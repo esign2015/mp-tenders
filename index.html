@@ -1,36 +1,1434 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MP Tenders Live Dashboard - SAR Digital Services</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAR Digital Services, Kannod | MP Tender Live Dashboard</title>
+
 <style>
-body{background:#f8fafc}.glass{background:#fff;border:1px solid #e2e8f0;box-shadow:0 4px 14px #0f172a0b}.urgent{background:#fff1f2!important}.soon{background:#fffbeb!important}.safe{background:#f0fdf4!important}.chip{font-size:11px;padding:3px 8px;border-radius:999px;font-weight:700;display:inline-block}.btn{border-radius:9px;padding:9px 13px;font-size:13px;font-weight:700}.btn:focus,input:focus,select:focus{outline:3px solid #93c5fd;outline-offset:1px}.table-wrap{max-height:58vh;overflow:auto}.sticky-head th{position:sticky;top:0;z-index:2}.muted{color:#64748b}.hide{display:none!important}@media(max-width:700px){.table-wrap{max-height:none}.desktop-only{display:none}.stat{min-width:145px}}
+:root{
+  --blue:#203b91;
+  --blue-dark:#172d70;
+  --border:#cbd5e1;
+  --header-height:94px;
+  --footer-height:48px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f7fb;
+  color:#172033;
+  overflow:hidden;
+}
+
+body{
+  display:flex;
+  flex-direction:column;
+}
+
+/* ================= HEADER ================= */
+
+.site-header{
+  flex:0 0 var(--header-height);
+  height:var(--header-height);
+  background:var(--blue);
+  color:white;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:12px;
+  padding:10px 18px;
+  border-bottom:3px solid #10245e;
+}
+
+.header-left{
+  min-width:0;
+  text-align:left;
+}
+
+.main-brand{
+  font-size:27px;
+  font-weight:800;
+  line-height:1.05;
+  white-space:nowrap;
+}
+
+.sub-brand{
+  font-size:14px;
+  margin-top:5px;
+  color:#ffffff;
+}
+
+.date-time{
+  margin-top:8px;
+  color:#ffe600;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.counts{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+}
+
+.count-box{
+  width:105px;
+  min-width:105px;
+  height:61px;
+  background:white;
+  color:#20304c;
+  border-radius:7px;
+  text-align:center;
+  padding:7px 5px;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+
+.count-label{
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.count-number{
+  font-size:22px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.count-number.red{color:#e11d2e}
+.count-number.orange{color:#e58a00}
+.count-number.blue{color:#1d4ed8}
+.count-number.green{color:#059669}
+
+.header-right{
+  min-width:0;
+  text-align:right;
+}
+
+.right-brand{
+  font-size:18px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.right-sub{
+  font-size:12px;
+  margin-top:5px;
+}
+
+/* ================= MAIN SCROLL AREA ================= */
+
+.main-area{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:10px 14px 12px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-panel{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:9px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
+
+.search-heading-row{
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:7px 12px;
+  border-bottom:1px solid #dbe3ee;
+}
+
+.search-heading{
+  font-size:16px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.action-buttons{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:5px;
+}
+
+button{
+  border:0;
+  border-radius:6px;
+  padding:8px 11px;
+  font-size:12px;
+  font-weight:bold;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.btn-red{background:#e3262e;color:white}
+.btn-orange{background:#f59e0b;color:white}
+.btn-blue{background:#2563eb;color:white}
+.btn-dark{background:#1e293b;color:white}
+.btn-light{background:#e2e8f0;color:#172033}
+
+.search-fields{
+  display:grid;
+  grid-template-columns:2fr 1.15fr 1.5fr 1.35fr;
+  gap:7px;
+  padding:8px 12px 5px;
+}
+
+.search-fields input,
+.search-fields select{
+  width:100%;
+  min-width:0;
+  height:32px;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  padding:5px 8px;
+  font-size:13px;
+  color:#172033;
+  background:white;
+}
+
+.search-bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.4fr auto;
+  gap:7px;
+  padding:0 12px 8px;
+}
+
+.search-bottom input,
+.search-bottom select{
+  width:100%;
+  height:30px;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  padding:4px 8px;
+  font-size:13px;
+}
+
+.legend-row{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:0 12px 8px;
+  color:#64748b;
+  font-size:12px;
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.legend-color{
+  width:13px;
+  height:13px;
+  border-radius:2px;
+  display:inline-block;
+}
+
+.legend-red{background:#e11d48}
+.legend-orange{background:#f59e0b}
+.legend-green{background:#10b981}
+
+/* ================= TABLE ================= */
+
+.table-panel{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:9px;
+  overflow:hidden;
+}
+
+.table-heading-row{
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:5px 12px;
+  border-bottom:1px solid #dbe3ee;
+}
+
+.table-heading{
+  font-size:16px;
+  font-weight:800;
+}
+
+.table-tools{
+  display:flex;
+  gap:6px;
+}
+
+.table-wrap{
+  width:100%;
+  overflow:auto;
+  max-height:calc(100vh - 250px);
+}
+
+table{
+  width:100%;
+  min-width:1450px;
+  border-collapse:collapse;
+  table-layout:auto;
+  font-size:12px;
+}
+
+thead{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+th{
+  background:#dfe7f2;
+  color:#172033;
+  font-weight:800;
+  padding:8px 7px;
+  text-align:left;
+  white-space:nowrap;
+  border-bottom:1px solid #cbd5e1;
+}
+
+td{
+  padding:7px 7px;
+  border-bottom:1px solid #e2e8f0;
+  white-space:nowrap;
+  vertical-align:middle;
+}
+
+tbody tr:nth-child(even){
+  background:#f8fafc;
+}
+
+tbody tr:hover{
+  background:#eef6ff;
+}
+
+td.title-cell{
+  min-width:260px;
+  max-width:360px;
+  white-space:normal;
+  line-height:1.25;
+}
+
+.tender-link{
+  color:#0756c9;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.tender-link:hover{
+  text-decoration:underline;
+}
+
+.date-closing{
+  font-weight:bold;
+}
+
+.closing-today{
+  color:#dc2626;
+}
+
+.closing-soon{
+  color:#d97706;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:12px;
+  background:#d1fae5;
+  color:#047857;
+  font-weight:bold;
+  font-size:11px;
+}
+
+.status.closed{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.status.corrigendum{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.empty-row{
+  text-align:center;
+  color:#dc2626;
+  padding:25px;
+  font-size:13px;
+}
+
+.loading-row{
+  text-align:center;
+  color:#475569;
+  padding:25px;
+}
+
+/* ================= FOOTER ================= */
+
+.site-footer{
+  flex:0 0 var(--footer-height);
+  height:var(--footer-height);
+  background:var(--blue);
+  color:white;
+  display:grid;
+  grid-template-columns:1fr 2fr 1fr;
+  align-items:center;
+  gap:12px;
+  padding:6px 15px;
+  border-top:3px solid #10245e;
+}
+
+.footer-left{
+  text-align:left;
+}
+
+.footer-center{
+  text-align:center;
+  font-size:11px;
+  line-height:1.35;
+}
+
+.footer-right{
+  text-align:right;
+}
+
+.footer-brand{
+  font-size:14px;
+  font-weight:800;
+}
+
+.footer-sub{
+  font-size:11px;
+  margin-top:3px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px){
+  .main-brand{
+    font-size:22px;
+  }
+
+  .right-brand{
+    font-size:15px;
+  }
+
+  .count-box{
+    width:88px;
+    min-width:88px;
+  }
+
+  .count-label{
+    font-size:11px;
+  }
+
+  .search-fields{
+    grid-template-columns:2fr 1fr 1.4fr 1.2fr;
+  }
+}
+
+@media(max-width:850px){
+  html,
+  body{
+    overflow:auto;
+  }
+
+  .site-header{
+    height:auto;
+    flex-basis:auto;
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .header-left,
+  .header-right{
+    text-align:center;
+  }
+
+  .main-brand,
+  .right-brand{
+    white-space:normal;
+  }
+
+  .counts{
+    flex-wrap:wrap;
+  }
+
+  .search-heading-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .action-buttons{
+    justify-content:flex-start;
+  }
+
+  .search-fields,
+  .search-bottom{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .main-area{
+    overflow:visible;
+  }
+
+  .table-wrap{
+    max-height:none;
+  }
+
+  .site-footer{
+    height:auto;
+    flex-basis:auto;
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right{
+    text-align:center;
+  }
+}
 </style>
 </head>
-<body class="text-slate-800">
-<header class="bg-gradient-to-r from-blue-950 to-blue-800 text-white p-5 shadow-lg"><div class="max-w-[1700px] mx-auto flex flex-wrap gap-4 justify-between items-center"><div><h1 class="text-2xl md:text-3xl font-extrabold">MP Tenders Live Dashboard</h1><p class="text-blue-200 text-sm mt-1">Smart monitoring, filtering and bidder assistance</p><div id="liveClock" class="text-yellow-300 text-sm font-mono mt-2"></div></div><div class="text-right"><div class="font-bold">SAR Digital Services, Kannod</div><div class="text-xs text-blue-200">For DSC & E-Tendering Services</div></div></div></header>
-<main class="max-w-[1700px] mx-auto p-4 space-y-4">
-<section class="grid grid-cols-2 md:grid-cols-5 gap-3"><div class="glass rounded-xl p-4 stat"><div class="muted text-xs">Total Tenders</div><div id="totalCount" class="text-2xl font-extrabold">0</div></div><div class="glass rounded-xl p-4 stat"><div class="muted text-xs">Closing Today</div><div id="todayCount" class="text-2xl font-extrabold text-red-600">0</div></div><div class="glass rounded-xl p-4 stat"><div class="muted text-xs">Closing in 3 Days</div><div id="soonCount" class="text-2xl font-extrabold text-amber-600">0</div></div><div class="glass rounded-xl p-4 stat"><div class="muted text-xs">New in 7 Days</div><div id="newCount" class="text-2xl font-extrabold text-blue-700">0</div></div><div class="glass rounded-xl p-4 stat"><div class="muted text-xs">Watchlist</div><div id="watchCount" class="text-2xl font-extrabold text-purple-700">0</div></div></section>
-<section class="glass rounded-xl p-4 space-y-3"><div class="flex flex-wrap gap-2 items-center justify-between"><h2 class="font-extrabold">Search & Smart Filters</h2><div class="flex gap-2 flex-wrap"><button class="btn bg-red-600 text-white" onclick="setQuick('today')">Closing Today</button><button class="btn bg-amber-500 text-white" onclick="setQuick('soon')">Next 3 Days</button><button class="btn bg-purple-600 text-white" onclick="setQuick('watch')">My Watchlist</button><button class="btn bg-slate-200" onclick="clearFilters()">Reset</button></div></div><div class="grid grid-cols-1 md:grid-cols-4 gap-3"><input id="globalSearch" class="border rounded-lg p-2" placeholder="Search ID, title, organisation, department..." oninput="filterTable()"><input id="filterId" class="border rounded-lg p-2" placeholder="Tender ID" oninput="filterTable()"><input id="filterTitle" class="border rounded-lg p-2" placeholder="Title / keyword" oninput="filterTable()"><input id="filterOrg" class="border rounded-lg p-2" placeholder="Organisation" oninput="filterTable()"><input id="filterPub" type="date" class="border rounded-lg p-2" onchange="filterTable()"><input id="filterClose" type="date" class="border rounded-lg p-2" onchange="filterTable()"><select id="sortBy" class="border rounded-lg p-2" onchange="filterTable()"><option value="close">Sort: Closing date</option><option value="new">Sort: Newest first</option><option value="title">Sort: Title A-Z</option><option value="watch">Sort: Watchlist first</option></select><label class="flex items-center gap-2 text-sm"><input id="onlyValid" type="checkbox" onchange="filterTable()"> Hide incomplete records</label></div><div class="flex flex-wrap gap-3 text-xs muted"><span>🟥 Closing today</span><span>🟨 Closing within 3 days</span><span>🟩 Closing after 3 days</span><span>⭐ Watchlist</span><span id="resultCount"></span></div></section>
-<section class="glass rounded-xl overflow-hidden"><div class="p-3 flex flex-wrap justify-between items-center gap-2 border-b"><div class="font-extrabold">Tender Records</div><div class="flex gap-2"><button class="btn bg-blue-700 text-white" onclick="exportToPDF()">📄 Export PDF</button><button class="btn bg-emerald-600 text-white" onclick="downloadCSV()">⬇ Export CSV</button><button class="btn bg-slate-800 text-white" onclick="fetchTenders()">↻ Reload</button></div></div><div class="table-wrap"><table id="tendersTable" class="min-w-full text-xs"><thead class="sticky-head bg-slate-200"><tr><th class="p-3">S.No</th><th class="p-3 text-left">Watch</th><th class="p-3 text-left">Tender ID</th><th class="p-3 text-left">Published</th><th class="p-3 text-left">Closing</th><th class="p-3 text-left">Opening</th><th class="p-3 text-left min-w-[260px]">Title</th><th class="p-3 text-left">Ref.No.</th><th class="p-3 text-left">Organisation</th><th class="p-3 text-left">Department</th><th class="p-3 text-left">Division</th><th class="p-3 text-left">Sub Division</th><th class="p-3">Status</th></tr></thead><tbody id="tableBody"><tr><td colspan="13" class="p-10 text-center">⏳ Loading tender database...</td></tr></tbody></table></div></section>
-<section class="glass rounded-xl p-4"><h2 class="font-extrabold mb-2">Bidder Checklist</h2><div class="grid md:grid-cols-3 gap-2 text-sm"><label><input type="checkbox"> DSC valid</label><label><input type="checkbox"> EMD / tender fee checked</label><label><input type="checkbox"> Eligibility and experience checked</label><label><input type="checkbox"> Technical documents ready</label><label><input type="checkbox"> Financial bid uploaded</label><label><input type="checkbox"> Final submission receipt saved</label></div><p class="text-xs muted mt-3">This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.</p></section>
-</main><footer class="text-center text-xs muted p-4 border-t bg-white">Provided by <b>SAR Digital Services, Kannod</b> | For DSC & E-Tendering Services</footer>
+
+<body>
+
+<header class="site-header">
+
+  <div class="header-left">
+    <div class="main-brand">SAR Digital Services, Kannod</div>
+    <div class="sub-brand">MP Tender Live Dashboard</div>
+    <div class="date-time" id="dateTime">Loading date...</div>
+  </div>
+
+  <div class="counts">
+    <div class="count-box">
+      <div class="count-label">Today Tenders</div>
+      <div class="count-number blue" id="todayCount">0</div>
+    </div>
+
+    <div class="count-box">
+      <div class="count-label">Closing Today</div>
+      <div class="count-number red" id="closingTodayCount">0</div>
+    </div>
+
+    <div class="count-box">
+      <div class="count-label">Closing in 3 Days</div>
+      <div class="count-number orange" id="closingThreeCount">0</div>
+    </div>
+
+    <div class="count-box">
+      <div class="count-label">New in 7 Days</div>
+      <div class="count-number green" id="newSevenCount">0</div>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="right-brand">SAR Digital Services, Kannod</div>
+    <div class="right-sub">For DSC &amp; E-Tendering Services</div>
+  </div>
+
+</header>
+
+<main class="main-area">
+
+  <section class="search-panel">
+
+    <div class="search-heading-row">
+      <div class="search-heading">Search &amp; Smart Filters</div>
+
+      <div class="action-buttons">
+        <button class="btn-red" id="closingTodayBtn">Closing Today</button>
+        <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
+        <button class="btn-light" id="resetBtn">Reset</button>
+        <button class="btn-dark" id="reloadBtn">↻ Reload</button>
+        <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
+      </div>
+    </div>
+
+    <div class="search-fields">
+      <input id="generalSearch"
+             type="text"
+             placeholder="Search ID, title, organisation, department...">
+
+      <input id="tenderIdSearch"
+             type="text"
+             placeholder="Tender ID">
+
+      <input id="titleSearch"
+             type="text"
+             placeholder="Title / keyword">
+
+      <input id="organisationSearch"
+             type="text"
+             placeholder="Organisation">
+    </div>
+
+    <div class="search-bottom">
+      <input id="publishedFrom"
+             type="date"
+             title="Published from">
+
+      <input id="closingDate"
+             type="date"
+             title="Closing date">
+
+      <select id="sortSelect">
+        <option value="closing">Sort: Closing date</option>
+        <option value="published">Sort: Published date</option>
+        <option value="title">Sort: Title</option>
+        <option value="organisation">Sort: Organisation</option>
+      </select>
+
+      <select id="statusSelect">
+        <option value="">All Status</option>
+        <option value="open">Open</option>
+        <option value="closed">Closed</option>
+        <option value="corrigendum">Corrigendum</option>
+      </select>
+    </div>
+
+    <div class="legend-row">
+      <div class="legend-item">
+        <span class="legend-color legend-red"></span>
+        Closing today
+      </div>
+
+      <div class="legend-item">
+        <span class="legend-color legend-orange"></span>
+        Closing within 3 days
+      </div>
+
+      <div class="legend-item">
+        <span class="legend-color legend-green"></span>
+        Closing after 3 days
+      </div>
+
+      <div id="recordCount">0 record(s) shown</div>
+    </div>
+
+  </section>
+
+  <section class="table-panel">
+
+    <div class="table-heading-row">
+      <div class="table-heading">Tender Records</div>
+
+      <div class="table-tools">
+        <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="tenderTable">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Tender ID</th>
+            <th>Published</th>
+            <th>Closing</th>
+            <th>Opening</th>
+            <th>Title</th>
+            <th>Ref.No.</th>
+            <th>Organisation</th>
+            <th>Department</th>
+            <th>Division</th>
+            <th>Sub Division</th>
+            <th>PAC Amount</th>
+            <th>EMD Fee</th>
+            <th>Tender Fee</th>
+            <th>Processing Fee</th>
+            <th>Total Fee</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="tenderBody">
+          <tr>
+            <td colspan="17" class="loading-row">
+              Loading tender data...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="site-footer">
+
+  <div class="footer-left">
+    <div class="footer-brand">SAR Digital Services, Kannod</div>
+    <div class="footer-sub">For DSC &amp; E-Tendering Services</div>
+  </div>
+
+  <div class="footer-center">
+    This dashboard is an assistance tool. Always verify the final tender notice,
+    corrigendum, eligibility, fee and deadline on the official tender portal.
+  </div>
+
+  <div class="footer-right">
+    <div class="footer-brand">SAR Digital Services, Kannod</div>
+    <div class="footer-sub">MP Tender Live Dashboard</div>
+  </div>
+
+</footer>
+
 <script>
-let allTenders=[],currentTenders=[],quick='';const WATCH_KEY='mpTenderWatchlist';
-const watchlist=()=>JSON.parse(localStorage.getItem(WATCH_KEY)||'[]');const saveWatch=a=>localStorage.setItem(WATCH_KEY,JSON.stringify(a));
-function updateClock(){document.getElementById('liveClock').textContent=new Date().toLocaleString('en-IN',{dateStyle:'full',timeStyle:'medium'});}setInterval(updateClock,1000);updateClock();
-function csvParse(text){let rows=[],row=[],cell='',quote=false;for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];if(c==='"'&&quote&&n==='"'){cell+='"';i++;continue}if(c==='"'){quote=!quote;continue}if(c===','&&!quote){row.push(cell.trim());cell='';continue}if((c==='\n'||c==='\r')&&!quote){if(c==='\r'&&n==='\n')i++;row.push(cell.trim());if(row.some(x=>x!==''))rows.push(row);row=[];cell='';continue}cell+=c;}if(cell||row.length){row.push(cell.trim());rows.push(row);}return rows;}
-async function fetchTenders(){try{let api='https://mp-tenders-api.onrender.com/api/tenders';let r=await fetch(api,{cache:'no-store'});if(r.ok){let j=await r.json();if(Array.isArray(j.tenders)&&j.tenders.length){allTenders=j.tenders.map(t=>({id:t['Tender ID']||'N/A',pubDate:t['Published Date']||'N/A',closeDate:t['Closing Date']||'N/A',openDate:t['Opening Date']||'N/A',title:t['Title']||'N/A',ref:t['Reference Number']||'N/A',org:t['Organisation']||'N/A',dept:t['Department']||'N/A',div:t['Division']||'N/A',subDiv:t['Sub Division']||'N/A'}));filterTable();return;}}let csv=await fetch('all_tenders_org_detailed.csv',{cache:'no-store'});if(!csv.ok)throw Error('CSV not found');parseCSV(await csv.text());}catch(e){document.getElementById('tableBody').innerHTML='<tr><td colspan="13" class="p-10 text-center text-red-600">⚠ Tender database could not be loaded.</td></tr>';}}
-function parseCSV(text){let rows=csvParse(text);if(rows.length<2)return;let head=rows[0].map(x=>x.toLowerCase());let idx=(names)=>{for(let n of names){let i=head.findIndex(h=>h.includes(n));if(i>=0)return i}return -1};let id=idx(['tender id','tenderid']),pub=idx(['published','e-published','pub date']),close=idx(['closing','close date']),open=idx(['opening','open date']),title=idx(['title','work name']),ref=idx(['ref']),org=idx(['organisation','organization']),dept=idx(['department']),div=idx(['division']),sub=idx(['sub division','subdivision']);allTenders=rows.slice(1).map(r=>({id:r[id>=0?id:0]||'N/A',pubDate:r[pub>=0?pub:1]||'N/A',closeDate:r[close>=0?close:2]||'N/A',openDate:r[open>=0?open:3]||'N/A',title:r[title>=0?title:4]||'N/A',ref:r[ref>=0?ref:5]||'N/A',org:r[org>=0?org:6]||'N/A',dept:r[dept>=0?dept:7]||'N/A',div:r[div>=0?div:8]||'N/A',subDiv:r[sub>=0?sub:9]||'N/A'})).filter(t=>t.id!=='N/A'||t.title!=='N/A');filterTable();}
-function dateOf(s){let d=new Date(s);return isNaN(d)?null:d}function daysTo(s){let d=dateOf(s);return d?Math.ceil((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()))/86400000):99999}function status(t){let d=daysTo(t.closeDate);if(d<0)return ['Closed','bg-slate-200 text-slate-600'];if(d===0)return ['Today','bg-red-100 text-red-700'];if(d<=3)return ['Soon','bg-amber-100 text-amber-700'];return ['Open','bg-emerald-100 text-emerald-700'];}
-function filterTable(){let g=(document.getElementById('globalSearch').value||'').toLowerCase(),fi=document.getElementById('filterId').value.toLowerCase(),ft=document.getElementById('filterTitle').value.toLowerCase(),fo=document.getElementById('filterOrg').value.toLowerCase(),fp=document.getElementById('filterPub').value,fc=document.getElementById('filterClose').value,valid=document.getElementById('onlyValid').checked;let wl=watchlist();currentTenders=allTenders.filter(t=>{let blob=Object.values(t).join(' ').toLowerCase();if(g&&!blob.includes(g))return false;if(fi&&!t.id.toLowerCase().includes(fi))return false;if(ft&&!t.title.toLowerCase().includes(ft))return false;if(fo&&!t.org.toLowerCase().includes(fo))return false;if(fp&&!t.pubDate.includes(fp))return false;if(fc&&!t.closeDate.includes(fc))return false;if(valid&&Object.values(t).some(v=>!v||v==='N/A'))return false;if(quick==='today'&&daysTo(t.closeDate)!==0)return false;if(quick==='soon'&&(daysTo(t.closeDate)<0||daysTo(t.closeDate)>3))return false;if(quick==='watch'&&!wl.includes(t.id))return false;return true});let s=document.getElementById('sortBy').value;currentTenders.sort((a,b)=>s==='title'?a.title.localeCompare(b.title):s==='new'?String(b.pubDate).localeCompare(String(a.pubDate)):s==='watch'?(wl.includes(b.id)-wl.includes(a.id)):daysTo(a.closeDate)-daysTo(b.closeDate));renderTable();updateStats();}
-function renderTable(){let tbody=document.getElementById('tableBody'),wl=watchlist();document.getElementById('resultCount').textContent=currentTenders.length+' record(s) shown';if(!currentTenders.length){tbody.innerHTML='<tr><td colspan="13" class="p-10 text-center muted">No tenders match your filters.</td></tr>';return}tbody.innerHTML=currentTenders.map((t,i)=>{let [st,cl]=status(t),d=daysTo(t.closeDate),row=d===0?'urgent':d>0&&d<=3?'soon':d>3?'safe':'';return `<tr class="${row} border-b border-slate-100 hover:bg-blue-50"><td class="p-3 font-bold text-center">${i+1}</td><td class="p-3"><button title="Add to watchlist" onclick="toggleWatch('${esc(t.id)}')" class="text-lg">${wl.includes(t.id)?'⭐':'☆'}</button></td><td class="p-3 font-bold text-blue-700">${esc(t.id)}</td><td class="p-3 whitespace-nowrap">${esc(t.pubDate)}</td><td class="p-3 font-bold text-red-700 whitespace-nowrap">${esc(t.closeDate)}</td><td class="p-3 whitespace-nowrap">${esc(t.openDate)}</td><td class="p-3 leading-relaxed">${esc(t.title)}</td><td class="p-3">${esc(t.ref)}</td><td class="p-3">${esc(t.org)}</td><td class="p-3">${esc(t.dept)}</td><td class="p-3">${esc(t.div)}</td><td class="p-3">${esc(t.subDiv)}</td><td class="p-3"><span class="chip ${cl}">${st}${d>=0?' · '+d+'d':''}</span></td></tr>`}).join('');}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}function toggleWatch(id){let a=watchlist();a=a.includes(id)?a.filter(x=>x!==id):[...a,id];saveWatch(a);filterTable();}function setQuick(q){quick=q;filterTable()}function clearFilters(){quick='';document.querySelectorAll('input').forEach(x=>{if(x.type==='checkbox')x.checked=false;else x.value=''});document.getElementById('sortBy').value='close';filterTable()}
-function updateStats(){let wl=watchlist();document.getElementById('totalCount').textContent=allTenders.length;document.getElementById('todayCount').textContent=allTenders.filter(t=>daysTo(t.closeDate)===0).length;document.getElementById('soonCount').textContent=allTenders.filter(t=>daysTo(t.closeDate)>=0&&daysTo(t.closeDate)<=3).length;document.getElementById('newCount').textContent=allTenders.filter(t=>daysTo(t.pubDate)>=-7&&daysTo(t.pubDate)<=0).length;document.getElementById('watchCount').textContent=wl.length;}
-function downloadCSV(){let rows=[['Tender ID','Published','Closing','Opening','Title','Ref','Organisation','Department','Division','Sub Division'],...currentTenders.map(t=>[t.id,t.pubDate,t.closeDate,t.openDate,t.title,t.ref,t.org,t.dept,t.div,t.subDiv])];let csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='MP_Tenders_Filtered.csv';a.click();}
-function exportToPDF(){if(!window.jspdf){alert('PDF library not loaded.');return}let doc=new jspdf.jsPDF('landscape');doc.setFontSize(15);doc.text('MP Tenders Live Dashboard',14,14);doc.setFontSize(9);doc.text('SAR Digital Services, Kannod',14,20);doc.autoTable({startY:25,head:[['S.No','Tender ID','Published','Closing','Opening','Title','Ref.No.','Organisation','Department','Division','Sub Division']],body:currentTenders.map((t,i)=>[i+1,t.id,t.pubDate,t.closeDate,t.openDate,t.title,t.ref,t.org,t.dept,t.div,t.subDiv]),styles:{fontSize:6},theme:'grid'});doc.save('MP_Tenders_Filtered_List.pdf');}
-fetchTenders();
-</script></body></html>
+const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
+const CSV_URL = "all_tenders_org_detailed.csv";
+
+let allTenders = [];
+let filteredTenders = [];
+
+const $ = id => document.getElementById(id);
+
+function clean(value){
+  if(value === null || value === undefined) return "";
+  return String(value).trim();
+}
+
+function escapeHtml(value){
+  return clean(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function parseDate(value){
+  const text = clean(value);
+
+  if(!text) return null;
+
+  let date = new Date(text);
+
+  if(!isNaN(date.getTime())) return date;
+
+  const parts = text.split(/[\/\-]/);
+
+  if(parts.length === 3){
+    let day = parts[0];
+    let month = parts[1];
+    let year = parts[2];
+
+    if(year.length === 2) year = "20" + year;
+
+    date = new Date(`${year}-${month}-${day}T00:00:00`);
+
+    if(!isNaN(date.getTime())) return date;
+  }
+
+  return null;
+}
+
+function formatDate(value){
+  const date = parseDate(value);
+
+  if(!date) return clean(value);
+
+  return String(date.getDate()).padStart(2,"0") + "/" +
+         String(date.getMonth()+1).padStart(2,"0") + "/" +
+         date.getFullYear();
+}
+
+function dateKey(value){
+  const date = parseDate(value);
+
+  if(!date) return "";
+
+  return date.getFullYear() + "-" +
+         String(date.getMonth()+1).padStart(2,"0") + "-" +
+         String(date.getDate()).padStart(2,"0");
+}
+
+function todayKey(){
+  const now = new Date();
+
+  return now.getFullYear() + "-" +
+         String(now.getMonth()+1).padStart(2,"0") + "-" +
+         String(now.getDate()).padStart(2,"0");
+}
+
+function moneyNumber(value){
+  if(typeof value === "number") return value;
+
+  const text = clean(value)
+    .replaceAll(",","")
+    .replace(/[₹Rs.]/gi,"")
+    .replace(/[^\d.-]/g,"");
+
+  const number = Number(text);
+
+  return Number.isFinite(number) ? number : 0;
+}
+
+function formatMoney(value){
+  const number = moneyNumber(value);
+
+  if(number === 0 && !clean(value)) return "—";
+
+  return "₹ " + number.toLocaleString("en-IN",{
+    maximumFractionDigits:2
+  });
+}
+
+function totalFee(row){
+  return moneyNumber(row["PAC Amount"]) +
+         moneyNumber(row["PAC_Amount"]) +
+         moneyNumber(row["EMD Fee"]) +
+         moneyNumber(row["EMD Amount"]) +
+         moneyNumber(row["Tender Fee"]) +
+         moneyNumber(row["Processing Fee"]);
+}
+
+function normaliseTender(row){
+  const item = {...row};
+
+  item["Tender ID"] =
+    clean(row["Tender ID"] || row["Tender_ID"] || row["TenderID"]);
+
+  item["Published Date"] =
+    clean(row["Published Date"] ||
+          row["Published_Date"] ||
+          row["Published"] ||
+          row["e-Published Date"]);
+
+  item["Closing Date"] =
+    clean(row["Closing Date"] ||
+          row["Closing_Date"] ||
+          row["Closing"]);
+
+  item["Opening Date"] =
+    clean(row["Opening Date"] ||
+          row["Opening_Date"] ||
+          row["Opening"]);
+
+  item["Title"] =
+    clean(row["Title"] ||
+          row["Work Name"] ||
+          row["Tender Title"]);
+
+  item["Reference Number"] =
+    clean(row["Reference Number"] ||
+          row["Reference_Number"] ||
+          row["Ref.No."] ||
+          row["Ref No"]);
+
+  item["Organisation"] =
+    clean(row["Organisation"] ||
+          row["Organisation Name"]);
+
+  item["Department"] = clean(row["Department"]);
+  item["Division"] = clean(row["Division"]);
+  item["Sub Division"] =
+    clean(row["Sub Division"] || row["Sub_Division"]);
+
+  item["PAC Amount"] =
+    clean(row["PAC Amount"] || row["PAC_Amount"]);
+
+  item["EMD Fee"] =
+    clean(row["EMD Fee"] || row["EMD Amount"]);
+
+  item["Tender Fee"] =
+    clean(row["Tender Fee"]);
+
+  item["Processing Fee"] =
+    clean(row["Processing Fee"]);
+
+  item["Status"] =
+    clean(row["Status"] || "Open");
+
+  item["Corrigendum"] =
+    clean(row["Corrigendum"] || row["Corrigendum Status"]);
+
+  item["URL"] =
+    clean(row["URL"] ||
+          row["Tender URL"] ||
+          row["Link"] ||
+          row["Tender Link"]);
+
+  return item;
+}
+
+async function loadFromApi(){
+  const response = await fetch(API_URL + "?t=" + Date.now(),{
+    cache:"no-store"
+  });
+
+  if(!response.ok){
+    throw new Error("API response failed");
+  }
+
+  const data = await response.json();
+
+  if(Array.isArray(data)){
+    return data;
+  }
+
+  if(Array.isArray(data.tenders)){
+    return data.tenders;
+  }
+
+  if(Array.isArray(data.records)){
+    return data.records;
+  }
+
+  return [];
+}
+
+function parseCsv(text){
+  const rows = [];
+  let row = [];
+  let value = "";
+  let insideQuotes = false;
+
+  for(let i=0;i<text.length;i++){
+    const char = text[i];
+    const next = text[i+1];
+
+    if(char === '"' && insideQuotes && next === '"'){
+      value += '"';
+      i++;
+      continue;
+    }
+
+    if(char === '"'){
+      insideQuotes = !insideQuotes;
+      continue;
+    }
+
+    if(char === "," && !insideQuotes){
+      row.push(value);
+      value = "";
+      continue;
+    }
+
+    if((char === "\n" || char === "\r") && !insideQuotes){
+      if(char === "\r" && next === "\n") i++;
+
+      row.push(value);
+      value = "";
+
+      if(row.some(cell => clean(cell) !== "")){
+        rows.push(row);
+      }
+
+      row = [];
+      continue;
+    }
+
+    value += char;
+  }
+
+  if(value !== "" || row.length){
+    row.push(value);
+    rows.push(row);
+  }
+
+  if(!rows.length) return [];
+
+  const headers = rows[0].map(header => clean(header));
+
+  return rows.slice(1).map(values => {
+    const object = {};
+
+    headers.forEach((header,index) => {
+      object[header] = values[index] || "";
+    });
+
+    return object;
+  });
+}
+
+async function loadFromCsv(){
+  const response = await fetch(CSV_URL + "?t=" + Date.now(),{
+    cache:"no-store"
+  });
+
+  if(!response.ok){
+    throw new Error("CSV not found");
+  }
+
+  const text = await response.text();
+
+  return parseCsv(text);
+}
+
+async function loadData(){
+  $("tenderBody").innerHTML =
+    `<tr><td colspan="17" class="loading-row">Loading tender data...</td></tr>`;
+
+  try{
+    let data = [];
+
+    try{
+      data = await loadFromApi();
+    }catch(apiError){
+      console.warn("API unavailable. Trying CSV.",apiError);
+      data = await loadFromCsv();
+    }
+
+    allTenders = data.map(normaliseTender);
+    applyFilters();
+
+  }catch(error){
+    console.error(error);
+
+    allTenders = [];
+    filteredTenders = [];
+
+    $("tenderBody").innerHTML =
+      `<tr>
+        <td colspan="17" class="empty-row">
+          Tender data could not be loaded. Render API or CSV is unavailable.
+        </td>
+      </tr>`;
+
+    updateCounts([]);
+  }
+}
+
+function getClosingClass(row){
+  const closing = parseDate(row["Closing Date"]);
+
+  if(!closing) return "";
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const close = new Date(closing);
+  close.setHours(0,0,0,0);
+
+  const difference =
+    Math.round((close - today) / 86400000);
+
+  if(difference === 0) return "closing-today";
+  if(difference > 0 && difference <= 3) return "closing-soon";
+
+  return "";
+}
+
+function getStatusClass(row){
+  const status = clean(row["Status"]).toLowerCase();
+  const corrigendum = clean(row["Corrigendum"]).toLowerCase();
+
+  if(corrigendum && corrigendum !== "no" && corrigendum !== "none"){
+    return "corrigendum";
+  }
+
+  if(status.includes("closed") || status.includes("expire")){
+    return "closed";
+  }
+
+  return "";
+}
+
+function getStatusText(row){
+  const status = clean(row["Status"]) || "Open";
+  const corrigendum = clean(row["Corrigendum"]);
+
+  if(corrigendum &&
+     corrigendum.toLowerCase() !== "no" &&
+     corrigendum.toLowerCase() !== "none"){
+    return "Corrigendum";
+  }
+
+  return status;
+}
+
+function renderTable(rows){
+  const body = $("tenderBody");
+
+  if(!rows.length){
+    body.innerHTML =
+      `<tr>
+        <td colspan="17" class="empty-row">
+          कोई tender record नहीं मिला।
+        </td>
+      </tr>`;
+
+    $("recordCount").textContent = "0 record(s) shown";
+    return;
+  }
+
+  body.innerHTML = rows.map((row,index) => {
+    const closingClass = getClosingClass(row);
+    const statusClass = getStatusClass(row);
+    const statusText = getStatusText(row);
+
+    const tenderId = escapeHtml(row["Tender ID"]);
+    const title = escapeHtml(row["Title"]);
+    const url = clean(row["URL"]);
+
+    const titleHtml = url
+      ? `<a class="tender-link"
+             href="${escapeHtml(url)}"
+             target="_blank"
+             rel="noopener">${title || "View Tender"}</a>`
+      : title;
+
+    return `
+      <tr>
+        <td>${index+1}</td>
+        <td>${tenderId || "—"}</td>
+        <td>${escapeHtml(formatDate(row["Published Date"]))}</td>
+        <td class="date-closing ${closingClass}">
+          ${escapeHtml(formatDate(row["Closing Date"]))}
+        </td>
+        <td>${escapeHtml(formatDate(row["Opening Date"]))}</td>
+        <td class="title-cell">${titleHtml || "—"}</td>
+        <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
+        <td>${escapeHtml(row["Organisation"]) || "—"}</td>
+        <td>${escapeHtml(row["Department"]) || "—"}</td>
+        <td>${escapeHtml(row["Division"]) || "—"}</td>
+        <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
+        <td>${formatMoney(row["PAC Amount"])}</td>
+        <td>${formatMoney(row["EMD Fee"])}</td>
+        <td>${formatMoney(row["Tender Fee"])}</td>
+        <td>${formatMoney(row["Processing Fee"])}</td>
+        <td><strong>${formatMoney(totalFee(row))}</strong></td>
+        <td>
+          <span class="status ${statusClass}">
+            ${escapeHtml(statusText)}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  $("recordCount").textContent =
+    rows.length + " record(s) shown";
+}
+
+function updateCounts(rows){
+  const today = todayKey();
+
+  const todayCount = rows.filter(row =>
+    dateKey(row["Published Date"]) === today
+  ).length;
+
+  const closingToday = rows.filter(row =>
+    dateKey(row["Closing Date"]) === today
+  ).length;
+
+  const closingThree = rows.filter(row => {
+    const date = parseDate(row["Closing Date"]);
+    if(!date) return false;
+
+    const now = new Date();
+    now.setHours(0,0,0,0);
+
+    const close = new Date(date);
+    close.setHours(0,0,0,0);
+
+    const days = Math.round((close-now)/86400000);
+
+    return days >= 1 && days <= 3;
+  }).length;
+
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  const newSeven = rows.filter(row => {
+    const date = parseDate(row["Published Date"]);
+    if(!date) return false;
+
+    const published = new Date(date);
+    published.setHours(0,0,0,0);
+
+    const days = Math.round((now-published)/86400000);
+
+    return days >= 0 && days <= 7;
+  }).length;
+
+  $("todayCount").textContent = todayCount;
+  $("closingTodayCount").textContent = closingToday;
+  $("closingThreeCount").textContent = closingThree;
+  $("newSevenCount").textContent = newSeven;
+}
+
+function applyFilters(){
+  const general = clean($("generalSearch").value).toLowerCase();
+  const tenderId = clean($("tenderIdSearch").value).toLowerCase();
+  const title = clean($("titleSearch").value).toLowerCase();
+  const organisation = clean($("organisationSearch").value).toLowerCase();
+  const publishedFrom = clean($("publishedFrom").value);
+  const closingDate = clean($("closingDate").value);
+  const status = clean($("statusSelect").value).toLowerCase();
+  const sort = $("sortSelect").value;
+
+  filteredTenders = allTenders.filter(row => {
+    const combined = [
+      row["Tender ID"],
+      row["Title"],
+      row["Reference Number"],
+      row["Organisation"],
+      row["Department"],
+      row["Division"],
+      row["Sub Division"]
+    ].join(" ").toLowerCase();
+
+    if(general && !combined.includes(general)) return false;
+
+    if(tenderId &&
+       !clean(row["Tender ID"]).toLowerCase().includes(tenderId)){
+      return false;
+    }
+
+    if(title &&
+       !clean(row["Title"]).toLowerCase().includes(title)){
+      return false;
+    }
+
+    if(organisation &&
+       !clean(row["Organisation"]).toLowerCase().includes(organisation)){
+      return false;
+    }
+
+    if(publishedFrom &&
+       dateKey(row["Published Date"]) < publishedFrom){
+      return false;
+    }
+
+    if(closingDate &&
+       dateKey(row["Closing Date"]) !== closingDate){
+      return false;
+    }
+
+    if(status){
+      const rowStatus = getStatusText(row).toLowerCase();
+
+      if(status === "corrigendum" && !rowStatus.includes("corrigendum")){
+        return false;
+      }
+
+      if(status === "closed" &&
+         !rowStatus.includes("closed") &&
+         !rowStatus.includes("expire")){
+        return false;
+      }
+
+      if(status === "open" &&
+         rowStatus.includes("closed")){
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  filteredTenders.sort((a,b) => {
+    if(sort === "title"){
+      return clean(a["Title"]).localeCompare(clean(b["Title"]));
+    }
+
+    if(sort === "organisation"){
+      return clean(a["Organisation"])
+        .localeCompare(clean(b["Organisation"]));
+    }
+
+    if(sort === "published"){
+      return (parseDate(b["Published Date"]) || 0) -
+             (parseDate(a["Published Date"]) || 0);
+    }
+
+    return (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
+           (parseDate(b["Closing Date"]) || new Date("2999-12-31"));
+  });
+
+  renderTable(filteredTenders);
+  updateCounts(allTenders);
+}
+
+function clearFilters(){
+  $("generalSearch").value = "";
+  $("tenderIdSearch").value = "";
+  $("titleSearch").value = "";
+  $("organisationSearch").value = "";
+  $("publishedFrom").value = "";
+  $("closingDate").value = "";
+  $("sortSelect").value = "closing";
+  $("statusSelect").value = "";
+
+  applyFilters();
+}
+
+function showClosingToday(){
+  clearFilters();
+  $("closingDate").value = todayKey();
+  applyFilters();
+}
+
+function showNextThreeDays(){
+  clearFilters();
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  filteredTenders = allTenders.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    if(!closing) return false;
+
+    const close = new Date(closing);
+    close.setHours(0,0,0,0);
+
+    const days = Math.round((close-today)/86400000);
+
+    return days >= 0 && days <= 3;
+  });
+
+  renderTable(filteredTenders);
+  updateCounts(allTenders);
+}
+
+function updateDateTime(){
+  const now = new Date();
+
+  $("dateTime").textContent =
+    now.toLocaleDateString("en-IN",{
+      weekday:"long",
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
+    }) + " at " +
+    now.toLocaleTimeString("en-IN");
+}
+
+function exportPdf(){
+  window.print();
+}
+
+[
+  "generalSearch",
+  "tenderIdSearch",
+  "titleSearch",
+  "organisationSearch",
+  "publishedFrom",
+  "closingDate",
+  "sortSelect",
+  "statusSelect"
+].forEach(id => {
+  $(id).addEventListener("input",applyFilters);
+  $(id).addEventListener("change",applyFilters);
+});
+
+$("resetBtn").addEventListener("click",clearFilters);
+$("reloadBtn").addEventListener("click",loadData);
+$("closingTodayBtn").addEventListener("click",showClosingToday);
+$("nextThreeBtn").addEventListener("click",showNextThreeDays);
+$("pdfBtn").addEventListener("click",exportPdf);
+$("pdfBtn2").addEventListener("click",exportPdf);
+
+updateDateTime();
+setInterval(updateDateTime,1000);
+
+loadData();
+</script>
+
+<style>
+@media print{
+  @page{
+    size:A3 landscape;
+    margin:10mm;
+  }
+
+  html,
+  body{
+    overflow:visible;
+    background:white;
+  }
+
+  .site-header,
+  .site-footer{
+    position:static;
+    break-inside:avoid;
+  }
+
+  .main-area{
+    overflow:visible;
+    padding:0;
+  }
+
+  .search-panel{
+    display:none;
+  }
+
+  .table-panel{
+    border:0;
+  }
+
+  .table-heading-row{
+    height:35px;
+  }
+
+  .table-tools{
+    display:none;
+  }
+
+  .table-wrap{
+    max-height:none;
+    overflow:visible;
+  }
+
+  table{
+    min-width:0;
+    width:100%;
+    font-size:8px;
+  }
+
+  th,
+  td{
+    padding:4px;
+  }
+
+  th{
+    background:#dfe7f2 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .status{
+    border:1px solid #999;
+  }
+
+  .title-cell{
+    max-width:none;
+  }
+}
+</style>
+
+</body>
+</html>
