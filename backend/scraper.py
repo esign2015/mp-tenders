@@ -467,7 +467,7 @@ def parse_list_dates(tender):
 
 def scrape_mp_tenders(csv_file):
     """
-    Current requested stage:
+    Current requested stage (full organisation list + tender lists; detail pages later):
     1) Save the complete Organisation/Department list and portal Tender Count.
     2) Open every organisation one-by-one in the same Chromium session.
     3) Save only the tender-list rows for each organisation.
