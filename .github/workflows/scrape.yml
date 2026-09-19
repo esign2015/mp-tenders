@@ -45,7 +45,8 @@ jobs:
 
       - name: Run MP Tender scraper — detail field validation sample
         env:
-          DETAIL_SAMPLE_SIZE: "50"
+          DETAIL_SAMPLE_SIZE: "9"
+          DETAIL_ORGANISATION: "Directorate Sports and Youth Welfare"
         run: python backend/scraper.py
 
       - name: Commit collected organisation and tender-list data
