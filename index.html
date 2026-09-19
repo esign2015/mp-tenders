@@ -1647,7 +1647,7 @@ function updateCounts(rows){
   const hasFilter = archivedMode || filterControls.some(value => clean(value) !== "");
 
   $("filterResultCount").textContent =
-    hasFilter ? rows.length : "No Filter";
+    hasFilter ? filteredTenders.length : "No Filter";
 }
 
 function applyFilters(){
@@ -1871,6 +1871,8 @@ function exportPdf(){
   const pageHeight = doc.internal.pageSize.getHeight();
   const BLUE = [20,55,110];
   const LIGHT_BLUE = [235,243,252];
+  const WATERMARK = [220,228,240];
+  const PORTAL_URL = "https://esign2015.github.io/mp-tenders/";
 
   const now = new Date();
   const reportDate =
@@ -1901,13 +1903,22 @@ function exportPdf(){
   ]);
 
   doc.autoTable({
-    startY:36,
+    startY:39,
+    margin:{
+      top:39,
+      left:10,
+      right:10,
+      bottom:22
+    },
     head:[[
       "S.No.","Tender ID","Closing Date","Title","Ref.No.",
       "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"
     ]],
     body:body,
     theme:"grid",
+    pageBreak:"auto",
+    rowPageBreak:"avoid",
+    showHead:"everyPage",
     styles:{
       font:"helvetica",
       fontSize:7,
@@ -1932,7 +1943,7 @@ function exportPdf(){
     },
     columnStyles:{
       0:{cellWidth:10,halign:"center"},
-      1:{cellWidth:32,whiteSpace:"nowrap"},
+      1:{cellWidth:32,overflow:"ellipsize"},
       2:{cellWidth:30},
       3:{cellWidth:82},
       4:{cellWidth:82},
@@ -1942,42 +1953,93 @@ function exportPdf(){
       8:{cellWidth:27,halign:"right"},
       9:{cellWidth:27,halign:"right"}
     },
-    margin:{left:10,right:10,bottom:20},
-    didDrawPage:function(data){
-      const page = doc.internal.getNumberOfPages();
 
-      // Same blue theme header on every page.
+    /*
+      Draw the watermark/header BEFORE the table content so neither
+      the header nor watermark can cover a tender row.
+    */
+    willDrawPage:function(){
+      // Full-page light watermark.
+      doc.saveGraphicsState();
+      doc.setTextColor(...WATERMARK);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(34);
+      doc.text(
+        "SAR Digital Services Kannod",
+        pageWidth/2,
+        pageHeight/2,
+        {
+          align:"center",
+          angle:35
+        }
+      );
+      doc.restoreGraphicsState();
+
+      // Blue header on every page.
       doc.setFillColor(...BLUE);
       doc.rect(0,0,pageWidth,27,"F");
 
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","bold");
       doc.setFontSize(15);
-      doc.text("SAR Digital Services, Kannod",12,10);
+      doc.text("SAR Digital Services, Kannod",12,9);
 
       doc.setFont("helvetica","normal");
-      doc.setFontSize(9);
-      doc.text("MP Tender Live Dashboard",12,17);
-      doc.setFontSize(8);
-      doc.text("Tender Report  •  " + reportDate,pageWidth-12,10,{align:"right"});
-      doc.text("Total Records: " + rows.length,pageWidth-12,17,{align:"right"});
+      doc.setFontSize(8.5);
+      doc.text("MP Tender Live Dashboard",12,15);
 
-      // Same blue theme footer on every page.
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(7.5);
+      doc.text("For DSC & E-Tendering Services",12,21);
+
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text("Tender Report  •  " + reportDate,pageWidth-12,9,{align:"right"});
+      doc.text("Total Records: " + rows.length,pageWidth-12,15,{align:"right"});
+
+      // Corrected assistance/disclaimer line.
+      doc.setTextColor(75,85,99);
+      doc.setFont("helvetica","italic");
+      doc.setFontSize(6.2);
+      doc.text(
+        "This dashboard is an assistance tool only. Always verify the final tender notice, corrigendum, eligibility requirements, fees, and deadline on the official tender portal.",
+        10,
+        33
+      );
+    },
+
+    didDrawPage:function(){
+      // Blue footer on every page.
       doc.setFillColor(...BLUE);
-      doc.rect(0,pageHeight-12,pageWidth,12,"F");
+      doc.rect(0,pageHeight-13,pageWidth,13,"F");
 
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","normal");
-      doc.setFontSize(7);
+      doc.setFontSize(6.5);
       doc.text(
         "SAR Digital Services, Kannod  •  MP Tender Live Dashboard",
-        12,
-        pageHeight-5
+        10,
+        pageHeight-8
       );
+
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.5);
+      doc.text("This PDF was downloaded from -", pageWidth-155, pageHeight-8);
+
+      doc.setFont("helvetica","normal");
+      doc.setTextColor(230,240,255);
+      doc.textWithLink(
+        PORTAL_URL,
+        pageWidth-92,
+        pageHeight-8,
+        {url:PORTAL_URL}
+      );
+
+      doc.setTextColor(255,255,255);
       doc.text(
-        "Page " + page + " of " + doc.internal.getNumberOfPages(),
-        pageWidth-12,
-        pageHeight-5,
+        "Page " + doc.internal.getNumberOfPages(),
+        pageWidth-10,
+        pageHeight-3,
         {align:"right"}
       );
     }
