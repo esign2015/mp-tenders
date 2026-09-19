@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
 PORTAL = "https://www.mptenders.gov.in/nicgep/app"
 ORG_URL = PORTAL + "?page=FrontEndTendersByOrganisation&service=page"
@@ -363,6 +364,58 @@ def get_all_tender_rows(session, start_url, expected_count):
     return list(unique.values()), len(pages)
 
 
+
+def browser_page(page, url, referer=None):
+    """Open an MP portal page in a real browser session so JSF DirectLink
+    navigation remains valid. The portal uses session-bound $DirectLink URLs."""
+    page.goto(url, wait_until="domcontentloaded", timeout=60000)
+    page.wait_for_timeout(900)
+    return BeautifulSoup(page.content(), "html.parser")
+
+
+def browser_get_all_tender_rows(page, org, expected_count):
+    """Open one organisation through the browser session and collect all tender rows."""
+    org_soup = browser_page(page, ORG_URL)
+    organisations = parse_organisation_rows(org_soup, page.url)
+    target = next(
+        (x for x in organisations
+         if x["name"] == org["name"] and x["count"] == org["count"]),
+        None,
+    )
+    if not target:
+        # Fall back to name-only because counts can change while the job is running.
+        target = next((x for x in organisations if x["name"] == org["name"]), None)
+    if not target:
+        raise RuntimeError(f"Organisation row not found in browser session: {org['name']}")
+
+    unique = {}
+    seen_urls = set()
+    current = target["url"]
+    pages = 0
+
+    for _ in range(500):
+        if not current or current in seen_urls:
+            break
+        seen_urls.add(current)
+        soup = browser_page(page, current)
+        rows = parse_tender_rows(soup, page.url)
+        for row in rows:
+            key = row["tender_id"] or row["reference"] or row["url"]
+            unique[key] = row
+        pages += 1
+
+        if expected_count and len(unique) >= expected_count:
+            break
+
+        nxt = next_page_url(soup, page.url, page.url)
+        if not nxt or nxt in seen_urls:
+            break
+        current = nxt
+
+    return list(unique.values()), pages
+
+
+
 def read_existing(csv_file):
     if not csv_file.exists():
         return []
@@ -386,9 +439,9 @@ def scrape_mp_tenders(csv_file):
     existing_by_id = {clean(r.get("Tender ID")): r for r in existing if clean(r.get("Tender ID"))}
     existing_by_ref = {clean(r.get("Reference Number")): r for r in existing if clean(r.get("Reference Number"))}
 
-    # Establish the portal session first, then open the organisation page.
-    request(session, PORTAL, sleep=0.5)
-    response = request(session, ORG_URL, sleep=0.5, referer=PORTAL)
+    # Keep a requests session for compatibility with the existing helper code.
+    # Actual portal navigation is performed in Chromium below because MP Tender
+    # uses session-bound JSF DirectLink URLs.
     soup = BeautifulSoup(response.text, "html.parser")
     organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
@@ -414,56 +467,66 @@ def scrape_mp_tenders(csv_file):
     }
 
     # Staged rollout: <=10, then <=50, <=100, <=200, <=400, <=600, and finally
-    # above 600. The organisation list is sorted ascending by Tender Count.
-    for index, org in enumerate(organisations, 1):
-        if MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
-            stats["organisations_skipped_stage_limit"] += 1
-            continue
-
+    # above 600. Use one real Chromium session for the MP portal because its
+    # organisation/tender links are session-bound JSF $DirectLink URLs.
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
+        )
         try:
-            tender_rows, pages = get_all_tender_rows(session, org["url"], org["count"])
-
-            # Do not open detail pages unless the parsed list count exactly matches
-            # the count displayed on the organisation page.
-            if org["count"] and len(tender_rows) != org["count"]:
-                stats["organisations_skipped_count_mismatch"] += 1
-                stats["errors"].append(
-                    f"{org['name']}: portal count {org['count']} != parsed {len(tender_rows)}"
-                )
-                continue
-
-            stats["organisations_verified"] += 1
-            stats["tender_listed"] += len(tender_rows)
-
-            for tender in tender_rows:
-                tid = tender["tender_id"]
-                ref = tender["reference"]
-                if tid and tid in existing_by_id:
-                    continue
-                if ref and ref in existing_by_ref:
+            for index, org in enumerate(organisations, 1):
+                if MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
+                    stats["organisations_skipped_stage_limit"] += 1
                     continue
 
-                detail_response = request(session, tender["url"], sleep=0.45, referer=org["url"])
-                detail_soup = BeautifulSoup(detail_response.text, "html.parser")
-                record = parse_detail(detail_soup, tender["url"])
-                stats["detail_opened"] += 1
+                try:
+                    tender_rows, pages = browser_get_all_tender_rows(page, org, org["count"])
 
-                if not record["Tender ID"]:
-                    record["Tender ID"] = tid
-                if not record["Reference Number"]:
-                    record["Reference Number"] = ref
-                if not record["Title"]:
-                    record["Title"] = tender["title"]
+                    # Do not open detail pages unless the parsed list count exactly matches
+                    # the count displayed on the organisation page.
+                    if org["count"] and len(tender_rows) != org["count"]:
+                        stats["organisations_skipped_count_mismatch"] += 1
+                        stats["errors"].append(
+                            f"{org['name']}: portal count {org['count']} != parsed {len(tender_rows)}"
+                        )
+                        continue
 
-                if record["Tender ID"]:
-                    if record["Tender ID"] not in rows_by_id:
-                        stats["new_tenders"] += 1
-                    rows_by_id[record["Tender ID"]] = record
-                elif record["Reference Number"]:
-                    rows_without_id[record["Reference Number"]] = record
+                    stats["organisations_verified"] += 1
+                    stats["tender_listed"] += len(tender_rows)
 
-        except Exception as exc:
-            stats["errors"].append(f"{org['name']}: {type(exc).__name__}: {exc}")
+                    for tender in tender_rows:
+                        tid = tender["tender_id"]
+                        ref = tender["reference"]
+                        if tid and tid in existing_by_id:
+                            continue
+                        if ref and ref in existing_by_ref:
+                            continue
+
+                        detail_soup = browser_page(page, tender["url"])
+                        record = parse_detail(detail_soup, page.url)
+                        stats["detail_opened"] += 1
+
+                        if not record["Tender ID"]:
+                            record["Tender ID"] = tid
+                        if not record["Reference Number"]:
+                            record["Reference Number"] = ref
+                        if not record["Title"]:
+                            record["Title"] = tender["title"]
+
+                        if record["Tender ID"]:
+                            if record["Tender ID"] not in rows_by_id:
+                                stats["new_tenders"] += 1
+                            rows_by_id[record["Tender ID"]] = record
+                        elif record["Reference Number"]:
+                            rows_without_id[record["Reference Number"]] = record
+
+                except Exception as exc:
+                    stats["errors"].append(f"{org['name']}: {type(exc).__name__}: {exc}")
+        finally:
+            browser.close()
 
     final_rows = list(rows_by_id.values()) + list(rows_without_id.values())
     now = datetime.now()
