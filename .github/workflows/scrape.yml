@@ -24,7 +24,7 @@ jobs:
     env:
       # Stage 1: only organisations with 10 or fewer tenders.
       # Later change to 100 -> 200 -> 400 -> 600 -> final 600+ stage.
-      MAX_ORG_TENDER_COUNT: "10"
+      MAX_ORG_TENDER_COUNT: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
