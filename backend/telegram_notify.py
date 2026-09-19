@@ -93,7 +93,7 @@ def main():
         f"📅 Date: {today}\n"
         f"🆕 New tenders published today: {len(today_rows)}\n"
         f"📋 Total tender-list records: {len(rows)}\n\n"
-        f"🌐 Dashboard: {SITE_URL}\n\n"
+        f"🌐 Dashboard: {SITE_URL}\n👤 Contact Admin: https://t.me/rdgyan\n\n"
         "⚠️ This dashboard is an assistance tool only. "
         "Always verify the final tender notice, corrigendum, eligibility, "
         "fees and deadline on the official tender portal."
