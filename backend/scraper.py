@@ -270,7 +270,9 @@ def parse_tender_rows(soup, base):
         )
         if not looks_like_tender_table:
             continue
-        for tr in rows[1:]:
+        # Do not blindly skip the first row: DirectLink tender pages on the MP portal
+        # can render the first tender row without a normal header row.
+        for tr in rows:
             cells = tr.find_all(["td", "th"])
             texts = [clean(c.get_text(" ", strip=True)) for c in cells]
             if len(texts) < 2:
