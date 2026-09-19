@@ -43,17 +43,23 @@ jobs:
       - name: Install Chromium for MP portal
         run: python -m playwright install --with-deps chromium
 
-      - name: Run MP Tender scraper — detail field validation sample
+      - name: Run MP Tender scraper — full organisation/tender list
         env:
+          DETAIL_SAMPLE_SIZE: "0"
+        run: python backend/scraper.py
+
+      - name: Validate exactly 9 Directorate Sports and Youth Welfare detail pages
+        env:
+          DETAIL_VALIDATION_ONLY: "1"
           DETAIL_SAMPLE_SIZE: "9"
           DETAIL_ORGANISATION: "Directorate Sports and Youth Welfare"
         run: python backend/scraper.py
 
-      - name: Commit collected organisation and tender-list data
+      - name: Commit collected organisation, tender-list and 9-detail validation data
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv detail_validation.csv
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
