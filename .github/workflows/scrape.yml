@@ -16,6 +16,10 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    env:
+      # Stage 1: only organisations with 50 or fewer tenders.
+      # Later change to 100 -> 200 -> 400 -> 600 -> final 600+ stage.
+      MAX_ORG_TENDER_COUNT: "50"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
