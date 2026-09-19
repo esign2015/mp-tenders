@@ -76,7 +76,7 @@ jobs:
               cell=ParagraphStyle("c",parent=styles["Normal"],fontName="Helvetica",fontSize=6.2,leading=7.4,textColor=colors.HexColor("#233044"))
               center=ParagraphStyle("cc",parent=cell,alignment=TA_CENTER)
               sub=ParagraphStyle("s",parent=styles["Normal"],fontName="Helvetica",fontSize=7.5,leading=9,alignment=TA_CENTER,textColor=colors.HexColor("#4b5563"))
-              doc=SimpleDocTemplate(filename,pagesize=landscape(A3),leftMargin=18,rightMargin=18,topMargin=58,bottomMargin=24,title=title,author="SAR Digital Services, Kannod")
+              doc=SimpleDocTemplate(str(filename),pagesize=landscape(A3),leftMargin=18,rightMargin=18,topMargin=58,bottomMargin=24,title=title,author="SAR Digital Services, Kannod")
               story=[Paragraph("SAR Digital Services, Kannod",ParagraphStyle("t",parent=styles["Title"],fontName="Helvetica-Bold",fontSize=15,textColor=colors.HexColor("#14376e"),alignment=TA_CENTER,leading=18)),Paragraph("MP Tender Live Dashboard",sub),Spacer(1,4),Paragraph(title+" • "+str(len(rows))+" tenders",sub),Spacer(1,7)]
               data=[["S.No.","Tender ID","Closing Date","Title","Ref.No.","PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"]]
               for i,r in enumerate(rows,1):
