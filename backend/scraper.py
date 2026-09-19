@@ -352,17 +352,54 @@ def parse_tender_rows(soup, base):
             # Title links are generally the longest meaningful text in the row.
             anchor, href, anchor_text = max(candidates, key=lambda x: len(x[2]))
 
-            reference = ""
-            ref_match = re.search(
-                r"(?i)(?:ref(?:erence)?\.?\s*(?:no\.?|number)?\s*[:\-]?\s*)([^|]+)",
-                full_text,
-            )
-            if ref_match:
-                reference = clean(ref_match.group(1))
+            # MP Tender list links commonly render as:
+            # [Title] [Reference Number] [Tender ID]
+            # while the Tender ID may also be visible elsewhere in the row.
+            # Capture these bracketed values directly so the dashboard gets
+            # the real Reference Number instead of an empty field.
+            bracket_values = [
+                clean(x)
+                for x in re.findall(r"\[([^\]]+)\]", anchor_text)
+                if clean(x)
+            ]
 
-            # If the row's visible text contains the title, use the anchor text;
-            # otherwise keep the full row text as a fallback title.
-            title = clean(anchor_text) or clean(texts[1] if len(texts) > 1 else texts[0])
+            bracket_tender_id = next(
+                (x for x in bracket_values if TENDER_ID_RE.fullmatch(x)),
+                "",
+            )
+            if bracket_tender_id:
+                tender_id = bracket_tender_id
+
+            non_id_brackets = [
+                x for x in bracket_values
+                if not TENDER_ID_RE.fullmatch(x)
+            ]
+
+            title = (
+                non_id_brackets[0]
+                if non_id_brackets
+                else clean(anchor_text)
+            )
+
+            reference = (
+                non_id_brackets[1]
+                if len(non_id_brackets) >= 2
+                else ""
+            )
+
+            # Fallback for rows whose portal markup does not use the
+            # [Title] [Reference] [Tender ID] pattern.
+            if not reference:
+                ref_match = re.search(
+                    r"(?i)(?:ref(?:erence)?\.?\s*(?:no\.?|number)?\s*[:\-]?\s*)([^|]+)",
+                    full_text,
+                )
+                if ref_match:
+                    reference = clean(ref_match.group(1))
+
+            title = clean(title).strip("[]")
+            reference = clean(reference).strip("[]")
+            tender_id = clean(tender_id).strip("[]")
 
             result.append({
                 "url": href,
@@ -640,7 +677,6 @@ def scrape_mp_tenders(csv_file):
                         detail_soup = browser_page(
                             page,
                             tender["Tender URL"],
-                            wait_ms=1200,
                         )
                         detail = parse_detail(
                             detail_soup,
