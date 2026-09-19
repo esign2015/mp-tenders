@@ -1051,24 +1051,59 @@ function parseDate(value){
   const text = clean(value);
   if(!text) return null;
 
-  let date = new Date(text);
-  if(!isNaN(date.getTime())) return date;
+  // MP Tender portal uses several date formats, including:
+  // 21/09/2026, 21-09-2026, 21-Sep-2026 and 21-Sep-2026 05:00 PM.
+  // Parse these explicitly in the browser's local timezone so that
+  // "Closing Today" and "Closed Today" use the correct calendar date.
+  const match = text.match(
+    /^(\d{1,2})[\/\-]([A-Za-z]{3,9}|\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?:\s*(AM|PM))?)?/i
+  );
 
-  const match = text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?:\s*(AM|PM))?)?/i);
   if(match){
-    let day = Number(match[1]);
-    let month = Number(match[2]);
+    const day = Number(match[1]);
+    const monthText = String(match[2]);
+    let month;
+
+    if(/^\d+$/.test(monthText)){
+      month = Number(monthText);
+    }else{
+      const names = [
+        "jan","feb","mar","apr","may","jun",
+        "jul","aug","sep","oct","nov","dec"
+      ];
+      month = names.indexOf(monthText.slice(0,3).toLowerCase()) + 1;
+    }
+
     let year = Number(match[3]);
     if(year < 100) year += 2000;
+
     let hour = Number(match[4] || 0);
     const minute = Number(match[5] || 0);
     const ampm = (match[6] || "").toUpperCase();
+
     if(ampm === "PM" && hour < 12) hour += 12;
     if(ampm === "AM" && hour === 12) hour = 0;
-    date = new Date(year, month - 1, day, hour, minute, 0);
-    if(!isNaN(date.getTime())) return date;
+
+    if(
+      month >= 1 && month <= 12 &&
+      day >= 1 && day <= 31 &&
+      year >= 2000
+    ){
+      const date = new Date(year, month - 1, day, hour, minute, 0);
+      if(
+        !isNaN(date.getTime()) &&
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      ){
+        return date;
+      }
+    }
   }
-  return null;
+
+  // Fallback for ISO/other browser-supported formats.
+  const date = new Date(text);
+  return isNaN(date.getTime()) ? null : date;
 }
 
 function formatDate(value){
