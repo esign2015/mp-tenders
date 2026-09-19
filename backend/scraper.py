@@ -586,8 +586,9 @@ def parse_list_dates(tender):
 
 
 def run_detail_validation(csv_file, organisations):
-    """Validate exactly N detail pages using the SAME requests session that
-    created the JSF DirectLink URLs. This keeps session-bound links valid."""
+    """Validate exactly N tender detail pages in one live Chromium session.
+    The portal generates JSF DirectLinks tied to that browser session, so we
+    click the actual 'View Tender Information' anchor on the organisation list."""
     target_name = clean(os.getenv("DETAIL_ORGANISATION", "Directorate Sports and Youth Welfare"))
     sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "9"))
     output_file = csv_file.parent / os.getenv("DETAIL_OUTPUT_FILE", "detail_validation.csv")
@@ -600,88 +601,130 @@ def run_detail_validation(csv_file, organisations):
     if not target_org:
         raise RuntimeError(f"DETAIL_ORGANISATION not found: {target_name}")
 
-    session = requests.Session()
     results = []
     errors = []
 
-    # Establish the same portal session, then create the organisation's
-    # DirectLink URLs and immediately consume those URLs with that session.
-    request(session, ORG_URL, sleep=0.5)
-    fresh_rows, pages = get_all_tender_rows(
-        session, target_org["url"], target_org["count"]
-    )
-    candidates = [
-        row for row in fresh_rows
-        if clean(row.get("tender_id")) and clean(row.get("url"))
-    ]
-    if len(candidates) < sample_size:
-        raise RuntimeError(
-            f"Only {len(candidates)} live tenders found for {target_name}; expected {sample_size}."
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
         )
-
-    selected = candidates[:sample_size]
-
-    # Debug the first live tender row structure once so we can bind to the
-    # portal's actual JSF link instead of guessing at its href.
-    try:
-        debug_response = request(session, target_org["url"], sleep=0.2)
-        debug_soup = BeautifulSoup(debug_response.text, "html.parser")
-        first = selected[0]
-        needles = [clean(first.get("tender_id")), clean(first.get("title")), clean(first.get("reference"))]
-        snippets = []
-        for a in debug_soup.find_all("a"):
-            raw = str(a)
-            if any(n and n.casefold() in raw.casefold() for n in needles):
-                snippets.append(raw[:5000])
-                if len(snippets) >= 5:
-                    break
-        print("DETAIL ANCHOR DEBUG:", " || ".join(snippets))
-    except Exception as exc:
-        print("DETAIL ANCHOR DEBUG ERROR:", type(exc).__name__, exc)
-
-    for idx, tender in enumerate(selected, 1):
         try:
-            response = request(
-                session,
-                tender["url"],
-                sleep=0.8,
-                referer=target_org["url"],
+            # Establish a fresh browser session on the organisation master page.
+            browser_page(page, ORG_URL)
+            org_soup = BeautifulSoup(page.content(), "html.parser")
+            live_orgs = parse_organisation_rows(org_soup, page.url)
+            live_org = next(
+                (x for x in live_orgs
+                 if clean(x.get("name")).casefold() == target_name.casefold()),
+                None,
             )
-            soup = BeautifulSoup(response.text, "html.parser")
-            body = clean(soup.get_text(" ", strip=True))
+            if not live_org:
+                raise RuntimeError(f"Live organisation not found: {target_name}")
 
-            tender_id = clean(tender.get("tender_id"))
-            # Reject navigation/home/list pages before parsing.
-            if (
-                tender_id.casefold() not in body.casefold()
-                and not re.search(r"(?i)Tender Reference Number|EMD Amount in|Tender Fee in|Organisation Chain", body)
-            ):
+            # Open the organisation tender list using the URL created in THIS browser session.
+            browser_page(page, live_org["url"])
+            list_soup = BeautifulSoup(page.content(), "html.parser")
+            candidates = parse_tender_rows(list_soup, page.url)
+            candidates = [
+                row for row in candidates
+                if clean(row.get("tender_id"))
+            ]
+            if len(candidates) < sample_size:
                 raise RuntimeError(
-                    f"Detail URL returned non-detail page: {response.url}"
+                    f"Only {len(candidates)} live tenders found for {target_name}; expected {sample_size}."
                 )
 
-            detail = parse_detail(soup, response.url)
-            list_dates = parse_list_dates(tender)
-            detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
-            detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
-            detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
-            detail["Published Date"] = clean(detail.get("Published Date")) or list_dates[0]
-            detail["Closing Date"] = clean(detail.get("Closing Date")) or list_dates[1]
-            detail["Opening Date"] = clean(detail.get("Opening Date")) or list_dates[2]
-            detail["Organisation"] = target_org["name"]
-            detail["URL"] = response.url
+            selected = candidates[:sample_size]
 
-            results.append(detail)
-            print(
-                f"DETAIL VALIDATION {idx}/{sample_size}: "
-                f"{detail.get('Tender ID')} | ref={detail.get('Reference Number')} | "
-                f"PAC={detail.get('PAC Amount')} | EMD={detail.get('EMD Fee')} | "
-                f"Fee={detail.get('Tender Fee')} | Processing={detail.get('Processing Fee')} | "
-                f"Total={detail.get('Total Fee')} | Location={detail.get('Location')} | "
-                f"Pincode={detail.get('Pincode')}"
-            )
-        except Exception as exc:
-            errors.append(f"{tender.get('tender_id')}: {type(exc).__name__}: {exc}")
+            for idx, tender in enumerate(selected, 1):
+                try:
+                    # Return to the same live organisation list before each click so
+                    # the JSF DirectLink and its session token are freshly generated.
+                    browser_page(page, live_org["url"])
+
+                    tender_id = clean(tender.get("tender_id"))
+                    tender_title = clean(tender.get("title"))
+                    tender_ref = clean(tender.get("reference"))
+
+                    links = page.locator('a[title="View Tender Information"]')
+                    chosen = None
+                    for j in range(links.count()):
+                        link = links.nth(j)
+                        txt = clean(link.inner_text())
+                        raw = (link.get_attribute("href") or "") + " " + (link.get_attribute("onclick") or "")
+                        hay = f"{txt} {raw}".casefold()
+                        if (
+                            tender_id.casefold() in hay
+                            or (tender_title and tender_title.casefold() in hay)
+                            or (tender_ref and tender_ref.casefold() in hay)
+                        ):
+                            chosen = link
+                            break
+
+                    if chosen is None:
+                        # Fallback: inspect every link's outerHTML for the ID/ref/title.
+                        all_links = page.locator("a")
+                        for j in range(all_links.count()):
+                            link = all_links.nth(j)
+                            outer = link.evaluate("(e) => e.outerHTML") or ""
+                            if (
+                                tender_id.casefold() in outer.casefold()
+                                or (tender_title and tender_title.casefold() in outer.casefold())
+                                or (tender_ref and tender_ref.casefold() in outer.casefold())
+                            ):
+                                chosen = link
+                                break
+
+                    if chosen is None:
+                        raise RuntimeError(f"View Tender Information link not found for {tender_id}")
+
+                    chosen.click()
+                    page.wait_for_load_state("domcontentloaded", timeout=60000)
+                    page.wait_for_timeout(1000)
+
+                    detail_soup = BeautifulSoup(page.content(), "html.parser")
+                    detail_text = clean(detail_soup.get_text(" ", strip=True))
+                    if tender_id.casefold() not in detail_text.casefold():
+                        raise RuntimeError(
+                            f"Clicked link but detail page did not contain Tender ID {tender_id}; "
+                            f"current_url={page.url}"
+                        )
+
+                    detail = parse_detail(detail_soup, page.url)
+                    list_dates = parse_list_dates(tender)
+                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                    detail["Title"] = clean(detail.get("Title")) or tender_title
+                    detail["Reference Number"] = clean(detail.get("Reference Number")) or tender_ref
+                    detail["Published Date"] = clean(detail.get("Published Date")) or list_dates[0]
+                    detail["Closing Date"] = clean(detail.get("Closing Date")) or list_dates[1]
+                    detail["Opening Date"] = clean(detail.get("Opening Date")) or list_dates[2]
+                    detail["Organisation"] = target_name
+                    detail["URL"] = page.url
+
+                    # Quality gate: these three identifiers must be present; otherwise
+                    # the page is not considered a successful detail extraction.
+                    if not clean(detail.get("Tender ID")) or not clean(detail.get("Reference Number")):
+                        raise RuntimeError(
+                            f"Detail extraction missing required identifier: "
+                            f"id={detail.get('Tender ID')} ref={detail.get('Reference Number')}"
+                        )
+
+                    results.append(detail)
+                    print(
+                        f"DETAIL VALIDATION {idx}/{sample_size}: "
+                        f"{detail.get('Tender ID')} | ref={detail.get('Reference Number')} | "
+                        f"PAC={detail.get('PAC Amount')} | EMD={detail.get('EMD Fee')} | "
+                        f"Fee={detail.get('Tender Fee')} | Processing={detail.get('Processing Fee')} | "
+                        f"Total={detail.get('Total Fee')} | Location={detail.get('Location')} | "
+                        f"Pincode={detail.get('Pincode')}"
+                    )
+                except Exception as exc:
+                    errors.append(f"{tender.get('tender_id')}: {type(exc).__name__}: {exc}")
+        finally:
+            browser.close()
 
     write_csv(output_file, results)
     if len(results) != sample_size:
@@ -690,8 +733,8 @@ def run_detail_validation(csv_file, organisations):
             + (" | ".join(errors) if errors else "")
         )
 
-    # Never replace the dashboard with the 9-test sample. Only enrich existing
-    # matching Tender IDs; the scheduled full scrape owns the complete dataset.
+    # Never replace the dashboard with the 9-test sample. Enrich only matching
+    # Tender IDs already present in the dashboard file.
     main_rows = read_existing(csv_file)
     by_id = {
         clean(row.get("Tender ID")): dict(row)
@@ -704,10 +747,7 @@ def run_detail_validation(csv_file, organisations):
             by_id[key].update(detail)
     write_csv(csv_file, list(by_id.values()))
 
-    print(
-        f"DETAIL VALIDATION COMPLETE: {len(results)}/{sample_size} tenders, "
-        f"organisation={target_name}, pages={pages}"
-    )
+    print(f"DETAIL VALIDATION COMPLETE: {len(results)}/{sample_size} tenders, organisation={target_name}")
     return {
         "ok": True,
         "detail_validation": len(results),
