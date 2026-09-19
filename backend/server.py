@@ -5,7 +5,7 @@ import hmac
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib import request, parse
+from urllib import request as urllib_request, parse as urllib_parse
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -21,7 +21,8 @@ FIELDS = [
     "Tender ID", "Published Date", "Closing Date", "Opening Date",
     "Title", "Reference Number", "Organisation", "Department",
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
-    "Tender Fee", "Processing Fee", "Total Fee", "Status", "URL",
+    "Tender Fee", "Processing Fee", "Total Fee", "Location", "Pincode",
+    "Status", "URL",
 ]
 
 
@@ -50,8 +51,8 @@ def telegram_api(method, params):
     if not token:
         raise RuntimeError("TELEGRAM_BOT_TOKEN is not configured.")
     url = f"https://api.telegram.org/bot{token}/{method}"
-    data = parse.urlencode(params).encode("utf-8")
-    with request.urlopen(request.Request(url, data=data), timeout=30) as response:
+    data = urllib_parse.urlencode(params).encode("utf-8")
+    with urllib_request.urlopen(urllib_request.Request(url, data=data), timeout=30) as response:
         return json.loads(response.read().decode("utf-8"))
 
 
