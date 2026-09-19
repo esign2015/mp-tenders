@@ -981,6 +981,8 @@ td.title-cell{
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
 const CSV_URL = "all_tenders_org_detailed.csv";
@@ -1608,7 +1610,140 @@ function updateDateTime(){
 }
 
 function exportPdf(){
-  window.print();
+  if(!window.jspdf || !window.jspdf.jsPDF){
+    alert("PDF library अभी load नहीं हुई है। कृपया 2 सेकंड बाद फिर Export PDF दबाएँ।");
+    return;
+  }
+
+  const rows = filteredTenders.length ? filteredTenders : allTenders;
+  const { jsPDF } = window.jspdf;
+
+  const doc = new jsPDF({
+    orientation:"landscape",
+    unit:"mm",
+    format:"a3"
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  const reportDate = new Date().toLocaleString("en-IN",{
+    day:"2-digit",
+    month:"2-digit",
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+
+  /* Light watermark */
+  doc.setTextColor(235,238,244);
+  doc.setFontSize(42);
+  doc.text(
+    "SAR DIGITAL SERVICES",
+    pageWidth/2,
+    pageHeight/2,
+    {align:"center",angle:25}
+  );
+
+  /* Header */
+  doc.setTextColor(20,55,110);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(17);
+  doc.text("SAR Digital Services, Kannod",14,13);
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
+  doc.text("MP Tender Live Dashboard",14,19);
+  doc.text("Generated: " + reportDate,pageWidth-14,13,{align:"right"});
+
+  doc.setDrawColor(20,55,110);
+  doc.line(14,23,pageWidth-14,23);
+
+  const body = rows.map((row,index) => [
+    index + 1,
+    clean(row["Tender ID"]),
+    formatDate(row["Published Date"]),
+    formatDate(row["Closing Date"]),
+    formatDate(row["Opening Date"]),
+    clean(row["Title"]),
+    clean(row["Reference Number"]),
+    clean(row["Organisation"]),
+    clean(row["Department"]),
+    clean(row["Division"]),
+    clean(row["Sub Division"]),
+    clean(row["PAC Amount"]),
+    clean(row["EMD Fee"]),
+    clean(row["Tender Fee"]),
+    clean(row["Processing Fee"]),
+    clean(row["Total Fee"]),
+    getStatusText(row)
+  ]);
+
+  doc.autoTable({
+    startY:28,
+    head:[[
+      "S.No.","Tender ID","Published","Closing","Opening","Title",
+      "Ref.No.","Organisation","Department","Division","Sub Division",
+      "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee","Status"
+    ]],
+    body:body,
+    theme:"grid",
+    styles:{
+      font:"helvetica",
+      fontSize:6.5,
+      cellPadding:1.5,
+      overflow:"linebreak",
+      valign:"middle"
+    },
+    headStyles:{
+      fontStyle:"bold",
+      fontSize:6.5,
+      halign:"center"
+    },
+    columnStyles:{
+      0:{cellWidth:9,halign:"center"},
+      1:{cellWidth:28},
+      2:{cellWidth:18},
+      3:{cellWidth:18},
+      4:{cellWidth:18},
+      5:{cellWidth:58},
+      6:{cellWidth:30},
+      7:{cellWidth:38},
+      8:{cellWidth:35},
+      9:{cellWidth:28},
+      10:{cellWidth:30},
+      11:{cellWidth:24},
+      12:{cellWidth:20},
+      13:{cellWidth:20},
+      14:{cellWidth:22},
+      15:{cellWidth:20},
+      16:{cellWidth:22}
+    },
+    margin:{left:10,right:10,bottom:18},
+    didDrawPage:function(data){
+      const page = doc.internal.getNumberOfPages();
+
+      doc.setTextColor(90,90,90);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(7);
+      doc.text(
+        "This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.",
+        pageWidth/2,
+        pageHeight-10,
+        {align:"center"}
+      );
+
+      doc.text(
+        "SAR Digital Services, Kannod  •  Page " + page,
+        pageWidth/2,
+        pageHeight-5,
+        {align:"center"}
+      );
+    }
+  });
+
+  const stamp = new Date().toISOString().slice(0,10);
+  doc.save("MP_Tender_Dashboard_" + stamp + ".pdf");
 }
 
 $("pincodeSearch").addEventListener("input", function(){
