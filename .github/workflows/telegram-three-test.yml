@@ -1,0 +1,106 @@
+name: Telegram Three Layout Test
+
+on:
+  push:
+    paths:
+      - ".github/workflows/telegram-three-test.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PDF dependency
+        run: pip install reportlab
+
+      - name: Send three Telegram test alerts one minute apart
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import csv, os, re, time
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+          from urllib import request, parse
+          from reportlab.lib import colors
+          from reportlab.lib.pagesizes import A3, landscape
+          from reportlab.lib.enums import TA_CENTER
+          from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+          from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
+          IST = timezone(timedelta(hours=5, minutes=30))
+          TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+          CHAT = os.environ["TELEGRAM_CHAT_ID"]
+          SITE = "https://esign2015.github.io/mp-tenders/"
+          TG = "https://t.me/mptendersalert"
+
+          def clean(v): return str(v or "").strip()
+          def strip(v): return re.sub(r"^\[|\]$", "", clean(v))
+
+          def pdate(v):
+              s=clean(v)
+              for f in ("%d/%m/%Y %I:%M %p","%d/%m/%Y %H:%M","%d-%m-%Y %I:%M %p","%d-%m-%Y %H:%M","%d/%m/%Y","%d-%m-%Y","%Y-%m-%d"):
+                  try: return datetime.strptime(s,f).replace(tzinfo=IST)
+                  except: pass
+              m=re.search(r"(\d{1,2})[/-](\d{1,2})[/-](\d{4})",s)
+              return datetime(int(m.group(3)),int(m.group(2)),int(m.group(1)),tzinfo=IST) if m else None
+
+          with open("organisation_tenders.csv",encoding="utf-8-sig",newline="") as f:
+              rows=list(csv.DictReader(f))
+          today=datetime.now(IST).date()
+          ds=today.strftime("%d-%m-%Y")
+          display=today.strftime("%d/%m/%Y")
+          new=[r for r in rows if pdate(r.get("Published Date")) and pdate(r.get("Published Date")).date()==today]
+          closing=[r for r in rows if pdate(r.get("Closing Date")) and pdate(r.get("Closing Date")).date()==today]
+
+          def send_msg(text):
+              data=parse.urlencode({"chat_id":CHAT,"text":text,"disable_web_page_preview":"false"}).encode()
+              with request.urlopen(request.Request("https://api.telegram.org/bot"+TOKEN+"/sendMessage",data=data),timeout=30) as r:
+                  assert '"ok":true' in r.read().decode()
+
+          def send_doc(path,caption):
+              b="----MPTendersTestBoundary"
+              body=(f"--{b}\r\nContent-Disposition: form-data; name=\"chat_id\"\r\n\r\n{CHAT}\r\n"
+                    f"--{b}\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\n{caption}\r\n"
+                    f"--{b}\r\nContent-Disposition: form-data; name=\"document\"; filename=\"{path.name}\"\r\n"
+                    "Content-Type: application/pdf\r\n\r\n").encode()+path.read_bytes()+f"\r\n--{b}--\r\n".encode()
+              req=request.Request("https://api.telegram.org/bot"+TOKEN+"/sendDocument",data=body,headers={"Content-Type":f"multipart/form-data; boundary={b}"},method="POST")
+              with request.urlopen(req,timeout=120) as r:
+                  assert '"ok":true' in r.read().decode()
+
+          def pdf(rows,filename,title):
+              styles=getSampleStyleSheet()
+              cell=ParagraphStyle("c",parent=styles["Normal"],fontName="Helvetica",fontSize=6.2,leading=7.4,textColor=colors.HexColor("#233044"))
+              center=ParagraphStyle("cc",parent=cell,alignment=TA_CENTER)
+              sub=ParagraphStyle("s",parent=styles["Normal"],fontName="Helvetica",fontSize=7.5,leading=9,alignment=TA_CENTER,textColor=colors.HexColor("#4b5563"))
+              doc=SimpleDocTemplate(filename,pagesize=landscape(A3),leftMargin=18,rightMargin=18,topMargin=58,bottomMargin=24,title=title,author="SAR Digital Services, Kannod")
+              story=[Paragraph("SAR Digital Services, Kannod",ParagraphStyle("t",parent=styles["Title"],fontName="Helvetica-Bold",fontSize=15,textColor=colors.HexColor("#14376e"),alignment=TA_CENTER,leading=18)),Paragraph("MP Tender Live Dashboard",sub),Spacer(1,4),Paragraph(title+" • "+str(len(rows))+" tenders",sub),Spacer(1,7)]
+              data=[["S.No.","Tender ID","Closing Date","Title","Ref.No.","PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"]]
+              for i,r in enumerate(rows,1):
+                  data.append([Paragraph(str(i),center),Paragraph(strip(r.get("Tender ID")),cell),Paragraph(clean(r.get("Closing Date")),center),Paragraph(strip(r.get("Title")),cell),Paragraph(strip(r.get("Reference Number")),cell),Paragraph(clean(r.get("PAC Amount")),center),Paragraph(clean(r.get("EMD Fee")),center),Paragraph(clean(r.get("Tender Fee")),center),Paragraph(clean(r.get("Processing Fee")),center),Paragraph(clean(r.get("Total Fee")),center)])
+              table=Table(data,colWidths=[28,125,95,260,250,95,75,75,90,90],repeatRows=1)
+              table.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),colors.HexColor("#14376e")),("TEXTCOLOR",(0,0),(-1,0),colors.white),("FONTNAME",(0,0),(-1,0),"Helvetica-Bold"),("FONTSIZE",(0,0),(-1,0),7),("ALIGN",(0,0),(-1,0),"CENTER"),("VALIGN",(0,0),(-1,-1),"TOP"),("GRID",(0,0),(-1,-1),.25,colors.HexColor("#cdd7e4")),("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#ebf3fc")]),("LEFTPADDING",(0,0),(-1,-1),4),("RIGHTPADDING",(0,0),(-1,-1),4),("TOPPADDING",(0,0),(-1,-1),3),("BOTTOMPADDING",(0,0),(-1,-1),3)]))
+              story.append(table)
+              generated=datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
+              def headerfooter(c,d):
+                  w,h=landscape(A3); c.saveState(); c.setFillColor(colors.HexColor("#14376e")); c.rect(0,h-32,w,32,fill=1,stroke=0)
+                  c.setFillColor(colors.HexColor("#0088cc")); c.roundRect(18,h-25,55,12,3,fill=1,stroke=0); c.setFillColor(colors.white); c.setFont("Helvetica-Bold",7.5); c.drawCentredString(45.5,h-21,"Get Daily Alert"); c.linkURL(TG,(18,h-25,73,h-13),relative=0)
+                  c.setFillColor(colors.HexColor("#2563eb")); c.roundRect(w-73,h-25,55,12,3,fill=1,stroke=0); c.setFillColor(colors.white); c.drawCentredString(w-45.5,h-21,"Website"); c.linkURL(SITE,(w-73,h-25,w-18,h-13),relative=0)
+                  c.setFont("Helvetica-Bold",12); c.drawCentredString(w/2,h-10,"SAR Digital Services, Kannod"); c.setFont("Helvetica",7); c.drawCentredString(w/2,h-18,"MP Tender Live Dashboard"); c.setFont("Helvetica-Bold",6.5); c.drawCentredString(w/2,h-26,"For DSC & E-Tendering Services")
+                  c.setFillColor(colors.HexColor("#14376e")); c.rect(0,0,w,16,fill=1,stroke=0); c.setFillColor(colors.white); c.setFont("Helvetica",6.5); c.drawString(18,6,"SAR Digital Services, Kannod • MP Tender Live Dashboard"); c.drawRightString(w-18,6,f"Page {d.page} • Generated {generated}"); c.restoreState()
+              doc.build(story,onFirstPage=headerfooter,onLaterPages=headerfooter)
+
+          warning="⚠️ Test alert — layout preview only. Always verify final tender details on the official portal."
+          tests=[
+            ("TOTAL",rows,f"Total Tenders as on {ds} on MPTenders",f"Total Tenders as on {ds} on MPTenders.pdf",f"📋 Total Tenders as on date: {len(rows)}\n🌐 Website: {SITE}\n📎 PDF attached\n\n📢 Get Daily Alert: {TG}\n\n{warning}"),
+            ("NEW",new,f"New Publish Tender List on Date {ds} on MPTenders",f"New Publish Tender List on Date {ds} on MPTenders.pdf",f"🆕 New Publish Tenders: {len(new)}\n📅 Date: {display}\n🌐 Website: {SITE}\n📎 PDF attached\n\n📢 Get Daily Alert: {TG}\n\n{warning}"),
+            ("CLOSING",closing,f"Closing Date {ds} Tenders List on MPTenders",f"Closing Date {ds} Tenders List on MPTenders.pdf",f"⏰ Closing Today Tenders: {len(closing)}\n📅 Closing Date: {display}\n🌐 Website: {SITE}\n📎 PDF attached\n\n📢 Get Daily Alert: {TG}\n\n{warning}")
+          ]
+          for idx,(kind,subset,title,filename,msg) in enumerate(tests):
+              path=Path(filename); pdf(subset,path,title); send_msg("🔔 MP Tenders Alert Bot — TEST "+kind+"\n\n"+msg); send_doc(path,"📎 "+title)
+              print("Sent",kind,"PDF:",filename,"rows:",len(subset))
+              if idx<2: time.sleep(60)
+          PY
