@@ -162,14 +162,14 @@ def parse_detail(soup, url):
     body_text = clean(soup.get_text(" ", strip=True))
 
     def between(label, stop_labels):
-        match = re.search(re.escape(label) + r"\s*(.*?)\\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
+        match = re.search(re.escape(label) + r"\s*(.*?)\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
         return clean(match.group(1)) if match else ""
 
     if not chain:
         chain = between("Organisation Chain", ["Tender Reference Number", "Tender ID"])
         organisation, department, division, sub_division = parse_chain(chain)
     if not tender_id:
-        match = re.search(r"\b20\\d{2}_[A-Z0-9]+_\\d+_\\d+\\b", body_text, re.I)
+        match = re.search(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", body_text, re.I)
         tender_id = match.group(0) if match else ""
     if not reference:
         reference = between("Tender Reference Number", ["Tender ID", "Withdrawal Allowed"])
@@ -192,7 +192,7 @@ def parse_detail(soup, url):
     if not location:
         location = between("Location", ["Pincode", "Pre Bid Meeting Place"])
     if not pincode:
-        pin_match = re.search(r"\bPincode\\s+([0-9]{6})\\b", body_text, re.I)
+        pin_match = re.search(r"\bPincode\s+([0-9]{6})\b", body_text, re.I)
         pincode = pin_match.group(1) if pin_match else ""
     total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
