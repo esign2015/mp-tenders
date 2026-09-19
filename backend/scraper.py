@@ -439,9 +439,10 @@ def scrape_mp_tenders(csv_file):
     existing_by_id = {clean(r.get("Tender ID")): r for r in existing if clean(r.get("Tender ID"))}
     existing_by_ref = {clean(r.get("Reference Number")): r for r in existing if clean(r.get("Reference Number"))}
 
-    # Keep a requests session for compatibility with the existing helper code.
-    # Actual portal navigation is performed in Chromium below because MP Tender
-    # uses session-bound JSF DirectLink URLs.
+    # Keep a requests session for the initial organisation list.
+    # Actual organisation/tender navigation is then performed in Chromium because
+    # MP Tender uses session-bound JSF DirectLink URLs.
+    response = request(session, ORG_URL, sleep=0.5)
     soup = BeautifulSoup(response.text, "html.parser")
     organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
