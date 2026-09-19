@@ -1836,50 +1836,31 @@ function exportPdf(){
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const BLUE = [20,55,110];
+  const LIGHT_BLUE = [235,243,252];
 
-  const reportDate = new Date().toLocaleString("en-IN",{
-    day:"2-digit",
-    month:"2-digit",
-    year:"numeric",
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-
-  /* Light watermark */
-  doc.setTextColor(235,238,244);
-  doc.setFontSize(42);
-  doc.text(
-    "SAR DIGITAL SERVICES",
-    pageWidth/2,
-    pageHeight/2,
-    {align:"center",angle:25}
-  );
-
-  /* Header */
-  doc.setTextColor(20,55,110);
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(17);
-  doc.text("SAR Digital Services, Kannod",14,13);
-
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(9);
-  doc.text("MP Tender Live Dashboard",14,19);
-  doc.text("Generated: " + reportDate,pageWidth-14,13,{align:"right"});
-
-  doc.setDrawColor(20,55,110);
-  doc.line(14,23,pageWidth-14,23);
+  const now = new Date();
+  const reportDate =
+    now.toLocaleDateString("en-IN",{
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric",
+      timeZone:"Asia/Kolkata"
+    }) + " " +
+    now.toLocaleTimeString("en-IN",{
+      hour:"2-digit",
+      minute:"2-digit",
+      hour12:true,
+      timeZone:"Asia/Kolkata"
+    }) + " IST";
 
   const body = rows.map((row,index) => [
     index + 1,
-    clean(row["Tender ID"]),
+    clean(row["Tender ID"]).replace(/[\\[\\]]/g,""),
     formatDate(row["Published Date"]),
-    formatDate(row["Closing Date"]),
-    clean(row["Title"]),
-    clean(row["Reference Number"]),
-    clean(row["Organisation"]),
-    clean(row["Department"]),
-    clean(row["Division"]),
-    clean(row["Sub Division"]),
+    formatClosingDateTime(row["Closing Date"]),
+    clean(row["Title"]).replace(/^\\[|\\]$/g,""),
+    clean(row["Reference Number"]).replace(/^\\[|\\]$/g,""),
     clean(row["PAC Amount"]),
     clean(row["EMD Fee"]),
     clean(row["Tender Fee"]),
@@ -1889,72 +1870,93 @@ function exportPdf(){
   ]);
 
   doc.autoTable({
-    startY:28,
+    startY:36,
     head:[[
-      "S.No.","Tender ID","Published","Closing","Title",
-      "Ref.No.","Organisation","Department","Division","Sub Division",
+      "S.No.","Tender ID","Published","Closing","Title","Ref.No.",
       "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee","Status"
     ]],
     body:body,
     theme:"grid",
     styles:{
       font:"helvetica",
-      fontSize:6.5,
-      cellPadding:1.5,
+      fontSize:7,
+      cellPadding:2,
       overflow:"linebreak",
-      valign:"middle"
+      valign:"top",
+      lineColor:[205,215,228],
+      lineWidth:0.2,
+      textColor:[35,45,60]
     },
     headStyles:{
+      fillColor:BLUE,
+      textColor:[255,255,255],
       fontStyle:"bold",
-      fontSize:6.5,
-      halign:"center"
+      fontSize:7,
+      halign:"center",
+      valign:"middle",
+      cellPadding:2.5
+    },
+    alternateRowStyles:{
+      fillColor:LIGHT_BLUE
     },
     columnStyles:{
-      0:{cellWidth:9,halign:"center"},
-      1:{cellWidth:28},
-      2:{cellWidth:18},
-      3:{cellWidth:18},
-      4:{cellWidth:18},
-      5:{cellWidth:58},
-      6:{cellWidth:30},
-      7:{cellWidth:38},
-      8:{cellWidth:35},
-      9:{cellWidth:28},
-      10:{cellWidth:30},
-      11:{cellWidth:24},
-      12:{cellWidth:20},
-      13:{cellWidth:20},
-      14:{cellWidth:22},
-      15:{cellWidth:20},
-      16:{cellWidth:22}
+      0:{cellWidth:10,halign:"center"},
+      1:{cellWidth:30,whiteSpace:"nowrap"},
+      2:{cellWidth:22},
+      3:{cellWidth:25},
+      4:{cellWidth:95},
+      5:{cellWidth:55},
+      6:{cellWidth:28,halign:"right"},
+      7:{cellWidth:22,halign:"right"},
+      8:{cellWidth:22,halign:"right"},
+      9:{cellWidth:25,halign:"right"},
+      10:{cellWidth:25,halign:"right"},
+      11:{cellWidth:21,halign:"center"}
     },
-    margin:{left:10,right:10,bottom:18},
+    margin:{left:10,right:10,bottom:20},
     didDrawPage:function(data){
       const page = doc.internal.getNumberOfPages();
 
-      doc.setTextColor(90,90,90);
+      // Same blue theme header on every page.
+      doc.setFillColor(...BLUE);
+      doc.rect(0,0,pageWidth,27,"F");
+
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(15);
+      doc.text("SAR Digital Services, Kannod",12,10);
+
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9);
+      doc.text("MP Tender Live Dashboard",12,17);
+      doc.setFontSize(8);
+      doc.text("Tender Report  •  " + reportDate,pageWidth-12,10,{align:"right"});
+      doc.text("Total Records: " + rows.length,pageWidth-12,17,{align:"right"});
+
+      // Same blue theme footer on every page.
+      doc.setFillColor(...BLUE);
+      doc.rect(0,pageHeight-12,pageWidth,12,"F");
+
+      doc.setTextColor(255,255,255);
       doc.setFont("helvetica","normal");
       doc.setFontSize(7);
       doc.text(
-        "This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.",
-        pageWidth/2,
-        pageHeight-10,
-        {align:"center"}
+        "SAR Digital Services, Kannod  •  MP Tender Live Dashboard",
+        12,
+        pageHeight-5
       );
-
       doc.text(
-        "SAR Digital Services, Kannod  •  Page " + page,
-        pageWidth/2,
+        "Page " + page + " of " + doc.internal.getNumberOfPages(),
+        pageWidth-12,
         pageHeight-5,
-        {align:"center"}
+        {align:"right"}
       );
     }
   });
 
-  const stamp = new Date().toISOString().slice(0,10);
+  const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   doc.save("MP_Tender_Dashboard_" + stamp + ".pdf");
 }
-
 $("pincodeSearch").addEventListener("input", function(){
   this.value = this.value.replace(/\D/g,"").slice(0,6);
   applyFilters();
