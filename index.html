@@ -1831,6 +1831,7 @@ function showClosingToday(){
   quickFilterMode = "closingToday";
   $("closingDate").value = todayKey();
   applyFilters();
+  $("filterResultCount").textContent = filteredTenders.length;
 }
 
 function showNextThreeDays(){
@@ -1854,6 +1855,7 @@ function showNextThreeDays(){
 
   renderTable(filteredTenders);
   updateCounts(allTenders);
+  $("filterResultCount").textContent = filteredTenders.length;
 }
 
 function updateDateTime(){
