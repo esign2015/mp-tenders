@@ -189,14 +189,16 @@ def make_pdf(rows, filename, report_title):
         canvas.setFont("Helvetica", 7)
         canvas.drawCentredString(w/2, h-18, "MP Tender Live Dashboard")
         canvas.setFont("Helvetica-Bold", 6.5)
-        canvas.drawCentredString(w/2, h-26, "For DSC & E-Tendering Services")
+        canvas.drawCentredString(w/2, h-26, "For DSC & E-Tendering Services • Contact Admin: t.me/rdgyan")
+        canvas.linkURL("https://t.me/rdgyan", (w/2-85, h-31, w/2+85, h-22), relative=0)
 
         # Footer
         canvas.setFillColor(colors.HexColor("#14376e"))
         canvas.rect(0, 0, w, 16, fill=1, stroke=0)
         canvas.setFillColor(colors.white)
         canvas.setFont("Helvetica", 6.5)
-        canvas.drawString(18, 6, "SAR Digital Services, Kannod • MP Tender Live Dashboard")
+        canvas.drawString(18, 6, "SAR Digital Services, Kannod • Contact Admin: t.me/rdgyan")
+        canvas.linkURL("https://t.me/rdgyan", (18, 4, 125, 11), relative=0)
         canvas.drawRightString(w-18, 6, f"Page {document.page} • Generated {generated}")
         canvas.restoreState()
 
