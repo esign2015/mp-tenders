@@ -10,65 +10,81 @@ on:
     paths:
       - "backend/**"
       - ".github/workflows/scrape.yml"
+      - "index.html"
   workflow_dispatch:
   schedule:
-    # 20:45 IST (UTC+5:30)
     - cron: "15 15 * * *"
-    # 08:55 IST (UTC+5:30)
     - cron: "25 3 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  scrape:
-    if: github.event_name != 'schedule' || github.event.schedule == '15 15 * * *'
+  detail_validation:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
-
-      - name: Install ReportLab for Telegram PDFs
-        run: pip install reportlab
-
-      - name: Install Chromium for MP portal
+      - name: Install Chromium
         run: python -m playwright install --with-deps chromium
-
-      - name: Run MP Tender scraper — full organisation/tender list
-        env:
-          DETAIL_SAMPLE_SIZE: "0"
-        run: python backend/scraper.py
-
       - name: Validate exactly 9 Directorate Sports and Youth Welfare detail pages
         env:
           DETAIL_VALIDATION_ONLY: "1"
           DETAIL_SAMPLE_SIZE: "9"
           DETAIL_ORGANISATION: "Directorate Sports and Youth Welfare"
         run: python backend/scraper.py
-
-      - name: Commit collected organisation, tender-list and 9-detail validation data
+      - name: Commit 9-detail validation data
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv detail_validation.csv
+          git add all_tenders_org_detailed.csv detail_validation.csv
+          if git diff --cached --quiet; then
+            echo "No 9-detail changes to commit."
+          else
+            git commit -m "Update 9 Directorate Sports detail validation records"
+            git push
+          fi
+
+  scrape_full:
+    if: github.event_name == 'schedule' && github.event.schedule == '15 15 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install ReportLab for Telegram PDFs
+        run: pip install reportlab
+      - name: Run MP Tender scraper — full organisation/tender list
+        env:
+          DETAIL_SAMPLE_SIZE: "0"
+        run: python backend/scraper.py
+      - name: Commit full tender data
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
             git commit -m "Update MP organisation and tender-list data"
             git push
           fi
-
       - name: Send Telegram evening update
-        if: success() && github.event_name == 'schedule' && github.event.schedule == '15 15 * * *'
+        if: success()
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -82,15 +98,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Install PDF dependency
+      - name: Install ReportLab
         run: pip install reportlab
-
       - name: Send Telegram morning closing-date alert
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
