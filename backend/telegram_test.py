@@ -13,7 +13,7 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 
 IST = timezone(timedelta(hours=5, minutes=30))
-SITE_URL = "https://esign2015.github.io/mp-tenders/"
+SITE_URL = "https://tenders.codinglms.xyz/"
 TELEGRAM_URL = "https://t.me/mptendersalert"
 CSV_PATH = Path("organisation_tenders.csv")
 PDF_PATH = Path("MP_Tender_Current_Data_Test.pdf")
