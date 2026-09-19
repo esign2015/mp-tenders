@@ -1,11 +1,10 @@
 import csv
 import os
 import re
-import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin, unquote
+from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -23,7 +22,6 @@ FIELDS = [
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
     "Tender Fee", "Processing Fee", "Total Fee", "Status", "URL",
 ]
-
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
 
@@ -44,9 +42,7 @@ def money_text(value):
     n = money_number(value)
     if not n:
         return ""
-    if n.is_integer():
-        return str(int(n))
-    return f"{n:.2f}"
+    return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
 def request(session, url, retries=3, sleep=1.0):
@@ -64,9 +60,7 @@ def request(session, url, retries=3, sleep=1.0):
 
 
 def absolute(base, href):
-    if not href:
-        return ""
-    return urljoin(base, href)
+    return urljoin(base, href) if href else ""
 
 
 def link_from_anchor(anchor, base):
@@ -75,47 +69,35 @@ def link_from_anchor(anchor, base):
     href = anchor.get("href")
     if href:
         return absolute(base, href)
-
     onclick = anchor.get("onclick", "")
     match = re.search(r"""['"]((?:https?://|/)[^'"]+)['"]""", onclick)
-    if match:
-        return absolute(base, match.group(1))
-
-    return ""
+    return absolute(base, match.group(1)) if match else ""
 
 
 def find_value_pairs(soup):
     pairs = {}
     for table in soup.find_all("table"):
         for tr in table.find_all("tr"):
-            cells = tr.find_all(["td", "th"])
-            values = [clean(c.get_text(" ", strip=True)) for c in cells]
+            values = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td", "th"])]
             if len(values) < 2:
                 continue
-
             if len(values) == 2:
                 pairs.setdefault(values[0].lower(), values[1])
             else:
                 for i in range(0, len(values) - 1, 2):
-                    label = values[i].lower()
-                    value = values[i + 1]
-                    if label:
-                        pairs.setdefault(label, value)
+                    if values[i]:
+                        pairs.setdefault(values[i].lower(), values[i + 1])
     return pairs
 
 
 def find_label_value(soup, label_patterns):
     patterns = [p.lower() for p in label_patterns]
-
     for table in soup.find_all("table"):
         for tr in table.find_all("tr"):
-            cells = tr.find_all(["td", "th"])
-            texts = [clean(c.get_text(" ", strip=True)) for c in cells]
+            texts = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td", "th"])]
             for i, text in enumerate(texts):
-                low = text.lower()
-                if any(p in low for p in patterns):
-                    if i + 1 < len(texts) and texts[i + 1]:
-                        return texts[i + 1]
+                if any(p in text.lower() for p in patterns) and i + 1 < len(texts) and texts[i + 1]:
+                    return texts[i + 1]
     return ""
 
 
@@ -134,40 +116,24 @@ def find_critical_date(soup, label):
 
 def parse_chain(chain):
     parts = [clean(x) for x in clean(chain).split("||") if clean(x)]
-    return (
-        parts[0] if len(parts) > 0 else "",
-        parts[1] if len(parts) > 1 else "",
-        parts[2] if len(parts) > 2 else "",
-        parts[3] if len(parts) > 3 else "",
-    )
+    return tuple(parts[i] if i < len(parts) else "" for i in range(4))
 
 
 def parse_detail(soup, url):
     pairs = find_value_pairs(soup)
-
-    chain = (
-        find_label_value(soup, ["Organisation Chain"])
-        or pairs.get("organisation chain", "")
-    )
+    chain = find_label_value(soup, ["Organisation Chain"]) or pairs.get("organisation chain", "")
     organisation, department, division, sub_division = parse_chain(chain)
-
-    tender_id = (
-        find_label_value(soup, ["Tender ID"])
-        or pairs.get("tender id", "")
-    )
+    tender_id = find_label_value(soup, ["Tender ID"]) or pairs.get("tender id", "")
     reference = (
         find_label_value(soup, ["Tender Reference Number", "Tender Reference"])
         or pairs.get("tender reference number", "")
         or pairs.get("tender reference", "")
     )
-
     title = find_label_value(soup, ["Work /Item(s) Title", "Title"])
     work_description = find_label_value(soup, ["Work Description"])
-
     publish = find_critical_date(soup, "Publish Date")
     closing = find_critical_date(soup, "Bid Submission End Date")
     opening = find_critical_date(soup, "Bid Opening Date")
-
     if not title:
         title = work_description
 
@@ -175,13 +141,7 @@ def parse_detail(soup, url):
     tender_fee = find_label_value(soup, ["Tender Fee in ₹"])
     processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
     emd = find_label_value(soup, ["EMD Amount in ₹"])
-
-    total_fee = (
-        money_number(pac)
-        + money_number(emd)
-        + money_number(tender_fee)
-        + money_number(processing_fee)
-    )
+    total_fee = money_number(pac) + money_number(emd) + money_number(tender_fee) + money_number(processing_fee)
 
     return {
         "Tender ID": clean(tender_id),
@@ -210,12 +170,8 @@ def parse_organisation_rows(soup, base):
         headers = [clean(x.get_text(" ", strip=True)).lower() for x in table.find_all("th")]
         if not headers:
             first = table.find("tr")
-            headers = [clean(x.get_text(" ", strip=True)).lower()
-                       for x in first.find_all(["td", "th"])] if first else []
-
-        if not any("organisation name" in h for h in headers):
-            continue
-        if not any("tender count" in h for h in headers):
+            headers = [clean(x.get_text(" ", strip=True)).lower() for x in first.find_all(["td", "th"])] if first else []
+        if not any("organisation name" in h for h in headers) or not any("tender count" in h for h in headers):
             continue
 
         for tr in table.find_all("tr")[1:]:
@@ -226,17 +182,17 @@ def parse_organisation_rows(soup, base):
 
             anchor = None
             for cell in cells:
-                anchor = cell.find("a")
-                if anchor and clean(anchor.get_text(" ", strip=True)).isdigit():
-                    break
-
-            if not anchor:
-                for cell in cells:
-                    candidate = cell.find("a")
-                    if candidate:
+                for candidate in cell.find_all("a"):
+                    if clean(candidate.get_text(" ", strip=True)).replace(",", "").isdigit():
                         anchor = candidate
                         break
-
+                if anchor:
+                    break
+            if not anchor:
+                for cell in cells:
+                    anchor = cell.find("a")
+                    if anchor:
+                        break
             if not anchor:
                 continue
 
@@ -247,35 +203,26 @@ def parse_organisation_rows(soup, base):
             count_match = re.search(r"\d[\d,]*", texts[-1])
             count = int(count_match.group(0).replace(",", "")) if count_match else 0
             name = texts[1] if len(texts) > 1 else texts[0]
-
-            result.append({
-                "name": name,
-                "count": count,
-                "url": href,
-            })
+            result.append({"name": name, "count": count, "url": href})
 
         if result:
+            # IMPORTANT: process lowest tender counts first.
+            result.sort(key=lambda x: (x["count"], x["name"].lower()))
             return result
-
     return result
 
 
 def parse_tender_rows(soup, base):
     result = []
     for table in soup.find_all("table"):
-        header_text = " ".join(
-            clean(x.get_text(" ", strip=True)).lower()
-            for x in table.find_all("th")
-        )
+        header_text = " ".join(clean(x.get_text(" ", strip=True)).lower() for x in table.find_all("th"))
         if not ("tender" in header_text and ("closing" in header_text or "title" in header_text)):
             continue
-
         for tr in table.find_all("tr")[1:]:
             cells = tr.find_all(["td", "th"])
             texts = [clean(c.get_text(" ", strip=True)) for c in cells]
             if len(texts) < 2:
                 continue
-
             anchor = None
             for cell in cells:
                 for a in cell.find_all("a"):
@@ -286,17 +233,14 @@ def parse_tender_rows(soup, base):
                         break
                 if anchor:
                     break
-
             if not anchor:
                 continue
 
             href = link_from_anchor(anchor, base)
             full_text = " ".join(texts)
-            tender_id_match = TENDER_ID_RE.search(full_text)
-            tender_id = tender_id_match.group(0) if tender_id_match else ""
+            match = TENDER_ID_RE.search(full_text)
+            tender_id = match.group(0) if match else ""
             reference = ""
-
-            # Try to use the cell containing the title/reference/tender id.
             title_cell = clean(anchor.parent.get_text(" ", strip=True)) if anchor.parent else ""
             if title_cell:
                 ref_match = re.search(
@@ -305,7 +249,6 @@ def parse_tender_rows(soup, base):
                 )
                 if ref_match:
                     reference = clean(ref_match.group(1))
-
             result.append({
                 "url": href,
                 "tender_id": tender_id,
@@ -313,10 +256,8 @@ def parse_tender_rows(soup, base):
                 "title": clean(anchor.get_text(" ", strip=True)),
                 "row_text": full_text,
             })
-
         if result:
             return result
-
     return result
 
 
@@ -342,20 +283,15 @@ def get_all_tender_rows(session, start_url, expected_count):
         if not current or current in seen:
             break
         seen.add(current)
-
         response = request(session, current, sleep=0.35)
         soup = BeautifulSoup(response.text, "html.parser")
         rows = parse_tender_rows(soup, current)
-
         for row in rows:
             key = row["tender_id"] or row["reference"] or row["url"]
             unique[key] = row
-
         pages.append(current)
-
         if expected_count and len(unique) >= expected_count:
             break
-
         current = next_page_url(soup, current, current)
 
     return list(unique.values()), len(pages)
@@ -381,28 +317,18 @@ def write_csv(csv_file, rows):
 def scrape_mp_tenders(csv_file):
     session = requests.Session()
     existing = read_existing(csv_file)
-    existing_by_id = {
-        clean(r.get("Tender ID")): r
-        for r in existing
-        if clean(r.get("Tender ID"))
-    }
-    existing_by_ref = {
-        clean(r.get("Reference Number")): r
-        for r in existing
-        if clean(r.get("Reference Number"))
-    }
+    existing_by_id = {clean(r.get("Tender ID")): r for r in existing if clean(r.get("Tender ID"))}
+    existing_by_ref = {clean(r.get("Reference Number")): r for r in existing if clean(r.get("Reference Number"))}
 
     response = request(session, ORG_URL, sleep=0.5)
     soup = BeautifulSoup(response.text, "html.parser")
     organisations = parse_organisation_rows(soup, ORG_URL)
-
     if not organisations:
         raise RuntimeError("Organisation list could not be parsed from MP Tender portal.")
 
     rows_by_id = dict(existing_by_id)
     rows_without_id = {
-        clean(r.get("Reference Number")): r
-        for r in existing
+        clean(r.get("Reference Number")): r for r in existing
         if not clean(r.get("Tender ID")) and clean(r.get("Reference Number"))
     }
 
@@ -417,14 +343,15 @@ def scrape_mp_tenders(csv_file):
         "errors": [],
     }
 
+    # Organisations are deliberately processed in ascending Tender Count order.
+    # This makes the smaller organisations complete first and pushes very large
+    # organisations to the end of the first full run.
     for index, org in enumerate(organisations, 1):
         try:
-            tender_rows, pages = get_all_tender_rows(
-                session, org["url"], org["count"]
-            )
+            tender_rows, pages = get_all_tender_rows(session, org["url"], org["count"])
 
-            # Safety check requested for this project: do not process an organisation
-            # until the tender list agrees with its displayed count.
+            # Do not open detail pages unless the parsed list count exactly matches
+            # the count displayed on the organisation page.
             if org["count"] and len(tender_rows) != org["count"]:
                 stats["organisations_skipped_count_mismatch"] += 1
                 stats["errors"].append(
@@ -438,7 +365,6 @@ def scrape_mp_tenders(csv_file):
             for tender in tender_rows:
                 tid = tender["tender_id"]
                 ref = tender["reference"]
-
                 if tid and tid in existing_by_id:
                     continue
                 if ref and ref in existing_by_ref:
@@ -467,17 +393,12 @@ def scrape_mp_tenders(csv_file):
             stats["errors"].append(f"{org['name']}: {type(exc).__name__}: {exc}")
 
     final_rows = list(rows_by_id.values()) + list(rows_without_id.values())
-
-    # Mark expired tenders closed based on their closing date.
     now = datetime.now()
     for row in final_rows:
         closing = clean(row.get("Closing Date"))
         try:
             dt = datetime.strptime(closing.split(" ")[0], "%d-%b-%Y")
-            if dt.date() < now.date():
-                row["Status"] = "Closed"
-            else:
-                row["Status"] = "Open"
+            row["Status"] = "Closed" if dt.date() < now.date() else "Open"
         except Exception:
             pass
 
@@ -490,16 +411,13 @@ def scrape_mp_tenders(csv_file):
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "total_records": len(final_rows),
         "stats": stats,
-        "message": "Real MP Tender organisation/list/detail scraper completed.",
+        "message": "Real MP Tender organisation/list/detail scraper completed in ascending Tender Count order.",
     }
 
 
 if __name__ == "__main__":
-    target = Path(
-        os.getenv(
-            "CSV_FILE",
-            Path(__file__).resolve().parent.parent / "all_tenders_org_detailed.csv",
-        )
-    )
-    result = scrape_mp_tenders(target)
-    print(result)
+    target = Path(os.getenv(
+        "CSV_FILE",
+        Path(__file__).resolve().parent.parent / "all_tenders_org_detailed.csv",
+    ))
+    print(scrape_mp_tenders(target))
