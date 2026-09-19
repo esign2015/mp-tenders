@@ -1064,10 +1064,8 @@ function parseDate(value){
   const text = clean(value);
   if(!text) return null;
 
-  // MP Tender portal uses several date formats, including:
-  // 21/09/2026, 21-09-2026, 21-Sep-2026 and 21-Sep-2026 05:00 PM.
-  // Parse these explicitly in the browser's local timezone so that
-  // "Closing Today" and "Closed Today" use the correct calendar date.
+  // MP Tender portal dates are treated as INDIA time (IST, UTC+05:30),
+  // regardless of the visitor's computer/browser timezone.
   const match = text.match(
     /^(\d{1,2})[\/\-]([A-Za-z]{3,9}|\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?:\s*(AM|PM))?)?/i
   );
@@ -1097,20 +1095,10 @@ function parseDate(value){
     if(ampm === "PM" && hour < 12) hour += 12;
     if(ampm === "AM" && hour === 12) hour = 0;
 
-    if(
-      month >= 1 && month <= 12 &&
-      day >= 1 && day <= 31 &&
-      year >= 2000
-    ){
-      const date = new Date(year, month - 1, day, hour, minute, 0);
-      if(
-        !isNaN(date.getTime()) &&
-        date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day
-      ){
-        return date;
-      }
+    if(month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000){
+      // Convert IST calendar time to a real instant.
+      const date = new Date(Date.UTC(year, month - 1, day, hour, minute, 0) - (5.5 * 60 * 60 * 1000));
+      if(!isNaN(date.getTime())) return date;
     }
   }
 
@@ -1119,48 +1107,58 @@ function parseDate(value){
   return isNaN(date.getTime()) ? null : date;
 }
 
+function istParts(date){
+  const ist = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
+  return {
+    year: ist.getUTCFullYear(),
+    month: ist.getUTCMonth() + 1,
+    day: ist.getUTCDate(),
+    hour: ist.getUTCHours(),
+    minute: ist.getUTCMinutes()
+  };
+}
+
 function formatDate(value){
   const date = parseDate(value);
   if(!date) return clean(value);
-  return String(date.getDate()).padStart(2,"0") + "/" +
-         String(date.getMonth()+1).padStart(2,"0") + "/" +
-         date.getFullYear();
+  const p = istParts(date);
+  return String(p.day).padStart(2,"0") + "/" +
+         String(p.month).padStart(2,"0") + "/" +
+         p.year;
 }
 
 function formatClosingDateTime(value){
   const date = parseDate(value);
   if(!date) return clean(value);
+  const p = istParts(date);
 
-  const datePart =
-    String(date.getDate()).padStart(2,"0") + "/" +
-    String(date.getMonth()+1).padStart(2,"0") + "/" +
-    date.getFullYear();
+  let hour = p.hour % 12 || 12;
+  const ampm = p.hour >= 12 ? "PM" : "AM";
 
-  const timePart = date.toLocaleTimeString("en-IN",{
-    hour:"2-digit",
-    minute:"2-digit",
-    hour12:true
-  });
-
-  return datePart + " " + timePart;
+  return String(p.day).padStart(2,"0") + "/" +
+         String(p.month).padStart(2,"0") + "/" +
+         p.year + " " +
+         String(hour).padStart(2,"0") + ":" +
+         String(p.minute).padStart(2,"0") + " " + ampm;
 }
 
 function dateKey(value){
   const date = parseDate(value);
-
   if(!date) return "";
 
-  return date.getFullYear() + "-" +
-         String(date.getMonth()+1).padStart(2,"0") + "-" +
-         String(date.getDate()).padStart(2,"0");
+  const p = istParts(date);
+  return p.year + "-" +
+         String(p.month).padStart(2,"0") + "-" +
+         String(p.day).padStart(2,"0");
 }
 
 function todayKey(){
   const now = new Date();
+  const p = istParts(now);
 
-  return now.getFullYear() + "-" +
-         String(now.getMonth()+1).padStart(2,"0") + "-" +
-         String(now.getDate()).padStart(2,"0");
+  return p.year + "-" +
+         String(p.month).padStart(2,"0") + "-" +
+         String(p.day).padStart(2,"0");
 }
 
 function moneyNumber(value){
