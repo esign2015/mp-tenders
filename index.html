@@ -339,13 +339,13 @@ table{
 table th:nth-child(1), table td:nth-child(1){width:55px;}
 table th:nth-child(2), table td:nth-child(2){width:145px;}
 table th:nth-child(3), table td:nth-child(3){width:105px;}
-table th:nth-child(4), table td:nth-child(4){width:125px;}
-table th:nth-child(5), table td:nth-child(5){width:270px;}
-table th:nth-child(6), table td:nth-child(6){width:120px;}
+table th:nth-child(4), table td:nth-child(4){width:150px;}
+table th:nth-child(5), table td:nth-child(5){width:300px;}
+table th:nth-child(6), table td:nth-child(6){width:90px;}
 table th:nth-child(7), table td:nth-child(7){width:210px;}
-table th:nth-child(8), table td:nth-child(8){width:190px;}
-table th:nth-child(9), table td:nth-child(9){width:190px;}
-table th:nth-child(10), table td:nth-child(10){width:190px;}
+table th:nth-child(8), table td:nth-child(8){width:180px;}
+table th:nth-child(9), table td:nth-child(9){width:180px;}
+table th:nth-child(10), table td:nth-child(10){width:180px;}
 table th:nth-child(11), table td:nth-child(11){width:110px;}
 table th:nth-child(12), table td:nth-child(12){width:100px;}
 table th:nth-child(13), table td:nth-child(13){width:100px;}
@@ -372,16 +372,29 @@ th{
 td{
   padding:7px 7px;
   border-bottom:1px solid #e2e8f0;
-  white-space:nowrap;
-  vertical-align:middle;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-height:1.3;
+  vertical-align:top;
 }
 
-/* Organisation hierarchy and Ref.No. should wrap instead of making one huge row. */
+/* All long values wrap within their own column. */
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(5),
 td:nth-child(6),
 td:nth-child(7),
 td:nth-child(8),
 td:nth-child(9),
-td:nth-child(10){
+td:nth-child(10),
+td:nth-child(11),
+td:nth-child(12),
+td:nth-child(13),
+td:nth-child(14),
+td:nth-child(15),
+td:nth-child(16){
   white-space:normal;
   overflow-wrap:anywhere;
   word-break:break-word;
@@ -1108,12 +1121,28 @@ function parseDate(value){
 
 function formatDate(value){
   const date = parseDate(value);
-
   if(!date) return clean(value);
-
   return String(date.getDate()).padStart(2,"0") + "/" +
          String(date.getMonth()+1).padStart(2,"0") + "/" +
          date.getFullYear();
+}
+
+function formatClosingDateTime(value){
+  const date = parseDate(value);
+  if(!date) return clean(value);
+
+  const datePart =
+    String(date.getDate()).padStart(2,"0") + "/" +
+    String(date.getMonth()+1).padStart(2,"0") + "/" +
+    date.getFullYear();
+
+  const timePart = date.toLocaleTimeString("en-IN",{
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:true
+  });
+
+  return datePart + " " + timePart;
 }
 
 function dateKey(value){
@@ -1516,7 +1545,7 @@ function renderTable(rows){
         <td>${tenderId || "—"}</td>
         <td>${escapeHtml(formatDate(row["Published Date"]))}</td>
         <td class="date-closing ${closingClass}">
-          ${escapeHtml(formatDate(row["Closing Date"]))}
+          ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
 
         <td class="title-cell">${titleHtml || "—"}</td>
