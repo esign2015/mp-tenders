@@ -14,12 +14,15 @@ on:
   schedule:
     # 20:45 IST (UTC+5:30)
     - cron: "15 15 * * *"
+    # 08:55 IST (UTC+5:30)
+    - cron: "25 3 * * *"
 
 permissions:
   contents: write
 
 jobs:
   scrape:
+    if: github.event_name != 'schedule' || github.event.schedule == '15 15 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -33,6 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
+
+      - name: Install ReportLab for Telegram PDFs
+        run: pip install reportlab
 
       - name: Install Chromium for MP portal
         run: python -m playwright install --with-deps chromium
@@ -52,10 +58,33 @@ jobs:
             git push
           fi
 
-      - name: Send Telegram daily update
+      - name: Send Telegram evening update
+        if: success() && github.event_name == 'schedule' && github.event.schedule == '15 15 * * *'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python backend/telegram_notify.py
+          NOTIFY_MODE: evening
+        run: python backend/telegram_alerts.py
 
-# Current stage: complete organisation list + tender-list rows.
+  morning_alert:
+    if: github.event_name == 'schedule' && github.event.schedule == '25 3 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF dependency
+        run: pip install reportlab
+
+      - name: Send Telegram morning closing-date alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_MODE: morning
+        run: python backend/telegram_alerts.py
