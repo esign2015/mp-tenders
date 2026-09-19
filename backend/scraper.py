@@ -2,6 +2,7 @@ import csv
 import os
 import re
 import time
+import random
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
@@ -125,7 +126,9 @@ def find_critical_date(soup, label):
 
 
 def parse_chain(chain):
-    parts = [clean(x) for x in clean(chain).split("||") if clean(x)]
+    # Preserve delimiter positions exactly:
+    # Organisation || Department || Division || Sub Division
+    parts = [clean(x) for x in clean(chain).split("||")]
     return tuple(parts[i] if i < len(parts) else "" for i in range(4))
 
 
@@ -610,8 +613,68 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # The old detailed CSV stays untouched at this stage.
-    if not csv_file.exists():
+    # Test stage: open a random sample of 50 tender detail pages.
+    # Controlled by DETAIL_SAMPLE_SIZE so the full organisation/tender-list
+    # collection remains unchanged.
+    detail_sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "50"))
+    detail_rows = read_existing(csv_file)
+
+    if detail_sample_size > 0 and tender_list_rows:
+        candidates = [
+            row for row in tender_list_rows
+            if clean(row.get("Tender ID")) and clean(row.get("Tender URL"))
+        ]
+        sample_size = min(detail_sample_size, len(candidates))
+        selected = random.sample(candidates, sample_size)
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                user_agent=HEADERS["User-Agent"],
+                locale="en-IN",
+                viewport={"width": 1920, "height": 1080},
+            )
+            try:
+                for sample_index, tender in enumerate(selected, 1):
+                    try:
+                        detail_soup = browser_page(
+                            page,
+                            tender["Tender URL"],
+                            wait_ms=1200,
+                        )
+                        detail = parse_detail(
+                            detail_soup,
+                            page.url or tender["Tender URL"],
+                        )
+                        if not detail.get("Tender ID"):
+                            detail["Tender ID"] = tender["Tender ID"]
+                        if not detail.get("Title"):
+                            detail["Title"] = tender["Title"]
+                        if not detail.get("Reference Number"):
+                            detail["Reference Number"] = tender["Reference Number"]
+                        detail_rows.append(detail)
+                        stats["detail_opened"] += 1
+                        print(
+                            f"DETAIL SAMPLE {sample_index}/{sample_size}: "
+                            f"{detail.get('Tender ID', '')}"
+                        )
+                    except Exception as exc:
+                        stats["errors"].append(
+                            f"DETAIL {tender.get('Tender ID', '')}: "
+                            f"{type(exc).__name__}: {exc}"
+                        )
+            finally:
+                browser.close()
+
+        by_id = {}
+        for row in detail_rows:
+            key = clean(row.get("Tender ID"))
+            if key:
+                by_id[key] = row
+        detail_rows = list(by_id.values())
+        write_csv(csv_file, detail_rows)
+
+    elif not csv_file.exists():
         write_csv(csv_file, [])
 
     return {
@@ -623,8 +686,8 @@ def scrape_mp_tenders(csv_file):
         "total_records": 0,
         "stats": stats,
         "message": (
-            "Organisation list and organisation-level tender lists were collected. "
-            "Individual tender detail pages were intentionally not opened."
+            f"Organisation list and organisation-level tender lists were collected. "
+            f"Random detail sample opened: {stats['detail_opened']}."
         ),
     }
 
