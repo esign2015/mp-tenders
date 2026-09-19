@@ -21,7 +21,7 @@ FIELDS = [
     "Tender ID", "Published Date", "Closing Date", "Opening Date",
     "Title", "Reference Number", "Organisation", "Department",
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
-    "Tender Fee", "Processing Fee", "Total Fee", "Status", "URL",
+    "Tender Fee", "Processing Fee", "Total Fee", "Pincode", "Status", "URL",
 ]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
@@ -148,7 +148,10 @@ def parse_detail(soup, url):
     tender_fee = find_label_value(soup, ["Tender Fee in ₹"])
     processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
     emd = find_label_value(soup, ["EMD Amount in ₹"])
-    total_fee = money_number(pac) + money_number(emd) + money_number(tender_fee) + money_number(processing_fee)
+    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
+    # Portal's "Total Fee" is Tender Fee + Processing Fee only.
+    # EMD and Tender Value/PAC are separate amounts.
+    total_fee = money_number(tender_fee) + money_number(processing_fee)
 
     return {
         "Tender ID": clean(tender_id),
@@ -166,6 +169,7 @@ def parse_detail(soup, url):
         "Tender Fee": money_text(tender_fee),
         "Processing Fee": money_text(processing_fee),
         "Total Fee": str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}",
+        "Pincode": re.sub(r"\D", "", clean(pincode))[:6],
         "Status": "Open",
         "URL": url,
     }
