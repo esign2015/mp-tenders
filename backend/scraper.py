@@ -162,14 +162,14 @@ def parse_detail(soup, url):
     body_text = clean(soup.get_text(" ", strip=True))
 
     def between(label, stop_labels):
-        match = re.search(re.escape(label) + r"\\s*(.*?)\\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
+        match = re.search(re.escape(label) + r"\s*(.*?)\\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
         return clean(match.group(1)) if match else ""
 
     if not chain:
         chain = between("Organisation Chain", ["Tender Reference Number", "Tender ID"])
         organisation, department, division, sub_division = parse_chain(chain)
     if not tender_id:
-        match = re.search(r"\\b20\\d{2}_[A-Z0-9]+_\\d+_\\d+\\b", body_text, re.I)
+        match = re.search(r"\b20\\d{2}_[A-Z0-9]+_\\d+_\\d+\\b", body_text, re.I)
         tender_id = match.group(0) if match else ""
     if not reference:
         reference = between("Tender Reference Number", ["Tender ID", "Withdrawal Allowed"])
@@ -192,7 +192,7 @@ def parse_detail(soup, url):
     if not location:
         location = between("Location", ["Pincode", "Pre Bid Meeting Place"])
     if not pincode:
-        pin_match = re.search(r"\\bPincode\\s+([0-9]{6})\\b", body_text, re.I)
+        pin_match = re.search(r"\bPincode\\s+([0-9]{6})\\b", body_text, re.I)
         pincode = pin_match.group(1) if pin_match else ""
     total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
@@ -397,7 +397,7 @@ def parse_tender_rows(soup, base):
             # the real Reference Number instead of an empty field.
             bracket_values = [
                 clean(x)
-                for x in re.findall(r"\[([^\]]+)\]", anchor_text)
+                for x in re.findall(r"\[([^\]]+)\]", full_text)
                 if clean(x)
             ]
 
@@ -494,7 +494,7 @@ def browser_page(page, url, referer=None):
     """Open an MP portal page in a real browser session so JSF DirectLink
     navigation remains valid. The portal uses session-bound $DirectLink URLs."""
     page.goto(url, wait_until="domcontentloaded", timeout=60000)
-    page.wait_for_timeout(900)
+    page.wait_for_timeout(2000)
     return BeautifulSoup(page.content(), "html.parser")
 
 
@@ -584,6 +584,97 @@ def parse_list_dates(tender):
     )
 
 
+
+def run_detail_validation(csv_file, organisations):
+    """Open exactly N fresh tender detail pages for one organisation.
+    This mode NEVER replaces the dashboard dataset."""
+    target_name = clean(os.getenv("DETAIL_ORGANISATION", "Directorate Sports and Youth Welfare"))
+    sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "9"))
+    output_file = csv_file.parent / os.getenv("DETAIL_OUTPUT_FILE", "detail_validation.csv")
+
+    target_org = next(
+        (org for org in organisations
+         if clean(org.get("name")).casefold() == target_name.casefold()),
+        None,
+    )
+    if not target_org:
+        raise RuntimeError(f"DETAIL_ORGANISATION not found: {target_name}")
+
+    results = []
+    errors = []
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
+        )
+        try:
+            fresh_rows, pages = browser_get_all_tender_rows(
+                page, target_org, target_org["count"]
+            )
+            candidates = [
+                row for row in fresh_rows
+                if clean(row.get("tender_id")) and clean(row.get("url"))
+            ]
+            if len(candidates) < sample_size:
+                raise RuntimeError(
+                    f"Only {len(candidates)} fresh tenders found for {target_name}; expected {sample_size}."
+                )
+
+            selected = candidates[:sample_size]
+            for idx, tender in enumerate(selected, 1):
+                try:
+                    detail_soup = browser_page(page, tender["url"])
+                    detail = parse_detail(detail_soup, page.url or tender["url"])
+                    detail["Tender ID"] = clean(detail.get("Tender ID")) or clean(tender.get("tender_id"))
+                    detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
+                    detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
+                    list_dates = parse_list_dates(tender)
+                    detail["Published Date"] = clean(detail.get("Published Date")) or list_dates[0]
+                    detail["Closing Date"] = clean(detail.get("Closing Date")) or list_dates[1]
+                    detail["Opening Date"] = clean(detail.get("Opening Date")) or list_dates[2]
+                    detail["Organisation"] = target_org["name"]
+                    detail["URL"] = page.url or tender["url"]
+                    results.append(detail)
+                    print(
+                        f"DETAIL VALIDATION {idx}/{sample_size}: "
+                        f"{detail.get('Tender ID')} | ref={detail.get('Reference Number')} | "
+                        f"PAC={detail.get('PAC Amount')} | EMD={detail.get('EMD Fee')} | "
+                        f"Fee={detail.get('Tender Fee')} | Processing={detail.get('Processing Fee')} | "
+                        f"Location={detail.get('Location')} | Pincode={detail.get('Pincode')}"
+                    )
+                except Exception as exc:
+                    errors.append(f"{tender.get('tender_id')}: {type(exc).__name__}: {exc}")
+        finally:
+            browser.close()
+
+    write_csv(output_file, results)
+    if len(results) != sample_size:
+        raise RuntimeError(
+            f"Detail validation incomplete: {len(results)}/{sample_size} succeeded. "
+            + (" | ".join(errors) if errors else "")
+        )
+
+    # Merge the 9 validated rows into the main dashboard CSV by Tender ID.
+    main_rows = read_existing(csv_file)
+    by_id = {clean(row.get("Tender ID")): dict(row) for row in main_rows if clean(row.get("Tender ID"))}
+    for detail in results:
+        key = clean(detail.get("Tender ID"))
+        if key:
+            by_id[key] = detail
+    write_csv(csv_file, list(by_id.values()))
+
+    print(f"DETAIL VALIDATION COMPLETE: {len(results)}/{sample_size} tenders, pages={pages}")
+    return {
+        "ok": True,
+        "detail_validation": len(results),
+        "organisation": target_org["name"],
+        "output": str(output_file),
+        "errors": errors,
+    }
+
+
 def scrape_mp_tenders(csv_file):
     """
     Current requested stage (full organisation list + tender lists; detail pages later):
@@ -599,6 +690,9 @@ def scrape_mp_tenders(csv_file):
     organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
         raise RuntimeError("Organisation list could not be parsed from MP Tender portal.")
+
+    if os.getenv("DETAIL_VALIDATION_ONLY") == "1":
+        return run_detail_validation(csv_file, organisations)
 
     retrieved_at = datetime.now(timezone.utc).isoformat()
 
@@ -640,17 +734,7 @@ def scrape_mp_tenders(csv_file):
             viewport={"width": 1920, "height": 1080},
         )
         try:
-            detail_organisation = clean(os.getenv("DETAIL_ORGANISATION", ""))
-            run_organisations = organisations
-            if detail_organisation:
-                run_organisations = [
-                    org for org in organisations
-                    if clean(org.get("name")).casefold() == detail_organisation.casefold()
-                ]
-                if not run_organisations:
-                    raise RuntimeError(f"DETAIL_ORGANISATION not found: {detail_organisation}")
-
-            for index, org in enumerate(run_organisations, 1):
+            for index, org in enumerate(organisations, 1):
                 try:
                     stats["organisations_opened"] += 1
                     tender_rows, pages = browser_get_all_tender_rows(
@@ -698,96 +782,42 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # Detail validation stage: open the requested sample, optionally restricted to one organisation.
-    # Controlled by DETAIL_SAMPLE_SIZE so the full organisation/tender-list
-    # collection remains unchanged.
-    detail_sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "0"))
-    detail_organisation = clean(os.getenv("DETAIL_ORGANISATION", ""))
-    detail_rows = read_existing(csv_file)
-
-    if detail_sample_size > 0 and tender_list_rows:
-        candidates = [
-            row for row in tender_list_rows
-            if clean(row.get("Tender ID")) and clean(row.get("Tender URL"))
-            and (not detail_organisation or clean(row.get("Organisation Name")).casefold() == detail_organisation.casefold())
-        ]
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
-                user_agent=HEADERS["User-Agent"],
-                locale="en-IN",
-                viewport={"width": 1920, "height": 1080},
-            )
-            try:
-                # Recreate session-bound $DirectLink URLs inside this same
-                # browser session before opening tender detail pages.
-                if detail_organisation:
-                    detail_org = next(
-                        (org for org in organisations
-                         if clean(org.get("name")).casefold() == detail_organisation.casefold()),
-                        None,
-                    )
-                    if not detail_org:
-                        raise RuntimeError(f"DETAIL_ORGANISATION not found: {detail_organisation}")
-                    fresh_rows, _ = browser_get_all_tender_rows(
-                        page, detail_org, detail_org["count"]
-                    )
-                    candidates = [
-                        {
-                            **row,
-                            "Tender URL": row.get("url", ""),
-                            "Organisation Name": detail_org["name"],
-                        }
-                        for row in fresh_rows
-                        if clean(row.get("tender_id")) and clean(row.get("url"))
-                    ]
-
-                sample_size = min(detail_sample_size, len(candidates))
-                selected = random.sample(candidates, sample_size)
-
-                for sample_index, tender in enumerate(selected, 1):
-                    try:
-                        detail_soup = browser_page(
-                            page,
-                            tender["Tender URL"],
-                        )
-                        if sample_index == 1:
-                            print("DETAIL DEBUG URL:", page.url)
-                            print("DETAIL DEBUG TEXT:", clean(detail_soup.get_text(" ", strip=True))[:4000])
-                        detail = parse_detail(
-                            detail_soup,
-                            page.url or tender["Tender URL"],
-                        )
-                        if not detail.get("Tender ID"):
-                            detail["Tender ID"] = tender["Tender ID"]
-                        if not detail.get("Title"):
-                            detail["Title"] = tender["Title"]
-                        if not detail.get("Reference Number"):
-                            detail["Reference Number"] = tender["Reference Number"]
-                        detail_rows.append(detail)
-                        stats["detail_opened"] += 1
-                        print(
-                            f"DETAIL SAMPLE {sample_index}/{sample_size}: "
-                            f"{detail.get('Tender ID', '')}"
-                        )
-                    except Exception as exc:
-                        stats["errors"].append(
-                            f"DETAIL {tender.get('Tender ID', '')}: "
-                            f"{type(exc).__name__}: {exc}"
-                        )
-            finally:
-                browser.close()
-
-        by_id = {}
-        for row in detail_rows:
-            key = clean(row.get("Tender ID"))
-            if key:
-                by_id[key] = row
-        detail_rows = list(by_id.values())
-        write_csv(csv_file, detail_rows)
-
-    elif not csv_file.exists():
-        write_csv(csv_file, [])
+    # Build/refresh the main detailed CSV from the complete tender-list collection.
+    # Existing detail fields are preserved; the 9-tender validation is run separately
+    # with DETAIL_VALIDATION_ONLY=1 so it can never replace the dashboard dataset.
+    existing_detail_rows = read_existing(csv_file)
+    existing_by_id = {
+        clean(row.get("Tender ID")): row
+        for row in existing_detail_rows
+        if clean(row.get("Tender ID"))
+    }
+    merged_rows = []
+    for row in tender_list_rows:
+        tender_id = clean(row.get("Tender ID"))
+        old = dict(existing_by_id.get(tender_id, {}))
+        base = {
+            "Tender ID": tender_id,
+            "Published Date": clean(row.get("Published Date")),
+            "Closing Date": clean(row.get("Closing Date")),
+            "Opening Date": clean(row.get("Opening Date")),
+            "Title": clean(row.get("Title")),
+            "Reference Number": clean(row.get("Reference Number")),
+            "Organisation": clean(row.get("Organisation Name")),
+            "Department": clean(old.get("Department")),
+            "Division": clean(old.get("Division")),
+            "Sub Division": clean(old.get("Sub Division")),
+            "PAC Amount": clean(old.get("PAC Amount")),
+            "EMD Fee": clean(old.get("EMD Fee")),
+            "Tender Fee": clean(old.get("Tender Fee")),
+            "Processing Fee": clean(old.get("Processing Fee")),
+            "Total Fee": clean(old.get("Total Fee")),
+            "Location": clean(old.get("Location")),
+            "Pincode": clean(old.get("Pincode")),
+            "Status": clean(old.get("Status")) or "Open",
+            "URL": clean(row.get("Tender URL")),
+        }
+        merged_rows.append(base)
+    write_csv(csv_file, merged_rows)
 
     return {
         "ok": True,
