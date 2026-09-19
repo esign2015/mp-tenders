@@ -483,7 +483,14 @@ def scrape_mp_tenders(csv_file):
         )
         try:
             for index, org in enumerate(organisations, 1):
-                if MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
+                # Temporary diagnostic mode: when stage limit is exactly 1,
+                # process only organisations whose portal Tender Count is exactly 1.
+                # For later stages (10/50/100/...), retain the <= limit behaviour.
+                if MAX_ORG_TENDER_COUNT == 1:
+                    if org["count"] != 1:
+                        stats["organisations_skipped_stage_limit"] += 1
+                        continue
+                elif MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
                     stats["organisations_skipped_stage_limit"] += 1
                     continue
 
