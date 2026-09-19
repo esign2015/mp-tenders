@@ -193,7 +193,7 @@ button:hover{
 
 .search-fields{
   display:grid;
-  grid-template-columns:2fr 1.15fr 1.5fr 1.35fr;
+  grid-template-columns:2fr 1.1fr 1.3fr 1.25fr 110px;
   gap:7px;
   padding:8px 12px 5px;
 }
@@ -213,7 +213,7 @@ button:hover{
 
 .search-bottom{
   display:grid;
-  grid-template-columns:1fr 1fr 1.4fr auto;
+  grid-template-columns:150px 170px 130px 1fr;
   gap:7px;
   padding:0 12px 8px;
 }
@@ -227,6 +227,11 @@ button:hover{
   padding:4px 8px;
   font-size:13px;
 }
+
+#closingDate{width:150px;}
+#sortSelect{width:170px;}
+#statusSelect{width:130px;}
+#pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
 .legend-row{
   display:flex;
@@ -451,7 +456,7 @@ td.title-cell{
   }
 
   .search-fields{
-    grid-template-columns:2fr 1fr 1.4fr 1.2fr;
+    grid-template-columns:1.7fr 1fr 1.2fr 1.1fr 100px;
   }
 }
 
@@ -591,16 +596,22 @@ td.title-cell{
       <input id="organisationSearch"
              type="text"
              placeholder="Organisation">
+
+      <input id="pincodeSearch"
+             type="text"
+             inputmode="numeric"
+             pattern="[0-9]{6}"
+             maxlength="6"
+             autocomplete="postal-code"
+             placeholder="Pincode"
+             title="6 digit Pincode">
     </div>
 
     <div class="search-bottom">
-      <input id="publishedFrom"
-             type="date"
-             title="Published from">
-
       <input id="closingDate"
              type="date"
-             title="Closing date">
+             title="Closing date"
+             aria-label="Closing date">
 
       <select id="sortSelect">
         <option value="closing">Sort: Closing date</option>
@@ -855,6 +866,9 @@ function normaliseTender(row){
   item["Division"] = clean(row["Division"]);
   item["Sub Division"] =
     clean(row["Sub Division"] || row["Sub_Division"]);
+
+  item["Pincode"] =
+    clean(row["Pincode"] || row["PIN Code"] || row["Pin Code"] || row["PIN"]);
 
   item["PAC Amount"] =
     clean(row["PAC Amount"] || row["PAC_Amount"]);
@@ -1185,7 +1199,7 @@ function applyFilters(){
   const tenderId = clean($("tenderIdSearch").value).toLowerCase();
   const title = clean($("titleSearch").value).toLowerCase();
   const organisation = clean($("organisationSearch").value).toLowerCase();
-  const publishedFrom = clean($("publishedFrom").value);
+  const pincode = clean($("pincodeSearch").value);
   const closingDate = clean($("closingDate").value);
   const status = clean($("statusSelect").value).toLowerCase();
   const sort = $("sortSelect").value;
@@ -1198,7 +1212,8 @@ function applyFilters(){
       row["Organisation"],
       row["Department"],
       row["Division"],
-      row["Sub Division"]
+      row["Sub Division"],
+      row["Pincode"]
     ].join(" ").toLowerCase();
 
     if(general && !combined.includes(general)) return false;
@@ -1218,8 +1233,8 @@ function applyFilters(){
       return false;
     }
 
-    if(publishedFrom &&
-       dateKey(row["Published Date"]) < publishedFrom){
+    if(pincode &&
+       clean(row["Pincode"]) !== pincode){
       return false;
     }
 
@@ -1278,7 +1293,7 @@ function clearFilters(){
   $("tenderIdSearch").value = "";
   $("titleSearch").value = "";
   $("organisationSearch").value = "";
-  $("publishedFrom").value = "";
+  $("pincodeSearch").value = "";
   $("closingDate").value = "";
   $("sortSelect").value = "closing";
   $("statusSelect").value = "";
@@ -1331,12 +1346,17 @@ function exportPdf(){
   window.print();
 }
 
+$("pincodeSearch").addEventListener("input", function(){
+  this.value = this.value.replace(/\D/g,"").slice(0,6);
+  applyFilters();
+});
+
 [
   "generalSearch",
   "tenderIdSearch",
   "titleSearch",
   "organisationSearch",
-  "publishedFrom",
+  "pincodeSearch",
   "closingDate",
   "sortSelect",
   "statusSelect"
