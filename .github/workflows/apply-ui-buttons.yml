@@ -1,0 +1,266 @@
+name: Apply Telegram and Website PDF Buttons
+
+on:
+  push:
+    paths:
+      - ".github/workflows/apply-ui-buttons.yml"
+      - "index.html"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update dashboard and PDF buttons
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("index.html")
+          text = path.read_text(encoding="utf-8")
+
+          # Stop safely if this version has already been applied.
+          if "📢 Get Daily Alert" in text and "Get Daily Alert" in text and "websiteButton" in text:
+              print("UI button update already present.")
+              raise SystemExit(0)
+
+          # Dashboard Telegram button text.
+          text = text.replace(
+              '📢 Telegram Daily Alerts',
+              '📢 Get Daily Alert'
+          )
+
+          # Dashboard Telegram button styling.
+          css_anchor = '.btn-light{background:#e2e8f0;color:#172033}\n'
+          css_add = '''
+.telegram-alert-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:8px 12px;
+  border-radius:6px;
+  background:#0088cc;
+  color:white;
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+.telegram-alert-btn:hover{
+  opacity:.92;
+  color:white;
+  text-decoration:none;
+}
+'''
+          if '.telegram-alert-btn{' not in text:
+              text = text.replace(css_anchor, css_anchor + css_add, 1)
+
+          # Replace the PDF per-page header block.
+          start = '      // Blue header on every page.\n'
+          end = '      // Corrected assistance/disclaimer line.\n'
+          if start not in text or end not in text:
+              raise SystemExit("PDF header anchors not found; no partial change was made.")
+
+          header = '''      // Blue header on every page.
+      doc.setFillColor(...BLUE);
+      doc.rect(0,0,pageWidth,27,"F");
+
+      // Left: Telegram alert button.
+      const telegramButtonX = 10;
+      const telegramButtonY = 5;
+      const telegramButtonW = 48;
+      const telegramButtonH = 9;
+
+      doc.setFillColor(0,136,204);
+      doc.setDrawColor(0,110,170);
+      doc.roundedRect(
+        telegramButtonX,
+        telegramButtonY,
+        telegramButtonW,
+        telegramButtonH,
+        2,
+        2,
+        "FD"
+      );
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(7);
+      doc.text(
+        "Get Daily Alert",
+        telegramButtonX + telegramButtonW/2,
+        telegramButtonY + 5.8,
+        {align:"center"}
+      );
+      doc.link(
+        telegramButtonX,
+        telegramButtonY,
+        telegramButtonW,
+        telegramButtonH,
+        {url:TELEGRAM_URL}
+      );
+
+      // Right: Website button.
+      const websiteButtonW = 34;
+      const websiteButtonH = 9;
+      const websiteButtonX = pageWidth - 10 - websiteButtonW;
+      const websiteButtonY = 5;
+
+      doc.setFillColor(37,99,235);
+      doc.setDrawColor(25,75,190);
+      doc.roundedRect(
+        websiteButtonX,
+        websiteButtonY,
+        websiteButtonW,
+        websiteButtonH,
+        2,
+        2,
+        "FD"
+      );
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(7);
+      doc.text(
+        "Website",
+        websiteButtonX + websiteButtonW/2,
+        websiteButtonY + 5.8,
+        {align:"center"}
+      );
+      doc.link(
+        websiteButtonX,
+        websiteButtonY,
+        websiteButtonW,
+        websiteButtonH,
+        {url:PORTAL_URL}
+      );
+
+      // Center branding.
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(12);
+      doc.text(
+        "SAR Digital Services, Kannod",
+        pageWidth/2,
+        8,
+        {align:"center"}
+      );
+
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(7.5);
+      doc.text(
+        "MP Tender Live Dashboard",
+        pageWidth/2,
+        14,
+        {align:"center"}
+      );
+
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.8);
+      doc.text(
+        "For DSC & E-Tendering Services",
+        pageWidth/2,
+        20,
+        {align:"center"}
+      );
+
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(5.8);
+      doc.text(
+        "Tender Report  •  " + reportDate + "  •  Total Records: " + rows.length,
+        pageWidth/2,
+        25,
+        {align:"center"}
+      );
+
+'''
+          text = text.replace(start, header + end, 1)
+
+          # Replace the old plain Telegram disclaimer line with a cleaner sentence.
+          old_disclaimer = '''      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.2);
+      doc.text(
+        "For daily tender alerts, please join our Telegram channel: " + TELEGRAM_URL,
+        10,
+        36
+      );
+'''
+          new_disclaimer = '''      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.2);
+      doc.text(
+        "For daily alerts, please click the Get Daily Alert button in the header to join our Telegram channel.",
+        10,
+        36
+      );
+'''
+          if old_disclaimer in text:
+              text = text.replace(old_disclaimer, new_disclaimer, 1)
+
+          # Remove the old footer Telegram URL so the header buttons are the
+          # dedicated navigation controls on every page.
+          old_footer = '''      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.2);
+      doc.text("Daily Tender Alerts:", pageWidth-155, pageHeight-3);
+      doc.setFont("helvetica","normal");
+      doc.textWithLink(
+        TELEGRAM_URL,
+        pageWidth-92,
+        pageHeight-3,
+        {url:TELEGRAM_URL}
+      );
+
+'''
+          if old_footer in text:
+              text = text.replace(old_footer, "", 1)
+
+          # Keep dashboard footer CTA consistent.
+          footer_anchor = '''  <div class="footer-right">
+    <div class="footer-brand">SAR Digital Services, Kannod</div>
+    <div class="footer-sub">MP Tender Live Dashboard</div>
+  </div>
+'''
+          footer_new = '''  <div class="footer-right">
+    <div class="footer-brand">SAR Digital Services, Kannod</div>
+    <div class="footer-sub">MP Tender Live Dashboard</div>
+    <a class="telegram-alert-btn footer-telegram-btn"
+       href="https://t.me/mptendersalert"
+       target="_blank"
+       rel="noopener noreferrer">📢 Get Daily Alert</a>
+  </div>
+'''
+          if footer_anchor in text:
+              text = text.replace(footer_anchor, footer_new, 1)
+
+          # Desktop footer CTA sizing.
+          footer_css = '''
+.footer-telegram-btn{
+  margin-top:3px;
+  padding:5px 10px;
+  font-size:10px;
+}
+'''
+          if '.footer-telegram-btn{' not in text:
+              text = text.replace('</style>\n</head>', footer_css + '</style>\n</head>', 1)
+
+          path.write_text(text, encoding="utf-8")
+          print("Dashboard and PDF header buttons updated.")
+
+      - name: Commit and push
+        shell: bash
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Add Get Daily Alert and Website PDF header buttons"
+            git push
+          fi
