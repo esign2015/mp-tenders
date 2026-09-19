@@ -12,7 +12,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 
 IST = timezone(timedelta(hours=5, minutes=30))
-SITE_URL = "https://esign2015.github.io/mp-tenders/"
+SITE_URL = "https://tenders.codinglms.xyz/"
 TELEGRAM_URL = "https://t.me/mptendersalert"
 CSV_PATH = Path("organisation_tenders.csv")
 
