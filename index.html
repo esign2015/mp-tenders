@@ -258,6 +258,13 @@ button:hover{
 #statusSelect{width:130px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
+.btn-archive{
+  border:1px solid #64748b;
+  background:#f1f5f9;
+  color:#1e293b;
+  font-weight:700;
+}
+
 .legend-row{
   display:flex;
   gap:18px;
@@ -837,6 +844,7 @@ td.title-cell{
       <div class="action-buttons">
         <button class="btn-red" id="closingTodayBtn">Closing Today</button>
         <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
+        <button class="btn-light" id="archivedBtn">Archived Tenders</button>
         <button class="btn-light" id="resetBtn">Reset</button>
         <button class="btn-dark" id="reloadBtn">↻ Reload</button>
         <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
@@ -917,7 +925,7 @@ td.title-cell{
   <section class="table-panel">
 
     <div class="table-heading-row">
-      <div class="table-heading">Tender Records</div>
+      <div class="table-heading" id="tableHeading">Tender Records</div>
 
       <div class="table-tools">
         <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
@@ -989,6 +997,7 @@ const CSV_URL = "all_tenders_org_detailed.csv";
 
 let allTenders = [];
 let filteredTenders = [];
+let archivedMode = false;
 
 const $ = id => document.getElementById(id);
 
@@ -1471,7 +1480,27 @@ function applyFilters(){
   const status = clean($("statusSelect").value).toLowerCase();
   const sort = $("sortSelect").value;
 
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
   filteredTenders = allTenders.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+
+    /* Active view: expired tenders are hidden.
+       Archived view: only tenders closed within the last 10 days are shown. */
+    if(closing){
+      const close = new Date(closing);
+      close.setHours(0,0,0,0);
+      const daysAgo = Math.round((today - close) / 86400000);
+
+      if(archivedMode){
+        if(daysAgo < 1 || daysAgo > 10) return false;
+      }else{
+        if(daysAgo >= 1) return false;
+      }
+    }else if(archivedMode){
+      return false;
+    }
     const combined = [
       row["Tender ID"],
       row["Title"],
@@ -1556,6 +1585,27 @@ function applyFilters(){
 }
 
 function clearFilters(){
+  archivedMode = false;
+  $("archivedBtn").textContent = "Archived Tenders";
+  $("tableHeading").textContent = "Tender Records";
+
+  $("generalSearch").value = "";
+  $("tenderIdSearch").value = "";
+  $("titleSearch").value = "";
+  $("organisationSearch").value = "";
+  $("pincodeSearch").value = "";
+  $("closingDate").value = "";
+  $("sortSelect").value = "closing";
+  $("statusSelect").value = "";
+
+  applyFilters();
+}
+
+function showArchived(){
+  archivedMode = true;
+  $("archivedBtn").textContent = "Active Tenders";
+  $("tableHeading").textContent = "Archived Tenders";
+
   $("generalSearch").value = "";
   $("tenderIdSearch").value = "";
   $("titleSearch").value = "";
@@ -1769,6 +1819,13 @@ $("resetBtn").addEventListener("click",clearFilters);
 $("reloadBtn").addEventListener("click",loadData);
 $("closingTodayBtn").addEventListener("click",showClosingToday);
 $("nextThreeBtn").addEventListener("click",showNextThreeDays);
+$("archivedBtn").addEventListener("click",function(){
+  if(archivedMode){
+    clearFilters();
+  }else{
+    showArchived();
+  }
+});
 $("pdfBtn").addEventListener("click",exportPdf);
 $("pdfBtn2").addEventListener("click",exportPdf);
 
