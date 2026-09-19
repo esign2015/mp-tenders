@@ -323,6 +323,13 @@ def parse_tender_rows(soup, base):
             tender_id_match = TENDER_ID_RE.search(full_text)
             tender_id = tender_id_match.group(0) if tender_id_match else ""
 
+            # A real tender-list row must contain a Tender ID. The MP portal
+            # places navigation/accessibility links in or around the same
+            # tables; accepting rows without an ID creates false records such
+            # as "Tenders by Closing Date" and "Screen Reader Access".
+            if not tender_id:
+                continue
+
             # Prefer a session-bound DirectLink in the row. If there are several,
             # choose the one with meaningful title/reference text.
             candidates = []
