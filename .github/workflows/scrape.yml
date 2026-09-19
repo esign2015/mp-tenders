@@ -22,9 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      # Stage 1: only organisations with 10 or fewer tenders.
-      # Later change to 100 -> 200 -> 400 -> 600 -> final 600+ stage.
-      MAX_ORG_TENDER_COUNT: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,16 +40,16 @@ jobs:
       - name: Run MP Tender scraper
         run: python backend/scraper.py
 
-      - name: Commit updated CSV
+      - name: Commit collected organisation and tender-list data
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv
           if git diff --cached --quiet; then
-            echo "No CSV changes to commit."
+            echo "No data changes to commit."
           else
-            git commit -m "Update MP tender data"
+            git commit -m "Update MP organisation and tender-list data"
             git push
           fi
 
-# Stage 1 live-data run: <=10 tenders per organisation.
+# Current stage: complete organisation list + tender-list rows.
