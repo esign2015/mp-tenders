@@ -157,6 +157,43 @@ def parse_detail(soup, url):
     location = find_label_value(soup, ["Location"])
     pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
     # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
+    # Robust fallback: the MP portal often renders label + value in the same
+    # table cell, so cell-pair parsing alone can miss these fields.
+    body_text = clean(soup.get_text(" ", strip=True))
+
+    def between(label, stop_labels):
+        match = re.search(re.escape(label) + r"\\s*(.*?)\\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
+        return clean(match.group(1)) if match else ""
+
+    if not chain:
+        chain = between("Organisation Chain", ["Tender Reference Number", "Tender ID"])
+        organisation, department, division, sub_division = parse_chain(chain)
+    if not tender_id:
+        match = re.search(r"\\b20\\d{2}_[A-Z0-9]+_\\d+_\\d+\\b", body_text, re.I)
+        tender_id = match.group(0) if match else ""
+    if not reference:
+        reference = between("Tender Reference Number", ["Tender ID", "Withdrawal Allowed"])
+    if not title:
+        title = between("Work /Item(s) Title", ["Work Description", "Pre Qualification Details"])
+    if not publish:
+        publish = between("Publish Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
+    if not closing:
+        closing = between("Bid Submission End Date", ["Financial Bid Opening Date", "Document Documents", "Tender Documents"])
+    if not opening:
+        opening = between("Bid Opening Date", ["Document Download / Sale Start Date", "Document Download / Sale End Date"])
+    if not pac:
+        pac = between("Tender Value in ₹", ["Product Category", "Sub category", "Contract Type"])
+    if not tender_fee:
+        tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
+    if not processing_fee:
+        processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
+    if not emd:
+        emd = between("EMD Amount in ₹", ["EMD Exemption Allowed", "EMD Fee Type"])
+    if not location:
+        location = between("Location", ["Pincode", "Pre Bid Meeting Place"])
+    if not pincode:
+        pin_match = re.search(r"\\bPincode\\s+([0-9]{6})\\b", body_text, re.I)
+        pincode = pin_match.group(1) if pin_match else ""
     total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
     return {
