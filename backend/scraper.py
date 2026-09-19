@@ -751,6 +751,9 @@ def scrape_mp_tenders(csv_file):
                             page,
                             tender["Tender URL"],
                         )
+                        if sample_index == 1:
+                            print("DETAIL DEBUG URL:", page.url)
+                            print("DETAIL DEBUG TEXT:", clean(detail_soup.get_text(" ", strip=True))[:4000])
                         detail = parse_detail(
                             detail_soup,
                             page.url or tender["Tender URL"],
