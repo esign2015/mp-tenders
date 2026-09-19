@@ -539,6 +539,25 @@ def scrape_mp_tenders(csv_file):
         except Exception:
             pass
 
+    # Keep archived tenders for 10 days after Closing Date, then remove them.
+    retention_cutoff = datetime.now().date().fromordinal(
+        datetime.now().date().toordinal() - 10
+    )
+    retained_rows = []
+    for row in final_rows:
+        closing_text = clean(row.get("Closing Date"))
+        try:
+            closing_date = datetime.strptime(
+                closing_text.split(" ")[0], "%d-%b-%Y"
+            ).date()
+            if closing_date < retention_cutoff:
+                continue
+        except Exception:
+            # Do not delete a record when its closing date cannot be parsed.
+            pass
+        retained_rows.append(row)
+
+    final_rows = retained_rows
     final_rows.sort(key=lambda r: clean(r.get("Closing Date")))
     write_csv(csv_file, final_rows)
 
