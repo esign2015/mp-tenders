@@ -22,7 +22,7 @@ FIELDS = [
     "Tender ID", "Published Date", "Closing Date", "Opening Date",
     "Title", "Reference Number", "Organisation", "Department",
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
-    "Tender Fee", "Processing Fee", "Total Fee", "Pincode", "Status", "URL",
+    "Tender Fee", "Processing Fee", "Total Fee", "Location", "Pincode", "Status", "URL",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
@@ -154,7 +154,7 @@ def parse_detail(soup, url):
     tender_fee = find_label_value(soup, ["Tender Fee in ₹"])
     processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
     emd = find_label_value(soup, ["EMD Amount in ₹"])
-    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
+    location = find_label_value(soup, ["Location"])\n    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
     # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
     total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
@@ -653,7 +653,7 @@ def scrape_mp_tenders(csv_file):
     # Test stage: open a random sample of 50 tender detail pages.
     # Controlled by DETAIL_SAMPLE_SIZE so the full organisation/tender-list
     # collection remains unchanged.
-    detail_sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "50"))
+    detail_sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "0"))
     detail_rows = read_existing(csv_file)
 
     if detail_sample_size > 0 and tender_list_rows:
