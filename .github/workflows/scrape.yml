@@ -10,9 +10,10 @@ on:
     paths:
       - "backend/**"
       - ".github/workflows/scrape.yml"
+  workflow_dispatch:
   schedule:
-    # 19:05 IST (UTC+5:30)
-    - cron: "35 13 * * *"
+    # 20:45 IST (UTC+5:30)
+    - cron: "15 15 * * *"
 
 permissions:
   contents: write
@@ -50,5 +51,11 @@ jobs:
             git commit -m "Update MP organisation and tender-list data"
             git push
           fi
+
+      - name: Send Telegram daily update
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python backend/telegram_notify.py
 
 # Current stage: complete organisation list + tender-list rows.
