@@ -586,8 +586,8 @@ def parse_list_dates(tender):
 
 
 def run_detail_validation(csv_file, organisations):
-    """Open exactly N fresh tender detail pages for one organisation.
-    This mode NEVER replaces the dashboard dataset."""
+    """Open exactly N tender detail pages by clicking the live tender link.
+    This avoids stale JSF DirectLink URLs and NEVER uses navigation/menu links."""
     target_name = clean(os.getenv("DETAIL_ORGANISATION", "Directorate Sports and Youth Welfare"))
     sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "9"))
     output_file = csv_file.parent / os.getenv("DETAIL_OUTPUT_FILE", "detail_validation.csv")
@@ -602,6 +602,63 @@ def run_detail_validation(csv_file, organisations):
 
     results = []
     errors = []
+
+    def open_org(page):
+        browser_page(page, ORG_URL)
+        if "FrontEndTendersByOrganisation" not in page.url:
+            raise RuntimeError(f"Organisation page did not load correctly: {page.url}")
+
+    def open_tender_by_click(page, tender_id):
+        open_org(page)
+        row = page.locator("tr", has_text=tender_id).first
+        if row.count() == 0:
+            raise RuntimeError(f"Tender row not found in live organisation list: {tender_id}")
+
+        links = row.locator("a")
+        link_count = links.count()
+        if link_count == 0:
+            raise RuntimeError(f"No tender link found for {tender_id}")
+
+        chosen = None
+        for i in range(link_count):
+            link = links.nth(i)
+            try:
+                href = link.get_attribute("href") or ""
+                onclick = link.get_attribute("onclick") or ""
+                text = clean(link.inner_text())
+                if "FrontEndViewTender" in href or "FrontEndViewTender" in onclick:
+                    chosen = link
+                    break
+                if chosen is None and text and len(text) > 15:
+                    chosen = link
+            except Exception:
+                continue
+
+        if chosen is None:
+            raise RuntimeError(f"Could not identify detail link for {tender_id}")
+
+        before = page.url
+        chosen.click()
+        page.wait_for_load_state("domcontentloaded", timeout=60000)
+        page.wait_for_timeout(1200)
+        soup = BeautifulSoup(page.content(), "html.parser")
+        after = page.url
+        body = clean(soup.get_text(" ", strip=True))
+
+        # A valid tender-detail page should identify the tender itself.
+        has_id = tender_id.casefold() in body.casefold() or bool(TENDER_ID_RE.search(body))
+        looks_like_nav_only = (
+            "Tenders by Organisation" in body
+            and "Tenders by Classification" in body
+            and body.find("Tender Reference Number") < 0
+            and body.find("EMD Amount") < 0
+        )
+        if looks_like_nav_only or not has_id:
+            raise RuntimeError(
+                f"Detail click did not open tender page: before={before} after={after}"
+            )
+        return soup, after
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(
@@ -610,39 +667,44 @@ def run_detail_validation(csv_file, organisations):
             viewport={"width": 1920, "height": 1080},
         )
         try:
-            fresh_rows, pages = browser_get_all_tender_rows(
-                page, target_org, target_org["count"]
-            )
+            # Read the live organisation list and determine the exact nine tender IDs.
+            open_org(page)
+            soup = BeautifulSoup(page.content(), "html.parser")
+            fresh_rows, pages = browser_get_all_tender_rows(page, target_org, target_org["count"])
             candidates = [
                 row for row in fresh_rows
                 if clean(row.get("tender_id")) and clean(row.get("url"))
             ]
             if len(candidates) < sample_size:
                 raise RuntimeError(
-                    f"Only {len(candidates)} fresh tenders found for {target_name}; expected {sample_size}."
+                    f"Only {len(candidates)} live tenders found for {target_name}; expected {sample_size}."
                 )
 
             selected = candidates[:sample_size]
+
             for idx, tender in enumerate(selected, 1):
                 try:
-                    detail_soup = browser_page(page, tender["url"])
-                    detail = parse_detail(detail_soup, page.url or tender["url"])
+                    detail_soup, detail_url = open_tender_by_click(page, tender["tender_id"])
+                    detail = parse_detail(detail_soup, detail_url)
+
+                    list_dates = parse_list_dates(tender)
                     detail["Tender ID"] = clean(detail.get("Tender ID")) or clean(tender.get("tender_id"))
                     detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
                     detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
-                    list_dates = parse_list_dates(tender)
                     detail["Published Date"] = clean(detail.get("Published Date")) or list_dates[0]
                     detail["Closing Date"] = clean(detail.get("Closing Date")) or list_dates[1]
                     detail["Opening Date"] = clean(detail.get("Opening Date")) or list_dates[2]
                     detail["Organisation"] = target_org["name"]
-                    detail["URL"] = page.url or tender["url"]
+                    detail["URL"] = detail_url
+
                     results.append(detail)
                     print(
                         f"DETAIL VALIDATION {idx}/{sample_size}: "
                         f"{detail.get('Tender ID')} | ref={detail.get('Reference Number')} | "
                         f"PAC={detail.get('PAC Amount')} | EMD={detail.get('EMD Fee')} | "
                         f"Fee={detail.get('Tender Fee')} | Processing={detail.get('Processing Fee')} | "
-                        f"Location={detail.get('Location')} | Pincode={detail.get('Pincode')}"
+                        f"Total={detail.get('Total Fee')} | Location={detail.get('Location')} | "
+                        f"Pincode={detail.get('Pincode')} | URL={detail_url}"
                     )
                 except Exception as exc:
                     errors.append(f"{tender.get('tender_id')}: {type(exc).__name__}: {exc}")
@@ -656,16 +718,17 @@ def run_detail_validation(csv_file, organisations):
             + (" | ".join(errors) if errors else "")
         )
 
-    # Merge the 9 validated rows into the main dashboard CSV by Tender ID.
+    # IMPORTANT: Never replace the main dashboard with the 9-test sample.
+    # Merge only rows that already exist in the dashboard by Tender ID.
     main_rows = read_existing(csv_file)
     by_id = {clean(row.get("Tender ID")): dict(row) for row in main_rows if clean(row.get("Tender ID"))}
     for detail in results:
         key = clean(detail.get("Tender ID"))
-        if key:
-            by_id[key] = detail
+        if key in by_id:
+            by_id[key].update(detail)
     write_csv(csv_file, list(by_id.values()))
 
-    print(f"DETAIL VALIDATION COMPLETE: {len(results)}/{sample_size} tenders, pages={pages}")
+    print(f"DETAIL VALIDATION COMPLETE: {len(results)}/{sample_size} tenders")
     return {
         "ok": True,
         "detail_validation": len(results),
