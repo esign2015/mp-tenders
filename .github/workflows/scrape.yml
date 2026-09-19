@@ -43,7 +43,9 @@ jobs:
       - name: Install Chromium for MP portal
         run: python -m playwright install --with-deps chromium
 
-      - name: Run MP Tender scraper
+      - name: Run MP Tender scraper — detail field validation sample
+        env:
+          DETAIL_SAMPLE_SIZE: "50"
         run: python backend/scraper.py
 
       - name: Commit collected organisation and tender-list data
