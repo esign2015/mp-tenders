@@ -961,7 +961,7 @@ td.title-cell{
   cursor:pointer;
 }
 .telegram-join-btn{background:#0ea5e9;color:#fff}
-.telegram-verify-btn{background:#7c3aed;color:#fff}
+.telegram-verify-btn{background:#7c3aed;color:#fff}\n#telegramLoginWrap{margin-top:8px;min-height:45px}
 #telegramGateStatus{min-height:22px;margin-top:12px;font-weight:700}
 .telegram-admin{margin-top:12px;font-size:12px;color:#64748b}
 .telegram-admin a{color:#0f766e;font-weight:800;text-decoration:none}
@@ -976,9 +976,11 @@ body.telegram-locked .site-footer{visibility:hidden}
   <div class="telegram-gate-card">
     <h2>🔐 Telegram Verification Required</h2>
     <p>MP Tender Dashboard का उपयोग करने के लिए पहले <b>@mptendersalert</b> Telegram channel join करें।</p>
-    <a class="telegram-join-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">🔐 Sign Up / Login Free</a>
+    <button class="telegram-verify-btn" id="telegramLoginBtn" type="button">🔐 Login with Telegram — Free</button>
+    <a class="telegram-join-btn" id="telegramJoinBtn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Join @mptendersalert</a>
+    <button class="telegram-verify-btn" id="telegramCheckBtn" type="button" style="display:none">✅ मैंने Join कर लिया — Check Again</button>
     <div class="telegram-login-wrap" id="telegramLoginWrap"></div>
-    <div id="telegramGateStatus">पहले channel join करें, फिर Telegram से Verify करें।</div>
+    <div id="telegramGateStatus">पहले Telegram से Free Login करें। अगर channel member नहीं हैं, तो Join करके वापस इसी पेज पर आएँ।</div>
     <div class="telegram-admin">समस्या हो तो <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">Contact Admin — t.me/rdgyan</a></div>
   </div>
 </div>
@@ -1206,67 +1208,133 @@ body.telegram-locked .site-footer{visibility:hidden}
 <script>
 const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/verify";
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
-async function setupTelegramLogin(){
+let telegramAuthData = null;
+let telegramChecking = false;
+
+function telegramStatus(message, ok=false){
   const status = document.getElementById("telegramGateStatus");
-  try{
-    const response = await fetch(TELEGRAM_CONFIG_API + "?t=" + Date.now(), {cache:"no-store"});
-    if(!response.ok) throw new Error("Telegram login configuration unavailable");
-    const config = await response.json();
-    if(!config.username) throw new Error("Telegram bot username is not configured");
-    const script = document.createElement("script");
-    script.src = "https://telegram.org/js/telegram-widget.js?22";
-    script.async = true;
-    script.setAttribute("data-telegram-login", config.username);
-    script.setAttribute("data-size", "large");
-    script.setAttribute("data-userpic", "false");
-    script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)");
-    document.getElementById("telegramLoginWrap").appendChild(script);
-    status.textContent = "Channel join करने के बाद नीचे Telegram से Verify करें।";
-  }catch(error){
-    console.error(error);
-    status.textContent = "Telegram verification setup अभी उपलब्ध नहीं है।";
+  if(status){
+    status.textContent = message;
+    status.style.color = ok ? "#166534" : "#475569";
   }
 }
-async function onTelegramAuth(user){
-  const status = document.getElementById("telegramGateStatus");
-  status.textContent = "⏳ Telegram membership verify हो रही है...";
+
+function showTelegramLogin(){
+  document.getElementById("telegramLoginWrap").innerHTML="";
+  const loginBtn=document.getElementById("telegramLoginBtn");
+  const joinBtn=document.getElementById("telegramJoinBtn");
+  const checkBtn=document.getElementById("telegramCheckBtn");
+  if(loginBtn) loginBtn.style.display="";
+  if(joinBtn) joinBtn.style.display="";
+  if(checkBtn) checkBtn.style.display=telegramAuthData ? "" : "none";
+}
+
+async function verifyTelegramMembership(user, persist=true){
+  if(telegramChecking) return false;
+  telegramChecking=true;
+  telegramAuthData=user;
+  telegramStatus("⏳ Telegram login और channel membership check हो रही है...");
   try{
-    const response = await fetch(TELEGRAM_VERIFY_API,{
+    const response=await fetch(TELEGRAM_VERIFY_API,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
+      cache:"no-store",
       body:JSON.stringify(user)
     });
-    const data = await response.json();
+    const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.verified){
-      throw new Error(data.message || "Channel membership verify नहीं हुई।");
+      if(response.status===403){
+        localStorage.setItem("telegram_auth",JSON.stringify(user));
+        document.getElementById("telegramCheckBtn").style.display="";
+        telegramStatus("❌ Login हो गया, लेकिन @mptendersalert membership नहीं मिली। Join करें और फिर Check Again दबाएँ।");
+      }else{
+        throw new Error(data.message || "Telegram verification failed.");
+      }
+      return false;
     }
+    if(persist) localStorage.setItem("telegram_auth",JSON.stringify(user));
     sessionStorage.setItem("telegram_verified","1");
     sessionStorage.setItem("telegram_user",JSON.stringify({
       id:user.id, username:user.username || "", first_name:user.first_name || ""
     }));
     document.body.classList.remove("telegram-locked");
-    document.getElementById("telegramGate").remove();
-    const badge = document.createElement("span");
-    badge.className = "telegram-status-badge ok";
-    badge.textContent = "✓ Telegram Verified";
-    const heading = document.querySelector(".search-heading");
-    if(heading) heading.appendChild(badge);
-  }catch(error){
-    console.error(error);
-    status.textContent = "❌ " + error.message + "  पहले channel join करके फिर Verify करें।";
-  }
-}
-async function enforceTelegramAccess(){
-  const existing = sessionStorage.getItem("telegram_verified");
-  if(existing === "1"){
-    document.body.classList.remove("telegram-locked");
     const gate=document.getElementById("telegramGate");
     if(gate) gate.remove();
-    return;
+    const badge=document.createElement("span");
+    badge.className="telegram-status-badge ok";
+    badge.textContent="✓ Telegram Verified";
+    const heading=document.querySelector(".search-heading");
+    if(heading) heading.appendChild(badge);
+    return true;
+  }catch(error){
+    console.error(error);
+    telegramStatus("❌ "+error.message);
+    return false;
+  }finally{
+    telegramChecking=false;
   }
+}
+
+async function setupTelegramLogin(){
+  const status = document.getElementById("telegramGateStatus");
+  try{
+    const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{cache:"no-store"});
+    if(!response.ok) throw new Error("Telegram bot configuration unavailable");
+    const config=await response.json();
+    if(!config.username) throw new Error("Telegram bot username is not configured");
+    const script=document.createElement("script");
+    script.src="https://telegram.org/js/telegram-widget.js?22";
+    script.async=true;
+    script.setAttribute("data-telegram-login",config.username);
+    script.setAttribute("data-size","large");
+    script.setAttribute("data-userpic","false");
+    script.setAttribute("data-request-access","write");
+    script.setAttribute("data-onauth","onTelegramAuth(user)");
+    document.getElementById("telegramLoginWrap").appendChild(script);
+    status.textContent="Login with Telegram नीचे दिखाई देगा।";
+  }catch(error){
+    console.error(error);
+    telegramStatus("Telegram login setup उपलब्ध नहीं है। BotFather में इस वेबसाइट domain को allow करना जरूरी है।");
+  }
+}
+
+function onTelegramAuth(user){
+  verifyTelegramMembership(user,true);
+}
+
+async function checkStoredTelegram(){
+  const raw=localStorage.getItem("telegram_auth");
+  if(!raw) return false;
+  try{
+    const user=JSON.parse(raw);
+    if(!user || !user.id) return false;
+    telegramAuthData=user;
+    return await verifyTelegramMembership(user,false);
+  }catch(e){
+    localStorage.removeItem("telegram_auth");
+    return false;
+  }
+}
+
+function setupTelegramFlow(){
+  const loginBtn=document.getElementById("telegramLoginBtn");
+  const checkBtn=document.getElementById("telegramCheckBtn");
+  if(loginBtn) loginBtn.onclick=()=>document.querySelector("#telegramLoginWrap iframe")?.contentWindow?.focus();
+  if(checkBtn) checkBtn.onclick=()=>telegramAuthData ? verifyTelegramMembership(telegramAuthData,false) : setupTelegramLogin();
+  window.addEventListener("focus",()=>{
+    if(document.body.classList.contains("telegram-locked") && telegramAuthData){
+      verifyTelegramMembership(telegramAuthData,false);
+    }
+  });
+}
+
+async function enforceTelegramAccess(){
+  setupTelegramFlow();
+  if(await checkStoredTelegram()) return;
+  showTelegramLogin();
   await setupTelegramLogin();
 }
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
