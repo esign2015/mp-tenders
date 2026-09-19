@@ -711,9 +711,6 @@ def scrape_mp_tenders(csv_file):
             if clean(row.get("Tender ID")) and clean(row.get("Tender URL"))
             and (not detail_organisation or clean(row.get("Organisation Name")).casefold() == detail_organisation.casefold())
         ]
-        sample_size = min(detail_sample_size, len(candidates))
-        selected = random.sample(candidates, sample_size)
-
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             page = browser.new_page(
@@ -722,6 +719,32 @@ def scrape_mp_tenders(csv_file):
                 viewport={"width": 1920, "height": 1080},
             )
             try:
+                # Recreate session-bound $DirectLink URLs inside this same
+                # browser session before opening tender detail pages.
+                if detail_organisation:
+                    detail_org = next(
+                        (org for org in organisations
+                         if clean(org.get("name")).casefold() == detail_organisation.casefold()),
+                        None,
+                    )
+                    if not detail_org:
+                        raise RuntimeError(f"DETAIL_ORGANISATION not found: {detail_organisation}")
+                    fresh_rows, _ = browser_get_all_tender_rows(
+                        page, detail_org, detail_org["count"]
+                    )
+                    candidates = [
+                        {
+                            **row,
+                            "Tender URL": row.get("url", ""),
+                            "Organisation Name": detail_org["name"],
+                        }
+                        for row in fresh_rows
+                        if clean(row.get("tender_id")) and clean(row.get("url"))
+                    ]
+
+                sample_size = min(detail_sample_size, len(candidates))
+                selected = random.sample(candidates, sample_size)
+
                 for sample_index, tender in enumerate(selected, 1):
                     try:
                         detail_soup = browser_page(
