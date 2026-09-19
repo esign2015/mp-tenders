@@ -856,11 +856,6 @@ td.title-cell{
 
   <div class="counts">
     <div class="count-box">
-      <div class="count-label">Total Tenders</div>
-      <div class="count-number blue" id="totalCount">0</div>
-    </div>
-
-    <div class="count-box">
       <div class="count-label">Live Tenders</div>
       <div class="count-number green" id="liveCount">0</div>
     </div>
@@ -871,8 +866,8 @@ td.title-cell{
     </div>
 
     <div class="count-box">
-      <div class="count-label">Closed Today</div>
-      <div class="count-number red" id="closedTodayCount">0</div>
+      <div class="count-label">Closing Tomorrow</div>
+      <div class="count-number blue" id="closingTomorrowCount">0</div>
     </div>
   </div>
 
@@ -1605,17 +1600,17 @@ function updateCounts(rows){
            closing.getTime() > now.getTime();
   }).length;
 
-  const closedToday = rows.filter(row => {
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const closingTomorrow = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     return closing &&
-           dateKey(closing) === todayKey() &&
-           closing.getTime() <= now.getTime();
+           dateKey(closing) === dateKey(tomorrow) &&
+           closing.getTime() > now.getTime();
   }).length;
 
-  $("totalCount").textContent = total;
   $("liveCount").textContent = live;
   $("closingTodayCount").textContent = closingToday;
-  $("closedTodayCount").textContent = closedToday;
+  $("closingTomorrowCount").textContent = closingTomorrow;
 }
 
 function applyFilters(){
