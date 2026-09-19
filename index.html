@@ -259,6 +259,15 @@ button:hover{
 #pacFilter{width:170px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
+/* Keep the "No Filter" label inside its count box. */
+#filterResultCount{
+  font-size:16px;
+  line-height:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .btn-archive{
   border:1px solid #64748b;
   background:#f1f5f9;
@@ -1077,6 +1086,7 @@ const ORG_TENDER_CSV_URL = "organisation_tenders.csv";
 let allTenders = [];
 let filteredTenders = [];
 let archivedMode = false;
+let quickFilterMode = "";
 
 const $ = id => document.getElementById(id);
 
@@ -1644,7 +1654,10 @@ function updateCounts(rows){
     $("statusSelect").value
   ];
 
-  const hasFilter = archivedMode || filterControls.some(value => clean(value) !== "");
+  const hasFilter =
+    archivedMode ||
+    quickFilterMode !== "" ||
+    filterControls.some(value => clean(value) !== "");
 
   $("filterResultCount").textContent =
     hasFilter ? filteredTenders.length : "No Filter";
@@ -1778,6 +1791,7 @@ function applyFilters(){
 
 function clearFilters(){
   archivedMode = false;
+  quickFilterMode = "";
   $("archivedBtn").textContent = "Archived Tenders";
   $("tableHeading").textContent = "Tender Records";
 
@@ -1796,6 +1810,7 @@ function clearFilters(){
 
 function showArchived(){
   archivedMode = true;
+  quickFilterMode = "";
   $("archivedBtn").textContent = "Active Tenders";
   $("tableHeading").textContent = "Archived Tenders";
 
@@ -1813,12 +1828,14 @@ function showArchived(){
 
 function showClosingToday(){
   clearFilters();
+  quickFilterMode = "closingToday";
   $("closingDate").value = todayKey();
   applyFilters();
 }
 
 function showNextThreeDays(){
   clearFilters();
+  quickFilterMode = "nextThreeDays";
 
   const today = new Date();
   today.setHours(0,0,0,0);
