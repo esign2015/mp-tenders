@@ -167,97 +167,146 @@ def parse_detail(soup, url):
 def parse_organisation_rows(soup, base):
     result = []
     for table in soup.find_all("table"):
-        headers = [clean(x.get_text(" ", strip=True)).lower() for x in table.find_all("th")]
-        if not headers:
-            first = table.find("tr")
-            headers = [clean(x.get_text(" ", strip=True)).lower() for x in first.find_all(["td", "th"])] if first else []
-        if not any("organisation name" in h for h in headers) or not any("tender count" in h for h in headers):
+        rows = table.find_all("tr")
+        if not rows:
             continue
 
-        for tr in table.find_all("tr")[1:]:
+        header_index = -1
+        header_cells = []
+        for idx, tr in enumerate(rows[:5]):
+            cells = tr.find_all(["th", "td"])
+            texts = [clean(c.get_text(" ", strip=True)).lower() for c in cells]
+            joined = " ".join(texts)
+            if "organisation name" in joined and "tender count" in joined:
+                header_index = idx
+                header_cells = texts
+                break
+
+        if header_index < 0:
+            continue
+
+        org_idx = next((i for i, h in enumerate(header_cells) if "organisation name" in h), 1)
+        count_idx = next((i for i, h in enumerate(header_cells) if "tender count" in h), len(header_cells) - 1)
+
+        for tr in rows[header_index + 1:]:
             cells = tr.find_all(["td", "th"])
             texts = [clean(c.get_text(" ", strip=True)) for c in cells]
-            if len(texts) < 3:
+            if len(cells) <= max(org_idx, count_idx):
                 continue
 
+            name = texts[org_idx] if org_idx < len(texts) else ""
+            count_text = texts[count_idx] if count_idx < len(texts) else ""
+            if not name or name.lower() in {"s.no", "organisation name", "tender count"}:
+                continue
+
+            count_match = re.search(r"\d[\d,]*", count_text)
+            if not count_match:
+                continue
+            count = int(count_match.group(0).replace(",", ""))
+
+            # The count itself is the organisation's DirectLink. Prefer that
+            # anchor because the MP portal uses session-bound $DirectLink URLs.
             anchor = None
-            for cell in cells:
-                for candidate in cell.find_all("a"):
-                    if clean(candidate.get_text(" ", strip=True)).replace(",", "").isdigit():
-                        anchor = candidate
-                        break
-                if anchor:
+            for a in cells[count_idx].find_all("a"):
+                if clean(a.get_text(" ", strip=True)).replace(",", "").isdigit():
+                    anchor = a
                     break
             if not anchor:
-                for cell in cells:
-                    anchor = cell.find("a")
-                    if anchor:
+                for a in cells[count_idx].find_all("a"):
+                    if link_from_anchor(a, base):
+                        anchor = a
                         break
             if not anchor:
-                continue
+                # Fallback: any link in the row.
+                for cell in cells:
+                    for a in cell.find_all("a"):
+                        if link_from_anchor(a, base):
+                            anchor = a
+                            break
+                    if anchor:
+                        break
 
-            href = link_from_anchor(anchor, base)
-            if not href:
-                continue
-
-            count_match = re.search(r"\d[\d,]*", texts[-1])
-            count = int(count_match.group(0).replace(",", "")) if count_match else 0
-            name = texts[1] if len(texts) > 1 else texts[0]
-            result.append({"name": name, "count": count, "url": href})
+            href = link_from_anchor(anchor, base) if anchor else ""
+            if href:
+                result.append({"name": name, "count": count, "url": href})
 
         if result:
-            # IMPORTANT: process lowest tender counts first.
             result.sort(key=lambda x: (x["count"], x["name"].lower()))
             return result
+
     return result
 
 
 def parse_tender_rows(soup, base):
     result = []
+    navigation_text = {
+        "next", "previous", "first", "last", "view", "details",
+        "print", "download", "back", "clear", "search"
+    }
+
     for table in soup.find_all("table"):
-        header_text = " ".join(clean(x.get_text(" ", strip=True)).lower() for x in table.find_all("th"))
-        if not ("tender" in header_text and ("closing" in header_text or "title" in header_text)):
+        header_text = " ".join(
+            clean(x.get_text(" ", strip=True)).lower()
+            for x in table.find_all(["th", "td"], limit=20)
+        )
+        # Tender-list tables normally expose Tender ID/Title/Closing information.
+        if not ("tender" in header_text and
+                ("closing" in header_text or "title" in header_text or "reference" in header_text)):
             continue
-        for tr in table.find_all("tr")[1:]:
+
+        rows = table.find_all("tr")
+        for tr in rows[1:]:
             cells = tr.find_all(["td", "th"])
             texts = [clean(c.get_text(" ", strip=True)) for c in cells]
             if len(texts) < 2:
                 continue
-            anchor = None
-            for cell in cells:
-                for a in cell.find_all("a"):
-                    href = link_from_anchor(a, base)
-                    text = clean(a.get_text(" ", strip=True))
-                    if href and ("FrontEnd" in href or "Tender" in href or TENDER_ID_RE.search(text)):
-                        anchor = a
-                        break
-                if anchor:
-                    break
-            if not anchor:
+
+            full_text = " ".join(texts)
+            tender_id_match = TENDER_ID_RE.search(full_text)
+            tender_id = tender_id_match.group(0) if tender_id_match else ""
+
+            # Prefer a session-bound DirectLink in the row. If there are several,
+            # choose the one with meaningful title/reference text.
+            candidates = []
+            for a in tr.find_all("a"):
+                href = link_from_anchor(a, base)
+                text = clean(a.get_text(" ", strip=True))
+                if not href or not text:
+                    continue
+                low = text.lower()
+                if low in navigation_text or text.replace(",", "").isdigit():
+                    continue
+                candidates.append((a, href, text))
+
+            if not candidates:
                 continue
 
-            href = link_from_anchor(anchor, base)
-            full_text = " ".join(texts)
-            match = TENDER_ID_RE.search(full_text)
-            tender_id = match.group(0) if match else ""
+            # Title links are generally the longest meaningful text in the row.
+            anchor, href, anchor_text = max(candidates, key=lambda x: len(x[2]))
+
             reference = ""
-            title_cell = clean(anchor.parent.get_text(" ", strip=True)) if anchor.parent else ""
-            if title_cell:
-                ref_match = re.search(
-                    r"(?i)(?:ref(?:erence)?\.?\s*(?:no\.?|number)?\s*[:\-]?\s*)([^|]+)",
-                    title_cell,
-                )
-                if ref_match:
-                    reference = clean(ref_match.group(1))
+            ref_match = re.search(
+                r"(?i)(?:ref(?:erence)?\.?\s*(?:no\.?|number)?\s*[:\-]?\s*)([^|]+)",
+                full_text,
+            )
+            if ref_match:
+                reference = clean(ref_match.group(1))
+
+            # If the row's visible text contains the title, use the anchor text;
+            # otherwise keep the full row text as a fallback title.
+            title = clean(anchor_text) or clean(texts[1] if len(texts) > 1 else texts[0])
+
             result.append({
                 "url": href,
                 "tender_id": tender_id,
                 "reference": reference,
-                "title": clean(anchor.get_text(" ", strip=True)),
+                "title": title,
                 "row_text": full_text,
             })
+
         if result:
             return result
+
     return result
 
 
