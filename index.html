@@ -1857,7 +1857,6 @@ function exportPdf(){
   const body = rows.map((row,index) => [
     index + 1,
     clean(row["Tender ID"]).replace(/[\\[\\]]/g,""),
-    formatDate(row["Published Date"]),
     formatClosingDateTime(row["Closing Date"]),
     clean(row["Title"]).replace(/^\\[|\\]$/g,""),
     clean(row["Reference Number"]).replace(/^\\[|\\]$/g,""),
@@ -1865,15 +1864,14 @@ function exportPdf(){
     clean(row["EMD Fee"]),
     clean(row["Tender Fee"]),
     clean(row["Processing Fee"]),
-    clean(row["Total Fee"]),
-    getStatusText(row)
+    clean(row["Total Fee"])
   ]);
 
   doc.autoTable({
     startY:36,
     head:[[
-      "S.No.","Tender ID","Published","Closing","Title","Ref.No.",
-      "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee","Status"
+      "S.No.","Tender ID","Closing Date","Title","Ref.No.",
+      "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"
     ]],
     body:body,
     theme:"grid",
@@ -1901,17 +1899,15 @@ function exportPdf(){
     },
     columnStyles:{
       0:{cellWidth:10,halign:"center"},
-      1:{cellWidth:30,whiteSpace:"nowrap"},
-      2:{cellWidth:22},
-      3:{cellWidth:25},
-      4:{cellWidth:95},
-      5:{cellWidth:55},
-      6:{cellWidth:28,halign:"right"},
-      7:{cellWidth:22,halign:"right"},
-      8:{cellWidth:22,halign:"right"},
-      9:{cellWidth:25,halign:"right"},
-      10:{cellWidth:25,halign:"right"},
-      11:{cellWidth:21,halign:"center"}
+      1:{cellWidth:32,whiteSpace:"nowrap"},
+      2:{cellWidth:30},
+      3:{cellWidth:115},
+      4:{cellWidth:58},
+      5:{cellWidth:30,halign:"right"},
+      6:{cellWidth:24,halign:"right"},
+      7:{cellWidth:24,halign:"right"},
+      8:{cellWidth:27,halign:"right"},
+      9:{cellWidth:27,halign:"right"}
     },
     margin:{left:10,right:10,bottom:20},
     didDrawPage:function(data){
