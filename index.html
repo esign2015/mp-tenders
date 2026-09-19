@@ -876,6 +876,11 @@ td.title-cell{
       <div class="count-label">Closing Tomorrow</div>
       <div class="count-number blue" id="closingTomorrowCount">0</div>
     </div>
+
+    <div class="count-box">
+      <div class="count-label">Filter Result</div>
+      <div class="count-number green" id="filterResultCount">No Filter</div>
+    </div>
   </div>
 
   <div class="header-right">
@@ -1627,6 +1632,22 @@ function updateCounts(rows){
   $("liveCount").textContent = live;
   $("closingTodayCount").textContent = closingToday;
   $("closingTomorrowCount").textContent = closingTomorrow;
+
+  const filterControls = [
+    $("generalSearch").value,
+    $("tenderIdSearch").value,
+    $("titleSearch").value,
+    $("organisationSearch").value,
+    $("pincodeSearch").value,
+    $("closingDate").value,
+    $("pacFilter").value,
+    $("statusSelect").value
+  ];
+
+  const hasFilter = archivedMode || filterControls.some(value => clean(value) !== "");
+
+  $("filterResultCount").textContent =
+    hasFilter ? rows.length : "No Filter";
 }
 
 function applyFilters(){
