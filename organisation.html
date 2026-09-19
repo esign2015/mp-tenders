@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP Tender — Organisation & Tender List</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#203b91;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;margin:0}.sub{font-size:12px;margin-top:4px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+button,a.btn{border:0;border-radius:6px;padding:8px 12px;font-weight:700;text-decoration:none;cursor:pointer;background:#fff;color:#203b91}
+main{padding:12px;max-width:1800px;margin:auto}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.stat{background:#fff;border:1px solid #d5deea;border-radius:8px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px;margin-top:3px}
+.panel{background:#fff;border:1px solid #d5deea;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.panel-head{padding:10px 12px;border-bottom:1px solid #dbe3ee;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+input{height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:5px 8px;min-width:220px}
+.wrap{overflow:auto;max-height:55vh}
+table{width:100%;border-collapse:collapse;min-width:900px;font-size:12px}
+th{position:sticky;top:0;background:#dfe7f2;padding:8px;text-align:left;white-space:nowrap;z-index:1}
+td{padding:7px 8px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+tr:nth-child(even){background:#f8fafc}
+.title{min-width:300px;white-space:normal}.url{color:#0756c9;text-decoration:none}
+.match{color:#047857;font-weight:800}.mismatch{color:#b91c1c;font-weight:800}
+footer{text-align:center;background:#203b91;color:#fff;padding:10px;font-size:11px}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}header{align-items:flex-start}.wrap{max-height:60vh}input{min-width:160px;width:100%}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>SAR Digital Services, Kannod — MP Tender Dashboard</h1><div class="sub">Organisation सूची और प्रत्येक Organisation की Tender List</div></div>
+<div class="actions"><a class="btn" href="./">मुख्य Dashboard</a><button id="reload">↻ Reload</button></div>
+</header>
+<main>
+<div class="stats">
+<div class="stat">कुल Departments / Organisations<b id="orgCount">0</b></div>
+<div class="stat">Portal Tender Count<b id="portalCount">0</b></div>
+<div class="stat">Copy किए गए Tender<b id="tenderCount">0</b></div>
+<div class="stat">Count MATCH<b id="matchCount">0</b></div>
+</div>
+
+<section class="panel">
+<div class="panel-head"><span>1. Organisation / Department List</span><input id="orgSearch" placeholder="Organisation खोजें"></div>
+<div class="wrap"><table><thead><tr><th>S.No.</th><th>Organisation / Department</th><th>Portal Tender Count</th><th>Copied Tender Count</th><th>Status</th></tr></thead><tbody id="orgBody"><tr><td colspan="5">Loading...</td></tr></tbody></table></div>
+</section>
+
+<section class="panel">
+<div class="panel-head"><span>2. Organisation के अंदर की Tender List</span><input id="tenderSearch" placeholder="Tender ID / Title / Organisation खोजें"></div>
+<div class="wrap"><table><thead><tr><th>S.No.</th><th>Organisation</th><th>Tender ID</th><th>Title</th><th>Reference Number</th><th>Published</th><th>Closing</th><th>Opening</th><th>Count Status</th><th>Portal</th></tr></thead><tbody id="tenderBody"><tr><td colspan="10">Loading...</td></tr></tbody></table></div>
+</section>
+</main>
+<footer>यह चरण केवल Organisation list और Tender-list data दिखाता है। Individual Tender Detail अभी जानबूझकर नहीं निकाला गया है।</footer>
+<script>
+let orgs=[],tenders=[];
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;")}
+function parseCSV(text){
+ let rows=[],row=[],v='',q=false;
+ for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];
+  if(c=='"'&&q&&n=='"'){v+='"';i++;continue}
+  if(c=='"'){q=!q;continue}
+  if(c==','&&!q){row.push(v);v='';continue}
+  if((c=='\n'||c=='\r')&&!q){if(c=='\r'&&n=='\n')i++;row.push(v);v='';if(row.some(x=>x.trim()))rows.push(row);row=[];continue}
+  v+=c;
+ }
+ if(v!==''||row.length){row.push(v);rows.push(row)}
+ if(!rows.length)return[];
+ const h=rows[0].map(x=>x.trim());
+ return rows.slice(1).map(r=>Object.fromEntries(h.map((x,i)=>[x,r[i]||''])));
+}
+async function csv(name){let r=await fetch(name+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error(name);return parseCSV(await r.text())}
+function renderOrgs(){
+ const q=$('orgSearch').value.toLowerCase();
+ const rows=orgs.filter(x=>x['Organisation Name'].toLowerCase().includes(q));
+ $('orgBody').innerHTML=rows.map((x,i)=>{
+  const name=x['Organisation Name'], p=Number(x['Tender Count']||0);
+  const list=tenders.filter(t=>t['Organisation Name']===name).length;
+  const ok=list===p;
+  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td>'+p.toLocaleString('en-IN')+'</td><td>'+list.toLocaleString('en-IN')+'</td><td class="'+(ok?'match':'mismatch')+'">'+(ok?'MATCH':'MISMATCH')+'</td></tr>';
+ }).join('')||'<tr><td colspan="5">कोई Organisation नहीं मिला।</td></tr>';
+}
+function renderTenders(){
+ const q=$('tenderSearch').value.toLowerCase();
+ const rows=tenders.filter(x=>(x['Tender ID']+' '+x['Title']+' '+x['Organisation Name']+' '+x['Reference Number']).toLowerCase().includes(q));
+ $('tenderBody').innerHTML=rows.map((x,i)=>'<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(x['Organisation Name'])+'</td><td>'+esc(x['Tender ID'])+'</td><td class="title">'+esc(x['Title'])+'</td><td>'+esc(x['Reference Number'])+'</td><td>'+esc(x['Published Date'])+'</td><td>'+esc(x['Closing Date'])+'</td><td>'+esc(x['Opening Date'])+'</td><td class="'+(x['Count Status']==='MATCH'?'match':'mismatch')+'">'+esc(x['Count Status'])+'</td><td><a class="url" href="'+esc(x['Tender URL'])+'" target="_blank" rel="noopener">Open</a></td></tr>').join('')||'<tr><td colspan="10">कोई Tender नहीं मिला।</td></tr>';
+}
+async function load(){
+ $('orgBody').innerHTML='<tr><td colspan="5">Organisation data loading...</td></tr>';
+ $('tenderBody').innerHTML='<tr><td colspan="10">Tender list loading...</td></tr>';
+ try{[orgs,tenders]=await Promise.all([csv('organisations.csv'),csv('organisation_tenders.csv')]);
+  $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
+  $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
+  $('tenderCount').textContent=tenders.length.toLocaleString('en-IN');
+  $('matchCount').textContent=orgs.filter(x=>tenders.filter(t=>t['Organisation Name']===x['Organisation Name']).length===Number(x['Tender Count']||0)).length.toLocaleString('en-IN');
+  renderOrgs();renderTenders();
+ }catch(e){$('orgBody').innerHTML='<tr><td colspan="5">Data अभी GitHub पर उपलब्ध नहीं है। Scraper run पूरा होने के बाद यहाँ दिखेगा।</td></tr>'; $('tenderBody').innerHTML='<tr><td colspan="10">Data अभी उपलब्ध नहीं है।</td></tr>'}
+}
+$('orgSearch').addEventListener('input',renderOrgs);$('tenderSearch').addEventListener('input',renderTenders);$('reload').addEventListener('click',load);load();
+</script>
+</body></html>
