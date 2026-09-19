@@ -213,7 +213,7 @@ button:hover{
 
 .search-bottom{
   display:grid;
-  grid-template-columns:150px 170px 130px 1fr;
+  grid-template-columns:150px 170px 130px 170px 170px 1fr;
   gap:7px;
   padding:0 12px 8px;
 }
@@ -256,6 +256,7 @@ button:hover{
 }
 #sortSelect{width:170px;}
 #statusSelect{width:130px;}
+#pacMin,#pacMax{width:170px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
 .btn-archive{
@@ -697,6 +698,11 @@ td.title-cell{
     width:100% !important;
   }
 
+  #pacMin,
+  #pacMax{
+    width:100% !important;
+  }
+
   .legend-row{
     gap:8px 12px;
     padding:0 8px 7px;
@@ -943,6 +949,20 @@ td.title-cell{
         <option value="closed">Closed</option>
         <option value="corrigendum">Corrigendum</option>
       </select>
+
+      <input id="pacMin"
+             type="number"
+             min="0"
+             step="1"
+             placeholder="PAC Min ₹"
+             title="PAC Amount की न्यूनतम राशि">
+
+      <input id="pacMax"
+             type="number"
+             min="0"
+             step="1"
+             placeholder="PAC Max ₹"
+             title="PAC Amount की अधिकतम राशि">
     </div>
 
     <div class="legend-row">
@@ -1608,6 +1628,10 @@ function applyFilters(){
   const pincode = clean($("pincodeSearch").value);
   const closingDate = clean($("closingDate").value);
   const status = clean($("statusSelect").value).toLowerCase();
+  const pacMinText = clean($("pacMin").value);
+  const pacMaxText = clean($("pacMax").value);
+  const pacMin = pacMinText === "" ? null : Number(pacMinText);
+  const pacMax = pacMaxText === "" ? null : Number(pacMaxText);
   const sort = $("sortSelect").value;
 
   const today = new Date();
@@ -1661,6 +1685,16 @@ function applyFilters(){
 
     if(pincode &&
        clean(row["Pincode"]) !== pincode){
+      return false;
+    }
+
+    const pacAmount = moneyNumber(row["PAC Amount"]);
+
+    if(pacMin !== null && (!Number.isFinite(pacMin) || pacAmount < pacMin)){
+      return false;
+    }
+
+    if(pacMax !== null && (!Number.isFinite(pacMax) || pacAmount > pacMax)){
       return false;
     }
 
@@ -1725,6 +1759,8 @@ function clearFilters(){
   $("organisationSearch").value = "";
   $("pincodeSearch").value = "";
   $("closingDate").value = "";
+  $("pacMin").value = "";
+  $("pacMax").value = "";
   $("sortSelect").value = "closing";
   $("statusSelect").value = "";
 
@@ -1930,6 +1966,13 @@ $("pincodeSearch").addEventListener("input", function(){
   applyFilters();
 });
 
+["pacMin","pacMax"].forEach(id => {
+  $("#"+id).addEventListener("input", function(){
+    if(this.value !== "" && Number(this.value) < 0) this.value = "0";
+    applyFilters();
+  });
+});
+
 [
   "generalSearch",
   "tenderIdSearch",
@@ -1938,7 +1981,9 @@ $("pincodeSearch").addEventListener("input", function(){
   "pincodeSearch",
   "closingDate",
   "sortSelect",
-  "statusSelect"
+  "statusSelect",
+  "pacMin",
+  "pacMax"
 ].forEach(id => {
   $(id).addEventListener("input",applyFilters);
   $(id).addEventListener("change",applyFilters);
