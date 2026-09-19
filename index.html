@@ -657,7 +657,8 @@ td.title-cell{
     gap:4px;
   }
 
-  .action-buttons button{
+  .action-buttons button,
+  .action-buttons .telegram-alert-btn{
     width:100%;
     min-width:0;
     padding:7px 3px;
@@ -913,6 +914,7 @@ td.title-cell{
         <button class="btn-light" id="resetBtn">Reset</button>
         <button class="btn-dark" id="reloadBtn">↻ Reload</button>
         <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
+        <a class="telegram-alert-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Telegram Daily Alerts</a>
       </div>
     </div>
 
@@ -1892,6 +1894,7 @@ function exportPdf(){
   const LIGHT_BLUE = [235,243,252];
   const WATERMARK = [220,228,240];
   const PORTAL_URL = "https://esign2015.github.io/mp-tenders/";
+  const TELEGRAM_URL = "https://t.me/mptendersalert";
 
   const now = new Date();
   const reportDate =
@@ -2016,6 +2019,15 @@ function exportPdf(){
       doc.text("Tender Report  •  " + reportDate,pageWidth-12,9,{align:"right"});
       doc.text("Total Records: " + rows.length,pageWidth-12,15,{align:"right"});
 
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(7);
+      doc.text(
+        "Daily Tender Alerts: " + TELEGRAM_URL,
+        pageWidth-12,
+        21,
+        {align:"right"}
+      );
+
       // Corrected assistance/disclaimer line.
       doc.setTextColor(75,85,99);
       doc.setFont("helvetica","italic");
@@ -2024,6 +2036,13 @@ function exportPdf(){
         "This dashboard is an assistance tool only. Always verify the final tender notice, corrigendum, eligibility requirements, fees, and deadline on the official tender portal.",
         10,
         33
+      );
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.2);
+      doc.text(
+        "For daily tender alerts, please join our Telegram channel: " + TELEGRAM_URL,
+        10,
+        36
       );
     },
 
@@ -2052,6 +2071,17 @@ function exportPdf(){
         pageWidth-92,
         pageHeight-8,
         {url:PORTAL_URL}
+      );
+
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.2);
+      doc.text("Daily Tender Alerts:", pageWidth-155, pageHeight-3);
+      doc.setFont("helvetica","normal");
+      doc.textWithLink(
+        TELEGRAM_URL,
+        pageWidth-92,
+        pageHeight-3,
+        {url:TELEGRAM_URL}
       );
 
       doc.setTextColor(255,255,255);
