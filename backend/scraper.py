@@ -709,7 +709,7 @@ def run_detail_validation(csv_file, organisations):
 
             for idx, tender in enumerate(selected, 1):
                 try:
-                    detail_soup, detail_url = open_tender_by_click(page, tender["tender_id"])
+                    detail_soup, detail_url = open_tender_by_click(page, tender)
                     detail = parse_detail(detail_soup, detail_url)
 
                     list_dates = parse_list_dates(tender)
