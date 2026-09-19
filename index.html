@@ -807,23 +807,23 @@ td.title-cell{
 
   <div class="counts">
     <div class="count-box">
-      <div class="count-label">Today Tenders</div>
-      <div class="count-number blue" id="todayCount">0</div>
+      <div class="count-label">Total Tenders</div>
+      <div class="count-number blue" id="totalCount">0</div>
+    </div>
+
+    <div class="count-box">
+      <div class="count-label">Live Tenders</div>
+      <div class="count-number green" id="liveCount">0</div>
     </div>
 
     <div class="count-box">
       <div class="count-label">Closing Today</div>
-      <div class="count-number red" id="closingTodayCount">0</div>
+      <div class="count-number orange" id="closingTodayCount">0</div>
     </div>
 
     <div class="count-box">
-      <div class="count-label">Closing in 3 Days</div>
-      <div class="count-number orange" id="closingThreeCount">0</div>
-    </div>
-
-    <div class="count-box">
-      <div class="count-label">New in 7 Days</div>
-      <div class="count-number green" id="newSevenCount">0</div>
+      <div class="count-label">Closed Today</div>
+      <div class="count-number red" id="closedTodayCount">0</div>
     </div>
   </div>
 
@@ -844,7 +844,6 @@ td.title-cell{
       <div class="action-buttons">
         <button class="btn-red" id="closingTodayBtn">Closing Today</button>
         <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
-        <a class="btn-light" href="./organisation.html" style="display:inline-block;text-decoration:none;color:#1e293b;padding:8px 11px;border-radius:6px;font-size:12px;font-weight:bold;">Departments &amp; Tender List</a>
         <button class="btn-light" id="archivedBtn">Archived Tenders</button>
         <button class="btn-light" id="resetBtn">Reset</button>
         <button class="btn-dark" id="reloadBtn">↻ Reload</button>
@@ -926,7 +925,7 @@ td.title-cell{
   <section class="table-panel">
 
     <div class="table-heading-row">
-      <div class="table-heading" id="tableHeading">Tender Records</div>
+      <div class="table-heading" id="tableHeading">Live Tender Records</div>
 
       <div class="table-tools">
         <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
@@ -941,7 +940,7 @@ td.title-cell{
             <th>Tender ID</th>
             <th>Published</th>
             <th>Closing</th>
-            <th>Opening</th>
+
             <th>Title</th>
             <th>Ref.No.</th>
             <th>Organisation</th>
@@ -959,7 +958,7 @@ td.title-cell{
 
         <tbody id="tenderBody">
           <tr>
-            <td colspan="17" class="loading-row">
+            <td colspan="16" class="loading-row">
               Loading tender data...
             </td>
           </tr>
@@ -1019,27 +1018,25 @@ function escapeHtml(value){
 
 function parseDate(value){
   const text = clean(value);
-
   if(!text) return null;
 
   let date = new Date(text);
-
   if(!isNaN(date.getTime())) return date;
 
-  const parts = text.split(/[\/\-]/);
-
-  if(parts.length === 3){
-    let day = parts[0];
-    let month = parts[1];
-    let year = parts[2];
-
-    if(year.length === 2) year = "20" + year;
-
-    date = new Date(`${year}-${month}-${day}T00:00:00`);
-
+  const match = text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?:\s*(AM|PM))?)?/i);
+  if(match){
+    let day = Number(match[1]);
+    let month = Number(match[2]);
+    let year = Number(match[3]);
+    if(year < 100) year += 2000;
+    let hour = Number(match[4] || 0);
+    const minute = Number(match[5] || 0);
+    const ampm = (match[6] || "").toUpperCase();
+    if(ampm === "PM" && hour < 12) hour += 12;
+    if(ampm === "AM" && hour === 12) hour = 0;
+    date = new Date(year, month - 1, day, hour, minute, 0);
     if(!isNaN(date.getTime())) return date;
   }
-
   return null;
 }
 
@@ -1103,6 +1100,45 @@ function totalFee(row){
          moneyNumber(row["Processing Fee"]);
 }
 
+function cleanDisplayTitle(value){
+  let text = clean(value);
+  text = text.replace(new RegExp("\\[([^\\]]+)\\]\\([^)]*\\)", "g"), "$1");
+  text = text.replace(new RegExp("https?://[^\\s]+", "gi"), "");
+  text = text.replace(new RegExp("\\[([^\\]]*)\\]", "g"), "$1");
+  return text.replace(new RegExp("\\s+", "g"), " ").trim();
+}
+
+function splitOrganisationChain(row){
+  const chain = clean(
+    row["Organisation Chain"] ||
+    row["Organisation_Chain"] ||
+    row["DepartmentDivisionSub Division"] ||
+    row["Department Division Sub Division"]
+  );
+  if(chain){
+    const parts = chain.split("||").map(x => clean(x));
+    return {
+      department: parts[0] || "",
+      division: parts[1] || "",
+      subDivision: parts.slice(2).join("||") || ""
+    };
+  }
+  return {
+    department: clean(row["Department"]),
+    division: clean(row["Division"]),
+    subDivision: clean(row["Sub Division"] || row["Sub_Division"])
+  };
+}
+
+function extractReferenceFromTitle(value){
+  const text = clean(value);
+  const parts = [];
+  const re = new RegExp("\\[([^\\]]+)\\]", "g");
+  let m;
+  while((m = re.exec(text)) !== null) parts.push(clean(m[1]));
+  return parts.length >= 3 ? parts[1] : "";
+}
+
 function normaliseTender(row){
   const item = {...row};
 
@@ -1126,7 +1162,7 @@ function normaliseTender(row){
           row["Opening"]);
 
   item["Title"] =
-    clean(row["Title"] ||
+    cleanDisplayTitle(row["Title"] ||
           row["Work Name"] ||
           row["Tender Title"]);
 
@@ -1134,16 +1170,17 @@ function normaliseTender(row){
     clean(row["Reference Number"] ||
           row["Reference_Number"] ||
           row["Ref.No."] ||
-          row["Ref No"]);
+          row["Ref No"]) ||
+    extractReferenceFromTitle(row["Title"]);
 
   item["Organisation"] =
     clean(row["Organisation"] ||
           row["Organisation Name"]);
 
-  item["Department"] = clean(row["Department"]);
-  item["Division"] = clean(row["Division"]);
-  item["Sub Division"] =
-    clean(row["Sub Division"] || row["Sub_Division"]);
+  const chain = splitOrganisationChain(row);
+  item["Department"] = chain.department;
+  item["Division"] = chain.division;
+  item["Sub Division"] = chain.subDivision;
 
   item["Pincode"] =
     clean(row["Pincode"] || row["PIN Code"] || row["Pin Code"] || row["PIN"]);
@@ -1293,7 +1330,7 @@ async function loadOrganisationTenderCsv(){
 
 async function loadData(){
   $("tenderBody").innerHTML =
-    `<tr><td colspan="17" class="loading-row">Loading tender data...</td></tr>`;
+    `<tr><td colspan="16" class="loading-row">Loading tender data...</td></tr>`;
 
   try{
     let data = [];
@@ -1326,7 +1363,7 @@ async function loadData(){
 
     $("tenderBody").innerHTML =
       `<tr>
-        <td colspan="17" class="empty-row">
+        <td colspan="16" class="empty-row">
           Tender data could not be loaded. Render API or CSV is unavailable.
         </td>
       </tr>`;
@@ -1389,7 +1426,7 @@ function renderTable(rows){
   if(!rows.length){
     body.innerHTML =
       `<tr>
-        <td colspan="17" class="empty-row">
+        <td colspan="16" class="empty-row">
           कोई tender record नहीं मिला।
         </td>
       </tr>`;
@@ -1404,15 +1441,8 @@ function renderTable(rows){
     const statusText = getStatusText(row);
 
     const tenderId = escapeHtml(row["Tender ID"]);
-    const title = escapeHtml(row["Title"]);
-    const url = clean(row["URL"]);
-
-    const titleHtml = url
-      ? `<a class="tender-link"
-             href="${escapeHtml(url)}"
-             target="_blank"
-             rel="noopener">${title || "View Tender"}</a>`
-      : title;
+    const title = escapeHtml(cleanDisplayTitle(row["Title"]));
+    const titleHtml = title;
 
     return `
       <tr>
@@ -1422,7 +1452,7 @@ function renderTable(rows){
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatDate(row["Closing Date"]))}
         </td>
-        <td>${escapeHtml(formatDate(row["Opening Date"]))}</td>
+
         <td class="title-cell">${titleHtml || "—"}</td>
         <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
         <td>${escapeHtml(row["Organisation"]) || "—"}</td>
@@ -1448,50 +1478,33 @@ function renderTable(rows){
 }
 
 function updateCounts(rows){
-  const today = todayKey();
-
-  const todayCount = rows.filter(row =>
-    dateKey(row["Published Date"]) === today
-  ).length;
-
-  const closingToday = rows.filter(row =>
-    dateKey(row["Closing Date"]) === today
-  ).length;
-
-  const closingThree = rows.filter(row => {
-    const date = parseDate(row["Closing Date"]);
-    if(!date) return false;
-
-    const now = new Date();
-    now.setHours(0,0,0,0);
-
-    const close = new Date(date);
-    close.setHours(0,0,0,0);
-
-    const days = Math.round((close-now)/86400000);
-
-    return days >= 1 && days <= 3;
-  }).length;
-
   const now = new Date();
-  now.setHours(0,0,0,0);
 
-  const newSeven = rows.filter(row => {
-    const date = parseDate(row["Published Date"]);
-    if(!date) return false;
+  const total = rows.length;
 
-    const published = new Date(date);
-    published.setHours(0,0,0,0);
-
-    const days = Math.round((now-published)/86400000);
-
-    return days >= 0 && days <= 7;
+  const live = rows.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    return !closing || closing.getTime() > now.getTime();
   }).length;
 
-  $("todayCount").textContent = todayCount;
+  const closingToday = rows.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    return closing &&
+           dateKey(closing) === todayKey() &&
+           closing.getTime() > now.getTime();
+  }).length;
+
+  const closedToday = rows.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    return closing &&
+           dateKey(closing) === todayKey() &&
+           closing.getTime() <= now.getTime();
+  }).length;
+
+  $("totalCount").textContent = total;
+  $("liveCount").textContent = live;
   $("closingTodayCount").textContent = closingToday;
-  $("closingThreeCount").textContent = closingThree;
-  $("newSevenCount").textContent = newSeven;
+  $("closedTodayCount").textContent = closedToday;
 }
 
 function applyFilters(){
@@ -1515,12 +1528,12 @@ function applyFilters(){
     if(closing){
       const close = new Date(closing);
       close.setHours(0,0,0,0);
-      const daysAgo = Math.round((today - close) / 86400000);
+      const daysAgo = Math.floor((today - close) / 86400000);
 
       if(archivedMode){
         if(daysAgo < 1 || daysAgo > 10) return false;
       }else{
-        if(daysAgo >= 1) return false;
+        if(close.getTime() <= Date.now()) return false;
       }
     }else if(archivedMode){
       return false;
@@ -1738,7 +1751,6 @@ function exportPdf(){
     clean(row["Tender ID"]),
     formatDate(row["Published Date"]),
     formatDate(row["Closing Date"]),
-    formatDate(row["Opening Date"]),
     clean(row["Title"]),
     clean(row["Reference Number"]),
     clean(row["Organisation"]),
@@ -1756,7 +1768,7 @@ function exportPdf(){
   doc.autoTable({
     startY:28,
     head:[[
-      "S.No.","Tender ID","Published","Closing","Opening","Title",
+      "S.No.","Tender ID","Published","Closing","Title",
       "Ref.No.","Organisation","Department","Division","Sub Division",
       "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee","Status"
     ]],
