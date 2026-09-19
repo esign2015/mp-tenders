@@ -178,77 +178,111 @@ def parse_detail(soup, url):
 
 
 def parse_organisation_rows(soup, base):
+    """Parse the MP organisation table by its actual row structure.
+
+    The portal's organisation name is plain text while the tender count is
+    the clickable DirectLink. Do not rely on fixed column indexes because
+    the JSF markup can contain hidden/extra cells.
+    """
     result = []
+    seen = set()
+
     for table in soup.find_all("table"):
         rows = table.find_all("tr")
         if not rows:
             continue
 
+        # Identify only the real organisation table.
         header_index = -1
-        header_cells = []
-        for idx, tr in enumerate(rows[:5]):
-            cells = tr.find_all(["th", "td"])
-            texts = [clean(c.get_text(" ", strip=True)).lower() for c in cells]
-            joined = " ".join(texts)
-            if "organisation name" in joined and "tender count" in joined:
+        for idx, tr in enumerate(rows[:10]):
+            header_text = clean(tr.get_text(" ", strip=True)).lower()
+            if "organisation name" in header_text and "tender count" in header_text:
                 header_index = idx
-                header_cells = texts
                 break
-
         if header_index < 0:
             continue
 
-        org_idx = next((i for i, h in enumerate(header_cells) if "organisation name" in h), 1)
-        count_idx = next((i for i, h in enumerate(header_cells) if "tender count" in h), len(header_cells) - 1)
-
         for tr in rows[header_index + 1:]:
-            cells = tr.find_all(["td", "th"])
-            texts = [clean(c.get_text(" ", strip=True)) for c in cells]
-            if len(cells) <= max(org_idx, count_idx):
+            cells = tr.find_all("td", recursive=False)
+            if len(cells) < 3:
+                # Fall back to direct th/td children when the markup differs.
+                cells = tr.find_all(["td", "th"], recursive=False)
+            if len(cells) < 3:
                 continue
 
-            name = texts[org_idx] if org_idx < len(texts) else ""
-            count_text = texts[count_idx] if count_idx < len(texts) else ""
-            if not name or name.lower() in {"s.no", "organisation name", "tender count"}:
-                continue
+            cell_texts = [clean(c.get_text(" ", strip=True)) for c in cells]
 
-            count_match = re.search(r"\d[\d,]*", count_text)
-            if not count_match:
+            # S.No. must be a plain numeric value. This prevents headers,
+            # pager rows and unrelated nested tables from being counted.
+            sno_match = re.fullmatch(r"\d+", cell_texts[0].replace(",", ""))
+            if not sno_match:
                 continue
-            count = int(count_match.group(0).replace(",", ""))
+            sno = int(sno_match.group(0))
 
-            # The count itself is the organisation's DirectLink. Prefer that
-            # anchor because the MP portal uses session-bound $DirectLink URLs.
-            anchor = None
-            for a in cells[count_idx].find_all("a"):
-                if clean(a.get_text(" ", strip=True)).replace(",", "").isdigit():
-                    anchor = a
+            # The tender-count cell contains a numeric DirectLink anchor.
+            count_anchor = None
+            count_cell = None
+            count = None
+            for cell in cells:
+                for a in cell.find_all("a"):
+                    anchor_text = clean(a.get_text(" ", strip=True))
+                    if re.fullmatch(r"\d[\d,]*", anchor_text):
+                        count_anchor = a
+                        count_cell = cell
+                        count = int(anchor_text.replace(",", ""))
+                        break
+                if count_anchor:
                     break
-            if not anchor:
-                for a in cells[count_idx].find_all("a"):
-                    if link_from_anchor(a, base):
-                        anchor = a
-                        break
-            if not anchor:
-                # Fallback: any link in the row.
-                for cell in cells:
-                    for a in cell.find_all("a"):
-                        if link_from_anchor(a, base):
-                            anchor = a
-                            break
-                    if anchor:
+
+            if count_anchor is None or count_cell is None:
+                continue
+
+            # The organisation name is the cell immediately before the
+            # clickable tender-count cell. This is stable on the MP portal
+            # and avoids the previous fixed-index parsing error.
+            try:
+                org_cell = count_cell.find_previous_sibling("td")
+            except Exception:
+                org_cell = None
+
+            name = clean(org_cell.get_text(" ", strip=True)) if org_cell else ""
+
+            # If the portal adds an extra wrapper cell, use the nearest
+            # preceding non-numeric cell as a safe fallback.
+            if not name or name.isdigit():
+                count_pos = cells.index(count_cell)
+                for pos in range(count_pos - 1, 0, -1):
+                    candidate = clean(cells[pos].get_text(" ", strip=True))
+                    if candidate and not re.fullmatch(r"\d[\d,]*", candidate):
+                        name = candidate
                         break
 
-            href = link_from_anchor(anchor, base) if anchor else ""
-            if href:
-                result.append({"name": name, "count": count, "url": href})
+            if not name or name.lower() in {
+                "s.no", "organisation name", "tender count"
+            }:
+                continue
+
+            href = link_from_anchor(count_anchor, base)
+            if not href:
+                continue
+
+            key = (sno, name, count, href)
+            if key in seen:
+                continue
+            seen.add(key)
+            result.append({
+                "sno": sno,
+                "name": name,
+                "count": count,
+                "url": href,
+            })
 
         if result:
-            result.sort(key=lambda x: (x["count"], x["name"].lower()))
+            # Preserve the portal's S.No. order; never sort by tender count.
+            result.sort(key=lambda x: x["sno"])
             return result
 
     return result
-
 
 def parse_tender_rows(soup, base):
     result = []
