@@ -1,0 +1,33 @@
+name: MP Tender Daily Scraper
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 15 * * *"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Run MP Tender scraper
+        run: python backend/scraper.py
+
+      - name: Commit updated CSV
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv
+          git diff --cached --quiet || git commit -m "Update MP tender data"
+          git push
