@@ -213,7 +213,7 @@ button:hover{
 
 .search-bottom{
   display:grid;
-  grid-template-columns:150px 170px 130px 170px 170px 1fr;
+  grid-template-columns:150px 170px 130px 170px 1fr;
   gap:7px;
   padding:0 12px 8px;
 }
@@ -256,7 +256,7 @@ button:hover{
 }
 #sortSelect{width:170px;}
 #statusSelect{width:130px;}
-#pacMin,#pacMax{width:170px;}
+#pacFilter{width:170px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
 .btn-archive{
@@ -698,8 +698,7 @@ td.title-cell{
     width:100% !important;
   }
 
-  #pacMin,
-  #pacMax{
+  #pacFilter{
     width:100% !important;
   }
 
@@ -950,19 +949,18 @@ td.title-cell{
         <option value="corrigendum">Corrigendum</option>
       </select>
 
-      <input id="pacMin"
-             type="number"
-             min="0"
-             step="1"
-             placeholder="PAC Min ₹"
-             title="PAC Amount की न्यूनतम राशि">
-
-      <input id="pacMax"
-             type="number"
-             min="0"
-             step="1"
-             placeholder="PAC Max ₹"
-             title="PAC Amount की अधिकतम राशि">
+      <select id="pacFilter" title="PAC / Estimate Amount">
+        <option value="">ALL PAC</option>
+        <option value="500000">Below 5 Lakh</option>
+        <option value="1000000">Below 10 Lakh</option>
+        <option value="2000000">Below 20 Lakh</option>
+        <option value="5000000">Below 50 Lakh</option>
+        <option value="10000000">Below 100 Lakh</option>
+        <option value="20000000">Below 200 Lakh</option>
+        <option value="50000000">Below 500 Lakh</option>
+        <option value="100000000">Below 1000 Lakh</option>
+        <option value="200000000">Below 2000 Lakh</option>
+      </select>
     </div>
 
     <div class="legend-row">
@@ -1628,10 +1626,8 @@ function applyFilters(){
   const pincode = clean($("pincodeSearch").value);
   const closingDate = clean($("closingDate").value);
   const status = clean($("statusSelect").value).toLowerCase();
-  const pacMinText = clean($("pacMin").value);
-  const pacMaxText = clean($("pacMax").value);
-  const pacMin = pacMinText === "" ? null : Number(pacMinText);
-  const pacMax = pacMaxText === "" ? null : Number(pacMaxText);
+  const pacFilter = clean($("pacFilter").value);
+  const pacMax = pacFilter === "" ? null : Number(pacFilter);
   const sort = $("sortSelect").value;
 
   const today = new Date();
@@ -1690,12 +1686,9 @@ function applyFilters(){
 
     const pacAmount = moneyNumber(row["PAC Amount"]);
 
-    if(pacMin !== null && (!Number.isFinite(pacMin) || pacAmount < pacMin)){
-      return false;
-    }
-
-    if(pacMax !== null && (!Number.isFinite(pacMax) || pacAmount > pacMax)){
-      return false;
+    if(pacMax !== null){
+      if(!Number.isFinite(pacMax)) return false;
+      if(!Number.isFinite(pacAmount) || pacAmount >= pacMax) return false;
     }
 
     if(closingDate &&
@@ -1759,8 +1752,7 @@ function clearFilters(){
   $("organisationSearch").value = "";
   $("pincodeSearch").value = "";
   $("closingDate").value = "";
-  $("pacMin").value = "";
-  $("pacMax").value = "";
+  $("pacFilter").value = "";
   $("sortSelect").value = "closing";
   $("statusSelect").value = "";
 
@@ -1966,12 +1958,6 @@ $("pincodeSearch").addEventListener("input", function(){
   applyFilters();
 });
 
-["pacMin","pacMax"].forEach(id => {
-  $("#"+id).addEventListener("input", function(){
-    if(this.value !== "" && Number(this.value) < 0) this.value = "0";
-    applyFilters();
-  });
-});
 
 [
   "generalSearch",
@@ -1982,8 +1968,7 @@ $("pincodeSearch").addEventListener("input", function(){
   "closingDate",
   "sortSelect",
   "statusSelect",
-  "pacMin",
-  "pacMax"
+  "pacFilter"
 ].forEach(id => {
   $(id).addEventListener("input",applyFilters);
   $(id).addEventListener("change",applyFilters);
