@@ -1,7 +1,12 @@
 name: MP Tender Daily Scraper
 
 on:
-  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/**"
+      - ".github/workflows/scrape.yml"
+      - "all_tenders_org_detailed.csv"
   schedule:
     - cron: "15 15 * * *"
 
