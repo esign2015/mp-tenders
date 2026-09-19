@@ -624,11 +624,8 @@ def run_detail_validation(csv_file, organisations):
     # Debug the first live tender row structure once so we can bind to the
     # portal's actual JSF link instead of guessing at its href.
     try:
-        debug_soup = BeautifulSoup(requests.get(
-            target_org["url"],
-            headers=HEADERS,
-            timeout=60,
-        ).text, "html.parser")
+        debug_response = request(session, target_org["url"], sleep=0.2)
+        debug_soup = BeautifulSoup(debug_response.text, "html.parser")
         first = selected[0]
         needles = [clean(first.get("tender_id")), clean(first.get("title")), clean(first.get("reference"))]
         snippets = []
