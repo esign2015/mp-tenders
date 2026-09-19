@@ -154,7 +154,8 @@ def parse_detail(soup, url):
     tender_fee = find_label_value(soup, ["Tender Fee in ₹"])
     processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
     emd = find_label_value(soup, ["EMD Amount in ₹"])
-    location = find_label_value(soup, ["Location"])\n    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
+    location = find_label_value(soup, ["Location"])
+    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
     # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
     total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
@@ -650,16 +651,18 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # Test stage: open a random sample of 50 tender detail pages.
+    # Detail validation stage: open the requested sample, optionally restricted to one organisation.
     # Controlled by DETAIL_SAMPLE_SIZE so the full organisation/tender-list
     # collection remains unchanged.
     detail_sample_size = int(os.getenv("DETAIL_SAMPLE_SIZE", "0"))
+    detail_organisation = clean(os.getenv("DETAIL_ORGANISATION", ""))
     detail_rows = read_existing(csv_file)
 
     if detail_sample_size > 0 and tender_list_rows:
         candidates = [
             row for row in tender_list_rows
             if clean(row.get("Tender ID")) and clean(row.get("Tender URL"))
+            and (not detail_organisation or clean(row.get("Organisation Name")).casefold() == detail_organisation.casefold())
         ]
         sample_size = min(detail_sample_size, len(candidates))
         selected = random.sample(candidates, sample_size)
