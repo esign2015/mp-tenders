@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib import request, parse
 
 IST = timezone(timedelta(hours=5, minutes=30))
-SITE_URL = "https://esign2015.github.io/mp-tenders/"
+SITE_URL = "https://tenders.codinglms.xyz/"
 CSV_PATH = Path("organisation_tenders.csv")
 
 
