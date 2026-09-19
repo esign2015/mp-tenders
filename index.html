@@ -228,7 +228,32 @@ button:hover{
   font-size:13px;
 }
 
-#closingDate{width:150px;}
+.date-filter-wrap{
+  width:150px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:0 5px;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  background:#fff;
+  box-sizing:border-box;
+}
+.date-filter-label{
+  font-size:10px;
+  font-weight:700;
+  color:#334155;
+  white-space:nowrap;
+}
+.date-filter-wrap #closingDate{
+  width:92px;
+  min-width:0;
+  border:0;
+  padding:0;
+  outline:0;
+  background:transparent;
+}
 #sortSelect{width:170px;}
 #statusSelect{width:130px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
@@ -846,10 +871,12 @@ td.title-cell{
     </div>
 
     <div class="search-bottom">
-      <input id="closingDate"
-             type="date"
-             title="Closing date"
-             aria-label="Closing date">
+      <label class="date-filter-wrap" title="जिस तारीख को Tender की Closing Date है, उसी तारीख के अनुसार खोजें">
+        <span class="date-filter-label">Closing Date</span>
+        <input id="closingDate"
+               type="date"
+               aria-label="Closing Date — जिस तारीख को Tender बंद हो रहा है">
+      </label>
 
       <select id="sortSelect">
         <option value="closing">Sort: Closing date</option>
