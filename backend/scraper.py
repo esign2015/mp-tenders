@@ -621,6 +621,27 @@ def run_detail_validation(csv_file, organisations):
 
     selected = candidates[:sample_size]
 
+    # Debug the first live tender row structure once so we can bind to the
+    # portal's actual JSF link instead of guessing at its href.
+    try:
+        debug_soup = BeautifulSoup(requests.get(
+            target_org["url"],
+            headers=HEADERS,
+            timeout=60,
+        ).text, "html.parser")
+        first = selected[0]
+        needles = [clean(first.get("tender_id")), clean(first.get("title")), clean(first.get("reference"))]
+        snippets = []
+        for a in debug_soup.find_all("a"):
+            raw = str(a)
+            if any(n and n.casefold() in raw.casefold() for n in needles):
+                snippets.append(raw[:5000])
+                if len(snippets) >= 5:
+                    break
+        print("DETAIL ANCHOR DEBUG:", " || ".join(snippets))
+    except Exception as exc:
+        print("DETAIL ANCHOR DEBUG ERROR:", type(exc).__name__, exc)
+
     for idx, tender in enumerate(selected, 1):
         try:
             response = request(
