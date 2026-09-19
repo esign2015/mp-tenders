@@ -995,6 +995,7 @@ td.title-cell{
 <script>
 const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
 const CSV_URL = "all_tenders_org_detailed.csv";
+const ORG_TENDER_CSV_URL = "organisation_tenders.csv";
 
 let allTenders = [];
 let filteredTenders = [];
@@ -1274,7 +1275,19 @@ async function loadFromCsv(){
   }
 
   const text = await response.text();
+  return parseCsv(text);
+}
 
+async function loadOrganisationTenderCsv(){
+  const response = await fetch(ORG_TENDER_CSV_URL + "?t=" + Date.now(),{
+    cache:"no-store"
+  });
+
+  if(!response.ok){
+    throw new Error("Organisation tender CSV not found");
+  }
+
+  const text = await response.text();
   return parseCsv(text);
 }
 
@@ -1288,8 +1301,18 @@ async function loadData(){
     try{
       data = await loadFromApi();
     }catch(apiError){
-      console.warn("API unavailable. Trying CSV.",apiError);
+      console.warn("API unavailable. Trying detailed CSV.",apiError);
       data = await loadFromCsv();
+    }
+
+    /*
+       Stage-1 data is now available in organisation_tenders.csv.
+       Until individual tender-detail extraction is completed, use that
+       verified tender-list dataset on the main dashboard whenever the
+       detail API/CSV has no records.
+    */
+    if(!Array.isArray(data) || data.length === 0){
+      data = await loadOrganisationTenderCsv();
     }
 
     allTenders = data.map(normaliseTender);
