@@ -603,7 +603,17 @@ def scrape_mp_tenders(csv_file):
             viewport={"width": 1920, "height": 1080},
         )
         try:
-            for index, org in enumerate(organisations, 1):
+            detail_organisation = clean(os.getenv("DETAIL_ORGANISATION", ""))
+            run_organisations = organisations
+            if detail_organisation:
+                run_organisations = [
+                    org for org in organisations
+                    if clean(org.get("name")).casefold() == detail_organisation.casefold()
+                ]
+                if not run_organisations:
+                    raise RuntimeError(f"DETAIL_ORGANISATION not found: {detail_organisation}")
+
+            for index, org in enumerate(run_organisations, 1):
                 try:
                     stats["organisations_opened"] += 1
                     tender_rows, pages = browser_get_all_tender_rows(
