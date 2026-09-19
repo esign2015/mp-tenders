@@ -24,6 +24,9 @@ FIELDS = [
 ]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
+# Staged rollout limit. Stage 1 starts with organisations having <= 50 tenders.
+MAX_ORG_TENDER_COUNT = int(os.getenv("MAX_ORG_TENDER_COUNT", "50"))
+
 
 def clean(value):
     return re.sub(r"\s+", " ", value or "").strip()
@@ -389,13 +392,18 @@ def scrape_mp_tenders(csv_file):
         "detail_opened": 0,
         "new_tenders": 0,
         "updated_records": 0,
+        "organisations_skipped_stage_limit": 0,
+        "stage_limit": MAX_ORG_TENDER_COUNT,
         "errors": [],
     }
 
-    # Organisations are deliberately processed in ascending Tender Count order.
-    # This makes the smaller organisations complete first and pushes very large
-    # organisations to the end of the first full run.
+    # Staged rollout: <=50, then <=100, <=200, <=400, <=600, and finally
+    # above 600. The organisation list is sorted ascending by Tender Count.
     for index, org in enumerate(organisations, 1):
+        if MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
+            stats["organisations_skipped_stage_limit"] += 1
+            continue
+
         try:
             tender_rows, pages = get_all_tender_rows(session, org["url"], org["count"])
 
@@ -460,7 +468,7 @@ def scrape_mp_tenders(csv_file):
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "total_records": len(final_rows),
         "stats": stats,
-        "message": "Real MP Tender organisation/list/detail scraper completed in ascending Tender Count order.",
+        "message": f"Staged MP Tender scrape completed for organisations with Tender Count <= {MAX_ORG_TENDER_COUNT}.",
     }
 
 
