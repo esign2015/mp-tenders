@@ -2317,6 +2317,8 @@ function exportPdf(){
         {align:"right"}
       );
       doc.setFontSize(6.5);
+      doc.text("Contact Admin: t.me/rdgyan",pageWidth/2,26,{align:"center"});
+      doc.setFontSize(6.5);
       doc.text(
         "Contact Admin: t.me/rdgyan",
         pageWidth/2,
@@ -2368,6 +2370,13 @@ function exportPdf(){
         pageHeight-8,
         {url:PORTAL_URL}
       );
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(6.5);
+      doc.text("Contact Admin:",10,pageHeight-3);
+      doc.setFont("helvetica","normal");
+      doc.setTextColor(230,240,255);
+      doc.textWithLink("t.me/rdgyan",48,pageHeight-3,{url:"https://t.me/rdgyan"});
 
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","bold");
