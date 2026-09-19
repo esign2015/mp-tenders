@@ -23,10 +23,13 @@ FIELDS = [
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
     "Tender Fee", "Processing Fee", "Total Fee", "Pincode", "Status", "URL",
 ]
+ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
+ORG_TENDER_FIELDS = [
+    "S.No.", "Organisation Name", "Portal Tender Count", "Copied Tender Count",
+    "Count Status", "Tender ID", "Title", "Reference Number",
+    "Published Date", "Closing Date", "Opening Date", "Tender URL", "Raw Row"
+]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
-
-# Staged rollout limit. Stage 1 now starts with organisations having <= 10 tenders.
-MAX_ORG_TENDER_COUNT = int(os.getenv("MAX_ORG_TENDER_COUNT", "10"))
 
 
 def clean(value):
@@ -436,43 +439,80 @@ def write_csv(csv_file, rows):
     temp.replace(csv_file)
 
 
-def scrape_mp_tenders(csv_file):
-    session = requests.Session()
-    existing = read_existing(csv_file)
-    existing_by_id = {clean(r.get("Tender ID")): r for r in existing if clean(r.get("Tender ID"))}
-    existing_by_ref = {clean(r.get("Reference Number")): r for r in existing if clean(r.get("Reference Number"))}
+def write_list_csv(csv_file, fieldnames, rows):
+    csv_file.parent.mkdir(parents=True, exist_ok=True)
+    temp = csv_file.with_suffix(".tmp")
+    with temp.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+    temp.replace(csv_file)
 
-    # Keep a requests session for the initial organisation list.
-    # Actual organisation/tender navigation is then performed in Chromium because
-    # MP Tender uses session-bound JSF DirectLink URLs.
+
+def parse_list_dates(tender):
+    """Best-effort extraction of dates from a tender-list row.
+    The raw row is always retained, so no list information is lost."""
+    text = tender.get("row_text", "")
+    dates = re.findall(
+        r"\b\d{1,2}[-/][A-Za-z]{3}[-/]\d{4}(?:\s+\d{1,2}:\d{2}\s*(?:AM|PM))?\b",
+        text,
+        flags=re.I,
+    )
+    return (
+        dates[0] if len(dates) > 0 else "",
+        dates[1] if len(dates) > 1 else "",
+        dates[2] if len(dates) > 2 else "",
+    )
+
+
+def scrape_mp_tenders(csv_file):
+    """
+    Current requested stage:
+    1) Save the complete Organisation/Department list and portal Tender Count.
+    2) Open every organisation one-by-one in the same Chromium session.
+    3) Save only the tender-list rows for each organisation.
+    4) Do NOT open individual tender detail pages yet.
+    """
+    session = requests.Session()
+
     response = request(session, ORG_URL, sleep=0.5)
     soup = BeautifulSoup(response.text, "html.parser")
     organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
         raise RuntimeError("Organisation list could not be parsed from MP Tender portal.")
 
-    rows_by_id = dict(existing_by_id)
-    rows_without_id = {
-        clean(r.get("Reference Number")): r for r in existing
-        if not clean(r.get("Tender ID")) and clean(r.get("Reference Number"))
-    }
+    retrieved_at = datetime.now(timezone.utc).isoformat()
 
+    # Save the complete organisation list first.
+    org_rows = []
+    for index, org in enumerate(organisations, 1):
+        org_rows.append({
+            "S.No.": index,
+            "Organisation Name": org["name"],
+            "Tender Count": org["count"],
+            "Portal URL": org["url"],
+            "Retrieved At": retrieved_at,
+        })
+
+    org_csv = csv_file.parent / "organisations.csv"
+    tender_list_csv = csv_file.parent / "organisation_tenders.csv"
+    write_list_csv(org_csv, ORG_FIELDS, org_rows)
+
+    tender_list_rows = []
     stats = {
         "organisations": len(organisations),
+        "organisations_opened": 0,
         "organisations_verified": 0,
-        "organisations_skipped_count_mismatch": 0,
+        "organisations_count_mismatch": 0,
         "tender_listed": 0,
         "detail_opened": 0,
         "new_tenders": 0,
         "updated_records": 0,
-        "organisations_skipped_stage_limit": 0,
-        "stage_limit": MAX_ORG_TENDER_COUNT,
         "errors": [],
     }
 
-    # Staged rollout: <=10, then <=50, <=100, <=200, <=400, <=600, and finally
-    # above 600. Use one real Chromium session for the MP portal because its
-    # organisation/tender links are session-bound JSF $DirectLink URLs.
+    # One Chromium session is used throughout because the portal uses
+    # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(
@@ -482,104 +522,70 @@ def scrape_mp_tenders(csv_file):
         )
         try:
             for index, org in enumerate(organisations, 1):
-                # Temporary diagnostic mode: when stage limit is exactly 1,
-                # process only organisations whose portal Tender Count is exactly 1.
-                # For later stages (10/50/100/...), retain the <= limit behaviour.
-                if MAX_ORG_TENDER_COUNT == 1:
-                    if org["count"] != 1:
-                        stats["organisations_skipped_stage_limit"] += 1
-                        continue
-                elif MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
-                    stats["organisations_skipped_stage_limit"] += 1
-                    continue
-
                 try:
-                    tender_rows, pages = browser_get_all_tender_rows(page, org, org["count"])
+                    stats["organisations_opened"] += 1
+                    tender_rows, pages = browser_get_all_tender_rows(
+                        page, org, org["count"]
+                    )
 
-                    # Do not open detail pages unless the parsed list count exactly matches
-                    # the count displayed on the organisation page.
-                    if org["count"] and len(tender_rows) != org["count"]:
-                        stats["organisations_skipped_count_mismatch"] += 1
-                        stats["errors"].append(
-                            f"{org['name']}: portal count {org['count']} != parsed {len(tender_rows)}"
-                        )
-                        continue
+                    copied_count = len(tender_rows)
+                    count_match = copied_count == org["count"]
+                    if count_match:
+                        stats["organisations_verified"] += 1
+                    else:
+                        stats["organisations_count_mismatch"] += 1
 
-                    stats["organisations_verified"] += 1
-                    stats["tender_listed"] += len(tender_rows)
+                    stats["tender_listed"] += copied_count
 
+                    # Save every tender-list row. No tender detail page is opened.
                     for tender in tender_rows:
-                        tid = tender["tender_id"]
-                        ref = tender["reference"]
-                        if tid and tid in existing_by_id:
-                            continue
-                        if ref and ref in existing_by_ref:
-                            continue
+                        published, closing, opening = parse_list_dates(tender)
+                        tender_list_rows.append({
+                            "S.No.": len(tender_list_rows) + 1,
+                            "Organisation Name": org["name"],
+                            "Portal Tender Count": org["count"],
+                            "Copied Tender Count": copied_count,
+                            "Count Status": "MATCH" if count_match else "MISMATCH",
+                            "Tender ID": tender.get("tender_id", ""),
+                            "Title": tender.get("title", ""),
+                            "Reference Number": tender.get("reference", ""),
+                            "Published Date": published,
+                            "Closing Date": closing,
+                            "Opening Date": opening,
+                            "Tender URL": tender.get("url", ""),
+                            "Raw Row": tender.get("row_text", ""),
+                        })
 
-                        detail_soup = browser_page(page, tender["url"])
-                        record = parse_detail(detail_soup, page.url)
-                        stats["detail_opened"] += 1
-
-                        if not record["Tender ID"]:
-                            record["Tender ID"] = tid
-                        if not record["Reference Number"]:
-                            record["Reference Number"] = ref
-                        if not record["Title"]:
-                            record["Title"] = tender["title"]
-
-                        if record["Tender ID"]:
-                            if record["Tender ID"] not in rows_by_id:
-                                stats["new_tenders"] += 1
-                            rows_by_id[record["Tender ID"]] = record
-                        elif record["Reference Number"]:
-                            rows_without_id[record["Reference Number"]] = record
+                    # Persist after every organisation so a long run keeps
+                    # previously collected list data.
+                    write_list_csv(
+                        tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
+                    )
 
                 except Exception as exc:
-                    stats["errors"].append(f"{org['name']}: {type(exc).__name__}: {exc}")
+                    stats["errors"].append(
+                        f"{org['name']}: {type(exc).__name__}: {exc}"
+                    )
         finally:
             browser.close()
 
-    final_rows = list(rows_by_id.values()) + list(rows_without_id.values())
-    now = datetime.now()
-    for row in final_rows:
-        closing = clean(row.get("Closing Date"))
-        try:
-            dt = datetime.strptime(closing.split(" ")[0], "%d-%b-%Y")
-            row["Status"] = "Closed" if dt.date() < now.date() else "Open"
-        except Exception:
-            pass
-
-    # Keep archived tenders for 10 days after Closing Date, then remove them.
-    retention_cutoff = datetime.now().date().fromordinal(
-        datetime.now().date().toordinal() - 10
-    )
-    retained_rows = []
-    for row in final_rows:
-        closing_text = clean(row.get("Closing Date"))
-        try:
-            closing_date = datetime.strptime(
-                closing_text.split(" ")[0], "%d-%b-%Y"
-            ).date()
-            if closing_date < retention_cutoff:
-                continue
-        except Exception:
-            # Do not delete a record when its closing date cannot be parsed.
-            pass
-        retained_rows.append(row)
-
-    final_rows = retained_rows
-    final_rows.sort(key=lambda r: clean(r.get("Closing Date")))
-    write_csv(csv_file, final_rows)
+    # The old detailed CSV stays untouched at this stage.
+    if not csv_file.exists():
+        write_csv(csv_file, [])
 
     return {
         "ok": True,
         "source": ORG_URL,
         "finished_at": datetime.now(timezone.utc).isoformat(),
-        "total_records": len(final_rows),
+        "organisation_records": len(org_rows),
+        "tender_list_records": len(tender_list_rows),
+        "total_records": 0,
         "stats": stats,
-        "message": f"Staged MP Tender scrape completed for organisations with Tender Count <= {MAX_ORG_TENDER_COUNT}.",
+        "message": (
+            "Organisation list and organisation-level tender lists were collected. "
+            "Individual tender detail pages were intentionally not opened."
+        ),
     }
-
 
 if __name__ == "__main__":
     target = Path(os.getenv(
