@@ -149,9 +149,8 @@ def parse_detail(soup, url):
     processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
     emd = find_label_value(soup, ["EMD Amount in ₹"])
     pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
-    # Portal's "Total Fee" is Tender Fee + Processing Fee only.
-    # EMD and Tender Value/PAC are separate amounts.
-    total_fee = money_number(tender_fee) + money_number(processing_fee)
+    # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
+    total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
 
     return {
         "Tender ID": clean(tender_id),
