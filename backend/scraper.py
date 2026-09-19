@@ -24,8 +24,8 @@ FIELDS = [
 ]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
-# Staged rollout limit. Stage 1 starts with organisations having <= 50 tenders.
-MAX_ORG_TENDER_COUNT = int(os.getenv("MAX_ORG_TENDER_COUNT", "50"))
+# Staged rollout limit. Stage 1 now starts with organisations having <= 10 tenders.
+MAX_ORG_TENDER_COUNT = int(os.getenv("MAX_ORG_TENDER_COUNT", "10"))
 
 
 def clean(value):
@@ -48,11 +48,14 @@ def money_text(value):
     return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
-def request(session, url, retries=3, sleep=1.0):
+def request(session, url, retries=3, sleep=1.0, referer=None):
     last = None
+    request_headers = dict(HEADERS)
+    if referer:
+        request_headers["Referer"] = referer
     for attempt in range(retries):
         try:
-            response = session.get(url, headers=HEADERS, timeout=60)
+            response = session.get(url, headers=request_headers, timeout=60, allow_redirects=True)
             response.raise_for_status()
             time.sleep(sleep)
             return response
@@ -250,14 +253,23 @@ def parse_tender_rows(soup, base):
     for table in soup.find_all("table"):
         header_text = " ".join(
             clean(x.get_text(" ", strip=True)).lower()
-            for x in table.find_all(["th", "td"], limit=20)
+            for x in table.find_all(["th", "td"], limit=30)
         )
-        # Tender-list tables normally expose Tender ID/Title/Closing information.
-        if not ("tender" in header_text and
-                ("closing" in header_text or "title" in header_text or "reference" in header_text)):
-            continue
-
         rows = table.find_all("tr")
+        # The MP portal sometimes renders the tender-list headers differently
+        # on DirectLink pages. Accept a table when either its header identifies
+        # a tender list OR one of its rows contains a real MP Tender ID.
+        table_has_tender_id = any(
+            TENDER_ID_RE.search(clean(tr.get_text(" ", strip=True)))
+            for tr in rows
+        )
+        looks_like_tender_table = (
+            ("tender" in header_text and
+             ("closing" in header_text or "title" in header_text or "reference" in header_text))
+            or table_has_tender_id
+        )
+        if not looks_like_tender_table:
+            continue
         for tr in rows[1:]:
             cells = tr.find_all(["td", "th"])
             texts = [clean(c.get_text(" ", strip=True)) for c in cells]
@@ -335,7 +347,7 @@ def get_all_tender_rows(session, start_url, expected_count):
         if not current or current in seen:
             break
         seen.add(current)
-        response = request(session, current, sleep=0.35)
+        response = request(session, current, sleep=0.35, referer=ORG_URL)
         soup = BeautifulSoup(response.text, "html.parser")
         rows = parse_tender_rows(soup, current)
         for row in rows:
@@ -372,7 +384,9 @@ def scrape_mp_tenders(csv_file):
     existing_by_id = {clean(r.get("Tender ID")): r for r in existing if clean(r.get("Tender ID"))}
     existing_by_ref = {clean(r.get("Reference Number")): r for r in existing if clean(r.get("Reference Number"))}
 
-    response = request(session, ORG_URL, sleep=0.5)
+    # Establish the portal session first, then open the organisation page.
+    request(session, PORTAL, sleep=0.5)
+    response = request(session, ORG_URL, sleep=0.5, referer=PORTAL)
     soup = BeautifulSoup(response.text, "html.parser")
     organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
@@ -397,7 +411,7 @@ def scrape_mp_tenders(csv_file):
         "errors": [],
     }
 
-    # Staged rollout: <=50, then <=100, <=200, <=400, <=600, and finally
+    # Staged rollout: <=10, then <=50, <=100, <=200, <=400, <=600, and finally
     # above 600. The organisation list is sorted ascending by Tender Count.
     for index, org in enumerate(organisations, 1):
         if MAX_ORG_TENDER_COUNT >= 0 and org["count"] > MAX_ORG_TENDER_COUNT:
@@ -427,7 +441,7 @@ def scrape_mp_tenders(csv_file):
                 if ref and ref in existing_by_ref:
                     continue
 
-                detail_response = request(session, tender["url"], sleep=0.45)
+                detail_response = request(session, tender["url"], sleep=0.45, referer=org["url"])
                 detail_soup = BeautifulSoup(detail_response.text, "html.parser")
                 record = parse_detail(detail_soup, tender["url"])
                 stats["detail_opened"] += 1
