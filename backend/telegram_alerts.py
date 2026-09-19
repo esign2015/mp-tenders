@@ -236,7 +236,7 @@ def main():
             f"⏰ Closing Today Tenders: {len(closing)}\n\n"
             f"🌐 Website: {SITE_URL}\n"
             "📎 Closing date tender list: attached\n\n"
-            f"📢 Daily alert पाने के लिए Telegram channel join करें: {TELEGRAM_URL}\n\n"
+            f"📢 Daily alert पाने के लिए Telegram channel join करें: {TELEGRAM_URL}\n👤 Contact Admin: https://t.me/rdgyan\n\n"
             f"{warning}\n\n"
             f"🕒 Morning Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
         )
