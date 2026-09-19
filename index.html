@@ -329,11 +329,29 @@ button:hover{
 
 table{
   width:100%;
-  min-width:1450px;
+  min-width:1650px;
   border-collapse:collapse;
-  table-layout:auto;
+  table-layout:fixed;
   font-size:12px;
 }
+
+/* Column widths: keep Ref.No. compact and give organisation hierarchy room to wrap. */
+table th:nth-child(1), table td:nth-child(1){width:55px;}
+table th:nth-child(2), table td:nth-child(2){width:145px;}
+table th:nth-child(3), table td:nth-child(3){width:105px;}
+table th:nth-child(4), table td:nth-child(4){width:125px;}
+table th:nth-child(5), table td:nth-child(5){width:270px;}
+table th:nth-child(6), table td:nth-child(6){width:120px;}
+table th:nth-child(7), table td:nth-child(7){width:210px;}
+table th:nth-child(8), table td:nth-child(8){width:190px;}
+table th:nth-child(9), table td:nth-child(9){width:190px;}
+table th:nth-child(10), table td:nth-child(10){width:190px;}
+table th:nth-child(11), table td:nth-child(11){width:110px;}
+table th:nth-child(12), table td:nth-child(12){width:100px;}
+table th:nth-child(13), table td:nth-child(13){width:100px;}
+table th:nth-child(14), table td:nth-child(14){width:110px;}
+table th:nth-child(15), table td:nth-child(15){width:105px;}
+table th:nth-child(16), table td:nth-child(16){width:90px;}
 
 thead{
   position:sticky;
@@ -356,6 +374,19 @@ td{
   border-bottom:1px solid #e2e8f0;
   white-space:nowrap;
   vertical-align:middle;
+}
+
+/* Organisation hierarchy and Ref.No. should wrap instead of making one huge row. */
+td:nth-child(6),
+td:nth-child(7),
+td:nth-child(8),
+td:nth-child(9),
+td:nth-child(10){
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-height:1.3;
+  vertical-align:top;
 }
 
 tbody tr:nth-child(even){
