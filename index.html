@@ -3513,6 +3513,12 @@ function setupPacFilter(){
   const apply = $("pacFilterApply");
   if(!wrap || !button || !panel || !label || !hidden) return;
 
+  // Keep the PAC menu outside search/table stacking and overflow contexts.
+  // This prevents the menu from appearing underneath the tender table.
+  if(panel.parentElement !== document.body){
+    document.body.appendChild(panel);
+  }
+
   function selectedMode(){
     return panel.querySelector('input[name="pacModeOption"]:checked')?.value || "";
   }
