@@ -862,9 +862,14 @@ def scrape_mp_tenders(csv_file):
 
                         if fetch_details and tender_id:
                             old = existing_by_id.get(tender_id, {})
+                            # Re-open a detail page whenever any important detail is missing,
+                            # including the full Organisation Chain. Older CSV records may contain
+                            # only the organisation name, so this also backfills Department,
+                            # Division and Sub Division on the next run.
                             needs_detail = not all(clean(old.get(k)) for k in (
-                                "Department", "PAC Amount", "EMD Fee",
-                                "Tender Fee", "Processing Fee", "Location", "Pincode"
+                                "Department", "Division", "Sub Division",
+                                "PAC Amount", "EMD Fee", "Tender Fee",
+                                "Processing Fee", "Location", "Pincode"
                             ))
                             if needs_detail:
                                 try:
