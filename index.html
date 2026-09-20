@@ -110,6 +110,22 @@ body{
 .count-number.orange{color:#e58a00}
 .count-number.blue{color:#1d4ed8}
 .count-number.green{color:#059669}
+.count-number.purple{color:#7c3aed}
+
+.count-box-button{
+  border:0;
+  cursor:pointer;
+  font:inherit;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.count-box-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 10px rgba(15,23,42,.20);
+}
+.count-box-button:focus-visible{
+  outline:2px solid #2563eb;
+  outline-offset:2px;
+}
 
 .header-right{
   min-width:0;
@@ -1149,25 +1165,31 @@ body.telegram-locked .site-footer{visibility:hidden}
   </div>
 
   <div class="counts">
-    <div class="count-box">
+    <button class="count-box count-box-button" id="liveCountBox" type="button" title="Show all live tenders">
       <div class="count-label">Live Tenders</div>
       <div class="count-number green" id="liveCount">0</div>
-    </div>
+    </button>
 
-    <div class="count-box">
+    <button class="count-box count-box-button" id="closingTodayBox" type="button" title="Show tenders closing today">
       <div class="count-label">Closing Today</div>
       <div class="count-number orange" id="closingTodayCount">0</div>
-    </div>
+    </button>
 
-    <div class="count-box">
+    <button class="count-box count-box-button" id="closingTomorrowBox" type="button" title="Show tenders closing tomorrow">
       <div class="count-label">Closing Tomorrow</div>
       <div class="count-number blue" id="closingTomorrowCount">0</div>
-    </div>
+    </button>
 
-    <div class="count-box">
+    <button class="count-box count-box-button" id="publishedYesterdayBox" type="button" title="Show tenders published yesterday">
+      <div class="count-label">Published Yesterday</div>
+      <div class="count-number purple" id="publishedYesterdayCount">0</div>
+    </button>
+
+    <button class="count-box count-box-button" id="filterResultBox" type="button" title="Show current filter result">
       <div class="count-label">Filter Result</div>
       <div class="count-number green" id="filterResultCount">No Filter</div>
-    </div>  </div>
+    </button>
+  </div>
 
   <div class="header-right">
     <div class="right-sub">For DSC &amp; E-Tendering Services</div>
@@ -2444,8 +2466,6 @@ function updateCounts(rows, refreshHeader=true){
     return;
   }
 
-  const total = rows.length;
-
   const live = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     return !closing || closing.getTime() > now.getTime();
@@ -2466,9 +2486,16 @@ function updateCounts(rows, refreshHeader=true){
            closing.getTime() > now.getTime();
   }).length;
 
+  const yesterdayDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const yesterdayKey = dateKey(yesterdayDate);
+  const publishedYesterday = rows.filter(row =>
+    dateKey(row["Published Date"]) === yesterdayKey
+  ).length;
+
   $("liveCount").textContent = live;
   $("closingTodayCount").textContent = closingToday;
   $("closingTomorrowCount").textContent = closingTomorrow;
+  $("publishedYesterdayCount").textContent = publishedYesterday;
 
   const filterControls = [
     $("generalSearch").value,
@@ -2489,7 +2516,6 @@ function updateCounts(rows, refreshHeader=true){
   $("filterResultCount").textContent =
     hasFilter ? filteredTenders.length : "No Filter";
 }
-
 function applyFilters(refreshHeader=true){
   const general = clean($("generalSearch").value).toLowerCase();
   const tenderId = clean($("tenderIdSearch").value).toLowerCase();
@@ -2667,6 +2693,32 @@ function showClosingToday(){
   quickFilterMode = "closingToday";
   $("closingDate").value = todayKey();
   applyFilters();
+  $("filterResultCount").textContent = filteredTenders.length;
+}
+
+function showPublishedYesterday(){
+  clearFilters();
+  quickFilterMode = "publishedYesterday";
+
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const yesterdayKey = dateKey(yesterday);
+
+  filteredTenders = allTenders.filter(row => {
+    return dateKey(row["Published Date"]) === yesterdayKey;
+  });
+
+  filteredTenders = filteredTenders.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    return !closing || closing.getTime() > Date.now();
+  });
+
+  filteredTenders.sort((a,b) =>
+    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
+    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
+  );
+
+  renderTable(filteredTenders);
+  updateCounts(allTenders);
   $("filterResultCount").textContent = filteredTenders.length;
 }
 
@@ -3126,6 +3178,32 @@ function scheduleFilter(){
 $("resetBtn").addEventListener("click",clearFilters);
 $("reloadBtn").addEventListener("click",loadData);
 $("closingTodayBtn").addEventListener("click",showClosingToday);
+$("liveCountBox").addEventListener("click",clearFilters);
+$("closingTodayBox").addEventListener("click",showClosingToday);
+$("closingTomorrowBox").addEventListener("click",showNextThreeDays);
+$("publishedYesterdayBox").addEventListener("click",showPublishedYesterday);
+$("filterResultBox").addEventListener("click",function(){
+  const hasFilter =
+    archivedMode ||
+    quickFilterMode !== "" ||
+    [
+      $("generalSearch").value,
+      $("tenderIdSearch").value,
+      $("titleSearch").value,
+      $("organisationSearch").value,
+      $("pincodeSearch").value,
+      $("closingDate").value,
+      $("pacFilter").value,
+      $("statusSelect").value
+    ].some(value => clean(value) !== "");
+
+  if(hasFilter){
+    renderTable(filteredTenders);
+    $("filterResultCount").textContent = filteredTenders.length;
+  }else{
+    clearFilters();
+  }
+});
 $("nextThreeBtn").addEventListener("click",showNextThreeDays);
 $("archivedBtn").addEventListener("click",function(){
   if(archivedMode){
