@@ -1,13 +1,14 @@
 {
-  "status": "completed",
-  "process_started_at": "2026-09-20T14:14:46.980698+00:00",
+  "status": "running",
+  "process_started_at": "2026-09-20T14:47:21.888354+00:00",
   "total_tenders": 5256,
-  "detail_complete": 0,
-  "detail_remaining": 5256,
+  "detail_complete": 1,
+  "detail_remaining": 5255,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "90/90",
+  "organisation_progress": "1/90",
+  "current_organisation": "Atal Indore City Transport Services Ltd - Indore",
   "detail_batch_size": 100,
-  "detail_batch_completed": 100,
-  "updated_at": "2026-09-20T14:32:19.449611+00:00"
+  "detail_batch_completed": 1,
+  "updated_at": "2026-09-20T14:47:37.671909+00:00"
 }
