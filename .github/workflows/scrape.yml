@@ -95,11 +95,22 @@ jobs:
           git config user.email "actions@github.com"
           python backend/scraper.py > scraper_live.log 2>&1 &
           SCRAPER_PID=$!
+          CHECKPOINT_TICK=0
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
             if [ -f data/status.json ]; then
               git add data/status.json
               git diff --cached --quiet || git commit -m "Update extraction status [skip ci]"
               git push origin "HEAD:${GITHUB_REF_NAME}" || true
+
+              CHECKPOINT_TICK=$((CHECKPOINT_TICK + 30))
+              if [ "$CHECKPOINT_TICK" -ge 60 ]; then
+                git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json 2>/dev/null || true
+                if ! git diff --cached --quiet; then
+                  git commit -m "Checkpoint tender data [skip ci]"
+                  git push origin "HEAD:${GITHUB_REF_NAME}" || true
+                fi
+                CHECKPOINT_TICK=0
+              fi
             fi
             sleep 30
           done
