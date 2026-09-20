@@ -959,6 +959,14 @@ def monitor_tender_changes(csv_file):
     print(f"MONITOR COMPLETE: {stats}")
     return {"ok": True, **stats}
 
+def write_extraction_status(csv_file, status):
+    status_file = csv_file.parent / "data" / "status.json"
+    status_file.parent.mkdir(parents=True, exist_ok=True)
+    status_file.write_text(
+        json.dumps(status, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
 def scrape_mp_tenders(csv_file):
     """
     Full MP tender collection:
@@ -1123,6 +1131,25 @@ def scrape_mp_tenders(csv_file):
                     # Also checkpoint all successful detail records after every
                     # organisation, so a long full extraction can resume safely.
                     write_csv(csv_file, list(existing_by_id.values()))
+                    complete_count = sum(
+                        1 for r in existing_by_id.values()
+                        if all(clean(r.get(k)) for k in (
+                            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
+                            "Pincode", "Department", "Division", "Sub Division"
+                        ))
+                    )
+                    write_extraction_status(csv_file, {
+                        "status": "running",
+                        "total_tenders": len(existing_by_id),
+                        "detail_complete": complete_count,
+                        "detail_remaining": max(0, len(existing_by_id) - complete_count),
+                        "errors": len(stats["errors"]),
+                        "latest_error": stats["errors"][-1] if stats["errors"] else "",
+                        "organisation_progress": f"{index}/{len(organisations)}",
+                        "detail_batch_size": batch_size,
+                        "detail_batch_completed": detail_successes,
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    })
 
                 except Exception as exc:
                     stats["errors"].append(
@@ -1174,6 +1201,25 @@ def scrape_mp_tenders(csv_file):
         }
         merged_rows.append(base)
     write_csv(csv_file, merged_rows)
+    complete_count = sum(
+        1 for r in merged_rows
+        if all(clean(r.get(k)) for k in (
+            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
+            "Pincode", "Department", "Division", "Sub Division"
+        ))
+    )
+    write_extraction_status(csv_file, {
+        "status": "completed",
+        "total_tenders": len(merged_rows),
+        "detail_complete": complete_count,
+        "detail_remaining": max(0, len(merged_rows) - complete_count),
+        "errors": len(stats["errors"]),
+        "latest_error": stats["errors"][-1] if stats["errors"] else "",
+        "organisation_progress": f"{len(organisations)}/{len(organisations)}",
+        "detail_batch_size": batch_size,
+        "detail_batch_completed": detail_successes,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    })
 
     # Advance only after the whole requested batch completed successfully.
     # If a detail error occurred, keep the next run conservative at 10.
