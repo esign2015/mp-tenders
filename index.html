@@ -2696,6 +2696,30 @@ function showClosingToday(){
   $("filterResultCount").textContent = filteredTenders.length;
 }
 
+function showClosingTomorrow(){
+  clearFilters();
+  quickFilterMode = "closingTomorrow";
+
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const tomorrowKey = dateKey(tomorrow);
+
+  filteredTenders = allTenders.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    return closing &&
+           dateKey(closing) === tomorrowKey &&
+           closing.getTime() > Date.now();
+  });
+
+  filteredTenders.sort((a,b) =>
+    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
+    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
+  );
+
+  renderTable(filteredTenders);
+  updateCounts(allTenders);
+  $("filterResultCount").textContent = filteredTenders.length;
+}
+
 function showPublishedYesterday(){
   clearFilters();
   quickFilterMode = "publishedYesterday";
@@ -3180,7 +3204,7 @@ $("reloadBtn").addEventListener("click",loadData);
 $("closingTodayBtn").addEventListener("click",showClosingToday);
 $("liveCountBox").addEventListener("click",clearFilters);
 $("closingTodayBox").addEventListener("click",showClosingToday);
-$("closingTomorrowBox").addEventListener("click",showNextThreeDays);
+$("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
 $("publishedYesterdayBox").addEventListener("click",showPublishedYesterday);
 $("filterResultBox").addEventListener("click",function(){
   const hasFilter =
