@@ -592,6 +592,45 @@ def browser_page(page, url, referer=None):
     return BeautifulSoup(page.content(), "html.parser")
 
 
+def open_tender_detail_by_click(page, tender):
+    """Open a tender detail through the live JSF link in the current browser session.
+    DirectLink URLs are session-bound, so never navigate to a stale copied URL."""
+    tender_id = clean(tender.get("tender_id"))
+    tender_title = clean(tender.get("title"))
+    tender_ref = clean(tender.get("reference"))
+
+    links = page.locator('a[title="View Tender Information"]')
+    chosen = None
+    for j in range(links.count()):
+        link = links.nth(j)
+        txt = clean(link.inner_text())
+        raw = (link.get_attribute("href") or "") + " " + (link.get_attribute("onclick") or "")
+        hay = f"{txt} {raw}".casefold()
+        if (
+            tender_id.casefold() in hay
+            or (tender_title and tender_title.casefold() in hay)
+            or (tender_ref and tender_ref.casefold() in hay)
+        ):
+            chosen = link
+            break
+
+    if chosen is None:
+        raise RuntimeError(f"View Tender Information link not found for {tender_id}")
+
+    chosen.click()
+    page.wait_for_load_state("domcontentloaded", timeout=60000)
+    page.wait_for_timeout(1200)
+
+    detail_soup = BeautifulSoup(page.content(), "html.parser")
+    detail_text = clean(detail_soup.get_text(" ", strip=True))
+    if tender_id and tender_id.casefold() not in detail_text.casefold():
+        raise RuntimeError(
+            f"Clicked link but detail page did not contain Tender ID {tender_id}; "
+            f"current_url={page.url}"
+        )
+    return detail_soup
+
+
 def browser_get_all_tender_rows(page, org, expected_count):
     """Open one organisation through the browser session and collect all tender rows."""
     org_soup = browser_page(page, ORG_URL)
@@ -969,7 +1008,8 @@ def monitor_tender_changes(csv_file):
                         )
                         if needs_detail:
                             try:
-                                detail_soup = browser_page(page, tender.get("url", ""))
+                                browser_page(page, org.get("url", "") or ORG_URL)
+                                detail_soup = open_tender_detail_by_click(page, tender)
                                 detail = parse_detail(detail_soup, page.url)
                                 detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                                 detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
@@ -1090,6 +1130,35 @@ def scrape_mp_tenders(csv_file):
         for row in existing_detail_rows
         if clean(row.get("Tender ID"))
     }
+    # Repair records marked successful by the previous broken detail navigation.
+    # Those pages were actually the portal home/menu, so fields such as Work Description
+    # contain the repeated navigation text. Preserve Tender ID/basic list data, but make
+    # these records eligible for a fresh, real detail extraction.
+    corrupted = 0
+    portal_menu_marker = "MIS Reports Tenders by Location Tenders by Organisation"
+    for tid, row in existing_by_id.items():
+        suspect_text = " ".join([
+            clean(row.get("Work Description")),
+            clean(row.get("Product Category")),
+            clean(row.get("Sub Category")),
+            clean(row.get("Contract Type")),
+        ])
+        if portal_menu_marker.casefold() in suspect_text.casefold():
+            for key in (
+                "Department","Division","Sub Division","PAC Amount","EMD Fee",
+                "Tender Fee","Processing Fee","Total Fee","Location","Pincode",
+                "Work Description","Product Category","Sub Category","Contract Type",
+                "Bid Validity","Pre Qualification Details","Bid Submission Start Date",
+                "Bid Submission End Date","Bid Opening Date","Document Download Start Date",
+                "Document Download End Date","Fee Payable To","Fee Payable At"
+            ):
+                row[key] = ""
+            row["Detail Extracted"] = ""
+            corrupted += 1
+    if corrupted:
+        write_csv(csv_file, list(existing_by_id.values()))
+        print(f"RESET CORRUPTED DETAIL CHECKPOINTS: {corrupted}")
+
     fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0").lower() in ("1", "true", "yes")
 
     # Publish the real starting inventory immediately; never show a fake 0
@@ -1246,7 +1315,11 @@ def scrape_mp_tenders(csv_file):
                             if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and detail_successes < batch_size:
                                 detail_candidates_seen += 1
                                 try:
-                                    detail_soup = browser_page(page, tender.get("url", ""))
+                                    # Refresh the organisation list in this same browser
+                                    # session, then click the live JSF detail link. The copied
+                                    # Tender URL is session-bound and must not be opened directly.
+                                    browser_page(page, org.get("url", "") or ORG_URL)
+                                    detail_soup = open_tender_detail_by_click(page, tender)
                                     detail = parse_detail(detail_soup, page.url)
                                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                                     detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
@@ -1258,6 +1331,23 @@ def scrape_mp_tenders(csv_file):
                                     detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
                                     if not detail["Tender ID"]:
                                         raise RuntimeError("detail Tender ID missing")
+                                    detail_blob = " ".join(
+                                        clean(detail.get(k)) for k in (
+                                            "Department","Division","Sub Division","PAC Amount",
+                                            "EMD Fee","Tender Fee","Processing Fee","Location",
+                                            "Pincode","Work Description","Product Category",
+                                            "Contract Type","Bid Validity"
+                                        )
+                                    )
+                                    if portal_menu_marker.casefold() in detail_blob.casefold():
+                                        raise RuntimeError("detail page returned portal menu/home content")
+                                    if not any(clean(detail.get(k)) for k in (
+                                        "Department","Division","Sub Division","PAC Amount","EMD Fee",
+                                        "Tender Fee","Processing Fee","Location","Pincode",
+                                        "Work Description","Product Category","Contract Type",
+                                        "Bid Validity","Pre Qualification Details"
+                                    )):
+                                        raise RuntimeError("detail page contained no usable tender detail fields")
                                     existing_by_id[tender_id] = {**old, **detail, "Detail Extracted": "YES"}
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
