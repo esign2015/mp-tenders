@@ -646,8 +646,7 @@ td.title-cell{
     gap:6px;
   }
 
-  .search-heading{
-    font-size:14px;
+  .search-heading{    font-size:14px;
   }
 
   .action-buttons{
@@ -1046,8 +1045,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="count-box">
       <div class="count-label">Filter Result</div>
       <div class="count-number green" id="filterResultCount">No Filter</div>
-    </div>
-  </div>
+    </div>  </div>
 
   <div class="header-right">
     <div class="right-sub">For DSC &amp; E-Tendering Services</div>
@@ -1596,8 +1594,7 @@ function totalFee(row){
   return moneyNumber(row["PAC Amount"]) +
          moneyNumber(row["PAC_Amount"]) +
          moneyNumber(row["EMD Fee"]) +
-         moneyNumber(row["EMD Amount"]) +
-         moneyNumber(row["Tender Fee"]) +
+         moneyNumber(row["EMD Amount"]) +         moneyNumber(row["Tender Fee"]) +
          moneyNumber(row["Processing Fee"]);
 }
 
@@ -1930,6 +1927,8 @@ function getStatusText(row){
   return status;
 }
 
+const MAX_RENDER_ROWS = 120;
+
 function renderTable(rows){
   const body = $("tenderBody");
 
@@ -1945,7 +1944,14 @@ function renderTable(rows){
     return;
   }
 
-  body.innerHTML = rows.map((row,index) => {
+  /*
+     Keep the full filtered dataset in memory, but render only a small
+     visible window. Rendering thousands of table rows blocks the browser
+     main thread and makes the next input/click feel frozen.
+  */
+  const visibleRows = rows.slice(0, MAX_RENDER_ROWS);
+
+  body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
     const statusClass = getStatusClass(row);
     const statusText = getStatusText(row);
@@ -1984,11 +1990,35 @@ function renderTable(rows){
   }).join("");
 
   $("recordCount").textContent =
-    rows.length + " record(s) shown";
+    rows.length > MAX_RENDER_ROWS
+      ? rows.length + " matched • showing first " + MAX_RENDER_ROWS
+      : rows.length + " record(s) shown";
 }
 
-function updateCounts(rows){
+function updateCounts(rows, refreshHeader=true){
   const now = new Date();
+
+  if(!refreshHeader){
+    const filterControls = [
+      $("generalSearch").value,
+      $("tenderIdSearch").value,
+      $("titleSearch").value,
+      $("organisationSearch").value,
+      $("pincodeSearch").value,
+      $("closingDate").value,
+      $("pacFilter").value,
+      $("statusSelect").value
+    ];
+
+    const hasFilter =
+      archivedMode ||
+      quickFilterMode !== "" ||
+      filterControls.some(value => clean(value) !== "");
+
+    $("filterResultCount").textContent =
+      hasFilter ? filteredTenders.length : "No Filter";
+    return;
+  }
 
   const total = rows.length;
 
@@ -2146,8 +2176,7 @@ function applyFilters(){
 
     if(sort === "organisation"){
       return clean(a["Organisation"])
-        .localeCompare(clean(b["Organisation"]));
-    }
+        .localeCompare(clean(b["Organisation"]));    }
 
     if(sort === "published"){
       return (parseDate(b["Published Date"]) || 0) -
@@ -2159,7 +2188,9 @@ function applyFilters(){
   });
 
   renderTable(filteredTenders);
-  updateCounts(allTenders);
+  /* Header counts do not change during a search; avoid rescanning 5,253+
+     records on every keystroke. */
+  updateCounts(allTenders,false);
 }
 
 function clearFilters(){
@@ -2446,8 +2477,7 @@ function exportPdf(){
       doc.setFontSize(12);
       doc.text(
         "SAR Digital Services, Kannod",
-        pageWidth/2,
-        8,
+        pageWidth/2,        8,
         {align:"center"}
       );
 
@@ -2598,7 +2628,7 @@ function exportPdf(){
 }
 $("pincodeSearch").addEventListener("input", function(){
   this.value = this.value.replace(/\D/g,"").slice(0,6);
-  applyFilters();
+  scheduleFilter();
 });
 
 
@@ -2746,8 +2776,7 @@ enforceTelegramAccess().then(() => loadData());
     display:none;
   }
 
-  .table-wrap{
-    max-height:none;
+  .table-wrap{    max-height:none;
     overflow:visible;
   }
 
