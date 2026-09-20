@@ -100,6 +100,9 @@ jobs:
             if [ -f data/status.json ]; then
               git add data/status.json
               git diff --cached --quiet || git commit -m "Update extraction status [skip ci]"
+              # Rebase the status commit onto the newest main before pushing.
+              git fetch origin "${GITHUB_REF_NAME}"
+              git rebase "origin/${GITHUB_REF_NAME}" || true
               git push origin "HEAD:${GITHUB_REF_NAME}" || true
 
               CHECKPOINT_TICK=$((CHECKPOINT_TICK + 30))
@@ -107,6 +110,8 @@ jobs:
                 git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json 2>/dev/null || true
                 if ! git diff --cached --quiet; then
                   git commit -m "Checkpoint tender data [skip ci]"
+                  git fetch origin "${GITHUB_REF_NAME}"
+                  git rebase "origin/${GITHUB_REF_NAME}" || true
                   git push origin "HEAD:${GITHUB_REF_NAME}" || true
                 fi
                 CHECKPOINT_TICK=0
