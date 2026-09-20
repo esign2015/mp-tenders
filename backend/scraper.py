@@ -1,3 +1,4 @@
+# [run-scrape-details] start fresh 100-record detail batch after restoring verified tender list
 # [run-scrape-details] resume after checkpoint-safe workflow
 # [run-scrape-details] accelerated detail batch + list-level hierarchy
 # [run-scrape-details] resume from recovered dataset and continue new detail batch
