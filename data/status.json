@@ -1,13 +1,14 @@
 {
-  "status": "ready",
-  "process_started_at": "",
+  "status": "running",
+  "process_started_at": "2026-09-20T17:35:18.476627+00:00",
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
   "errors": 0,
-  "latest_error": "पिछला detail extraction run विफल हुआ था; उपलब्ध tender list सुरक्षित रखी गई है। अगला batch 100 से शुरू होगा।",
+  "latest_error": "",
   "organisation_progress": "0/90",
+  "current_organisation": "Atal Bihari Vajpayee Institute of Good Governance and policy Analysis Bhopal",
   "detail_batch_size": 100,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-20T17:34:16.853Z"
+  "updated_at": "2026-09-20T17:35:24.036592+00:00"
 }
