@@ -9,8 +9,10 @@ on:
       - "index.html"
   workflow_dispatch:
   schedule:
-    - cron: "15 15 * * *"
-    - cron: "50 4 * * *"
+    - cron: "15 15 * * *"   # 8:45 PM IST — data extraction
+    - cron: "25 15 * * *"   # 8:55 PM IST — New Published Telegram
+    - cron: "30 15 * * *"   # 9:00 PM IST — Total Tenders Telegram
+    - cron: "50 4 * * *"    # 10:20 AM IST — Closing Today Telegram
     - cron: "*/5 3-13 * * *"
 
 permissions:
@@ -181,14 +183,6 @@ jobs:
             git commit -m "Checkpoint collected tender data"
             git push || echo "Checkpoint commit push failed; retained in workspace/logs."
           fi
-      - name: Send Telegram evening update
-        if: success()
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          NOTIFY_MODE: evening
-        run: python backend/telegram_alerts.py
-
   monitor_changes:
     if: github.event_name == 'schedule' && github.event.schedule == '*/5 3-13 * * *'
     runs-on: ubuntu-latest
@@ -251,6 +245,45 @@ jobs:
             git push
           fi
 
+  evening_new_alert:
+    if: github.event_name == 'schedule' && github.event.schedule == '25 15 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ReportLab
+        run: pip install reportlab
+      - name: Send Telegram New Published alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_MODE: evening_new
+        run: python backend/telegram_alerts.py
+
+  evening_total_alert:
+    if: github.event_name == 'schedule' && github.event.schedule == '30 15 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ReportLab
+        run: pip install reportlab
+      - name: Send Telegram Total Tenders alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_MODE: evening_total
+        run: python backend/telegram_alerts.py
   morning_alert:
     if: github.event_name == 'schedule' && github.event.schedule == '50 4 * * *'
     runs-on: ubuntu-latest
