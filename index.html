@@ -1807,18 +1807,27 @@ async function loadData(){
   try{
     let data = [];
 
+    /*
+       GitHub Pages CSV is the authoritative published dashboard dataset.
+       The Render API can contain an older/smaller working copy while its
+       service is being redeployed, so do not let a 10-row API response
+       hide the complete CSV dataset.
+    */
     try{
-      data = await loadFromApi();
-    }catch(apiError){
-      console.warn("API unavailable. Trying detailed CSV.",apiError);
       data = await loadFromCsv();
+    }catch(csvError){
+      console.warn("Detailed CSV unavailable. Trying Render API.",csvError);
+      try{
+        data = await loadFromApi();
+      }catch(apiError){
+        console.warn("API unavailable. Trying organisation tender CSV.",apiError);
+        data = await loadOrganisationTenderCsv();
+      }
     }
 
     /*
-       Stage-1 data is now available in organisation_tenders.csv.
-       Until individual tender-detail extraction is completed, use that
-       verified tender-list dataset on the main dashboard whenever the
-       detail API/CSV has no records.
+       If the detailed CSV is temporarily empty, fall back to the verified
+       organisation tender-list dataset.
     */
     if(!Array.isArray(data) || data.length === 0){
       data = await loadOrganisationTenderCsv();
