@@ -1990,11 +1990,9 @@ function formatMoney(value){
 }
 
 function totalFee(row){
-  return moneyNumber(row["PAC Amount"]) +
-         moneyNumber(row["PAC_Amount"]) +
-         moneyNumber(row["EMD Fee"]) +
-         moneyNumber(row["EMD Amount"]) +         moneyNumber(row["Tender Fee"]) +
-         moneyNumber(row["Processing Fee"]);
+  const saved = clean(row["Total Fee"]);
+  if(saved) return moneyNumber(saved);
+  return moneyNumber(row["Tender Fee"]) + moneyNumber(row["Processing Fee"]);
 }
 
 function cleanDisplayTitle(value){
@@ -2301,7 +2299,7 @@ async function loadData(){
     applyFilters();
 
     if(!liveRefreshTimer){
-      liveRefreshTimer = setInterval(refreshPublishedData, 60000);
+      liveRefreshTimer = setInterval(refreshPublishedData, 15000);
     }
 
   }catch(error){
