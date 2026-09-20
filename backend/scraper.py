@@ -1112,6 +1112,7 @@ def scrape_mp_tenders(csv_file):
         batch_size = 100
     detail_successes = 0
     detail_candidates_seen = 0
+    detail_completed_ids = []
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
@@ -1224,6 +1225,7 @@ def scrape_mp_tenders(csv_file):
                                     existing_by_id[tender_id] = {**old, **detail}
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
+                                    detail_completed_ids.append(tender_id)
                                     # Save every 10 successful detail pages so the
                                     # checkpoint is never lost and progress becomes visible.
                                     if detail_successes % 10 == 0:
@@ -1378,22 +1380,13 @@ def scrape_mp_tenders(csv_file):
         next_batch_size = batch_size
     else:
         next_batch_size = batch_size
-    completed_ids_this_run = [
-        clean(r.get("Tender ID"))
-        for r in merged_rows
-        if clean(r.get("Tender ID")) and clean(r.get("Tender ID")) in {
-            clean(x.get("Tender ID"))
-            for x in existing_by_id.values()
-            if clean(x.get("Tender ID"))
-        }
-    ]
     batch_state_file.write_text(
         json.dumps({
             "next_batch_size": next_batch_size,
             "last_batch_size": batch_size,
             "last_batch_completed": detail_successes,
             "detail_candidates_seen": detail_candidates_seen,
-            "completed_detail_ids": completed_ids_this_run[:batch_size],
+            "completed_detail_ids": detail_completed_ids[:batch_size],
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }, indent=2),
         encoding="utf-8",
