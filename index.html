@@ -2901,7 +2901,7 @@ function exportPdf(){
     clean(row["Total Fee"])
   ]);
 
-  doc.autoTable({
+  const pdfTableOptions = {
     startY:39,
     margin:{
       top:39,
@@ -2920,7 +2920,7 @@ function exportPdf(){
     showHead:"everyPage",
     styles:{
       font:"helvetica",
-      fontSize:7,
+      fontSize:8,
       cellPadding:2,
       overflow:"linebreak",
       valign:"top",
@@ -2932,7 +2932,7 @@ function exportPdf(){
       fillColor:BLUE,
       textColor:[255,255,255],
       fontStyle:"bold",
-      fontSize:7,
+      fontSize:8,
       halign:"center",
       valign:"middle",
       cellPadding:2.5
@@ -2941,16 +2941,17 @@ function exportPdf(){
       fillColor:LIGHT_BLUE
     },
     columnStyles:{
+      /* A3 landscape usable width: 400mm. Keep left/right margins equal. */
       0:{cellWidth:10,halign:"center"},
-      1:{cellWidth:32,overflow:"ellipsize"},
-      2:{cellWidth:30},
-      3:{cellWidth:82},
-      4:{cellWidth:82},
+      1:{cellWidth:35,overflow:"ellipsize"},
+      2:{cellWidth:32},
+      3:{cellWidth:90},
+      4:{cellWidth:90},
       5:{cellWidth:30,halign:"right"},
-      6:{cellWidth:24,halign:"right"},
-      7:{cellWidth:24,halign:"right"},
-      8:{cellWidth:27,halign:"right"},
-      9:{cellWidth:27,halign:"right"}
+      6:{cellWidth:25,halign:"right"},
+      7:{cellWidth:25,halign:"right"},
+      8:{cellWidth:30,halign:"right"},
+      9:{cellWidth:33,halign:"right"}
     },
 
     /*
@@ -3197,7 +3198,17 @@ function exportPdf(){
         {align:"right"}
       );
     }
-  });
+  };
+
+  // Keep exactly 20 tender records in each PDF page batch.
+  const pdfPageSize = 20;
+  for(let i = 0; i < body.length; i += pdfPageSize){
+    if(i > 0) doc.addPage();
+    doc.autoTable({
+      ...pdfTableOptions,
+      body: body.slice(i, i + pdfPageSize)
+    });
+  }
 
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   doc.save("MP_Tender_Dashboard_" + stamp + ".pdf");
