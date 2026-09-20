@@ -3146,7 +3146,7 @@ setInterval(updateDateTime,1000);
 
 setupVirtualTable();
 updateVirtualPager();
-enforceTelegramAccess().then(() => loadData());
+document.body.classList.remove("telegram-locked"); const telegramGate=document.getElementById("telegramGate"); if(telegramGate) telegramGate.remove(); loadData();
 </script>
 
 <style>
