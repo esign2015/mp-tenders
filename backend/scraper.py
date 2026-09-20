@@ -1112,8 +1112,6 @@ def scrape_mp_tenders(csv_file):
                             if fetch_details and tender_id and needs_detail and detail_successes < batch_size:
                                 detail_candidates_seen += 1
                                 try:
-                                detail_candidates_seen += 1
-                                try:
                                     detail_soup = browser_page(page, tender.get("url", ""))
                                     detail = parse_detail(detail_soup, page.url)
                                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
