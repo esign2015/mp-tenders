@@ -68,6 +68,8 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install ReportLab for Telegram PDFs
         run: pip install reportlab
+      - name: Install Chromium for full scraper
+        run: python -m playwright install --with-deps chromium
       - name: Run MP Tender scraper — full organisation/tender list
         env:
           DETAIL_SAMPLE_SIZE: "0"
