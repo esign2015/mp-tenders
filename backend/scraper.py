@@ -12,6 +12,8 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 import requests
+
+# [run-scrape-details] retry real session-bound detail extraction
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
