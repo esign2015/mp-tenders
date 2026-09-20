@@ -1004,19 +1004,6 @@ def scrape_mp_tenders(csv_file):
     }
     fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
 
-    # Detail extraction is deliberately checkpointed in small batches.
-    # First successful batch = 10 tenders; after that, grow to 50.
-    # Any detail error checkpoints the successful work and stops the run,
-    # so a bad portal page can never wipe out a large in-progress batch.
-    batch_state_file = csv_file.parent / "scrape_batch_state.json"
-    try:
-        batch_state = json.loads(batch_state_file.read_text(encoding="utf-8"))
-    except Exception:
-        batch_state = {}
-    batch_size = 50 if int(batch_state.get("next_batch_size", 10)) >= 50 else 10
-    batch_completed = 0
-    batch_failed = False
-
     stats = {
         "organisations": len(organisations),
         "organisations_opened": 0,
@@ -1082,7 +1069,7 @@ def scrape_mp_tenders(csv_file):
                             # including the full Organisation Chain. Older CSV records may contain
                             # only the organisation name, so this also backfills Department,
                             # Division and Sub Division on the next run.
-                            force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0") == "1"
+                            force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0").lower() in ("1", "true", "yes")
                             needs_detail = force_detail or not all(clean(old.get(k)) for k in (
                                 "Department", "Division", "Sub Division",
                                 "PAC Amount", "EMD Fee", "Tender Fee",
@@ -1111,61 +1098,13 @@ def scrape_mp_tenders(csv_file):
                                     stats["detail_opened"] += 1
                                     batch_completed += 1
 
-                                    # Checkpoint immediately when the current batch is complete.
-                                    if batch_completed >= batch_size:
-                                        # Checkpoint both detail data and all list-level
-                                        # fields collected so far. Existing records are
-                                        # preserved, so the dashboard never shrinks while
-                                        # detail extraction continues in the background.
-                                        checkpoint_rows = []
-                                        for list_row in tender_list_rows:
-                                            tid = clean(list_row.get("Tender ID"))
-                                            if not tid:
-                                                continue
-                                            old_row = dict(existing_by_id.get(tid, {}))
-                                            checkpoint_rows.append({
-                                                **old_row,
-                                                "Tender ID": tid,
-                                                "Published Date": clean(list_row.get("Published Date")) or old_row.get("Published Date", ""),
-                                                "Closing Date": clean(list_row.get("Closing Date")) or old_row.get("Closing Date", ""),
-                                                "Opening Date": clean(list_row.get("Opening Date")) or old_row.get("Opening Date", ""),
-                                                "Title": clean(list_row.get("Title")) or old_row.get("Title", ""),
-                                                "Reference Number": clean(list_row.get("Reference Number")) or old_row.get("Reference Number", ""),
-                                                "Organisation": clean(list_row.get("Organisation Name")) or old_row.get("Organisation", ""),
-                                                "URL": clean(list_row.get("Tender URL")) or old_row.get("URL", ""),
-                                            })
-                                        checkpoint_ids = {clean(r.get("Tender ID")) for r in checkpoint_rows}
-                                        checkpoint_rows.extend(
-                                            r for tid, r in existing_by_id.items() if tid and tid not in checkpoint_ids
-                                        )
-                                        write_csv(csv_file, checkpoint_rows)
-                                        write_list_csv(
-                                            tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
-                                        )
-                                        next_size = 50 if batch_size == 10 else 50
-                                        batch_state_file.write_text(
-                                            json.dumps({
-                                                "next_batch_size": next_size,
-                                                "last_batch_completed": batch_completed,
-                                                "updated_at": datetime.now(timezone.utc).isoformat(),
-                                            }, indent=2),
-                                            encoding="utf-8",
-                                        )
-                                        print(
-                                            f"DETAIL CHECKPOINT: {batch_completed} successful; "
-                                            f"saved CSV; next batch size={next_size}"
-                                        )
-                                        return {
-                                            "ok": True,
-                                            "checkpoint": True,
-                                            "batch_completed": batch_completed,
-                                            "next_batch_size": next_size,
-                                            "stats": stats,
-                                        }
                                 except Exception as detail_exc:
                                     stats["errors"].append(
                                         f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
                                     )
+                                    # Keep the already-extracted records; continue with
+                                    # the next tender instead of losing the full run.
+                                    write_csv(csv_file, list(existing_by_id.values()))
                                     batch_failed = True
                                     # Preserve every successful detail before the failure.
                                     write_csv(csv_file, list(existing_by_id.values()))
