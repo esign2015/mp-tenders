@@ -17,6 +17,7 @@ pre{white-space:pre-wrap;background:#fff1f2;padding:14px;border-radius:10px;colo
 <div class="box">Errors<div class="num err" id="errors">—</div></div>
 <div class="box">Batch<div class="num" id="batch">—</div></div>
 <div class="box">Progress<div class="num" id="org">—</div></div>
+<div class="box">⏱️ Process Time<div class="num" id="elapsed">—</div></div>
 </div><div class="bar"><div class="fill" id="fill"></div></div><p id="updated" class="muted"></p></div>
 <div class="card" id="errorCard" style="display:none"><h2>❌ Latest Error</h2><pre id="latest"></pre></div>
 <div class="card"><button id="refreshBtn" onclick="manualRefresh()" style="border:0;border-radius:10px;padding:11px 18px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:pointer">🔄 Refresh Now</button><p class="muted" style="margin-bottom:0">यह पेज लगभग 60 सेकंड में अपने आप refresh होता है। आप चाहें तो ऊपर के बटन से अभी तुरंत status refresh कर सकते हैं।</p></div>
@@ -33,9 +34,15 @@ async function load(){
   total.textContent=s.total_tenders??'—'; done.textContent=s.detail_complete??'—'; remain.textContent=s.detail_remaining??'—';
   errors.textContent=s.errors??0; batch.textContent=s.detail_batch_completed??0; org.textContent=s.organisation_progress??'—';
   const p=s.total_tenders?Math.min(100,(s.detail_complete/s.total_tenders)*100):0; fill.style.width=p+'%';
-  updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update: '+(s.updated_at||'—');
+  function formatElapsed(ms){
+  const sec=Math.max(0,Math.floor(ms/1000)), h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s2=sec%60;
+  return (h?h+'h ':'')+(m?m+'m ':'')+s2+'s';
+}
+const started=s.process_started_at ? new Date(s.process_started_at).getTime() : 0;
+elapsed.textContent=started ? formatElapsed((s.status==='running'?Date.now():new Date(s.updated_at||Date.now()).getTime())-started) : '—';
+updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update: '+(s.updated_at||'—')+' • Started: '+(s.process_started_at||'—');
   if(s.latest_error){errorCard.style.display='block';latest.textContent=s.latest_error}else errorCard.style.display='none';
  }catch(e){updated.textContent='Status अभी उपलब्ध नहीं है।'}
 }
-load();setInterval(load,60000);
+load();setInterval(load,1000);
 </script></body></html>
