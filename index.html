@@ -1214,11 +1214,10 @@ body.telegram-locked .site-footer{visibility:hidden}
           <tr>
             <th>S.No.</th>
             <th>Tender ID</th>
-            <th>Published</th>
-            <th>Closing</th>
-
             <th>Title</th>
             <th>Ref.No.</th>
+            <th>Closing</th>
+            <th>Published</th>
             <th>PAC Amount</th>
             <th>EMD Fee</th>
             <th>Tender Fee</th>
@@ -2018,13 +2017,12 @@ function renderTable(rows){
       <tr>
         <td>${index+1}</td>
         <td>${tenderId || "—"}</td>
-        <td>${escapeHtml(formatDate(row["Published Date"]))}</td>
+        <td class="title-cell">${titleHtml || "—"}</td>
+        <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
-
-        <td class="title-cell">${titleHtml || "—"}</td>
-        <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
+        <td>${escapeHtml(formatDate(row["Published Date"]))}</td>
         <td>${formatMoney(row["PAC Amount"])}</td>
         <td>${formatMoney(row["EMD Fee"])}</td>
         <td>${formatMoney(row["Tender Fee"])}</td>
