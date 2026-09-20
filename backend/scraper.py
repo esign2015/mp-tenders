@@ -383,10 +383,15 @@ def parse_tender_rows(soup, base):
             TENDER_ID_RE.search(clean(tr.get_text(" ", strip=True)))
             for tr in rows
         )
+        table_has_view_link = any(
+            clean(a.get("title", "")).casefold() == "view tender information"
+            for a in table.find_all("a")
+        )
         looks_like_tender_table = (
             ("tender" in header_text and
              ("closing" in header_text or "title" in header_text or "reference" in header_text))
             or table_has_tender_id
+            or table_has_view_link
         )
         if not looks_like_tender_table:
             continue
@@ -406,7 +411,11 @@ def parse_tender_rows(soup, base):
             # places navigation/accessibility links in or around the same
             # tables; accepting rows without an ID creates false records such
             # as "Tenders by Closing Date" and "Screen Reader Access".
-            if not tender_id:
+            has_detail_link = any(
+                clean(a.get("title", "")).casefold() == "view tender information"
+                for a in tr.find_all("a")
+            )
+            if not tender_id and not has_detail_link:
                 continue
 
             # Prefer a session-bound DirectLink in the row. If there are several,
@@ -425,8 +434,14 @@ def parse_tender_rows(soup, base):
             if not candidates:
                 continue
 
-            # Title links are generally the longest meaningful text in the row.
-            anchor, href, anchor_text = max(candidates, key=lambda x: len(x[2]))
+            # Prefer the portal's explicit detail link; otherwise use the longest meaningful link.
+            detail_candidates = [
+                x for x in candidates
+                if clean(x[0].get("title", "")).casefold() == "view tender information"
+            ]
+            anchor, href, anchor_text = (
+                detail_candidates[0] if detail_candidates else max(candidates, key=lambda x: len(x[2]))
+            )
 
             # MP Tender list links commonly render as:
             # [Title] [Reference Number] [Tender ID]
@@ -980,6 +995,9 @@ def scrape_mp_tenders(csv_file):
         "organisations_opened": 0,
         "tenders_seen": 0,
         "detail_opened": 0,
+        "organisations_verified": 0,
+        "organisations_count_mismatch": 0,
+        "tender_listed": 0,
         "errors": [],
     }
     write_extraction_status(csv_file, {
@@ -1080,6 +1098,20 @@ def scrape_mp_tenders(csv_file):
             for index, org in enumerate(organisations, 1):
                 try:
                     stats["organisations_opened"] += 1
+                    write_extraction_status(csv_file, {
+                        "status": "running",
+                        "process_started_at": process_started_at,
+                        "total_tenders": max(len(existing_by_id), stats.get("tender_listed", 0)),
+                        "detail_complete": detail_successes,
+                        "detail_remaining": max(0, len(existing_by_id) - detail_successes),
+                        "errors": len(stats["errors"]),
+                        "latest_error": stats["errors"][-1] if stats["errors"] else "",
+                        "organisation_progress": f"{index-1}/{len(organisations)}",
+                        "current_organisation": org["name"],
+                        "detail_batch_size": batch_size,
+                        "detail_batch_completed": detail_successes,
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    })
                     tender_rows, pages = browser_get_all_tender_rows(
                         page, org, org["count"]
                     )
@@ -1216,6 +1248,24 @@ def scrape_mp_tenders(csv_file):
             browser.close()
 
     # Build/refresh the main detailed CSV from the complete tender-list collection.
+    # Safety: never replace a known-good dataset with an empty scrape.
+    if not tender_list_rows:
+        write_extraction_status(csv_file, {
+            "status": "error",
+            "process_started_at": process_started_at,
+            "total_tenders": len(existing_by_id),
+            "detail_complete": 0,
+            "detail_remaining": len(existing_by_id),
+            "errors": 1,
+            "latest_error": "Portal tender rows could not be parsed; previous dataset preserved.",
+            "organisation_progress": f"{len(organisations)}/{len(organisations)}",
+            "detail_batch_size": batch_size,
+            "detail_batch_completed": detail_successes,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        })
+        print("SCRAPER SAFETY STOP: zero tender-list rows; previous dataset preserved.")
+        return {"ok": False, "preserved_previous_dataset": True, "tender_list_records": 0}
+
     # Existing detail fields are preserved; the 9-tender validation is run separately
     # with DETAIL_VALIDATION_ONLY=1 so it can never replace the dashboard dataset.
     merged_rows = []
