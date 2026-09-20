@@ -986,7 +986,8 @@ def scrape_mp_tenders(csv_file):
     if os.getenv("DETAIL_VALIDATION_ONLY") == "1":
         return run_detail_validation(csv_file, organisations)
 
-    retrieved_at = datetime.now(timezone.utc).isoformat()
+    process_started_at = datetime.now(timezone.utc).isoformat()
+    retrieved_at = process_started_at
 
     # Save the complete organisation list first.
     org_rows = []
@@ -1023,6 +1024,7 @@ def scrape_mp_tenders(csv_file):
     )
     write_extraction_status(csv_file, {
         "status": "running",
+        "process_started_at": process_started_at,
         "total_tenders": len(existing_by_id),
         "detail_complete": initial_complete,
         "detail_remaining": max(0, len(existing_by_id) - initial_complete),
@@ -1220,6 +1222,7 @@ def scrape_mp_tenders(csv_file):
     )
     write_extraction_status(csv_file, {
         "status": "completed",
+        "process_started_at": process_started_at,
         "total_tenders": len(merged_rows),
         "detail_complete": complete_count,
         "detail_remaining": max(0, len(merged_rows) - complete_count),
