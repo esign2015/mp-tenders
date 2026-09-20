@@ -408,8 +408,10 @@ button:hover{
   box-sizing:border-box;
 }
 .pac-filter-panel.open{
-  display:block;
+  display:block !important;
+  position:fixed !important;
   z-index:2147483647 !important;
+  isolation:isolate;
 }
 .pac-filter-title{
   font-size:14px;
@@ -847,10 +849,10 @@ td.title-cell{
 
   .counts{
     width:100%;
-    display:flex;
-    flex-wrap:nowrap;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:3px;
+    align-items:stretch;
   }
 
   .count-box{
@@ -2093,11 +2095,12 @@ function normaliseTender(row){
   item["Corrigendum"] =
     clean(row["Corrigendum"] || row["Corrigendum Status"]);
 
-  item["URL"] =
-    clean(row["URL"] ||
-          row["Tender URL"] ||
-          row["Link"] ||
-          row["Tender Link"]);
+  // Tender links are intentionally not kept in dashboard records.
+  // MP Tender detail links are session-bound and expire.
+  delete item["URL"];
+  delete item["Tender URL"];
+  delete item["Link"];
+  delete item["Tender Link"];
 
   return item;
 }
