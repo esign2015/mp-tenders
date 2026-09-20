@@ -228,6 +228,76 @@ button:hover{
   font-size:13px;
 }
 
+.organisation-filter-wrap{
+  position:relative;
+  width:100%;
+  min-width:0;
+}
+.organisation-filter-wrap input{
+  width:100%;
+}
+.organisation-suggestions{
+  display:none;
+  position:absolute;
+  left:0;
+  right:0;
+  top:34px;
+  z-index:5000;
+  max-height:280px;
+  overflow-y:auto;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:0 0 7px 7px;
+  box-shadow:0 10px 24px rgba(15,23,42,.16);
+}
+.organisation-suggestions.open{display:block}
+.organisation-option{
+  display:block;
+  width:100%;
+  padding:8px 10px;
+  border:0;
+  border-bottom:1px solid #eef2f7;
+  background:#fff;
+  color:#172033;
+  text-align:left;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+.organisation-option:hover,
+.organisation-option.active{
+  background:#eef6ff;
+  color:#1d4ed8;
+}
+.organisation-empty{
+  padding:9px 10px;
+  color:#64748b;
+  font-size:12px;
+}
+.virtual-page-controls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:8px 10px;
+  border-top:1px solid #dbe3ee;
+  background:#f8fafc;
+}
+.virtual-page-controls button{
+  min-width:110px;
+}
+.virtual-page-controls button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+#virtualPageInfo{
+  min-width:150px;
+  text-align:center;
+  color:#475569;
+  font-size:12px;
+  font-weight:800;
+}
 .date-filter-wrap{
   width:150px;
   height:32px;
@@ -1147,9 +1217,14 @@ body.telegram-locked .site-footer{visibility:hidden}
              type="text"
              placeholder="Title / keyword">
 
-      <input id="organisationSearch"
-             type="text"
-             placeholder="Organisation">
+      <div class="organisation-filter-wrap" id="organisationFilterWrap">
+        <input id="organisationSearch"
+               type="text"
+               autocomplete="off"
+               placeholder="Organisation — type to find..."
+               aria-label="Organisation filter">
+        <div class="organisation-suggestions" id="organisationSuggestions" role="listbox"></div>
+      </div>
 
       <input id="pincodeSearch"
              type="text"
@@ -1274,6 +1349,12 @@ body.telegram-locked .site-footer{visibility:hidden}
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="virtual-page-controls" id="virtualPageControls">
+      <button type="button" class="btn-light" id="last100Btn">⬅ Last 100</button>
+      <span id="virtualPageInfo">1–100</span>
+      <button type="button" class="btn-blue" id="next100Btn">Next 100 ➜</button>
     </div>
 
   </section>
@@ -1535,6 +1616,7 @@ const ORG_TENDER_CSV_URL = "organisation_tenders.csv";
 
 let allTenders = [];
 let filteredTenders = [];
+let organisationOptions = [];
 let archivedMode = false;
 let quickFilterMode = "";
 
@@ -1948,6 +2030,7 @@ async function loadData(){
     }
 
     allTenders = data.map(normaliseTender);
+    buildOrganisationOptions();
     applyFilters();
 
   }catch(error){
@@ -2144,6 +2227,7 @@ function updateVirtualWindow(){
     }
 
     renderVirtualWindow();
+    updateVirtualPager();
     requestAnimationFrame(() => { virtualBusy = false; });
     return;
   }
@@ -2174,8 +2258,131 @@ function updateVirtualWindow(){
     requestAnimationFrame(() => {
       wrap.scrollTop += addedHeight;
       virtualBusy = false;
+      updateVirtualPager();
     });
   }
+}
+
+function updateVirtualPager(){
+  const info = $("virtualPageInfo");
+  const prev = $("last100Btn");
+  const next = $("next100Btn");
+  if(!info || !prev || !next) return;
+
+  if(!virtualRows.length){
+    info.textContent = "0 records";
+    prev.disabled = true;
+    next.disabled = true;
+    return;
+  }
+
+  const start = virtualStart + 1;
+  const end = Math.min(virtualEnd, virtualRows.length);
+  info.textContent = start + "–" + end + " / " + virtualRows.length;
+
+  prev.disabled = virtualStart <= 0;
+  next.disabled = virtualEnd >= virtualRows.length;
+}
+
+function goVirtualPage(direction){
+  if(!virtualRows.length) return;
+
+  const pageStart = direction > 0
+    ? Math.min(virtualStart + VIRTUAL_CHUNK_SIZE,
+               Math.max(0, virtualRows.length - VIRTUAL_CHUNK_SIZE))
+    : Math.max(0, virtualStart - VIRTUAL_CHUNK_SIZE);
+
+  if(pageStart === virtualStart) return;
+
+  const wrap = $("tableWrap");
+  virtualBusy = true;
+  virtualStart = pageStart;
+  virtualEnd = Math.min(virtualRows.length, virtualStart + VIRTUAL_CHUNK_SIZE);
+  virtualTopHeight = virtualStart * ESTIMATED_ROW_HEIGHT;
+  virtualBottomHeight = Math.max(0, virtualRows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
+
+  renderVirtualWindow();
+
+  requestAnimationFrame(() => {
+    if(wrap){
+      wrap.scrollTop = virtualTopHeight;
+    }
+    virtualBusy = false;
+    updateVirtualPager();
+  });
+}
+
+function setupOrganisationFilter(){
+  const input = $("organisationSearch");
+  const list = $("organisationSuggestions");
+  if(!input || !list) return;
+
+  function showOrganisationSuggestions(){
+    const query = clean(input.value).toLowerCase();
+    const matches = organisationOptions
+      .filter(org => !query || org.toLowerCase().startsWith(query))
+      .slice(0, 120);
+
+    if(!matches.length){
+      list.innerHTML = '<div class="organisation-empty">कोई matching organisation नहीं मिली।</div>';
+    }else{
+      list.innerHTML = matches.map(org =>
+        '<button type="button" class="organisation-option" role="option" data-org="' +
+        escapeHtml(org) + '">' + escapeHtml(org) + '</button>'
+      ).join("");
+    }
+
+    list.classList.add("open");
+  }
+
+  input.addEventListener("focus", showOrganisationSuggestions);
+  input.addEventListener("input", function(){
+    showOrganisationSuggestions();
+    scheduleFilter();
+  });
+
+  list.addEventListener("mousedown", function(event){
+    const option = event.target.closest(".organisation-option");
+    if(!option) return;
+    event.preventDefault();
+
+    input.value = option.dataset.org || "";
+    list.classList.remove("open");
+    applyFilters();
+  });
+
+  input.addEventListener("keydown", function(event){
+    if(event.key === "Escape"){
+      list.classList.remove("open");
+    }
+    if(event.key === "Enter"){
+      const first = list.querySelector(".organisation-option");
+      if(first){
+        input.value = first.dataset.org || "";
+        list.classList.remove("open");
+        applyFilters();
+      }
+    }
+  });
+
+  document.addEventListener("click", function(event){
+    if(!event.target.closest("#organisationFilterWrap")){
+      list.classList.remove("open");
+    }
+  });
+}
+
+function buildOrganisationOptions(){
+  const set = new Set();
+
+  allTenders.forEach(row => {
+    const org = clean(row["Organisation"]);
+    if(org) set.add(org);
+  });
+
+  organisationOptions = [...set].sort((a,b) =>
+    a.localeCompare(b, "en", {sensitivity:"base"})
+  );
 }
 
 function setupVirtualTable(){
@@ -2209,6 +2416,7 @@ function renderTable(rows){
   virtualTopHeight = 0;
   virtualBottomHeight = Math.max(0, rows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
   renderVirtualWindow();
+  updateVirtualPager();
 }
 
 function updateCounts(rows, refreshHeader=true){
@@ -2339,9 +2547,17 @@ function applyFilters(refreshHeader=true){
       return false;
     }
 
-    if(organisation &&
-       !clean(row["Organisation"]).toLowerCase().includes(organisation)){
-      return false;
+    if(organisation){
+      const rowOrganisation = clean(row["Organisation"]).toLowerCase();
+
+      /*
+        Organisation is a single-select/prefix filter:
+        - after selecting an organisation, match that organisation only;
+        - while typing, show/filter organisations that START with the typed text.
+      */
+      if(!rowOrganisation.startsWith(organisation)){
+        return false;
+      }
     }
 
     if(pincode &&
@@ -2920,11 +3136,16 @@ $("archivedBtn").addEventListener("click",function(){
 });
 $("pdfBtn").addEventListener("click",exportPdf);
 $("pdfBtn2").addEventListener("click",exportPdf);
+$("last100Btn").addEventListener("click",() => goVirtualPage(-1));
+$("next100Btn").addEventListener("click",() => goVirtualPage(1));
+
+setupOrganisationFilter();
 
 updateDateTime();
 setInterval(updateDateTime,1000);
 
 setupVirtualTable();
+updateVirtualPager();
 enforceTelegramAccess().then(() => loadData());
 </script>
 
