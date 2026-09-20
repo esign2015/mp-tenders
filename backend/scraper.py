@@ -1012,6 +1012,28 @@ def scrape_mp_tenders(csv_file):
     }
     fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
 
+    # Publish the real starting inventory immediately; never show a fake 0
+    # while the detail extraction job is still running.
+    initial_complete = sum(
+        1 for r in existing_by_id.values()
+        if all(clean(r.get(k)) for k in (
+            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
+            "Pincode", "Department", "Division", "Sub Division"
+        ))
+    )
+    write_extraction_status(csv_file, {
+        "status": "running",
+        "total_tenders": len(existing_by_id),
+        "detail_complete": initial_complete,
+        "detail_remaining": max(0, len(existing_by_id) - initial_complete),
+        "errors": 0,
+        "latest_error": "",
+        "organisation_progress": f"0/{len(organisations)}",
+        "detail_batch_size": 10,
+        "detail_batch_completed": 0,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    })
+
     # Detail extraction is intentionally incremental: first run 10 records,
     # then 50 records per successful run. The complete tender list is still
     # collected every run, so the dashboard always retains all tenders.
