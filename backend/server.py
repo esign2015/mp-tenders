@@ -108,7 +108,7 @@ def telegram_verify():
     if not allowed:
         return jsonify({"verified": False, "message": "You are not a member of the Telegram channel. Please join it first."}), 403
 
-    return jsonify({"verified": True, "username": payload.get("username", ""), "first_name": payload.get("first_name", ""), "message": "Telegram membership verified."})
+    return jsonify({"verified": True, "id": user_id, "username": payload.get("username", ""), "first_name": payload.get("first_name", ""), "last_name": payload.get("last_name", ""), "photo_url": payload.get("photo_url", ""), "message": "Telegram membership verified."})
 
 
 @app.get("/health")
