@@ -4,11 +4,11 @@
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
-  "errors": 32,
-  "latest_error": "Commissioner - Commercial Tax / 2026_MPTAX_534364_1: detail RuntimeError: detail page returned portal menu/home content",
-  "organisation_progress": "6/90",
-  "current_organisation": "Department of Higher Education",
+  "errors": 75,
+  "latest_error": "Department of Higher Education / 2026_HED_527553_1: detail RuntimeError: Clicked link but detail page did not contain Tender ID 2026_HED_527553_1; current_url=https://www.mptenders.gov.in/nicgep/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SKkyeHGcs%2B9knOmKbXO6mRQ%3D%3D",
+  "organisation_progress": "7/90",
+  "current_organisation": "Devi Ahilya Vishwavidyalaya - Indore",
   "detail_batch_size": 100,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-20T18:18:13.917126+00:00"
+  "updated_at": "2026-09-20T18:23:19.619566+00:00"
 }
