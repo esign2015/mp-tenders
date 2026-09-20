@@ -1,9 +1,5 @@
 name: MP Tender Daily Scraper
 
-concurrency:
-  group: mp-tender-scrape
-  cancel-in-progress: true
-
 on:
   push:
     branches: ["main"]
@@ -15,6 +11,7 @@ on:
   schedule:
     - cron: "15 15 * * *"
     - cron: "50 4 * * *"
+    - cron: "*/5 3-13 * * *"
 
 permissions:
   contents: write
@@ -74,7 +71,7 @@ jobs:
         env:
           DETAIL_SAMPLE_SIZE: "0"
           FETCH_DETAIL_PAGES: "1"
-          FORCE_DETAIL_REFRESH: "1"
+          FORCE_DETAIL_REFRESH: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]')) }}
         run: python backend/scraper.py
       - name: Commit full tender data
         run: |
@@ -94,6 +91,68 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_MODE: evening
         run: python backend/telegram_alerts.py
+
+  monitor_changes:
+    if: github.event_name == 'schedule' && github.event.schedule == '*/5 3-13 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: mp-tender-monitor
+      cancel-in-progress: true
+    steps:
+      - name: Check whether this 5-minute tick is a 14-minute/fixed-time slot
+        id: gate
+        shell: bash
+        run: |
+          set -e
+          now="$(TZ=Asia/Kolkata date '+%H %M')"
+          hour="$(echo "$now" | cut -d' ' -f1)"
+          minute="$(echo "$now" | cut -d' ' -f2)"
+          total=$((10#$hour * 60 + 10#$minute))
+          anchor=$((9 * 60))
+          exact="false"
+          if [[ "$hour:$minute" == "09:00" || "$hour:$minute" == "11:00" || "$hour:$minute" == "13:00" || "$hour:$minute" == "15:00" || "$hour:$minute" == "17:00" || "$hour:$minute" == "19:00" ]]; then
+            exact="true"
+          fi
+          if (( total >= anchor && total <= 19*60 )) && (( (total-anchor) % 14 == 0 )); then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$exact" == "true" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v4
+      - name: Setup Python
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        if: steps.gate.outputs.run == 'true'
+        run: python -m playwright install --with-deps chromium
+      - name: Check MP Tender changes
+        if: steps.gate.outputs.run == 'true'
+        env:
+          MONITOR_ONLY: "1"
+        run: python backend/scraper.py
+      - name: Commit monitor changes
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv
+          if git diff --cached --quiet; then
+            echo "No monitor data changes."
+          else
+            git commit -m "Update MP tender monitor data"
+            git push
+          fi
 
   morning_alert:
     if: github.event_name == 'schedule' && github.event.schedule == '50 4 * * *'
