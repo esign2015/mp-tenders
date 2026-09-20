@@ -18,7 +18,7 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
-PORTAL = "https://www.mptenders.gov.in/nicgep/app"
+PORTAL = "https://mptenders.gov.in/nicgep/app"
 ORG_URL = PORTAL + "?page=FrontEndTendersByOrganisation&service=page"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -647,6 +647,16 @@ def find_live_tender_link(page, tender_id="", tender_title="", tender_ref=""):
     tender_title = clean(tender_title)
     tender_ref = clean(tender_ref)
 
+    # The portal's search result is intentionally followed by clicking the
+    # visible Tender Title, exactly as a human bidder does.
+    if tender_title:
+        anchors = page.locator("a")
+        for j in range(anchors.count()):
+            link = anchors.nth(j)
+            txt = clean(link.inner_text())
+            if tender_title.casefold() in txt.casefold():
+                return link
+
     links = page.locator('a[title="View Tender Information"]')
     for j in range(links.count()):
         link = links.nth(j)
@@ -710,7 +720,12 @@ def open_tender_detail_by_search(page, tender):
 
     go.first.click()
     page.wait_for_load_state("domcontentloaded", timeout=60000)
-    page.wait_for_timeout(1800)
+    # JSF can take longer than the button response; wait until either the
+    # searched Tender ID or a no-result message is actually rendered.
+    for _ in range(12):
+        page.wait_for_timeout(500)
+        if tender_id.casefold() in clean(page.locator("body").inner_text()).casefold():
+            break
 
     result_text = clean(page.locator("body").inner_text())
     if tender_id.casefold() not in result_text.casefold():
@@ -814,7 +829,7 @@ def browser_get_all_tender_rows(page, org, expected_count):
                 unique[key] = row
         pages += 1
 
-        if expected_count and len(unique) >= expected_count:
+            if expected_count and len(unique) >= expected_count:
             break
 
         next_soup = click_next_live_page(page)
@@ -822,7 +837,13 @@ def browser_get_all_tender_rows(page, org, expected_count):
             break
         soup = next_soup
 
-    return list(unique.values()), pages
+    records = list(unique.values())
+    if expected_count and len(records) != expected_count:
+        raise RuntimeError(
+            f"Organisation tender count mismatch for {clean(org.get('name'))}: "
+            f"portal={expected_count}, actually collected={len(records)}"
+        )
+    return records, pages
 
 
 
