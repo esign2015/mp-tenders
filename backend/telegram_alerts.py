@@ -264,14 +264,14 @@ def main():
             key=closing_sort_key
         )
         message = (
-            "🔔 MP Tenders Alert Bot\n\n"
-            f"📅 Date: {display}\n\n"
-            f"⏰ Closing Today Tenders: {len(closing)}\n\n"
-            + ("📎 आज कोई tender Closing Today नहीं है, इसलिए Closing Today की PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
-            + f"🌐 Website: {SITE_URL}\n"
-            f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
-            f"{warning}\n\n"
-            f"🕒 Morning Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+            "🔔 एमपी टेंडर्स अलर्ट\n\n"
+            f"📅 दिनांक: {display}\n\n"
+            f"⏰ आज बंद होने वाले टेंडर: {len(closing)}\n\n"
+            + ("📎 आज कोई भी टेंडर Closing Today में नहीं है, इसलिए इसकी PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
+            + f"🌐 वेबसाइट: {SITE_URL}\n"
+            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
+            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
+            f"🕒 मॉर्निंग अलर्ट: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
         )
         pdf = make_pdf(
             closing,
@@ -293,15 +293,15 @@ def main():
     total_sorted = sorted(rows, key=closing_sort_key)
 
     message = (
-        "🔔 MP Tenders Alert Bot\n\n"
-        f"📅 Date: {display}\n\n"
-        f"🆕 Today’s New Published Tenders: {len(new)}\n\n"
-        + ("📎 आज एक भी tender publish नहीं हुआ है, इसलिए New Published Tenders की PDF नहीं भेजी जा रही है।\n\n" if not new else "")
-        + f"📋 Total Tenders as on date: {len(rows)}\n\n"
-        f"🌐 Website: {SITE_URL}\n"
-        f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
-        f"{warning}\n\n"
-        f"🕒 Updated: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+        "🔔 एमपी टेंडर्स अलर्ट\n\n"
+        f"📅 दिनांक: {display}\n\n"
+        f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n\n"
+        + ("📎 आज एक भी टेंडर प्रकाशित नहीं हुआ है, इसलिए New Published Tenders की PDF नहीं भेजी जा रही है।\n\n" if not new else "")
+        + f"📋 आज तक कुल टेंडर: {len(rows)}\n\n"
+        f"🌐 वेबसाइट: {SITE_URL}\n"
+        f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
+        f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
+        f"🕒 अपडेट: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
     )
 
     total_pdf = make_pdf(
