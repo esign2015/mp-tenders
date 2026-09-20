@@ -1270,7 +1270,8 @@ body.telegram-locked .site-footer{visibility:hidden}
 </footer>
 
 <script>
-const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/verify";
+const TELEGRAM_API_BASE = "https://mp-tenders-api.onrender.com";
+const TELEGRAM_VERIFY_API = TELEGRAM_API_BASE + "/api/telegram/verify";
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
 let telegramAuthData = null;
 let telegramChecking = false;
@@ -1312,7 +1313,7 @@ function updateTelegramProfile(user){
   if(menuName) menuName.textContent=name;
   if(menuUser) menuUser.textContent=username;
   if(avatar){
-    const photoUrl = clean(user.photo_url);
+    const photoUrl = user.id ? (TELEGRAM_API_BASE + "/api/telegram/photo/" + encodeURIComponent(user.id) + "?t=" + Date.now()) : clean(user.photo_url);
     if(photoUrl){
       avatar.onerror = () => {
         avatar.removeAttribute("src");
