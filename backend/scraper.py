@@ -44,6 +44,9 @@ ORG_TENDER_FIELDS = [
 ]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
+# Never persist or directly open MP JSF session URLs. Tender ID is the permanent key.
+SESSION_URL_RE = re.compile(r"(?:[?&])session=", re.I)
+
 
 def clean(value):
     return re.sub(r"\s+", " ", value or "").strip()
@@ -311,7 +314,7 @@ def parse_detail(soup, url):
         "Fee Payable To": clean(fee_payable_to),
         "Fee Payable At": clean(fee_payable_at),
         "Status": "Open",
-        "URL": url,
+        "URL": PORTAL,
     }
 
 
@@ -612,93 +615,212 @@ def get_all_tender_rows(session, start_url, expected_count):
 
 
 
+def assert_no_session_url(url):
+    """Session-bound MP Tender URLs are ephemeral and must never be opened via goto
+    or persisted as a tender URL. Live JSF links may only be activated by clicking
+    them inside the current browser session."""
+    value = clean(url)
+    if "session=" in value.casefold():
+        raise RuntimeError(f"Session-bound URL must not be opened or persisted: {value[:180]}")
+    return value
+
+
 def browser_page(page, url, referer=None):
-    """Open an MP portal page in a real browser session so JSF DirectLink
-    navigation remains valid. The portal uses session-bound $DirectLink URLs."""
-    page.goto(url, wait_until="domcontentloaded", timeout=60000)
+    """Open only a stable MP Tender URL. Never page.goto() a session-bound URL."""
+    stable = assert_no_session_url(url)
+    page.goto(stable, wait_until="domcontentloaded", timeout=60000)
     page.wait_for_timeout(2000)
     return BeautifulSoup(page.content(), "html.parser")
 
 
-def open_tender_detail_by_click(page, tender):
-    """Open a tender detail through the live JSF link in the current browser session.
-    DirectLink URLs are session-bound, so never navigate to a stale copied URL."""
-    tender_id = clean(tender.get("tender_id"))
-    tender_title = clean(tender.get("title"))
-    tender_ref = clean(tender.get("reference"))
+def click_live_anchor(page, link):
+    """Click a JSF DirectLink in the current page/session.
+    The href may contain session=, but it is NEVER passed to page.goto()."""
+    link.click()
+    page.wait_for_load_state("domcontentloaded", timeout=60000)
+    page.wait_for_timeout(1200)
+    return BeautifulSoup(page.content(), "html.parser")
+
+
+def find_live_tender_link(page, tender_id="", tender_title="", tender_ref=""):
+    tender_id = clean(tender_id)
+    tender_title = clean(tender_title)
+    tender_ref = clean(tender_ref)
 
     links = page.locator('a[title="View Tender Information"]')
-    chosen = None
     for j in range(links.count()):
         link = links.nth(j)
         txt = clean(link.inner_text())
-        raw = (link.get_attribute("href") or "") + " " + (link.get_attribute("onclick") or "")
-        hay = f"{txt} {raw}".casefold()
+        outer = link.evaluate("(e) => e.outerHTML") or ""
+        hay = f"{txt} {outer}".casefold()
         if (
             tender_id.casefold() in hay
             or (tender_title and tender_title.casefold() in hay)
             or (tender_ref and tender_ref.casefold() in hay)
         ):
-            chosen = link
-            break
+            return link
 
-    if chosen is None:
-        raise RuntimeError(f"View Tender Information link not found for {tender_id}")
+    # Fallback: the portal search-result title link may not carry the
+    # View Tender Information title attribute.
+    all_links = page.locator("a")
+    for j in range(all_links.count()):
+        link = all_links.nth(j)
+        txt = clean(link.inner_text())
+        outer = link.evaluate("(e) => e.outerHTML") or ""
+        hay = f"{txt} {outer}".casefold()
+        if (
+            (tender_title and tender_title.casefold() in hay)
+            or (tender_id and tender_id.casefold() in hay)
+            or (tender_ref and tender_ref.casefold() in hay)
+        ):
+            return link
+    return None
 
-    chosen.click()
+
+def open_tender_detail_by_search(page, tender):
+    """Find a tender by Tender ID from the stable MP home page search box,
+    click the result title, and parse the resulting detail page.
+
+    This deliberately avoids all saved/session-bound URLs. The only navigation
+    URL opened directly is the stable portal home page.
+    """
+    tender_id = clean(tender.get("tender_id") or tender.get("Tender ID"))
+    tender_title = clean(tender.get("title") or tender.get("Title"))
+    tender_ref = clean(tender.get("reference") or tender.get("Reference Number"))
+    if not tender_id:
+        raise RuntimeError("Tender ID is required for ID search")
+
+    browser_page(page, PORTAL)
+
+    search_box = page.locator("#SearchDescription")
+    if search_box.count() == 0:
+        search_box = page.locator('input[name="SearchDescription"]')
+    if search_box.count() == 0:
+        raise RuntimeError("MP Tender search box #SearchDescription not found")
+
+    search_box.first.fill(tender_id)
+
+    go = page.locator('input[type="submit"][value="Go"]')
+    if go.count() == 0:
+        go = page.locator('input[value="Go"]')
+    if go.count() == 0:
+        go = page.get_by_role("button", name=re.compile(r"^Go$", re.I))
+    if go.count() == 0:
+        raise RuntimeError("MP Tender search Go button not found")
+
+    go.first.click()
     page.wait_for_load_state("domcontentloaded", timeout=60000)
-    page.wait_for_timeout(1200)
+    page.wait_for_timeout(1800)
 
-    detail_soup = BeautifulSoup(page.content(), "html.parser")
-    detail_text = clean(detail_soup.get_text(" ", strip=True))
-    if tender_id and tender_id.casefold() not in detail_text.casefold():
+    result_text = clean(page.locator("body").inner_text())
+    if tender_id.casefold() not in result_text.casefold():
         raise RuntimeError(
-            f"Clicked link but detail page did not contain Tender ID {tender_id}; "
+            f"Tender ID search returned no matching result for {tender_id}; "
+            f"current_url={page.url}"
+        )
+
+    chosen = find_live_tender_link(page, tender_id, tender_title, tender_ref)
+    if chosen is None:
+        # Search-result pages normally show the title as a normal anchor.
+        # Prefer a link whose visible text is the requested title.
+        if tender_title:
+            exact = page.get_by_text(tender_title, exact=False)
+            if exact.count():
+                for j in range(exact.count()):
+                    candidate = exact.nth(j)
+                    if candidate.evaluate("(e) => e.tagName").upper() == "A":
+                        chosen = candidate
+                        break
+        if chosen is None:
+            raise RuntimeError(f"Tender title/result link not found for {tender_id}")
+
+    detail_soup = click_live_anchor(page, chosen)
+    detail_text = clean(detail_soup.get_text(" ", strip=True))
+    if tender_id.casefold() not in detail_text.casefold():
+        raise RuntimeError(
+            f"Search result title click did not open Tender Details for {tender_id}; "
             f"current_url={page.url}"
         )
     return detail_soup
 
 
-def browser_get_all_tender_rows(page, org, expected_count):
-    """Open one organisation through the browser session and collect all tender rows."""
-    org_soup = browser_page(page, ORG_URL)
-    organisations = parse_organisation_rows(org_soup, page.url)
-    target = next(
-        (x for x in organisations
-         if x["name"] == org["name"] and x["count"] == org["count"]),
-        None,
-    )
-    if not target:
-        # Fall back to name-only because counts can change while the job is running.
-        target = next((x for x in organisations if x["name"] == org["name"]), None)
-    if not target:
-        raise RuntimeError(f"Organisation row not found in browser session: {org['name']}")
+def open_tender_detail_by_click(page, tender):
+    """Backward-compatible wrapper. Detail extraction now uses the stable
+    Tender-ID search flow rather than any session-bound list URL."""
+    return open_tender_detail_by_search(page, tender)
 
+
+def open_organisation_list_by_click(page, org):
+    """From the stable organisation page, click the organisation's live count.
+    Never navigate to the DirectLink href."""
+    org_soup = browser_page(page, ORG_URL)
+    org_name = clean(org.get("name"))
+    expected = int(org.get("count") or 0)
+
+    rows = page.locator("tr")
+    chosen = None
+    for i in range(rows.count()):
+        row = rows.nth(i)
+        text = clean(row.inner_text())
+        if org_name.casefold() not in text.casefold():
+            continue
+        anchors = row.locator("a")
+        for j in range(anchors.count()):
+            a = anchors.nth(j)
+            txt = clean(a.inner_text())
+            if txt.replace(",", "").isdigit():
+                count = int(txt.replace(",", ""))
+                if count == expected or expected == 0:
+                    chosen = a
+                    break
+        if chosen is not None:
+            break
+
+    if chosen is None:
+        raise RuntimeError(f"Live organisation count link not found: {org_name}")
+
+    return click_live_anchor(page, chosen)
+
+
+def click_next_live_page(page):
+    """Click the live Next pagination link; never open its session-bound href."""
+    candidates = page.locator("a")
+    for i in range(candidates.count()):
+        a = candidates.nth(i)
+        text = clean(a.inner_text()).casefold()
+        title = clean(a.get_attribute("title")).casefold()
+        aria = clean(a.get_attribute("aria-label")).casefold()
+        if text in {"next", ">", "»", "next >"} or "next page" in title or "next page" in aria:
+            return click_live_anchor(page, a)
+    return None
+
+
+def browser_get_all_tender_rows(page, org, expected_count):
+    """Collect an organisation's tender rows using only live clicks.
+    No session-bound URL is passed to page.goto(), stored, or reused."""
+    soup = open_organisation_list_by_click(page, org)
     unique = {}
-    seen_urls = set()
-    current = target["url"]
     pages = 0
 
     for _ in range(500):
-        if not current or current in seen_urls:
-            break
-        seen_urls.add(current)
-        soup = browser_page(page, current)
         rows = parse_tender_rows(soup, page.url)
         for row in rows:
-            # Keep the list-page URL generated in THIS Chromium session.
-            row["list_page_url"] = page.url
-            key = row["tender_id"] or row["reference"] or row["url"]
-            unique[key] = row
+            # Tender URLs from the portal are session-bound. Keep no URL in the
+            # persistent row; Tender ID is the permanent key.
+            row["url"] = ""
+            row.pop("list_page_url", None)
+            key = row["tender_id"] or row["reference"] or row.get("title")
+            if key:
+                unique[key] = row
         pages += 1
 
         if expected_count and len(unique) >= expected_count:
             break
 
-        nxt = next_page_url(soup, page.url, page.url)
-        if not nxt or nxt in seen_urls:
+        next_soup = click_next_live_page(page)
+        if next_soup is None:
             break
-        current = nxt
+        soup = next_soup
 
     return list(unique.values()), pages
 
@@ -775,21 +897,9 @@ def run_detail_validation(csv_file, organisations):
             viewport={"width": 1920, "height": 1080},
         )
         try:
-            # Establish a fresh browser session on the organisation master page.
-            browser_page(page, ORG_URL)
-            org_soup = BeautifulSoup(page.content(), "html.parser")
-            live_orgs = parse_organisation_rows(org_soup, page.url)
-            live_org = next(
-                (x for x in live_orgs
-                 if clean(x.get("name")).casefold() == target_name.casefold()),
-                None,
-            )
-            if not live_org:
-                raise RuntimeError(f"Live organisation not found: {target_name}")
-
-            # Open the organisation tender list using the URL created in THIS browser session.
-            browser_page(page, live_org["url"])
-            list_soup = BeautifulSoup(page.content(), "html.parser")
+            # Build the live organisation list only through clicks; never goto() a
+            # session-bound organisation URL.
+            list_soup = open_organisation_list_by_click(page, target_org)
             candidates = parse_tender_rows(list_soup, page.url)
             candidates = [
                 row for row in candidates
@@ -804,59 +914,17 @@ def run_detail_validation(csv_file, organisations):
 
             for idx, tender in enumerate(selected, 1):
                 try:
-                    # Return to the same live organisation list before each click so
-                    # the JSF DirectLink and its session token are freshly generated.
-                    browser_page(page, live_org["url"])
-
                     tender_id = clean(tender.get("tender_id"))
                     tender_title = clean(tender.get("title"))
                     tender_ref = clean(tender.get("reference"))
 
-                    links = page.locator('a[title="View Tender Information"]')
-                    chosen = None
-                    for j in range(links.count()):
-                        link = links.nth(j)
-                        txt = clean(link.inner_text())
-                        raw = (link.get_attribute("href") or "") + " " + (link.get_attribute("onclick") or "")
-                        hay = f"{txt} {raw}".casefold()
-                        if (
-                            tender_id.casefold() in hay
-                            or (tender_title and tender_title.casefold() in hay)
-                            or (tender_ref and tender_ref.casefold() in hay)
-                        ):
-                            chosen = link
-                            break
-
-                    if chosen is None:
-                        # Fallback: inspect every link's outerHTML for the ID/ref/title.
-                        all_links = page.locator("a")
-                        for j in range(all_links.count()):
-                            link = all_links.nth(j)
-                            outer = link.evaluate("(e) => e.outerHTML") or ""
-                            if (
-                                tender_id.casefold() in outer.casefold()
-                                or (tender_title and tender_title.casefold() in outer.casefold())
-                                or (tender_ref and tender_ref.casefold() in outer.casefold())
-                            ):
-                                chosen = link
-                                break
-
-                    if chosen is None:
-                        raise RuntimeError(f"View Tender Information link not found for {tender_id}")
-
-                    chosen.click()
-                    page.wait_for_load_state("domcontentloaded", timeout=60000)
-                    page.wait_for_timeout(1000)
-
-                    detail_soup = BeautifulSoup(page.content(), "html.parser")
-                    detail_text = clean(detail_soup.get_text(" ", strip=True))
-                    if tender_id.casefold() not in detail_text.casefold():
-                        raise RuntimeError(
-                            f"Clicked link but detail page did not contain Tender ID {tender_id}; "
-                            f"current_url={page.url}"
-                        )
-
-                    detail = parse_detail(detail_soup, page.url)
+                    # Use the stable home-page Tender ID search for every sample.
+                    detail_soup = open_tender_detail_by_search(page, {
+                        "tender_id": tender_id,
+                        "title": tender_title,
+                        "reference": tender_ref,
+                    })
+                    detail = parse_detail(detail_soup, PORTAL)
                     list_dates = parse_list_dates(tender)
                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                     detail["Title"] = clean(detail.get("Title")) or tender_title
@@ -865,10 +933,8 @@ def run_detail_validation(csv_file, organisations):
                     detail["Closing Date"] = clean(detail.get("Closing Date")) or list_dates[1]
                     detail["Opening Date"] = clean(detail.get("Opening Date")) or list_dates[2]
                     detail["Organisation"] = target_name
-                    detail["URL"] = page.url
+                    detail["URL"] = PORTAL
 
-                    # Quality gate: these three identifiers must be present; otherwise
-                    # the page is not considered a successful detail extraction.
                     if not clean(detail.get("Tender ID")) or not clean(detail.get("Reference Number")):
                         raise RuntimeError(
                             f"Detail extraction missing required identifier: "
@@ -884,6 +950,8 @@ def run_detail_validation(csv_file, organisations):
                         f"Total={detail.get('Total Fee')} | Location={detail.get('Location')} | "
                         f"Pincode={detail.get('Pincode')}"
                     )
+                    continue
+
                 except Exception as exc:
                     errors.append(f"{tender.get('tender_id')}: {type(exc).__name__}: {exc}")
         finally:
@@ -1048,7 +1116,7 @@ def monitor_tender_changes(csv_file):
                                 detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
                                 detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
                                 detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
-                                detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
+                                detail["URL"] = PORTAL
                                 existing_by_id[tender_id] = {**old, **detail}
                                 stats["details_opened"] += 1
                                 if not old:
@@ -1352,15 +1420,12 @@ def scrape_mp_tenders(csv_file):
                             if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and detail_successes < batch_size:
                                 detail_candidates_seen += 1
                                 try:
-                                    # Refresh the organisation list in this same browser
-                                    # session, then click the live JSF detail link. The copied
-                                    # Tender URL is session-bound and must not be opened directly.
-                                    list_page_url = clean(tender.get("list_page_url"))
-                                    if not list_page_url:
-                                        raise RuntimeError("live tender list page URL missing")
-                                    browser_page(page, list_page_url)
-                                    detail_soup = open_tender_detail_by_click(page, tender)
-                                    detail = parse_detail(detail_soup, page.url)
+                                    # IMPORTANT: never reuse the tender-list URL.
+                                    # MP Tender DirectLink URLs contain session= and expire.
+                                    # Find this Tender ID again from the stable home-page
+                                    # search box, click the live result title, and parse it.
+                                    detail_soup = open_tender_detail_by_search(page, tender)
+                                    detail = parse_detail(detail_soup, PORTAL)
                                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                                     detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
                                     detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
