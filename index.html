@@ -112,6 +112,27 @@ body{
 .count-number.green{color:#059669}
 .count-number.purple{color:#7c3aed}
 
+.sortable-th{
+  cursor:pointer;
+  user-select:none;
+  white-space:nowrap;
+}
+.sortable-th:hover{
+  background:rgba(37,99,235,.10);
+}
+.sort-arrow{
+  display:inline-block;
+  width:12px;
+  margin-left:3px;
+  font-size:11px;
+}
+.sortable-th.sort-active .sort-arrow::after{
+  content:"▲";
+}
+.sortable-th.sort-active.sort-desc .sort-arrow::after{
+  content:"▼";
+}
+
 .count-box-button{
   border:0;
   cursor:pointer;
@@ -1347,19 +1368,19 @@ body.telegram-locked .site-footer{visibility:hidden}
         <thead>
           <tr>
             <th>S.No.</th>
-            <th>Tender ID</th>
-            <th>Title</th>
-            <th>Ref.No.</th>
-            <th>Last Date</th>
-            <th>PAC Amount</th>
-            <th>EMD Fee</th>
-            <th>Tender Fee</th>
-            <th>Processing Fee</th>
-            <th>Total Fee</th>
-            <th>Organisation</th>
-            <th>Department</th>
-            <th>Division</th>
-            <th>Sub Division</th>
+            <th class="sortable-th" data-sort-key="Tender ID">Tender ID <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Title">Title <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="PAC Amount">PAC Amount <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="EMD Fee">EMD Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Tender Fee">Tender Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Processing Fee">Processing Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Total Fee">Total Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Organisation">Organisation <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Department">Department <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Division">Division <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Sub Division">Sub Division <span class="sort-arrow"></span></th>
             
           </tr>
         </thead>
@@ -1641,6 +1662,8 @@ let filteredTenders = [];
 let organisationOptions = [];
 let archivedMode = false;
 let quickFilterMode = "";
+let tableSortKey = "Closing Date";
+let tableSortDesc = false;
 
 const $ = id => document.getElementById(id);
 
@@ -2627,28 +2650,72 @@ function applyFilters(refreshHeader=true){
     return true;
   });
 
-  filteredTenders.sort((a,b) => {
-    if(sort === "title"){
-      return clean(a["Title"]).localeCompare(clean(b["Title"]));
-    }
-
-    if(sort === "organisation"){
-      return clean(a["Organisation"])
-        .localeCompare(clean(b["Organisation"]));    }
-
-    if(sort === "published"){
-      return (parseDate(b["Published Date"]) || 0) -
-             (parseDate(a["Published Date"]) || 0);
-    }
-
-    return (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
-           (parseDate(b["Closing Date"]) || new Date("2999-12-31"));
-  });
+  filteredTenders.sort((a,b) => compareTableValues(a,b,tableSortKey) * (tableSortDesc ? -1 : 1));
 
   renderTable(filteredTenders);
   /* Header counts do not change during a search; avoid rescanning 5,253+
      records on every keystroke. */
   updateCounts(allTenders,refreshHeader);
+}
+
+function moneySortValue(value){
+  const text = clean(value).replace(/,/g,"").replace(/₹/g,"").replace(/[^0-9.\-]/g,"");
+  const n = Number(text);
+  return Number.isFinite(n) ? n : null;
+}
+
+function compareTableValues(a,b,key){
+  let av, bv;
+
+  if(key === "Closing Date"){
+    av = parseDate(a[key]);
+    bv = parseDate(b[key]);
+    if(!av && !bv) return 0;
+    if(!av) return 1;
+    if(!bv) return -1;
+    return av - bv;
+  }
+
+  if(["PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"].includes(key)){
+    av = key === "Total Fee" ? moneySortValue(totalFee(a)) : moneySortValue(a[key]);
+    bv = key === "Total Fee" ? moneySortValue(totalFee(b)) : moneySortValue(b[key]);
+    if(av === null && bv === null) return 0;
+    if(av === null) return 1;
+    if(bv === null) return -1;
+    return av - bv;
+  }
+
+  av = clean(a[key]).toLowerCase();
+  bv = clean(b[key]).toLowerCase();
+
+  if(!av && !bv) return 0;
+  if(!av) return 1;
+  if(!bv) return -1;
+  return av.localeCompare(bv,"en",{numeric:true,sensitivity:"base"});
+}
+
+function updateTableSortHeaders(){
+  document.querySelectorAll(".sortable-th").forEach(th => {
+    const active = th.dataset.sortKey === tableSortKey;
+    th.classList.toggle("sort-active",active);
+    th.classList.toggle("sort-desc",active && tableSortDesc);
+  });
+}
+
+function sortCurrentTable(key){
+  if(tableSortKey === key){
+    tableSortDesc = !tableSortDesc;
+  }else{
+    tableSortKey = key;
+    tableSortDesc = false;
+  }
+
+  filteredTenders.sort((a,b) =>
+    compareTableValues(a,b,tableSortKey) * (tableSortDesc ? -1 : 1)
+  );
+
+  renderTable(filteredTenders);
+  updateTableSortHeaders();
 }
 
 function clearFilters(){
@@ -3198,6 +3265,11 @@ function scheduleFilter(){
 ].forEach(id => {
   $(id).addEventListener("change",applyFilters);
 });
+
+document.querySelectorAll(".sortable-th").forEach(th => {
+  th.addEventListener("click", () => sortCurrentTable(th.dataset.sortKey));
+});
+updateTableSortHeaders();
 
 $("resetBtn").addEventListener("click",clearFilters);
 $("reloadBtn").addEventListener("click",loadData);
