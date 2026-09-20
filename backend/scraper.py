@@ -1010,7 +1010,7 @@ def scrape_mp_tenders(csv_file):
         for row in existing_detail_rows
         if clean(row.get("Tender ID"))
     }
-    fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
+    fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0").lower() in ("1", "true", "yes")
 
     # Publish the real starting inventory immediately; never show a fake 0
     # while the detail extraction job is still running.
@@ -1096,9 +1096,9 @@ def scrape_mp_tenders(csv_file):
                             old = existing_by_id.get(tender_id, {})
                             # Re-open a detail page whenever any important detail is missing,
                             # including the full Organisation Chain. Older CSV records may contain
-                            # only the organisation name, so this also backfills Department,
-                            # Division and Sub Division on the next run.
+                            # Missing detail fields are backfilled incrementally.
                             force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0").lower() in ("1", "true", "yes")
+                            old = existing_by_id.get(tender_id, {})
                             needs_detail = force_detail or not all(clean(old.get(k)) for k in (
                                 "Department", "Division", "Sub Division",
                                 "PAC Amount", "EMD Fee", "Tender Fee",
@@ -1109,19 +1109,9 @@ def scrape_mp_tenders(csv_file):
                                 "Document Download Start Date", "Document Download End Date",
                                 "Fee Payable To", "Fee Payable At"
                             ))
-                            if fetch_details and tender_id:
-                            old = existing_by_id.get(tender_id, {})
-                            needs_detail = not all(clean(old.get(k)) for k in (
-                                "Department", "Division", "Sub Division",
-                                "PAC Amount", "EMD Fee", "Tender Fee",
-                                "Processing Fee", "Total Fee", "Location", "Pincode",
-                                "Work Description", "Product Category", "Sub Category",
-                                "Contract Type", "Bid Validity", "Pre Qualification Details",
-                                "Bid Submission Start Date", "Bid Submission End Date",
-                                "Document Download Start Date", "Document Download End Date",
-                                "Fee Payable To", "Fee Payable At"
-                            ))
-                            if needs_detail and detail_successes < batch_size:
+                            if fetch_details and tender_id and needs_detail and detail_successes < batch_size:
+                                detail_candidates_seen += 1
+                                try:
                                 detail_candidates_seen += 1
                                 try:
                                     detail_soup = browser_page(page, tender.get("url", ""))
