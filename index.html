@@ -390,6 +390,7 @@ button:hover{
 .pac-filter-arrow{font-size:14px;color:#64748b;}
 .pac-filter-panel{
   display:none;
+  position:fixed !important;
   isolation:isolate;
   transform:translate3d(0,0,0);
   position:fixed;
@@ -411,6 +412,7 @@ button:hover{
   display:block !important;
   position:fixed !important;
   z-index:2147483647 !important;
+  visibility:visible !important;
   isolation:isolate;
 }
 .pac-filter-title{
@@ -854,6 +856,7 @@ td.title-cell{
     gap:3px;
     align-items:stretch;
     white-space:nowrap;
+    flex-wrap:nowrap;
   }
 
   .count-box{
@@ -866,10 +869,11 @@ td.title-cell{
   }
 
   .count-label{
-    font-size:9.5px;
+    font-size:9px;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:clip;
+    letter-spacing:-.15px;
   }
 
   .count-number{
