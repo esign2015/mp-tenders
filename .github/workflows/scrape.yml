@@ -74,6 +74,7 @@ jobs:
         env:
           DETAIL_SAMPLE_SIZE: "0"
           FETCH_DETAIL_PAGES: "1"
+          FORCE_DETAIL_REFRESH: "1"
         run: python backend/scraper.py
       - name: Commit full tender data
         run: |
