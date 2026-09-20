@@ -1,13 +1,14 @@
 {
-  "status": "completed",
-  "process_started_at": "2026-09-20T14:47:21.888354+00:00",
+  "status": "running",
+  "process_started_at": "2026-09-20T15:12:24.974699+00:00",
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "90/90",
+  "organisation_progress": "3/90",
+  "current_organisation": "Board of Secondary Education",
   "detail_batch_size": 100,
-  "detail_batch_completed": 100,
-  "updated_at": "2026-09-20T15:04:30.500288+00:00"
+  "detail_batch_completed": 0,
+  "updated_at": "2026-09-20T15:12:54.030872+00:00"
 }
