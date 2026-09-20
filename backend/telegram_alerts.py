@@ -27,15 +27,34 @@ def strip_brackets(value):
 
 def parse_date(value):
     text = clean(value)
-    for fmt in (
-        "%d/%m/%Y %I:%M %p", "%d/%m/%Y %H:%M",
-        "%d-%m-%Y %I:%M %p", "%d-%m-%Y %H:%M",
-        "%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d",
-    ):
-        try:
-            return datetime.strptime(text, fmt).replace(tzinfo=IST)
-        except ValueError:
-            pass
+    text = re.sub(r"[\[\]]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+
+    # Prefer a complete date + time so PDF ordering uses the actual closing time.
+    datetime_patterns = (
+        r"\b\d{1,2}/\d{1,2}/\d{4}\s+\d{1,2}:\d{2}\s*(?:AM|PM)?\b",
+        r"\b\d{1,2}-\d{1,2}-\d{4}\s+\d{1,2}:\d{2}\s*(?:AM|PM)?\b",
+        r"\b\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{2}(?::\d{2})?\b",
+    )
+    candidates = []
+    for pattern in datetime_patterns:
+        m = re.search(pattern, text, flags=re.I)
+        if m:
+            candidates.append(m.group(0))
+
+    for candidate in candidates + [text]:
+        candidate = candidate.strip()
+        for fmt in (
+            "%d/%m/%Y %I:%M %p", "%d/%m/%Y %H:%M",
+            "%d-%m-%Y %I:%M %p", "%d-%m-%Y %H:%M",
+            "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M",
+            "%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d",
+        ):
+            try:
+                return datetime.strptime(candidate, fmt).replace(tzinfo=IST)
+            except ValueError:
+                pass
+
     m = re.search(r"(\d{1,2})[/-](\d{1,2})[/-](\d{4})", text)
     if m:
         try:
