@@ -2958,22 +2958,6 @@ function exportPdf(){
       the header nor watermark can cover a tender row.
     */
     willDrawPage:function(){
-      // Full-page light watermark.
-      doc.saveGraphicsState();
-      doc.setTextColor(...WATERMARK);
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(34);
-      doc.text(
-        "SAR Digital Services Kannod",
-        pageWidth/2,
-        pageHeight/2,
-        {
-          align:"center",
-          angle:35
-        }
-      );
-      doc.restoreGraphicsState();
-
       // Blue header on every page.
       doc.setFillColor(...BLUE);
       doc.rect(0,0,pageWidth,27,"F");
@@ -3142,6 +3126,23 @@ function exportPdf(){
     },
 
     didDrawPage:function(){
+      // Front-layer watermark: drawn after the table so it appears above
+      // the tender rows on every PDF page.
+      doc.saveGraphicsState();
+      doc.setTextColor(...WATERMARK);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(34);
+      doc.text(
+        "SAR Digital Services Kannod",
+        pageWidth/2,
+        pageHeight/2,
+        {
+          align:"center",
+          angle:35
+        }
+      );
+      doc.restoreGraphicsState();
+
       // Blue footer on every page.
       doc.setFillColor(...BLUE);
       doc.rect(0,pageHeight-13,pageWidth,13,"F");
