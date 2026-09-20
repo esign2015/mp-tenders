@@ -50,6 +50,17 @@ def is_on_date(value, target):
     return bool(dt and dt.date() == target)
 
 
+def closing_sort_key(row):
+    """
+    Sort PDFs by exact Closing Date + Closing Time, earliest first.
+    Rows without a usable closing date/time go to the end.
+    """
+    dt = parse_date(row.get("Closing Date"))
+    if dt is None:
+        return (1, datetime.max.replace(tzinfo=IST))
+    return (0, dt)
+
+
 def telegram_message(token, chat_id, text):
     data = parse.urlencode({
         "chat_id": chat_id,
@@ -224,19 +235,21 @@ def main():
     display = today.strftime("%d/%m/%Y")
 
     warning = (
-        "⚠️ This dashboard is an assistance tool only. Always verify the final tender notice, "
+        "⚠️ Disclaimer: This dashboard is an assistance tool only. Always verify the final tender notice, "
         "corrigendum, eligibility requirements, fees, and deadline on the official tender portal."
     )
 
     if mode == "morning":
-        closing = [r for r in rows if is_on_date(r.get("Closing Date"), today)]
+        closing = sorted(
+            [r for r in rows if is_on_date(r.get("Closing Date"), today)],
+            key=closing_sort_key
+        )
         message = (
             "🔔 MP Tenders Alert Bot\n\n"
-            f"📅 Date: {display}\n"
+            f"📅 Date: {display}\n\n"
             f"⏰ Closing Today Tenders: {len(closing)}\n\n"
             f"🌐 Website: {SITE_URL}\n"
-            "📎 Closing date tender list: attached\n\n"
-            f"📢 Daily alert पाने के लिए Telegram channel join करें: {TELEGRAM_URL}\n👤 Contact Admin: https://t.me/rdgyan\n\n"
+            f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
             f"{warning}\n\n"
             f"🕒 Morning Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
         )
@@ -252,23 +265,25 @@ def main():
         )
         return 0
 
-    new = [r for r in rows if is_on_date(r.get("Published Date"), today)]
+    new = sorted(
+        [r for r in rows if is_on_date(r.get("Published Date"), today)],
+        key=closing_sort_key
+    )
+    total_sorted = sorted(rows, key=closing_sort_key)
 
     message = (
         "🔔 MP Tenders Alert Bot\n\n"
-        f"📅 Date: {display}\n"
-        f"🆕 Today’s New Published Tenders: {len(new)}\n"
+        f"📅 Date: {display}\n\n"
+        f"🆕 Today’s New Published Tenders: {len(new)}\n\n"
         f"📋 Total Tenders as on date: {len(rows)}\n\n"
         f"🌐 Website: {SITE_URL}\n"
-        "📎 Total tender list: attached\n"
-        "📎 New published tender list: attached\n\n"
-        f"📢 Daily alert पाने के लिए Telegram channel join करें: {TELEGRAM_URL}\n\n"
+        f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
         f"{warning}\n\n"
         f"🕒 Updated: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
     )
 
     total_pdf = make_pdf(
-        rows,
+        total_sorted,
         f"Total Tenders as on {d} on MPTenders.pdf",
         f"Total Tenders as on {d} on MPTenders • {len(rows)} tenders",
     )
