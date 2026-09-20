@@ -1584,7 +1584,7 @@ async function setupTelegramLogin(){
 
   try{
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
+    const timeout = setTimeout(() => controller.abort(), 30000);
     const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
       cache:"no-store",
       signal:controller.signal
