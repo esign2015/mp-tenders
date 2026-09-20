@@ -2820,10 +2820,18 @@ function applyFilters(refreshHeader=true){
       return false;
     }
 
+    /*
+      PAC filter: a blank/— PAC is NOT a zero-value PAC.
+      It must be excluded from Above/Below filters because there is no
+      actual PAC amount available for comparison.
+    */
+    const pacRaw = clean(row["PAC Amount"]);
     const pacAmount = moneyNumber(row["PAC Amount"]);
 
     if(pacMode){
-      if(!Number.isFinite(pacLimit) || !Number.isFinite(pacAmount)) return false;
+      if(!Number.isFinite(pacLimit) || !pacRaw ||
+         pacRaw === "—" || pacRaw === "-" ||
+         !Number.isFinite(pacAmount)) return false;
 
       if(pacMode === "below" && pacAmount >= pacLimit) return false;
       if(pacMode === "above" && pacAmount <= pacLimit) return false;
