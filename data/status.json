@@ -2,12 +2,13 @@
   "status": "running",
   "process_started_at": "2026-09-20T15:13:54.509761+00:00",
   "total_tenders": 5256,
-  "detail_complete": 90,
-  "detail_remaining": 5166,
+  "detail_complete": 200,
+  "detail_remaining": 5056,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "21/90",
+  "organisation_progress": "22/90",
+  "current_organisation": "District Collectorate",
   "detail_batch_size": 100,
-  "detail_batch_completed": 90,
-  "updated_at": "2026-09-20T15:23:12.441659+00:00"
+  "detail_batch_completed": 100,
+  "updated_at": "2026-09-20T15:23:56.582499+00:00"
 }
