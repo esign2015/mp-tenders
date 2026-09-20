@@ -132,7 +132,8 @@ jobs:
         env:
           DETAIL_SAMPLE_SIZE: "0" # [run-scrape-details]
           FETCH_DETAIL_PAGES: "1"
-          FORCE_DETAIL_REFRESH: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]')) }}
+          # Incremental mode: do not reopen already-complete tender detail pages.
+          FORCE_DETAIL_REFRESH: "0"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
