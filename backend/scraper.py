@@ -220,6 +220,25 @@ def parse_detail(soup, url):
         document_end = between("Document Download / Sale End Date", ["Bid Submission Start Date", "Bid Submission End Date"])
     if not pac:
         pac = between("Tender Value in ₹", ["Product Category", "Sub category", "Contract Type"])
+    if not pac:
+        # NIC/MP Tender detail pages can render the label and value in the
+        # same text node, so also parse the complete page text directly.
+        pac_match = re.search(
+            r"(?:Tender Value(?:\s+in\s+₹)?|PAC(?:\s+(?:Amount|cost))?)\s*(?:Rs\.?|₹)?\s*([0-9][0-9,]*(?:\.\d+)?)",
+            body_text,
+            re.I,
+        )
+        if pac_match:
+            pac = pac_match.group(1)
+    if not pac:
+        # Some MP notices put PAC only in the work title/description.
+        pac_match = re.search(
+            r"PAC(?:\s+(?:Amount|cost))?\s*(?:Rs\.?|₹)?\s*([0-9][0-9,]*(?:\.\d+)?)",
+            " ".join([title, work_description]),
+            re.I,
+        )
+        if pac_match:
+            pac = pac_match.group(1)
     if not tender_fee:
         tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
     if not processing_fee:
