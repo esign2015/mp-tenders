@@ -59,9 +59,15 @@ def money_number(value):
 
 
 def money_text(value):
-    n = money_number(value)
-    if not n:
+    """Preserve portal NA/zero values instead of turning them into blanks."""
+    raw = clean(value)
+    if not raw:
         return ""
+    if raw.casefold() in {"na", "n/a", "not applicable", "-", "nil"}:
+        return "NA"
+    n = money_number(raw)
+    if n == 0 and not re.search(r"\d", raw):
+        return "0"
     return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
@@ -165,7 +171,10 @@ def parse_detail(soup, url):
     )
     title = find_label_value(soup, ["Work /Item(s) Title", "Title"])
     work_description = find_label_value(soup, ["Work Description"])
-    publish = find_critical_date(soup, "Publish Date")
+    publish = (
+        find_critical_date(soup, "Published Date")
+        or find_critical_date(soup, "Publish Date")
+    )
     closing = find_critical_date(soup, "Bid Submission End Date")
     opening = find_critical_date(soup, "Bid Opening Date")
     bid_submission_start = find_critical_date(soup, "Bid Submission Start Date")
@@ -185,10 +194,18 @@ def parse_detail(soup, url):
     sub_category = find_label_value(soup, ["Sub Category"])
     contract_type = find_label_value(soup, ["Contract Type"])
     bid_validity = find_label_value(soup, ["Bid Validity"])
-    pre_qualification = find_label_value(soup, ["Pre Qualification Details", "Pre-Qualification Details"])
+    pre_qualification = find_label_value(
+        soup,
+        [
+            "Pre Qualification Details",
+            "Pre-Qualification Details",
+            "NDA/Pre Qualification",
+            "NDA / Pre Qualification",
+        ],
+    )
     fee_payable_to = find_label_value(soup, ["Fee Payable To"])
     fee_payable_at = find_label_value(soup, ["Fee Payable At"])
-    # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
+    # MP Tender's displayed Total Fee excludes EMD.
     # Robust fallback: the MP portal often renders label + value in the same
     # table cell, so cell-pair parsing alone can miss these fields.
     body_text = clean(soup.get_text(" ", strip=True))
@@ -208,7 +225,10 @@ def parse_detail(soup, url):
     if not title:
         title = between("Work /Item(s) Title", ["Work Description", "Pre Qualification Details"])
     if not publish:
-        publish = between("Publish Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
+        publish = (
+            between("Published Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
+            or between("Publish Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
+        )
     if not closing:
         closing = between("Bid Submission End Date", ["Financial Bid Opening Date", "Document Documents", "Tender Documents"])
     if not opening:
@@ -244,6 +264,11 @@ def parse_detail(soup, url):
             pac = pac_match.group(1)
     if not tender_fee:
         tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
+    if not pre_qualification:
+        pre_qualification = (
+            between("Pre Qualification Details", ["Independent External Monitor/Remarks", "Tender Value in ₹"])
+            or between("NDA/Pre Qualification", ["Independent External Monitor/Remarks", "Tender Value in ₹"])
+        )
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
     if not emd:
@@ -253,7 +278,7 @@ def parse_detail(soup, url):
     if not pincode:
         pin_match = re.search(r"\bPincode\s+([0-9]{6})\b", body_text, re.I)
         pincode = pin_match.group(1) if pin_match else ""
-    total_fee = money_number(tender_fee) + money_number(emd) + money_number(processing_fee)
+    total_fee = money_number(tender_fee) + money_number(processing_fee)
 
     return {
         "Tender ID": clean(tender_id),
@@ -661,6 +686,8 @@ def browser_get_all_tender_rows(page, org, expected_count):
         soup = browser_page(page, current)
         rows = parse_tender_rows(soup, page.url)
         for row in rows:
+            # Keep the list-page URL generated in THIS Chromium session.
+            row["list_page_url"] = page.url
             key = row["tender_id"] or row["reference"] or row["url"]
             unique[key] = row
         pages += 1
@@ -1168,9 +1195,11 @@ def scrape_mp_tenders(csv_file):
     # while the detail extraction job is still running.
     initial_complete = sum(
         1 for r in existing_by_id.values()
-        if all(clean(r.get(k)) for k in (
-            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
-            "Pincode", "Department", "Division", "Sub Division"
+        if clean(r.get("Detail Extracted")).upper() == "YES"
+        and all(clean(r.get(k)) for k in (
+            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+            "Total Fee", "Location", "Pincode", "Work Description",
+            "Product Category", "Contract Type", "Bid Validity"
         ))
     )
     write_extraction_status(csv_file, {
@@ -1212,8 +1241,9 @@ def scrape_mp_tenders(csv_file):
         tid for tid, row in existing_by_id.items()
         if tid and clean(row.get("Detail Extracted")).upper() == "YES"
         and all(clean(row.get(k)) for k in (
-            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
-            "Department", "Division", "Sub Division", "Location", "Pincode"
+            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+            "Total Fee", "Location", "Pincode", "Work Description",
+            "Product Category", "Contract Type", "Bid Validity"
         ))
     ]
     # One Chromium session is used throughout because the portal uses
@@ -1311,14 +1341,13 @@ def scrape_mp_tenders(csv_file):
                             force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0").lower() in ("1", "true", "yes")
                             old = existing_by_id.get(tender_id, {})
                             needs_detail = force_detail or not all(clean(old.get(k)) for k in (
-                                "Department", "Division", "Sub Division",
-                                "PAC Amount", "EMD Fee", "Tender Fee",
+                                "Tender ID", "PAC Amount", "EMD Fee", "Tender Fee",
                                 "Processing Fee", "Total Fee", "Location", "Pincode",
                                 "Work Description", "Product Category", "Sub Category",
                                 "Contract Type", "Bid Validity", "Pre Qualification Details",
                                 "Bid Submission Start Date", "Bid Submission End Date",
-                                "Document Download Start Date", "Document Download End Date",
-                                "Fee Payable To", "Fee Payable At"
+                                "Bid Opening Date", "Document Download Start Date",
+                                "Document Download End Date", "Fee Payable To", "Fee Payable At"
                             ))
                             if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and detail_successes < batch_size:
                                 detail_candidates_seen += 1
@@ -1326,7 +1355,10 @@ def scrape_mp_tenders(csv_file):
                                     # Refresh the organisation list in this same browser
                                     # session, then click the live JSF detail link. The copied
                                     # Tender URL is session-bound and must not be opened directly.
-                                    browser_page(page, org.get("url", "") or ORG_URL)
+                                    list_page_url = clean(tender.get("list_page_url"))
+                                    if not list_page_url:
+                                        raise RuntimeError("live tender list page URL missing")
+                                    browser_page(page, list_page_url)
                                     detail_soup = open_tender_detail_by_click(page, tender)
                                     detail = parse_detail(detail_soup, page.url)
                                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
@@ -1374,10 +1406,10 @@ def scrape_mp_tenders(csv_file):
                                         write_csv(csv_file, list(existing_by_id.values()))
                                         complete_count = sum(
                                             1 for r in existing_by_id.values()
-                                            if all(clean(r.get(k)) for k in (
-                                                "PAC Amount", "EMD Fee", "Tender Fee",
-                                                "Processing Fee", "Pincode", "Department",
-                                                "Division", "Sub Division"
+                                            if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in (
+                                                "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+                                                "Total Fee", "Location", "Pincode", "Work Description",
+                                                "Product Category", "Contract Type", "Bid Validity"
                                             ))
                                         )
                                         write_extraction_status(csv_file, {
@@ -1409,9 +1441,10 @@ def scrape_mp_tenders(csv_file):
                     write_csv(csv_file, list(existing_by_id.values()))
                     complete_count = sum(
                         1 for r in existing_by_id.values()
-                        if all(clean(r.get(k)) for k in (
-                            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
-                            "Pincode", "Department", "Division", "Sub Division"
+                        if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in (
+                            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+                            "Total Fee", "Location", "Pincode", "Work Description",
+                            "Product Category", "Contract Type", "Bid Validity"
                         ))
                     )
                     write_extraction_status(csv_file, {
