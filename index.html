@@ -2888,18 +2888,22 @@ function exportPdf(){
       timeZone:"Asia/Kolkata"
     }) + " IST";
 
-  const body = rows.map((row,index) => [
-    index + 1,
-    clean(row["Tender ID"]).replace(/[\\[\\]]/g,""),
-    formatClosingDateTime(row["Closing Date"]),
-    clean(row["Title"]).replace(/^\\[|\\]$/g,""),
-    clean(row["Reference Number"]).replace(/^\\[|\\]$/g,""),
-    clean(row["PAC Amount"]),
-    clean(row["EMD Fee"]),
-    clean(row["Tender Fee"]),
-    clean(row["Processing Fee"]),
-    clean(row["Total Fee"])
-  ]);
+  const body = rows.map((row,index) => {
+    const pdfRow = [
+      index + 1,
+      clean(row["Tender ID"]).replace(/[\\[\\]]/g,""),
+      formatClosingDateTime(row["Closing Date"]),
+      clean(row["Title"]).replace(/^\\[|\\]$/g,""),
+      clean(row["Reference Number"]).replace(/^\\[|\\]$/g,""),
+      clean(row["PAC Amount"]),
+      clean(row["EMD Fee"]),
+      clean(row["Tender Fee"]),
+      clean(row["Processing Fee"]),
+      clean(row["Total Fee"])
+    ];
+    pdfRow.__source = row;
+    return pdfRow;
+  });
 
   const pdfTableOptions = {
     startY:39,
@@ -3062,7 +3066,7 @@ function exportPdf(){
       doc.setFont("helvetica","normal");
       doc.setFontSize(5.8);
       doc.text(
-        "Tender Report  •  " + reportDate + "  •  Total Records: " + rows.length,
+        "Data As On: " + reportDate + "  •  Total Records: " + rows.length,
         pageWidth/2,
         25,
         {align:"center"}
