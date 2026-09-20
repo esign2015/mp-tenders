@@ -2342,7 +2342,7 @@ function setupOrganisationFilter(){
   function showOrganisationSuggestions(){
     const query = clean(input.value).toLowerCase();
     const matches = organisationOptions
-      .filter(org => !query || org.toLowerCase().startsWith(query))
+      .filter(org => !query || org.toLowerCase().includes(query))
       .slice(0, 120);
 
     if(!matches.length){
@@ -2577,11 +2577,11 @@ function applyFilters(refreshHeader=true){
       const rowOrganisation = clean(row["Organisation"]).toLowerCase();
 
       /*
-        Organisation is a single-select/prefix filter:
-        - after selecting an organisation, match that organisation only;
-        - while typing, show/filter organisations that START with the typed text.
+        Organisation search is a contains search:
+        - while typing, match the text anywhere in the organisation name;
+        - selecting a suggestion still fills the exact organisation name.
       */
-      if(!rowOrganisation.startsWith(organisation)){
+      if(!rowOrganisation.includes(organisation)){
         return false;
       }
     }
