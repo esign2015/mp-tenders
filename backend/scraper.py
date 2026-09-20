@@ -1004,18 +1004,17 @@ def scrape_mp_tenders(csv_file):
     }
     fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
 
-    stats = {
-        "organisations": len(organisations),
-        "organisations_opened": 0,
-        "organisations_verified": 0,
-        "organisations_count_mismatch": 0,
-        "tender_listed": 0,
-        "detail_opened": 0,
-        "new_tenders": 0,
-        "updated_records": 0,
-        "errors": [],
-    }
-
+    # Detail extraction is intentionally incremental: first run 10 records,
+    # then 50 records per successful run. The complete tender list is still
+    # collected every run, so the dashboard always retains all tenders.
+    batch_state_file = csv_file.parent / "scrape_batch_state.json"
+    try:
+        batch_state = json.loads(batch_state_file.read_text(encoding="utf-8"))
+    except Exception:
+        batch_state = {}
+    batch_size = 50 if int(batch_state.get("next_batch_size", 10)) >= 50 else 10
+    detail_successes = 0
+    detail_candidates_seen = 0
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
@@ -1080,29 +1079,42 @@ def scrape_mp_tenders(csv_file):
                                 "Document Download Start Date", "Document Download End Date",
                                 "Fee Payable To", "Fee Payable At"
                             ))
-                            if needs_detail:
-                            try:
-                                detail_soup = browser_page(page, tender.get("url", ""))
-                                detail = parse_detail(detail_soup, page.url)
-                                detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
-                                detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
-                                detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
-                                detail["Published Date"] = clean(detail.get("Published Date")) or published
-                                detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
-                                detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
-                                detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
-                                detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
-                                if not detail["Tender ID"]:
-                                    raise RuntimeError("detail Tender ID missing")
-                                existing_by_id[tender_id] = {**old, **detail}
-                                stats["detail_opened"] += 1
-                            except Exception as detail_exc:
-                                stats["errors"].append(
-                                    f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
-                                )
-                                # One bad tender must never stop or erase the rest.
-                                write_csv(csv_file, list(existing_by_id.values()))
-
+                            if fetch_details and tender_id:
+                            old = existing_by_id.get(tender_id, {})
+                            needs_detail = not all(clean(old.get(k)) for k in (
+                                "Department", "Division", "Sub Division",
+                                "PAC Amount", "EMD Fee", "Tender Fee",
+                                "Processing Fee", "Total Fee", "Location", "Pincode",
+                                "Work Description", "Product Category", "Sub Category",
+                                "Contract Type", "Bid Validity", "Pre Qualification Details",
+                                "Bid Submission Start Date", "Bid Submission End Date",
+                                "Document Download Start Date", "Document Download End Date",
+                                "Fee Payable To", "Fee Payable At"
+                            ))
+                            if needs_detail and detail_successes < batch_size:
+                                detail_candidates_seen += 1
+                                try:
+                                    detail_soup = browser_page(page, tender.get("url", ""))
+                                    detail = parse_detail(detail_soup, page.url)
+                                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                                    detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
+                                    detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
+                                    detail["Published Date"] = clean(detail.get("Published Date")) or published
+                                    detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
+                                    detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
+                                    detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
+                                    detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
+                                    if not detail["Tender ID"]:
+                                        raise RuntimeError("detail Tender ID missing")
+                                    existing_by_id[tender_id] = {**old, **detail}
+                                    stats["detail_opened"] += 1
+                                    detail_successes += 1
+                                except Exception as detail_exc:
+                                    stats["errors"].append(
+                                        f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
+                                    )
+                                    # Save successful records even when one tender fails.
+                                    write_csv(csv_file, list(existing_by_id.values()))
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
                     write_list_csv(
@@ -1162,6 +1174,25 @@ def scrape_mp_tenders(csv_file):
         }
         merged_rows.append(base)
     write_csv(csv_file, merged_rows)
+
+    # Advance only after the whole requested batch completed successfully.
+    # If a detail error occurred, keep the next run conservative at 10.
+    if detail_successes >= batch_size and not stats["errors"]:
+        next_batch_size = 50
+    elif detail_successes < batch_size or stats["errors"]:
+        next_batch_size = 10 if batch_size == 10 else 10
+    else:
+        next_batch_size = batch_size
+    batch_state_file.write_text(
+        json.dumps({
+            "next_batch_size": next_batch_size,
+            "last_batch_size": batch_size,
+            "last_batch_completed": detail_successes,
+            "detail_candidates_seen": detail_candidates_seen,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }, indent=2),
+        encoding="utf-8",
+    )
 
     return {
         "ok": True,
