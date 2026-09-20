@@ -2,12 +2,13 @@
   "status": "running",
   "process_started_at": "2026-09-20T14:47:21.888354+00:00",
   "total_tenders": 5256,
-  "detail_complete": 0,
-  "detail_remaining": 5256,
+  "detail_complete": 77,
+  "detail_remaining": 5179,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "7/90",
+  "organisation_progress": "8/90",
+  "current_organisation": "Directorate Farmer Welfare And Agriculture Development",
   "detail_batch_size": 100,
-  "detail_batch_completed": 70,
-  "updated_at": "2026-09-20T14:52:34.519605+00:00"
+  "detail_batch_completed": 77,
+  "updated_at": "2026-09-20T14:53:07.498671+00:00"
 }
