@@ -452,8 +452,11 @@ button:hover{
 }
 .table-wrap{
   width:100%;
-  overflow:auto;
-  max-height:calc(100vh - 250px);
+  overflow-x:auto;
+  overflow-y:auto;
+  max-height:62vh;
+  min-height:180px;
+  -webkit-overflow-scrolling:touch;
 }
 
 table{
@@ -621,6 +624,30 @@ td.title-cell{
   padding:25px;
   font-size:13px;
 }
+.empty-state-row td{
+  background:#fff7ed;
+  color:#b91c1c;
+  font-weight:800;
+  font-size:14px;
+  line-height:1.4;
+  text-align:center;
+  padding:28px 12px;
+  border-bottom:1px solid #fed7aa;
+  white-space:nowrap;
+}
+.empty-state-left{
+  position:sticky;
+  left:0;
+  z-index:3;
+  box-shadow:4px 0 8px rgba(15,23,42,.08);
+}
+.empty-state-right{
+  position:sticky;
+  right:0;
+  z-index:3;
+  box-shadow:-4px 0 8px rgba(15,23,42,.08);
+}
+.empty-state-center{text-align:center;}
 
 .loading-row{
   text-align:center;
@@ -886,7 +913,9 @@ td.title-cell{
     width:100%;
     max-width:100%;
     overflow-x:auto;
-    overflow-y:visible;
+    overflow-y:auto;
+    max-height:55vh;
+    min-height:180px;
     -webkit-overflow-scrolling:touch;
   }
 
@@ -994,6 +1023,11 @@ td.title-cell{
   .empty-row,
   .loading-row{
     padding:20px 10px;
+  }
+
+  .empty-state-row td{
+    font-size:13px;
+    padding:24px 8px;
   }
 }
 
@@ -2203,19 +2237,16 @@ function renderVirtualWindow(){
 
   if(!visibleRows.length){
     body.innerHTML =
-      `<tr>
-        <td colspan="14" class="empty-row">
-          कोई tender record नहीं मिला।
-        </td>
+      `<tr class="empty-state-row">
+        <td colspan="2" class="empty-state-side empty-state-left">कोई tender record नहीं मिला।</td>
+        <td colspan="10" class="empty-state-center">कोई tender record नहीं मिला।</td>
+        <td colspan="2" class="empty-state-side empty-state-right">कोई tender record नहीं मिला।</td>
       </tr>`;
     $("recordCount").textContent = "0 record(s) shown";
     return;
   }
 
-  const topSpacer = virtualSpacerRow(virtualTopHeight,"virtual-top-spacer");
-  const bottomSpacer = virtualSpacerRow(virtualBottomHeight,"virtual-bottom-spacer");
-
-  body.innerHTML = topSpacer + visibleRows.map((row,index) => {
+  body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
     const tenderId = escapeHtml(row["Tender ID"]);
     const title = escapeHtml(cleanDisplayTitle(row["Title"]));
@@ -2241,14 +2272,12 @@ function renderVirtualWindow(){
         <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
       </tr>
     `;
-  }).join("") + bottomSpacer;
+  }).join("");
 
   $("recordCount").textContent =
     virtualRows.length > virtualEnd
-      ? virtualRows.length + " matched • loaded " + virtualStart + "-" + virtualEnd
+      ? virtualRows.length + " matched • page " + (Math.floor(virtualStart / VIRTUAL_CHUNK_SIZE) + 1)
       : virtualRows.length + " record(s) shown";
-
-  requestAnimationFrame(updateVirtualSpacerHeights);
 }
 
 function updateVirtualSpacerHeights(){
@@ -2267,6 +2296,9 @@ function measureRenderedChunkHeight(){
 }
 
 function updateVirtualWindow(){
+  // Pagination controls handle 100-record pages. Scroll position no longer
+  // creates virtual spacer rows or changes the loaded page.
+  return;
   const wrap = $("tableWrap");
   if(!wrap || virtualBusy || !virtualRows.length) return;
 
