@@ -134,9 +134,18 @@ def find_critical_date(soup, label):
 
 
 def parse_chain(chain):
-    # Preserve delimiter positions exactly:
+    # MP Tender portal Organisation Chain is normally:
     # Organisation || Department || Division || Sub Division
-    parts = [clean(x) for x in clean(chain).split("||")]
+    # Some portal views render the same hierarchy with >> separators.
+    text = clean(chain)
+    if "||" in text:
+        parts = [clean(x) for x in text.split("||")]
+    elif ">>" in text:
+        parts = [clean(x) for x in text.split(">>")]
+    elif " > " in text:
+        parts = [clean(x) for x in text.split(" > ")]
+    else:
+        parts = [text] if text else []
     return tuple(parts[i] if i < len(parts) else "" for i in range(4))
 
 
