@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib import request as urllib_request, parse as urllib_parse
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 
 from scraper import scrape_mp_tenders
@@ -102,6 +102,45 @@ def telegram_api(method, params):
     data = urllib_parse.urlencode(params).encode("utf-8")
     with urllib_request.urlopen(urllib_request.Request(url, data=data), timeout=30) as response:
         return json.loads(response.read().decode("utf-8"))
+
+
+@app.get("/api/telegram/photo/<int:user_id>")
+def telegram_photo(user_id):
+    """Return the user's current Telegram profile photo through the server.
+
+    Telegram file URLs are temporary, so the browser must not store the
+    Bot-API file URL directly. This endpoint resolves a fresh URL each time.
+    """
+    try:
+        photos = telegram_api("getUserProfilePhotos", {
+            "user_id": int(user_id),
+            "offset": 0,
+            "limit": 1,
+        })
+        if not photos.get("ok"):
+            return Response(status=404)
+        photo_sets = photos.get("result", {}).get("photos", [])
+        if not photo_sets or not photo_sets[0]:
+            return Response(status=404)
+        photo = max(photo_sets[0], key=lambda item: int(item.get("width", 0)) * int(item.get("height", 0)))
+        file_id = clean(photo.get("file_id"))
+        if not file_id:
+            return Response(status=404)
+        file_info = telegram_api("getFile", {"file_id": file_id})
+        if not file_info.get("ok"):
+            return Response(status=404)
+        file_path = clean(file_info.get("result", {}).get("file_path"))
+        if not file_path:
+            return Response(status=404)
+        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+        url = f"https://api.telegram.org/file/bot{token}/{file_path}"
+        with urllib_request.urlopen(url, timeout=20) as response:
+            image = response.read()
+            content_type = response.headers.get("Content-Type", "image/jpeg")
+        return Response(image, mimetype=content_type.split(";")[0], headers={"Cache-Control": "private, max-age=300"})
+    except Exception as exc:
+        print(f"Telegram profile photo proxy failed: {exc}")
+        return Response(status=404)
 
 
 @app.get("/api/telegram/config")
