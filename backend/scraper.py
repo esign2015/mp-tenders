@@ -1149,6 +1149,31 @@ def scrape_mp_tenders(csv_file):
                                     existing_by_id[tender_id] = {**old, **detail}
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
+                                    # Save every 10 successful detail pages so the
+                                    # checkpoint is never lost and progress becomes visible.
+                                    if detail_successes % 10 == 0:
+                                        write_csv(csv_file, list(existing_by_id.values()))
+                                        complete_count = sum(
+                                            1 for r in existing_by_id.values()
+                                            if all(clean(r.get(k)) for k in (
+                                                "PAC Amount", "EMD Fee", "Tender Fee",
+                                                "Processing Fee", "Pincode", "Department",
+                                                "Division", "Sub Division"
+                                            ))
+                                        )
+                                        write_extraction_status(csv_file, {
+                                            "status": "running",
+                                            "process_started_at": process_started_at,
+                                            "total_tenders": len(existing_by_id),
+                                            "detail_complete": complete_count,
+                                            "detail_remaining": max(0, len(existing_by_id) - complete_count),
+                                            "errors": len(stats["errors"]),
+                                            "latest_error": stats["errors"][-1] if stats["errors"] else "",
+                                            "organisation_progress": f"{index}/{len(organisations)}",
+                                            "detail_batch_size": batch_size,
+                                            "detail_batch_completed": detail_successes,
+                                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                                        })
                                 except Exception as detail_exc:
                                     stats["errors"].append(
                                         f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
