@@ -866,10 +866,11 @@ def scrape_mp_tenders(csv_file):
                             # including the full Organisation Chain. Older CSV records may contain
                             # only the organisation name, so this also backfills Department,
                             # Division and Sub Division on the next run.
-                            needs_detail = not all(clean(old.get(k)) for k in (
+                            force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0") == "1"
+                            needs_detail = force_detail or not all(clean(old.get(k)) for k in (
                                 "Department", "Division", "Sub Division",
                                 "PAC Amount", "EMD Fee", "Tender Fee",
-                                "Processing Fee", "Location", "Pincode"
+                                "Processing Fee", "Total Fee", "Location", "Pincode"
                             ))
                             if needs_detail:
                                 try:
