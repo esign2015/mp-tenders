@@ -997,6 +997,24 @@ td.title-cell{
   width:100%;margin-top:10px;padding:8px;border:0;border-radius:7px;
   background:#fee2e2;color:#b91c1c;font-weight:800;cursor:pointer;
 }
+.telegram-login-start{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:44px;
+  margin-top:8px;
+  padding:11px 14px;
+  border:0;
+  border-radius:8px;
+  background:#229ed9;
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+}
+.telegram-login-start:hover{filter:brightness(1.05)}
+.telegram-login-start.loading{opacity:.7;cursor:wait}
 .telegram-gate-card .telegram-join-btn{display:none}
 .telegram-gate-card #telegramCheckBtn{display:none}
 body.telegram-locked .main-area,
@@ -1009,6 +1027,7 @@ body.telegram-locked .site-footer{visibility:hidden}
   <div class="telegram-gate-card">
     <h2>🔐 Telegram Login</h2>
     <p>Dashboard खोलने के लिए अपने Telegram account से login करें। Login के बाद channel membership अपने-आप check होगी।</p>
+    <button class="telegram-login-start" id="telegramLoginStart" type="button">🔵 Login with Telegram</button>
     <div class="telegram-login-wrap" id="telegramLoginWrap"></div>
     <a class="telegram-join-btn" id="telegramJoinBtn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Join @mptendersalert</a>
     <button class="telegram-verify-btn" id="telegramCheckBtn" type="button">✅ Check Again</button>
@@ -1266,9 +1285,16 @@ function telegramStatus(message, ok=false){
 
 function showTelegramLogin(){
   const loginWrap=document.getElementById("telegramLoginWrap");
+  const loginStart=document.getElementById("telegramLoginStart");
   const joinBtn=document.getElementById("telegramJoinBtn");
   const checkBtn=document.getElementById("telegramCheckBtn");
+
   if(loginWrap && !loginWrap.querySelector("iframe")) setupTelegramLogin();
+
+  if(loginStart && loginWrap?.querySelector("iframe")){
+    loginStart.style.display="none";
+  }
+
   if(joinBtn) joinBtn.style.display=telegramAuthData ? "" : "none";
   if(checkBtn) checkBtn.style.display=telegramAuthData ? "" : "none";
 }
@@ -1372,12 +1398,27 @@ async function verifyTelegramMembership(user, persist=true){
 async function setupTelegramLogin(){
   const status = document.getElementById("telegramGateStatus");
   const wrap=document.getElementById("telegramLoginWrap");
+  const start=document.getElementById("telegramLoginStart");
   if(!wrap || wrap.querySelector("iframe")) return;
+
+  if(start){
+    start.classList.add("loading");
+    start.textContent="⏳ Telegram Login तैयार हो रहा है...";
+  }
+
   try{
-    const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{cache:"no-store"});
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
+      cache:"no-store",
+      signal:controller.signal
+    });
+    clearTimeout(timeout);
+
     if(!response.ok) throw new Error("Telegram bot configuration unavailable");
     const config=await response.json();
     if(!config.username) throw new Error("Telegram bot username is not configured");
+
     const script=document.createElement("script");
     script.src="https://telegram.org/js/telegram-widget.js?22";
     script.async=true;
@@ -1387,10 +1428,20 @@ async function setupTelegramLogin(){
     script.setAttribute("data-request-access","write");
     script.setAttribute("data-onauth","onTelegramAuth(user)");
     wrap.appendChild(script);
-    if(status) status.textContent="Telegram Login पर क्लिक करके आगे बढ़ें।";
+
+    if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
+    if(start) start.style.display="none";
   }catch(error){
-    console.error(error);
-    telegramStatus("Telegram login setup उपलब्ध नहीं है। BotFather में इस वेबसाइट domain को allow करना जरूरी है।");
+    console.error("Telegram Login setup failed:",error);
+    if(start){
+      start.classList.remove("loading");
+      start.textContent="🔄 Retry Telegram Login";
+      start.style.display="inline-flex";
+    }
+    const message = error.name === "AbortError"
+      ? "Telegram server से response देर से आ रहा है। Retry Telegram Login दबाएँ।"
+      : "Telegram Login अभी load नहीं हुआ। Retry Telegram Login दबाएँ।";
+    telegramStatus(message);
   }
 }
 
@@ -1414,10 +1465,12 @@ async function checkStoredTelegram(){
 
 function setupTelegramFlow(){
   const checkBtn=document.getElementById("telegramCheckBtn");
+  const loginStart=document.getElementById("telegramLoginStart");
   const profileBtn=document.getElementById("telegramProfileBtn");
   const logoutBtn=document.getElementById("telegramLogoutBtn");
   const profileMenu=document.getElementById("telegramProfileMenu");
   if(checkBtn) checkBtn.onclick=()=>telegramAuthData ? verifyTelegramMembership(telegramAuthData,false) : setupTelegramLogin();
+  if(loginStart) loginStart.onclick=()=>setupTelegramLogin();
   if(profileBtn) profileBtn.onclick=()=>profileMenu?.classList.toggle("open");
   if(logoutBtn) logoutBtn.onclick=logoutTelegram;
   document.addEventListener("click",(event)=>{
