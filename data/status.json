@@ -1,14 +1,13 @@
 {
-  "status": "running",
+  "status": "completed",
   "process_started_at": "2026-09-20T14:14:46.980698+00:00",
   "total_tenders": 5256,
-  "detail_complete": 100,
-  "detail_remaining": 5156,
+  "detail_complete": 0,
+  "detail_remaining": 5256,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "87/90",
-  "current_organisation": "THE CHIEF ELECTORAL OFFICER",
+  "organisation_progress": "90/90",
   "detail_batch_size": 100,
   "detail_batch_completed": 100,
-  "updated_at": "2026-09-20T14:31:57.206780+00:00"
+  "updated_at": "2026-09-20T14:32:19.449611+00:00"
 }
