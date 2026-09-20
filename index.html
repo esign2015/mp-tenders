@@ -1601,7 +1601,7 @@ function setupTelegramFlow(){
   });
 }
 
-async async function enforceTelegramAccess(){
+async function enforceTelegramAccess(){
   setupTelegramFlow();
   if(await checkStoredTelegram()) return;
   showTelegramLogin();
