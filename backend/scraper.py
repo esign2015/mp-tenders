@@ -687,7 +687,7 @@ def find_live_tender_link(page, tender_id="", tender_title="", tender_ref=""):
     return None
 
 
-def open_tender_detail_by_search(page, tender):
+def open_tender_detail_dual(page, tender, org):
     """Find a tender by Tender ID from the stable MP home page search box,
     click the result title, and parse the resulting detail page.
 
@@ -757,6 +757,56 @@ def open_tender_detail_by_search(page, tender):
             f"current_url={page.url}"
         )
     return detail_soup
+
+
+def open_organisation_page_from_home(page):
+    """Open Tenders by Organisation by clicking from the stable portal home page.
+    Never goto() the JSF organisation URL directly."""
+    browser_page(page, PORTAL)
+    candidates = page.locator("a")
+    for i in range(candidates.count()):
+        a = candidates.nth(i)
+        text = clean(a.inner_text()).casefold()
+        title = clean(a.get_attribute("title")).casefold()
+        if "tenders by organisation" in text or "tenders by organisation" in title:
+            return click_live_anchor(page, a)
+    raise RuntimeError("Tenders by Organisation link not found on MP Tender home page")
+
+
+def open_tender_detail_by_organisation(page, tender, org):
+    """Open a tender from its live organisation list.
+    This is the first extraction route; it never reuses a saved DirectLink URL."""
+    tender_id = clean(tender.get("tender_id") or tender.get("Tender ID"))
+    tender_title = clean(tender.get("title") or tender.get("Title"))
+    tender_ref = clean(tender.get("reference") or tender.get("Reference Number"))
+    list_soup = open_organisation_list_by_click(page, org)
+    chosen = find_live_tender_link(page, tender_id, tender_title, tender_ref)
+    if chosen is None:
+        # The list can paginate; use the current live page search as a fallback
+        # only after the organisation route has been attempted.
+        raise RuntimeError(f"Live organisation tender link not found for {tender_id}")
+    detail_soup = click_live_anchor(page, chosen)
+    detail_text = clean(detail_soup.get_text(" ", strip=True))
+    if tender_id.casefold() not in detail_text.casefold():
+        raise RuntimeError(f"Organisation click did not open Tender Details for {tender_id}; current_url={page.url}")
+    return detail_soup
+
+
+def open_tender_detail_dual(page, tender, org):
+    """Use both supported portal paths:
+    1) Organisation list -> live Title click.
+    2) Home page -> Tender ID search -> Go -> live Title click.
+    If the first route fails, the second route is used automatically."""
+    errors = []
+    try:
+        return open_tender_detail_by_organisation(page, tender, org)
+    except Exception as exc:
+        errors.append(f"organisation route: {type(exc).__name__}: {exc}")
+    try:
+        return open_tender_detail_by_search(page, tender)
+    except Exception as exc:
+        errors.append(f"home search route: {type(exc).__name__}: {exc}")
+        raise RuntimeError(" | ".join(errors))
 
 
 def open_tender_detail_by_click(page, tender):
@@ -957,11 +1007,11 @@ def run_detail_validation(csv_file, organisations):
                     tender_ref = clean(tender.get("reference"))
 
                     # Use the stable home-page Tender ID search for every sample.
-                    detail_soup = open_tender_detail_by_search(page, {
+                    detail_soup = open_tender_detail_dual(page, {
                         "tender_id": tender_id,
                         "title": tender_title,
                         "reference": tender_ref,
-                    })
+                    }, target_org)
                     detail = parse_detail(detail_soup, PORTAL)
                     list_dates = parse_list_dates(tender)
                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
@@ -1227,16 +1277,35 @@ def scrape_mp_tenders(csv_file):
         "errors": 0,
         "latest_error": "",
         "organisation_progress": "0/0",
-        "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "100") or 100),
+        "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "0") or 0),
         "detail_batch_completed": 0,
         "updated_at": process_started_at,
     })
 
     session = requests.Session()
 
-    response = request(session, ORG_URL, sleep=0.5)
-    soup = BeautifulSoup(response.text, "html.parser")
-    organisations = parse_organisation_rows(soup, ORG_URL)
+    # Primary organisation discovery path: open the stable MP home page,
+    # click "Tenders by Organisation", then parse the live organisation table.
+    # This avoids the direct ORG_URL request that previously timed out.
+    with sync_playwright() as bootstrap_pw:
+        bootstrap_browser = bootstrap_pw.chromium.launch(headless=True)
+        bootstrap_page = bootstrap_browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
+        )
+        try:
+            soup = open_organisation_page_from_home(bootstrap_page)
+            organisations = parse_organisation_rows(soup, bootstrap_page.url)
+        finally:
+            bootstrap_browser.close()
+
+    if not organisations:
+        # Secondary fallback: retain the HTTP parser in case the browser route
+        # is temporarily unavailable.
+        response = request(session, ORG_URL, retries=5, sleep=2.0)
+        soup = BeautifulSoup(response.text, "html.parser")
+        organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
         raise RuntimeError("Organisation list could not be parsed from MP Tender portal.")
 
@@ -1479,7 +1548,7 @@ def scrape_mp_tenders(csv_file):
                                 "Bid Opening Date", "Document Download Start Date",
                                 "Document Download End Date", "Fee Payable To", "Fee Payable At"
                             ))
-                            if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and detail_successes < batch_size:
+                            if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and (batch_size <= 0 or detail_successes < batch_size):
                                 detail_candidates_seen += 1
                                 try:
                                     # IMPORTANT: never reuse the tender-list URL.
@@ -1693,7 +1762,7 @@ def scrape_mp_tenders(csv_file):
             "last_batch_completed": detail_successes,
             "checkpoint_interval": 10,
             "detail_candidates_seen": detail_candidates_seen,
-            "completed_detail_ids": detail_completed_ids[:batch_size] or recovered_completed_ids[:batch_size],
+            "completed_detail_ids": (detail_completed_ids if batch_size <= 0 else detail_completed_ids[:batch_size]) or (recovered_completed_ids if batch_size <= 0 else recovered_completed_ids[:batch_size]),
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }, indent=2),
         encoding="utf-8",
