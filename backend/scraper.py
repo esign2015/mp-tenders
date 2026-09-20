@@ -22,7 +22,12 @@ FIELDS = [
     "Tender ID", "Published Date", "Closing Date", "Opening Date",
     "Title", "Reference Number", "Organisation", "Department",
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
-    "Tender Fee", "Processing Fee", "Total Fee", "Location", "Pincode", "Status", "URL",
+    "Tender Fee", "Processing Fee", "Total Fee", "Location", "Pincode",
+    "Work Description", "Product Category", "Sub Category", "Contract Type",
+    "Bid Validity", "Pre Qualification Details",
+    "Bid Submission Start Date", "Bid Submission End Date",
+    "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
+    "Fee Payable To", "Fee Payable At", "Status", "URL",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
@@ -147,6 +152,10 @@ def parse_detail(soup, url):
     publish = find_critical_date(soup, "Publish Date")
     closing = find_critical_date(soup, "Bid Submission End Date")
     opening = find_critical_date(soup, "Bid Opening Date")
+    bid_submission_start = find_critical_date(soup, "Bid Submission Start Date")
+    bid_submission_end = find_critical_date(soup, "Bid Submission End Date")
+    document_start = find_critical_date(soup, "Document Download / Sale Start Date")
+    document_end = find_critical_date(soup, "Document Download / Sale End Date")
     if not title:
         title = work_description
 
@@ -156,6 +165,13 @@ def parse_detail(soup, url):
     emd = find_label_value(soup, ["EMD Amount in ₹"])
     location = find_label_value(soup, ["Location"])
     pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
+    product_category = find_label_value(soup, ["Product Category"])
+    sub_category = find_label_value(soup, ["Sub Category"])
+    contract_type = find_label_value(soup, ["Contract Type"])
+    bid_validity = find_label_value(soup, ["Bid Validity"])
+    pre_qualification = find_label_value(soup, ["Pre Qualification Details", "Pre-Qualification Details"])
+    fee_payable_to = find_label_value(soup, ["Fee Payable To"])
+    fee_payable_at = find_label_value(soup, ["Fee Payable At"])
     # Dashboard Total Fee = Tender Fee + EMD + Processing Fee.
     # Robust fallback: the MP portal often renders label + value in the same
     # table cell, so cell-pair parsing alone can miss these fields.
@@ -181,6 +197,14 @@ def parse_detail(soup, url):
         closing = between("Bid Submission End Date", ["Financial Bid Opening Date", "Document Documents", "Tender Documents"])
     if not opening:
         opening = between("Bid Opening Date", ["Document Download / Sale Start Date", "Document Download / Sale End Date"])
+    if not bid_submission_start:
+        bid_submission_start = between("Bid Submission Start Date", ["Bid Submission End Date", "Financial Bid Opening Date"])
+    if not bid_submission_end:
+        bid_submission_end = between("Bid Submission End Date", ["Financial Bid Opening Date", "Tender Documents"])
+    if not document_start:
+        document_start = between("Document Download / Sale Start Date", ["Document Download / Sale End Date", "Bid Submission Start Date"])
+    if not document_end:
+        document_end = between("Document Download / Sale End Date", ["Bid Submission Start Date", "Bid Submission End Date"])
     if not pac:
         pac = between("Tender Value in ₹", ["Product Category", "Sub category", "Contract Type"])
     if not tender_fee:
@@ -213,6 +237,19 @@ def parse_detail(soup, url):
         "Processing Fee": money_text(processing_fee),
         "Total Fee": str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}",
         "Pincode": re.sub(r"\D", "", clean(pincode))[:6],
+        "Work Description": clean(work_description),
+        "Product Category": clean(product_category),
+        "Sub Category": clean(sub_category),
+        "Contract Type": clean(contract_type),
+        "Bid Validity": clean(bid_validity),
+        "Pre Qualification Details": clean(pre_qualification),
+        "Bid Submission Start Date": clean(bid_submission_start),
+        "Bid Submission End Date": clean(bid_submission_end or closing),
+        "Bid Opening Date": clean(opening),
+        "Document Download Start Date": clean(document_start),
+        "Document Download End Date": clean(document_end),
+        "Fee Payable To": clean(fee_payable_to),
+        "Fee Payable At": clean(fee_payable_at),
         "Status": "Open",
         "URL": url,
     }
@@ -757,6 +794,165 @@ def run_detail_validation(csv_file, organisations):
     }
 
 
+
+def parse_portal_datetime(value):
+    value = clean(value)
+    formats = [
+        "%d/%m/%Y %I:%M %p", "%d-%m-%Y %I:%M %p",
+        "%d/%b/%Y %I:%M %p", "%d-%b-%Y %I:%M %p",
+        "%d/%m/%Y %H:%M", "%d-%m-%Y %H:%M",
+        "%d/%b/%Y %H:%M", "%d-%b-%Y %H:%M",
+        "%d/%m/%Y", "%d-%m-%Y", "%d/%b/%Y", "%d-%b-%Y",
+    ]
+    for fmt in formats:
+        try:
+            return datetime.strptime(value, fmt).replace(tzinfo=timezone(timedelta(hours=5, minutes=30)))
+        except ValueError:
+            continue
+    return None
+
+
+def should_run_monitor_now():
+    now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
+    if not (9 <= now.hour <= 19):
+        return False
+    minutes_from_anchor = (now.hour * 60 + now.minute) - (9 * 60)
+    exact_times = {(9, 0), (11, 0), (13, 0), (15, 0), (17, 0), (19, 0)}
+    if (now.hour, now.minute) in exact_times:
+        return True
+    return minutes_from_anchor >= 0 and minutes_from_anchor % 14 == 0
+
+
+def monitor_tender_changes(csv_file):
+    if not should_run_monitor_now():
+        print("MONITOR: outside 14-minute/fixed-time window; skipped.")
+        return {"ok": True, "skipped": True, "changes": 0}
+
+    org_csv = csv_file.parent / "organisations.csv"
+    tender_list_csv = csv_file.parent / "organisation_tenders.csv"
+    existing_rows = read_existing(csv_file)
+    existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
+    old_org_rows = read_existing(org_csv)
+    old_org_by_name = {clean(r.get("Organisation Name")).casefold(): r for r in old_org_rows if clean(r.get("Organisation Name"))}
+
+    session = requests.Session()
+    response = request(session, ORG_URL, sleep=0.4)
+    soup = BeautifulSoup(response.text, "html.parser")
+    live_orgs = parse_organisation_rows(soup, ORG_URL)
+    if not live_orgs:
+        raise RuntimeError("Monitor could not parse live organisation counts.")
+
+    now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
+    changed_orgs = []
+    for org in live_orgs:
+        name = clean(org["name"])
+        old = old_org_by_name.get(name.casefold(), {})
+        old_count = int(re.sub(r"\D", "", clean(old.get("Tender Count"))) or 0)
+        active_expected = 0
+        for row in existing_by_id.values():
+            if clean(row.get("Organisation")).casefold() != name.casefold():
+                continue
+            closing = parse_portal_datetime(row.get("Closing Date"))
+            if not closing or closing > now:
+                active_expected += 1
+        if org["count"] != old_count or org["count"] != active_expected:
+            changed_orgs.append(org)
+
+    if not changed_orgs:
+        print(f"MONITOR: no changes ({len(live_orgs)} organisations).")
+        return {"ok": True, "changes": 0, "organisations_checked": len(live_orgs)}
+
+    tender_list_rows = read_existing(tender_list_csv)
+    tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in tender_list_rows if clean(r.get("Tender ID"))}
+    stats = {"organisations_checked": len(live_orgs), "organisations_changed": 0, "new_tenders": 0, "details_opened": 0}
+
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(user_agent=HEADERS["User-Agent"], locale="en-IN", viewport={"width": 1920, "height": 1080})
+        try:
+            for org in changed_orgs:
+                try:
+                    rows, _ = browser_get_all_tender_rows(page, org, org["count"])
+                    stats["organisations_changed"] += 1
+                    count_match = len(rows) == org["count"]
+                    for tender in rows:
+                        tender_id = clean(tender.get("tender_id"))
+                        if not tender_id:
+                            continue
+                        published, closing, opening = parse_list_dates(tender)
+                        old = existing_by_id.get(tender_id, {})
+                        tender_list_by_id[tender_id] = {
+                            "S.No.": len(tender_list_by_id) + 1,
+                            "Organisation Name": org["name"],
+                            "Portal Tender Count": org["count"],
+                            "Copied Tender Count": len(rows),
+                            "Count Status": "MATCH" if count_match else "MISMATCH",
+                            "Tender ID": tender_id,
+                            "Title": tender.get("title", ""),
+                            "Reference Number": tender.get("reference", ""),
+                            "Published Date": published,
+                            "Closing Date": closing,
+                            "Opening Date": opening,
+                            "Tender URL": tender.get("url", ""),
+                            "Raw Row": tender.get("row_text", ""),
+                        }
+                        needs_detail = (
+                            not old
+                            or clean(old.get("Closing Date")) != clean(closing)
+                            or not all(clean(old.get(k)) for k in (
+                                "Department", "Division", "Sub Division",
+                                "PAC Amount", "EMD Fee", "Tender Fee",
+                                "Processing Fee", "Total Fee", "Work Description"
+                            ))
+                        )
+                        if needs_detail:
+                            try:
+                                detail_soup = browser_page(page, tender.get("url", ""))
+                                detail = parse_detail(detail_soup, page.url)
+                                detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                                detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
+                                detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
+                                detail["Published Date"] = clean(detail.get("Published Date")) or published
+                                detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
+                                detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
+                                detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
+                                detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
+                                existing_by_id[tender_id] = {**old, **detail}
+                                stats["details_opened"] += 1
+                                if not old:
+                                    stats["new_tenders"] += 1
+                            except Exception as exc:
+                                print(f"MONITOR detail error {org['name']} / {tender_id}: {exc}")
+                        else:
+                            existing_by_id[tender_id] = {
+                                **old,
+                                "Title": clean(tender.get("title")) or old.get("Title", ""),
+                                "Reference Number": clean(tender.get("reference")) or old.get("Reference Number", ""),
+                                "Published Date": published or old.get("Published Date", ""),
+                                "Closing Date": closing or old.get("Closing Date", ""),
+                                "Opening Date": opening or old.get("Opening Date", ""),
+                                "Organisation": org["name"],
+                                "URL": clean(tender.get("url")) or old.get("URL", ""),
+                            }
+                except Exception as exc:
+                    print(f"MONITOR organisation error {org['name']}: {exc}")
+        finally:
+            browser.close()
+
+    retrieved_at = now.isoformat()
+    new_org_rows = [{
+        "S.No.": i,
+        "Organisation Name": org["name"],
+        "Tender Count": org["count"],
+        "Portal URL": org["url"],
+        "Retrieved At": retrieved_at,
+    } for i, org in enumerate(live_orgs, 1)]
+    write_list_csv(org_csv, ORG_FIELDS, new_org_rows)
+    write_csv(csv_file, list(existing_by_id.values()))
+    write_list_csv(tender_list_csv, ORG_TENDER_FIELDS, list(tender_list_by_id.values()))
+    print(f"MONITOR COMPLETE: {stats}")
+    return {"ok": True, **stats}
+
 def scrape_mp_tenders(csv_file):
     """
     Full MP tender collection:
@@ -956,4 +1152,7 @@ if __name__ == "__main__":
         "CSV_FILE",
         Path(__file__).resolve().parent.parent / "all_tenders_org_detailed.csv",
     ))
-    print(scrape_mp_tenders(target))
+    if os.getenv("MONITOR_ONLY") == "1":
+        print(monitor_tender_changes(target))
+    else:
+        print(scrape_mp_tenders(target))
