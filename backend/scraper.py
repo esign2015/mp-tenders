@@ -1287,15 +1287,25 @@ def scrape_mp_tenders(csv_file):
                             # Organisation hierarchy is available directly in the tender
                             # list row. Fill it immediately; do not spend a detail-page
                             # request just to obtain these four fields.
+                            # LOCK the Organisation Chain exactly as it appears on
+                            # the tender-list page. Detail-page parsing must never replace
+                            # these hierarchy fields with a partial/different value.
                             chain = clean(tender.get("organisation_chain"))
+                            locked_chain = None
                             if chain:
                                 chain_org, chain_department, chain_division, chain_sub_division = parse_chain(chain)
+                                locked_chain = (
+                                    chain_org or org["name"],
+                                    chain_department,
+                                    chain_division,
+                                    chain_sub_division,
+                                )
                                 old = {
                                     **old,
-                                    "Organisation": chain_org or clean(old.get("Organisation")) or org["name"],
-                                    "Department": chain_department or clean(old.get("Department")),
-                                    "Division": chain_division or clean(old.get("Division")),
-                                    "Sub Division": chain_sub_division or clean(old.get("Sub Division")),
+                                    "Organisation": locked_chain[0],
+                                    "Department": locked_chain[1],
+                                    "Division": locked_chain[2],
+                                    "Sub Division": locked_chain[3],
                                 }
                                 existing_by_id[tender_id] = old
 
@@ -1350,7 +1360,15 @@ def scrape_mp_tenders(csv_file):
                                         "Bid Validity","Pre Qualification Details"
                                     )):
                                         raise RuntimeError("detail page contained no usable tender detail fields")
-                                    existing_by_id[tender_id] = {**old, **detail, "Detail Extracted": "YES"}
+                                    merged_detail = {**old, **detail, "Detail Extracted": "YES"}
+                                    # Keep the exact four-level Organisation Chain from
+                                    # the tender-list row, even if detail parsing differs.
+                                    if locked_chain:
+                                        merged_detail["Organisation"] = locked_chain[0]
+                                        merged_detail["Department"] = locked_chain[1]
+                                        merged_detail["Division"] = locked_chain[2]
+                                        merged_detail["Sub Division"] = locked_chain[3]
+                                    existing_by_id[tender_id] = merged_detail
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
                                     detail_completed_ids.append(tender_id)
