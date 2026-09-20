@@ -2944,6 +2944,27 @@ function exportPdf(){
     alternateRowStyles:{
       fillColor:LIGHT_BLUE
     },
+    // Highlight urgent tenders only in the S.No. cell, not the full row.
+    didParseCell:function(data){
+      if(data.section !== "body") return;
+      const source = data.row.raw && data.row.raw.__source;
+      if(!source) return;
+      const closing = parseDate(source["Closing Date"]);
+      if(!closing) return;
+
+      const hoursLeft = (closing.getTime() - Date.now()) / 3600000;
+      if(hoursLeft > 0 && hoursLeft <= 24){
+        data.cell.styles.fillColor = [254,226,226];
+        data.cell.styles.textColor = [153,27,27];
+        if(data.column.index === 0){
+          data.cell.styles.fontStyle = "bold";
+        }
+      }else if(hoursLeft > 24 && hoursLeft <= 72 && data.column.index === 0){
+        data.cell.styles.fillColor = [255,237,213];
+        data.cell.styles.textColor = [154,52,18];
+        data.cell.styles.fontStyle = "bold";
+      }
+    },
     columnStyles:{
       /* A3 landscape usable width: 400mm. Keep left/right margins equal. */
       0:{cellWidth:10,halign:"center"},
@@ -3128,13 +3149,13 @@ function exportPdf(){
         10,
         36
       );
-    },
-
-    didDrawPage:function(){
-      // Front-layer watermark: drawn after the table so it appears above
-      // the tender rows on every PDF page.
-      doc.saveGraphicsState();
-      doc.setTextColor(...WATERMARK);
+      // Color watermark: intentionally light and behind the table.
+      // It remains visible through the light table background without hiding text.
+      if(doc.setGState && doc.GState){
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({opacity:0.13}));
+      }
+      doc.setTextColor(38,116,180);
       doc.setFont("helvetica","bold");
       doc.setFontSize(34);
       doc.text(
@@ -3146,8 +3167,12 @@ function exportPdf(){
           angle:35
         }
       );
-      doc.restoreGraphicsState();
+      if(doc.setGState && doc.GState){
+        doc.restoreGraphicsState();
+      }
+    },
 
+    didDrawPage:function(){
       // Blue footer on every page.
       doc.setFillColor(...BLUE);
       doc.rect(0,pageHeight-13,pageWidth,13,"F");
