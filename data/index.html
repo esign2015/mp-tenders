@@ -30,7 +30,7 @@ function manualRefresh(){
 }
 async function load(){
  try{
-  const r=await fetch('./status.json?t='+Date.now(),{cache:'no-store'}); const s=await r.json();
+  const r=await fetch('https://raw.githubusercontent.com/esign2015/mp-tenders/main/data/status.json?t='+Date.now(),{cache:'no-store'}); const s=await r.json();
   total.textContent=s.total_tenders??'—'; done.textContent=s.detail_complete??'—'; remain.textContent=s.detail_remaining??'—';
   errors.textContent=s.errors??0; batch.textContent=s.detail_batch_completed??0; org.textContent=s.organisation_progress??'—';
   const p=s.total_tenders?Math.min(100,(s.detail_complete/s.total_tenders)*100):0; fill.style.width=p+'%';
