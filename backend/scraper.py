@@ -492,11 +492,21 @@ def parse_tender_rows(soup, base):
             reference = clean(reference).strip("[]")
             tender_id = clean(tender_id).strip("[]")
 
+            # The organisation chain is already present in the tender-list row.
+            # Capture it here so Organisation / Department / Division / Sub Division
+            # do not require opening the detail page.
+            organisation_chain = ""
+            for cell_text in texts:
+                if "||" in cell_text:
+                    organisation_chain = clean(cell_text)
+                    break
+
             result.append({
                 "url": href,
                 "tender_id": tender_id,
                 "reference": reference,
                 "title": title,
+                "organisation_chain": organisation_chain,
                 "row_text": full_text,
             })
 
@@ -1082,7 +1092,12 @@ def scrape_mp_tenders(csv_file):
         batch_state = json.loads(batch_state_file.read_text(encoding="utf-8"))
     except Exception:
         batch_state = {}
-    batch_size = 50 if int(batch_state.get("next_batch_size", 10)) >= 50 else 10
+    # Detail extraction is no longer artificially capped at 10 records.
+    # Use 100 per run by default; an environment override can tune it.
+    try:
+        batch_size = max(10, min(500, int(os.getenv("DETAIL_BATCH_SIZE", "100"))))
+    except ValueError:
+        batch_size = 100
     detail_successes = 0
     detail_candidates_seen = 0
     # One Chromium session is used throughout because the portal uses
@@ -1148,6 +1163,22 @@ def scrape_mp_tenders(csv_file):
 
                         if fetch_details and tender_id:
                             old = existing_by_id.get(tender_id, {})
+
+                            # Organisation hierarchy is available directly in the tender
+                            # list row. Fill it immediately; do not spend a detail-page
+                            # request just to obtain these four fields.
+                            chain = clean(tender.get("organisation_chain"))
+                            if chain:
+                                chain_org, chain_department, chain_division, chain_sub_division = parse_chain(chain)
+                                old = {
+                                    **old,
+                                    "Organisation": chain_org or clean(old.get("Organisation")) or org["name"],
+                                    "Department": chain_department or clean(old.get("Department")),
+                                    "Division": chain_division or clean(old.get("Division")),
+                                    "Sub Division": chain_sub_division or clean(old.get("Sub Division")),
+                                }
+                                existing_by_id[tender_id] = old
+
                             # Re-open a detail page whenever any important detail is missing,
                             # including the full Organisation Chain. Older CSV records may contain
                             # Missing detail fields are backfilled incrementally.
@@ -1329,12 +1360,10 @@ def scrape_mp_tenders(csv_file):
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    # Advance only after the whole requested batch completed successfully.
-    # If a detail error occurred, keep the next run conservative at 10.
-    if detail_successes >= batch_size and not stats["errors"]:
-        next_batch_size = 50
-    elif detail_successes < batch_size or stats["errors"]:
-        next_batch_size = 10 if batch_size == 10 else 10
+    # Keep the next run at the configured full batch size. A failed detail
+    # page must not reduce the whole project back to an artificial 10-record cap.
+    if stats["errors"]:
+        next_batch_size = batch_size
     else:
         next_batch_size = batch_size
     batch_state_file.write_text(
