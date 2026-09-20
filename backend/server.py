@@ -46,6 +46,54 @@ def clean(value):
     return str(value or "").strip()
 
 
+def telegram_profile_photo_url(user_id):
+    """
+    Telegram Login's photo_url is not guaranteed to be present on every
+    successful widget response. When it is missing, ask the Bot API for the
+    user's latest profile photo and convert its file_id into a short-lived
+    HTTPS file URL. The bot token never leaves the server.
+    """
+    try:
+        photos = telegram_api("getUserProfilePhotos", {
+            "user_id": int(user_id),
+            "offset": 0,
+            "limit": 1,
+        })
+        if not photos.get("ok"):
+            return ""
+
+        photo_sets = photos.get("result", {}).get("photos", [])
+        if not photo_sets:
+            return ""
+
+        sizes = photo_sets[0]
+        if not sizes:
+            return ""
+
+        # Prefer the largest available size.
+        photo = max(
+            sizes,
+            key=lambda item: int(item.get("width", 0)) * int(item.get("height", 0))
+        )
+        file_id = clean(photo.get("file_id"))
+        if not file_id:
+            return ""
+
+        file_info = telegram_api("getFile", {"file_id": file_id})
+        if not file_info.get("ok"):
+            return ""
+
+        file_path = clean(file_info.get("result", {}).get("file_path"))
+        if not file_path:
+            return ""
+
+        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+        return f"https://api.telegram.org/file/bot{token}/{file_path}"
+    except Exception as exc:
+        print(f"Telegram profile photo lookup failed: {exc}")
+        return ""
+
+
 def telegram_api(method, params):
     token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
     if not token:
@@ -108,7 +156,21 @@ def telegram_verify():
     if not allowed:
         return jsonify({"verified": False, "message": "You are not a member of the Telegram channel. Please join it first."}), 403
 
-    return jsonify({"verified": True, "id": user_id, "username": payload.get("username", ""), "first_name": payload.get("first_name", ""), "last_name": payload.get("last_name", ""), "photo_url": payload.get("photo_url", ""), "message": "Telegram membership verified."})
+    # Use the Login Widget photo when available; otherwise fetch the
+    # latest Telegram profile photo through the Bot API.
+    photo_url = clean(payload.get("photo_url"))
+    if not photo_url:
+        photo_url = telegram_profile_photo_url(user_id)
+
+    return jsonify({
+        "verified": True,
+        "id": user_id,
+        "username": payload.get("username", ""),
+        "first_name": payload.get("first_name", ""),
+        "last_name": payload.get("last_name", ""),
+        "photo_url": photo_url,
+        "message": "Telegram membership verified."
+    })
 
 
 @app.get("/health")
