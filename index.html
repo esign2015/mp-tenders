@@ -2119,7 +2119,7 @@ function updateCounts(rows, refreshHeader=true){
     hasFilter ? filteredTenders.length : "No Filter";
 }
 
-function applyFilters(){
+function applyFilters(refreshHeader=true){
   const general = clean($("generalSearch").value).toLowerCase();
   const tenderId = clean($("tenderIdSearch").value).toLowerCase();
   const title = clean($("titleSearch").value).toLowerCase();
@@ -2243,7 +2243,7 @@ function applyFilters(){
   renderTable(filteredTenders);
   /* Header counts do not change during a search; avoid rescanning 5,253+
      records on every keystroke. */
-  updateCounts(allTenders,false);
+  updateCounts(allTenders,refreshHeader);
 }
 
 function clearFilters(){
@@ -2718,7 +2718,7 @@ function scheduleFilter(){
        starts, so the typed text and "Searching…" state become visible first.
     */
     requestAnimationFrame(() => {
-      applyFilters();
+      applyFilters(false);
       hideSearchProgress();
     });
   }, 300);
