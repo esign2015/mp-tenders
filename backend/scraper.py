@@ -829,7 +829,7 @@ def browser_get_all_tender_rows(page, org, expected_count):
                 unique[key] = row
         pages += 1
 
-            if expected_count and len(unique) >= expected_count:
+        if expected_count and len(unique) >= expected_count:
             break
 
         next_soup = click_next_live_page(page)
@@ -1414,6 +1414,29 @@ def scrape_mp_tenders(csv_file):
                             "Raw Row": tender.get("row_text", ""),
                         })
 
+                        # Save the list-level record immediately. Detail-only fields
+                        # remain blank until the detail page is successfully extracted.
+                        if tender_id:
+                            old = existing_by_id.get(tender_id, {})
+                            chain = clean(tender.get("organisation_chain"))
+                            chain_org, chain_department, chain_division, chain_sub_division = parse_chain(chain) if chain else ("", "", "", "")
+                            existing_by_id[tender_id] = {
+                                **old,
+                                "Tender ID": tender_id,
+                                "Published Date": published or old.get("Published Date", ""),
+                                "Closing Date": closing or old.get("Closing Date", ""),
+                                "Opening Date": opening or old.get("Opening Date", ""),
+                                "Title": clean(tender.get("title")) or old.get("Title", ""),
+                                "Reference Number": clean(tender.get("reference")) or old.get("Reference Number", ""),
+                                "Organisation": chain_org or old.get("Organisation") or org["name"],
+                                "Department": chain_department or old.get("Department", ""),
+                                "Division": chain_division or old.get("Division", ""),
+                                "Sub Division": chain_sub_division or old.get("Sub Division", ""),
+                                "Status": clean(old.get("Status")) or "Open",
+                                "URL": PORTAL,
+                                "Detail Extracted": clean(old.get("Detail Extracted")),
+                            }
+
                         if fetch_details and tender_id:
                             old = existing_by_id.get(tender_id, {})
 
@@ -1504,8 +1527,9 @@ def scrape_mp_tenders(csv_file):
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
                                     detail_completed_ids.append(tender_id)
-                                    # Save every 10 successful detail pages so the
-                                    # checkpoint is never lost and progress becomes visible.
+                                    # Hard checkpoint every 10 successful detail pages.
+                                    # The workflow watches detail_batch_completed and commits
+                                    # this CSV so the dashboard can refresh during the long run.
                                     if detail_successes % 10 == 0:
                                         write_csv(csv_file, list(existing_by_id.values()))
                                         complete_count = sum(
@@ -1527,8 +1551,10 @@ def scrape_mp_tenders(csv_file):
                                             "organisation_progress": f"{index}/{len(organisations)}",
                                             "detail_batch_size": batch_size,
                                             "detail_batch_completed": detail_successes,
+                                            "checkpoint_ready": True,
                                             "updated_at": datetime.now(timezone.utc).isoformat(),
                                         })
+                                        print(f"CHECKPOINT READY: {detail_successes} detail records completed; dashboard CSV saved.")
                                 except Exception as detail_exc:
                                     stats["errors"].append(
                                         f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
@@ -1665,6 +1691,7 @@ def scrape_mp_tenders(csv_file):
             "next_batch_size": next_batch_size,
             "last_batch_size": batch_size,
             "last_batch_completed": detail_successes,
+            "checkpoint_interval": 10,
             "detail_candidates_seen": detail_candidates_seen,
             "completed_detail_ids": detail_completed_ids[:batch_size] or recovered_completed_ids[:batch_size],
             "updated_at": datetime.now(timezone.utc).isoformat(),
