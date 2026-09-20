@@ -267,7 +267,8 @@ def main():
             "🔔 MP Tenders Alert Bot\n\n"
             f"📅 Date: {display}\n\n"
             f"⏰ Closing Today Tenders: {len(closing)}\n\n"
-            f"🌐 Website: {SITE_URL}\n"
+            + ("📎 आज कोई tender Closing Today नहीं है, इसलिए Closing Today की PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
+            + f"🌐 Website: {SITE_URL}\n"
             f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
             f"{warning}\n\n"
             f"🕒 Morning Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
@@ -278,10 +279,11 @@ def main():
             f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
         )
         telegram_message(token, chat_id, message)
-        telegram_document(
-            token, chat_id, pdf,
-            f"📎 Closing Date {d} Tenders List on MPTenders"
-        )
+        if closing:
+            telegram_document(
+                token, chat_id, pdf,
+                f"📎 Closing Date {d} Tenders List on MPTenders"
+            )
         return 0
 
     new = sorted(
@@ -294,7 +296,8 @@ def main():
         "🔔 MP Tenders Alert Bot\n\n"
         f"📅 Date: {display}\n\n"
         f"🆕 Today’s New Published Tenders: {len(new)}\n\n"
-        f"📋 Total Tenders as on date: {len(rows)}\n\n"
+        + ("📎 आज एक भी tender publish नहीं हुआ है, इसलिए New Published Tenders की PDF नहीं भेजी जा रही है।\n\n" if not new else "")
+        + f"📋 Total Tenders as on date: {len(rows)}\n\n"
         f"🌐 Website: {SITE_URL}\n"
         f"📢 Telegram Channel: {TELEGRAM_URL}\n\n"
         f"{warning}\n\n"
@@ -317,10 +320,11 @@ def main():
         token, chat_id, total_pdf,
         f"📎 Total Tenders as on {d} on MPTenders"
     )
-    telegram_document(
-        token, chat_id, new_pdf,
-        f"📎 New Publish Tender List on Date {d} on MPTenders"
-    )
+    if new:
+        telegram_document(
+            token, chat_id, new_pdf,
+            f"📎 New Publish Tender List on Date {d} on MPTenders"
+        )
     return 0
 
 
