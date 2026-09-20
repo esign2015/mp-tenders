@@ -178,7 +178,7 @@ body{
 
 .search-panel{
   position:relative;
-  z-index:20;
+  z-index:100000;
   background:white;
   border:1px solid var(--border);
   border-radius:9px;
@@ -388,6 +388,7 @@ button:hover{
 .pac-filter-arrow{font-size:14px;color:#64748b;}
 .pac-filter-panel{
   display:none;
+  isolation:isolate;
   position:fixed;
   top:0;
   left:0;
@@ -2864,14 +2865,9 @@ function sortCurrentTable(key){
     tableSortDesc = false;
   }
 
-  // Sort the complete current result set first. Pagination only decides
-  // which 100 rows are displayed; it must never limit the sorting scope.
-  filteredTenders.sort((a,b) =>
-    compareTableValues(a,b,tableSortKey) * (tableSortDesc ? -1 : 1)
-  );
-
-  virtualStart = 0;
-  renderTable(filteredTenders);
+  // Rebuild the complete filtered result from allTenders first.
+  // The 100-row pager is only a display window and is never the sort scope.
+  applyFilters(false);
   updateTableSortHeaders();
 }
 
@@ -2888,6 +2884,14 @@ function clearFilters(){
   $("pincodeSearch").value = "";
   $("closingDate").value = "";
   $("pacFilter").value = "";
+  document.querySelectorAll('input[name="pacModeOption"]').forEach(input => {
+    input.checked = input.value === "";
+  });
+  document.querySelectorAll('input[name="pacAmountOption"]').forEach(input => {
+    input.checked = false;
+  });
+  const pacLabel = $("pacFilterLabel");
+  if(pacLabel) pacLabel.textContent = "All PAC";
   $("sortSelect").value = "closing";
   $("statusSelect").value = "";
 
