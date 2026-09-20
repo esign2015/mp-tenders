@@ -1,5 +1,6 @@
 # [run-scrape-details] resume after checkpoint-safe workflow
 # [run-scrape-details] accelerated detail batch + list-level hierarchy
+# [run-scrape-details] resume from recovered dataset and continue new detail batch
 import csv
 import json
 import os
