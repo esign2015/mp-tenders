@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MP Tender Data Extraction Status</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;color:#172033}.wrap{max-width:900px;margin:40px auto;padding:20px}
+.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 20px #00000012;margin-bottom:18px}
+h1{margin-top:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.box{background:#f8fafc;padding:18px;border-radius:12px}.num{font-size:30px;font-weight:700;margin-top:5px}
+.ok{color:#15803d}.err{color:#b91c1c}.muted{color:#64748b}.bar{height:14px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-top:12px}.fill{height:100%;background:#2563eb;width:0}
+pre{white-space:pre-wrap;background:#fff1f2;padding:14px;border-radius:10px;color:#991b1b}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="card"><h1>📊 MP Tender Data Extraction</h1><p class="muted">यह पेज केवल data collection की स्थिति दिखाता है। Dashboard पर कोई बदलाव नहीं करता।</p>
+<div class="grid">
+<div class="box">कुल Tenders<div class="num" id="total">—</div></div>
+<div class="box">Detail Complete<div class="num ok" id="done">—</div></div>
+<div class="box">बाकी<div class="num" id="remain">—</div></div>
+<div class="box">Errors<div class="num err" id="errors">—</div></div>
+<div class="box">Batch<div class="num" id="batch">—</div></div>
+<div class="box">Progress<div class="num" id="org">—</div></div>
+</div><div class="bar"><div class="fill" id="fill"></div></div><p id="updated" class="muted"></p></div>
+<div class="card" id="errorCard" style="display:none"><h2>❌ Latest Error</h2><pre id="latest"></pre></div>
+<div class="card"><p class="muted">यह पेज लगभग 60 सेकंड में अपने आप refresh होता है।</p></div>
+</div>
+<script>
+async function load(){
+ try{
+  const r=await fetch('./status.json?t='+Date.now(),{cache:'no-store'}); const s=await r.json();
+  total.textContent=s.total_tenders??'—'; done.textContent=s.detail_complete??'—'; remain.textContent=s.detail_remaining??'—';
+  errors.textContent=s.errors??0; batch.textContent=s.detail_batch_completed??0; org.textContent=s.organisation_progress??'—';
+  const p=s.total_tenders?Math.min(100,(s.detail_complete/s.total_tenders)*100):0; fill.style.width=p+'%';
+  updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update: '+(s.updated_at||'—');
+  if(s.latest_error){errorCard.style.display='block';latest.textContent=s.latest_error}else errorCard.style.display='none';
+ }catch(e){updated.textContent='Status अभी उपलब्ध नहीं है।'}
+}
+load();setInterval(load,60000);
+</script></body></html>
