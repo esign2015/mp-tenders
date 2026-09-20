@@ -9,7 +9,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
 
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
@@ -47,8 +47,10 @@ def parse_date(value):
         for fmt in (
             "%d/%m/%Y %I:%M %p", "%d/%m/%Y %H:%M",
             "%d-%m-%Y %I:%M %p", "%d-%m-%Y %H:%M",
+            "%d-%b-%Y %I:%M %p", "%d-%b-%Y %H:%M",
+            "%d-%B-%Y %I:%M %p", "%d-%B-%Y %H:%M",
             "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M",
-            "%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d",
+            "%d/%m/%Y", "%d-%m-%Y", "%d-%b-%Y", "%d-%B-%Y", "%Y-%m-%d",
         ):
             try:
                 return datetime.strptime(candidate, fmt).replace(tzinfo=IST)
@@ -122,7 +124,7 @@ def make_pdf(rows, filename, report_title):
     styles = getSampleStyleSheet()
     cell = ParagraphStyle(
         "cell", parent=styles["Normal"], fontName="Helvetica",
-        fontSize=6.2, leading=7.4, textColor=colors.HexColor("#233044")
+        fontSize=8.2, leading=10.0, textColor=colors.HexColor("#233044")
     )
     center = ParagraphStyle("center", parent=cell, alignment=TA_CENTER)
     subtitle = ParagraphStyle(
@@ -153,41 +155,53 @@ def make_pdf(rows, filename, report_title):
         "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.",
         "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee", "Total Fee"
     ]
-    data = [header]
-    for i, row in enumerate(rows, 1):
-        data.append([
-            Paragraph(str(i), center),
-            Paragraph(strip_brackets(row.get("Tender ID")), cell),
-            Paragraph(clean(row.get("Closing Date")), center),
-            Paragraph(strip_brackets(row.get("Title")), cell),
-            Paragraph(strip_brackets(row.get("Reference Number")), cell),
-            Paragraph(clean(row.get("PAC Amount")), center),
-            Paragraph(clean(row.get("EMD Fee")), center),
-            Paragraph(clean(row.get("Tender Fee")), center),
-            Paragraph(clean(row.get("Processing Fee")), center),
-            Paragraph(clean(row.get("Total Fee")), center),
-        ])
 
-    table = Table(
-        data,
-        colWidths=[28, 125, 95, 260, 250, 95, 75, 75, 90, 90],
-        repeatRows=1,
-    )
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#14376e")),
-        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
-        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
-        ("FONTSIZE", (0,0), (-1,0), 7),
-        ("ALIGN", (0,0), (-1,0), "CENTER"),
-        ("VALIGN", (0,0), (-1,-1), "TOP"),
-        ("GRID", (0,0), (-1,-1), 0.25, colors.HexColor("#cdd7e4")),
-        ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white, colors.HexColor("#ebf3fc")]),
-        ("LEFTPADDING", (0,0), (-1,-1), 4),
-        ("RIGHTPADDING", (0,0), (-1,-1), 4),
-        ("TOPPADDING", (0,0), (-1,-1), 3),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 3),
-    ]))
-    story.append(table)
+    # Keep the PDF in exact Closing Date + Closing Time order.
+    # The portal commonly uses formats such as 18-Sep-2026 03:00 PM.
+    rows = sorted(rows, key=closing_sort_key)
+
+    # Fewer records per page gives a much more readable Telegram PDF.
+    # A3 landscape is retained; 15 tenders per page with a larger font.
+    page_size = 15
+    for chunk_start in range(0, len(rows), page_size):
+        chunk = rows[chunk_start:chunk_start + page_size]
+        data = [header]
+        for offset, row in enumerate(chunk, chunk_start + 1):
+            data.append([
+                Paragraph(str(offset), center),
+                Paragraph(strip_brackets(row.get("Tender ID")), cell),
+                Paragraph(clean(row.get("Closing Date")), center),
+                Paragraph(strip_brackets(row.get("Title")), cell),
+                Paragraph(strip_brackets(row.get("Reference Number")), cell),
+                Paragraph(clean(row.get("PAC Amount")), center),
+                Paragraph(clean(row.get("EMD Fee")), center),
+                Paragraph(clean(row.get("Tender Fee")), center),
+                Paragraph(clean(row.get("Processing Fee")), center),
+                Paragraph(clean(row.get("Total Fee")), center),
+            ])
+
+        table = Table(
+            data,
+            colWidths=[32, 125, 105, 270, 255, 95, 75, 75, 90, 90],
+            repeatRows=1,
+        )
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#14376e")),
+            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+            ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+            ("FONTSIZE", (0,0), (-1,0), 9),
+            ("ALIGN", (0,0), (-1,0), "CENTER"),
+            ("VALIGN", (0,0), (-1,-1), "TOP"),
+            ("GRID", (0,0), (-1,-1), 0.35, colors.HexColor("#cdd7e4")),
+            ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white, colors.HexColor("#ebf3fc")]),
+            ("LEFTPADDING", (0,0), (-1,-1), 5),
+            ("RIGHTPADDING", (0,0), (-1,-1), 5),
+            ("TOPPADDING", (0,0), (-1,-1), 5),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+        ]))
+        if chunk_start:
+            story.append(PageBreak())
+        story.append(table)
 
     generated = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
 
