@@ -2128,11 +2128,11 @@ function renderVirtualWindow(){
 
   if(!visibleRows.length){
     body.innerHTML =
-      \`<tr>
+      `<tr>
         <td colspan="14" class="empty-row">
           कोई tender record नहीं मिला।
         </td>
-      </tr>\`;
+      </tr>`;
     $("recordCount").textContent = "0 record(s) shown";
     return;
   }
@@ -2146,7 +2146,7 @@ function renderVirtualWindow(){
     const title = escapeHtml(cleanDisplayTitle(row["Title"]));
     const titleHtml = title;
 
-    return \`
+    return `
       <tr data-row-index="${filteredTenders.indexOf(row)}">
         <td>${virtualStart + index + 1}</td>
         <td>${tenderId || "—"}</td>
@@ -2165,7 +2165,7 @@ function renderVirtualWindow(){
         <td>${escapeHtml(row["Division"]) || "—"}</td>
         <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
       </tr>
-    \`;
+    `;
   }).join("") + bottomSpacer;
 
   $("recordCount").textContent =
