@@ -820,7 +820,12 @@ def should_run_monitor_now():
     exact_times = {(9, 0), (11, 0), (13, 0), (15, 0), (17, 0), (19, 0)}
     if (now.hour, now.minute) in exact_times:
         return True
-    return minutes_from_anchor >= 0 and minutes_from_anchor % 14 == 0
+    if minutes_from_anchor < 0:
+        return False
+    remainder = minutes_from_anchor % 14
+    # GitHub's 5-minute scheduler can start a few minutes after the exact slot.
+    # Accept the nearest scheduled tick so the monitor remains effectively 14-minute based.
+    return remainder <= 4 or remainder >= 10
 
 
 def monitor_tender_changes(csv_file):
