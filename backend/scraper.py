@@ -819,8 +819,8 @@ def scrape_mp_tenders(csv_file):
             for index, org in enumerate(organisations, 1):
                 try:
                     stats["organisations_opened"] += 1
-                    tender_rows, pages = get_all_tender_rows(
-                        session, org["url"], org["count"]
+                    tender_rows, pages = browser_get_all_tender_rows(
+                        page, org, org["count"]
                     )
 
                     copied_count = len(tender_rows)
