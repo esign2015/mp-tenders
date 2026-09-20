@@ -759,11 +759,11 @@ def run_detail_validation(csv_file, organisations):
 
 def scrape_mp_tenders(csv_file):
     """
-    Current requested stage (full organisation list + tender lists; detail pages later):
-    1) Save the complete Organisation/Department list and portal Tender Count.
+    Full MP tender collection:
+    1) Save the complete organisation list and portal Tender Count.
     2) Open every organisation one-by-one in the same Chromium session.
-    3) Save only the tender-list rows for each organisation.
-    4) Do NOT open individual tender detail pages yet.
+    3) Verify copied tender count equals the portal count.
+    4) When FETCH_DETAIL_PAGES=1, open each tender detail page and enrich the main CSV with fees, PAC, organisation chain and critical dates.
     """
     session = requests.Session()
 
@@ -794,6 +794,13 @@ def scrape_mp_tenders(csv_file):
     write_list_csv(org_csv, ORG_FIELDS, org_rows)
 
     tender_list_rows = []
+    existing_detail_rows = read_existing(csv_file)
+    existing_by_id = {
+        clean(row.get("Tender ID")): dict(row)
+        for row in existing_detail_rows
+        if clean(row.get("Tender ID"))
+    }
+    fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
     stats = {
         "organisations": len(organisations),
         "organisations_opened": 0,
@@ -832,16 +839,18 @@ def scrape_mp_tenders(csv_file):
 
                     stats["tender_listed"] += copied_count
 
-                    # Save every tender-list row. No tender detail page is opened.
+                    # Save every tender-list row and, when requested, open its
+                    # session-bound detail page in the same Chromium session.
                     for tender in tender_rows:
                         published, closing, opening = parse_list_dates(tender)
+                        tender_id = clean(tender.get("tender_id"))
                         tender_list_rows.append({
                             "S.No.": len(tender_list_rows) + 1,
                             "Organisation Name": org["name"],
                             "Portal Tender Count": org["count"],
                             "Copied Tender Count": copied_count,
                             "Count Status": "MATCH" if count_match else "MISMATCH",
-                            "Tender ID": tender.get("tender_id", ""),
+                            "Tender ID": tender_id,
                             "Title": tender.get("title", ""),
                             "Reference Number": tender.get("reference", ""),
                             "Published Date": published,
@@ -850,6 +859,33 @@ def scrape_mp_tenders(csv_file):
                             "Tender URL": tender.get("url", ""),
                             "Raw Row": tender.get("row_text", ""),
                         })
+
+                        if fetch_details and tender_id:
+                            old = existing_by_id.get(tender_id, {})
+                            needs_detail = not all(clean(old.get(k)) for k in (
+                                "Department", "PAC Amount", "EMD Fee",
+                                "Tender Fee", "Processing Fee", "Location", "Pincode"
+                            ))
+                            if needs_detail:
+                                try:
+                                    detail_soup = browser_page(page, tender.get("url", ""))
+                                    detail = parse_detail(detail_soup, page.url)
+                                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                                    detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
+                                    detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
+                                    detail["Published Date"] = clean(detail.get("Published Date")) or published
+                                    detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
+                                    detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
+                                    detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
+                                    detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
+                                    if not detail["Tender ID"]:
+                                        raise RuntimeError("detail Tender ID missing")
+                                    existing_by_id[tender_id] = detail
+                                    stats["detail_opened"] += 1
+                                except Exception as detail_exc:
+                                    stats["errors"].append(
+                                        f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
+                                    )
 
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
@@ -867,12 +903,6 @@ def scrape_mp_tenders(csv_file):
     # Build/refresh the main detailed CSV from the complete tender-list collection.
     # Existing detail fields are preserved; the 9-tender validation is run separately
     # with DETAIL_VALIDATION_ONLY=1 so it can never replace the dashboard dataset.
-    existing_detail_rows = read_existing(csv_file)
-    existing_by_id = {
-        clean(row.get("Tender ID")): row
-        for row in existing_detail_rows
-        if clean(row.get("Tender ID"))
-    }
     merged_rows = []
     for row in tender_list_rows:
         tender_id = clean(row.get("Tender ID"))
