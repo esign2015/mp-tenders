@@ -386,18 +386,19 @@ button:hover{
 .pac-filter-arrow{font-size:14px;color:#64748b;}
 .pac-filter-panel{
   display:none;
-  position:absolute;
-  top:34px;
+  position:fixed;
+  top:0;
   left:0;
   width:300px;
-  max-height:430px;
+  max-height:min(430px,70vh);
   overflow-y:auto;
-  z-index:6000;
+  z-index:99999;
   padding:10px;
   background:#fff;
   border:1px solid #cbd5e1;
   border-radius:8px;
-  box-shadow:0 12px 28px rgba(15,23,42,.20);
+  box-shadow:0 12px 28px rgba(15,23,42,.28);
+  box-sizing:border-box;
 }
 .pac-filter-panel.open{display:block;}
 .pac-filter-title{
@@ -2887,10 +2888,13 @@ function sortCurrentTable(key){
     tableSortDesc = false;
   }
 
+  // Sort the complete current result set first. Pagination only decides
+  // which 100 rows are displayed; it must never limit the sorting scope.
   filteredTenders.sort((a,b) =>
     compareTableValues(a,b,tableSortKey) * (tableSortDesc ? -1 : 1)
   );
 
+  virtualStart = 0;
   renderTable(filteredTenders);
   updateTableSortHeaders();
 }
@@ -3519,11 +3523,40 @@ function setupPacFilter(){
     button.setAttribute("aria-expanded","false");
   }
 
+  function positionPanel(){
+    if(!panel.classList.contains("open")) return;
+    const rect = button.getBoundingClientRect();
+    const gap = 6;
+    const panelWidth = Math.min(300, window.innerWidth - 16);
+    const panelHeight = Math.min(430, Math.floor(window.innerHeight * 0.70));
+    let left = rect.left;
+    let top = rect.bottom + gap;
+
+    if(left + panelWidth > window.innerWidth - 8){
+      left = window.innerWidth - panelWidth - 8;
+    }
+    if(left < 8) left = 8;
+
+    if(top + panelHeight > window.innerHeight - 8){
+      top = rect.top - panelHeight - gap;
+    }
+    if(top < 8) top = 8;
+
+    panel.style.width = panelWidth + "px";
+    panel.style.left = left + "px";
+    panel.style.top = top + "px";
+    panel.style.maxHeight = panelHeight + "px";
+  }
+
   button.addEventListener("click", function(event){
     event.stopPropagation();
     const open = panel.classList.toggle("open");
     button.setAttribute("aria-expanded", open ? "true" : "false");
+    if(open) requestAnimationFrame(positionPanel);
   });
+
+  window.addEventListener("resize", positionPanel);
+  window.addEventListener("scroll", positionPanel, true);
 
   panel.addEventListener("click", function(event){
     event.stopPropagation();
