@@ -4,11 +4,11 @@
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
-  "errors": 3,
-  "latest_error": "Bhopal City Link Limited: TimeoutError: Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.mptenders.gov.in/nicgep/app?page=FrontEndTendersByOrganisation&service=page\", waiting until \"domcontentloaded\"\n",
-  "organisation_progress": "3/90",
-  "current_organisation": "Board of Secondary Education",
+  "errors": 4,
+  "latest_error": "Board of Secondary Education: RuntimeError: Organisation row not found in browser session: Board of Secondary Education",
+  "organisation_progress": "4/90",
+  "current_organisation": "Capital Project Administration",
   "detail_batch_size": 100,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-20T17:38:24.048295+00:00"
+  "updated_at": "2026-09-20T17:39:10.908560+00:00"
 }
