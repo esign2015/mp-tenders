@@ -1405,10 +1405,10 @@ function showTelegramLogin(){
   const joinBtn=document.getElementById("telegramJoinBtn");
   const checkBtn=document.getElementById("telegramCheckBtn");
 
-  if(loginWrap && !loginWrap.querySelector("iframe")) setupTelegramLogin();
-
   if(loginStart && loginWrap?.querySelector("iframe")){
     loginStart.style.display="none";
+  }else if(loginStart){
+    loginStart.style.display="inline-flex";
   }
 
   if(joinBtn) joinBtn.style.display=telegramAuthData ? "" : "none";
@@ -1511,11 +1511,16 @@ async function verifyTelegramMembership(user, persist=true){
   }
 }
 
+let telegramLoginSetupPromise = null;
+
 async function setupTelegramLogin(){
+  if(telegramLoginSetupPromise) return telegramLoginSetupPromise;
+
+  telegramLoginSetupPromise = (async () => {
   const status = document.getElementById("telegramGateStatus");
   const wrap=document.getElementById("telegramLoginWrap");
   const start=document.getElementById("telegramLoginStart");
-  if(!wrap || wrap.querySelector("iframe")) return;
+  if(!wrap || wrap.querySelector("iframe")) return true;
 
   if(start){
     start.classList.add("loading");
@@ -1576,7 +1581,13 @@ async function setupTelegramLogin(){
       ? "Telegram server से response देर से आ रहा है। Retry Telegram Login दबाएँ।"
       : "Telegram Login अभी load नहीं हुआ। Retry Telegram Login दबाएँ।";
     telegramStatus(message);
+    return false;
+  } finally {
+    telegramLoginSetupPromise = null;
   }
+  })();
+
+  return telegramLoginSetupPromise;
 }
 
 function onTelegramAuth(user){
