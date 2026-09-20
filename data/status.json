@@ -4,11 +4,11 @@
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
-  "errors": 0,
-  "latest_error": "",
-  "organisation_progress": "0/90",
-  "current_organisation": "Atal Bihari Vajpayee Institute of Good Governance and policy Analysis Bhopal",
+  "errors": 1,
+  "latest_error": "Atal Bihari Vajpayee Institute of Good Governance and policy Analysis Bhopal: TimeoutError: Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.mptenders.gov.in/nicgep/app?page=FrontEndTendersByOrganisation&service=page\", waiting until \"domcontentloaded\"\n",
+  "organisation_progress": "1/90",
+  "current_organisation": "Atal Indore City Transport Services Ltd - Indore",
   "detail_batch_size": 100,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-20T17:35:24.036592+00:00"
+  "updated_at": "2026-09-20T17:36:24.041275+00:00"
 }
