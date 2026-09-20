@@ -251,6 +251,8 @@ button:hover{
 }
 
 .search-bottom{
+  position:relative;
+  z-index:100001;
   display:grid;
   grid-template-columns:150px 170px 130px 170px 1fr;
   gap:7px;
@@ -389,6 +391,7 @@ button:hover{
 .pac-filter-panel{
   display:none;
   isolation:isolate;
+  transform:translateZ(0);
   position:fixed;
   top:0;
   left:0;
@@ -403,7 +406,10 @@ button:hover{
   box-shadow:0 12px 28px rgba(15,23,42,.28);
   box-sizing:border-box;
 }
-.pac-filter-panel.open{display:block;}
+.pac-filter-panel.open{
+  display:block;
+  z-index:2147483647 !important;
+}
 .pac-filter-title{
   font-size:14px;
   font-weight:800;
@@ -840,13 +846,15 @@ td.title-cell{
 
   .counts{
     width:100%;
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:space-between;
     gap:5px;
   }
 
   .count-box{
-    width:100%;
+    flex:1 1 0;
+    width:auto;
     min-width:0;
     height:50px;
     padding:5px 2px;
@@ -855,6 +863,7 @@ td.title-cell{
 
   .count-label{
     font-size:9px;
+    white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
   }
