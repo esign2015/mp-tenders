@@ -1081,62 +1081,36 @@ def scrape_mp_tenders(csv_file):
                                 "Fee Payable To", "Fee Payable At"
                             ))
                             if needs_detail:
-                                try:
-                                    detail_soup = browser_page(page, tender.get("url", ""))
-                                    detail = parse_detail(detail_soup, page.url)
-                                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
-                                    detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
-                                    detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
-                                    detail["Published Date"] = clean(detail.get("Published Date")) or published
-                                    detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
-                                    detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
-                                    detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
-                                    detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
-                                    if not detail["Tender ID"]:
-                                        raise RuntimeError("detail Tender ID missing")
-                                    existing_by_id[tender_id] = detail
-                                    stats["detail_opened"] += 1
-                                    batch_completed += 1
-
-                                except Exception as detail_exc:
-                                    stats["errors"].append(
-                                        f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
-                                    )
-                                    # Keep the already-extracted records; continue with
-                                    # the next tender instead of losing the full run.
-                                    write_csv(csv_file, list(existing_by_id.values()))
-                                    batch_failed = True
-                                    # Preserve every successful detail before the failure.
-                                    write_csv(csv_file, list(existing_by_id.values()))
-                                    write_list_csv(
-                                        tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
-                                    )
-                                    batch_state_file.write_text(
-                                        json.dumps({
-                                            "next_batch_size": 10,
-                                            "last_batch_completed": batch_completed,
-                                            "last_error": f"{type(detail_exc).__name__}: {detail_exc}",
-                                            "updated_at": datetime.now(timezone.utc).isoformat(),
-                                        }, indent=2),
-                                        encoding="utf-8",
-                                    )
-                                    print(
-                                        f"DETAIL ERROR CHECKPOINT: {batch_completed} successful; "
-                                        f"saved CSV; next batch size=10"
-                                    )
-                                    return {
-                                        "ok": False,
-                                        "checkpoint": True,
-                                        "batch_completed": batch_completed,
-                                        "next_batch_size": 10,
-                                        "stats": stats,
-                                    }
+                            try:
+                                detail_soup = browser_page(page, tender.get("url", ""))
+                                detail = parse_detail(detail_soup, page.url)
+                                detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                                detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
+                                detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
+                                detail["Published Date"] = clean(detail.get("Published Date")) or published
+                                detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
+                                detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
+                                detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
+                                detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
+                                if not detail["Tender ID"]:
+                                    raise RuntimeError("detail Tender ID missing")
+                                existing_by_id[tender_id] = {**old, **detail}
+                                stats["detail_opened"] += 1
+                            except Exception as detail_exc:
+                                stats["errors"].append(
+                                    f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
+                                )
+                                # One bad tender must never stop or erase the rest.
+                                write_csv(csv_file, list(existing_by_id.values()))
 
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
                     write_list_csv(
                         tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
                     )
+                    # Also checkpoint all successful detail records after every
+                    # organisation, so a long full extraction can resume safely.
+                    write_csv(csv_file, list(existing_by_id.values()))
 
                 except Exception as exc:
                     stats["errors"].append(
