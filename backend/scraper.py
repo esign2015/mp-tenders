@@ -8,7 +8,7 @@ import os
 import re
 import time
 import random
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -1252,7 +1252,7 @@ def scrape_mp_tenders(csv_file):
             "S.No.": index,
             "Organisation Name": org["name"],
             "Tender Count": org["count"],
-            "Portal URL": org["url"],
+            "Portal URL": ORG_URL,
             "Retrieved At": retrieved_at,
         })
 
@@ -1628,7 +1628,7 @@ def scrape_mp_tenders(csv_file):
             "Fee Payable To": clean(old.get("Fee Payable To")),
             "Fee Payable At": clean(old.get("Fee Payable At")),
             "Status": clean(old.get("Status")) or "Open",
-            "URL": clean(row.get("Tender URL")),
+            "URL": PORTAL,
             "Detail Extracted": clean(old.get("Detail Extracted")),
         }
         merged_rows.append(base)
