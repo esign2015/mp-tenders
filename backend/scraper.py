@@ -33,7 +33,7 @@ FIELDS = [
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
-    "Fee Payable To", "Fee Payable At", "Status", "URL", "Detail Extracted",
+    "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
