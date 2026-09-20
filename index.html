@@ -2150,14 +2150,27 @@ function updateVirtualWindow(){
 
   if(nearTop && virtualStart > 0){
     virtualBusy = true;
+
     const prependStart = Math.max(0, virtualStart - VIRTUAL_CHUNK_SIZE);
     const addedCount = virtualStart - prependStart;
+    const oldRendered = [...$("tenderBody").querySelectorAll("tr[data-row-index]")];
+
+    const removedBottomHeight = oldRendered
+      .filter(row => {
+        const idx = Number(row.dataset.rowIndex);
+        return idx >= virtualEnd - VIRTUAL_CHUNK_SIZE && idx < virtualEnd;
+      })
+      .reduce((sum,row) => sum + row.offsetHeight, 0);
+
     const addedHeight = Math.max(addedCount * ESTIMATED_ROW_HEIGHT, 1);
 
     virtualStart = prependStart;
+    virtualEnd = Math.min(virtualRows.length, virtualStart + VIRTUAL_MAX_ROWS);
     virtualTopHeight = Math.max(0, virtualTopHeight - addedHeight);
+    virtualBottomHeight += removedBottomHeight || VIRTUAL_CHUNK_SIZE * ESTIMATED_ROW_HEIGHT;
 
     renderVirtualWindow();
+
     requestAnimationFrame(() => {
       wrap.scrollTop += addedHeight;
       virtualBusy = false;
@@ -2911,6 +2924,7 @@ $("pdfBtn2").addEventListener("click",exportPdf);
 updateDateTime();
 setInterval(updateDateTime,1000);
 
+setupVirtualTable();
 enforceTelegramAccess().then(() => loadData());
 </script>
 
