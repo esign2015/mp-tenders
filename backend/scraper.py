@@ -31,7 +31,7 @@ FIELDS = [
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
-    "Fee Payable To", "Fee Payable At", "Status", "URL",
+    "Fee Payable To", "Fee Payable At", "Status", "URL", "Detail Extracted",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
@@ -1132,6 +1132,23 @@ def scrape_mp_tenders(csv_file):
     detail_successes = 0
     detail_candidates_seen = 0
     detail_completed_ids = []
+
+    # A previous 100-record run completed successfully but older code did not
+    # persist the completed Tender IDs. Recover that checkpoint once, using the
+    # same candidate order, so those records are never opened again.
+    recovered_completed_ids = []
+    previous_completed = int(batch_state.get("last_batch_completed", 0) or 0)
+    previous_ids = batch_state.get("completed_detail_ids") or []
+    if previous_completed and not previous_ids:
+        for tid, row in existing_by_id.items():
+            if tid and not clean(row.get("Detail Extracted")):
+                recovered_completed_ids.append(tid)
+                if len(recovered_completed_ids) >= previous_completed:
+                    break
+        for tid in recovered_completed_ids:
+            existing_by_id[tid]["Detail Extracted"] = "YES"
+        if recovered_completed_ids:
+            write_csv(csv_file, list(existing_by_id.values()))
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
@@ -1226,7 +1243,7 @@ def scrape_mp_tenders(csv_file):
                                 "Document Download Start Date", "Document Download End Date",
                                 "Fee Payable To", "Fee Payable At"
                             ))
-                            if fetch_details and tender_id and needs_detail and detail_successes < batch_size:
+                            if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and detail_successes < batch_size:
                                 detail_candidates_seen += 1
                                 try:
                                     detail_soup = browser_page(page, tender.get("url", ""))
@@ -1241,7 +1258,7 @@ def scrape_mp_tenders(csv_file):
                                     detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
                                     if not detail["Tender ID"]:
                                         raise RuntimeError("detail Tender ID missing")
-                                    existing_by_id[tender_id] = {**old, **detail}
+                                    existing_by_id[tender_id] = {**old, **detail, "Detail Extracted": "YES"}
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
                                     detail_completed_ids.append(tender_id)
@@ -1383,8 +1400,8 @@ def scrape_mp_tenders(csv_file):
         "status": "completed",
         "process_started_at": process_started_at,
         "total_tenders": len(merged_rows),
-        "detail_complete": max(detail_successes, complete_count),
-        "detail_remaining": max(0, len(merged_rows) - max(detail_successes, complete_count)),
+        "detail_complete": sum(1 for r in merged_rows if clean(r.get("Detail Extracted")) == "YES"),
+        "detail_remaining": max(0, len(merged_rows) - sum(1 for r in merged_rows if clean(r.get("Detail Extracted")) == "YES")),
         "errors": len(stats["errors"]),
         "latest_error": stats["errors"][-1] if stats["errors"] else "",
         "organisation_progress": f"{len(organisations)}/{len(organisations)}",
@@ -1405,7 +1422,7 @@ def scrape_mp_tenders(csv_file):
             "last_batch_size": batch_size,
             "last_batch_completed": detail_successes,
             "detail_candidates_seen": detail_candidates_seen,
-            "completed_detail_ids": detail_completed_ids[:batch_size],
+            "completed_detail_ids": detail_completed_ids[:batch_size] or recovered_completed_ids[:batch_size],
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }, indent=2),
         encoding="utf-8",
