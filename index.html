@@ -427,6 +427,27 @@ tbody tr:hover{
   background:#eef6ff;
 }
 
+.row-copy-menu{
+  position:fixed;
+  z-index:9999;
+  display:none;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  box-shadow:0 8px 24px rgba(15,23,42,.18);
+  padding:5px;
+}
+.row-copy-menu button{
+  border:0;
+  background:#fff;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:700;
+  color:#172033;
+  border-radius:6px;
+}
+.row-copy-menu button:hover{background:#eef6ff;}
+
 td.title-cell{
   min-width:260px;
   max-width:360px;
@@ -2014,7 +2035,7 @@ function renderTable(rows){
     const titleHtml = title;
 
     return `
-      <tr>
+      <tr data-row-index="${filteredTenders.indexOf(row)}">
         <td>${index+1}</td>
         <td>${tenderId || "—"}</td>
         <td class="title-cell">${titleHtml || "—"}</td>
@@ -2859,5 +2880,77 @@ enforceTelegramAccess().then(() => loadData());
 }
 </style>
 
+<script>
+(function setupRowCopy(){
+  const body = document.getElementById("tenderBody");
+  if(!body) return;
+
+  const menu = document.createElement("div");
+  menu.className = "row-copy-menu";
+  menu.innerHTML = '<button type="button">📋 Copy Row</button>';
+  document.body.appendChild(menu);
+
+  let selectedRow = null;
+
+  function closeMenu(){
+    menu.style.display = "none";
+    selectedRow = null;
+  }
+
+  function rowText(row){
+    const fields = [
+      ["Tender ID","Tender ID"],
+      ["Title","Title"],
+      ["Reference Number","Ref.No."],
+      ["Closing Date","Last Date"],
+      ["Published Date","Published"],
+      ["PAC Amount","PAC Amount"],
+      ["EMD Fee","EMD Fee"],
+      ["Tender Fee","Tender Fee"],
+      ["Processing Fee","Processing Fee"],
+      ["Total Fee","Total Fee"],
+      ["Organisation","Organisation"],
+      ["Department","Department"],
+      ["Division","Division"],
+      ["Sub Division","Sub Division"],
+      ["Status","Status"]
+    ];
+    return fields.map(([key,label]) => label + ": " + clean(row[key])).join("\n");
+  }
+
+  body.addEventListener("click", function(event){
+    const tr = event.target.closest("tr");
+    if(!tr || !tr.dataset.rowIndex) return;
+    selectedRow = filteredTenders[Number(tr.dataset.rowIndex)];
+    if(!selectedRow) return;
+
+    menu.style.left = Math.min(event.clientX, window.innerWidth - 150) + "px";
+    menu.style.top = Math.min(event.clientY, window.innerHeight - 55) + "px";
+    menu.style.display = "block";
+  });
+
+  menu.querySelector("button").addEventListener("click", async function(){
+    if(!selectedRow) return;
+    try{
+      await navigator.clipboard.writeText(rowText(selectedRow));
+      this.textContent = "✓ Copied";
+      setTimeout(() => { this.textContent = "📋 Copy Row"; closeMenu(); }, 700);
+    }catch(e){
+      const area = document.createElement("textarea");
+      area.value = rowText(selectedRow);
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      this.textContent = "✓ Copied";
+      setTimeout(() => { this.textContent = "📋 Copy Row"; closeMenu(); }, 700);
+    }
+  });
+
+  document.addEventListener("click", function(event){
+    if(!menu.contains(event.target) && !event.target.closest("#tenderBody tr")) closeMenu();
+  });
+})();
+</script>
 </body>
 </html>
