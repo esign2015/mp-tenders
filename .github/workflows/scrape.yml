@@ -142,32 +142,51 @@ jobs:
           git config user.email "actions@github.com"
           python backend/scraper.py > scraper_live.log 2>&1 &
           SCRAPER_PID=$!
-          CHECKPOINT_TICK=0
+          LAST_PUBLISHED_CHECKPOINT=0
+
+          # The scraper writes the main CSV every 10 successful detail records.
+          # Publish that checkpoint immediately so the live dashboard can refresh.
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
             if [ -f data/status.json ]; then
-              git add data/status.json
-              git diff --cached --quiet || git commit -m "Update extraction status [skip ci]"
-              # Rebase the status commit onto the newest main before pushing.
-              git fetch origin "${GITHUB_REF_NAME}"
-              git rebase "origin/${GITHUB_REF_NAME}" || true
-              git push origin "HEAD:${GITHUB_REF_NAME}" || true
+              CHECKPOINT=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          try:
+              data=json.loads(Path("data/status.json").read_text(encoding="utf-8"))
+              print(int(data.get("detail_batch_completed", 0) or 0))
+          except Exception:
+              print(0)
+          PY
+              )
 
-              CHECKPOINT_TICK=$((CHECKPOINT_TICK + 30))
-              if [ "$CHECKPOINT_TICK" -ge 60 ]; then
-                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json; do
-            if [ -s "$f" ]; then git add "$f"; fi
-          done
+              if [ "$CHECKPOINT" -ge 10 ] && [ "$CHECKPOINT" != "$LAST_PUBLISHED_CHECKPOINT" ]; then
+                echo "Publishing checkpoint: $CHECKPOINT completed detail records"
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+                  if [ -s "$f" ]; then git add "$f"; fi
+                done
+
                 if ! git diff --cached --quiet; then
-                  git commit -m "Checkpoint tender data [skip ci]"
+                  git commit -m "Checkpoint tender data $CHECKPOINT [skip ci]"
                   git fetch origin "${GITHUB_REF_NAME}"
                   git rebase "origin/${GITHUB_REF_NAME}" || true
                   git push origin "HEAD:${GITHUB_REF_NAME}" || true
                 fi
-                CHECKPOINT_TICK=0
+                LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
               fi
             fi
-            sleep 30
+            sleep 10
           done
+
+          # Publish any final partial checkpoint too.
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+            if [ -s "$f" ]; then git add "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Final tender data checkpoint [skip ci]"
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
           wait "$SCRAPER_PID"
       - name: Commit whatever tender data was collected
         if: always()
