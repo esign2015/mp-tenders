@@ -2,13 +2,12 @@
   "status": "running",
   "process_started_at": "2026-09-20T14:47:21.888354+00:00",
   "total_tenders": 5256,
-  "detail_complete": 32,
-  "detail_remaining": 5224,
+  "detail_complete": 0,
+  "detail_remaining": 5256,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "6/90",
-  "current_organisation": "Department of Higher Education",
+  "organisation_progress": "7/90",
   "detail_batch_size": 100,
-  "detail_batch_completed": 32,
-  "updated_at": "2026-09-20T14:50:07.853970+00:00"
+  "detail_batch_completed": 40,
+  "updated_at": "2026-09-20T14:50:44.429062+00:00"
 }
