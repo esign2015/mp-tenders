@@ -361,7 +361,6 @@ table th:nth-child(12), table td:nth-child(12){width:220px;}
 table th:nth-child(13), table td:nth-child(13){width:190px;}
 table th:nth-child(14), table td:nth-child(14){width:170px;}
 table th:nth-child(15), table td:nth-child(15){width:190px;}
-table th:nth-child(16), table td:nth-child(16){width:90px;}
 
 thead{
   position:sticky;
@@ -1247,13 +1246,13 @@ body.telegram-locked .site-footer{visibility:hidden}
             <th>Department</th>
             <th>Division</th>
             <th>Sub Division</th>
-            <th>Status</th>
+            
           </tr>
         </thead>
 
         <tbody id="tenderBody">
           <tr>
-            <td colspan="16" class="loading-row">
+            <td colspan="14" class="loading-row">
               Loading tender data...
             </td>
           </tr>
@@ -1901,7 +1900,7 @@ async function loadOrganisationTenderCsv(){
 
 async function loadData(){
   $("tenderBody").innerHTML =
-    `<tr><td colspan="16" class="loading-row">Loading tender data...</td></tr>`;
+    `<tr><td colspan="14" class="loading-row">Loading tender data...</td></tr>`;
 
   try{
     let data = [];
@@ -1943,7 +1942,7 @@ async function loadData(){
 
     $("tenderBody").innerHTML =
       `<tr>
-        <td colspan="16" class="empty-row">
+        <td colspan="14" class="empty-row">
           Tender data could not be loaded. Render API or CSV is unavailable.
         </td>
       </tr>`;
@@ -2008,7 +2007,7 @@ function renderTable(rows){
   if(!rows.length){
     body.innerHTML =
       `<tr>
-        <td colspan="16" class="empty-row">
+        <td colspan="14" class="empty-row">
           कोई tender record नहीं मिला।
         </td>
       </tr>`;
@@ -2026,9 +2025,6 @@ function renderTable(rows){
 
   body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
-    const statusClass = getStatusClass(row);
-    const statusText = getStatusText(row);
-
     const tenderId = escapeHtml(row["Tender ID"]);
     const title = escapeHtml(cleanDisplayTitle(row["Title"]));
     const titleHtml = title;
@@ -2051,11 +2047,6 @@ function renderTable(rows){
         <td>${escapeHtml(row["Department"]) || "—"}</td>
         <td>${escapeHtml(row["Division"]) || "—"}</td>
         <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
-        <td>
-          <span class="status ${statusClass}">
-            ${escapeHtml(statusText)}
-          </span>
-        </td>
       </tr>
     `;
   }).join("");
