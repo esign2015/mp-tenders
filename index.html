@@ -1547,6 +1547,24 @@ async function setupTelegramLogin(){
 
     if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
     if(start) start.style.display="none";
+    // Telegram widget loads asynchronously; keep a visible status until its iframe appears.
+    let widgetWaits = 0;
+    const widgetTimer = setInterval(() => {
+      widgetWaits += 1;
+      if (wrap.querySelector("iframe")) {
+        clearInterval(widgetTimer);
+        return;
+      }
+      if (widgetWaits >= 20) {
+        clearInterval(widgetTimer);
+        if (start) {
+          start.classList.remove("loading");
+          start.textContent = "🔄 Retry Telegram Login";
+          start.style.display = "inline-flex";
+        }
+        telegramStatus("Telegram Login button load नहीं हुआ। Retry Telegram Login दबाएँ।");
+      }
+    }, 500);
   }catch(error){
     console.error("Telegram Login setup failed:",error);
     if(start){
