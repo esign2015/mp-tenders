@@ -1325,10 +1325,26 @@ async function verifyTelegramMembership(user, persist=true){
       }
       return false;
     }
-    if(persist) localStorage.setItem("telegram_auth",JSON.stringify(user));
+    /*
+       Telegram Login can return photo_url. Use the server-validated payload
+       as the current profile source so a changed Telegram profile photo is
+       reflected after the next successful membership check.
+    */
+    const verifiedUser = {
+      ...user,
+      ...(data.id ? {
+        id: data.id,
+        username: data.username || user.username || "",
+        first_name: data.first_name || user.first_name || "",
+        last_name: data.last_name || user.last_name || "",
+        photo_url: data.photo_url || user.photo_url || ""
+      } : {})
+    };
+    telegramAuthData = verifiedUser;
+    if(persist) localStorage.setItem("telegram_auth",JSON.stringify(verifiedUser));
     sessionStorage.setItem("telegram_verified","1");
-    sessionStorage.setItem("telegram_user",JSON.stringify(user));
-    updateTelegramProfile(user);
+    sessionStorage.setItem("telegram_user",JSON.stringify(verifiedUser));
+    updateTelegramProfile(verifiedUser);
     document.body.classList.remove("telegram-locked");
     const gate=document.getElementById("telegramGate");
     if(gate) gate.remove();
