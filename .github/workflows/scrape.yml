@@ -56,7 +56,7 @@ jobs:
   scrape_full:
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '15 15 * * *')
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 300
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,6 +73,7 @@ jobs:
       - name: Run MP Tender scraper — full organisation/tender list
         env:
           DETAIL_SAMPLE_SIZE: "0"
+          FETCH_DETAIL_PAGES: "1"
         run: python backend/scraper.py
       - name: Commit full tender data
         run: |
