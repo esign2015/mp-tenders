@@ -1455,13 +1455,24 @@ async function verifyTelegramMembership(user, persist=true){
   }
 }
 
-async function setupTelegramLogin(){
+async async function setupTelegramLogin(){
   const status = document.getElementById("telegramGateStatus");
+  const wrap = document.getElementById("telegramLoginWrap");
+  if(!wrap) return false;
+  if(wrap.querySelector("iframe")) return true;
+
   try{
-    const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{cache:"no-store"});
+    if(status) status.textContent="⏳ Telegram Login तैयार हो रहा है...";
+
+    const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
+      cache:"no-store"
+    });
     if(!response.ok) throw new Error("Telegram bot configuration unavailable");
+
     const config=await response.json();
     if(!config.username) throw new Error("Telegram bot username is not configured");
+
+    wrap.innerHTML="";
     const script=document.createElement("script");
     script.src="https://telegram.org/js/telegram-widget.js?22";
     script.async=true;
@@ -1470,11 +1481,14 @@ async function setupTelegramLogin(){
     script.setAttribute("data-userpic","false");
     script.setAttribute("data-request-access","write");
     script.setAttribute("data-onauth","onTelegramAuth(user)");
-    document.getElementById("telegramLoginWrap").appendChild(script);
-    status.textContent="Login with Telegram नीचे दिखाई देगा।";
+    wrap.appendChild(script);
+
+    if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
+    return true;
   }catch(error){
-    console.error(error);
-    telegramStatus("Telegram login setup उपलब्ध नहीं है। BotFather में इस वेबसाइट domain को allow करना जरूरी है।");
+    console.error("Telegram Login setup failed:",error);
+    telegramStatus("❌ Telegram Login अभी load नहीं हुआ। कृपया फिर Login with Telegram दबाएँ।");
+    return false;
   }
 }
 
@@ -1499,8 +1513,22 @@ async function checkStoredTelegram(){
 function setupTelegramFlow(){
   const loginBtn=document.getElementById("telegramLoginBtn");
   const checkBtn=document.getElementById("telegramCheckBtn");
-  if(loginBtn) loginBtn.onclick=()=>document.querySelector("#telegramLoginWrap iframe")?.contentWindow?.focus();
+
+  if(loginBtn){
+    loginBtn.onclick=async()=>{
+      const wrap=document.getElementById("telegramLoginWrap");
+      const iframe=wrap?.querySelector("iframe");
+      if(iframe){
+        iframe.scrollIntoView({behavior:"smooth",block:"center"});
+        iframe.contentWindow?.focus();
+        return;
+      }
+      await setupTelegramLogin();
+    };
+  }
+
   if(checkBtn) checkBtn.onclick=()=>telegramAuthData ? verifyTelegramMembership(telegramAuthData,false) : setupTelegramLogin();
+
   window.addEventListener("focus",()=>{
     if(document.body.classList.contains("telegram-locked") && telegramAuthData){
       verifyTelegramMembership(telegramAuthData,false);
