@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   detail_validation:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -54,9 +54,9 @@ jobs:
           fi
 
   scrape_full:
-    if: github.event_name == 'schedule' && github.event.schedule == '15 15 * * *'
+    if: (github.event_name == 'schedule' && github.event.schedule == '15 15 * * *') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape]'))
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
     steps:
       - name: Checkout
         uses: actions/checkout@v4
