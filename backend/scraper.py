@@ -851,7 +851,16 @@ def read_existing(csv_file):
     if not csv_file.exists():
         return []
     with csv_file.open("r", encoding="utf-8-sig", newline="") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    # Clean any legacy session-bound URLs left by older scraper versions.
+    for row in rows:
+        if SESSION_URL_RE.search(clean(row.get("URL"))):
+            row["URL"] = PORTAL
+        if SESSION_URL_RE.search(clean(row.get("Tender URL"))):
+            row["Tender URL"] = ""
+        if SESSION_URL_RE.search(clean(row.get("Portal URL"))):
+            row["Portal URL"] = ORG_URL
+    return rows
 
 
 def write_csv(csv_file, rows):
@@ -870,7 +879,15 @@ def write_list_csv(csv_file, fieldnames, rows):
     with temp.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(rows)
+        safe_rows = []
+        for row in rows:
+            item = dict(row)
+            if SESSION_URL_RE.search(clean(item.get("Tender URL"))):
+                item["Tender URL"] = ""
+            if SESSION_URL_RE.search(clean(item.get("Portal URL"))):
+                item["Portal URL"] = ORG_URL
+            safe_rows.append(item)
+        writer.writerows(safe_rows)
     temp.replace(csv_file)
 
 
@@ -1113,7 +1130,7 @@ def monitor_tender_changes(csv_file):
                             "Published Date": published,
                             "Closing Date": closing,
                             "Opening Date": opening,
-                            "Tender URL": tender.get("url", ""),
+                            "Tender URL": "",
                             "Raw Row": tender.get("row_text", ""),
                         }
                         needs_detail = (
@@ -1127,9 +1144,10 @@ def monitor_tender_changes(csv_file):
                         )
                         if needs_detail:
                             try:
-                                browser_page(page, org.get("url", "") or ORG_URL)
-                                detail_soup = open_tender_detail_by_click(page, tender)
-                                detail = parse_detail(detail_soup, page.url)
+                                # Never open the organisation's saved DirectLink URL.
+                                # Search by permanent Tender ID from the stable home page.
+                                detail_soup = open_tender_detail_by_search(page, tender)
+                                detail = parse_detail(detail_soup, PORTAL)
                                 detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                                 detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
                                 detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
@@ -1153,7 +1171,7 @@ def monitor_tender_changes(csv_file):
                                 "Closing Date": closing or old.get("Closing Date", ""),
                                 "Opening Date": opening or old.get("Opening Date", ""),
                                 "Organisation": org["name"],
-                                "URL": clean(tender.get("url")) or old.get("URL", ""),
+                                "URL": PORTAL,
                             }
                 except Exception as exc:
                     print(f"MONITOR organisation error {org['name']}: {exc}")
@@ -1165,7 +1183,7 @@ def monitor_tender_changes(csv_file):
         "S.No.": i,
         "Organisation Name": org["name"],
         "Tender Count": org["count"],
-        "Portal URL": org["url"],
+        "Portal URL": ORG_URL,
         "Retrieved At": retrieved_at,
     } for i, org in enumerate(live_orgs, 1)]
     write_list_csv(org_csv, ORG_FIELDS, new_org_rows)
@@ -1392,7 +1410,7 @@ def scrape_mp_tenders(csv_file):
                             "Published Date": published,
                             "Closing Date": closing,
                             "Opening Date": opening,
-                            "Tender URL": tender.get("url", ""),
+                            "Tender URL": "",
                             "Raw Row": tender.get("row_text", ""),
                         })
 
