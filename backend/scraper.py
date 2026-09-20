@@ -1066,7 +1066,12 @@ def scrape_mp_tenders(csv_file):
                             needs_detail = force_detail or not all(clean(old.get(k)) for k in (
                                 "Department", "Division", "Sub Division",
                                 "PAC Amount", "EMD Fee", "Tender Fee",
-                                "Processing Fee", "Total Fee", "Location", "Pincode"
+                                "Processing Fee", "Total Fee", "Location", "Pincode",
+                                "Work Description", "Product Category", "Sub Category",
+                                "Contract Type", "Bid Validity", "Pre Qualification Details",
+                                "Bid Submission Start Date", "Bid Submission End Date",
+                                "Document Download Start Date", "Document Download End Date",
+                                "Fee Payable To", "Fee Payable At"
                             ))
                             if needs_detail:
                                 try:
@@ -1127,6 +1132,19 @@ def scrape_mp_tenders(csv_file):
             "Total Fee": clean(old.get("Total Fee")),
             "Location": clean(old.get("Location")),
             "Pincode": clean(old.get("Pincode")),
+            "Work Description": clean(old.get("Work Description")),
+            "Product Category": clean(old.get("Product Category")),
+            "Sub Category": clean(old.get("Sub Category")),
+            "Contract Type": clean(old.get("Contract Type")),
+            "Bid Validity": clean(old.get("Bid Validity")),
+            "Pre Qualification Details": clean(old.get("Pre Qualification Details")),
+            "Bid Submission Start Date": clean(old.get("Bid Submission Start Date")),
+            "Bid Submission End Date": clean(old.get("Bid Submission End Date")),
+            "Bid Opening Date": clean(row.get("Opening Date")) or clean(old.get("Bid Opening Date")),
+            "Document Download Start Date": clean(old.get("Document Download Start Date")),
+            "Document Download End Date": clean(old.get("Document Download End Date")),
+            "Fee Payable To": clean(old.get("Fee Payable To")),
+            "Fee Payable At": clean(old.get("Fee Payable At")),
             "Status": clean(old.get("Status")) or "Open",
             "URL": clean(row.get("Tender URL")),
         }
