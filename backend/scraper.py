@@ -818,7 +818,7 @@ def open_tender_detail_by_click(page, tender):
 def open_organisation_list_by_click(page, org):
     """From the stable organisation page, click the organisation's live count.
     Never navigate to the DirectLink href."""
-    org_soup = browser_page(page, ORG_URL)
+    org_soup = open_organisation_page_from_home(page)
     org_name = clean(org.get("name"))
     expected = int(org.get("count") or 0)
 
