@@ -1052,7 +1052,7 @@ body.telegram-locked .site-footer{visibility:hidden}
   <div class="header-right">
     <div class="right-sub">For DSC &amp; E-Tendering Services</div>
     <div class="telegram-profile" id="telegramProfile">
-      <img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile">
+      <img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile" referrerpolicy="no-referrer" crossorigin="anonymous">
       <button class="telegram-profile-btn" id="telegramProfileBtn" type="button">
         <span id="telegramProfileName">Telegram User</span><span>▾</span>
       </button>
@@ -1288,8 +1288,18 @@ function updateTelegramProfile(user){
   if(menuName) menuName.textContent=name;
   if(menuUser) menuUser.textContent=username;
   if(avatar){
-    if(user.photo_url){ avatar.src=user.photo_url; avatar.style.display="block"; }
-    else { avatar.style.display="none"; }
+    const photoUrl = clean(user.photo_url);
+    if(photoUrl){
+      avatar.onerror = () => {
+        avatar.removeAttribute("src");
+        avatar.style.display = "none";
+      };
+      avatar.src = photoUrl;
+      avatar.style.display = "block";
+    }else{
+      avatar.removeAttribute("src");
+      avatar.style.display = "none";
+    }
   }
   profile.classList.add("visible");
 }
@@ -1340,7 +1350,7 @@ async function verifyTelegramMembership(user, persist=true){
         username: data.username || user.username || "",
         first_name: data.first_name || user.first_name || "",
         last_name: data.last_name || user.last_name || "",
-        photo_url: data.photo_url || user.photo_url || ""
+        photo_url: data.photo_url || ""
       } : {})
     };
     telegramAuthData = verifiedUser;
