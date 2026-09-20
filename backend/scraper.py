@@ -1240,8 +1240,8 @@ def scrape_mp_tenders(csv_file):
                                             "status": "running",
                                             "process_started_at": process_started_at,
                                             "total_tenders": len(existing_by_id),
-                                            "detail_complete": complete_count,
-                                            "detail_remaining": max(0, len(existing_by_id) - complete_count),
+                                            "detail_complete": max(detail_successes, complete_count),
+                                            "detail_remaining": max(0, len(existing_by_id) - max(detail_successes, complete_count)),
                                             "errors": len(stats["errors"]),
                                             "latest_error": stats["errors"][-1] if stats["errors"] else "",
                                             "organisation_progress": f"{index}/{len(organisations)}",
@@ -1273,8 +1273,8 @@ def scrape_mp_tenders(csv_file):
                     write_extraction_status(csv_file, {
                         "status": "running",
                         "total_tenders": len(existing_by_id),
-                        "detail_complete": complete_count,
-                        "detail_remaining": max(0, len(existing_by_id) - complete_count),
+                        "detail_complete": max(detail_successes, complete_count),
+                        "detail_remaining": max(0, len(existing_by_id) - max(detail_successes, complete_count)),
                         "errors": len(stats["errors"]),
                         "latest_error": stats["errors"][-1] if stats["errors"] else "",
                         "organisation_progress": f"{index}/{len(organisations)}",
@@ -1362,8 +1362,8 @@ def scrape_mp_tenders(csv_file):
         "status": "completed",
         "process_started_at": process_started_at,
         "total_tenders": len(merged_rows),
-        "detail_complete": complete_count,
-        "detail_remaining": max(0, len(merged_rows) - complete_count),
+        "detail_complete": max(detail_successes, complete_count),
+        "detail_remaining": max(0, len(merged_rows) - max(detail_successes, complete_count)),
         "errors": len(stats["errors"]),
         "latest_error": stats["errors"][-1] if stats["errors"] else "",
         "organisation_progress": f"{len(organisations)}/{len(organisations)}",
@@ -1378,12 +1378,22 @@ def scrape_mp_tenders(csv_file):
         next_batch_size = batch_size
     else:
         next_batch_size = batch_size
+    completed_ids_this_run = [
+        clean(r.get("Tender ID"))
+        for r in merged_rows
+        if clean(r.get("Tender ID")) and clean(r.get("Tender ID")) in {
+            clean(x.get("Tender ID"))
+            for x in existing_by_id.values()
+            if clean(x.get("Tender ID"))
+        }
+    ]
     batch_state_file.write_text(
         json.dumps({
             "next_batch_size": next_batch_size,
             "last_batch_size": batch_size,
             "last_batch_completed": detail_successes,
             "detail_candidates_seen": detail_candidates_seen,
+            "completed_detail_ids": completed_ids_this_run[:batch_size],
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }, indent=2),
         encoding="utf-8",
@@ -1395,7 +1405,7 @@ def scrape_mp_tenders(csv_file):
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "organisation_records": len(org_rows),
         "tender_list_records": len(tender_list_rows),
-        "total_records": 0,
+        "total_records": len(merged_rows),
         "stats": stats,
         "message": (
             f"Organisation list and organisation-level tender lists were collected. "
