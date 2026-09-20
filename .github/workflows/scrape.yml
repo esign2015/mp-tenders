@@ -84,6 +84,50 @@ jobs:
         run: pip install reportlab
       - name: Install Chromium for full scraper
         run: python -m playwright install --with-deps chromium
+      - name: Recover existing Render dataset before extraction
+        env:
+          RENDER_TENDERS_API: "https://mp-tenders-api.onrender.com/api/tenders"
+        run: |
+          set -e
+          if [ ! -s all_tenders_org_detailed.csv ]; then
+            echo "GitHub detailed CSV is empty; attempting one-time recovery from the existing Render API copy."
+            python - <<'PY'
+          import csv, json, os, urllib.request
+          from pathlib import Path
+          url=os.environ["RENDER_TENDERS_API"]
+          try:
+              with urllib.request.urlopen(url, timeout=60) as response:
+                  payload=json.loads(response.read().decode("utf-8"))
+              rows=payload.get("tenders", payload if isinstance(payload,list) else [])
+              if rows:
+                  rows=[r for r in rows if isinstance(r,dict) and str(r.get("Tender ID","")).strip()]
+                  if rows:
+                      fields=[
+                          "Tender ID","Published Date","Closing Date","Opening Date","Title",
+                          "Reference Number","Organisation","Department","Division","Sub Division",
+                          "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee",
+                          "Location","Pincode","Work Description","Product Category","Sub Category",
+                          "Contract Type","Bid Validity","Pre Qualification Details",
+                          "Bid Submission Start Date","Bid Submission End Date","Bid Opening Date",
+                          "Document Download Start Date","Document Download End Date",
+                          "Fee Payable To","Fee Payable At","Status","URL"
+                      ]
+                      with Path("all_tenders_org_detailed.csv").open("w",encoding="utf-8",newline="") as f:
+                          w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
+                          w.writeheader()
+                          w.writerows(rows)
+                      print(f"Recovered {len(rows)} existing tender records from Render API.")
+                  else:
+                      print("Render API returned no usable tender records; keeping CSV untouched.")
+              else:
+                  print("Render API returned no tender records; keeping CSV untouched.")
+          except Exception as exc:
+              print(f"Render API recovery unavailable: {exc}")
+          PY
+          else
+            echo "Existing detailed CSV is non-empty; no recovery needed."
+          fi
+
       - name: Run MP Tender scraper — full organisation/tender list
         env:
           DETAIL_SAMPLE_SIZE: "0" # [run-scrape-details]
@@ -107,7 +151,9 @@ jobs:
 
               CHECKPOINT_TICK=$((CHECKPOINT_TICK + 30))
               if [ "$CHECKPOINT_TICK" -ge 60 ]; then
-                git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json 2>/dev/null || true
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json; do
+            if [ -s "$f" ]; then git add "$f"; fi
+          done
                 if ! git diff --cached --quiet; then
                   git commit -m "Checkpoint tender data [skip ci]"
                   git fetch origin "${GITHUB_REF_NAME}"
@@ -125,7 +171,9 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json 2>/dev/null || true
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+            if [ -s "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then
             echo "No tender data checkpoint to commit."
           else
