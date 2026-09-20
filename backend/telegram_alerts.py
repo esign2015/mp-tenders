@@ -299,6 +299,66 @@ def main():
                 f"📎 Closing Date {d} Tenders List on MPTenders"
             )
         return 0
+    new = sorted(
+        [r for r in rows if is_on_date(r.get("Published Date"), today)],
+        key=closing_sort_key
+    )
+    total_sorted = sorted(rows, key=closing_sort_key)
+
+    # Evening alerts are deliberately split into two independent messages:
+    # 8:55 PM = today's newly published tenders only
+    # 9:00 PM = complete total tender list only
+    if mode == "evening_new":
+        message = (
+            "🔔 एमपी टेंडर्स अलर्ट\n\n"
+            f"📅 दिनांक: {display}\n\n"
+            f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n\n"
+            + ("📎 आज एक भी नया टेंडर प्रकाशित नहीं हुआ है, इसलिए PDF नहीं भेजी जा रही है।\n\n" if not new else "")
+            + f"🌐 वेबसाइट: {SITE_URL}\n"
+            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
+            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
+            f"🕒 New Published Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+        )
+        if new:
+            new_pdf = make_pdf(
+                new,
+                f"New Publish Tender List on Date {d} on MPTenders.pdf",
+                f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
+            )
+        telegram_message(token, chat_id, message)
+        if new:
+            telegram_document(
+                token, chat_id, new_pdf,
+                f"📎 New Publish Tender List on Date {d} on MPTenders"
+            )
+        return 0
+
+    if mode == "evening_total":
+        message = (
+            "🔔 एमपी टेंडर्स अलर्ट\n\n"
+            f"📅 दिनांक: {display}\n\n"
+            f"📋 आज तक कुल टेंडर: {len(total_sorted)}\n\n"
+            f"🌐 वेबसाइट: {SITE_URL}\n"
+            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
+            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
+            f"🕒 Total Tenders Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+        )
+        total_pdf = make_pdf(
+            total_sorted,
+            f"Total Tenders as on {d} on MPTenders.pdf",
+            f"Total Tenders as on {d} on MPTenders • {len(total_sorted)} tenders",
+        )
+        telegram_message(token, chat_id, message)
+        telegram_document(
+            token, chat_id, total_pdf,
+            f"📎 Total Tenders as on {d} on MPTenders"
+        )
+        return 0
+
+    if mode != "evening":
+        raise RuntimeError(f"Unknown NOTIFY_MODE: {mode}")
+
+    # Legacy combined mode retained only for manual compatibility.
 
     new = sorted(
         [r for r in rows if is_on_date(r.get("Published Date"), today)],
