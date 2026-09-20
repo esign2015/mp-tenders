@@ -92,7 +92,7 @@ jobs:
         run: python backend/telegram_alerts.py
 
   morning_alert:
-    if: github.event_name == 'schedule' && github.event.schedule == '25 3 * * *'
+    if: github.event_name == 'schedule' && github.event.schedule == '50 4 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
