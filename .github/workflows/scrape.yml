@@ -69,7 +69,7 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Run MP Tender scraper — full organisation/tender list
         env:
-          DETAIL_SAMPLE_SIZE: "0"
+          DETAIL_SAMPLE_SIZE: "0" # [run-scrape-details]
           FETCH_DETAIL_PAGES: "1"
           FORCE_DETAIL_REFRESH: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]')) }}
         run: python backend/scraper.py
