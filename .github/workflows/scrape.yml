@@ -72,7 +72,7 @@ jobs:
       cancel-in-progress: true
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '15 15 * * *') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 350
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -136,6 +136,8 @@ jobs:
           FETCH_DETAIL_PAGES: "1"
           # Incremental mode: do not reopen already-complete tender detail pages.
           FORCE_DETAIL_REFRESH: "0"
+          # 0 = process the full remaining dataset; checkpoint every 10 successes.
+          DETAIL_BATCH_SIZE: "0"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
