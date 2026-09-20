@@ -853,6 +853,7 @@ td.title-cell{
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:3px;
     align-items:stretch;
+    white-space:nowrap;
   }
 
   .count-box{
@@ -865,10 +866,10 @@ td.title-cell{
   }
 
   .count-label{
-    font-size:9px;
+    font-size:9.5px;
     white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
+    text-overflow:clip;
   }
 
   .count-number{
