@@ -363,7 +363,86 @@ button:hover{
 }
 #sortSelect{width:170px;}
 #statusSelect{width:130px;}
-#pacFilter{width:170px;}
+#pacFilter{width:0;height:0;opacity:0;position:absolute;pointer-events:none;}
+.pac-filter-wrap{
+  position:relative;
+  width:170px;
+  min-width:0;
+}
+.pac-filter-button{
+  width:100%;
+  height:30px;
+  padding:4px 9px;
+  border:1px solid #cbd5e1;
+  border-radius:5px;
+  background:#fff;
+  color:#172033;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:13px;
+  font-weight:600;
+}
+.pac-filter-arrow{font-size:14px;color:#64748b;}
+.pac-filter-panel{
+  display:none;
+  position:absolute;
+  top:34px;
+  left:0;
+  width:300px;
+  max-height:430px;
+  overflow-y:auto;
+  z-index:6000;
+  padding:10px;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  box-shadow:0 12px 28px rgba(15,23,42,.20);
+}
+.pac-filter-panel.open{display:block;}
+.pac-filter-title{
+  font-size:14px;
+  font-weight:800;
+  padding:2px 2px 8px;
+  border-bottom:1px solid #e2e8f0;
+}
+.pac-filter-group{padding:9px 2px;border-bottom:1px solid #eef2f7;}
+.pac-filter-group-title{
+  font-size:11px;
+  color:#64748b;
+  font-weight:800;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+.pac-check-option{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-height:28px;
+  padding:3px 5px;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+}
+.pac-check-option:hover{background:#eef6ff;}
+.pac-check-option input{
+  width:15px;
+  height:15px;
+  margin:0;
+  accent-color:#2563eb;
+}
+.pac-amount-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.pac-filter-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:6px;
+  padding-top:9px;
+}
+.pac-filter-actions button{padding:7px 12px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
 /* Keep the "No Filter" label inside its count box. */
@@ -880,8 +959,17 @@ td.title-cell{
     width:100% !important;
   }
 
-  #pacFilter{
-    width:100% !important;
+  .pac-filter-wrap{
+    width:100%;
+  }
+  .pac-filter-button{
+    width:100%;
+  }
+  .pac-filter-panel{
+    left:0;
+    right:0;
+    width:100%;
+    max-height:55vh;
   }
 
   .legend-row{
@@ -1336,27 +1424,54 @@ body.telegram-locked .site-footer{visibility:hidden}
         <option value="corrigendum">Corrigendum</option>
       </select>
 
-      <select id="pacFilter" title="PAC / Estimate Amount">
-        <option value="">ALL PAC</option>
-        <option value="below:500000">Below 5 Lakh</option>
-        <option value="below:1000000">Below 10 Lakh</option>
-        <option value="below:2000000">Below 20 Lakh</option>
-        <option value="below:5000000">Below 50 Lakh</option>
-        <option value="below:10000000">Below 1 Cr.</option>
-        <option value="below:20000000">Below 2 Cr.</option>
-        <option value="below:50000000">Below 5 Cr.</option>
-        <option value="below:100000000">Below 10 Cr.</option>
-        <option value="below:200000000">Below 20 Cr.</option>
-        <option value="above:500000">Above 5 Lakh</option>
-        <option value="above:1000000">Above 10 Lakh</option>
-        <option value="above:2000000">Above 20 Lakh</option>
-        <option value="above:5000000">Above 50 Lakh</option>
-        <option value="above:10000000">Above 1 Cr.</option>
-        <option value="above:20000000">Above 2 Cr.</option>
-        <option value="above:50000000">Above 5 Cr.</option>
-        <option value="above:100000000">Above 10 Cr.</option>
-        <option value="above:200000000">Above 20 Cr.</option>
-      </select>
+      <div class="pac-filter-wrap" id="pacFilterWrap">
+        <button type="button" class="pac-filter-button" id="pacFilterButton"
+                aria-haspopup="dialog" aria-expanded="false">
+          <span id="pacFilterLabel">All PAC</span><span class="pac-filter-arrow">▾</span>
+        </button>
+        <div class="pac-filter-panel" id="pacFilterPanel" role="dialog" aria-label="PAC Amount Filter">
+          <div class="pac-filter-title">PAC Amount</div>
+
+          <div class="pac-filter-group">
+            <div class="pac-filter-group-title">Choose Type</div>
+            <label class="pac-check-option">
+              <input type="radio" name="pacModeOption" value="" checked>
+              <span>All PAC</span>
+            </label>
+            <label class="pac-check-option">
+              <input type="radio" name="pacModeOption" value="above">
+              <span>Above</span>
+            </label>
+            <label class="pac-check-option">
+              <input type="radio" name="pacModeOption" value="below">
+              <span>Below</span>
+            </label>
+          </div>
+
+          <div class="pac-filter-group">
+            <div class="pac-filter-group-title">Choose Amount</div>
+            <div class="pac-amount-options">
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="500000"><span>5 Lakh</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="1000000"><span>10 Lakh</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="2000000"><span>20 Lakh</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="5000000"><span>50 Lakh</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="10000000"><span>1 Cr.</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="20000000"><span>2 Cr.</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="50000000"><span>5 Cr.</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="100000000"><span>10 Cr.</span></label>
+              <label class="pac-check-option"><input type="radio" name="pacAmountOption" value="200000000"><span>20 Cr.</span></label>
+            </div>
+          </div>
+
+          <div class="pac-filter-actions">
+            <button type="button" class="btn-light" id="pacFilterReset">Reset</button>
+            <button type="button" class="btn-blue" id="pacFilterApply">Apply</button>
+          </div>
+        </div>
+        <select id="pacFilter" aria-hidden="true" tabindex="-1">
+          <option value="">ALL PAC</option>
+        </select>
+      </div>
     </div>
 
     <div class="legend-row">
@@ -3363,11 +3478,98 @@ function scheduleFilter(){
 [
   "closingDate",
   "sortSelect",
-  "statusSelect",
-  "pacFilter"
+  "statusSelect"
 ].forEach(id => {
   $(id).addEventListener("change",applyFilters);
 });
+
+function setupPacFilter(){
+  const wrap = $("pacFilterWrap");
+  const button = $("pacFilterButton");
+  const panel = $("pacFilterPanel");
+  const label = $("pacFilterLabel");
+  const hidden = $("pacFilter");
+  const reset = $("pacFilterReset");
+  const apply = $("pacFilterApply");
+  if(!wrap || !button || !panel || !label || !hidden) return;
+
+  function selectedMode(){
+    return panel.querySelector('input[name="pacModeOption"]:checked')?.value || "";
+  }
+  function selectedAmount(){
+    return panel.querySelector('input[name="pacAmountOption"]:checked')?.value || "";
+  }
+  function syncLabel(){
+    const mode = selectedMode();
+    const amount = selectedAmount();
+    if(!mode){
+      label.textContent = "All PAC";
+    }else{
+      const amountLabel = panel.querySelector('input[name="pacAmountOption"]:checked')?.nextElementSibling?.textContent || "";
+      label.textContent = (mode === "above" ? "Above " : "Below ") + amountLabel;
+    }
+  }
+  function syncHidden(){
+    const mode = selectedMode();
+    const amount = selectedAmount();
+    hidden.value = mode && amount ? mode + ":" + amount : "";
+  }
+  function close(){
+    panel.classList.remove("open");
+    button.setAttribute("aria-expanded","false");
+  }
+
+  button.addEventListener("click", function(event){
+    event.stopPropagation();
+    const open = panel.classList.toggle("open");
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  panel.addEventListener("click", function(event){
+    event.stopPropagation();
+  });
+
+  reset.addEventListener("click", function(){
+    panel.querySelector('input[name="pacModeOption"][value=""]').checked = true;
+    panel.querySelectorAll('input[name="pacAmountOption"]').forEach(input => input.checked = false);
+    syncHidden();
+    syncLabel();
+    close();
+    applyFilters();
+  });
+
+  apply.addEventListener("click", function(){
+    const mode = selectedMode();
+    const amount = selectedAmount();
+
+    // All PAC needs no amount. Above/Below requires one amount.
+    if(mode && !amount){
+      label.textContent = "Select amount";
+      return;
+    }
+
+    syncHidden();
+    syncLabel();
+    close();
+    applyFilters();
+  });
+
+  panel.querySelectorAll('input[name="pacModeOption"]').forEach(input => {
+    input.addEventListener("change", function(){
+      if(!this.value){
+        panel.querySelectorAll('input[name="pacAmountOption"]').forEach(x => x.checked = false);
+      }
+    });
+  });
+
+  document.addEventListener("click", function(event){
+    if(!wrap.contains(event.target)) close();
+  });
+
+  syncHidden();
+  syncLabel();
+}
+setupPacFilter();
 
 document.querySelectorAll(".sortable-th").forEach(th => {
   th.addEventListener("click", () => sortCurrentTable(th.dataset.sortKey));
