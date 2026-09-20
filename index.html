@@ -331,6 +331,18 @@ button:hover{
   gap:6px;
 }
 
+.table-scroll-top{
+  width:100%;
+  height:18px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border-bottom:1px solid #dbe3ee;
+  background:#f8fafc;
+}
+.table-scroll-top-inner{
+  width:1980px;
+  height:1px;
+}
 .table-wrap{
   width:100%;
   overflow:auto;
@@ -1228,7 +1240,11 @@ body.telegram-locked .site-footer{visibility:hidden}
       </div>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-scroll-top" id="tableScrollTop" aria-label="Horizontal table scrollbar">
+      <div class="table-scroll-top-inner" id="tableScrollTopInner"></div>
+    </div>
+
+    <div class="table-wrap" id="tableWrap">
       <table id="tenderTable">
         <thead>
           <tr>
@@ -1999,39 +2015,57 @@ function getStatusText(row){
   return status;
 }
 
-const MAX_RENDER_ROWS = 120;
+const VIRTUAL_CHUNK_SIZE = 100;
+const VIRTUAL_MAX_ROWS = 300;
+const ESTIMATED_ROW_HEIGHT = 48;
 
-function renderTable(rows){
+let virtualRows = [];
+let virtualStart = 0;
+let virtualEnd = 0;
+let virtualTopHeight = 0;
+let virtualBottomHeight = 0;
+let virtualBusy = false;
+let virtualScrollTimer = null;
+
+function virtualSpacerRow(height, className){
+  const safeHeight = Math.max(0, Math.round(height));
+  if(!safeHeight) return "";
+  return `
+    <tr class="${className}" aria-hidden="true">
+      <td colspan="14" style="height:${safeHeight}px;padding:0;border:0;"></td>
+    </tr>
+  `;
+}
+
+function renderVirtualWindow(){
   const body = $("tenderBody");
+  if(!body) return;
 
-  if(!rows.length){
+  const visibleRows = virtualRows.slice(virtualStart, virtualEnd);
+
+  if(!visibleRows.length){
     body.innerHTML =
-      `<tr>
+      \`<tr>
         <td colspan="14" class="empty-row">
           कोई tender record नहीं मिला।
         </td>
-      </tr>`;
-
+      </tr>\`;
     $("recordCount").textContent = "0 record(s) shown";
     return;
   }
 
-  /*
-     Keep the full filtered dataset in memory, but render only a small
-     visible window. Rendering thousands of table rows blocks the browser
-     main thread and makes the next input/click feel frozen.
-  */
-  const visibleRows = rows.slice(0, MAX_RENDER_ROWS);
+  const topSpacer = virtualSpacerRow(virtualTopHeight,"virtual-top-spacer");
+  const bottomSpacer = virtualSpacerRow(virtualBottomHeight,"virtual-bottom-spacer");
 
-  body.innerHTML = visibleRows.map((row,index) => {
+  body.innerHTML = topSpacer + visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
     const tenderId = escapeHtml(row["Tender ID"]);
     const title = escapeHtml(cleanDisplayTitle(row["Title"]));
     const titleHtml = title;
 
-    return `
+    return \`
       <tr data-row-index="${filteredTenders.indexOf(row)}">
-        <td>${index+1}</td>
+        <td>${virtualStart + index + 1}</td>
         <td>${tenderId || "—"}</td>
         <td class="title-cell">${titleHtml || "—"}</td>
         <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
@@ -2048,13 +2082,120 @@ function renderTable(rows){
         <td>${escapeHtml(row["Division"]) || "—"}</td>
         <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
       </tr>
-    `;
-  }).join("");
+    \`;
+  }).join("") + bottomSpacer;
 
   $("recordCount").textContent =
-    rows.length > MAX_RENDER_ROWS
-      ? rows.length + " matched • showing first " + MAX_RENDER_ROWS
-      : rows.length + " record(s) shown";
+    virtualRows.length > virtualEnd
+      ? virtualRows.length + " matched • loaded " + virtualStart + "-" + virtualEnd
+      : virtualRows.length + " record(s) shown";
+
+  requestAnimationFrame(updateVirtualSpacerHeights);
+}
+
+function updateVirtualSpacerHeights(){
+  const body = $("tenderBody");
+  if(!body) return;
+
+  const top = body.querySelector(".virtual-top-spacer td");
+  const bottom = body.querySelector(".virtual-bottom-spacer td");
+  if(top) top.style.height = Math.max(0, virtualTopHeight) + "px";
+  if(bottom) bottom.style.height = Math.max(0, virtualBottomHeight) + "px";
+}
+
+function measureRenderedChunkHeight(){
+  const rows = [...$("tenderBody").querySelectorAll("tr[data-row-index]")];
+  return rows.slice(0,VIRTUAL_CHUNK_SIZE).reduce((sum,row) => sum + row.offsetHeight, 0);
+}
+
+function updateVirtualWindow(){
+  const wrap = $("tableWrap");
+  if(!wrap || virtualBusy || !virtualRows.length) return;
+
+  const nearBottom = wrap.scrollTop + wrap.clientHeight >= wrap.scrollHeight - 900;
+  const nearTop = wrap.scrollTop <= 900;
+
+  if(nearBottom && virtualEnd < virtualRows.length){
+    virtualBusy = true;
+    const oldStart = virtualStart;
+    const nextEnd = Math.min(virtualRows.length, virtualEnd + VIRTUAL_CHUNK_SIZE);
+
+    virtualEnd = nextEnd;
+
+    if(virtualEnd - virtualStart > VIRTUAL_MAX_ROWS){
+      const removedRows = virtualRows.slice(virtualStart, virtualStart + VIRTUAL_CHUNK_SIZE);
+      const oldRendered = [...$("tenderBody").querySelectorAll("tr[data-row-index]")];
+      const removedHeight = oldRendered
+        .filter(row => {
+          const idx = Number(row.dataset.rowIndex);
+          return idx >= oldStart && idx < oldStart + VIRTUAL_CHUNK_SIZE;
+        })
+        .reduce((sum,row) => sum + row.offsetHeight, 0);
+
+      virtualStart += VIRTUAL_CHUNK_SIZE;
+      virtualTopHeight += removedHeight || removedRows.length * ESTIMATED_ROW_HEIGHT;
+
+      renderVirtualWindow();
+      requestAnimationFrame(() => {
+        wrap.scrollTop += removedHeight || removedRows.length * ESTIMATED_ROW_HEIGHT;
+        virtualBusy = false;
+      });
+      return;
+    }
+
+    renderVirtualWindow();
+    requestAnimationFrame(() => { virtualBusy = false; });
+    return;
+  }
+
+  if(nearTop && virtualStart > 0){
+    virtualBusy = true;
+    const prependStart = Math.max(0, virtualStart - VIRTUAL_CHUNK_SIZE);
+    const addedCount = virtualStart - prependStart;
+    const addedHeight = Math.max(addedCount * ESTIMATED_ROW_HEIGHT, 1);
+
+    virtualStart = prependStart;
+    virtualTopHeight = Math.max(0, virtualTopHeight - addedHeight);
+
+    renderVirtualWindow();
+    requestAnimationFrame(() => {
+      wrap.scrollTop += addedHeight;
+      virtualBusy = false;
+    });
+  }
+}
+
+function setupVirtualTable(){
+  const wrap = $("tableWrap");
+  const topScroll = $("tableScrollTop");
+  const inner = $("tableScrollTopInner");
+  if(!wrap || !topScroll || !inner) return;
+
+  inner.style.width = "1980px";
+
+  topScroll.addEventListener("scroll", () => {
+    if(Math.abs(wrap.scrollLeft - topScroll.scrollLeft) > 1){
+      wrap.scrollLeft = topScroll.scrollLeft;
+    }
+  });
+
+  wrap.addEventListener("scroll", () => {
+    if(Math.abs(topScroll.scrollLeft - wrap.scrollLeft) > 1){
+      topScroll.scrollLeft = wrap.scrollLeft;
+    }
+
+    if(virtualScrollTimer) cancelAnimationFrame(virtualScrollTimer);
+    virtualScrollTimer = requestAnimationFrame(updateVirtualWindow);
+  });
+}
+
+function renderTable(rows){
+  virtualRows = rows;
+  virtualStart = 0;
+  virtualEnd = Math.min(VIRTUAL_CHUNK_SIZE, rows.length);
+  virtualTopHeight = 0;
+  virtualBottomHeight = Math.max(0, rows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
+  renderVirtualWindow();
 }
 
 function updateCounts(rows, refreshHeader=true){
