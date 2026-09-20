@@ -1092,7 +1092,7 @@ def scrape_mp_tenders(csv_file):
         "errors": 0,
         "latest_error": "",
         "organisation_progress": "0/0",
-        "detail_batch_size": 10,
+        "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "100") or 100),
         "detail_batch_completed": 0,
         "updated_at": process_started_at,
     })
@@ -1181,7 +1181,7 @@ def scrape_mp_tenders(csv_file):
         "errors": 0,
         "latest_error": "",
         "organisation_progress": f"0/{len(organisations)}",
-        "detail_batch_size": 10,
+        "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "100") or 100),
         "detail_batch_completed": 0,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
@@ -1207,19 +1207,14 @@ def scrape_mp_tenders(csv_file):
     # A previous 100-record run completed successfully but older code did not
     # persist the completed Tender IDs. Recover that checkpoint once, using the
     # same candidate order, so those records are never opened again.
-    recovered_completed_ids = []
-    previous_completed = int(batch_state.get("last_batch_completed", 0) or 0)
-    previous_ids = batch_state.get("completed_detail_ids") or []
-    if previous_completed and not previous_ids:
-        for tid, row in existing_by_id.items():
-            if tid and not clean(row.get("Detail Extracted")):
-                recovered_completed_ids.append(tid)
-                if len(recovered_completed_ids) >= previous_completed:
-                    break
-        for tid in recovered_completed_ids:
-            existing_by_id[tid]["Detail Extracted"] = "YES"
-        if recovered_completed_ids:
-            write_csv(csv_file, list(existing_by_id.values()))
+    recovered_completed_ids = [
+        tid for tid, row in existing_by_id.items()
+        if tid and clean(row.get("Detail Extracted")).upper() == "YES"
+        and all(clean(row.get(k)) for k in (
+            "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
+            "Department", "Division", "Sub Division", "Location", "Pincode"
+        ))
+    ]
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
@@ -1388,8 +1383,8 @@ def scrape_mp_tenders(csv_file):
                                             "status": "running",
                                             "process_started_at": process_started_at,
                                             "total_tenders": len(existing_by_id),
-                                            "detail_complete": max(detail_successes, complete_count),
-                                            "detail_remaining": max(0, len(existing_by_id) - max(detail_successes, complete_count)),
+                                            "detail_complete": complete_count,
+                                            "detail_remaining": max(0, len(existing_by_id) - complete_count),
                                             "errors": len(stats["errors"]),
                                             "latest_error": stats["errors"][-1] if stats["errors"] else "",
                                             "organisation_progress": f"{index}/{len(organisations)}",
@@ -1511,8 +1506,8 @@ def scrape_mp_tenders(csv_file):
         "status": "completed",
         "process_started_at": process_started_at,
         "total_tenders": len(merged_rows),
-        "detail_complete": sum(1 for r in merged_rows if clean(r.get("Detail Extracted")) == "YES"),
-        "detail_remaining": max(0, len(merged_rows) - sum(1 for r in merged_rows if clean(r.get("Detail Extracted")) == "YES")),
+        "detail_complete": sum(1 for r in merged_rows if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in ("PAC Amount","EMD Fee","Tender Fee","Processing Fee","Department","Division","Sub Division","Location","Pincode"))),
+        "detail_remaining": max(0, len(merged_rows) - sum(1 for r in merged_rows if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in ("PAC Amount","EMD Fee","Tender Fee","Processing Fee","Department","Division","Sub Division","Location","Pincode")))),
         "errors": len(stats["errors"]),
         "latest_error": stats["errors"][-1] if stats["errors"] else "",
         "organisation_progress": f"{len(organisations)}/{len(organisations)}",
@@ -1561,4 +1556,29 @@ if __name__ == "__main__":
     if os.getenv("MONITOR_ONLY") == "1":
         print(monitor_tender_changes(target))
     else:
-        print(scrape_mp_tenders(target))
+        try:
+            print(scrape_mp_tenders(target))
+        except Exception as exc:
+            existing = read_existing(target)
+            completed = sum(
+                1 for r in existing
+                if clean(r.get("Detail Extracted")).upper() == "YES"
+                and all(clean(r.get(k)) for k in (
+                    "PAC Amount","EMD Fee","Tender Fee","Processing Fee",
+                    "Department","Division","Sub Division","Location","Pincode"
+                ))
+            )
+            write_extraction_status(target, {
+                "status": "failed",
+                "process_started_at": "",
+                "total_tenders": len(existing),
+                "detail_complete": completed,
+                "detail_remaining": max(0, len(existing) - completed),
+                "errors": 1,
+                "latest_error": f"{type(exc).__name__}: {exc}",
+                "organisation_progress": "failed",
+                "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "100") or 100),
+                "detail_batch_completed": completed,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            })
+            raise
