@@ -975,6 +975,27 @@ def scrape_mp_tenders(csv_file):
     3) Verify copied tender count equals the portal count.
     4) When FETCH_DETAIL_PAGES=1, open each tender detail page and enrich the main CSV with fees, PAC, organisation chain and critical dates.
     """
+    process_started_at = datetime.now(timezone.utc).isoformat()
+    stats = {
+        "organisations_opened": 0,
+        "tenders_seen": 0,
+        "detail_opened": 0,
+        "errors": [],
+    }
+    write_extraction_status(csv_file, {
+        "status": "running",
+        "process_started_at": process_started_at,
+        "total_tenders": 0,
+        "detail_complete": 0,
+        "detail_remaining": 0,
+        "errors": 0,
+        "latest_error": "",
+        "organisation_progress": "0/0",
+        "detail_batch_size": 10,
+        "detail_batch_completed": 0,
+        "updated_at": process_started_at,
+    })
+
     session = requests.Session()
 
     response = request(session, ORG_URL, sleep=0.5)
@@ -986,7 +1007,6 @@ def scrape_mp_tenders(csv_file):
     if os.getenv("DETAIL_VALIDATION_ONLY") == "1":
         return run_detail_validation(csv_file, organisations)
 
-    process_started_at = datetime.now(timezone.utc).isoformat()
     retrieved_at = process_started_at
 
     # Save the complete organisation list first.
