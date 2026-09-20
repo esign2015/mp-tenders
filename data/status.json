@@ -1,14 +1,14 @@
 {
   "status": "running",
-  "process_started_at": "2026-09-20T17:35:18.476627+00:00",
+  "process_started_at": "2026-09-20T18:13:31.921792+00:00",
   "total_tenders": 5256,
   "detail_complete": 0,
   "detail_remaining": 5256,
-  "errors": 102,
-  "latest_error": "Directorate Sports and Youth Welfare / 2026_DSYW_532439_1: detail RuntimeError: detail page returned portal menu/home content",
-  "organisation_progress": "20/90",
-  "current_organisation": "Directorate Urban Administration and Development",
+  "errors": 1,
+  "latest_error": "Atal Bihari Vajpayee Institute of Good Governance and policy Analysis Bhopal / 2026_IGGPA_524363_1: detail RuntimeError: detail page returned portal menu/home content",
+  "organisation_progress": "1/90",
+  "current_organisation": "Atal Indore City Transport Services Ltd - Indore",
   "detail_batch_size": 100,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-20T17:54:53.335604+00:00"
+  "updated_at": "2026-09-20T18:14:00.208677+00:00"
 }
