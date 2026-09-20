@@ -2,13 +2,12 @@
   "status": "running",
   "process_started_at": "2026-09-20T14:14:46.980698+00:00",
   "total_tenders": 5253,
-  "detail_complete": 8,
-  "detail_remaining": 5245,
+  "detail_complete": 0,
+  "detail_remaining": 5253,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "2/90",
-  "current_organisation": "Bhopal City Link Limited",
+  "organisation_progress": "3/90",
   "detail_batch_size": 100,
-  "detail_batch_completed": 8,
-  "updated_at": "2026-09-20T14:15:35.887900+00:00"
+  "detail_batch_completed": 10,
+  "updated_at": "2026-09-20T14:15:50.239552+00:00"
 }
