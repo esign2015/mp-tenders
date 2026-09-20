@@ -1173,7 +1173,10 @@ body.telegram-locked .site-footer{visibility:hidden}
         Closing after 3 days
       </div>
 
-      <div id="recordCount">0 record(s) shown</div>
+      <div id="recordCountWrap">
+        <span id="searchStatus" class="search-status" aria-live="polite"></span>
+        <span id="recordCount">0 record(s) shown</span>
+      </div>
     </div>
 
   </section>
@@ -2589,18 +2592,62 @@ $("pincodeSearch").addEventListener("input", function(){
 });
 
 
+/*
+   Search is intentionally debounced. Filtering 5,253+ records can take a
+   little time, but typing itself must NEVER wait for that work. The input
+   event only updates the small "Searching..." indicator and schedules the
+   heavier filter work after the user pauses typing.
+*/
+let filterTimer = null;
+
+function showSearchProgress(){
+  const status = $("searchStatus");
+  if(status){
+    status.textContent = "🔎 Searching…";
+    status.classList.add("active");
+  }
+}
+
+function hideSearchProgress(){
+  const status = $("searchStatus");
+  if(status){
+    status.textContent = "";
+    status.classList.remove("active");
+  }
+}
+
+function scheduleFilter(){
+  showSearchProgress();
+  clearTimeout(filterTimer);
+  filterTimer = setTimeout(() => {
+    /*
+       Give the browser one paint opportunity before the heavier filtering
+       starts, so the typed text and "Searching…" state become visible first.
+    */
+    requestAnimationFrame(() => {
+      applyFilters();
+      hideSearchProgress();
+    });
+  }, 300);
+}
+
 [
   "generalSearch",
   "tenderIdSearch",
   "titleSearch",
   "organisationSearch",
-  "pincodeSearch",
+  "pincodeSearch"
+].forEach(id => {
+  $(id).addEventListener("input",scheduleFilter);
+  $(id).addEventListener("change",scheduleFilter);
+});
+
+[
   "closingDate",
   "sortSelect",
   "statusSelect",
   "pacFilter"
 ].forEach(id => {
-  $(id).addEventListener("input",applyFilters);
   $(id).addEventListener("change",applyFilters);
 });
 
@@ -2625,6 +2672,31 @@ enforceTelegramAccess().then(() => loadData());
 </script>
 
 <style>
+#recordCountWrap{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:20px;
+}
+
+.search-status{
+  display:none;
+  font-weight:700;
+  color:#2563eb;
+  white-space:nowrap;
+}
+
+.search-status.active{
+  display:inline-flex;
+  align-items:center;
+  animation:searchPulse 1s ease-in-out infinite;
+}
+
+@keyframes searchPulse{
+  0%,100%{opacity:.55}
+  50%{opacity:1}
+}
+
 @media print{
   @page{
     size:A3 landscape;
