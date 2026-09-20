@@ -73,16 +73,17 @@ jobs:
           FETCH_DETAIL_PAGES: "1"
           FORCE_DETAIL_REFRESH: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]')) }}
         run: python backend/scraper.py
-      - name: Commit full tender data
+      - name: Commit whatever tender data was collected
+        if: always()
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No data changes to commit."
+            echo "No tender data checkpoint to commit."
           else
-            git commit -m "Update MP organisation and tender-list data"
-            git push
+            git commit -m "Checkpoint collected tender data"
+            git push || echo "Checkpoint commit push failed; retained in workspace/logs."
           fi
       - name: Send Telegram evening update
         if: success()
