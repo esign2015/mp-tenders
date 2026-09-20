@@ -1386,6 +1386,7 @@ def scrape_mp_tenders(csv_file):
             "Fee Payable At": clean(old.get("Fee Payable At")),
             "Status": clean(old.get("Status")) or "Open",
             "URL": clean(row.get("Tender URL")),
+            "Detail Extracted": clean(old.get("Detail Extracted")),
         }
         merged_rows.append(base)
     write_csv(csv_file, merged_rows)
