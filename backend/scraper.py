@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import re
 import time
@@ -1002,6 +1003,20 @@ def scrape_mp_tenders(csv_file):
         if clean(row.get("Tender ID"))
     }
     fetch_details = os.getenv("FETCH_DETAIL_PAGES", "0") == "1"
+
+    # Detail extraction is deliberately checkpointed in small batches.
+    # First successful batch = 10 tenders; after that, grow to 50.
+    # Any detail error checkpoints the successful work and stops the run,
+    # so a bad portal page can never wipe out a large in-progress batch.
+    batch_state_file = csv_file.parent / "scrape_batch_state.json"
+    try:
+        batch_state = json.loads(batch_state_file.read_text(encoding="utf-8"))
+    except Exception:
+        batch_state = {}
+    batch_size = 50 if int(batch_state.get("next_batch_size", 10)) >= 50 else 10
+    batch_completed = 0
+    batch_failed = False
+
     stats = {
         "organisations": len(organisations),
         "organisations_opened": 0,
@@ -1094,10 +1109,64 @@ def scrape_mp_tenders(csv_file):
                                         raise RuntimeError("detail Tender ID missing")
                                     existing_by_id[tender_id] = detail
                                     stats["detail_opened"] += 1
+                                    batch_completed += 1
+
+                                    # Checkpoint immediately when the current batch is complete.
+                                    if batch_completed >= batch_size:
+                                        write_csv(csv_file, list(existing_by_id.values()))
+                                        write_list_csv(
+                                            tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
+                                        )
+                                        next_size = 50 if batch_size == 10 else 50
+                                        batch_state_file.write_text(
+                                            json.dumps({
+                                                "next_batch_size": next_size,
+                                                "last_batch_completed": batch_completed,
+                                                "updated_at": datetime.now(timezone.utc).isoformat(),
+                                            }, indent=2),
+                                            encoding="utf-8",
+                                        )
+                                        print(
+                                            f"DETAIL CHECKPOINT: {batch_completed} successful; "
+                                            f"saved CSV; next batch size={next_size}"
+                                        )
+                                        return {
+                                            "ok": True,
+                                            "checkpoint": True,
+                                            "batch_completed": batch_completed,
+                                            "next_batch_size": next_size,
+                                            "stats": stats,
+                                        }
                                 except Exception as detail_exc:
                                     stats["errors"].append(
                                         f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
                                     )
+                                    batch_failed = True
+                                    # Preserve every successful detail before the failure.
+                                    write_csv(csv_file, list(existing_by_id.values()))
+                                    write_list_csv(
+                                        tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
+                                    )
+                                    batch_state_file.write_text(
+                                        json.dumps({
+                                            "next_batch_size": 10,
+                                            "last_batch_completed": batch_completed,
+                                            "last_error": f"{type(detail_exc).__name__}: {detail_exc}",
+                                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                                        }, indent=2),
+                                        encoding="utf-8",
+                                    )
+                                    print(
+                                        f"DETAIL ERROR CHECKPOINT: {batch_completed} successful; "
+                                        f"saved CSV; next batch size=10"
+                                    )
+                                    return {
+                                        "ok": False,
+                                        "checkpoint": True,
+                                        "batch_completed": batch_completed,
+                                        "next_batch_size": 10,
+                                        "stats": stats,
+                                    }
 
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
