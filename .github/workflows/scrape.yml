@@ -2,6 +2,8 @@ name: MP Tender Daily Scraper
 
 on:
   push:
+    paths-ignore:
+      - 'data/status.json'
     branches: ["main"]
     paths:
       - "backend/**"
@@ -37,7 +39,19 @@ jobs:
           DETAIL_VALIDATION_ONLY: "1"
           DETAIL_SAMPLE_SIZE: "9"
           DETAIL_ORGANISATION: "Directorate Sports and Youth Welfare"
-        run: python backend/scraper.py
+        run: |
+          set -o pipefail
+          python backend/scraper.py > scraper_live.log 2>&1 &
+          SCRAPER_PID=$!
+          while kill -0 "$SCRAPER_PID" 2>/dev/null; do
+            if [ -f data/status.json ]; then
+              git add data/status.json
+              git diff --cached --quiet || git commit -m "Update extraction status [skip ci]"
+              git push origin "HEAD:${GITHUB_REF_NAME}" || true
+            fi
+            sleep 30
+          done
+          wait "$SCRAPER_PID"
       - name: Commit 9-detail validation data
         run: |
           git config user.name "mp-tenders-bot"
