@@ -20,7 +20,7 @@ pre{white-space:pre-wrap;background:#fff1f2;padding:14px;border-radius:10px;colo
 <div class="box">⏱️ Process Time<div class="num" id="elapsed">—</div></div>
 </div><div class="bar"><div class="fill" id="fill"></div></div><p id="updated" class="muted"></p></div>
 <div class="card" id="errorCard" style="display:none"><h2>❌ Latest Error</h2><pre id="latest"></pre></div>
-<div class="card"><button id="refreshBtn" onclick="manualRefresh()" style="border:0;border-radius:10px;padding:11px 18px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:pointer">🔄 Refresh Now</button><p class="muted" style="margin-bottom:0">यह पेज लगभग 60 सेकंड में अपने आप refresh होता है। आप चाहें तो ऊपर के बटन से अभी तुरंत status refresh कर सकते हैं।</p></div>
+<div class="card"><button id="refreshBtn" onclick="manualRefresh()" style="border:0;border-radius:10px;padding:11px 18px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:pointer">🔄 Refresh Now</button><p class="muted" style="margin-bottom:0">Status लगभग 30 सेकंड में अपने आप update होगा। आप चाहें तो ऊपर के बटन से अभी तुरंत status refresh कर सकते हैं।</p></div>
 </div>
 <script>
 function manualRefresh(){
@@ -40,7 +40,8 @@ async function load(){
 }
 const started=s.process_started_at ? new Date(s.process_started_at).getTime() : 0;
 elapsed.textContent=started ? formatElapsed((s.status==='running'?Date.now():new Date(s.updated_at||Date.now()).getTime())-started) : '—';
-updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update: '+(s.updated_at||'—')+' • Started: '+(s.process_started_at||'—');
+const fmtIST=v=>v?new Date(v).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}):'—';
+updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update (IST): '+fmtIST(s.updated_at)+' • Started (IST): '+fmtIST(s.process_started_at);
   if(s.latest_error){errorCard.style.display='block';latest.textContent=s.latest_error}else errorCard.style.display='none';
  }catch(e){updated.textContent='Status अभी उपलब्ध नहीं है।'}
 }
