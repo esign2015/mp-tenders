@@ -1,4 +1,4 @@
-# [run-scrape-details] dual-route live extraction kickoff
+# [run-scrape-details] data extraction engine: dual live routes + checkpoint-safe full run
 # [run-scrape-details] start fresh 100-record detail batch after restoring verified tender list
 # [run-scrape-details] resume after checkpoint-safe workflow
 # [run-scrape-details] accelerated detail batch + list-level hierarchy
@@ -1288,18 +1288,23 @@ def scrape_mp_tenders(csv_file):
     # Primary organisation discovery path: open the stable MP home page,
     # click "Tenders by Organisation", then parse the live organisation table.
     # This avoids the direct ORG_URL request that previously timed out.
-    with sync_playwright() as bootstrap_pw:
-        bootstrap_browser = bootstrap_pw.chromium.launch(headless=True)
-        bootstrap_page = bootstrap_browser.new_page(
-            user_agent=HEADERS["User-Agent"],
-            locale="en-IN",
-            viewport={"width": 1920, "height": 1080},
-        )
-        try:
-            soup = open_organisation_page_from_home(bootstrap_page)
-            organisations = parse_organisation_rows(soup, bootstrap_page.url)
-        finally:
-            bootstrap_browser.close()
+    organisations = []
+    try:
+        with sync_playwright() as bootstrap_pw:
+            bootstrap_browser = bootstrap_pw.chromium.launch(headless=True)
+            bootstrap_page = bootstrap_browser.new_page(
+                user_agent=HEADERS["User-Agent"],
+                locale="en-IN",
+                viewport={"width": 1920, "height": 1080},
+            )
+            try:
+                soup = open_organisation_page_from_home(bootstrap_page)
+                organisations = parse_organisation_rows(soup, bootstrap_page.url)
+            finally:
+                bootstrap_browser.close()
+    except Exception as bootstrap_exc:
+        stats["errors"].append(f"organisation browser discovery: {type(bootstrap_exc).__name__}: {bootstrap_exc}")
+        print(f"Organisation browser discovery failed; trying HTTP fallback: {bootstrap_exc}")
 
     if not organisations:
         # Secondary fallback: retain the HTTP parser in case the browser route
@@ -1404,9 +1409,11 @@ def scrape_mp_tenders(csv_file):
     # Detail extraction is no longer artificially capped at 10 records.
     # Use 100 per run by default; an environment override can tune it.
     try:
-        batch_size = max(10, min(500, int(os.getenv("DETAIL_BATCH_SIZE", "100"))))
+        configured_batch = int(os.getenv("DETAIL_BATCH_SIZE", "0") or 0)
+        # 0 means no artificial batch cap. Checkpoints are still written every 10 successes.
+        batch_size = 0 if configured_batch <= 0 else max(10, min(500, configured_batch))
     except ValueError:
-        batch_size = 100
+        batch_size = 0
     detail_successes = 0
     detail_candidates_seen = 0
     detail_completed_ids = []
@@ -1556,7 +1563,7 @@ def scrape_mp_tenders(csv_file):
                                     # MP Tender DirectLink URLs contain session= and expire.
                                     # Find this Tender ID again from the stable home-page
                                     # search box, click the live result title, and parse it.
-                                    detail_soup = open_tender_detail_by_search(page, tender)
+                                    detail_soup = open_tender_detail_dual(page, tender, org)
                                     detail = parse_detail(detail_soup, PORTAL)
                                     detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
                                     detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
