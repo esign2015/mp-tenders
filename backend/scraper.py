@@ -1248,7 +1248,7 @@ def scrape_mp_tenders(csv_file):
             browser.close()
 
     # Build/refresh the main detailed CSV from the complete tender-list collection.
-    # Safety: never replace a known-good dataset with an empty scrape.
+    # Safety: never replace a known-good dataset with an empty scrape. [detail-run]
     if not tender_list_rows:
         write_extraction_status(csv_file, {
             "status": "error",
