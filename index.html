@@ -1472,11 +1472,28 @@ function updateTelegramProfile(user){
   if(menuUser) menuUser.textContent=username;
   if(avatar){
     const photoUrl = clean(user.photo_url);
-    if(photoUrl){
-      avatar.onerror = () => {
-        avatar.removeAttribute("src");
-        avatar.style.display = "none";
-      };
+    const proxyUrl = user.id
+      ? TELEGRAM_VERIFY_API.replace("/api/telegram/verify","/api/telegram/photo/") + encodeURIComponent(user.id)
+      : "";
+
+    // Prefer our server-side Telegram photo proxy. It fetches a fresh
+    // profile image and avoids stale/blocked Telegram photo URLs.
+    let triedProxy = false;
+    avatar.onerror = () => {
+      if(!triedProxy && photoUrl && proxyUrl){
+        triedProxy = true;
+        avatar.src = proxyUrl;
+        return;
+      }
+      avatar.removeAttribute("src");
+      avatar.style.display = "none";
+    };
+
+    if(proxyUrl){
+      triedProxy = true;
+      avatar.src = proxyUrl;
+      avatar.style.display = "block";
+    }else if(photoUrl){
       avatar.src = photoUrl;
       avatar.style.display = "block";
     }else{
