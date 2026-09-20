@@ -1,3 +1,4 @@
+# [run-scrape-details] accelerated detail batch + list-level hierarchy
 import csv
 import json
 import os
