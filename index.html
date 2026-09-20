@@ -391,14 +391,15 @@ button:hover{
 .pac-filter-panel{
   display:none;
   isolation:isolate;
-  transform:translateZ(0);
+  transform:translate3d(0,0,0);
   position:fixed;
   top:0;
   left:0;
   width:300px;
   max-height:min(430px,70vh);
   overflow-y:auto;
-  z-index:2147483647;
+  z-index:2147483647 !important;
+  pointer-events:auto;
   padding:10px;
   background:#fff;
   border:1px solid #cbd5e1;
@@ -849,7 +850,7 @@ td.title-cell{
     display:flex;
     flex-wrap:nowrap;
     justify-content:space-between;
-    gap:5px;
+    gap:3px;
   }
 
   .count-box{
@@ -2217,6 +2218,43 @@ async function loadOrganisationTenderCsv(){
   return parseCsv(text);
 }
 
+let liveRefreshTimer = null;
+let liveRefreshBusy = false;
+
+async function refreshPublishedData(){
+  if(liveRefreshBusy || document.hidden) return;
+  liveRefreshBusy = true;
+  try{
+    const data = await loadFromCsv();
+    if(Array.isArray(data) && data.length){
+      const next = data.map(normaliseTender);
+      const oldKey = allTenders.map(x => clean(x["Tender ID"])).join("|");
+      const newKey = next.map(x => clean(x["Tender ID"])).join("|");
+
+      // Refresh when tender list OR extracted detail fields change.
+      const oldSignature = allTenders.map(x => [
+        x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
+        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"]
+      ].join("~")).join("|");
+      const newSignature = next.map(x => [
+        x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
+        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"]
+      ].join("~")).join("|");
+
+      if(oldKey !== newKey || oldSignature !== newSignature){
+        allTenders = next;
+        buildOrganisationOptions();
+        applyFilters();
+        console.info("Dashboard data refreshed from latest GitHub checkpoint.");
+      }
+    }
+  }catch(error){
+    console.warn("Live dashboard refresh skipped:",error);
+  }finally{
+    liveRefreshBusy = false;
+  }
+}
+
 async function loadData(){
   $("tenderBody").innerHTML =
     `<tr><td colspan="14" class="loading-row">Loading tender data...</td></tr>`;
@@ -2253,6 +2291,10 @@ async function loadData(){
     allTenders = data.map(normaliseTender);
     buildOrganisationOptions();
     applyFilters();
+
+    if(!liveRefreshTimer){
+      liveRefreshTimer = setInterval(refreshPublishedData, 60000);
+    }
 
   }catch(error){
     console.error(error);
