@@ -177,11 +177,13 @@ body{
 /* ================= SEARCH ================= */
 
 .search-panel{
+  position:relative;
+  z-index:20;
   background:white;
   border:1px solid var(--border);
   border-radius:9px;
   margin-bottom:10px;
-  overflow:hidden;
+  overflow:visible;
 }
 
 .search-heading-row{
@@ -392,7 +394,7 @@ button:hover{
   width:300px;
   max-height:min(430px,70vh);
   overflow-y:auto;
-  z-index:99999;
+  z-index:2147483647;
   padding:10px;
   background:#fff;
   border:1px solid #cbd5e1;
@@ -446,15 +448,6 @@ button:hover{
 .pac-filter-actions button{padding:7px 12px;}
 #pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
-/* Keep the "No Filter" label inside its count box. */
-#filterResultCount{
-  font-size:16px;
-  line-height:1;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
 .btn-archive{
   border:1px solid #64748b;
   background:#f1f5f9;
@@ -492,6 +485,8 @@ button:hover{
 /* ================= TABLE ================= */
 
 .table-panel{
+  position:relative;
+  z-index:1;
   background:white;
   border:1px solid var(--border);
   border-radius:9px;
@@ -845,26 +840,26 @@ td.title-cell{
   .counts{
     width:100%;
     display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:6px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
   }
 
   .count-box{
     width:100%;
     min-width:0;
-    height:52px;
-    padding:5px 3px;
+    height:50px;
+    padding:5px 2px;
     border-radius:6px;
   }
 
   .count-label{
-    font-size:10px;
+    font-size:9px;
     overflow:hidden;
     text-overflow:ellipsis;
   }
 
   .count-number{
-    font-size:19px;
+    font-size:18px;
     margin-top:3px;
   }
 
@@ -1324,15 +1319,6 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="count-number blue" id="closingTomorrowCount">0</div>
     </button>
 
-    <button class="count-box count-box-button" id="publishedYesterdayBox" type="button" title="Show tenders published yesterday">
-      <div class="count-label">Published Yesterday</div>
-      <div class="count-number purple" id="publishedYesterdayCount">0</div>
-    </button>
-
-    <button class="count-box count-box-button" id="filterResultBox" type="button" title="Show current filter result">
-      <div class="count-label">Filter Result</div>
-      <div class="count-number green" id="filterResultCount">No Filter</div>
-    </button>
   </div>
 
   <div class="header-right">
@@ -2662,8 +2648,6 @@ function updateCounts(rows, refreshHeader=true){
       quickFilterMode !== "" ||
       filterControls.some(value => clean(value) !== "");
 
-    $("filterResultCount").textContent =
-      hasFilter ? filteredTenders.length : "No Filter";
     return;
   }
 
@@ -2689,16 +2673,10 @@ function updateCounts(rows, refreshHeader=true){
 
   const yesterdayDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const yesterdayKey = dateKey(yesterdayDate);
-  const publishedYesterday = rows.filter(row =>
-    dateKey(row["Published Date"]) === yesterdayKey
-  ).length;
-
   $("liveCount").textContent = live;
   $("closingTodayCount").textContent = closingToday;
   $("closingTomorrowCount").textContent = closingTomorrow;
-  $("publishedYesterdayCount").textContent = publishedYesterday;
-
-  const filterControls = [
+const filterControls = [
     $("generalSearch").value,
     $("tenderIdSearch").value,
     $("titleSearch").value,
@@ -2714,8 +2692,6 @@ function updateCounts(rows, refreshHeader=true){
     quickFilterMode !== "" ||
     filterControls.some(value => clean(value) !== "");
 
-  $("filterResultCount").textContent =
-    hasFilter ? filteredTenders.length : "No Filter";
 }
 function applyFilters(refreshHeader=true){
   const general = clean($("generalSearch").value).toLowerCase();
@@ -2941,7 +2917,7 @@ function showClosingToday(){
   quickFilterMode = "closingToday";
   $("closingDate").value = todayKey();
   applyFilters();
-  $("filterResultCount").textContent = filteredTenders.length;
+
 }
 
 function showClosingTomorrow(){
@@ -2965,33 +2941,7 @@ function showClosingTomorrow(){
 
   renderTable(filteredTenders);
   updateCounts(allTenders);
-  $("filterResultCount").textContent = filteredTenders.length;
-}
 
-function showPublishedYesterday(){
-  clearFilters();
-  quickFilterMode = "publishedYesterday";
-
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const yesterdayKey = dateKey(yesterday);
-
-  filteredTenders = allTenders.filter(row => {
-    return dateKey(row["Published Date"]) === yesterdayKey;
-  });
-
-  filteredTenders = filteredTenders.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    return !closing || closing.getTime() > Date.now();
-  });
-
-  filteredTenders.sort((a,b) =>
-    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
-    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
-  );
-
-  renderTable(filteredTenders);
-  updateCounts(allTenders);
-  $("filterResultCount").textContent = filteredTenders.length;
 }
 
 function showNextThreeDays(){
@@ -3015,7 +2965,7 @@ function showNextThreeDays(){
 
   renderTable(filteredTenders);
   updateCounts(allTenders);
-  $("filterResultCount").textContent = filteredTenders.length;
+
 }
 
 function updateDateTime(){
@@ -3615,29 +3565,6 @@ $("closingTodayBtn").addEventListener("click",showClosingToday);
 $("liveCountBox").addEventListener("click",clearFilters);
 $("closingTodayBox").addEventListener("click",showClosingToday);
 $("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
-$("publishedYesterdayBox").addEventListener("click",showPublishedYesterday);
-$("filterResultBox").addEventListener("click",function(){
-  const hasFilter =
-    archivedMode ||
-    quickFilterMode !== "" ||
-    [
-      $("generalSearch").value,
-      $("tenderIdSearch").value,
-      $("titleSearch").value,
-      $("organisationSearch").value,
-      $("pincodeSearch").value,
-      $("closingDate").value,
-      $("pacFilter").value,
-      $("statusSelect").value
-    ].some(value => clean(value) !== "");
-
-  if(hasFilter){
-    renderTable(filteredTenders);
-    $("filterResultCount").textContent = filteredTenders.length;
-  }else{
-    clearFilters();
-  }
-});
 $("nextThreeBtn").addEventListener("click",showNextThreeDays);
 $("archivedBtn").addEventListener("click",function(){
   if(archivedMode){
