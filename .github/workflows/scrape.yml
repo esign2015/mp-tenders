@@ -78,7 +78,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json 2>/dev/null || true
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No tender data checkpoint to commit."
           else
