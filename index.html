@@ -2901,8 +2901,7 @@ enforceTelegramAccess().then(() => loadData());
       ["Organisation","Organisation"],
       ["Department","Department"],
       ["Division","Division"],
-      ["Sub Division","Sub Division"],
-      ["Status","Status"]
+      ["Sub Division","Sub Division"]
     ];
     return fields.map(([key,label]) => label + ": " + clean(row[key])).join("\n");
   }
