@@ -2773,14 +2773,24 @@ function applyFilters(refreshHeader=true){
     /* Active view: expired tenders are hidden.
        Archived view: only tenders closed within the last 10 days are shown. */
     if(closing){
-      const close = new Date(closing);
-      close.setHours(0,0,0,0);
-      const daysAgo = Math.floor((today - close) / 86400000);
-
+      /*
+        IMPORTANT: keep the real closing time for Active view.
+        Resetting today's closing date to 00:00 hid every tender that
+        was closing later today, even though the header correctly counted it.
+      */
       if(archivedMode){
+        const closeDay = dateKey(closing);
+        const todayDay = todayKey();
+        const todayMidnight = parseDate(todayDay.split("-").reverse().join("-"));
+        const closeMidnight = parseDate(closeDay.split("-").reverse().join("-"));
+        const daysAgo = (todayMidnight && closeMidnight)
+          ? Math.floor((todayMidnight.getTime() - closeMidnight.getTime()) / 86400000)
+          : 999;
+
         if(daysAgo < 1 || daysAgo > 10) return false;
       }else{
-        if(close.getTime() <= Date.now()) return false;
+        // Active tenders remain visible until their actual closing time.
+        if(closing.getTime() <= Date.now()) return false;
       }
     }else if(archivedMode){
       return false;
