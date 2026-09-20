@@ -1113,7 +1113,32 @@ def scrape_mp_tenders(csv_file):
 
                                     # Checkpoint immediately when the current batch is complete.
                                     if batch_completed >= batch_size:
-                                        write_csv(csv_file, list(existing_by_id.values()))
+                                        # Checkpoint both detail data and all list-level
+                                        # fields collected so far. Existing records are
+                                        # preserved, so the dashboard never shrinks while
+                                        # detail extraction continues in the background.
+                                        checkpoint_rows = []
+                                        for list_row in tender_list_rows:
+                                            tid = clean(list_row.get("Tender ID"))
+                                            if not tid:
+                                                continue
+                                            old_row = dict(existing_by_id.get(tid, {}))
+                                            checkpoint_rows.append({
+                                                **old_row,
+                                                "Tender ID": tid,
+                                                "Published Date": clean(list_row.get("Published Date")) or old_row.get("Published Date", ""),
+                                                "Closing Date": clean(list_row.get("Closing Date")) or old_row.get("Closing Date", ""),
+                                                "Opening Date": clean(list_row.get("Opening Date")) or old_row.get("Opening Date", ""),
+                                                "Title": clean(list_row.get("Title")) or old_row.get("Title", ""),
+                                                "Reference Number": clean(list_row.get("Reference Number")) or old_row.get("Reference Number", ""),
+                                                "Organisation": clean(list_row.get("Organisation Name")) or old_row.get("Organisation", ""),
+                                                "URL": clean(list_row.get("Tender URL")) or old_row.get("URL", ""),
+                                            })
+                                        checkpoint_ids = {clean(r.get("Tender ID")) for r in checkpoint_rows}
+                                        checkpoint_rows.extend(
+                                            r for tid, r in existing_by_id.items() if tid and tid not in checkpoint_ids
+                                        )
+                                        write_csv(csv_file, checkpoint_rows)
                                         write_list_csv(
                                             tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
                                         )
