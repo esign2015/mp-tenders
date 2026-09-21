@@ -2649,7 +2649,7 @@ function renderVirtualWindow(){
         <td><strong>${formatMoney(totalFee(row))}</strong></td>
         <td class="org-display-cell">
   <span class="org-full">${escapeHtml(row["Organisation"]) || "—"}</span>
-  <span class="org-short">${escapeHtml(clean(row["Organisation"]).split(/\s+/).slice(0,2).join(" ") + (clean(row["Organisation"]).split(/\s+/).length > 2 ? "…" : "")) || "—"}</span>
+  <span class="org-short">${escapeHtml((clean(row["Tender ID"]).split("_")[1] || clean(row["Organisation"]).split(/\s+/)[0] || "—").toUpperCase()) || "—"}</span>
 </td>
         <td>${escapeHtml(row["Department"]) || "—"}</td>
         <td>${escapeHtml(row["Division"]) || "—"}</td>
