@@ -60,7 +60,7 @@ def main():
     with sync_playwright() as p:
         for lo, hi, label in RANGES:
             print(f"RANGE {label}: starting", flush=True)
-            state["current_range"] = label
+            state["current_range"] = label  # live sequential checkpoint
             state["updated_at"] = now()
             save_status(state)
 
