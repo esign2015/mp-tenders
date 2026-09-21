@@ -90,7 +90,7 @@ function render(){
    const closeDate=Number.isFinite(t)?new Date(t):null;
    const eligibleAt=closeDate?new Date(closeDate):null;
    if(eligibleAt) eligibleAt.setHours(19,0,0,0);
-   return Number.isFinite(t)&&eligibleAt&&now>=eligibleAt.getTime()&&now-t<=10*86400000 &&
+   return Number.isFinite(t)&&eligibleAt&&now>=eligibleAt.getTime()&&now-t<=3*86400000 &&
      (!q||["Tender ID","Title","Reference Number","Organisation","Department","Division"].some(k=>clean(r[k]).toLowerCase().includes(q)));
  }).sort((a,b)=>dateValue(b["Closing Date"]||b["Last Date"])-dateValue(a["Closing Date"]||a["Last Date"]));
  $("count").textContent=archived.length+" archived tenders";
@@ -105,7 +105,7 @@ function render(){
  "<td>"+clean(r["Organisation"])+"</td>"+
  "<td>"+clean(r["Department"])+"</td>"+
  "<td>"+clean(r["Division"])+"</td>"+
- "<td>Archived</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 10 दिनों तक tender दिखाई देगा।</td></tr>";
+ "<td>Archived</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 3 दिनों तक tender दिखाई देगा।</td></tr>";
 }
 (async()=>{
  try{
