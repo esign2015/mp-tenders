@@ -17,7 +17,7 @@ on:
     - cron: "35 4 * * *"     # 10:05 AM IST — corrigendum check before morning alert
     - cron: "35 10 * * *"    # 4:05 PM IST — 6 hours after morning check
     - cron: "15 15 * * *"    # 8:45 PM IST — final corrigendum check before evening alert
-    - cron: "45 21 * * *"    # 3:15 AM IST — 6 hours after evening check
+    - cron: "15 21 * * *"    # 2:45 AM IST — 6 hours after evening check
     - cron: "*/5 * * * *"    # 5-minute scheduler for exact 15m/5m pre-opening checks
 
 permissions:
