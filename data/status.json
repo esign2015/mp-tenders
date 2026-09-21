@@ -1,14 +1,13 @@
 {
   "status": "running",
-  "process_started_at": "2026-09-21T07:03:33.231164+00:00",
-  "total_tenders": 130,
+  "process_started_at": "2026-09-21T09:11:58.684444+00:00",
+  "total_tenders": 0,
   "detail_complete": 0,
-  "detail_remaining": 122,
-  "errors": 130,
-  "latest_error": "Directorate of Health Services / 2026_DHS_527959_1: detail RuntimeError: organisation route: RuntimeError: Live organisation count link not found: Directorate of Health Services | home search route: NameError: name 'open_tender_detail_by_search' is not defined",
-  "organisation_progress": "12/92",
-  "current_organisation": "Directorate of Medical Education",
+  "detail_remaining": 0,
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/0",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T07:33:20.176994+00:00"
+  "updated_at": "2026-09-21T09:11:58.684444+00:00"
 }
