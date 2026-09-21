@@ -593,16 +593,18 @@ table th:nth-child(2), table td:nth-child(2){width:145px;}
 table th:nth-child(3), table td:nth-child(3){width:260px;}
 table th:nth-child(4), table td:nth-child(4){width:125px;}
 table th:nth-child(5), table td:nth-child(5){width:125px;}
-table th:nth-child(6), table td:nth-child(6){width:120px;}
-table th:nth-child(7), table td:nth-child(7){width:115px;}
-table th:nth-child(8), table td:nth-child(8){width:110px;}
-table th:nth-child(9), table td:nth-child(9){width:110px;}
-table th:nth-child(10), table td:nth-child(10){width:125px;}
+table th:nth-child(6), table td:nth-child(6){width:110px;}
+table th:nth-child(7), table td:nth-child(7){width:125px;}
+table th:nth-child(8), table td:nth-child(8){width:120px;}
+table th:nth-child(9), table td:nth-child(9){width:115px;}
+table th:nth-child(10), table td:nth-child(10){width:110px;}
 table th:nth-child(11), table td:nth-child(11){width:110px;}
-table th:nth-child(12), table td:nth-child(12){width:220px;}
-table th:nth-child(13), table td:nth-child(13){width:190px;}
-table th:nth-child(14), table td:nth-child(14){width:170px;}
+table th:nth-child(12), table td:nth-child(12){width:125px;}
+table th:nth-child(13), table td:nth-child(13){width:110px;}
+table th:nth-child(14), table td:nth-child(14){width:220px;}
 table th:nth-child(15), table td:nth-child(15){width:190px;}
+table th:nth-child(16), table td:nth-child(16){width:170px;}
+table th:nth-child(17), table td:nth-child(17){width:190px;}
 
 thead{
   position:sticky;
@@ -709,6 +711,14 @@ td.title-cell{
 .date-closing{
   font-weight:bold;
 }
+.time-left{font-weight:800;white-space:nowrap;}
+.time-left-urgent{color:#dc2626;}
+.time-left-soon{color:#d97706;}
+.time-left-normal{color:#047857;}
+.time-left-closed{color:#b91c1c;}
+.district-cell{line-height:1.25;}
+.district-cell-note,.district-cell-warning{display:block;margin-top:2px;font-size:9px;color:#64748b;}
+.district-cell-warning{color:#b45309;font-weight:700;}
 
 .closing-today{
   color:#dc2626;
@@ -1556,6 +1566,8 @@ body.telegram-locked .site-footer{visibility:hidden}
             <th class="sortable-th" data-sort-key="Title">Title <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
+            <th>Time Left</th>
+            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="PAC Amount">PAC Amount <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="EMD Fee">EMD Fee <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Tender Fee">Tender Fee <span class="sort-arrow"></span></th>
@@ -1565,13 +1577,12 @@ body.telegram-locked .site-footer{visibility:hidden}
             <th class="sortable-th" data-sort-key="Department">Department <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Division">Division <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Sub Division">Sub Division <span class="sort-arrow"></span></th>
-            
           </tr>
         </thead>
 
         <tbody id="tenderBody">
           <tr>
-            <td colspan="14" class="loading-row">
+            <td colspan="17" class="loading-row">
               Loading tender data...
             </td>
           </tr>
@@ -1964,6 +1975,63 @@ function formatDate(value){
          p.year;
 }
 
+function formatTimeLeft(value){
+  const closing = parseDate(value);
+  if(!closing) return "—";
+  const ms = closing.getTime() - Date.now();
+  if(ms <= 0) return "Closed";
+  const totalMinutes = Math.floor(ms / 60000);
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+  if(days > 0) return days + "d " + hours + "h";
+  if(hours > 0) return hours + "h " + minutes + "m";
+  return Math.max(1,minutes) + "m";
+}
+
+function getTimeLeftClass(value){
+  const closing = parseDate(value);
+  if(!closing) return "";
+  const ms = closing.getTime() - Date.now();
+  if(ms <= 0) return "time-left-closed";
+  if(ms <= 24 * 60 * 60 * 1000) return "time-left-urgent";
+  if(ms <= 3 * 24 * 60 * 60 * 1000) return "time-left-soon";
+  return "time-left-normal";
+}
+
+function getDistrictInfo(row){
+  const pin = clean(row["Pincode"]).replace(/\D/g,"");
+  const candidates = [];
+  if(pin && MP_DISTRICT_MASTER.length){
+    MP_DISTRICT_MASTER.forEach(d => {
+      (d.pinPrefixes || []).forEach(prefix => {
+        const p = String(prefix);
+        if(pin.startsWith(p)) candidates.push({district:d,prefix:p});
+      });
+    });
+  }
+  if(!candidates.length) return {name:"—",detail:"PIN not mapped",mentioned:[]};
+  const maxPrefix = Math.max(...candidates.map(x => x.prefix.length));
+  const best = candidates.filter(x => x.prefix.length === maxPrefix);
+  const unique = [...new Map(best.map(x => [x.district.name,x.district])).values()];
+  const text = [row["Location"],row["Title"],row["Work Description"],row["Reference Number"],row["Organisation"],row["Department"],row["Division"],row["Sub Division"]].join(" ").toLowerCase();
+  const mentioned = unique.filter(d => [d.name,...(d.aliases || [])].some(n => text.includes(String(n).toLowerCase())));
+  if(unique.length === 1) return {name:unique[0].name,detail:"PIN "+pin,mentioned:[]};
+  if(mentioned.length === 1) return {name:mentioned[0].name,detail:"PIN "+pin+" + tender text",mentioned:unique.filter(d => d.name !== mentioned[0].name).map(d => d.name)};
+  return {name:"PIN zone "+best[0].prefix,detail:"Possible: "+unique.map(d => d.name).join(", "),mentioned:[]};
+}
+
+function formatDistrictCell(row){
+  const info = getDistrictInfo(row);
+  if(info.name === "—") return "—";
+  let html = "<strong>"+escapeHtml(info.name)+"</strong>";
+  html += "<small class=\"district-cell-note\">"+escapeHtml(info.detail)+"</small>";
+  if(info.mentioned && info.mentioned.length){
+    html += "<small class=\"district-cell-warning\">⚠ Other PIN-match: "+escapeHtml(info.mentioned.join(", "))+"</small>";
+  }
+  return html;
+}
+
 function formatClosingDateTime(value){
   const date = parseDate(value);
   if(!date) return clean(value);
@@ -2350,7 +2418,7 @@ async function loadData(){
   const hasExistingData = Array.isArray(allTenders) && allTenders.length > 0;
   if(!hasExistingData){
     $("tenderBody").innerHTML =
-      `<tr><td colspan="14" class="loading-row">Loading tender data...</td></tr>`;
+      `<tr><td colspan="17" class="loading-row">Loading tender data...</td></tr>`;
   }else{
     const status = $("searchStatus");
     if(status){
@@ -2414,7 +2482,7 @@ async function loadData(){
 
       $("tenderBody").innerHTML =
         `<tr>
-          <td colspan="14" class="empty-row">
+          <td colspan="17" class="empty-row">
             Tender data load failed: ${clean(error && error.message ? error.message : error)}
           </td>
         </tr>`;
@@ -2496,7 +2564,7 @@ function virtualSpacerRow(height, className){
   if(!safeHeight) return "";
   return `
     <tr class="${className}" aria-hidden="true">
-      <td colspan="14" style="height:${safeHeight}px;padding:0;border:0;"></td>
+      <td colspan="17" style="height:${safeHeight}px;padding:0;border:0;"></td>
     </tr>
   `;
 }
@@ -2533,6 +2601,8 @@ function renderVirtualWindow(){
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
+        <td class="time-left ${getTimeLeftClass(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
+        <td class="district-cell">${formatDistrictCell(row)}</td>
         <td>${formatMoney(row["PAC Amount"])}</td>
         <td>${formatMoney(row["EMD Fee"])}</td>
         <td>${formatMoney(row["Tender Fee"])}</td>
@@ -3007,10 +3077,12 @@ function applyFilters(refreshHeader=true){
     }else if(archivedMode){
       return false;
     }
+    const districtInfo = getDistrictInfo(row);
     const combined = [
       row["Tender ID"],row["Title"],row["Reference Number"],row["Organisation"],
       row["Department"],row["Division"],row["Sub Division"],row["Location"],
-      row["Pincode"],row["Product Category"],row["Sub Category"],row["Work Description"]
+      row["Pincode"],districtInfo.name,districtInfo.detail,
+      row["Product Category"],row["Sub Category"],row["Work Description"]
     ].join(" ").toLowerCase();
     if(general && !combined.includes(general)) return false;
 
@@ -3908,6 +3980,7 @@ setupDistrictSearch();
 
 updateDateTime();
 setInterval(updateDateTime,1000);
+setInterval(() => { if(Array.isArray(virtualRows) && virtualRows.length) renderVirtualWindow(); },60000);
 
 setupVirtualTable();
 updateVirtualPager();
@@ -4044,6 +4117,8 @@ enforceTelegramAccess().then(async () => {
       ["Title","Title"],
       ["Reference Number","Ref.No."],
       ["Closing Date","Last Date"],
+      ["Time Left","Time Left"],
+      ["District","District"],
       ["Published Date","Published"],
       ["PAC Amount","PAC Amount"],
       ["EMD Fee","EMD Fee"],
@@ -4055,7 +4130,11 @@ enforceTelegramAccess().then(async () => {
       ["Division","Division"],
       ["Sub Division","Sub Division"]
     ];
-    return fields.map(([key,label]) => label + ": " + clean(row[key])).join("\n");
+    return fields.map(([key,label]) => {
+      if(key === "Time Left") return label + ": " + formatTimeLeft(row["Closing Date"]);
+      if(key === "District") return label + ": " + getDistrictInfo(row).name;
+      return label + ": " + clean(row[key]);
+    }).join("\n");
   }
 
   body.addEventListener("click", function(event){
