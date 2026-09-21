@@ -270,6 +270,7 @@ def main():
                 merged.pop("URL", None)
                 by_id[tid] = merged
                 success += 1
+                success_ids.add(tid)
 
                 # Save in small checkpoints instead of rewriting the full 5,000+
                 # row CSV after every Tender ID.
