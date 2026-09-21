@@ -1,4 +1,5 @@
 # [run-scrape-details] data extraction engine: dual live routes + checkpoint-safe full run
+# [run-scrape-details] recovery/detail route audit trigger
 # [run-scrape-details] start fresh 100-record detail batch after restoring verified tender list
 # [run-scrape-details] resume after checkpoint-safe workflow
 # [run-scrape-details] accelerated detail batch + list-level hierarchy
