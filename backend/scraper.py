@@ -796,7 +796,7 @@ def browser_page(page, url, referer=None):
     """Open only a stable MP Tender URL. Never page.goto() a session-bound URL."""
     stable = assert_no_session_url(url)
     page.goto(stable, wait_until="domcontentloaded", timeout=60000)
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(500)
     return BeautifulSoup(page.content(), "html.parser")
 
 
@@ -805,7 +805,7 @@ def click_live_anchor(page, link):
     The href may contain session=, but it is NEVER passed to page.goto()."""
     link.click()
     page.wait_for_load_state("domcontentloaded", timeout=60000)
-    page.wait_for_timeout(1200)
+    page.wait_for_timeout(500)
     return BeautifulSoup(page.content(), "html.parser")
 
 
@@ -1062,7 +1062,7 @@ def browser_get_all_tender_rows(page, org, expected_count):
             f"portal={expected_count}, first_pass={first_count}; reloading organisation list",
             flush=True,
         )
-        time.sleep(2)
+        time.sleep(0.5)
         soup = open_organisation_list_by_click(page, org)
         unique = {}
         pages = 0
@@ -1681,6 +1681,7 @@ def run_separate_detail_extraction(csv_file, organisations, process_started_at, 
     Tender IDs and opens only the detail records that still need extraction.
     """
     org_by_name = {clean(o.get("name")).casefold(): o for o in organisations if clean(o.get("name"))}
+    portal_menu_marker = "MIS Reports Tenders by Location Tenders by Organisation"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
     tender_list_rows = read_existing(tender_list_csv)
     existing_rows = read_existing(csv_file)
@@ -2063,6 +2064,16 @@ def scrape_mp_tenders(csv_file):
         tid for tid, row in existing_by_id.items()
         if tid and clean(row.get("Detail Extracted")).upper() == "YES"
     ]
+    # Compatibility state for the final run summary. Detail extraction itself
+    # now owns its own candidate/checkpoint state.
+    batch_state_file = csv_file.parent / "scrape_batch_state.json"
+    detail_candidates_seen = 0
+    detail_completed_ids = []
+    try:
+        configured_batch = int(os.getenv("DETAIL_BATCH_SIZE", "0") or 0)
+        batch_size = 0 if configured_batch <= 0 else max(10, min(500, configured_batch))
+    except ValueError:
+        batch_size = 0
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
     with sync_playwright() as pw:
