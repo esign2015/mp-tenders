@@ -2214,7 +2214,7 @@ def scrape_mp_tenders(csv_file):
         flush=True,
     )
 
-    # Fast list-refresh mode: stop immediately after the complete
+    # [run-scrape-details] Fast list-refresh mode: stop immediately after the complete
     # organisation/tender-list snapshot. Detail extraction is handled separately.
     if os.getenv("COPY_ONLY", "0").lower() in ("1", "true", "yes"):
         write_extraction_status(csv_file, {
