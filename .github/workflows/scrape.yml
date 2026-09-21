@@ -307,7 +307,7 @@ jobs:
           NOTIFY_MODE: evening_total
         run: python backend/telegram_alerts.py
   morning_alert:
-    if: github.event_name == 'schedule' && github.event.schedule == '50 4 * * *'
+    if: (github.event_name == 'schedule' && github.event.schedule == '50 4 * * *') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-morning-alert]'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
