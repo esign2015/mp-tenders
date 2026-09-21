@@ -121,8 +121,7 @@ def main():
         rows = list(csv.DictReader(f))
         fields = list(f.fieldnames or [])
 
-    # Daily detail worker only processes IDs that are in the CURRENT portal
-    # snapshot. Historical/incomplete archive records are not reopened here.
+    # Only current portal IDs are eligible. Existing detailed records are skipped.
     current_ids = []
     if SNAPSHOT.exists():
         with SNAPSHOT.open(encoding="utf-8-sig", newline="") as sf:
@@ -132,47 +131,72 @@ def main():
                     current_ids.append(tid)
     current_set = set(current_ids)
 
-    incomplete = []
-    for row in rows:
-        tid = clean(row.get("Tender ID"))
-        if tid and tid in current_set and clean(row.get("Detail Extracted")).upper() != "YES":
-            incomplete.append(row)
-
+    incomplete = [
+        row for row in rows
+        if clean(row.get("Tender ID")) in current_set
+        and clean(row.get("Detail Extracted")).upper() != "YES"
+    ]
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
+
     print(
         f"CSV IDs: {len(rows)} | current portal IDs: {len(current_ids)} | "
-        f"new/incomplete current IDs: {len(incomplete)} | this batch: {len(targets)}",
+        f"new/incomplete current IDs: {len(incomplete)} | targets: {len(targets)}",
         flush=True
     )
 
     by_id = {clean(r.get("Tender ID")): r for r in rows if clean(r.get("Tender ID"))}
     errors = []
+    failed_bases = []
     success = 0
 
-    failed_bases = []
+    def save_csv():
+        nonlocal fields
+        out_fields = list(fields)
+        for merged in by_id.values():
+            for k in merged:
+                if k not in out_fields:
+                    out_fields.append(k)
+        with CSV.open("w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=out_fields, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(by_id.values())
+        fields = out_fields
 
-    def save_status(status, success, errors, last_id=""):
+    def save_status(status, last_id=""):
         STATUS.parent.mkdir(parents=True, exist_ok=True)
-                "status": status, "batch_size": BATCH_SIZE,
-            "total_csv_ids": len(rows), "current_portal_ids": len(current_ids),
-            "initial_incomplete": len(incomplete), "batch_targets": len(targets),
-            "success": success, "failed": len(errors),
-            "last_successful_tender_id": last_id, "errors": errors,
+        STATUS.write_text(json.dumps({
+            "status": status,
+            "batch_size": BATCH_SIZE,
+            "total_csv_ids": len(rows),
+            "current_portal_ids": len(current_ids),
+            "initial_incomplete": len(incomplete),
+            "batch_targets": len(targets),
+            "success": success,
+            "failed": len(errors),
+            "last_successful_tender_id": last_id,
+            "errors": errors,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }, indent=2), encoding="utf-8")
 
-    def process_targets(p, target_rows, errors):
+    def process_targets(p, target_rows, is_retry=False):
+        nonlocal success
         for base in target_rows:
             tid = clean(base.get("Tender ID"))
             browser = context = None
             try:
-                print(f"DETAIL START {tid} — NEW BROWSER", flush=True)
+                print(
+                    f"DETAIL {'RETRY ' if is_retry else ''}START {tid}",
+                    flush=True
+                )
                 browser = p.chromium.launch(headless=True)
-                context = browser.new_context(locale="en-IN", timezone_id="Asia/Kolkata", viewport={"width":1366,"height":900})
+                context = browser.new_context(
+                    locale="en-IN",
+                    timezone_id="Asia/Kolkata",
+                    viewport={"width": 1366, "height": 900}
+                )
                 page = context.new_page()
                 detail = do_search(page, tid)
 
-                # Preserve known list-level hierarchy if it is more complete.
                 for key in ("Organisation","Department","Division","Sub Division"):
                     if clean(base.get(key)) and len(clean(base.get(key))) >= len(clean(detail.get(key))):
                         detail[key] = base.get(key, "")
@@ -186,65 +210,57 @@ def main():
                 by_id[tid] = merged
                 success += 1
 
-                # Save immediately after each Tender ID.
-                out_fields = list(fields)
-                for k in merged:
-                    if k not in out_fields:
-                        out_fields.append(k)
-                with CSV.open("w", encoding="utf-8-sig", newline="") as f:
-                    w = csv.DictWriter(f, fieldnames=out_fields, extrasaction="ignore")
-                    w.writeheader()
-                    w.writerows(by_id.values())
-                fields = out_fields
-
-                STATUS.parent.mkdir(parents=True, exist_ok=True)
-                STATUS.write_text(json.dumps({
-                    "status":"running","batch_size":BATCH_SIZE,
-                    "total_csv_ids":len(rows),"initial_incomplete":len(incomplete),
-                    "batch_targets":len(targets),"success":success,"failed":len(errors),
-                    "last_successful_tender_id":tid,"errors":errors,
-                    "updated_at":datetime.now(timezone.utc).isoformat()
-                }, indent=2), encoding="utf-8")
+                # Persist immediately so one successful Tender ID is never lost.
+                save_csv()
+                save_status("running", tid)
                 print(f"DETAIL OK {tid} — SAVED — NEXT ID", flush=True)
+
             except Exception as e:
-                failure={"Tender ID":tid,"error":f"{type(e).__name__}: {e}"}
+                failure = {
+                    "Tender ID": tid,
+                    "error": f"{type(e).__name__}: {e}",
+                    "retry_pass": bool(is_retry)
+                }
                 errors.append(failure)
-                failed_bases.append(base)
-                print(f"DETAIL FAIL {tid}: {type(e).__name__}: {e}", flush=True)
+                if not is_retry:
+                    failed_bases.append(base)
+                print(
+                    f"DETAIL {'RETRY ' if is_retry else ''}FAIL {tid}: "
+                    f"{type(e).__name__}: {e}",
+                    flush=True
+                )
             finally:
                 if context:
                     context.close()
                 if browser:
                     browser.close()
 
-
+    save_status("running")
     with sync_playwright() as p:
-        process_targets(p, targets, errors)
+        # First pass: every new/current incomplete Tender ID.
+        process_targets(p, targets, is_retry=False)
 
-        # Every failed ID gets exactly ONE retry after the first pass.
+        # Exactly one retry for IDs that failed in the first pass.
         retry_targets = list(failed_bases)
-        failed_bases.clear()
         if retry_targets:
-            print(f"RETRY PASS: {len(retry_targets)} Tender IDs", flush=True)
-            retry_errors_before = len(errors)
-            process_targets(p, retry_targets, errors)
-            # process_targets appends failures again; retain only the final
-            # failure for IDs that failed twice.
+            print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
+            before = len(errors)
+            process_targets(p, retry_targets, is_retry=True)
+
+            # Keep only the final failure entry for IDs that failed twice.
             final_errors = {}
             for e in errors:
                 final_errors[e["Tender ID"]] = e
             errors[:] = list(final_errors.values())
 
-    save_status("completed", success, errors, "")
-    print(json.dumps({"success":success,"failed":len(errors),"errors":errors}, indent=2))
-    STATUS.write_text(json.dumps({
-        "status":"completed","batch_size":BATCH_SIZE,
-        "total_csv_ids":len(rows),"initial_incomplete":len(incomplete),
-        "batch_targets":len(targets),"success":success,"failed":len(errors),
-        "last_successful_tender_id": targets[-1].get("Tender ID","") if targets and success else "",
-        "errors":errors,"updated_at":datetime.now(timezone.utc).isoformat()
-    }, indent=2), encoding="utf-8")
-    print(json.dumps({"success":success,"failed":len(errors),"errors":errors}, indent=2))
+    save_status("completed")
+    print(
+        json.dumps(
+            {"success": success, "failed": len(errors), "errors": errors},
+            indent=2
+        ),
+        flush=True
+    )
 
 if __name__ == "__main__":
     main()
