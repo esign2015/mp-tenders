@@ -1,7 +1,7 @@
 # DAILY_DETAIL_WORKER_VERSION = 2
 # Fresh bootstrap trigger: [fresh-bootstrap]
 # Retry after bootstrap writer fix
-import csv, json, re, time
+import csv, json, os, re, time
 from pathlib import Path
 from datetime import datetime, timezone
 from playwright.sync_api import sync_playwright
