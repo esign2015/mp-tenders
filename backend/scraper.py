@@ -1721,14 +1721,30 @@ def scrape_mp_tenders(csv_file):
 
     org_csv = csv_file.parent / "organisations.csv"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
-    existing_org_rows = read_existing(org_csv)
-    merged_org_rows = merge_org_rows(existing_org_rows, org_rows)
+
+    # One-time clean bootstrap: discard every previous tender/detail record and
+    # rebuild from the live Tenders by Organisation page. Daily runs do NOT use
+    # this flag, so historical detail data is retained after bootstrap.
+    fresh_bootstrap = os.getenv("FRESH_BOOTSTRAP", "0").lower() in ("1", "true", "yes")
+    if fresh_bootstrap:
+        print("FRESH BOOTSTRAP: wiping previous tender/list/detail inventory before live collection", flush=True)
+        existing_org_rows = []
+        existing_tender_list_rows = []
+        existing_detail_rows = []
+    else:
+        existing_org_rows = read_existing(org_csv)
+        existing_tender_list_rows = read_existing(tender_list_csv)
+        existing_detail_rows = read_existing(csv_file)
+
+    if fresh_bootstrap:
+        write_list_csv(org_csv, ORG_FIELDS, org_rows)
+    else:
+        merged_org_rows = merge_org_rows(existing_org_rows, org_rows)
+        write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
     write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
 
-    existing_tender_list_rows = read_existing(tender_list_csv)
     tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_tender_list_rows if clean(r.get("Tender ID"))}
     tender_list_rows = list(tender_list_by_id.values())
-    existing_detail_rows = read_existing(csv_file)
     existing_by_id = {
         clean(row.get("Tender ID")): dict(row)
         for row in existing_detail_rows
