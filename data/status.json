@@ -1,14 +1,14 @@
 {
   "status": "running",
   "process_started_at": "2026-09-21T07:03:33.231164+00:00",
-  "total_tenders": 78,
+  "total_tenders": 79,
   "detail_complete": 0,
   "detail_remaining": 73,
-  "errors": 78,
-  "latest_error": "Directorate Farmer Welfare And Agriculture Development / 2026_IGGPA_524363_1: detail RuntimeError: detail page returned portal menu/home content",
-  "organisation_progress": "9/92",
-  "current_organisation": "Directorate of Animal Husbandry",
+  "errors": 79,
+  "latest_error": "Directorate of Animal Husbandry / 2026_IGGPA_524363_1: detail RuntimeError: detail page returned portal menu/home content",
+  "organisation_progress": "10/92",
+  "current_organisation": "Directorate of Economics and Statistics",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T07:22:34.985161+00:00"
+  "updated_at": "2026-09-21T07:22:57.928909+00:00"
 }
