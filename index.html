@@ -1995,10 +1995,38 @@ async function setupTelegramLogin(){
     script.setAttribute("data-userpic","true");
     script.setAttribute("data-request-access","write");
     script.setAttribute("data-onauth","onTelegramAuth(user)");
-    wrap.appendChild(script);
 
-    if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
-    if(start) start.style.display="none";
+    let widgetTimer = null;
+    const showRetry = (message) => {
+      if(widgetTimer) clearTimeout(widgetTimer);
+      if(start){
+        start.classList.remove("loading");
+        start.textContent="🔄 Retry Telegram Login";
+        start.style.display="inline-flex";
+      }
+      telegramStatus(message || "Telegram Login load नहीं हुआ। Retry Telegram Login दबाएँ।");
+    };
+
+    script.onerror = () => {
+      console.error("Telegram Login Widget script failed to load");
+      showRetry("Telegram Login widget load नहीं हुआ। Retry Telegram Login दबाएँ।");
+    };
+
+    script.onload = () => {
+      // Telegram inserts its iframe asynchronously after the widget script loads.
+      // Do not hide the retry button until that iframe is actually present.
+      widgetTimer = setTimeout(() => {
+        if(wrap.querySelector("iframe")){
+          if(start) start.style.display="none";
+          if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
+        }else{
+          showRetry("Telegram Login button load नहीं हुआ। Retry Telegram Login दबाएँ।");
+        }
+      }, 1200);
+    };
+
+    wrap.appendChild(script);
+    if(status) status.textContent="Telegram Login button load हो रहा है...";
   }catch(error){
     console.error("Telegram Login setup failed:",error);
     if(start){
