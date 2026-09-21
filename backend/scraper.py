@@ -164,142 +164,239 @@ def parse_chain(chain):
 
 
 def parse_detail(soup, url):
-    pairs = find_value_pairs(soup)
-    chain = find_label_value(soup, ["Organisation Chain"]) or pairs.get("organisation chain", "")
-    organisation, department, division, sub_division = parse_chain(chain)
-    tender_id = find_label_value(soup, ["Tender ID"]) or pairs.get("tender id", "")
-    reference = (
-        find_label_value(soup, ["Tender Reference Number", "Tender Reference"])
-        or pairs.get("tender reference number", "")
-        or pairs.get("tender reference", "")
-    )
-    title = find_label_value(soup, ["Work /Item(s) Title", "Title"])
-    work_description = find_label_value(soup, ["Work Description"])
-    publish = (
-        find_critical_date(soup, "Published Date")
-        or find_critical_date(soup, "Publish Date")
-    )
-    closing = find_critical_date(soup, "Bid Submission End Date")
-    opening = find_critical_date(soup, "Bid Opening Date")
-    bid_submission_start = find_critical_date(soup, "Bid Submission Start Date")
-    bid_submission_end = find_critical_date(soup, "Bid Submission End Date")
-    document_start = find_critical_date(soup, "Document Download / Sale Start Date")
-    document_end = find_critical_date(soup, "Document Download / Sale End Date")
-    if not title:
-        title = work_description
+    """RSP-derived resilient MP Tender detail extraction.
 
-    pac = find_label_value(soup, ["Tender Value in ₹", "Tender Value"])
-    tender_fee = find_label_value(soup, ["Tender Fee in ₹"])
-    processing_fee = find_label_value(soup, ["Processing Fee in ₹"])
-    emd = find_label_value(soup, ["EMD Amount in ₹"])
-    location = find_label_value(soup, ["Location"])
-    pincode = find_label_value(soup, ["Pincode", "PIN Code", "Pin Code"])
-    product_category = find_label_value(soup, ["Product Category"])
-    sub_category = find_label_value(soup, ["Sub Category"])
-    contract_type = find_label_value(soup, ["Contract Type"])
-    bid_validity = find_label_value(soup, ["Bid Validity"])
-    pre_qualification = find_label_value(
-        soup,
-        [
-            "Pre Qualification Details",
-            "Pre-Qualification Details",
-            "NDA/Pre Qualification",
-            "NDA / Pre Qualification",
-        ],
-    )
-    fee_payable_to = find_label_value(soup, ["Fee Payable To"])
-    fee_payable_at = find_label_value(soup, ["Fee Payable At"])
-    # MP Tender's displayed Total Fee excludes EMD.
-    # Robust fallback: the MP portal often renders label + value in the same
-    # table cell, so cell-pair parsing alone can miss these fields.
+    Navigation/session handling stays in our live Playwright routes; this
+    function only parses the already-open detail page.
+    """
+    pairs = find_value_pairs(soup)
     body_text = clean(soup.get_text(" ", strip=True))
 
-    def between(label, stop_labels):
-        match = re.search(re.escape(label) + r"\s*(.*?)\s*(?:" + "|".join(re.escape(x) for x in stop_labels) + r"|$)", body_text, re.I)
-        return clean(match.group(1)) if match else ""
+    def exact_value(*labels):
+        wanted = {clean(x).rstrip(":").casefold() for x in labels}
+        for cell in soup.find_all(["td", "th"]):
+            key = clean(cell.get_text(" ", strip=True)).rstrip(":").casefold()
+            if key not in wanted:
+                continue
+            sibling = cell.find_next_sibling(["td", "th"])
+            while sibling is not None:
+                value = clean(sibling.get_text(" ", strip=True))
+                if value and value not in (":", "-"):
+                    return value
+                sibling = sibling.find_next_sibling(["td", "th"])
+        return ""
 
-    if not chain:
-        chain = between("Organisation Chain", ["Tender Reference Number", "Tender ID"])
-        organisation, department, division, sub_division = parse_chain(chain)
-    if not tender_id:
-        match = re.search(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", body_text, re.I)
-        tender_id = match.group(0) if match else ""
-    if not reference:
-        reference = between("Tender Reference Number", ["Tender ID", "Withdrawal Allowed"])
-    if not title:
-        title = between("Work /Item(s) Title", ["Work Description", "Pre Qualification Details"])
-    if not publish:
-        publish = (
-            between("Published Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
-            or between("Publish Date", ["Bid Opening Date", "Document Download / Sale Start Date"])
-        )
-    if not closing:
-        closing = between("Bid Submission End Date", ["Financial Bid Opening Date", "Document Documents", "Tender Documents"])
-    if not opening:
-        opening = between("Bid Opening Date", ["Document Download / Sale Start Date", "Document Download / Sale End Date"])
-    if not bid_submission_start:
-        bid_submission_start = between("Bid Submission Start Date", ["Bid Submission End Date", "Financial Bid Opening Date"])
-    if not bid_submission_end:
-        bid_submission_end = between("Bid Submission End Date", ["Financial Bid Opening Date", "Tender Documents"])
-    if not document_start:
-        document_start = between("Document Download / Sale Start Date", ["Document Download / Sale End Date", "Bid Submission Start Date"])
-    if not document_end:
-        document_end = between("Document Download / Sale End Date", ["Bid Submission Start Date", "Bid Submission End Date"])
-    if not pac:
-        pac = between("Tender Value in ₹", ["Product Category", "Sub category", "Contract Type"])
-    if not pac:
-        # NIC/MP Tender detail pages can render the label and value in the
-        # same text node, so also parse the complete page text directly.
-        pac_match = re.search(
-            r"(?:Tender Value(?:\s+in\s+₹)?|PAC(?:\s+(?:Amount|cost))?)\s*(?:Rs\.?|₹)?\s*([0-9][0-9,]*(?:\.\d+)?)",
+    def value(*labels):
+        found = exact_value(*labels)
+        if found:
+            return found
+        for label in labels:
+            key = clean(label).rstrip(":").casefold()
+            if key in pairs and clean(pairs[key]):
+                return clean(pairs[key])
+        return clean(find_label_value(soup, list(labels)))
+
+    def between(label, stop_labels):
+        stops = "|".join(re.escape(clean(x)) for x in stop_labels if clean(x))
+        match = re.search(
+            re.escape(label) + r"\s*(.*?)\s*(?:" + stops + r"|$)",
             body_text,
             re.I,
         )
-        if pac_match:
-            pac = pac_match.group(1)
+        return clean(match.group(1)) if match else ""
+
+    def date_value(*labels):
+        found = value(*labels)
+        if found:
+            return found
+        for label in labels:
+            found = find_critical_date(soup, label)
+            if found:
+                return clean(found)
+        return ""
+
+    chain = value("Organisation Chain", "Organization Chain")
+    if not chain:
+        chain = between("Organisation Chain", ["Tender Reference Number", "Tender ID"])
+    organisation, department, division, sub_division = parse_chain(chain)
+
+    tender_id = value("Tender ID")
+    if not tender_id:
+        match = TENDER_ID_RE.search(body_text)
+        tender_id = match.group(0) if match else ""
+
+    reference = value(
+        "Tender Reference Number", "Tender Ref. No.", "Tender Ref.No", "Tender Reference"
+    )
+    if not reference:
+        reference = between("Tender Reference Number", ["Tender ID", "Withdrawal Allowed"])
+
+    title = value("Work /Item(s) Title", "Work Item(s) Title", "Title")
+    work_description = value("Work Description")
+    if not title:
+        title = between("Work /Item(s) Title", ["Work Description", "Pre Qualification Details"])
+    if not title:
+        title = work_description
+
+    published = date_value("Published Date", "Publish Date", "Publication Date")
+    closing = date_value(
+        "Bid Submission End Date",
+        "Bid Submission Closing Date",
+        "Submission End Date",
+    )
+    opening = date_value("Bid Opening Date")
+    bid_submission_start = date_value("Bid Submission Start Date")
+    bid_submission_end = date_value("Bid Submission End Date")
+    document_start = date_value(
+        "Document Download / Sale Start Date",
+        "Document Download Start Date",
+    )
+    document_end = date_value(
+        "Document Download / Sale End Date",
+        "Document Download End Date",
+    )
+
+    if not published:
+        published = between(
+            "Published Date",
+            ["Bid Opening Date", "Document Download / Sale Start Date"],
+        ) or between(
+            "Publish Date",
+            ["Bid Opening Date", "Document Download / Sale Start Date"],
+        )
+    if not closing:
+        closing = between(
+            "Bid Submission End Date",
+            ["Financial Bid Opening Date", "Tender Documents"],
+        )
+    if not opening:
+        opening = between(
+            "Bid Opening Date",
+            ["Document Download / Sale Start Date", "Document Download / Sale End Date"],
+        )
+    if not bid_submission_start:
+        bid_submission_start = between(
+            "Bid Submission Start Date",
+            ["Bid Submission End Date", "Financial Bid Opening Date"],
+        )
+    if not bid_submission_end:
+        bid_submission_end = between(
+            "Bid Submission End Date",
+            ["Financial Bid Opening Date", "Tender Documents"],
+        )
+    if not document_start:
+        document_start = between(
+            "Document Download / Sale Start Date",
+            ["Document Download / Sale End Date", "Bid Submission Start Date"],
+        )
+    if not document_end:
+        document_end = between(
+            "Document Download / Sale End Date",
+            ["Bid Submission Start Date", "Bid Submission End Date"],
+        )
+
+    pac = value(
+        "Tender Value in ₹", "Tender Value",
+        "Estimated Cost in ₹", "Estimated Cost",
+        "Estimated Value in ₹", "Estimated Value",
+        "Estimated Tender Value",
+    )
     if not pac:
-        # Some MP notices put PAC only in the work title/description.
-        pac_match = re.search(
-            r"PAC(?:\s+(?:Amount|cost))?\s*(?:Rs\.?|₹)?\s*([0-9][0-9,]*(?:\.\d+)?)",
+        pac = between(
+            "Tender Value in ₹",
+            ["Product Category", "Sub category", "Contract Type"],
+        )
+    if not pac:
+        match = re.search(
+            r"(?:Tender Value(?:\s+in\s+₹)?|Estimated Cost(?:\s+in\s+₹)?|"
+            r"Estimated Value(?:\s+in\s+₹)?|Estimated Tender Value|"
+            r"PAC(?:\s+(?:Amount|cost))?)\s*(?:Rs\.?|₹)?\s*"
+            r"([0-9][0-9,]*(?:\.\d+)?)",
+            body_text,
+            re.I,
+        )
+        if match:
+            pac = match.group(1)
+    if not pac:
+        match = re.search(
+            r"PAC(?:\s+(?:Amount|cost))?\s*(?:Rs\.?|₹)?\s*"
+            r"([0-9][0-9,]*(?:\.\d+)?)",
             " ".join([title, work_description]),
             re.I,
         )
-        if pac_match:
-            pac = pac_match.group(1)
+        if match:
+            pac = match.group(1)
+
+    tender_fee = value(
+        "Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"
+    )
     if not tender_fee:
         tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
-    if not pre_qualification:
-        pre_qualification = (
-            between("Pre Qualification Details", ["Independent External Monitor/Remarks", "Tender Value in ₹"])
-            or between("NDA/Pre Qualification", ["Independent External Monitor/Remarks", "Tender Value in ₹"])
-        )
+
+    processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
+
+    emd = value(
+        "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
+    )
     if not emd:
         emd = between("EMD Amount in ₹", ["EMD Exemption Allowed", "EMD Fee Type"])
+
+    location = value("Location")
     if not location:
         location = between("Location", ["Pincode", "Pre Bid Meeting Place"])
+
+    pincode = value("Pincode", "PIN Code", "Pin Code")
     if not pincode:
-        pin_match = re.search(r"\bPincode\s+([0-9]{6})\b", body_text, re.I)
-        pincode = pin_match.group(1) if pin_match else ""
+        match = re.search(r"\bPincode\s*[:\-]?\s*([0-9]{6})\b", body_text, re.I)
+        pincode = match.group(1) if match else ""
+
+    product_category = value("Product Category")
+    sub_category = value("Sub Category", "Sub category")
+    contract_type = value("Contract Type")
+    bid_validity = value("Bid Validity")
+    pre_qualification = value(
+        "Pre Qualification Details",
+        "Pre-Qualification Details",
+        "NDA/Pre Qualification",
+        "NDA / Pre Qualification",
+    )
+    if not pre_qualification:
+        pre_qualification = (
+            between(
+                "Pre Qualification Details",
+                ["Independent External Monitor/Remarks", "Tender Value in ₹"],
+            )
+            or between(
+                "NDA/Pre Qualification",
+                ["Independent External Monitor/Remarks", "Tender Value in ₹"],
+            )
+        )
+
+    fee_payable_to = value("Fee Payable To")
+    fee_payable_at = value("Fee Payable At")
+
+    # MP's displayed Total Fee excludes EMD.
     total_fee = money_number(tender_fee) + money_number(processing_fee)
 
     return {
         "Tender ID": clean(tender_id),
-        "Published Date": clean(publish),
+        "Published Date": clean(published),
         "Closing Date": clean(closing),
         "Opening Date": clean(opening),
         "Title": clean(title),
         "Reference Number": clean(reference),
-        "Organisation": organisation,
-        "Department": department,
-        "Division": division,
-        "Sub Division": sub_division,
+        "Organisation": clean(organisation),
+        "Department": clean(department),
+        "Division": clean(division),
+        "Sub Division": clean(sub_division),
         "PAC Amount": money_text(pac),
         "EMD Fee": money_text(emd),
         "Tender Fee": money_text(tender_fee),
         "Processing Fee": money_text(processing_fee),
         "Total Fee": str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}",
+        "Location": clean(location),
         "Pincode": re.sub(r"\D", "", clean(pincode))[:6],
         "Work Description": clean(work_description),
         "Product Category": clean(product_category),
@@ -315,9 +412,9 @@ def parse_detail(soup, url):
         "Fee Payable To": clean(fee_payable_to),
         "Fee Payable At": clean(fee_payable_at),
         "Status": "Open",
+        # Never persist a JSF session URL.
         "URL": PORTAL,
     }
-
 
 def parse_organisation_rows(soup, base):
     """Parse the MP organisation table by its actual row structure.
