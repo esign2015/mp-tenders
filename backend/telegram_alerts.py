@@ -158,9 +158,11 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         Spacer(1, 7),
     ]
 
+    # Telegram PDFs: temporarily hide financial fields that are not yet
+    # consistently reliable across all extracted tender details.
+    # The dashboard/CSV data is unchanged; this only affects Telegram PDF output.
     header = [
-        "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.",
-        "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee", "Total Fee"
+        "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.", "Tender Fee"
     ]
 
     # Keep the PDF in exact Closing Date + Closing Time order.
@@ -180,16 +182,12 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
                 Paragraph(clean(row.get("Closing Date")), center),
                 Paragraph(strip_brackets(row.get("Title")), cell),
                 Paragraph(strip_brackets(row.get("Reference Number")), cell),
-                Paragraph(clean(row.get("PAC Amount")), center),
-                Paragraph(clean(row.get("EMD Fee")), center),
                 Paragraph(clean(row.get("Tender Fee")), center),
-                Paragraph(clean(row.get("Processing Fee")), center),
-                Paragraph(clean(row.get("Total Fee")), center),
             ])
 
         table = Table(
             data,
-            colWidths=[32, 125, 105, 270, 255, 95, 75, 75, 90, 90],
+            colWidths=[32, 150, 110, 360, 300, 95],
             repeatRows=1,
         )
         table.setStyle(TableStyle([
