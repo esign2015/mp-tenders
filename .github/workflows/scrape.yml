@@ -40,12 +40,54 @@ jobs:
         run: |
           set -o pipefail
           python backend/manual_detail_test.py | tee manual_detail_test.log
+      - name: Merge successful 5-detail test records into dashboard CSV
+        if: success()
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          src=Path("manual_detail_test.csv")
+          dst=Path("all_tenders_org_detailed.csv")
+          if not src.exists():
+              raise SystemExit("manual_detail_test.csv not found")
+          with src.open(encoding="utf-8-sig", newline="") as f:
+              new_rows=list(csv.DictReader(f))
+          existing=[]
+          if dst.exists():
+              with dst.open(encoding="utf-8-sig", newline="") as f:
+                  existing=list(csv.DictReader(f))
+          by_id={str(r.get("Tender ID","")).strip():dict(r) for r in existing if str(r.get("Tender ID","")).strip()}
+          order=list(by_id)
+          for r in new_rows:
+              tid=str(r.get("Tender ID","")).strip()
+              if not tid:
+                  continue
+              clean={k:r.get(k,"") for k in (existing[0].keys() if existing else r.keys())}
+              for k,v in r.items():
+                  clean[k]=v
+              if tid not in by_id:
+                  order.append(tid)
+              by_id[tid]=clean
+          if not existing:
+              fields=list(new_rows[0].keys())
+          else:
+              fields=list(existing[0].keys())
+              for k in new_rows[0].keys():
+                  if k not in fields: fields.append(k)
+          with dst.open("w",encoding="utf-8-sig",newline="") as f:
+              w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
+              w.writeheader()
+              for tid in order:
+                  w.writerow(by_id[tid])
+          print("Merged",len(new_rows),"successful detail records into",dst)
+          PY
+
       - name: Commit test CSV and status
         if: always()
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add manual_detail_test.csv data/manual_detail_test_status.json || true
+          git add manual_detail_test.csv all_tenders_org_detailed.csv data/manual_detail_test_status.json || true
           if ! git diff --cached --quiet; then
             git commit -m "Save manual tender detail route test results [skip ci]"
             git push || true
