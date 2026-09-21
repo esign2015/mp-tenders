@@ -166,7 +166,7 @@ def parse_chain(chain):
 def parse_latest_corrigendum(soup):
     """Read the Latest Corrigendum List shown on a tender detail page."""
     result = {"title": "", "type": "", "key": ""}
-    for heading in soup.find_all(string=re.compile(r"Latest\\s+Corrigendum\\s+List", re.I)):
+    for heading in soup.find_all(string=re.compile(r"Latest\s+Corrigendum\s+List", re.I)):
         table = heading.find_parent("table")
         if not table:
             continue
