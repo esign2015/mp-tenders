@@ -378,11 +378,6 @@ def parse_detail(soup, url):
         if match:
             processing_fee = match.group(1)
 
-    # Published MP eProcurement tenders carry the portal processing fee
-    # (normally ₹295 including GST). Never publish a false ₹0 when the
-    # template failed to expose the fee value.
-    if not processing_fee or money_number(processing_fee) == 0:
-        processing_fee = "295"
 
     emd = value(
         "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
