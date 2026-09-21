@@ -223,6 +223,26 @@ def parse_detail(soup, url):
                 return clean(pairs[key])
         return clean(find_label_value(soup, list(labels)))
 
+    def labeled_amount(prefixes):
+        """Extract the numeric amount from fee/EMD labels even when the portal
+        appends text such as '(18.00% GST Incl.)' to the label."""
+        wanted = [clean(x).casefold() for x in prefixes]
+        for cell in soup.find_all(["td", "th", "label", "div", "span"]):
+            label_text = clean(cell.get_text(" ", strip=True))
+            low = label_text.casefold()
+            if not any(low.startswith(x) for x in wanted):
+                continue
+            sibling = cell.find_next_sibling(["td", "th", "label", "div", "span"])
+            if sibling is not None:
+                raw = clean(sibling.get_text(" ", strip=True))
+                m = re.search(r"(?<![A-Za-z])(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)", raw)
+                if m:
+                    return m.group(1)
+            m = re.search(r"(?<![A-Za-z])(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)", label_text[len(min((x for x in prefixes if x), key=len, default="")):])
+            if m:
+                return m.group(1)
+        return ""
+
     def between(label, stop_labels):
         stops = "|".join(re.escape(clean(x)) for x in stop_labels if clean(x))
         match = re.search(
@@ -354,13 +374,13 @@ def parse_detail(soup, url):
         if match:
             pac = match.group(1)
 
-    tender_fee = value(
+    tender_fee = labeled_amount(["Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"]) or value(
         "Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"
     )
     if not tender_fee:
         tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
 
-    processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
+    processing_fee = labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"]) or value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
     # Some MP Tender detail templates render the fee label and amount as
@@ -379,7 +399,7 @@ def parse_detail(soup, url):
             processing_fee = match.group(1)
 
 
-    emd = value(
+    emd = labeled_amount(["EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"]) or value(
         "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
     )
     if not emd:
