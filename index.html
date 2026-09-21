@@ -3543,6 +3543,29 @@ function exportPdf(){
   const PORTAL_URL = "https://tenders.codinglms.xyz/";
   const TELEGRAM_URL = "https://t.me/mptendersalert";
 
+  // Describe the exact dataset represented in this PDF. This prevents a filtered
+  // export from being mistaken for the total dashboard count.
+  const totalAvailable = allTenders.length;
+  const filterParts = [];
+  const addFilter = (label, value) => {
+    if(value !== undefined && value !== null && String(value).trim() !== "" && String(value).toLowerCase() !== "all"){
+      filterParts.push(label + ": " + String(value).trim());
+    }
+  };
+  addFilter("Search", $("generalSearch")?.value);
+  addFilter("Organisation", $("organisationSearch")?.value);
+  addFilter("District/PIN", $("districtSearch")?.value);
+  addFilter("Date", $("dateFilter")?.value);
+  addFilter("Changes", $("changeFilter")?.value);
+  addFilter("Status", $("statusSelect")?.value);
+  const pacLabel = $("pacFilterBtn")?.textContent?.trim();
+  if(pacLabel && pacLabel !== "All PAC") addFilter("PAC", pacLabel);
+  const reportScope = rows.length === totalAvailable
+    ? "All Tenders"
+    : (filterParts.length ? filterParts.join(" • ") : "Applied dashboard filters");
+  const reportCountText = "Total Records: " + rows.length + " out of " + totalAvailable;
+
+
   const now = new Date();
   const reportDate =
     now.toLocaleDateString("en-IN",{
@@ -3757,7 +3780,7 @@ function exportPdf(){
       doc.setFont("helvetica","normal");
       doc.setFontSize(5.8);
       doc.text(
-        "Data As On: " + reportDate + "  •  Total Records: " + rows.length,
+        "Data As On: " + reportDate + "  •  " + reportCountText,
         pageWidth/2,
         25,
         {align:"center"}
@@ -3783,7 +3806,10 @@ function exportPdf(){
       doc.setFont("helvetica","normal");
       doc.setFontSize(8);
       doc.text("Tender Report  •  " + reportDate,pageWidth-12,9,{align:"right"});
-      doc.text("Total Records: " + rows.length,pageWidth-12,15,{align:"right"});
+      doc.text(reportCountText,pageWidth-12,15,{align:"right"});
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(6.2);
+      doc.text("As per filter: " + reportScope,pageWidth-12,25,{align:"right"});
 
       doc.setFont("helvetica","bold");
       doc.setFontSize(7);
