@@ -53,7 +53,24 @@ function parseCSV(text){
  if(v!==''||row.length){row.push(v);rows.push(row)}
  const h=rows.shift()||[]; return rows.map(r=>Object.fromEntries(h.map((x,i)=>[x,r[i]||''])));
 }
-async function csv(name){const r=await fetch('../'+name+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error(name);return parseCSV(await r.text())}
+async function csv(name){
+  const urls=[
+    '../'+name,
+    'https://raw.githubusercontent.com/esign2015/mp-tenders/main/'+name
+  ];
+  let lastError=null;
+  for(const url of urls){
+    try{
+      const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'});
+      if(!r.ok) throw Error(name+' HTTP '+r.status);
+      const text=await r.text();
+      const data=parseCSV(text);
+      if(data.length) return data;
+      throw Error(name+' empty');
+    }catch(e){lastError=e;}
+  }
+  throw lastError||Error(name);
+}
 function render(){
  const q=$('search').value.toLowerCase();
  const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
