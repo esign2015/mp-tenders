@@ -23,7 +23,6 @@ def build_slots(day, start_min, end_min, lo, hi):
         if current >= end_min:
             break
         slots.append(current)
-    # Always perform a final check at the requested 18:58 IST cutoff.
     if slots[-1] != end_min:
         slots.append(end_min)
     return slots
@@ -33,26 +32,20 @@ def main():
     cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
     now = datetime.now(IST)
     today = now.date()
-    morning = hm(cfg["morning_telegram_ist"])
     monitor = cfg["organisation_monitor"]
-    start = morning - int(monitor["start_before_morning_minutes"])
+    start = hm(cfg["morning_telegram_ist"]) - int(monitor["start_before_morning_minutes"])
     end = hm(monitor["end_ist"])
     lo = int(monitor["random_interval_min_minutes"])
     hi = int(monitor["random_interval_max_minutes"])
     tick = int(monitor.get("scheduler_tick_minutes", 5))
+    grace = int(monitor.get("max_lateness_minutes", max(10, tick * 2)))
 
-    # Never schedule before the requested 30-minute pre-alert start.
     slots = build_slots(today, start, end, lo, hi)
     current_min = now.hour * 60 + now.minute
 
-    # A GitHub Actions tick can be delayed. Accept the most recent slot only
-    # inside one scheduler interval, preventing duplicate execution.
-    due = [s for s in slots if s <= current_min < s + tick]
-    if not due:
-        print("ORG_SCHEDULE: no random check due now.")
-        return 0
-
-    slot = due[-1]
+    # Pick the latest unexecuted slot that is still reasonably close.
+    # This protects against a delayed GitHub tick without running an old check
+    # hours late.
     state = {}
     if STATE.exists():
         try:
@@ -60,14 +53,19 @@ def main():
         except Exception:
             state = {}
 
-    key = f"{today.isoformat()}:{slot}"
-    if state.get("last_executed") == key:
-        print(f"ORG_SCHEDULE: slot {slot} already executed.")
+    candidates = []
+    for slot in slots:
+        if slot <= current_min <= slot + grace:
+            key = f"{today.isoformat()}:{slot}"
+            if state.get("last_executed") != key:
+                candidates.append((slot, key))
+
+    if not candidates:
+        print("ORG_SCHEDULE: no random check due now.")
         return 0
 
-    # Only decide here. The workflow records the slot AFTER the monitor succeeds.
-    # This means a failed run can be retried on the next scheduler tick.
-    print(f"run=true")
+    slot, key = candidates[-1]
+    print("run=true")
     print(f"slot={slot // 60:02d}:{slot % 60:02d}")
     print(f"key={key}")
     return 0
