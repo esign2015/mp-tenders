@@ -279,8 +279,7 @@ def main():
                     f"{type(e).__name__}: {e}",
                     flush=True
                 )
-            finally:
-                # Reuse the same browser/page for the next Tender ID.
+            # Reuse the same browser/page for the next Tender ID.
 
     save_status("running")
     with sync_playwright() as p:
