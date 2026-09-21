@@ -1533,6 +1533,15 @@ def monitor_tender_changes(csv_file):
                     rows, _ = browser_get_all_tender_rows(page, org, org["count"])
                     stats["organisations_changed"] += 1
                     count_match = len(rows) == org["count"]
+
+                    # Replace this organisation's previous snapshot instead
+                    # of appending another copy. The snapshot must contain
+                    # exactly the tenders currently shown by the portal.
+                    org_key = clean(org["name"]).casefold()
+                    tender_list_by_id = {
+                        tid: row for tid, row in tender_list_by_id.items()
+                        if clean(row.get("Organisation Name")).casefold() != org_key
+                    }
                     for tender in rows:
                         tender_id = clean(tender.get("tender_id"))
                         if not tender_id:
@@ -1750,6 +1759,11 @@ def scrape_mp_tenders(csv_file):
         write_csv(csv_file, list(existing_by_id.values()))
         write_csv(tender_list_csv, tender_list_rows)
         print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 3 days after closing")
+
+    # IMPORTANT: this file is a CURRENT portal snapshot, not a history table.
+    # Rebuild it from the live 93-organisation run below. Historical detail
+    # records stay in all_tenders_org_detailed.csv / Archive.
+    tender_list_rows = []
     # Repair records marked successful by the previous broken detail navigation.
     # Those pages were actually the portal home/menu, so fields such as Work Description
     # contain the repeated navigation text. Preserve Tender ID/basic list data, but make
