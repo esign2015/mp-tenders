@@ -36,6 +36,26 @@ body{
   flex-direction:column;
 }
 
+/* Overlay/popup stacking fix: every opened dropdown/popover must sit above
+   PAC and other controls, and the selected popup owns the foreground layer. */
+.organisation-suggestions.open,
+.district-suggestions.open,
+.telegram-profile-menu.open,
+.pac-filter-panel.open{
+  z-index:200000 !important;
+}
+.organisation-filter-wrap:focus-within,
+.district-filter-wrap:focus-within,
+.telegram-profile:has(.telegram-profile-menu.open),
+.pac-filter-wrap:has(.pac-filter-panel.open){
+  z-index:200001 !important;
+}
+.pac-filter-wrap,
+.organisation-filter-wrap,
+.district-filter-wrap{
+  position:relative;
+}
+
 /* ================= HEADER ================= */
 
 .site-header{
