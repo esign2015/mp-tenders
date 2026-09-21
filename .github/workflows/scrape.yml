@@ -333,7 +333,6 @@ jobs:
     concurrency:
       group: mp-telegram-sender
       cancel-in-progress: false
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -345,106 +344,7 @@ jobs:
         id: gate
         run: |
           python backend/telegram_scheduler.py | tee /tmp/telegram_schedule.txt
-          if grep -q '^run=true
-          grep '^mode=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_mode || true
-          grep '^key=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_key || true
-      - name: Install ReportLab
-        if: steps.gate.outputs.run == 'true'
-        run: pip install reportlab
-      - name: Send scheduled Telegram alert
-        if: steps.gate.outputs.run == 'true'
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          MODE="$(cat /tmp/telegram_mode)"
-          NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
-      - name: Mark Telegram alert complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          mode=Path("/tmp/telegram_mode").read_text(encoding="utf-8").strip()
-          key=Path("/tmp/telegram_key").read_text(encoding="utf-8").strip()
-          path=Path("data/telegram_schedule.json")
-          state={}
-          if path.exists():
-              try: state=json.loads(path.read_text(encoding="utf-8"))
-              except Exception: state={}
-          state[mode]=key
-          path.write_text(json.dumps(state, indent=2), encoding="utf-8")
-          PY
-      - name: Commit Telegram scheduler state
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add data/telegram_schedule.json
-          git diff --cached --quiet || git commit -m "Record Telegram alert schedule state [skip ci]"
-          git push || echo "Telegram schedule state push failed."
-
-  monitor_changes:
-    # Random organisation monitor. The Python scheduler chooses irregular
-    # check times from 30 minutes before the morning Telegram until 18:58 IST.
-    # It is linked to data/schedule_config.json, so changing the Telegram time
-    # automatically moves the monitoring window.
-    if: github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    concurrency:
-      group: mp-tender-data-writer
-      cancel-in-progress: false
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: pip install -r backend/requirements.txt
-      - name: Decide whether a random organisation check is due
-        id: gate
-        run: |
-          python backend/org_monitor_scheduler.py | tee /tmp/org_schedule.txt
-          if grep -q '^run=true
-          grep '^key=' /tmp/org_schedule.txt | cut -d= -f2- > /tmp/org_slot_key || true
-      - name: Install Chromium
-        if: steps.gate.outputs.run == 'true'
-        run: python -m playwright install --with-deps chromium
-      - name: Check live Tenders by Organisation
-        if: steps.gate.outputs.run == 'true'
-        env:
-          MONITOR_ONLY: "1"
-          ORG_SCHEDULED_MONITOR: "1"
-        run: python backend/scraper.py
-      - name: Mark random slot complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          key=Path("/tmp/org_slot_key").read_text(encoding="utf-8").strip()
-          Path("data/org_monitor_schedule.json").write_text(json.dumps({
-              "last_executed": key
-          }, indent=2), encoding="utf-8")
-          PY
-      - name: Commit organisation monitor data
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/org_monitor_schedule.json || true
-          if git diff --cached --quiet; then
-            echo "No organisation monitor changes."
-          else
-            git commit -m "Random MP organisation tender monitor [skip ci]"
-            git push || echo "Organisation monitor push failed."
-          fi
-
- /tmp/telegram_schedule.txt; then
+          if grep -q '^run=true$' /tmp/telegram_schedule.txt; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
@@ -473,8 +373,10 @@ jobs:
           path=Path("data/telegram_schedule.json")
           state={}
           if path.exists():
-              try: state=json.loads(path.read_text(encoding="utf-8"))
-              except Exception: state={}
+              try:
+                  state=json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  state={}
           state[mode]=key
           path.write_text(json.dumps(state, indent=2), encoding="utf-8")
           PY
@@ -498,7 +400,6 @@ jobs:
     concurrency:
       group: mp-tender-data-writer
       cancel-in-progress: false
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -512,42 +413,7 @@ jobs:
         id: gate
         run: |
           python backend/org_monitor_scheduler.py | tee /tmp/org_schedule.txt
-          grep -q '^run=true$' /tmp/org_schedule.txt && echo "run=true" >> "$GITHUB_OUTPUT" || echo "run=false" >> "$GITHUB_OUTPUT"
-          grep '^key=' /tmp/org_schedule.txt | cut -d= -f2- > /tmp/org_slot_key || true
-      - name: Install Chromium
-        if: steps.gate.outputs.run == 'true'
-        run: python -m playwright install --with-deps chromium
-      - name: Check live Tenders by Organisation
-        if: steps.gate.outputs.run == 'true'
-        env:
-          MONITOR_ONLY: "1"
-          ORG_SCHEDULED_MONITOR: "1"
-        run: python backend/scraper.py
-      - name: Mark random slot complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          key=Path("/tmp/org_slot_key").read_text(encoding="utf-8").strip()
-          Path("data/org_monitor_schedule.json").write_text(json.dumps({
-              "last_executed": key
-          }, indent=2), encoding="utf-8")
-          PY
-      - name: Commit organisation monitor data
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/org_monitor_schedule.json || true
-          if git diff --cached --quiet; then
-            echo "No organisation monitor changes."
-          else
-            git commit -m "Random MP organisation tender monitor [skip ci]"
-            git push || echo "Organisation monitor push failed."
-          fi
-
- /tmp/org_schedule.txt; then
+          if grep -q '^run=true$' /tmp/org_schedule.txt; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
@@ -569,9 +435,10 @@ jobs:
           import json
           from pathlib import Path
           key=Path("/tmp/org_slot_key").read_text(encoding="utf-8").strip()
-          Path("data/org_monitor_schedule.json").write_text(json.dumps({
-              "last_executed": key
-          }, indent=2), encoding="utf-8")
+          Path("data/org_monitor_schedule.json").write_text(
+              json.dumps({"last_executed": key}, indent=2),
+              encoding="utf-8"
+          )
           PY
       - name: Commit organisation monitor data
         if: steps.gate.outputs.run == 'true'
@@ -585,107 +452,3 @@ jobs:
             git commit -m "Random MP organisation tender monitor [skip ci]"
             git push || echo "Organisation monitor push failed."
           fi
-
- /tmp/telegram_schedule.txt; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          fi
-          grep '^mode=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_mode || true
-          grep '^key=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_key || true
-      - name: Install ReportLab
-        if: steps.gate.outputs.run == 'true'
-        run: pip install reportlab
-      - name: Send scheduled Telegram alert
-        if: steps.gate.outputs.run == 'true'
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          MODE="$(cat /tmp/telegram_mode)"
-          NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
-      - name: Mark Telegram alert complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          mode=Path("/tmp/telegram_mode").read_text(encoding="utf-8").strip()
-          key=Path("/tmp/telegram_key").read_text(encoding="utf-8").strip()
-          path=Path("data/telegram_schedule.json")
-          state={}
-          if path.exists():
-              try: state=json.loads(path.read_text(encoding="utf-8"))
-              except Exception: state={}
-          state[mode]=key
-          path.write_text(json.dumps(state, indent=2), encoding="utf-8")
-          PY
-      - name: Commit Telegram scheduler state
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add data/telegram_schedule.json
-          git diff --cached --quiet || git commit -m "Record Telegram alert schedule state [skip ci]"
-          git push || echo "Telegram schedule state push failed."
-
-  monitor_changes:
-    # Random organisation monitor. The Python scheduler chooses irregular
-    # check times from 30 minutes before the morning Telegram until 18:58 IST.
-    # It is linked to data/schedule_config.json, so changing the Telegram time
-    # automatically moves the monitoring window.
-    if: github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    concurrency:
-      group: mp-tender-data-writer
-      cancel-in-progress: false
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: pip install -r backend/requirements.txt
-      - name: Decide whether a random organisation check is due
-        id: gate
-        run: |
-          python backend/org_monitor_scheduler.py | tee /tmp/org_schedule.txt
-          grep -q '^run=true$' /tmp/org_schedule.txt && echo "run=true" >> "$GITHUB_OUTPUT" || echo "run=false" >> "$GITHUB_OUTPUT"
-          grep '^key=' /tmp/org_schedule.txt | cut -d= -f2- > /tmp/org_slot_key || true
-      - name: Install Chromium
-        if: steps.gate.outputs.run == 'true'
-        run: python -m playwright install --with-deps chromium
-      - name: Check live Tenders by Organisation
-        if: steps.gate.outputs.run == 'true'
-        env:
-          MONITOR_ONLY: "1"
-          ORG_SCHEDULED_MONITOR: "1"
-        run: python backend/scraper.py
-      - name: Mark random slot complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          key=Path("/tmp/org_slot_key").read_text(encoding="utf-8").strip()
-          Path("data/org_monitor_schedule.json").write_text(json.dumps({
-              "last_executed": key
-          }, indent=2), encoding="utf-8")
-          PY
-      - name: Commit organisation monitor data
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/org_monitor_schedule.json || true
-          if git diff --cached --quiet; then
-            echo "No organisation monitor changes."
-          else
-            git commit -m "Random MP organisation tender monitor [skip ci]"
-            git push || echo "Organisation monitor push failed."
-          fi
-
