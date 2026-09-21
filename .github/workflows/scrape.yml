@@ -253,7 +253,7 @@ jobs:
             git push || echo "Checkpoint commit push failed; retained in workspace/logs."
           fi
   corrigendum_watch:
-    if: github.event_name == "schedule" && (github.event.schedule == "35 4 * * *" || github.event.schedule == "35 10 * * *" || github.event.schedule == "15 15 * * *" || github.event.schedule == "15 21 * * *")
+    if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *' || github.event.schedule == '15 15 * * *' || github.event.schedule == '15 21 * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
@@ -289,7 +289,7 @@ jobs:
           fi
 
   corrigendum_urgent:
-    if: github.event_name == "schedule" && github.event.schedule == "*/5 * * * *"
+    if: github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
