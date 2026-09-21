@@ -3071,7 +3071,7 @@ const filterControls = [
 }
 let MP_DISTRICT_MASTER=[];
 let MP_DISTRICT_PIN_PREFIXES={};
-const districtInfoCache = new WeakMap();
+const districtInfoCache = new Map();
 async function loadDistrictMaster(){
   try{
     const response=await fetch("./data/mp_districts.json?ts="+Date.now(),{cache:"no-store"});
@@ -3080,7 +3080,7 @@ async function loadDistrictMaster(){
     MP_DISTRICT_MASTER=Array.isArray(payload.districts)?payload.districts:[];
     MP_DISTRICT_PIN_PREFIXES={};
     MP_DISTRICT_MASTER.forEach(d=>{MP_DISTRICT_PIN_PREFIXES[normalizeSearchText(d.name)]=(d.pinPrefixes||[]).map(String);});
-    districtInfoCache.clear?.();
+    districtInfoCache.clear();
   }catch(error){console.warn("District master unavailable:",error);MP_DISTRICT_MASTER=[];MP_DISTRICT_PIN_PREFIXES={};}
 }
 
