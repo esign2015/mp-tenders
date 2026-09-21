@@ -1960,8 +1960,15 @@ def scrape_mp_tenders(csv_file):
                             # including the full Organisation Chain. Older CSV records may contain
                             # Missing detail fields are backfilled incrementally.
                             force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0").lower() in ("1", "true", "yes")
+                            new_tender_only = os.getenv("NEW_TENDER_ONLY", "0").lower() in ("1", "true", "yes")
                             old = existing_by_id.get(tender_id, {})
-                            needs_detail = force_detail or not all(clean(old.get(k)) for k in (
+                            # Fast daily mode: Tender-by-Organisation is discovery only.
+                            # If the Tender ID already existed before this run, do not reopen
+                            # its detail page. Existing incomplete records are handled by the
+                            # separate backfill/corrigendum jobs.
+                            is_existing_tender = bool(old)
+                            needs_detail = (not new_tender_only or not is_existing_tender) and (
+                                force_detail or not all(clean(old.get(k)) for k in (
                                 "Tender ID", "PAC Amount", "EMD Fee", "Tender Fee",
                                 "Processing Fee", "Total Fee", "Location", "Pincode",
                                 "Work Description", "Product Category", "Sub Category",
