@@ -84,11 +84,29 @@ def main():
                 soup = open_tender_detail_by_search(page, tender)
                 detail = parse_detail(soup, page.url)
                 detail.pop("URL", None)
+
+                # Preserve the already-known organisation hierarchy when the
+                # fresh detail response is partial. Some portal views can
+                # return only the top organisation even though the CSV already
+                # contains the complete Department / Division / Sub Division.
+                old = by_id.get(tid, {})
+                for key in ("Organisation", "Department", "Division", "Sub Division"):
+                    if not clean(detail.get(key)) and clean(old.get(key)):
+                        detail[key] = old[key]
+
+                # Never replace a complete hierarchy with a partial one.
+                old_levels = [clean(old.get(k)) for k in ("Organisation","Department","Division","Sub Division")]
+                new_levels = [clean(detail.get(k)) for k in ("Organisation","Department","Division","Sub Division")]
+                if sum(bool(x) for x in old_levels) > sum(bool(x) for x in new_levels):
+                    for key in ("Organisation", "Department", "Division", "Sub Division"):
+                        if clean(old.get(key)):
+                            detail[key] = old[key]
+
                 detail["Detail Extracted"] = "Yes"
                 detail["Organisation Tender Count Range"] = tender.get("range","")
                 if tid not in by_id:
                     order.append(tid)
-                by_id[tid] = detail
+                by_id[tid] = {**old, **detail}
                 write_csv(OUT, [by_id[x] for x in order])
                 state["success"] += 1
                 state["updated_at"] = datetime.now(timezone.utc).isoformat()
