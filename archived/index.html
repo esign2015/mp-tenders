@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Archived Tenders | MP Tender Live Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#203b91;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{font-size:21px;margin:0}.sub{font-size:12px;margin-top:4px}
+nav button{border:0;border-radius:6px;padding:8px 12px;font-weight:700;cursor:pointer;background:#fff;color:#203b91}
+main{padding:12px}.panel{background:#fff;border:1px solid #cbd5e1;border-radius:9px;overflow:hidden}
+.toolbar{padding:10px 12px;border-bottom:1px solid #dbe3ee;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar input{height:32px;border:1px solid #cbd5e1;border-radius:5px;padding:5px 8px;min-width:260px}
+.count{font-weight:800;color:#475569}
+.table-wrap{overflow:auto;max-height:calc(100vh - 150px)}
+table{width:100%;min-width:1200px;border-collapse:collapse;font-size:12px}
+th{position:sticky;top:0;background:#dfe7f2;padding:8px;text-align:left;white-space:nowrap;border-bottom:1px solid #cbd5e1}
+td{padding:7px 8px;border-bottom:1px solid #e2e8f0;vertical-align:top;overflow-wrap:anywhere}
+tbody tr:nth-child(even){background:#f8fafc}.empty{text-align:center;padding:30px;color:#64748b;font-weight:700}
+.badge{display:inline-block;padding:4px 7px;border-radius:12px;background:#fee2e2;color:#b91c1c;font-weight:700}
+a{color:#0756c9;font-weight:700;text-decoration:none}
+@media(max-width:700px){header{align-items:flex-start;flex-direction:column}.toolbar input{min-width:100%;width:100%}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>📦 Archived Tenders</h1><div class="sub">Closing date बीत चुके tender — अलग पेज</div></div>
+<nav><button onclick="location.href='../'">← Live Tenders</button></nav>
+</header>
+<main>
+<div class="panel">
+<div class="toolbar"><input id="q" placeholder="Tender ID / Title / Organisation खोजें"><span id="count" class="count">लोड हो रहा है…</span></div>
+<div class="table-wrap"><table><thead><tr>
+<th>Tender ID</th><th>Title</th><th>Ref.No.</th><th>Closing Date</th><th>Published</th><th>PAC</th><th>EMD</th><th>Organisation</th><th>Department</th><th>Division</th><th>Status</th>
+</tr></thead><tbody id="body"><tr><td colspan="11" class="empty">डेटा लोड हो रहा है…</td></tr></tbody></table></div>
+</div>
+</main>
+<script>
+const CSV_URL="../all_tenders_org_detailed.csv";
+const $=id=>document.getElementById(id);
+function clean(v){return String(v??"").replace(/\s+/g," ").trim()}
+function csv(text){
+ const rows=[];let row=[],cell="",quote=false;
+ for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];
+  if(ch=='"'){if(quote&&nx=='"'){cell+='"';i++}else quote=!quote}
+  else if(ch==","&&!quote){row.push(cell);cell=""}
+  else if((ch=="\n"||ch=="\r")&&!quote){if(ch=="\r"&&nx=="\n")i++;row.push(cell);cell="";if(row.some(x=>clean(x)!=""))rows.push(row);row=[]}
+  else cell+=ch;
+ }
+ if(cell!=""||row.length){row.push(cell);if(row.some(x=>clean(x)!=""))rows.push(row)}
+ const h=(rows.shift()||[]).map(clean);return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]??""])));
+}
+function dateValue(v){
+ const s=clean(v);if(!s)return NaN;
+ const m=s.match(/(\d{1,2})[-\/]([A-Za-z]{3}|\d{1,2})[-\/](\d{4})/);
+ if(!m)return NaN;
+ const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+ const mo=isNaN(Number(m[2]))?months[m[2].slice(0,1).toUpperCase()+m[2].slice(1,3).toLowerCase()]:Number(m[2])-1;
+ const d=new Date(Number(m[3]),mo,Number(m[1]),23,59,59);
+ return d.getTime();
+}
+let all=[];
+function render(){
+ const q=clean($("q").value).toLowerCase();
+ const now=Date.now();
+ const archived=all.filter(r=>{
+   const t=dateValue(r["Closing Date"]||r["Last Date"]||r["Bid Submission End"]);
+   return Number.isFinite(t)&&t<now&&now-t<=10*86400000 &&
+     (!q||["Tender ID","Title","Reference Number","Organisation","Department","Division"].some(k=>clean(r[k]).toLowerCase().includes(q)));
+ }).sort((a,b)=>dateValue(b["Closing Date"]||b["Last Date"])-dateValue(a["Closing Date"]||a["Last Date"]));
+ $("count").textContent=archived.length+" archived tenders";
+ $("body").innerHTML=archived.length?archived.map(r=>"<tr>"+
+ "<td>"+clean(r["Tender ID"])+"</td>"+
+ "<td>"+clean(r["Title"])+"</td>"+
+ "<td>"+clean(r["Reference Number"])+"</td>"+
+ "<td><span class='badge'>"+clean(r["Closing Date"]||r["Last Date"])+"</span></td>"+
+ "<td>"+clean(r["Published Date"])+"</td>"+
+ "<td>"+clean(r["PAC Amount"]||r["Tender Value/PAC"])+"</td>"+
+ "<td>"+clean(r["EMD Amount"]||r["EMD Fee"])+"</td>"+
+ "<td>"+clean(r["Organisation"])+"</td>"+
+ "<td>"+clean(r["Department"])+"</td>"+
+ "<td>"+clean(r["Division"])+"</td>"+
+ "<td>Archived</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 10 दिनों तक tender दिखाई देगा।</td></tr>";
+}
+(async()=>{
+ try{
+  const res=await fetch(CSV_URL+"?ts="+Date.now(),{cache:"no-store"});
+  if(!res.ok)throw new Error("CSV "+res.status);
+  all=csv(await res.text());render();
+ }catch(e){$("body").innerHTML="<tr><td colspan='11' class='empty'>Archived data load नहीं हो सका।</td></tr>";$("count").textContent="Data unavailable";}
+})();
+$("q").addEventListener("input",render);
+</script>
+</body>
+</html>
