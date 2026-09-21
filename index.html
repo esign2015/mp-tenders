@@ -1963,6 +1963,28 @@ function clean(value){
   return String(value).trim();
 }
 
+function dedupeTenderRows(rows){
+  const byId = new Map();
+  const order = [];
+  for(const row of (rows || [])){
+    const id = clean(row["Tender ID"]);
+    if(!id){
+      order.push(row);
+      continue;
+    }
+    if(!byId.has(id)){
+      byId.set(id, {...row});
+      order.push(byId.get(id));
+      continue;
+    }
+    const existing = byId.get(id);
+    for(const [key,value] of Object.entries(row)){
+      if(clean(value) && !clean(existing[key])) existing[key] = value;
+    }
+  }
+  return order;
+}
+
 function escapeHtml(value){
   return clean(value)
     .replaceAll("&","&amp;")
@@ -2541,7 +2563,7 @@ async function loadData(){
       }
     }
 
-    allTenders = data.map(normaliseTender);
+    allTenders = dedupeTenderRows(data.map(normaliseTender));
 
     // Load the same portal snapshot used to discover current tenders.
     // The detailed CSV is retained for historical/archive records.
@@ -3077,7 +3099,11 @@ function updateCounts(rows, refreshHeader=true){
   }
 
   const live = portalActiveIds.size
-    ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"]))).length
+    ? new Set(rows
+        .filter(row => portalActiveIds.has(clean(row["Tender ID"])))
+        .map(row => clean(row["Tender ID"]))
+        .filter(Boolean)
+      ).size
     : rows.filter(row => {
         const closing = parseDate(row["Closing Date"]);
         return !closing || closing.getTime() > now.getTime();
