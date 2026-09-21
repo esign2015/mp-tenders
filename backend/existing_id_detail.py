@@ -47,7 +47,7 @@ def find_search_area(page):
 
 def do_search(page, tender_id):
     page.goto(PORTAL, wait_until="domcontentloaded", timeout=90000)
-    page.wait_for_timeout(1500)
+    page.wait_for_timeout(500)
     area = find_search_area(page)
     inputs = visible_text_inputs(area)
     if not inputs:
@@ -85,12 +85,21 @@ def do_search(page, tender_id):
         raise RuntimeError("GO/Search button not found")
 
     go.click()
-    page.wait_for_load_state("domcontentloaded", timeout=90000)
-    page.wait_for_timeout(2500)
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=15000)
+    except Exception:
+        pass
 
-    result_soup = BeautifulSoup(page.content(), "html.parser")
-    result_rows = parse_tender_rows(result_soup, page.url)
-    match = next((r for r in result_rows if clean(r.get("tender_id")).casefold() == tender_id.casefold()), None)
+    result_soup = None
+    result_rows = []
+    match = None
+    for _ in range(12):
+        page.wait_for_timeout(300)
+        result_soup = BeautifulSoup(page.content(), "html.parser")
+        result_rows = parse_tender_rows(result_soup, page.url)
+        match = next((r for r in result_rows if clean(r.get("tender_id")).casefold() == tender_id.casefold()), None)
+        if match and clean(match.get("title")):
+            break
     if not match:
         raise RuntimeError(f"Search returned no matching Tender row for {tender_id}")
     title = clean(match.get("title"))
@@ -111,8 +120,11 @@ def do_search(page, tender_id):
         raise RuntimeError(f"Actual Tender Title link not found after GO for {tender_id}")
 
     title_link.click()
-    page.wait_for_load_state("domcontentloaded", timeout=90000)
-    page.wait_for_timeout(2500)
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=15000)
+    except Exception:
+        pass
+    page.wait_for_timeout(700)
     soup = BeautifulSoup(page.content(), "html.parser")
     detail = parse_detail(soup, PORTAL)
 
@@ -218,23 +230,16 @@ def main():
             "updated_at": datetime.now(timezone.utc).isoformat()
         }, indent=2), encoding="utf-8")
 
-    def process_targets(p, target_rows, is_retry=False):
+    def process_targets(page, target_rows, is_retry=False):
         nonlocal success
+        save_every = 10
         for base in target_rows:
             tid = clean(base.get("Tender ID"))
-            browser = context = None
             try:
                 print(
                     f"DETAIL {'RETRY ' if is_retry else ''}START {tid}",
                     flush=True
                 )
-                browser = p.chromium.launch(headless=True)
-                context = browser.new_context(
-                    locale="en-IN",
-                    timezone_id="Asia/Kolkata",
-                    viewport={"width": 1366, "height": 900}
-                )
-                page = context.new_page()
                 detail = do_search(page, tid)
 
                 for key in ("Organisation","Department","Division","Sub Division"):
@@ -250,11 +255,13 @@ def main():
                 by_id[tid] = merged
                 success += 1
 
-                # Persist immediately so one successful Tender ID is never lost.
-                save_csv()
-                save_detail_csv()
+                # Save in small checkpoints instead of rewriting the full 5,000+
+                # row CSV after every Tender ID.
+                if success % save_every == 0:
+                    save_csv()
+                    save_detail_csv()
                 save_status("running", tid)
-                print(f"DETAIL OK {tid} — SAVED — NEXT ID", flush=True)
+                print(f"DETAIL OK {tid} — {'CHECKPOINT SAVED' if success % save_every == 0 else 'MEMORY SAVED'} — NEXT ID", flush=True)
 
             except Exception as e:
                 failure = {
@@ -273,28 +280,35 @@ def main():
                     flush=True
                 )
             finally:
-                if context:
-                    context.close()
-                if browser:
-                    browser.close()
+                # Reuse the same browser/page for the next Tender ID.
 
     save_status("running")
     with sync_playwright() as p:
-        # First pass: every new/current incomplete Tender ID.
-        process_targets(p, targets, is_retry=False)
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            locale="en-IN",
+            timezone_id="Asia/Kolkata",
+            viewport={"width": 1366, "height": 900}
+        )
+        page = context.new_page()
+        try:
+            # First pass: every new/current incomplete Tender ID.
+            process_targets(page, targets, is_retry=False)
 
-        # Exactly one retry for IDs that failed in the first pass.
-        retry_targets = list(failed_bases)
-        if retry_targets:
-            print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
-            before = len(errors)
-            process_targets(p, retry_targets, is_retry=True)
+            # Exactly one retry for IDs that failed in the first pass.
+            retry_targets = list(failed_bases)
+            if retry_targets:
+                print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
+                process_targets(page, retry_targets, is_retry=True)
 
-            # Keep only the final failure entry for IDs that failed twice.
-            final_errors = {}
-            for e in errors:
-                final_errors[e["Tender ID"]] = e
-            errors[:] = list(final_errors.values())
+                # Keep only the final failure entry for IDs that failed twice.
+                final_errors = {}
+                for e in errors:
+                    final_errors[e["Tender ID"]] = e
+                errors[:] = list(final_errors.values())
+        finally:
+            context.close()
+            browser.close()
 
     save_csv()
     save_detail_csv()
