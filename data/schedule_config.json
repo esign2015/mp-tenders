@@ -2,11 +2,13 @@
   "morning_telegram_ist": "09:35",
   "evening_new_telegram_ist": "20:55",
   "evening_total_telegram_ist": "21:00",
+  "telegram_max_delay_minutes": 45,
   "organisation_monitor": {
     "start_before_morning_minutes": 30,
     "end_ist": "18:58",
     "random_interval_min_minutes": 35,
     "random_interval_max_minutes": 80,
-    "scheduler_tick_minutes": 5
+    "scheduler_tick_minutes": 5,
+    "max_lateness_minutes": 20
   }
 }
