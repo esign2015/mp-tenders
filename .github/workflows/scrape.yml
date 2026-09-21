@@ -259,7 +259,7 @@ jobs:
     concurrency:
       group: mp-tender-data-writer
       cancel-in-progress: false
-      queue: max
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -333,7 +333,7 @@ jobs:
     concurrency:
       group: mp-telegram-sender
       cancel-in-progress: false
-      queue: max
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -395,7 +395,7 @@ jobs:
     concurrency:
       group: mp-tender-data-writer
       cancel-in-progress: false
-      queue: max
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
