@@ -1538,7 +1538,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">Contact Admin — t.me/rdgyan</a>
     </div>
   </div>
-</div>iv>
+</div>
 
 
 <header class="site-header">
@@ -1915,6 +1915,16 @@ async function verifyTelegramMembership(user, persist=true){
         if(joinBtn) joinBtn.style.display="";
         if(checkBtn) checkBtn.style.display="";
         telegramStatus("❌ Telegram login हो गया, लेकिन @mptendersalert membership नहीं मिली। पहले channel join करें, फिर Check Again दबाएँ।");
+      }else if(response.status===401 && !persist){
+        // A previously stored Telegram authorization can become invalid.
+        // Do not trap the user in a failed auto-check: clear it and show
+        // the fresh Telegram Login widget again.
+        localStorage.removeItem("telegram_auth");
+        sessionStorage.removeItem("telegram_verified");
+        sessionStorage.removeItem("telegram_user");
+        telegramAuthData=null;
+        telegramStatus("🔄 पुराना Telegram login expire/invalid हो गया। कृपया फिर से Login with Telegram करें।");
+        showTelegramLogin();
       }else{
         throw new Error(data.message || "Telegram verification failed.");
       }
@@ -2004,8 +2014,15 @@ async function setupTelegramLogin(){
 }
 
 function onTelegramAuth(user){
+  if(!user || !user.id){
+    telegramStatus("❌ Telegram से user details नहीं मिलीं। कृपया फिर से Login करें।");
+    return;
+  }
   verifyTelegramMembership(user,true);
 }
+// Telegram's legacy Login Widget invokes the callback by name.
+// Keep it explicitly on window so dynamically injected widgets can always find it.
+window.onTelegramAuth = onTelegramAuth;
 
 async function checkStoredTelegram(){
   const raw=localStorage.getItem("telegram_auth");
