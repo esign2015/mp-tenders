@@ -1262,6 +1262,9 @@ td.title-cell{
   width:34px;height:34px;border-radius:50%;
   object-fit:cover;border:2px solid rgba(255,255,255,.75);
 }
+.telegram-profile-display{font-weight:800;font-size:13px;color:#fff;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.telegram-logout-front{padding:6px 9px;border:1px solid rgba(255,255,255,.45);border-radius:6px;background:#dc2626;color:#fff;font-weight:800;font-size:11px;cursor:pointer}
+.telegram-logout-front:hover{background:#b91c1c}
 .telegram-profile-btn{
   display:flex;align-items:center;gap:7px;
   border:0;background:transparent;color:#fff;
@@ -1352,9 +1355,9 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="right-sub">For DSC &amp; E-Tendering Services</div>
     <div class="telegram-profile" id="telegramProfile">
       <img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile" referrerpolicy="no-referrer" crossorigin="anonymous">
-      <button class="telegram-profile-btn" id="telegramProfileBtn" type="button">
-        <span id="telegramProfileName">Telegram User</span><span>▾</span>
-      </button>
+      <span class="telegram-profile-display" id="telegramProfileName">Telegram User</span>
+      <button class="telegram-logout-front" id="telegramLogoutFrontBtn" type="button">🚪 Logout</button>
+      <button class="telegram-profile-btn" id="telegramProfileBtn" type="button" aria-label="Telegram profile menu"><span>▾</span></button>
       <div class="telegram-profile-menu" id="telegramProfileMenu">
         <div class="telegram-profile-name" id="telegramMenuName">Telegram User</div>
         <div class="telegram-profile-username" id="telegramMenuUsername"></div>
@@ -1809,11 +1812,13 @@ function setupTelegramFlow(){
   const loginStart=document.getElementById("telegramLoginStart");
   const profileBtn=document.getElementById("telegramProfileBtn");
   const logoutBtn=document.getElementById("telegramLogoutBtn");
+  const logoutFrontBtn=document.getElementById("telegramLogoutFrontBtn");
   const profileMenu=document.getElementById("telegramProfileMenu");
   if(checkBtn) checkBtn.onclick=()=>telegramAuthData ? verifyTelegramMembership(telegramAuthData,false) : setupTelegramLogin();
   if(loginStart) loginStart.onclick=()=>setupTelegramLogin();
   if(profileBtn) profileBtn.onclick=()=>profileMenu?.classList.toggle("open");
   if(logoutBtn) logoutBtn.onclick=logoutTelegram;
+  if(logoutFrontBtn) logoutFrontBtn.onclick=logoutTelegram;
   document.addEventListener("click",(event)=>{
     if(profileMenu && !profileMenu.contains(event.target) && !profileBtn?.contains(event.target)){
       profileMenu.classList.remove("open");
