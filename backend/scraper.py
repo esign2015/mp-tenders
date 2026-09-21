@@ -1054,10 +1054,44 @@ def browser_get_all_tender_rows(page, org, expected_count):
 
     records = list(unique.values())
     if expected_count and len(records) != expected_count:
-        raise RuntimeError(
-            f"Organisation tender count mismatch for {clean(org.get('name'))}: "
-            f"portal={expected_count}, actually collected={len(records)}"
+        # JSF/portal pagination can render late. Re-open the organisation once
+        # and collect the complete list again before declaring a mismatch.
+        first_count = len(records)
+        print(
+            f"COUNT RETRY: {clean(org.get('name'))} "
+            f"portal={expected_count}, first_pass={first_count}; reloading organisation list",
+            flush=True,
         )
+        time.sleep(2)
+        soup = open_organisation_list_by_click(page, org)
+        unique = {}
+        pages = 0
+        for _ in range(500):
+            rows = parse_tender_rows(soup, page.url)
+            for row in rows:
+                row["url"] = ""
+                row.pop("list_page_url", None)
+                key = row["tender_id"] or row["reference"] or row.get("title")
+                if key:
+                    unique[key] = row
+            pages += 1
+            if expected_count and len(unique) >= expected_count:
+                break
+            next_soup = click_next_live_page(page)
+            if next_soup is None:
+                break
+            soup = next_soup
+        records = list(unique.values())
+        print(
+            f"COUNT RETRY RESULT: {clean(org.get('name'))} "
+            f"portal={expected_count}, retry_pass={len(records)}",
+            flush=True,
+        )
+        if len(records) != expected_count:
+            raise RuntimeError(
+                f"Organisation tender count mismatch after retry for {clean(org.get('name'))}: "
+                f"portal={expected_count}, collected={len(records)}"
+            )
     return records, pages
 
 
