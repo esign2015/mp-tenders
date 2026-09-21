@@ -3520,7 +3520,7 @@ function showNextThreeDays(){
 /* ================= TABLE DISPLAY CONTROLS ================= */
 let orgDisplayMode = "short";
 
-const COLUMN_PREF_KEY="mp_tender_hidden_columns";
+const COLUMN_PREF_KEY="mp_tender_hidden_columns_v2";
 const COLUMN_DEFS=[
   ["S.No.",1],["District",2],["Tender ID",3],["Title",4],["Ref.No.",5],
   ["Last Date",6],["Time Left",7],["PAC Amount",8],["EMD Fee",9],
@@ -3531,7 +3531,7 @@ const COLUMN_DEFS=[
 
 function loadHiddenColumns(){
   // Default view: exactly the columns shown in the requested layout.
-  const defaultHidden=[22,23,24]; // Department, Division, Sub Division
+  const defaultHidden=[17,18,19,20,21,22,23,24]; // Advanced/detail columns hidden by default
   try{
     const raw=localStorage.getItem(COLUMN_PREF_KEY);
     return raw === null ? defaultHidden : JSON.parse(raw).map(Number);
