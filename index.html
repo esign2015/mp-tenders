@@ -1567,7 +1567,7 @@ body.telegram-locked .site-footer{visibility:hidden}
             <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
             <th>Time Left</th>
-            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th>
+            <th>District</th>
             <th class="sortable-th" data-sort-key="PAC Amount">PAC Amount <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="EMD Fee">EMD Fee <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Tender Fee">Tender Fee <span class="sort-arrow"></span></th>
@@ -3206,6 +3206,12 @@ function moneySortValue(value){
 function compareTableValues(a,b,key){
   let av, bv;
 
+  if(key === "District"){
+    av = clean(getDistrictInfo(a).name).toLowerCase();
+    bv = clean(getDistrictInfo(b).name).toLowerCase();
+    return av.localeCompare(bv,"en",{numeric:true,sensitivity:"base"});
+  }
+
   if(key === "Closing Date"){
     av = parseDate(a[key]);
     bv = parseDate(b[key]);
@@ -3992,6 +3998,7 @@ updateVirtualPager();
 const backgroundDataLoad = loadData();
 enforceTelegramAccess().then(async () => {
   await loadDistrictMaster();
+  if(Array.isArray(allTenders) && allTenders.length) applyFilters(false);
   await backgroundDataLoad;
 }).catch(error => {
   console.error("Dashboard startup failed:",error);
