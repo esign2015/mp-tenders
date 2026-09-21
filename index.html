@@ -2271,7 +2271,7 @@ async function refreshPublishedData(){
 
       if(oldKey !== newKey || oldSignature !== newSignature){
         allTenders = next;
-        buildOrganisationOptions();
+        await buildOrganisationOptions();
         applyFilters();
         console.info("Dashboard data refreshed from latest GitHub checkpoint.");
       }
@@ -2708,9 +2708,25 @@ function setupOrganisationFilter(){
   });
 }
 
-function buildOrganisationOptions(){
+async function buildOrganisationOptions(){
   const set = new Set();
 
+  // Permanent MP organisation master: always keep all 298 organisations
+  // in the search dropdown, including organisations with zero live tenders.
+  try{
+    const response = await fetch("./data/mp_organisation_master.json?ts="+Date.now(),{cache:"no-store"});
+    if(response.ok){
+      const master = await response.json();
+      (master.organisations || []).forEach(org => {
+        org = clean(org);
+        if(org) set.add(org);
+      });
+    }
+  }catch(error){
+    console.warn("Permanent organisation master unavailable:", error);
+  }
+
+  // Add any newly discovered organisation from live tender data as well.
   allTenders.forEach(row => {
     const org = clean(row["Organisation"]);
     if(org) set.add(org);
@@ -2719,6 +2735,11 @@ function buildOrganisationOptions(){
   organisationOptions = [...set].sort((a,b) =>
     a.localeCompare(b, "en", {sensitivity:"base"})
   );
+
+  const input = $("organisationSearch");
+  if(input){
+    input.placeholder = "Search Organisation (298 MP organisations)...";
+  }
 }
 
 function setupVirtualTable(){
