@@ -278,6 +278,9 @@ button:hover{
   gap:7px;
   padding:0 12px 8px;
 }
+.search-bottom #pacFilterWrap{grid-column:auto;}
+.search-bottom #statusSelect{order:5;}
+.search-bottom #pacFilterWrap{order:4;}
 
 .search-bottom input,
 .search-bottom select{
@@ -1429,9 +1432,8 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <button class="btn-red" id="closingTodayBtn">Closing Today</button>
-        <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
-        <button class="btn-light" id="archivedBtn">Archived Tenders</button><button class="btn-dark" id="reloadBtn">↻ Reload</button>
+        <button class="btn-light" id="archivedBtn">Archived Tenders</button>
+        <button class="btn-dark" id="reloadBtn">↻ Reload</button>
         <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
         <button class="user-tool-btn" id="favOrgBtn" type="button">⭐ Fav Organisation</button>
         <button class="user-tool-btn" id="favDistrictBtn" type="button">⭐ Fav District</button>
@@ -3108,20 +3110,36 @@ function applyFilters(refreshHeader=true){
     */
     const opening = parseDate(row["Opening Date"]);
 
+    /*
+       Keep a tender visible on the main dashboard until 7:00 PM IST on
+       the calendar day after its closing time. This gives users a clear
+       visual "Closed" state during the day instead of moving it to Archive
+       immediately when the countdown reaches zero.
+       After 7 PM IST, it becomes archived. Archived page still applies
+       its existing 10-day retention rule.
+    */
+    const nowIST = new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
+    const archiveCutoff = new Date(nowIST);
+    archiveCutoff.setHours(19,0,0,0);
+
     if(isCancelled){
       if(!archivedMode) return false;
     }else if(closing){
+      const closeIST = new Date(closing);
       if(archivedMode){
-        const closeDay = dateKey(closing);
-        const todayDay = todayKey();
-        const todayMidnight = parseDate(todayDay.split("-").reverse().join("-"));
-        const closeMidnight = parseDate(closeDay.split("-").reverse().join("-"));
-        const daysAgo = (todayMidnight && closeMidnight)
-          ? Math.floor((todayMidnight.getTime() - closeMidnight.getTime()) / 86400000)
-          : 999;
-        if(daysAgo < 1 || daysAgo > 10) return false;
+        const archiveEligible = new Date(closeIST);
+        archiveEligible.setHours(19,0,0,0);
+        // Do not archive before 7 PM on the closing day.
+        if(nowIST.getTime() < archiveEligible.getTime()) return false;
+        const daysAgo = Math.floor((nowIST.getTime() - closeIST.getTime()) / 86400000);
+        if(daysAgo < 0 || daysAgo > 10) return false;
       }else{
-        if(closing.getTime() <= Date.now()) return false;
+        // Main table keeps the tender visible until 7 PM on closing day.
+        if(nowIST.getTime() >= archiveCutoff.getTime() && dateKey(closeIST) !== dateKey(nowIST)){
+          // Older closed tenders are no longer active.
+          return false;
+        }
+        if(dateKey(closeIST) < dateKey(nowIST)) return false;
       }
     }else if(archivedMode){
       return false;
@@ -4189,11 +4207,10 @@ $("sortSelect").addEventListener("change", applyFilters);
 updateTableSortHeaders();
 
 $("reloadBtn").addEventListener("click",clearFilters);
-$("closingTodayBtn").addEventListener("click",showClosingToday);
 $("liveCountBox").addEventListener("click",clearFilters);
 $("closingTodayBox").addEventListener("click",showClosingToday);
 $("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
-$("nextThreeBtn").addEventListener("click",showNextThreeDays);
+
 $("archivedBtn").addEventListener("click",function(){
   window.location.href = "./archived/";
 });
