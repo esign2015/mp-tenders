@@ -91,9 +91,8 @@ jobs:
           RENDER_TENDERS_API: "https://mp-tenders-api.onrender.com/api/tenders"
         run: |
           set -e
-          if [ ! -s all_tenders_org_detailed.csv ]; then
-            echo "GitHub detailed CSV is empty; attempting one-time recovery from the existing Render API copy."
-            python - <<'PY'
+          echo "Checking Render for a larger previously-successful dataset; existing data is never discarded."
+          python - <<'PY'
           import csv, json, os, urllib.request
           from pathlib import Path
           url=os.environ["RENDER_TENDERS_API"]
@@ -126,14 +125,13 @@ jobs:
           except Exception as exc:
               print(f"Render API recovery unavailable: {exc}")
           PY
-          else
-            echo "Existing detailed CSV is non-empty; no recovery needed."
-          fi
 
       - name: Run MP Tender scraper — full organisation/tender list
         env:
           DETAIL_SAMPLE_SIZE: "0" # [run-scrape-details]
-          FETCH_DETAIL_PAGES: "1"
+          FETCH_DETAIL_PAGES: "0"
+          # Phase 1: collect organisation counts and every tender-list row first.
+          # Detail pages are opened only after the complete list snapshot is saved.
           # Incremental mode: do not reopen already-complete tender detail pages.
           FORCE_DETAIL_REFRESH: "0"
           # 0 = process the full remaining dataset; checkpoint every 10 successes.
@@ -186,6 +184,36 @@ jobs:
                 fi
                 LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
                 LAST_PUBLISHED_ORG_PROGRESS="$ORG_PROGRESS"
+              fi
+            fi
+            sleep 10
+          done
+          wait "$SCRAPER_PID"
+
+      - name: Phase 2 — extract tender detail pages after full list collection
+        env:
+          FETCH_DETAIL_PAGES: "1"
+          FORCE_DETAIL_REFRESH: "0"
+          DETAIL_BATCH_SIZE: "0"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/scraper.py > scraper_detail_live.log 2>&1 &
+          SCRAPER_PID=$!
+          LAST_PUBLISHED_CHECKPOINT=0
+          while kill -0 "$SCRAPER_PID" 2>/dev/null; do
+            if [ -f data/status.json ]; then
+              CHECKPOINT="$(python -c 'import json; print(json.load(open("data/status.json")).get("detail_batch_completed",0))' 2>/dev/null || echo 0)"
+              if [ "$CHECKPOINT" -ge 10 ] && [ "$CHECKPOINT" != "$LAST_PUBLISHED_CHECKPOINT" ]; then
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+                  [ -s "$f" ] && git add "$f"
+                done
+                if ! git diff --cached --quiet; then
+                  git commit -m "Detail checkpoint $CHECKPOINT [skip ci]"
+                  git push || true
+                fi
+                LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
               fi
             fi
             sleep 10
