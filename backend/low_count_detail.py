@@ -85,7 +85,7 @@ def main():
                 detail = parse_detail(soup, page.url)
                 detail.pop("URL", None)
                 detail["Detail Extracted"] = "Yes"
-                detail["Low Count Organisation Batch"] = "Organisation <= 20"
+                detail["Organisation Tender Count Range"] = tender.get("range","")
                 if tid not in by_id:
                     order.append(tid)
                 by_id[tid] = detail
