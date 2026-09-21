@@ -95,7 +95,7 @@ jobs:
 
 
   low_count_detail:
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[low-count-detail]')
+    if: github.event_name == 'push' && (contains(github.event.head_commit.message, '[low-count-detail]') || contains(github.event.head_commit.message, 'tender-count ranges'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
