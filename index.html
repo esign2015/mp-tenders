@@ -1267,36 +1267,140 @@ td.title-cell{
   align-items:center;
   justify-content:center;
   padding:18px;
-  background:rgba(15,23,42,.82);
-  backdrop-filter:blur(5px);
+  overflow:auto;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(59,130,246,.28), transparent 34%),
+    radial-gradient(circle at 90% 90%, rgba(14,165,233,.20), transparent 36%),
+    rgba(15,23,42,.88);
+  backdrop-filter:blur(7px);
 }
 .telegram-gate-card{
-  width:min(460px,100%);
+  width:min(500px,100%);
   background:#fff;
-  border-radius:16px;
+  border:1px solid rgba(255,255,255,.75);
+  border-radius:20px;
   padding:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  box-shadow:0 24px 70px rgba(0,0,0,.42);
   text-align:center;
 }
-.telegram-gate-card h2{margin:0 0 8px;color:#14376e;font-size:22px}
-.telegram-gate-card p{margin:7px 0;color:#475569;line-height:1.5;font-size:13px}
+.telegram-gate-brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:18px;
+  text-align:left;
+}
+.telegram-gate-icon{
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;
+  background:#229ed9;
+  color:#fff;
+  font-size:22px;
+  box-shadow:0 6px 16px rgba(34,158,217,.28);
+}
+.telegram-gate-title{font-size:16px;font-weight:900;color:#14376e;line-height:1.15}
+.telegram-gate-subtitle{font-size:11px;color:#64748b;margin-top:3px}
+.telegram-gate-heading{
+  margin:2px 0 7px;
+  color:#14376e;
+  font-size:23px;
+  font-weight:900;
+}
+.telegram-gate-intro{
+  max-width:430px;
+  margin:0 auto 15px;
+  color:#475569;
+  line-height:1.55;
+  font-size:13px;
+}
+.telegram-login-steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin:0 0 15px;
+}
+.telegram-step{
+  min-width:0;
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  text-align:left;
+  padding:9px 7px;
+  border:1px solid #e2e8f0;
+  border-radius:9px;
+  background:#f8fafc;
+}
+.telegram-step.active{
+  border-color:#bfdbfe;
+  background:#eff6ff;
+}
+.telegram-step-no{
+  flex:0 0 22px;
+  width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:#dbeafe;
+  color:#1d4ed8;
+  font-size:11px;
+  font-weight:900;
+}
+.telegram-step strong{display:block;color:#172033;font-size:11px}
+.telegram-step small{display:block;margin-top:2px;color:#64748b;font-size:9px;line-height:1.25}
+.telegram-gate-actions{margin-top:2px}
 .telegram-join-btn,.telegram-verify-btn{
   display:block;
   width:100%;
-  margin-top:10px;
+  margin-top:9px;
   padding:11px 14px;
-  border-radius:8px;
+  border-radius:9px;
   text-decoration:none;
   border:0;
   font-weight:800;
   cursor:pointer;
+  font-size:13px;
 }
 .telegram-join-btn{background:#0ea5e9;color:#fff}
-.telegram-verify-btn{background:#7c3aed;color:#fff}\n#telegramLoginWrap{margin-top:8px;min-height:45px}
-#telegramGateStatus{min-height:22px;margin-top:12px;font-weight:700}
-.telegram-admin{margin-top:12px;font-size:12px;color:#64748b}
+.telegram-verify-btn{background:#7c3aed;color:#fff}
+#telegramLoginWrap{margin-top:9px;min-height:45px}
+#telegramGateStatus{
+  min-height:22px;
+  margin-top:13px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:#f8fafc;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.4;
+}
+.telegram-gate-note{
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+  margin-top:12px;
+  padding:9px 10px;
+  border:1px solid #dbeafe;
+  border-radius:8px;
+  background:#eff6ff;
+  color:#475569;
+  text-align:left;
+  font-size:10px;
+  line-height:1.4;
+}
+.telegram-admin{margin-top:12px;font-size:11px;color:#64748b}
 .telegram-admin a{color:#0f766e;font-weight:800;text-decoration:none}
 .telegram-login-wrap{margin-top:12px}
+@media(max-width:520px){
+  #telegramGate{padding:10px}
+  .telegram-gate-card{padding:18px 14px;border-radius:16px}
+  .telegram-gate-heading{font-size:20px}
+  .telegram-gate-intro{font-size:12px}
+  .telegram-login-steps{grid-template-columns:1fr;gap:5px}
+  .telegram-step{padding:7px 8px}
+  .telegram-step small{font-size:9px}
+}
 .telegram-profile{
   display:none;
   align-items:center;
@@ -1383,16 +1487,56 @@ body.telegram-locked .site-footer{visibility:hidden}
 <body class="telegram-locked org-display-full">
 <div id="telegramGate">
   <div class="telegram-gate-card">
-    <h2>🔐 Telegram Login</h2>
-    <p>Dashboard खोलने के लिए अपने Telegram account से login करें। Login के बाद channel membership अपने-आप check होगी।</p>
+    <div class="telegram-gate-brand">
+      <div class="telegram-gate-icon">✈</div>
+      <div>
+        <div class="telegram-gate-title">MP Tender Live Dashboard</div>
+        <div class="telegram-gate-subtitle">SAR Digital Services, Kannod</div>
+      </div>
+    </div>
+
+    <div class="telegram-gate-heading">🔐 Telegram से Login करें</div>
+    <p class="telegram-gate-intro">
+      Dashboard का उपयोग करने के लिए पहले अपने Telegram account से login करें।
+      Login के बाद <strong>@mptendersalert</strong> channel membership अपने-आप verify होगी।
+    </p>
+
+    <div class="telegram-login-steps">
+      <div class="telegram-step active">
+        <span class="telegram-step-no">1</span>
+        <span><strong>Login</strong><small>Telegram account verify करें</small></span>
+      </div>
+      <div class="telegram-step">
+        <span class="telegram-step-no">2</span>
+        <span><strong>Channel Join</strong><small>@mptendersalert join करें</small></span>
+      </div>
+      <div class="telegram-step">
+        <span class="telegram-step-no">3</span>
+        <span><strong>Dashboard</strong><small>Tenders देखना शुरू करें</small></span>
+      </div>
+    </div>
+
     <button class="telegram-login-start" id="telegramLoginStart" type="button">🔵 Login with Telegram</button>
     <div class="telegram-login-wrap" id="telegramLoginWrap"></div>
-    <a class="telegram-join-btn" id="telegramJoinBtn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Join @mptendersalert</a>
-    <button class="telegram-verify-btn" id="telegramCheckBtn" type="button">✅ Check Again</button>
-    <div id="telegramGateStatus">Telegram Login button नीचे दिखाई देगा।</div>
-    <div class="telegram-admin">समस्या हो तो <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">Contact Admin — t.me/rdgyan</a></div>
+
+    <div class="telegram-gate-actions">
+      <a class="telegram-join-btn" id="telegramJoinBtn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Join @mptendersalert Channel</a>
+      <button class="telegram-verify-btn" id="telegramCheckBtn" type="button">✅ मैंने Join कर लिया — Check Again</button>
+    </div>
+
+    <div id="telegramGateStatus">ऊपर दिए गए Telegram Login button पर क्लिक करें।</div>
+
+    <div class="telegram-gate-note">
+      <span>🔒</span>
+      <span>आपका Telegram password या OTP इस website पर नहीं लिया जाता। Login Telegram के माध्यम से होता है।</span>
+    </div>
+
+    <div class="telegram-admin">
+      Login या channel verification में समस्या हो तो
+      <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">Contact Admin — t.me/rdgyan</a>
+    </div>
   </div>
-</div>
+</div>iv>
 
 
 <header class="site-header">
