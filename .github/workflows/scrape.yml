@@ -137,6 +137,7 @@ jobs:
           # Incremental mode: do not reopen already-complete tender detail pages.
           FORCE_DETAIL_REFRESH: "0"
           # 0 = process the full remaining dataset; checkpoint every 10 successes.
+          # Full recovery run: rebuild the current organisation/tender snapshot first.
           DETAIL_BATCH_SIZE: "0"
         run: |
           set -o pipefail
