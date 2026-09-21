@@ -2199,30 +2199,48 @@ function parseCsv(text){
   });
 }
 
-async function loadFromCsv(){
-  const response = await fetch(CSV_URL + "?t=" + Date.now(),{
+async function fetchCsvText(url){
+  const response = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(),{
     cache:"no-store"
   });
+  if(!response.ok) throw new Error("CSV HTTP " + response.status);
+  return await response.text();
+}
 
-  if(!response.ok){
-    throw new Error("CSV not found");
+async function loadFromCsv(){
+  let lastError = null;
+  for(const url of [
+    CSV_URL,
+    "https://raw.githubusercontent.com/esign2015/mp-tenders/main/all_tenders_org_detailed.csv"
+  ]){
+    try{
+      const text = await fetchCsvText(url);
+      const data = parseCsv(text);
+      if(data.length) return data;
+      lastError = new Error("CSV is empty");
+    }catch(error){
+      lastError = error;
+    }
   }
-
-  const text = await response.text();
-  return parseCsv(text);
+  throw lastError || new Error("CSV not found");
 }
 
 async function loadOrganisationTenderCsv(){
-  const response = await fetch(ORG_TENDER_CSV_URL + "?t=" + Date.now(),{
-    cache:"no-store"
-  });
-
-  if(!response.ok){
-    throw new Error("Organisation tender CSV not found");
+  let lastError = null;
+  for(const url of [
+    ORG_TENDER_CSV_URL,
+    "https://raw.githubusercontent.com/esign2015/mp-tenders/main/organisation_tenders.csv"
+  ]){
+    try{
+      const text = await fetchCsvText(url);
+      const data = parseCsv(text);
+      if(data.length) return data;
+      lastError = new Error("Organisation CSV is empty");
+    }catch(error){
+      lastError = error;
+    }
   }
-
-  const text = await response.text();
-  return parseCsv(text);
+  throw lastError || new Error("Organisation tender CSV not found");
 }
 
 let liveRefreshTimer = null;
@@ -2312,7 +2330,7 @@ async function loadData(){
     }
 
   }catch(error){
-    console.error(error);
+    console.error("Dashboard data load failed:", error);
 
     allTenders = [];
     filteredTenders = [];
@@ -2320,7 +2338,7 @@ async function loadData(){
     $("tenderBody").innerHTML =
       `<tr>
         <td colspan="14" class="empty-row">
-          Tender data could not be loaded from GitHub CSV or the organisation tender list.
+          Tender data load failed: ${clean(error && error.message ? error.message : error)}
         </td>
       </tr>`;
 
