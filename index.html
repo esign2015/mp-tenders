@@ -1757,13 +1757,11 @@ function updateTelegramProfile(user){
 }
 
 function logoutTelegram(){
-  // Keep a persistent logout lock for this Telegram account.
-  // This prevents the browser's already-signed-in Telegram account
-  // from immediately logging back into the dashboard with one click.
-  if(telegramAuthData?.id){
-    localStorage.setItem("telegram_logout_lock",String(telegramAuthData.id));
-  }
+  // Dashboard logout only clears this site's authentication.
+  // Telegram itself may remain signed in; the next Telegram Login
+  // should be allowed to authenticate the same account again.
   localStorage.removeItem("telegram_auth");
+  localStorage.removeItem("telegram_logout_lock");
   sessionStorage.removeItem("telegram_verified");
   sessionStorage.removeItem("telegram_user");
   telegramAuthData=null;
@@ -1882,11 +1880,13 @@ async function setupTelegramLogin(){
 }
 
 function onTelegramAuth(user){
-  const logoutLock=localStorage.getItem("telegram_logout_lock");
-  if(logoutLock && String(user?.id || "") === logoutLock){
-    telegramStatus("🔒 आपने इस Telegram account से Logout किया है। सुरक्षा के लिए पहले Telegram में इस account से Logout करें, फिर दोबारा Login करें।");
+  // Telegram Login is the authentication step. Do not block the same
+  // Telegram account merely because it logged out of this dashboard.
+  if(!user || !user.id){
+    telegramStatus("❌ Telegram Login से user details नहीं मिलीं। कृपया फिर से Login करें।");
     return;
   }
+  localStorage.removeItem("telegram_logout_lock");
   verifyTelegramMembership(user,true);
 }
 
