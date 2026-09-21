@@ -14,14 +14,15 @@ body{font-family:system-ui,Arial;margin:0;background:#f4f7fb;color:#172033}.wrap
 <div class="note">Auto refresh: हर 15 सेकंड। Manual Refresh केवल status/data दोबारा पढ़ता है; scraper को restart नहीं करता।</div>
 </div>
 <script>
-const statusUrl='./status.json', manualTestUrl='./manual_detail_test_status.json';
+const statusUrl='./status.json', manualTestUrl='./manual_detail_test_status.json', detailStatusUrl='./existing_id_detail_status.json';
 function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++){const c=t[i],n=t[i+1];if(c=='"'&&q&&n=='"'){v+='"';i++;continue}if(c=='"'){q=!q;continue}if(c==','&&!q){row.push(v);v='';continue}if((c=='\\n'||c=='\\r')&&!q){if(c=='\\r'&&n=='\\n')i++;row.push(v);v='';if(row.some(x=>String(x).trim()))rows.push(row);row=[];continue}v+=c}if(v!==''||row.length){row.push(v);rows.push(row)}if(rows.length<2)return[];const h=rows[0].map(x=>String(x).replace(/^\\uFEFF/,'').trim());return rows.slice(1).map(a=>{const o={};h.forEach((k,i)=>o[k]=String(a[i]||'').trim());return o})}
 function row(k,v,c=''){return '<div class="row"><span>'+k+'</span><b class="'+c+'">'+v+'</b></div>'}
 function esc(x){return String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function load(){const stamp=Date.now();document.getElementById('refreshTime').textContent='Refreshing…';try{
-const [st,manual]=await Promise.all([
+const [st,manual,detailStatus]=await Promise.all([
   fetch(statusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.json()),
-  fetch(manualTestUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
+  fetch(manualTestUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
+  fetch(detailStatusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
 ]);
 const total=+(st.portal_total_tenders||st.total_tenders)||0;
 const scraperDone=+st.detail_complete||0;
@@ -38,7 +39,9 @@ document.getElementById('process').innerHTML=row('Organisation Progress',esc(st.
 const latest=st.latest_error||st.error||'';document.getElementById('errBox').style.display=latest?'block':'none';document.getElementById('error').textContent=latest?latest:'';
 const productionDetails=Math.max(0,scraperDone), testedDetails=Math.max(0,manualDone);
 const detailLabel=testedDetails && productionDetails===0 ? '0 production + '+testedDetails+' verified test' : productionDetails.toLocaleString();
-document.getElementById('quality').innerHTML=row('Detailed CSV rows','Live CSV — browser monitor does not download the large CSV','info')+row('Detail Extracted = YES',detailLabel,testedDetails||productionDetails?'ok':'warn')+row('Pincode Missing',pinCount? 'See scraper quality counters':'—')+row('Pincode Out',otherPinCount?'See scraper quality counters':'—')+row('District Missing','See scraper quality counters','info')+row('District Out','See scraper quality counters','info');
+const finalFailed=Array.isArray(detailStatus.errors)?detailStatus.errors:[];
+const failedText=finalFailed.length ? finalFailed.map(x=>((x['Tender ID']||'')+' — '+(x.error||'')).trim()).join('\n') : 'कोई final failed Tender ID नहीं';
+document.getElementById('quality').innerHTML=row('Final failed Tender IDs',finalFailed.length.toLocaleString(),'bad')+'<div class="error" style="margin-top:8px">'+esc(failedText)+'</div>'+row('Detailed CSV rows','Live CSV — browser monitor does not download the large CSV','info')+row('Detail Extracted = YES',detailLabel,testedDetails||productionDetails?'ok':'warn')+row('Pincode Missing',pinCount? 'See scraper quality counters':'—')+row('Pincode Out',otherPinCount?'See scraper quality counters':'—')+row('District Missing','See scraper quality counters','info')+row('District Out','See scraper quality counters','info');
 document.getElementById('org').innerHTML=row('Organisation records',orgCount.toLocaleString())+row('Unique Organisations',orgCount.toLocaleString())+row('Departments',deptCount.toLocaleString())+row('Known 6-digit Pincodes',pinCount.toLocaleString())+row('Pincodes in Others',otherPinCount.toLocaleString())+row('Tender rows in organisation CSV',total.toLocaleString());
 document.getElementById('refreshTime').textContent='Last refresh: '+new Date().toLocaleTimeString();
 }catch(e){document.getElementById('refreshTime').textContent='Refresh error';document.getElementById('error').textContent=e.message;document.getElementById('errBox').style.display='block'}}
