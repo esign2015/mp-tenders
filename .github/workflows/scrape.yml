@@ -262,7 +262,7 @@ jobs:
     timeout-minutes: 350
     concurrency:
       group: mp-tender-data-writer
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
