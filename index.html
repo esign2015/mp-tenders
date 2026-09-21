@@ -1429,18 +1429,27 @@ body.telegram-locked .site-footer{visibility:hidden}
     </div>
 
     <div class="search-bottom">
-      <label class="date-filter-wrap" title="जिस तारीख को Tender की Closing Date है, उसी तारीख के अनुसार खोजें">
-        <span class="date-filter-label">Closing Date</span>
-        <input id="closingDate"
-               type="date"
-               aria-label="Closing Date — जिस तारीख को Tender बंद हो रहा है">
-      </label>
+      <select id="closingExpire" aria-label="Closing Date filter">
+        <option value="0">Closing Date</option>
+        <option value="1">Closing Today</option>
+        <option value="2">Closing Tomorrow</option>
+        <option value="3">Closing within 3 Days</option>
+        <option value="7">Closing within 7 Days</option>
+        <option value="15">Closing within 15 Days</option>
+        <option value="30">Closing within 30 Days</option>
+        <option value="45">Closing within 45 Days</option>
+        <option value="gt45">Closing greater than 45 Days</option>
+      </select>
 
-      <select id="sortSelect">
-        <option value="closing">Sort: Closing date</option>
-        <option value="published">Sort: Published date</option>
-        <option value="title">Sort: Title</option>
-        <option value="organisation">Sort: Organisation</option>
+      <select id="sortSelect" aria-label="Sort order">
+        <option value="closing-asc">Sort: Closing ↑</option>
+        <option value="closing-desc">Sort: Closing ↓</option>
+        <option value="published-asc">Sort: Published ↑</option>
+        <option value="published-desc">Sort: Published ↓</option>
+        <option value="title-asc">Sort: Title A-Z</option>
+        <option value="title-desc">Sort: Title Z-A</option>
+        <option value="organisation-asc">Sort: Organisation A-Z</option>
+        <option value="organisation-desc">Sort: Organisation Z-A</option>
       </select>
 
       <select id="statusSelect">
@@ -2953,12 +2962,15 @@ function applyFilters(refreshHeader=true){
   const organisation = clean($("organisationSearch").value).toLowerCase();
   const districtSearch = clean($("districtSearch").value).toLowerCase();
 
-  const closingDate = clean($("closingDate").value);
+  const closingExpire = clean($("closingExpire").value);
   const status = clean($("statusSelect").value).toLowerCase();
   const pacFilter = clean($("pacFilter").value);
   const pacMode = pacFilter ? pacFilter.split(":")[0] : "";
   const pacLimit = pacFilter ? Number(pacFilter.split(":")[1]) : null;
-  const sort = $("sortSelect").value;
+  const sortValue = $("sortSelect").value;
+  const sortParts = sortValue.split("-");
+  const sort = sortParts[0] || "closing";
+  const explicitSortDesc = sortParts[1] === "desc";
 
   const today = new Date();
   today.setHours(0,0,0,0);
@@ -3064,9 +3076,16 @@ function applyFilters(refreshHeader=true){
       if(pacMode === "above" && pacAmount <= pacLimit) return false;
     }
 
-    if(closingDate &&
-       dateKey(row["Closing Date"]) !== closingDate){
-      return false;
+    if(closingExpire){
+      const rowClosing = parseDate(row["Closing Date"]);
+      if(!rowClosing) return false;
+      const rowDay = new Date(rowClosing.getFullYear(), rowClosing.getMonth(), rowClosing.getDate());
+      const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const days = Math.floor((rowDay.getTime() - todayDay.getTime()) / 86400000);
+      if(closingExpire === "1" && days !== 0) return false;
+      if(closingExpire === "2" && days !== 1) return false;
+      if(["3","7","15","30","45"].includes(closingExpire) && (days < 0 || days > Number(closingExpire))) return false;
+      if(closingExpire === "gt45" && days <= 45) return false;
     }
 
     if(status){
@@ -3091,7 +3110,14 @@ function applyFilters(refreshHeader=true){
     return true;
   });
 
-  filteredTenders.sort((a,b) => compareTableValues(a,b,tableSortKey) * (tableSortDesc ? -1 : 1));
+  const sortKeyMap = {
+    closing:"Closing Date",
+    published:"Published Date",
+    title:"Title",
+    organisation:"Organisation"
+  };
+  const effectiveSortKey = sortKeyMap[sort] || "Closing Date";
+  filteredTenders.sort((a,b) => compareTableValues(a,b,effectiveSortKey) * (explicitSortDesc ? -1 : 1));
 
   renderTable(filteredTenders);
   /* Header counts do not change during a search; avoid rescanning 5,253+
@@ -3168,7 +3194,7 @@ function clearFilters(){
   $("organisationSearch").value = "";
   $("districtSearch").value = "";
 
-  $("closingDate").value = "";
+  $("closingExpire").value = "0";
   $("pacFilter").value = "";
   document.querySelectorAll('input[name="pacModeOption"]').forEach(input => {
     input.checked = input.value === "";
@@ -3178,7 +3204,7 @@ function clearFilters(){
   });
   const pacLabel = $("pacFilterLabel");
   if(pacLabel) pacLabel.textContent = "All PAC";
-  $("sortSelect").value = "closing";
+  $("sortSelect").value = "closing-asc";
   $("statusSelect").value = "";
 
   applyFilters();
@@ -3205,7 +3231,7 @@ function showArchived(){
 function showClosingToday(){
   clearFilters();
   quickFilterMode = "closingToday";
-  $("closingDate").value = todayKey();
+  $("closingExpire").value = "1";
   applyFilters();
 
 }
@@ -3726,7 +3752,7 @@ function scheduleFilter(){
 });
 
 [
-  "closingDate",
+  "closingExpire",
   "sortSelect",
   "statusSelect"
 ].forEach(id => {
@@ -3859,6 +3885,8 @@ setupPacFilter();
 document.querySelectorAll(".sortable-th").forEach(th => {
   th.addEventListener("click", () => sortCurrentTable(th.dataset.sortKey));
 });
+$("closingExpire").addEventListener("change", applyFilters);
+$("sortSelect").addEventListener("change", applyFilters);
 updateTableSortHeaders();
 
 $("reloadBtn").addEventListener("click",clearFilters);
