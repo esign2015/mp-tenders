@@ -62,16 +62,12 @@ def main():
         print(f"ORG_SCHEDULE: slot {slot} already executed.")
         return 0
 
-    # The caller performs the actual monitor. State is written only after the
-    # decision so a failed monitor can be retried on the next scheduler tick.
-    STATE.write_text(json.dumps({
-        "date": today.isoformat(),
-        "last_executed": key,
-        "slot_ist": f"{slot // 60:02d}:{slot % 60:02d}",
-        "generated_from_morning_alert": cfg["morning_telegram_ist"]
-    }, indent=2), encoding="utf-8")
-    print(f"ORG_SCHEDULE: RUN at {slot // 60:02d}:{slot % 60:02d} IST")
-    return 1
+    # Only decide here. The workflow records the slot AFTER the monitor succeeds.
+    # This means a failed run can be retried on the next scheduler tick.
+    print(f"run=true")
+    print(f"slot={slot // 60:02d}:{slot % 60:02d}")
+    print(f"key={key}")
+    return 0
 
 
 if __name__ == "__main__":
