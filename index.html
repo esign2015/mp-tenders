@@ -3636,17 +3636,17 @@ function exportPdf(){
       }
     },
     columnStyles:{
-      /* A3 landscape usable width: 400mm. Keep left/right margins equal. */
+      /* A3 landscape: keep the complete Tender ID visible; long IDs wrap instead of becoming "…". */
       0:{cellWidth:10,halign:"center"},
-      1:{cellWidth:35,overflow:"ellipsize"},
-      2:{cellWidth:32},
-      3:{cellWidth:90},
-      4:{cellWidth:90},
-      5:{cellWidth:30,halign:"right"},
-      6:{cellWidth:25,halign:"right"},
-      7:{cellWidth:25,halign:"right"},
-      8:{cellWidth:30,halign:"right"},
-      9:{cellWidth:33,halign:"right"}
+      1:{cellWidth:45,overflow:"linebreak",halign:"left"},
+      2:{cellWidth:30},
+      3:{cellWidth:75},
+      4:{cellWidth:70},
+      5:{cellWidth:28,halign:"right"},
+      6:{cellWidth:28,halign:"right"},
+      7:{cellWidth:28,halign:"right"},
+      8:{cellWidth:28,halign:"right"},
+      9:{cellWidth:28,halign:"right"}
     },
 
     /*
