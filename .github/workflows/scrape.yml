@@ -325,9 +325,11 @@ jobs:
           fi
 
   fresh_bootstrap:
-    # One-time clean rebuild requested for the current project state.
-    # It intentionally wipes the old tender/detail inventory, rebuilds the
-    # live organisation snapshot, then runs the Tender-ID detail worker.
+    # One-time clean rebuild:
+    # each organisation is collected, count-verified (with one retry), and
+    # matched organisations immediately send their Tender IDs to detail extraction.
+    # Mismatched organisations are not sent to detail until their count matches.
+    # The final existing_id_detail worker remains as a retry/backfill pass.
     if: github.event_name == 'push' && contains(github.event.head_commit.message, '[fresh-bootstrap]')
     runs-on: ubuntu-latest
     timeout-minutes: 350
@@ -345,10 +347,10 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium
         run: python -m playwright install --with-deps chromium
-      - name: Fresh Phase 1 — copy every organisation and every tender list
+      - name: Fresh Phase 1 — copy each organisation and extract matched Tender IDs immediately
         env:
           FRESH_BOOTSTRAP: "1"
-          FETCH_DETAIL_PAGES: "0"
+          FETCH_DETAIL_PAGES: "1"
           NEW_TENDER_ONLY: "1"
           DETAIL_BATCH_SIZE: "0"
         run: |
