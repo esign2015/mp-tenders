@@ -1,4 +1,5 @@
 # DAILY_DETAIL_WORKER_VERSION = 2
+# Fresh bootstrap trigger: [fresh-bootstrap]
 import csv, json, re, time
 from pathlib import Path
 from datetime import datetime, timezone
