@@ -805,7 +805,7 @@ def find_live_tender_link(page, tender_id="", tender_title="", tender_ref=""):
     return None
 
 
-def open_tender_detail_dual(page, tender, org):
+def open_tender_detail_by_search(page, tender):
     """Find a tender by Tender ID from the stable MP home page search box,
     click the result title, and parse the resulting detail page.
 
