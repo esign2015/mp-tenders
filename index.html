@@ -232,7 +232,7 @@ button:hover{
 
 .search-fields{
   display:grid;
-  grid-template-columns:2fr 1.05fr 1.25fr 1.35fr 1.35fr 110px;
+  grid-template-columns:2fr 1.25fr 1.5fr;
   gap:7px;
   padding:8px 12px 5px;
 }
@@ -279,6 +279,12 @@ button:hover{
 }
 .district-filter-wrap{position:relative;width:100%;min-width:0}
 .district-filter-wrap input{width:100%}
+.district-suggestions{display:none;position:absolute;left:0;right:0;top:34px;z-index:5001;max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:0 0 7px 7px;box-shadow:0 10px 24px rgba(15,23,42,.16)}
+.district-suggestions.open{display:block}
+.district-option{display:block;width:100%;padding:8px 10px;border:0;border-bottom:1px solid #eef2f7;background:#fff;color:#172033;text-align:left;font-size:12px;font-weight:600;cursor:pointer}
+.district-option:hover,.district-option.active{background:#eef6ff;color:#1d4ed8}
+.district-option small{display:block;margin-top:2px;color:#64748b;font-size:10px;font-weight:500}
+.district-empty{padding:9px 10px;color:#64748b;font-size:12px}
 .district-search-help{
   display:none;position:absolute;left:0;right:0;top:34px;z-index:5000;
   padding:7px 9px;background:#f8fafc;border:1px solid #cbd5e1;border-top:0;
@@ -466,7 +472,6 @@ button:hover{
   padding-top:9px;
 }
 .pac-filter-actions button{padding:7px 12px;}
-#pincodeSearch{width:110px;text-align:center;letter-spacing:.5px;}
 
 .btn-archive{
   border:1px solid #64748b;
@@ -796,7 +801,7 @@ td.title-cell{
   .right-brand{font-size:15px;}
   .count-box{width:88px;min-width:88px;}
   .count-label{font-size:11px;}
-  .search-fields{grid-template-columns:1.7fr 1fr 1.2fr 1.1fr 100px;}
+  .search-fields{grid-template-columns:1.8fr 1fr 1.2fr;}
 }
 
 @media(max-width:850px){
@@ -953,10 +958,7 @@ td.title-cell{
     grid-column:1 / -1;
   }
 
-  #pincodeSearch{
-    width:100%;
-  }
-
+  
   .search-bottom{
     width:100%;
     display:grid;
@@ -1388,14 +1390,6 @@ body.telegram-locked .site-footer{visibility:hidden}
              type="text"
              placeholder="Search ID, title, organisation, department...">
 
-      <input id="tenderIdSearch"
-             type="text"
-             placeholder="Tender ID">
-
-      <input id="titleSearch"
-             type="text"
-             placeholder="Title / keyword">
-
       <div class="organisation-filter-wrap" id="organisationFilterWrap">
         <input id="organisationSearch"
                type="text"
@@ -1409,17 +1403,9 @@ body.telegram-locked .site-footer{visibility:hidden}
         <input id="districtSearch" type="text" autocomplete="off"
                placeholder="District / PIN / smart search..."
                aria-label="District or PIN smart search">
-        <div class="district-search-help">Work name → authority → reference → PIN</div>
+        <div class="district-suggestions" id="districtSuggestions" role="listbox"></div>
+        <div class="district-search-help">District name / spelling correction / 1–6 digit PIN prefix</div>
       </div>
-
-      <input id="pincodeSearch"
-             type="text"
-             inputmode="numeric"
-             pattern="[0-9]{6}"
-             maxlength="6"
-             autocomplete="postal-code"
-             placeholder="Pincode"
-             title="6 digit Pincode">
     </div>
 
     <div class="search-bottom">
@@ -2423,8 +2409,7 @@ function renderVirtualWindow(){
 
   body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
-    const tenderId = escapeHtml(row["Tender ID"]);
-    const title = escapeHtml(cleanDisplayTitle(row["Title"]));
+
     const titleHtml = title;
 
     return `
@@ -2594,10 +2579,48 @@ function goVirtualPage(direction){
   });
 }
 
+function normalizeSearchText(value){
+  return clean(value).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
+}
+function levenshteinDistance(a,b){
+  if(a===b)return 0;if(!a)return b.length;if(!b)return a.length;
+  const prev=Array.from({length:b.length+1},(_,i)=>i);
+  for(let i=1;i<=a.length;i++){let current=[i];for(let j=1;j<=b.length;j++)current[j]=Math.min(current[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));for(let j=0;j<current.length;j++)prev[j]=current[j];}
+  return prev[b.length];
+}
+function districtCandidates(query){
+  const q=normalizeSearchText(query);if(!q||/^\d+$/.test(q))return [];
+  return MP_DISTRICT_MASTER.map(d=>{
+    let best=Infinity;
+    for(const name of [d.name,...(d.aliases||[])]){
+      const n=normalizeSearchText(name);
+      const score=n===q?0:(n.startsWith(q)||q.startsWith(n)?Math.abs(n.length-q.length)*0.15+0.2:levenshteinDistance(n,q)/Math.max(1,Math.max(n.length,q.length)));
+      if(score<best)best=score;
+    }
+    return {...d,score:best};
+  }).filter(d=>d.score<=0.48).sort((a,b)=>a.score-b.score).slice(0,6);
+}
+function resolveDistrict(query){
+  const q=normalizeSearchText(query);if(!q||/^\d+$/.test(q))return null;
+  const exact=MP_DISTRICT_MASTER.find(d=>[d.name,...(d.aliases||[])].some(x=>normalizeSearchText(x)===q));
+  if(exact)return exact;
+  const candidates=districtCandidates(query);return candidates.length&&candidates[0].score<=0.38?candidates[0]:null;
+}
+function showDistrictSuggestions(){
+  const input=$("districtSearch"),list=$("districtSuggestions");if(!input||!list)return;
+  const raw=clean(input.value);if(!raw){list.classList.remove("open");list.innerHTML="";return;}
+  if(/^\d+$/.test(raw)){list.innerHTML='<div class="district-empty">PIN prefix: <b>'+escapeHtml(raw.slice(0,6))+'</b> — अधिकतम 6 अंक</div>';list.classList.add("open");return;}
+  const matches=districtCandidates(raw);
+  list.innerHTML=matches.length?matches.map(d=>'<button type="button" class="district-option" role="option" data-district="'+escapeHtml(d.name)+'">'+escapeHtml(d.name)+'<small>PIN prefix: '+escapeHtml((d.pinPrefixes||[]).join(", "))+' • सुझाव</small></button>').join(""):'<div class="district-empty">District नहीं मिला। सही spelling का सुझाव नहीं मिला।</div>';
+  list.classList.add("open");
+}
 function setupDistrictSearch(){
-  const input=$("districtSearch");
-  if(!input)return;
-  input.addEventListener("input",scheduleFilter);
+  const input=$("districtSearch"),list=$("districtSuggestions");if(!input)return;
+  input.addEventListener("input",function(){if(/^\d/.test(this.value))this.value=this.value.replace(/\D/g,"").slice(0,6);showDistrictSuggestions();scheduleFilter();});
+  input.addEventListener("focus",showDistrictSuggestions);
+  input.addEventListener("keydown",function(event){if(event.key==="Escape"&&list)list.classList.remove("open");if(event.key==="Enter"&&list){const first=list.querySelector(".district-option");if(first){input.value=first.dataset.district||input.value;list.classList.remove("open");applyFilters();}}});
+  if(list)list.addEventListener("mousedown",function(event){const option=event.target.closest(".district-option");if(!option)return;event.preventDefault();input.value=option.dataset.district||"";list.classList.remove("open");applyFilters();});
+  document.addEventListener("click",function(event){if(!event.target.closest("#districtFilterWrap")&&list)list.classList.remove("open");});
 }
 function setupOrganisationFilter(){
   const input = $("organisationSearch");
@@ -2712,11 +2735,10 @@ function updateCounts(rows, refreshHeader=true){
   if(!refreshHeader){
     const filterControls = [
       $("generalSearch").value,
-      $("tenderIdSearch").value,
-      $("titleSearch").value,
+
       $("organisationSearch").value,
       $("districtSearch").value,
-      $("pincodeSearch").value,
+
       $("closingDate").value,
       $("pacFilter").value,
       $("statusSelect").value
@@ -2757,10 +2779,9 @@ function updateCounts(rows, refreshHeader=true){
   $("closingTomorrowCount").textContent = closingTomorrow;
 const filterControls = [
     $("generalSearch").value,
-    $("tenderIdSearch").value,
-    $("titleSearch").value,
+
     $("organisationSearch").value,
-    $("pincodeSearch").value,
+
     $("closingDate").value,
     $("pacFilter").value,
     $("statusSelect").value
@@ -2772,27 +2793,25 @@ const filterControls = [
     filterControls.some(value => clean(value) !== "");
 
 }
-const MP_DISTRICT_PIN_PREFIXES={
-"alirajpur":["457"],"anuppur":["484"],"ashok nagar":["473"],"ashoknagar":["473"],"balaghat":["481"],
-"barwani":["451"],"betul":["460"],"bhind":["477"],"bhopal":["462"],"burhanpur":["450"],"chhatarpur":["471"],
-"chhindwara":["480"],"damoh":["470"],"datia":["475"],
-"dewas":["455001","455111","455115","455116","455118","455221","455223","455227","455332","455336","455339","455440","455459"],"dhar":["454"],"dindori":["481"],
-"guna":["473"],"gwalior":["474"],"harda":["461"],"hoshangabad":["461"],"narmadapuram":["461"],"indore":["452"],
-"jabalpur":["482"],"jhabua":["457"],"katni":["483"],"khandwa":["450"],"khargone":["451"],"mandla":["481"],
-"mandsaur":["458"],"morena":["476"],"narsinghpur":["487"],"neemuch":["458"],"panna":["488"],"rewa":["486"],
-"rajgarh":["465"],"ratlam":["457"],"raisen":["464"],"sagar":["470"],"satna":["485"],"sehore":["466"],
-"seoni":["480"],"shahdol":["484"],"shajapur":["465"],"sheopur":["476"],"shivpuri":["473"],"sidhi":["486"],
-"singrauli":["486885","486886","486887","486888","486889"],"tikamgarh":["472"],"ujjain":["456"],"umaria":["484"],"vidisha":["464"],
-"agar malwa":["465"],"niwari":["472"],"maihar":["485"],"mauganj":["486"],"pandhurna":["480"]
-};
+let MP_DISTRICT_MASTER=[];
+let MP_DISTRICT_PIN_PREFIXES={};
+async function loadDistrictMaster(){
+  try{
+    const response=await fetch("./data/mp_districts.json?ts="+Date.now(),{cache:"no-store"});
+    if(!response.ok)throw new Error("District master HTTP "+response.status);
+    const payload=await response.json();
+    MP_DISTRICT_MASTER=Array.isArray(payload.districts)?payload.districts:[];
+    MP_DISTRICT_PIN_PREFIXES={};
+    MP_DISTRICT_MASTER.forEach(d=>{MP_DISTRICT_PIN_PREFIXES[normalizeSearchText(d.name)]=(d.pinPrefixes||[]).map(String);});
+  }catch(error){console.warn("District master unavailable:",error);MP_DISTRICT_MASTER=[];MP_DISTRICT_PIN_PREFIXES={};}
+}
 
 function applyFilters(refreshHeader=true){
   const general = clean($("generalSearch").value).toLowerCase();
-  const tenderId = clean($("tenderIdSearch").value).toLowerCase();
-  const title = clean($("titleSearch").value).toLowerCase();
+
   const organisation = clean($("organisationSearch").value).toLowerCase();
   const districtSearch = clean($("districtSearch").value).toLowerCase();
-  const pincode = clean($("pincodeSearch").value);
+
   const closingDate = clean($("closingDate").value);
   const status = clean($("statusSelect").value).toLowerCase();
   const pacFilter = clean($("pacFilter").value);
@@ -2832,27 +2851,11 @@ function applyFilters(refreshHeader=true){
       return false;
     }
     const combined = [
-      row["Tender ID"],
-      row["Title"],
-      row["Reference Number"],
-      row["Organisation"],
-      row["Department"],
-      row["Division"],
-      row["Sub Division"],
-      row["Pincode"]
+      row["Tender ID"],row["Title"],row["Reference Number"],row["Organisation"],
+      row["Department"],row["Division"],row["Sub Division"],row["Location"],
+      row["Pincode"],row["Product Category"],row["Sub Category"],row["Work Description"]
     ].join(" ").toLowerCase();
-
     if(general && !combined.includes(general)) return false;
-
-    if(tenderId &&
-       !clean(row["Tender ID"]).toLowerCase().includes(tenderId)){
-      return false;
-    }
-
-    if(title &&
-       !clean(row["Title"]).toLowerCase().includes(title)){
-      return false;
-    }
 
     if(organisation){
       const rowOrganisation = clean(row["Organisation"]).toLowerCase();
@@ -2868,27 +2871,17 @@ function applyFilters(refreshHeader=true){
     }
 
     if(districtSearch){
-      const titleText = clean(row["Title"]).toLowerCase();
-      const authorityText = [row["Organisation"],row["Department"],row["Division"],row["Sub Division"],row["Location"]].join(" ").toLowerCase();
-      const referenceText = clean(row["Reference Number"]).toLowerCase();
-      const pinText = clean(row["Pincode"]).replace(/\D/g,"");
-      let districtHit = false;
-      Object.keys(MP_DISTRICT_PIN_PREFIXES).some(district => {
-        if(district === districtSearch || district.includes(districtSearch)){
-          districtHit = MP_DISTRICT_PIN_PREFIXES[district].some(prefix => pinText.startsWith(prefix));
-          return districtHit;
-        }
-        return false;
-      });
-      const numericQuery = districtSearch.replace(/\D/g,"");
-      const pinHit = numericQuery.length >= 1 && pinText.startsWith(numericQuery);
-      if(!titleText.includes(districtSearch) && !authorityText.includes(districtSearch) &&
-         !referenceText.includes(districtSearch) && !pinHit && !districtHit) return false;
-    }
-
-    if(pincode &&
-       !clean(row["Pincode"]).startsWith(pincode)){
-      return false;
+      const titleText=clean(row["Title"]).toLowerCase();
+      const workText=clean(row["Work Description"]).toLowerCase();
+      const authorityText=[row["Organisation"],row["Department"],row["Division"],row["Sub Division"],row["Location"]].join(" ").toLowerCase();
+      const referenceText=clean(row["Reference Number"]).toLowerCase();
+      const pinText=clean(row["Pincode"]).replace(/\D/g,"");
+      const numericQuery=districtSearch.replace(/\D/g,"").slice(0,6);
+      const pinHit=numericQuery.length>=1&&pinText.startsWith(numericQuery);
+      const resolved=resolveDistrict(districtSearch);
+      const districtHit=!!resolved&&(resolved.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix)));
+      const textHit=titleText.includes(districtSearch)||workText.includes(districtSearch)||authorityText.includes(districtSearch)||referenceText.includes(districtSearch);
+      if(!textHit&&!pinHit&&!districtHit)return false;
     }
 
     /*
@@ -3008,11 +3001,10 @@ function clearFilters(){
   $("tableHeading").textContent = "Tender Records";
 
   $("generalSearch").value = "";
-  $("tenderIdSearch").value = "";
-  $("titleSearch").value = "";
+
   $("organisationSearch").value = "";
   $("districtSearch").value = "";
-  $("pincodeSearch").value = "";
+
   $("closingDate").value = "";
   $("pacFilter").value = "";
   document.querySelectorAll('input[name="pacModeOption"]').forEach(input => {
@@ -3036,11 +3028,10 @@ function showArchived(){
   $("tableHeading").textContent = "Archived Tenders";
 
   $("generalSearch").value = "";
-  $("tenderIdSearch").value = "";
-  $("titleSearch").value = "";
+
   $("organisationSearch").value = "";
   $("districtSearch").value = "";
-  $("pincodeSearch").value = "";
+
   $("closingDate").value = "";
   $("sortSelect").value = "closing";
   $("statusSelect").value = "";
@@ -3509,11 +3500,6 @@ function exportPdf(){
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   doc.save("MP_Tender_Dashboard_" + stamp + ".pdf");
 }
-$("pincodeSearch").addEventListener("input", function(){
-  this.value = this.value.replace(/\D/g,"").slice(0,6);
-  scheduleFilter();
-});
-
 
 /*
    Search is intentionally debounced. Filtering 5,253+ records can take a
@@ -3556,11 +3542,10 @@ function scheduleFilter(){
 
 [
   "generalSearch",
-  "tenderIdSearch",
-  "titleSearch",
+
   "organisationSearch",
   "districtSearch",
-  "pincodeSearch"
+
 ].forEach(id => {
   $(id).addEventListener("input",scheduleFilter);
   $(id).addEventListener("change",scheduleFilter);
@@ -3729,7 +3714,7 @@ setInterval(updateDateTime,1000);
 
 setupVirtualTable();
 updateVirtualPager();
-enforceTelegramAccess().then(() => loadData());
+enforceTelegramAccess().then(async () => { await loadDistrictMaster(); await loadData(); });
 </script>
 
 <style>
