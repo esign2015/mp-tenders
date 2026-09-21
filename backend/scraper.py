@@ -363,6 +363,18 @@ def parse_detail(soup, url):
     processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
+    # Some MP Tender detail templates render the fee label and amount as
+    # plain text instead of adjacent table cells. In that case the table
+    # parser above can return 0/blank even though the portal shows the fee.
+    if not processing_fee:
+        match = re.search(
+            r"Processing Fee(?:\\s+in\\s+₹)?\\s*[:\-]?\\s*(?:Rs\\.?\\s*|₹\\s*)?"
+            r"([0-9][0-9,]*(?:\\.\\d+)?)",
+            body_text,
+            re.I,
+        )
+        if match:
+            processing_fee = match.group(1)
 
     emd = value(
         "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
@@ -404,8 +416,14 @@ def parse_detail(soup, url):
     fee_payable_to = value("Fee Payable To")
     fee_payable_at = value("Fee Payable At")
 
-    # MP's displayed Total Fee excludes EMD.
-    total_fee = money_number(tender_fee) + money_number(processing_fee)
+    # Dashboard Total Fee = EMD + Tender/Form Fee + Processing Fee.
+    # EMD is intentionally included because this is the user's required
+    # combined payable/fee figure, not the portal's displayed fee subtotal.
+    total_fee = (
+        money_number(emd)
+        + money_number(tender_fee)
+        + money_number(processing_fee)
+    )
 
     return {
         "Tender ID": clean(tender_id),
