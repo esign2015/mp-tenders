@@ -34,7 +34,7 @@ td{padding:8px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f8
 <section class="panel">
 <div class="panel-head"><span>Organisation-wise Tender Count</span><input id="search" placeholder="Organisation खोजें"></div>
 <div id="msg">Loading...</div>
-<div class="wrap"><table><thead><tr><th>S.No.</th><th>Organisation Name</th><th>Tender Count</th><th>Copied Count</th><th>Status</th><th>Detail Extraction</th></tr></thead><tbody id="body"></tbody></table></div>
+<div class="wrap"><table><thead><tr><th>S.No.</th><th>Organisation Name</th><th>Tender Count (7 PM)</th><th>Copied Count</th><th>Status</th><th>Success</th><th>Fail</th><th>Skip</th><th>Pending</th></tr></thead><tbody id="body"></tbody></table></div>
 </section>
 </main>
 <script>
@@ -60,13 +60,17 @@ function render(){
   const name=x['Organisation Name'], key=name.toLowerCase(), count=Number(x['Tender Count']||0);
   const orgRows=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
   const ids=new Set(orgRows.map(t=>clean(t['Tender ID'])).filter(Boolean));
-  const successIds=new Set(details.filter(t=>clean(t['Organisation']).toLowerCase()===key || clean(t['Organisation Name']).toLowerCase()===key).map(t=>clean(t['Tender ID'])).filter(Boolean));
-  const failedIds=new Set((statusData.errors||[]).filter(e=>ids.has(clean(e['Tender ID']))).map(e=>clean(e['Tender ID'])).filter(Boolean));
-  const success=[...successIds].filter(id=>ids.has(id)).length;
-  const failed=[...failedIds].filter(id=>!successIds.has(id)).length;
-  const skipped=Math.max(0,ids.size-success-failed);
-  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+ids.size.toLocaleString('en-IN')+'</td><td class="'+(ids.size===count?'ok':'bad')+'">'+(ids.size===count?'MATCH':'MISMATCH')+'</td><td class="detail-stats"><span class="detail-success">Success: '+success+'</span> · <span class="detail-fail">Fail: '+failed+'</span> · <span class="detail-skip">Skip/Pending: '+skipped+'</span></td></tr>';
- }).join('')||'<tr><td colspan="6">कोई organisation नहीं मिली।</td></tr>';
+  const successSet=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
+  const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
+  const skippedSet=new Set((statusData.skipped_ids||[]).filter(id=>ids.has(id)));
+  const pendingSet=new Set((statusData.pending_ids||[]).filter(id=>ids.has(id)));
+  const success=successSet.size, failed=failedSet.size, skipped=skippedSet.size, pending=pendingSet.size;
+  // Never display a detail bucket outside the copied Tender-ID population.
+  const covered=Math.min(ids.size,success+failed+skipped+pending);
+  const pendingSafe=Math.max(0,ids.size-success-failed-skipped);
+  const p=pending ? Math.min(pending,pendingSafe) : pendingSafe;
+  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+ids.size.toLocaleString('en-IN')+'</td><td class="'+(ids.size===count?'ok':'bad')+'">'+(ids.size===count?'MATCH':'MISMATCH')+'</td><td class="detail-num success">'+successSet.size+'</td><td class="detail-num fail">'+failedSet.size+'</td><td class="detail-num skip">'+skippedSet.size+'</td><td class="detail-num pending">'+p+'</td></tr>';
+ }).join('')||'<tr><td colspan="9">कोई organisation नहीं मिली।</td></tr>';
 }
 function clean(v){return String(v??'').replace(/\s+/g,' ').trim()}
 async function load(){
@@ -81,7 +85,7 @@ async function load(){
   $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
   $('copiedCount').textContent=tenders.length.toLocaleString('en-IN');
-  $('msg').textContent='Portal snapshot loaded. Tender Count केवल count है; Detail Extraction में organisation-wise Success / Fail / Skip-Pending दिख रहा है।';
+  $('msg').textContent='Tender Count = 7 PM portal snapshot; Copied Count = organisation page से वास्तव में copy हुए Tender IDs. Detail buckets केवल copied IDs के भीतर हैं।';
   render();
  }catch(e){$('msg').textContent='Data अभी उपलब्ध नहीं है। Fresh collection पूरा होने के बाद यह page स्वतः data दिखाएगा.'}
 }
