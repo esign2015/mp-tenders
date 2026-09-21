@@ -145,6 +145,20 @@ jobs:
               print(f"Render API recovery unavailable: {exc}")
           PY
 
+      - name: Commit recovered Render dataset immediately
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          for f in all_tenders_org_detailed.csv organisations.csv organisation_tenders.csv data/status.json; do
+            if [ -s "$f" ]; then git add "$f"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Recover protected tender dataset from Render [skip ci]"
+            git push || echo "Recovery dataset push failed."
+          else
+            echo "No recovery changes to commit."
+          fi
+
       - name: Run MP Tender scraper — full organisation/tender list
         env:
           DETAIL_SAMPLE_SIZE: "0" # [run-scrape-details]
@@ -208,6 +222,14 @@ jobs:
             sleep 10
           done
           wait "$SCRAPER_PID"
+
+      - name: Show scraper log on Phase 1 failure
+        if: failure()
+        run: |
+          echo "===== scraper_live.log ====="
+          cat scraper_live.log || true
+          echo "===== data/status.json ====="
+          cat data/status.json || true
 
       - name: Phase 2 — extract tender detail pages after full list collection
         env:
