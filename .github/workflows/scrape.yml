@@ -102,7 +102,12 @@ jobs:
               rows=payload.get("tenders", payload if isinstance(payload,list) else [])
               if rows:
                   rows=[r for r in rows if isinstance(r,dict) and str(r.get("Tender ID","")).strip()]
-                  if rows:
+                  existing_ids=set()
+                  local=Path("all_tenders_org_detailed.csv")
+                  if local.exists():
+                      with local.open(encoding="utf-8-sig",newline="") as f:
+                          existing_ids={str(r.get("Tender ID","")).strip() for r in csv.DictReader(f) if str(r.get("Tender ID","")).strip()}
+                  if len(rows) > len(existing_ids):
                       fields=[
                           "Tender ID","Published Date","Closing Date","Opening Date","Title",
                           "Reference Number","Organisation","Department","Division","Sub Division",
@@ -117,9 +122,9 @@ jobs:
                           w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
                           w.writeheader()
                           w.writerows(rows)
-                      print(f"Recovered {len(rows)} existing tender records from Render API.")
+                      print(f"Recovered larger Render dataset: {len(rows)} records; local had {len(existing_ids)}.")
                   else:
-                      print("Render API returned no usable tender records; keeping CSV untouched.")
+                      print(f"Render dataset ({len(rows)}) is not larger than local ({len(existing_ids)}); keeping local data.")
               else:
                   print("Render API returned no tender records; keeping CSV untouched.")
           except Exception as exc:
