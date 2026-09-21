@@ -1600,12 +1600,12 @@ body.telegram-locked .site-footer{visibility:hidden}
         <thead>
           <tr>
             <th>S.No.</th>
+            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Tender ID">Tender ID <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Title">Title <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
-            <th>Time Left</th>
-            <th>District</th>
+            <th class="sortable-th" data-sort-key="Time Left">Time Left <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="PAC Amount">PAC Amount <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="EMD Fee">EMD Fee <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Tender Fee">Tender Fee <span class="sort-arrow"></span></th>
@@ -2638,6 +2638,7 @@ function renderVirtualWindow(){
     return `
       <tr data-row-index="${filteredTenders.indexOf(row)}">
         <td>${virtualStart + index + 1}</td>
+        <td class="district-cell">${formatDistrictCell(row)}</td>
         <td>${tenderId || "—"}</td>
         <td class="title-cell">${titleHtml || "—"}</td>
         <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
@@ -2645,7 +2646,6 @@ function renderVirtualWindow(){
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
         <td class="time-left ${getTimeLeftClass(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
-        <td class="district-cell">${formatDistrictCell(row)}</td>
         <td>${formatMoney(row["PAC Amount"])}</td>
         <td>${formatMoney(row["EMD Fee"])}</td>
         <td>${formatMoney(row["Tender Fee"])}</td>
@@ -3273,9 +3273,10 @@ function compareTableValues(a,b,key){
     return av.localeCompare(bv,"en",{numeric:true,sensitivity:"base"});
   }
 
-  if(key === "Closing Date"){
-    av = parseDate(a[key]);
-    bv = parseDate(b[key]);
+  if(key === "Closing Date" || key === "Time Left"){
+    av = parseDate(a["Closing Date"]);
+    bv = parseDate(b["Closing Date"]);
+    if(!av && !bv) return 0;
     if(!av && !bv) return 0;
     if(!av) return 1;
     if(!bv) return -1;
