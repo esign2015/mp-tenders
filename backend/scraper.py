@@ -1727,6 +1727,29 @@ def scrape_mp_tenders(csv_file):
         for row in existing_detail_rows
         if clean(row.get("Tender ID"))
     }
+
+    # Retention policy: keep a tender for 3 days after its closing date.
+    # After that, remove the complete record from the local dataset so the
+    # dashboard/API does not carry stale detail indefinitely. If a later
+    # corrigendum extends the closing date, the tender will be discovered
+    # again by the next Tenders-by-Organisation snapshot and re-extracted.
+    retention_cutoff = now - timedelta(days=3)
+    pruned_ids = set()
+    for tid, row in list(existing_by_id.items()):
+        closing = parse_portal_datetime(row.get("Closing Date"))
+        if closing and closing < retention_cutoff:
+            pruned_ids.add(tid)
+            del existing_by_id[tid]
+
+    if pruned_ids:
+        tender_list_by_id = {
+            tid: row for tid, row in tender_list_by_id.items()
+            if tid not in pruned_ids
+        }
+        tender_list_rows = list(tender_list_by_id.values())
+        write_csv(csv_file, list(existing_by_id.values()))
+        write_csv(tender_list_csv, tender_list_rows)
+        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 3 days after closing")
     # Repair records marked successful by the previous broken detail navigation.
     # Those pages were actually the portal home/menu, so fields such as Work Description
     # contain the repeated navigation text. Preserve Tender ID/basic list data, but make
