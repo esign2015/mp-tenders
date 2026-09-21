@@ -24,6 +24,26 @@ a{color:#0756c9;font-weight:700;text-decoration:none}
 </style>
 </head>
 <body>
+<script>
+/*
+  Live + Archived use one shared Telegram login state.
+  If the user is already logged in on the live dashboard, Archive opens
+  directly without asking for login again. If not logged in, send them to
+  the live gate; there is no separate Archive login.
+*/
+(function enforceSharedTelegramLogin(){
+  try{
+    const raw=localStorage.getItem("telegram_auth");
+    const user=raw ? JSON.parse(raw) : null;
+    if(!user || !user.id){
+      location.replace("../");
+    }
+  }catch(e){
+    localStorage.removeItem("telegram_auth");
+    location.replace("../");
+  }
+})();
+</script>
 <header>
 <div><h1>📦 Archived Tenders</h1><div class="sub">Closing date बीत चुके tender — अलग पेज</div></div>
 <nav><button onclick="location.href='../'">← Live Tenders</button></nav>
