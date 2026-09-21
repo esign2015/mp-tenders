@@ -10,6 +10,7 @@ from scraper import (
 
 OUT = Path("all_tenders_org_detailed.csv")
 STATUS = Path("data/low_count_detail_status.json")
+RANGES = [(0,20,"0-20"), (21,60,"21-60"), (61,250,"61-250"), (251,500,"251-500"), (501,10**9,"501-plus")]
 
 def save_status(data):
     STATUS.parent.mkdir(parents=True, exist_ok=True)
@@ -21,7 +22,7 @@ def main():
     order = list(by_id)
     state = {
         "started_at": datetime.now(timezone.utc).isoformat(),
-        "max_org_tenders": 20,
+        "ranges": [label for _,_,label in RANGES],
         "organisations": [],
         "tenders_found": 0,
         "success": 0,
@@ -37,27 +38,31 @@ def main():
         try:
             org_soup = open_organisation_page_from_home(page)
             orgs = parse_organisation_rows(org_soup, page.url)
-            targets = [o for o in orgs if int(o.get("count") or 0) <= 20]
-            print(f"LOW COUNT ORGS: {len(targets)}", flush=True)
-            state["organisations"] = [{"name":o["name"],"count":o["count"]} for o in targets]
-            save_status(state)
-
             tender_map = {}
-            for idx, org in enumerate(targets, 1):
-                print(f"ORG {idx}/{len(targets)}: {org['name']} ({org['count']})", flush=True)
-                try:
-                    rows, pages = browser_get_all_tender_rows(page, org, int(org["count"]))
-                    for row in rows:
-                        tid = clean(row.get("tender_id"))
-                        if tid:
-                            tender_map[tid] = {"tender_id":tid, "title":row.get("title",""), "reference":row.get("reference",""), "organisation":org["name"]}
-                    print(f"  LIST OK: {len(rows)}/{org['count']} across {pages} page(s)", flush=True)
-                except Exception as exc:
-                    err=f"{org['name']}: {type(exc).__name__}: {exc}"
-                    print("  LIST FAIL:", err, flush=True)
-                    state["errors"].append(err)
-            state["tenders_found"] = len(tender_map)
-            save_status(state)
+            for lo, hi, label in RANGES:
+                org_soup = open_organisation_page_from_home(page)
+                orgs = parse_organisation_rows(org_soup, page.url)
+                targets = [o for o in orgs if lo <= int(o.get("count") or 0) <= hi]
+                print(f"RANGE {label}: {len(targets)} organisations", flush=True)
+                state["current_range"] = label
+                state["organisations"] = [{"name":o["name"],"count":o["count"],"range":label} for o in targets]
+                save_status(state)
+                for idx, org in enumerate(targets, 1):
+                    print(f"ORG {idx}/{len(targets)} [{label}]: {org['name']} ({org['count']})", flush=True)
+                    try:
+                        rows, pages = browser_get_all_tender_rows(page, org, int(org["count"]))
+                        for row in rows:
+                            tid = clean(row.get("tender_id"))
+                            if tid:
+                                tender_map[tid] = {"tender_id":tid, "title":row.get("title",""), "reference":row.get("reference",""), "organisation":org["name"], "range":label}
+                        print(f"  LIST OK: {len(rows)}/{org['count']} across {pages} page(s)", flush=True)
+                    except Exception as exc:
+                        err=f"{org['name']} [{label}]: {type(exc).__name__}: {exc}"
+                        print("  LIST FAIL:", err, flush=True)
+                        state["errors"].append(err)
+                state["tenders_found"] = len(tender_map)
+                state["updated_at"] = datetime.now(timezone.utc).isoformat()
+                save_status(state)
         finally:
             context.close()
             browser.close()
