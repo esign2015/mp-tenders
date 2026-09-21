@@ -101,19 +101,33 @@ def do_search(page,tender_id):
 def main():
     rows=[];errors=[]
     with sync_playwright() as p:
-        browser=p.chromium.launch(headless=True)
+        # Each Tender ID gets a completely fresh Chromium browser/session.
+        # No MP Tender session URL is copied or reused between tenders.
         for tid in IDS:
-            context=browser.new_context(locale="en-IN",timezone_id="Asia/Kolkata",viewport={"width":1366,"height":900})
-            page=context.new_page()
+            browser=None
+            context=None
             try:
-                print(f"TEST START {tid}",flush=True)
-                rows.append(do_search(page,tid))
-                print(f"TEST OK {tid}",flush=True)
+                print(f"TEST START {tid} — NEW BROWSER",flush=True)
+                browser=p.chromium.launch(headless=True)
+                context=browser.new_context(
+                    locale="en-IN",
+                    timezone_id="Asia/Kolkata",
+                    viewport={"width":1366,"height":900}
+                )
+                page=context.new_page()
+                detail=do_search(page,tid)
+                # Never persist even the base/session navigation URL in test data.
+                detail.pop("URL",None)
+                rows.append(detail)
+                print(f"TEST OK {tid} — BROWSER WILL CLOSE",flush=True)
             except Exception as e:
                 errors.append({"Tender ID":tid,"error":f"{type(e).__name__}: {e}"})
                 print(f"TEST FAIL {tid}: {type(e).__name__}: {e}",flush=True)
-            finally:context.close()
-        browser.close()
+            finally:
+                if context:
+                    context.close()
+                if browser:
+                    browser.close()
     fields=[]
     for r in rows:
         for k in r:
