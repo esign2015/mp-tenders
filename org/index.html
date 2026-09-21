@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP Tender — Tender Count by Organisation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#203b91;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;margin:0}.sub{font-size:12px;margin-top:4px}.actions{display:flex;gap:7px;flex-wrap:wrap}
+a.btn,button{border:0;border-radius:6px;padding:8px 12px;font-weight:700;text-decoration:none;cursor:pointer;background:#fff;color:#203b91}
+main{padding:12px;max-width:1800px;margin:auto}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat{background:#fff;border:1px solid #d5deea;border-radius:8px;padding:10px;text-align:center}.stat b{display:block;font-size:22px;margin-top:3px}
+.panel{background:#fff;border:1px solid #d5deea;border-radius:8px;overflow:hidden}.panel-head{padding:10px 12px;border-bottom:1px solid #dbe3ee;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+input{height:34px;border:1px solid #cbd5e1;border-radius:5px;padding:5px 8px;min-width:260px}.wrap{overflow:auto;max-height:72vh}
+table{width:100%;border-collapse:collapse;font-size:13px}th{position:sticky;top:0;background:#dfe7f2;padding:9px;text-align:left;z-index:1}
+td{padding:8px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f8fafc}
+.count{color:#0756c9;font-weight:800;text-decoration:underline;cursor:pointer}.ok{color:#047857;font-weight:800}.bad{color:#b91c1c;font-weight:800}
+#msg{padding:10px;color:#475569}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}input{min-width:160px;width:100%}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>SAR Digital Services, Kannod — Tender Count by Organisation</h1><div class="sub">MPTenders के live “Tenders by Organisation” snapshot</div></div>
+<div class="actions"><a class="btn" href="../">मुख्य Dashboard</a><button id="reload">↻ Reload</button></div>
+</header>
+<main>
+<div class="stats">
+<div class="stat">कुल Organisations<b id="orgCount">0</b></div>
+<div class="stat">Portal का कुल Tender Count<b id="portalCount">0</b></div>
+<div class="stat">Copied Tender Rows<b id="copiedCount">0</b></div>
+</div>
+<section class="panel">
+<div class="panel-head"><span>Organisation-wise Tender Count</span><input id="search" placeholder="Organisation खोजें"></div>
+<div id="msg">Loading...</div>
+<div class="wrap"><table><thead><tr><th>S.No.</th><th>Organisation Name</th><th>Tender Count</th><th>Copied Count</th><th>Status</th></tr></thead><tbody id="body"></tbody></table></div>
+</section>
+</main>
+<script>
+let orgs=[],tenders=[];
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;")}
+function parseCSV(text){
+ let rows=[],row=[],v='',q=false;
+ for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];
+  if(c=='"'&&q&&n=='"'){v+='"';i++;continue} if(c=='"'){q=!q;continue}
+  if(c==','&&!q){row.push(v);v='';continue}
+  if((c=='\n'||c=='\r')&&!q){if(c=='\r'&&n=='\n')i++;row.push(v);v='';if(row.some(x=>x.trim()))rows.push(row);row=[];continue}
+  v+=c;
+ }
+ if(v!==''||row.length){row.push(v);rows.push(row)}
+ const h=rows.shift()||[]; return rows.map(r=>Object.fromEntries(h.map((x,i)=>[x,r[i]||''])));
+}
+async function csv(name){const r=await fetch('../'+name+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error(name);return parseCSV(await r.text())}
+function render(){
+ const q=$('search').value.toLowerCase();
+ const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
+ $('body').innerHTML=rows.map((x,i)=>{
+  const name=x['Organisation Name'], count=Number(x['Tender Count']||0);
+  const copied=tenders.filter(t=>clean(t['Organisation Name']).casefold===undefined ? clean(t['Organisation Name'])===name : false).length;
+  const actual=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===name.toLowerCase()).length;
+  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+actual.toLocaleString('en-IN')+'</td><td class="'+(actual===count?'ok':'bad')+'">'+(actual===count?'MATCH':'MISMATCH')+'</td></tr>';
+ }).join('')||'<tr><td colspan="5">कोई organisation नहीं मिली।</td></tr>';
+}
+function clean(v){return String(v??'').replace(/\s+/g,' ').trim()}
+async function load(){
+ $('msg').textContent='Live organisation data loading...';
+ try{
+  [orgs,tenders]=await Promise.all([csv('organisations.csv'),csv('organisation_tenders.csv')]);
+  $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
+  $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
+  $('copiedCount').textContent=tenders.length.toLocaleString('en-IN');
+  $('msg').textContent='Portal snapshot loaded. Tender Count पर click करने से backend में वही organisation list process की जाती है।';
+  render();
+ }catch(e){$('msg').textContent='Data अभी उपलब्ध नहीं है। Fresh collection पूरा होने के बाद यह page स्वतः data दिखाएगा.'}
+}
+$('search').addEventListener('input',render);$('reload').addEventListener('click',load);load();
+</script>
+</body></html>
