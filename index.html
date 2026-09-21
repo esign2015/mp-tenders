@@ -3531,8 +3531,19 @@ function hideSearchProgress(){
 }
 
 function scheduleFilter(){
-  showSearchProgress();
   clearTimeout(filterTimer);
+
+  // जैसे-जैसे text delete हो, remaining characters के हिसाब से result तुरंत update हो।
+  // Search पूरी तरह खाली होते ही dashboard का full/default data वापस दिखाएँ।
+  const searchInputs = [$("generalSearch"),$("organisationSearch"),$("districtSearch")];
+  const allSearchEmpty = searchInputs.every(input => !clean(input && input.value));
+  if(allSearchEmpty){
+    hideSearchProgress();
+    applyFilters(false);
+    return;
+  }
+
+  showSearchProgress();
   filterTimer = setTimeout(() => {
     /*
        Give the browser one paint opportunity before the heavier filtering
