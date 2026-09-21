@@ -277,18 +277,22 @@ jobs:
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
             if [ -f data/status.json ]; then
               CHECKPOINT="$(python -c 'import json; print(json.load(open("data/status.json")).get("detail_batch_completed",0))' 2>/dev/null || echo 0)"
-              if [ "$CHECKPOINT" -ge 10 ] && [ "$CHECKPOINT" != "$LAST_PUBLISHED_CHECKPOINT" ]; then
+              # Publish EVERY successful detail, not every 10.
+              # The scraper writes all_tenders_org_detailed.csv immediately after
+              # each successful Tender ID. GitHub Pages therefore receives the
+              # record before the workflow continues through the remaining queue.
+              if [ "$CHECKPOINT" -gt "$LAST_PUBLISHED_CHECKPOINT" ]; then
                 for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
                   [ -s "$f" ] && git add "$f"
                 done
                 if ! git diff --cached --quiet; then
-                  git commit -m "Detail checkpoint $CHECKPOINT [skip ci]"
+                  git commit -m "Publish tender detail $CHECKPOINT [skip ci]"
                   git push || true
                 fi
                 LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
               fi
             fi
-            sleep 10
+            sleep 5
           done
           wait "$SCRAPER_PID"
       - name: Commit whatever tender data was collected
