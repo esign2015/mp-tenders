@@ -2660,7 +2660,11 @@ function levenshteinDistance(a,b){
 function districtCandidates(query){
   const q=normalizeSearchText(query);
   if(!q||/^\d+$/.test(q))return [];
-  return MP_DISTRICT_MASTER.map(d=>{
+  const master=[...MP_DISTRICT_MASTER];
+  if(q==="others" || "others".includes(q)){
+    master.push({name:"Others",aliases:["other","unknown"],pinPrefixes:[],isOthers:true});
+  }
+  return master.map(d=>{
     let best=Infinity;
     for(const name of [d.name,...(d.aliases||[])]){
       const n=normalizeSearchText(name);
@@ -2992,7 +2996,9 @@ function applyFilters(refreshHeader=true){
         const names=[name,...aliases];
         const nameHit=names.some(n=>authorityText.includes(n)||titleText.includes(n)||workText.includes(n));
         const pinHitForDistrict=(candidate.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix)));
-        return nameHit||pinHitForDistrict;
+        const othersHit=candidate.isOthers && /^\d{6}$/.test(pinText) &&
+          !MP_DISTRICT_MASTER.some(d=>(d.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix))));
+        return nameHit||pinHitForDistrict||othersHit;
       });
       const resolved=resolveDistrict(districtSearch);
       const districtHit=!!resolved&&(
