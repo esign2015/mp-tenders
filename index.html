@@ -1948,6 +1948,9 @@ const ORG_TENDER_CSV_URL = "./organisation_tenders.csv";
 let allTenders = [];
 let filteredTenders = [];
 let organisationOptions = [];
+// Current Tenders by Organisation snapshot is the authoritative list of tenders
+// currently visible on the MP portal. Detailed CSV keeps historical records for Archive.
+let portalActiveIds = new Set();
 let archivedMode = false;
 let quickFilterMode = "";
 let tableSortKey = "Closing Date";
@@ -2439,6 +2442,15 @@ async function refreshPublishedData(){
   liveRefreshBusy = true;
   try{
     let data = await loadFromCsv();
+    try{
+      const portalRows = await loadOrganisationTenderCsv();
+      const nextPortalIds = new Set(
+        portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
+      );
+      portalActiveIds = nextPortalIds;
+    }catch(portalError){
+      console.warn("Portal snapshot refresh skipped:", portalError);
+    }
     if(!Array.isArray(data) || !data.length){
       data = await loadOrganisationTenderCsv();
     }
@@ -2530,6 +2542,22 @@ async function loadData(){
     }
 
     allTenders = data.map(normaliseTender);
+
+    // Load the same portal snapshot used to discover current tenders.
+    // The detailed CSV is retained for historical/archive records.
+    try{
+      const portalRows = await loadOrganisationTenderCsv();
+      portalActiveIds = new Set(
+        portalRows
+          .map(row => clean(row["Tender ID"]))
+          .filter(Boolean)
+      );
+      console.info("Portal snapshot loaded:", portalActiveIds.size, "Tender IDs");
+    }catch(portalError){
+      portalActiveIds = new Set();
+      console.warn("Portal snapshot unavailable; falling back to Closing Date rules.", portalError);
+    }
+
     buildOrganisationOptions();
     applyFilters();
 
@@ -3048,10 +3076,12 @@ function updateCounts(rows, refreshHeader=true){
     return;
   }
 
-  const live = rows.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    return !closing || closing.getTime() > now.getTime();
-  }).length;
+  const live = portalActiveIds.size
+    ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"]))).length
+    : rows.filter(row => {
+        const closing = parseDate(row["Closing Date"]);
+        return !closing || closing.getTime() > now.getTime();
+      }).length;
 
   const closingToday = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
@@ -3127,15 +3157,25 @@ function applyFilters(refreshHeader=true){
   filteredTenders = allTenders.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     const isCancelled = clean(row["Status"]).toLowerCase() === "cancelled";
+    const tenderId = clean(row["Tender ID"]);
+    const hasPortalSnapshot = portalActiveIds.size > 0;
+    const isPortalListed = hasPortalSnapshot && portalActiveIds.has(tenderId);
 
     /*
-       Active uses the CURRENT Closing Date only.
-       - Closing passed => Archived.
-       - A later date-extension corrigendum updates Closing Date and the
-         tender automatically returns to Active.
-       - A cancellation is always removed from Active and shown in Archive
-         with a Cancelled tag, even if its old closing date was in the future.
+       The portal's current Tenders-by-Organisation snapshot is authoritative
+       for what belongs on the main dashboard. This prevents the dashboard
+       from inventing a different "live" count merely from Closing Date math.
+       Detailed CSV records not present in the current portal snapshot remain
+       available for Archive.
     */
+    if(hasPortalSnapshot){
+      if(archivedMode){
+        if(isPortalListed) return false;
+      }else{
+        if(!isPortalListed) return false;
+      }
+    }
+
     const opening = parseDate(row["Opening Date"]);
 
     /*
