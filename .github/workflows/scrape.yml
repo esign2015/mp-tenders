@@ -170,31 +170,27 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium
         run: python -m playwright install --with-deps chromium
-      - name: Extract all organisations with 20 or fewer active tenders
+      - name: Extract low-count ranges sequentially with live checkpoints
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           python backend/low_count_detail.py > low_count_detail_live.log 2>&1 &
           SCRAPER_PID=$!
-          LAST_PUBLISHED=0
+          LAST_SUCCESS=0
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
-            if [ -s all_tenders_org_detailed.csv ] && [ -s data/low_count_detail_status.json ]; then
-              COUNT="$(python - <<'PY'
-          import csv
-          from pathlib import Path
-          p=Path("all_tenders_org_detailed.csv")
-          with p.open(encoding="utf-8-sig",newline="") as f:
-              print(sum(1 for _ in csv.DictReader(f)))
-          PY
-              )"
-              if [ "$COUNT" -gt "$LAST_PUBLISHED" ]; then
+            if [ -s data/low_count_detail_status.json ]; then
+              SUCCESS="$(python -c 'import json; print(json.load(open("data/low_count_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
+              RANGE="$(python -c 'import json; print(json.load(open("data/low_count_detail_status.json")).get("current_range",""))' 2>/dev/null || echo "")"
+              ORG="$(python -c 'import json; print(json.load(open("data/low_count_detail_status.json")).get("current_organisation",""))' 2>/dev/null || echo "")"
+              if [ "$SUCCESS" -gt "$LAST_SUCCESS" ]; then
+                echo "LIVE PUBLISH: success=$SUCCESS range=$RANGE org=$ORG"
                 git add all_tenders_org_detailed.csv data/low_count_detail_status.json
                 if ! git diff --cached --quiet; then
-                  git commit -m "Publish low-count tender detail checkpoint $COUNT [skip ci]"
+                  git commit -m "Publish live low-count tender detail $SUCCESS [skip ci]"
                   git push || true
                 fi
-                LAST_PUBLISHED="$COUNT"
+                LAST_SUCCESS="$SUCCESS"
               fi
             fi
             sleep 5
@@ -207,7 +203,7 @@ jobs:
           git config user.email "actions@github.com"
           git add all_tenders_org_detailed.csv data/low_count_detail_status.json || true
           if ! git diff --cached --quiet; then
-            git commit -m "Complete low-count organisation detail batch [skip ci]"
+            git commit -m "Complete low-count sequential detail batch [skip ci]"
             git push || true
           fi
       - name: Show low-count batch log
