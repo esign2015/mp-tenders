@@ -1741,7 +1741,6 @@ def scrape_mp_tenders(csv_file):
     else:
         merged_org_rows = merge_org_rows(existing_org_rows, org_rows)
         write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
-    write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
 
     tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_tender_list_rows if clean(r.get("Tender ID"))}
     tender_list_rows = list(tender_list_by_id.values())
