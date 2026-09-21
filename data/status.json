@@ -1,13 +1,13 @@
 {
-  "status": "failed",
-  "process_started_at": "",
-  "total_tenders": 5253,
+  "status": "running",
+  "process_started_at": "2026-09-21T09:45:17.746238+00:00",
+  "total_tenders": 0,
   "detail_complete": 0,
-  "detail_remaining": 5253,
-  "errors": 1,
-  "latest_error": "TypeError: expected string or bytes-like object, got 'int'",
-  "organisation_progress": "failed",
+  "detail_remaining": 0,
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/0",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T09:12:09.762590+00:00"
+  "updated_at": "2026-09-21T09:45:17.746238+00:00"
 }
