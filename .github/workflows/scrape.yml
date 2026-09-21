@@ -159,6 +159,70 @@ jobs:
         run: cat new_tender_detail_live.log || true
 
 
+  detail_recovery_now:
+    # One-shot backfill for the current portal Tender IDs. It deliberately
+    # shares the list-refresh concurrency group so it waits for the current
+    # organisation copy to finish before touching the same CSV.
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[run-detail-now]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    concurrency:
+      group: mp-tender-list-refresh
+      cancel-in-progress: false
+    steps:
+      - name: Checkout latest completed tender-list snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Extract all incomplete current Tender IDs
+        env:
+          EXISTING_ID_BATCH_SIZE: "0"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/existing_id_detail.py > detail_recovery_live.log 2>&1 &
+          PID=$!
+          LAST=0
+          while kill -0 "$PID" 2>/dev/null; do
+            if [ -s data/existing_id_detail_status.json ]; then
+              COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
+              if [ "$COUNT" -gt "$LAST" ]; then
+                git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
+                if ! git diff --cached --quiet; then
+                  git commit -m "Publish detail recovery checkpoint $COUNT [skip ci]"
+                  git push || true
+                fi
+                LAST="$COUNT"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$PID"
+      - name: Commit final recovered detail data
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete Tender detail recovery [skip ci]"
+            git push || true
+          fi
+      - name: Show detail recovery log
+        if: always()
+        run: cat detail_recovery_live.log || true
+
+
   existing_id_detail:
     if: github.event_name == 'push' && contains(github.event.head_commit.message, '[existing-id-detail]')
     runs-on: ubuntu-latest
