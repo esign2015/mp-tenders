@@ -1,13 +1,18 @@
 {
-  "status": "failed",
-  "process_started_at": "",
-  "total_tenders": 5448,
+  "status": "running",
+  "process_started_at": "2026-09-21T17:17:28.243533+00:00",
+  "total_tenders": 5095,
+  "portal_total_tenders": 5095,
+  "organisation_count": 93,
+  "department_count": 266,
+  "pincode_count": 5,
+  "pincode_others_count": 0,
   "detail_complete": 0,
   "detail_remaining": 5448,
-  "errors": 1,
-  "latest_error": "NameError: name 'now' is not defined",
-  "organisation_progress": "failed",
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/93",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T17:16:25.891250+00:00"
+  "updated_at": "2026-09-21T17:17:37.858068+00:00"
 }
