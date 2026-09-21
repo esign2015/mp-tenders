@@ -1871,28 +1871,11 @@ function updateTelegramProfile(user){
   if(menuUser) menuUser.textContent=username;
   if(avatar){
     const photoUrl = clean(user.photo_url);
-    const proxyUrl = user.id
-      ? TELEGRAM_VERIFY_API.replace("/api/telegram/verify","/api/telegram/photo/") + encodeURIComponent(user.id)
-      : "";
-
-    // Prefer our server-side Telegram photo proxy. It fetches a fresh
-    // profile image and avoids stale/blocked Telegram photo URLs.
-    let triedProxy = false;
-    avatar.onerror = () => {
-      if(!triedProxy && photoUrl && proxyUrl){
-        triedProxy = true;
-        avatar.src = proxyUrl;
-        return;
-      }
-      avatar.removeAttribute("src");
-      avatar.style.display = "none";
-    };
-
-    if(proxyUrl){
-      triedProxy = true;
-      avatar.src = proxyUrl;
-      avatar.style.display = "block";
-    }else if(photoUrl){
+    if(photoUrl){
+      avatar.onerror = () => {
+        avatar.removeAttribute("src");
+        avatar.style.display = "none";
+      };
       avatar.src = photoUrl;
       avatar.style.display = "block";
     }else{
@@ -1904,11 +1887,7 @@ function updateTelegramProfile(user){
 }
 
 function logoutTelegram(){
-  // Dashboard logout only clears this site's authentication.
-  // Telegram itself may remain signed in; the next Telegram Login
-  // should be allowed to authenticate the same account again.
   localStorage.removeItem("telegram_auth");
-  localStorage.removeItem("telegram_logout_lock");
   sessionStorage.removeItem("telegram_verified");
   sessionStorage.removeItem("telegram_user");
   telegramAuthData=null;
@@ -1958,8 +1937,6 @@ async function verifyTelegramMembership(user, persist=true){
     };
     telegramAuthData = verifiedUser;
     if(persist) localStorage.setItem("telegram_auth",JSON.stringify(verifiedUser));
-    // A successful fresh Telegram login clears the previous logout lock.
-    localStorage.removeItem("telegram_logout_lock");
     sessionStorage.setItem("telegram_verified","1");
     sessionStorage.setItem("telegram_user",JSON.stringify(verifiedUser));
     updateTelegramProfile(verifiedUser);
@@ -1989,7 +1966,7 @@ async function setupTelegramLogin(){
 
   try{
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    const timeout = setTimeout(() => controller.abort(), 12000);
     const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
       cache:"no-store",
       signal:controller.signal
@@ -2027,19 +2004,8 @@ async function setupTelegramLogin(){
 }
 
 function onTelegramAuth(user){
-  // Telegram Login is the authentication step. Do not block the same
-  // Telegram account merely because it logged out of this dashboard.
-  if(!user || !user.id){
-    telegramStatus("❌ Telegram Login से user details नहीं मिलीं। कृपया फिर से Login करें।");
-    return;
-  }
-  localStorage.removeItem("telegram_logout_lock");
   verifyTelegramMembership(user,true);
 }
-// Telegram's legacy Login Widget resolves data-onauth in the page window.
-// Expose the callback explicitly so the dynamically-created widget iframe
-// can always find it after a fresh page load / re-login.
-window.onTelegramAuth = onTelegramAuth;
 
 async function checkStoredTelegram(){
   const raw=localStorage.getItem("telegram_auth");
@@ -2060,13 +2026,11 @@ function setupTelegramFlow(){
   const loginStart=document.getElementById("telegramLoginStart");
   const profileBtn=document.getElementById("telegramProfileBtn");
   const logoutBtn=document.getElementById("telegramLogoutBtn");
-  const logoutFrontBtn=document.getElementById("telegramLogoutFrontBtn");
   const profileMenu=document.getElementById("telegramProfileMenu");
   if(checkBtn) checkBtn.onclick=()=>telegramAuthData ? verifyTelegramMembership(telegramAuthData,false) : setupTelegramLogin();
   if(loginStart) loginStart.onclick=()=>setupTelegramLogin();
   if(profileBtn) profileBtn.onclick=()=>profileMenu?.classList.toggle("open");
   if(logoutBtn) logoutBtn.onclick=logoutTelegram;
-  if(logoutFrontBtn) logoutFrontBtn.onclick=logoutTelegram;
   document.addEventListener("click",(event)=>{
     if(profileMenu && !profileMenu.contains(event.target) && !profileBtn?.contains(event.target)){
       profileMenu.classList.remove("open");
