@@ -93,6 +93,71 @@ jobs:
             git push || true
           fi
 
+
+  low_count_detail:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[low-count-detail]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    concurrency:
+      group: mp-tender-data-writer
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Extract all organisations with 20 or fewer active tenders
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/low_count_detail.py > low_count_detail_live.log 2>&1 &
+          SCRAPER_PID=$!
+          LAST_PUBLISHED=0
+          while kill -0 "$SCRAPER_PID" 2>/dev/null; do
+            if [ -s all_tenders_org_detailed.csv ] && [ -s data/low_count_detail_status.json ]; then
+              COUNT="$(python - <<'PY'
+          import csv
+          from pathlib import Path
+          p=Path("all_tenders_org_detailed.csv")
+          with p.open(encoding="utf-8-sig",newline="") as f:
+              print(sum(1 for _ in csv.DictReader(f)))
+          PY
+              )"
+              if [ "$COUNT" -gt "$LAST_PUBLISHED" ]; then
+                git add all_tenders_org_detailed.csv data/low_count_detail_status.json
+                if ! git diff --cached --quiet; then
+                  git commit -m "Publish low-count tender detail checkpoint $COUNT [skip ci]"
+                  git push || true
+                fi
+                LAST_PUBLISHED="$COUNT"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$SCRAPER_PID"
+      - name: Commit final low-count batch
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv data/low_count_detail_status.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete low-count organisation detail batch [skip ci]"
+            git push || true
+          fi
+      - name: Show low-count batch log
+        if: always()
+        run: |
+          echo "===== low_count_detail_live.log ====="
+          cat low_count_detail_live.log || true
+
   detail_validation:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
