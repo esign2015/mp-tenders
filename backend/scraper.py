@@ -35,7 +35,7 @@ FIELDS = [
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
-    "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted", "Corrigendum", "Corrigendum Last Checked", "Corrigendum Detected At", "Corrigendum Type",
+    "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted", "Corrigendum", "Corrigendum Last Checked", "Corrigendum Detected At", "Corrigendum Type", "Corrigendum 15m Checked", "Corrigendum 5m Checked",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
@@ -431,7 +431,7 @@ def parse_detail(soup, url):
         "Document Download End Date": clean(document_end),
         "Fee Payable To": clean(fee_payable_to),
         "Fee Payable At": clean(fee_payable_at),
-        "Status": "Open",
+        "Status": ("Cancelled" if re.search(r"\\b(cancelled|canceled|tender cancelled|tender canceled|withdrawn|withdrawal)\\b", body_text, re.I) else "Open"),
         # Never persist a JSF session URL.
         "URL": PORTAL,
     }
@@ -1032,12 +1032,28 @@ def read_existing(csv_file):
 
 
 def write_csv(csv_file, rows):
+    """Write without deleting any previously-known columns or records."""
     csv_file.parent.mkdir(parents=True, exist_ok=True)
+    existing_fields = []
+    if csv_file.exists() and csv_file.stat().st_size:
+        try:
+            with csv_file.open("r", encoding="utf-8-sig", newline="") as old_f:
+                existing_fields = list(csv.DictReader(old_f).fieldnames or [])
+        except Exception:
+            existing_fields = []
+    fieldnames = list(FIELDS)
+    for field in existing_fields:
+        if field and field not in fieldnames:
+            fieldnames.append(field)
+    for row in rows or []:
+        for field in row.keys():
+            if field and field not in fieldnames:
+                fieldnames.append(field)
     temp = csv_file.with_suffix(".tmp")
     with temp.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDS, extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(rows or [])
     temp.replace(csv_file)
 
 
@@ -1273,13 +1289,65 @@ def is_watchable_tender(row, now):
     return True
 
 
-def monitor_corrigendum_changes(csv_file):
-    """Six-hour watch of active/extension-window tenders by permanent Tender ID."""
+def _corrigendum_detail_with_retry(page, tender, attempts=3):
+    last = None
+    for attempt in range(1, attempts + 1):
+        try:
+            soup = open_tender_detail_by_search(page, tender)
+            text = clean(soup.get_text(" ", strip=True))
+            if clean(tender.get("tender_id")).casefold() not in text.casefold():
+                raise RuntimeError("detail page does not contain requested Tender ID")
+            detail = parse_detail(soup, PORTAL)
+            if clean(detail.get("Tender ID")).casefold() != clean(tender.get("tender_id")).casefold():
+                raise RuntimeError("detail parser returned a different Tender ID")
+            return detail
+        except Exception as exc:
+            last = exc
+            if attempt < attempts:
+                time.sleep(2 * attempt)
+    raise last
+
+
+def _is_cancelled_detail(detail):
+    hay = " ".join([clean(detail.get("Status")), clean(detail.get("Corrigendum")), clean(detail.get("Corrigendum Type"))]).casefold()
+    return bool(re.search(r"\b(cancelled|canceled|tender cancelled|tender canceled|withdrawn|withdrawal)\b", hay))
+
+
+def _urgent_corrigendum_stage(opening, now):
+    if not opening:
+        return ""
+    minutes = (opening - now).total_seconds() / 60.0
+    if 12.0 <= minutes <= 18.0:
+        return "15m"
+    if 2.0 <= minutes <= 8.0:
+        return "5m"
+    return ""
+
+
+def monitor_corrigendum_changes(csv_file, urgent_only=False):
+    """6-hour watch plus reliable 15/5-minute pre-opening checks."""
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
     existing_rows = read_existing(csv_file)
     existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
-    watch_rows = [r for r in existing_by_id.values() if is_watchable_tender(r, now)]
-    checked = changed = errors = 0
+    watch_rows = []
+    for row in existing_by_id.values():
+        if not is_watchable_tender(row, now):
+            continue
+        opening = parse_portal_datetime(row.get("Opening Date") or row.get("Bid Opening Date"))
+        if urgent_only:
+            closing = parse_portal_datetime(row.get("Closing Date"))
+            if not closing or closing > now or not opening:
+                continue
+            stage = _urgent_corrigendum_stage(opening, now)
+            if not stage:
+                continue
+            marker = clean(row.get("Corrigendum 15m Checked" if stage == "15m" else "Corrigendum 5m Checked"))
+            if marker == opening.isoformat():
+                continue
+            row["_urgent_stage"] = stage
+        watch_rows.append(row)
+
+    checked = changed = cancelled = errors = 0
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(user_agent=HEADERS["User-Agent"], locale="en-IN", viewport={"width":1920,"height":1080})
@@ -1288,18 +1356,36 @@ def monitor_corrigendum_changes(csv_file):
                 tender_id = clean(row.get("Tender ID"))
                 tender = {"tender_id": tender_id, "title": clean(row.get("Title")), "reference": clean(row.get("Reference Number"))}
                 try:
-                    fresh = parse_detail(open_tender_detail_by_search(page, tender), PORTAL)
+                    fresh = _corrigendum_detail_with_retry(page, tender, attempts=3 if urgent_only else 2)
                     checked += 1
                     old_close = clean(row.get("Closing Date"))
-                    new_close = clean(fresh.get("Closing Date"))
+                    new_close = clean(fresh.get("Closing Date")) or old_close
                     old_open = clean(row.get("Opening Date") or row.get("Bid Opening Date"))
-                    new_open = clean(fresh.get("Opening Date") or fresh.get("Bid Opening Date"))
+                    new_open = clean(fresh.get("Opening Date") or fresh.get("Bid Opening Date")) or old_open
                     old_corr = clean(row.get("Corrigendum"))
                     old_type = clean(row.get("Corrigendum Type"))
                     new_corr = clean(fresh.get("Corrigendum"))
                     new_type = clean(fresh.get("Corrigendum Type"))
-                    if old_close != new_close or old_open != new_open or old_corr != new_corr or old_type != new_type:
-                        updated = {**row, **fresh, "Tender ID": tender_id, "URL": PORTAL}
+
+                    updated = dict(row)
+                    updated.pop("_urgent_stage", None)
+                    for key, value in fresh.items():
+                        if clean(value):
+                            updated[key] = value
+                    updated["Tender ID"] = tender_id
+                    updated["URL"] = PORTAL
+                    updated["Corrigendum Last Checked"] = now.isoformat()
+
+                    if _is_cancelled_detail(fresh):
+                        was_cancelled = clean(row.get("Status")).casefold() == "cancelled"
+                        updated["Status"] = "Cancelled"
+                        updated["Corrigendum Type"] = "Cancelled"
+                        updated["Corrigendum"] = new_corr or "Tender Cancelled"
+                        updated["Corrigendum Detected At"] = now.isoformat()
+                        if not was_cancelled:
+                            changed += 1
+                            cancelled += 1
+                    elif old_close != new_close or old_open != new_open or old_corr != new_corr or old_type != new_type:
                         old_dt = parse_portal_datetime(old_close)
                         new_dt = parse_portal_datetime(new_close)
                         if old_dt and new_dt and new_dt > old_dt:
@@ -1316,18 +1402,24 @@ def monitor_corrigendum_changes(csv_file):
                             updated["Corrigendum"] = new_corr or "Other Corrigendum"
                         updated["Corrigendum Detected At"] = now.isoformat()
                         changed += 1
-                        existing_by_id[tender_id] = updated
-                    else:
-                        row["Corrigendum Last Checked"] = now.isoformat()
-                        existing_by_id[tender_id] = row
+
+                    if urgent_only:
+                        stage = row.get("_urgent_stage", "")
+                        opening_key = parse_portal_datetime(updated.get("Opening Date") or updated.get("Bid Opening Date"))
+                        if stage == "15m" and opening_key:
+                            updated["Corrigendum 15m Checked"] = opening_key.isoformat()
+                        elif stage == "5m" and opening_key:
+                            updated["Corrigendum 5m Checked"] = opening_key.isoformat()
+                    existing_by_id[tender_id] = updated
                 except Exception as exc:
                     errors += 1
                     print(f"CORRIGENDUM WATCH ERROR {tender_id}: {type(exc).__name__}: {exc}")
         finally:
             browser.close()
     write_csv(csv_file, list(existing_by_id.values()))
-    print(f"CORRIGENDUM WATCH COMPLETE: checked={checked}, changes={changed}, errors={errors}")
-    return {"ok": True, "checked": checked, "changes": changed, "errors": errors}
+    mode = "URGENT-15/5-MIN" if urgent_only else "6-HOUR"
+    print(f"CORRIGENDUM WATCH {mode} COMPLETE: candidates={len(watch_rows)}, checked={checked}, changes={changed}, cancelled={cancelled}, errors={errors}")
+    return {"ok": True, "checked": checked, "changes": changed, "cancelled": cancelled, "errors": errors, "candidates": len(watch_rows)}
 
 def monitor_tender_changes(csv_file):
     if not should_run_monitor_now():
