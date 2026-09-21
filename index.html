@@ -3047,7 +3047,7 @@ function setupVirtualTable(){
   const inner = $("tableScrollTopInner");
   if(!wrap || !topScroll || !inner) return;
 
-  inner.style.width = "1980px";
+  // Keep the upper scrollbar exactly the same scrollable width as the real table.\n  // The previous fixed 1980px width made its thumb a different size.\n  const syncTopScrollbarWidth = () => {\n    inner.style.width = Math.max(wrap.scrollWidth, wrap.clientWidth) + "px";\n  };\n  syncTopScrollbarWidth();\n  window.addEventListener("resize", syncTopScrollbarWidth);\n  new ResizeObserver(syncTopScrollbarWidth).observe(wrap);
 
   topScroll.addEventListener("scroll", () => {
     if(Math.abs(wrap.scrollLeft - topScroll.scrollLeft) > 1){
