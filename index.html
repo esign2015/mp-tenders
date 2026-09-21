@@ -803,7 +803,11 @@ td.title-cell{
 }
 
 .footer-left{
-  text-align:left;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
 .footer-center{
@@ -813,7 +817,11 @@ td.title-cell{
 }
 
 .footer-right{
-  text-align:right;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
 .footer-brand{
@@ -3134,20 +3142,28 @@ function applyFilters(refreshHeader=true){
       if(!archivedMode) return false;
     }else if(closing){
       const closeIST = new Date(closing);
+      const closeKey = dateKey(closeIST);
+      const todayKeyNow = dateKey(nowIST);
+      const hasClosed = closeIST.getTime() <= Date.now();
+      const closeIsToday = closeKey === todayKeyNow;
+
       if(archivedMode){
-        const archiveEligible = new Date(closeIST);
-        archiveEligible.setHours(19,0,0,0);
-        // Do not archive before 7 PM on the closing day.
-        if(nowIST.getTime() < archiveEligible.getTime()) return false;
+        // A closed tender enters Archive at 7:00 PM IST on its closing day.
+        // Anything from an earlier calendar day is already archive-eligible.
+        if(!hasClosed) return false;
+        if(closeIsToday && nowIST.getTime() < archiveCutoff.getTime()) return false;
+
         const daysAgo = Math.floor((nowIST.getTime() - closeIST.getTime()) / 86400000);
-        if(daysAgo < 0 || daysAgo > 10) return false;
+        if(daysAgo > 10) return false;
       }else{
-        // Main table keeps the tender visible until 7 PM on closing day.
-        if(nowIST.getTime() >= archiveCutoff.getTime() && dateKey(closeIST) !== dateKey(nowIST)){
-          // Older closed tenders are no longer active.
-          return false;
+        // Before 7 PM on the closing day, keep the tender visible as
+        // "Closed" so users can see that it has just expired.
+        // At 7 PM it leaves the main dashboard for Archive.
+        if(hasClosed){
+          if(!closeIsToday || nowIST.getTime() >= archiveCutoff.getTime()){
+            return false;
+          }
         }
-        if(dateKey(closeIST) < dateKey(nowIST)) return false;
       }
     }else if(archivedMode){
       return false;
@@ -3306,9 +3322,17 @@ function compareTableValues(a,b,key){
     av = parseDate(a["Closing Date"]);
     bv = parseDate(b["Closing Date"]);
     if(!av && !bv) return 0;
-    if(!av && !bv) return 0;
     if(!av) return 1;
     if(!bv) return -1;
+
+    // In ascending/default closing-date order, currently closed tenders
+    // are always placed after still-open tenders. This keeps the nearest
+    // upcoming deadlines at the top of the dashboard.
+    const nowMs = Date.now();
+    const aClosed = av.getTime() <= nowMs;
+    const bClosed = bv.getTime() <= nowMs;
+    if(aClosed !== bClosed) return aClosed ? 1 : -1;
+
     return av - bv;
   }
 
@@ -4206,6 +4230,13 @@ setupUserFeatures();
 
 updateDateTime();
 setInterval(updateDateTime,1000);
+// Re-evaluate archive/closed state continuously so the 7:00 PM IST
+// transition happens automatically without requiring a page reload.
+setInterval(() => {
+  if(Array.isArray(allTenders) && allTenders.length){
+    applyFilters(false);
+  }
+},5000);
 setInterval(() => { if(Array.isArray(virtualRows) && virtualRows.length) renderVirtualWindow(); },60000);
 
 setupVirtualTable();
