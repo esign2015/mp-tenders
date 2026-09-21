@@ -1363,7 +1363,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
-<body class="telegram-locked">
+<body class="telegram-locked org-display-full">
 <div id="telegramGate">
   <div class="telegram-gate-card">
     <h2>🔐 Telegram Login</h2>
@@ -1471,9 +1471,6 @@ body.telegram-locked .site-footer{visibility:hidden}
         <option value="">All Favourites</option>
         <option value="org">⭐ My Favourite Organisations</option>
         <option value="district">⭐ My Favourite Districts</option>
-      </select>
-      <select id="savedFilterSelect" aria-label="Saved filters">
-        <option value="">Saved Filter</option>
       </select>
       <select id="closingExpire" aria-label="Closing Date filter">
         <option value="0">Closing Date</option>
@@ -2996,6 +2993,7 @@ function renderTable(rows){
   virtualTopHeight = 0;
   virtualBottomHeight = Math.max(0, rows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
   renderVirtualWindow();
+  applyColumnVisibility();
   updateVirtualPager();
 }
 
@@ -3349,9 +3347,6 @@ function clearFilters(){
   $("statusSelect").value = "";
   $("changeFilter").value = "";
   $("favouriteFilter").value = "";
-  $("savedFilterSelect").value = "";
-  $("favouriteFilter").value = "";
-  $("savedFilterSelect").value = "";
 
   applyFilters();
 }
@@ -3531,7 +3526,14 @@ function refreshUserPreferenceUI(){
     '<div class="user-pref-title" style="margin-top:10px">Saved Filters</div>'+
     (saved.length?saved.map((x,i)=>'<div class="user-pref-row"><button type="button" data-saved="'+i+'">💾 '+escapeHtml(x.name)+'</button><button type="button" style="flex:0 0 auto" data-remove-saved="'+i+'">✕</button></div>').join(""):'<div class="user-pref-empty">अभी कोई saved filter नहीं है।</div>')+
     '<button type="button" id="saveCurrentFilterBtn" class="btn-blue" style="width:100%;margin-top:8px">💾 Save Current Filter</button>';
-  content.querySelectorAll("[data-pref]").forEach(b=>b.onclick=()=>{applyFilters();$("userPrefMenu").classList.remove("open");});
+  content.querySelectorAll("[data-pref]").forEach(b=>b.onclick=()=>{
+    const type=b.dataset.pref==="org"?"org":"district";
+    $("favouriteFilter").value=type;
+    if(type==="org") $("organisationSearch").value=b.dataset.value||"";
+    else $("districtSearch").value=b.dataset.value||"";
+    applyFilters();
+    $("userPrefMenu").classList.remove("open");
+  });
   content.querySelectorAll("[data-remove-org]").forEach(b=>b.onclick=()=>{userPrefs.favOrgs.splice(Number(b.dataset.removeOrg),1);saveUserPrefs();});
   content.querySelectorAll("[data-remove-district]").forEach(b=>b.onclick=()=>{userPrefs.favDistricts.splice(Number(b.dataset.removeDistrict),1);saveUserPrefs();});
   content.querySelectorAll("[data-saved]").forEach(b=>b.onclick=()=>{applySavedFilter(userPrefs.savedFilters[Number(b.dataset.saved)]);$("userPrefMenu").classList.remove("open");});
@@ -3580,7 +3582,8 @@ function setupUserFeatures(){
   window.addEventListener("resize",()=>{const m=$("userPrefMenu");if(m?.classList.contains("open"))m.classList.remove("open");});
   document.addEventListener("click",e=>{const m=$("userPrefMenu");if(m&&!m.contains(e.target)&&!e.target.closest("#savedFilterBtn"))m.classList.remove("open");});
 }
-\nfunction updateDateTime(){
+
+function updateDateTime(){
   const now = new Date();
 
   $("dateTime").textContent =
