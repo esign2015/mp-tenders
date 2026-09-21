@@ -1,14 +1,14 @@
 {
   "status": "running",
   "process_started_at": "2026-09-21T07:03:33.231164+00:00",
-  "total_tenders": 75,
+  "total_tenders": 77,
   "detail_complete": 0,
   "detail_remaining": 73,
-  "errors": 75,
-  "latest_error": "Department of Higher Education / 2026_HED_527553_1: detail RuntimeError: organisation route: RuntimeError: Organisation click did not open Tender Details for 2026_HED_527553_1; current_url=https://mptenders.gov.in/nicgep/app?component=%24DirectLink&page=FrontEndViewTender&service=direct&session=T&sp=SKkyeHGcs%2B9knOmKbXO6mRQ%3D%3D | home search route: NameError: name 'open_tender_detail_by_search' is not defined",
-  "organisation_progress": "7/92",
-  "current_organisation": "Devi Ahilya Vishwavidyalaya - Indore",
+  "errors": 77,
+  "latest_error": "Devi Ahilya Vishwavidyalaya - Indore / 2026_CPA_534387_1: detail RuntimeError: detail page returned portal menu/home content",
+  "organisation_progress": "8/92",
+  "current_organisation": "Directorate Farmer Welfare And Agriculture Development",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T07:21:34.341776+00:00"
+  "updated_at": "2026-09-21T07:22:10.664877+00:00"
 }
