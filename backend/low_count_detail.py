@@ -10,7 +10,7 @@ from scraper import (
 
 OUT = Path("all_tenders_org_detailed.csv")
 STATUS = Path("data/low_count_detail_status.json")
-RANGES = [(0,20,"0-20"), (21,60,"21-60"), (61,250,"61-250"), (251,500,"251-500"), (501,10**9,"501-plus")]
+# Sequential production plan: finish each count range before moving to the next.\nRANGES = [(0,20,"0-20"), (21,60,"21-60"), (61,250,"61-250"), (251,500,"251-500"), (501,10**9,"501-plus")]
 
 def save_status(data):
     STATUS.parent.mkdir(parents=True, exist_ok=True)
