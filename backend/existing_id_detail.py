@@ -164,11 +164,21 @@ def main():
                     current_ids.append(tid)
     current_set = set(current_ids)
 
-    incomplete = [
-        row for row in rows
-        if clean(row.get("Tender ID")) in current_set
-        and clean(row.get("Detail Extracted")).upper() != "YES"
-    ]
+    # Deduplicate by Tender ID before extraction. The organisation snapshot
+    # can contain repeated rows for the same ID, but a detail page must be
+    # opened only once per Tender ID.
+    incomplete = []
+    seen_incomplete = set()
+    for row in rows:
+        tid = clean(row.get("Tender ID"))
+        if (
+            tid
+            and tid in current_set
+            and clean(row.get("Detail Extracted")).upper() != "YES"
+            and tid not in seen_incomplete
+        ):
+            seen_incomplete.add(tid)
+            incomplete.append(row)
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
     skipped_ids = [
         clean(row.get("Tender ID")) for row in rows
