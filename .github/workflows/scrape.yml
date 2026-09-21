@@ -14,6 +14,7 @@ on:
     - cron: "30 15 * * *"   # 9:00 PM IST — Total Tenders Telegram
     - cron: "50 4 * * *"    # 10:20 AM IST — Closing Today Telegram
     - cron: "*/5 3-13 * * *"
+    - cron: "0 0,6,12,18 * * *" # Every 6 hours — corrigendum watch
 
 permissions:
   contents: write
@@ -237,6 +238,42 @@ jobs:
           else
             git commit -m "Checkpoint collected tender data"
             git push || echo "Checkpoint commit push failed; retained in workspace/logs."
+          fi
+  corrigendum_watch:
+    if: github.event_name == "schedule" && github.event.schedule == "0 0,6,12,18 * * *"
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    concurrency:
+      group: mp-tender-corrigendum-watch
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Check active tender corrigendums
+        env:
+          MONITOR_CORRIGENDUM_ONLY: "1"
+        run: python backend/scraper.py
+      - name: Commit corrigendum/date changes
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          for f in all_tenders_org_detailed.csv; do
+            [ -s "$f" ] && git add "$f"
+          done
+          if git diff --cached --quiet; then
+            echo "No corrigendum changes."
+          else
+            git commit -m "Update active tender corrigendum watch [skip ci]"
+            git push || echo "Corrigendum checkpoint push failed."
           fi
   monitor_changes:
     if: github.event_name == 'schedule' && github.event.schedule == '*/5 3-13 * * *'
