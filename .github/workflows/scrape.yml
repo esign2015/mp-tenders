@@ -20,6 +20,37 @@ permissions:
   contents: write
 
 jobs:
+
+  manual_detail_test:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[manual-detail-test]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Run exact Home Search -> Tender ID -> GO -> Title -> Detail test
+        run: |
+          set -o pipefail
+          python backend/manual_detail_test.py | tee manual_detail_test.log
+      - name: Commit test CSV and status
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add manual_detail_test.csv data/manual_detail_test_status.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Save manual tender detail route test results [skip ci]"
+            git push || true
+          fi
+
   detail_validation:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
