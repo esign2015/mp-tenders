@@ -1433,12 +1433,24 @@ def monitor_tender_changes(csv_file):
     old_org_rows = read_existing(org_csv)
     old_org_by_name = {clean(r.get("Organisation Name")).casefold(): r for r in old_org_rows if clean(r.get("Organisation Name"))}
 
-    session = requests.Session()
-    response = request(session, ORG_URL, sleep=0.4)
-    soup = BeautifulSoup(response.text, "html.parser")
-    live_orgs = parse_organisation_rows(soup, ORG_URL)
+    # Hourly organisation monitor MUST use the same live browser path as the
+    # full scraper: open MP Tender home -> click "Tenders by Organisation".
+    # This keeps the monitor aligned with the JSF portal and avoids stale/session URLs.
+    live_orgs = []
+    with sync_playwright() as bootstrap_pw:
+        bootstrap_browser = bootstrap_pw.chromium.launch(headless=True)
+        bootstrap_page = bootstrap_browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
+        )
+        try:
+            live_soup = open_organisation_page_from_home(bootstrap_page)
+            live_orgs = parse_organisation_rows(live_soup, bootstrap_page.url)
+        finally:
+            bootstrap_browser.close()
     if not live_orgs:
-        raise RuntimeError("Monitor could not parse live organisation counts.")
+        raise RuntimeError("Monitor could not parse live Tenders by Organisation counts.")
 
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
     changed_orgs = []
