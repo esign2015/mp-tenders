@@ -59,20 +59,43 @@ function render(){
  const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
  const totals={portal:0,copied:0,success:0,fail:0,skip:0,pending:0};
  const html=rows.map((x,i)=>{
-  const name=x['Organisation Name'], key=name.toLowerCase(), count=Number(x['Tender Count']||0);
+  const name=x['Organisation Name'], key=clean(name).toLowerCase(), count=Number(x['Tender Count']||0);
   const orgRows=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
   const ids=new Set(orgRows.map(t=>clean(t['Tender ID'])).filter(Boolean));
   const successSet=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
   const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
   const skippedSet=new Set((statusData.skipped_ids||[]).filter(id=>ids.has(id)));
   const success=successSet.size, failed=failedSet.size, skipped=skippedSet.size;
-  // Detail buckets are ONLY for copied Tender IDs.
   const pending=Math.max(0,ids.size-success-failed-skipped);
   totals.portal+=count; totals.copied+=ids.size; totals.success+=success; totals.fail+=failed; totals.skip+=skipped; totals.pending+=pending;
   const status=ids.size===count?'MATCH':'MISMATCH';
-  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+ids.size.toLocaleString('en-IN')+'</td><td class="'+(status==='MATCH'?'ok':'bad')+'">'+status+'</td><td class="detail-num success">'+success+'</td><td class="detail-num fail">'+failed+'</td><td class="detail-num skip">'+skipped+'</td><td class="detail-num pending">'+pending+'</td></tr>';
+  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+ids.size.toLocaleString('en-IN')+'</td><td class="'+(status==='MATCH'?'ok':'bad')+'">'+status+'</td><td>'+success+'</td><td>'+failed+'</td><td>'+skipped+'</td><td>'+pending+'</td></tr>';
  }).join('');
- const totalRow='<tr class="total-row"><td></td><td class="total-label">कुल</td><td id="totalPortal" class="total-value">'+totals.portal.toLocaleString('en-IN')+'</td><td id="totalCopied" class="total-value">'+totals.copied.toLocaleString('en-IN')+'</td><td id="totalStatus" class="total-value">'+(totals.portal===totals.copied?'MATCH':'—')+'</td><td id="totalSuccess" class="total-value">'+totals.success.toLocaleString('en-IN')+'</td><td id="totalFail" class="total-value">'+totals.fail.toLocaleString('en-IN')+'</td><td id="totalSkip" class="total-value">'+totals.skip.toLocaleString('en-IN')+'</td><td id="totalPending" class="total-value">'+totals.pending.toLocaleString('en-IN')+'</td></tr>';
+ const totalRow='<tr class="total-row"><td></td><td class="total-label">कुल</td><td class="total-value">'+totals.portal.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.copied.toLocaleString('en-IN')+'</td><td class="total-value">'+(totals.portal===totals.copied?'MATCH':'—')+'</td><td class="total-value">'+totals.success.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.fail.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.skip.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.pending.toLocaleString('en-IN')+'</td></tr>';
  $('body').innerHTML=totalRow+(html||'<tr><td colspan="9">कोई organisation नहीं मिली।</td></tr>');
  $('copiedCount').textContent=totals.copied.toLocaleString('en-IN')+' / '+totals.success.toLocaleString('en-IN');
-}>
+}
+function clean(v){return String(v??'').replace(/\s+/g,' ').trim()}
+async function load(){
+ $('msg').textContent='Live organisation data loading...';
+ try{
+  [orgs,tenders]=await Promise.all([csv('organisations.csv'),csv('organisation_tenders.csv')]);
+  try{details=await csv('all_tenders_org_detailed.csv')}catch(_){details=[]}
+  try{
+   const sr=await fetch('../data/existing_id_detail_status.json?t='+Date.now(),{cache:'no-store'});
+   if(sr.ok) statusData=await sr.json();
+  }catch(_){statusData={errors:[]}}
+  $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
+  $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
+  const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
+  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+((statusData.success_ids||[]).length).toLocaleString('en-IN');
+  $('msg').textContent='Status = Portal Tender Count और Copied Tender Count का मिलान. Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
+  render();
+ }catch(e){
+  console.error(e);
+  $('msg').textContent='Data अभी उपलब्ध नहीं है। organisations.csv / organisation_tenders.csv load नहीं हो सका।';
+ }
+}
+$('search').addEventListener('input',render);$('reload').addEventListener('click',load);load();
+</script>
+</body></html>
