@@ -21,7 +21,16 @@ tbody tr:nth-child(even){background:#f8fafc}.empty{text-align:center;padding:30p
 .badge{display:inline-block;padding:4px 7px;border-radius:12px;background:#fee2e2;color:#b91c1c;font-weight:700}
 a{color:#0756c9;font-weight:700;text-decoration:none}
 @media(max-width:700px){header{align-items:flex-start;flex-direction:column}.toolbar input{min-width:100%;width:100%}}
-</style>
+<style>
+/* Archived table compact widths */
+.table-wrap table{table-layout:fixed;width:100%}
+.table-wrap th:nth-child(1),.table-wrap td:nth-child(1){width:165px;white-space:nowrap}
+.table-wrap th:nth-child(2),.table-wrap td:nth-child(2){width:30%;white-space:normal}
+.table-wrap th:nth-child(3),.table-wrap td:nth-child(3){width:145px;white-space:nowrap}
+.table-wrap th:nth-child(4),.table-wrap td:nth-child(4){width:75px;white-space:nowrap}
+.table-wrap th:nth-child(5),.table-wrap td:nth-child(5){width:210px;white-space:normal}
+.table-wrap th:nth-child(6),.table-wrap td:nth-child(6){width:210px;white-space:normal}
+</style></style>
 </head>
 <body>
 <script>
@@ -52,7 +61,7 @@ a{color:#0756c9;font-weight:700;text-decoration:none}
 <div class="panel">
 <div class="toolbar"><input id="q" placeholder="Tender ID / Title / Organisation खोजें"><span id="count" class="count">लोड हो रहा है…</span></div>
 <div class="table-wrap"><table><thead><tr>
-<th>Tender ID</th><th>Title</th><th>Closing Date</th><th>Organisation</th><th>Department</th><th>Division</th>
+<th>Tender ID</th><th>Title</th><th>Closing Date</th><th>Org</th><th>Department</th><th>Division</th>
 </tr></thead><tbody id="body"><tr><td colspan="5" class="empty">डेटा लोड हो रहा है…</td></tr></tbody></table></div>
 </div>
 </main>
@@ -60,6 +69,10 @@ a{color:#0756c9;font-weight:700;text-decoration:none}
 const CSV_URL="../all_tenders_org_detailed.csv";
 const $=id=>document.getElementById(id);
 function clean(v){return String(v??"").replace(/\s+/g," ").trim()}
+function orgShort(id,org){
+ const m=clean(id).match(/^\d{4}_([^_]+)_/);
+ return (m?m[1]:clean(org).split(/\s+/)[0]||"—").toUpperCase().slice(0,6);
+}
 function csv(text){
  const rows=[];let row=[],cell="",quote=false;
  for(let i=0;i<text.length;i++){const ch=text[i],nx=text[i+1];
@@ -98,7 +111,7 @@ function render(){
  "<td>"+clean(r["Tender ID"])+"</td>"+
  "<td>"+clean(r["Title"])+"</td>"+
  "<td><span class='badge'>"+clean(r["Closing Date"]||r["Last Date"])+"</span></td>"+
- "<td>"+clean(r["Organisation"])+"</td>"+
+ "<td>"+orgShort(r["Tender ID"],r["Organisation"])+"</td>"+
  "<td>"+clean(r["Department"])+"</td><td>"+clean(r["Division"])+"</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 3 दिनों तक tender दिखाई देगा।</td></tr>";
 }
 (async()=>{
