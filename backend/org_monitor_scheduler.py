@@ -20,9 +20,12 @@ def build_slots(day, start_min, end_min, lo, hi):
     current = start_min
     while True:
         current += rng.randint(lo, hi)
-        if current > end_min:
+        if current >= end_min:
             break
         slots.append(current)
+    # Always perform a final check at the requested 18:58 IST cutoff.
+    if slots[-1] != end_min:
+        slots.append(end_min)
     return slots
 
 
