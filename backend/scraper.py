@@ -2,6 +2,7 @@
 # [run-scrape-details] recovery/detail route audit trigger
 # [run-scrape-details] protect recovered dataset before live collection
 # [run-scrape-details] syntax-verified merge block
+# [run-scrape-details] final syntax repair trigger
 # [run-scrape-details] start fresh 100-record detail batch after restoring verified tender list
 # [run-scrape-details] resume after checkpoint-safe workflow
 # [run-scrape-details] accelerated detail batch + list-level hierarchy
