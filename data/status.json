@@ -1,19 +1,13 @@
 {
   "status": "running",
-  "process_started_at": "2026-09-21T09:45:17.746238+00:00",
-  "total_tenders": 5380,
-  "portal_total_tenders": 5380,
-  "organisation_count": 92,
+  "process_started_at": "2026-09-21T17:16:15.465417+00:00",
+  "total_tenders": 0,
   "detail_complete": 0,
-  "detail_remaining": 5448,
-  "errors": 3,
-  "latest_error": "MP State Tourism Development Corporation Ltd.: RuntimeError: Live organisation count link not found: MP State Tourism Development Corporation Ltd.",
-  "organisation_progress": "91/92",
-  "current_organisation": "Vikram University",
-  "department_count": 266,
-  "pincode_count": 0,
-  "pincode_others_count": 0,
+  "detail_remaining": 0,
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/0",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T10:02:23.803472+00:00"
+  "updated_at": "2026-09-21T17:16:15.465417+00:00"
 }
