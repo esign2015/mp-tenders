@@ -1422,8 +1422,10 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
     return {"ok": True, "checked": checked, "changes": changed, "cancelled": cancelled, "errors": errors, "candidates": len(watch_rows)}
 
 def monitor_tender_changes(csv_file):
-    if not should_run_monitor_now():
-        print("MONITOR: outside 14-minute/fixed-time window; skipped.")
+    # The normal monitor has its legacy time gate, but the new random
+    # organisation scheduler explicitly decides when this function runs.
+    if os.getenv("ORG_SCHEDULED_MONITOR") != "1" and not should_run_monitor_now():
+        print("MONITOR: outside legacy monitor window; skipped.")
         return {"ok": True, "skipped": True, "changes": 0}
 
     org_csv = csv_file.parent / "organisations.csv"
