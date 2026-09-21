@@ -1992,13 +1992,16 @@ function todayKey(){
 function moneyNumber(value){
   if(typeof value === "number") return value;
 
-  const text = clean(value)
-    .replaceAll(",","")
-    .replace(/[₹Rs.]/gi,"")
-    .replace(/[^\d.-]/g,"");
+  const text = clean(value);
+  if(!text) return 0;
 
-  const number = Number(text);
+  // Read the first actual numeric amount only. Do not manufacture a
+  // number by concatenating digits from labels such as "NA", "Not
+  // Available", or other text. This is especially important for PAC.
+  const match = text.match(/-?\d[\d,]*(?:\.\d+)?/);
+  if(!match) return 0;
 
+  const number = Number(match[0].replaceAll(",",""));
   return Number.isFinite(number) ? number : 0;
 }
 
@@ -3049,11 +3052,13 @@ function applyFilters(refreshHeader=true){
     */
     const pacRaw = clean(row["PAC Amount"]);
     const pacAmount = moneyNumber(row["PAC Amount"]);
+    const pacMissing = !pacRaw ||
+      /^(?:na|n\/a|nil|null|not\s+available|not\s+applicable|[-—])$/i.test(pacRaw);
 
     if(pacMode){
-      if(!Number.isFinite(pacLimit) || !pacRaw ||
-         pacRaw === "—" || pacRaw === "-" ||
-         !Number.isFinite(pacAmount)) return false;
+      // PAC filters operate only on a real numeric PAC value.
+      // Zero and missing/NA values can never satisfy "Above".
+      if(!Number.isFinite(pacLimit) || pacMissing || !Number.isFinite(pacAmount)) return false;
 
       if(pacMode === "below" && pacAmount >= pacLimit) return false;
       if(pacMode === "above" && pacAmount <= pacLimit) return false;
