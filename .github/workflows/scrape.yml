@@ -99,7 +99,7 @@ jobs:
     # Discovery finishes first; this second job immediately processes only
     # current portal Tender IDs that do not yet have details.
     needs: scrape_full
-    if: needs.scrape_full.result == 'success' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]')))
+    if: needs.scrape_full.result == 'success' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
