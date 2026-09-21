@@ -959,19 +959,17 @@ def open_tender_detail_by_organisation(page, tender, org):
 
 
 def open_tender_detail_dual(page, tender, org):
-    """Use both supported portal paths:
-    1) Organisation list -> live Title click.
-    2) Home page -> Tender ID search -> Go -> live Title click.
-    If the first route fails, the second route is used automatically."""
+    """Primary detail route is Home -> Tender ID -> GO -> Title -> Detail.
+    Organisation-list click is only a fallback when the primary route fails."""
     errors = []
-    try:
-        return open_tender_detail_by_organisation(page, tender, org)
-    except Exception as exc:
-        errors.append(f"organisation route: {type(exc).__name__}: {exc}")
     try:
         return open_tender_detail_by_search(page, tender)
     except Exception as exc:
         errors.append(f"home search route: {type(exc).__name__}: {exc}")
+    try:
+        return open_tender_detail_by_organisation(page, tender, org)
+    except Exception as exc:
+        errors.append(f"organisation route: {type(exc).__name__}: {exc}")
         raise RuntimeError(" | ".join(errors))
 
 
@@ -1977,6 +1975,7 @@ def scrape_mp_tenders(csv_file):
                                 "Bid Opening Date", "Document Download Start Date",
                                 "Document Download End Date", "Fee Payable To", "Fee Payable At"
                             ))
+                            )
                             if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and (batch_size <= 0 or detail_successes < batch_size):
                                 detail_candidates_seen += 1
                                 try:
