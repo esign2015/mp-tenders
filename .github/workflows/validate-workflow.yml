@@ -4,6 +4,7 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/scrape.yml"
+      - ".github/workflows/validate-workflow.yml"
 jobs:
   lint:
     runs-on: ubuntu-latest
