@@ -1954,37 +1954,41 @@ def scrape_mp_tenders(csv_file):
                                     stats["detail_opened"] += 1
                                     detail_successes += 1
                                     detail_completed_ids.append(tender_id)
-                                    # Hard checkpoint every 10 successful detail pages.
-                                    # The workflow watches detail_batch_completed and commits
-                                    # this CSV so the dashboard can refresh during the long run.
-                                    if detail_successes % 10 == 0:
-                                        write_csv(csv_file, list(existing_by_id.values()))
-                                        complete_count = sum(
-                                            1 for r in existing_by_id.values()
-                                            if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in (
-                                                "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
-                                                "Total Fee", "Location", "Pincode", "Work Description",
-                                                "Product Category", "Contract Type", "Bid Validity"
-                                            ))
-                                        )
-                                        write_extraction_status(csv_file, {
-                                            "status": "running",
-                                            "process_started_at": process_started_at,
-                                            "total_tenders": portal_total_tenders,
-                                            "portal_total_tenders": portal_total_tenders,
-                                            "organisation_count": len(organisations),
-                                            **status_metrics(existing_by_id.values()),
-                                            "detail_complete": complete_count,
-                                            "detail_remaining": max(0, len(existing_by_id) - complete_count),
-                                            "errors": len(stats["errors"]),
-                                            "latest_error": stats["errors"][-1] if stats["errors"] else "",
-                                            "organisation_progress": f"{index}/{len(organisations)}",
-                                            "detail_batch_size": batch_size,
-                                            "detail_batch_completed": detail_successes,
-                                            "checkpoint_ready": True,
-                                            "updated_at": datetime.now(timezone.utc).isoformat(),
-                                        })
-                                        print(f"CHECKPOINT READY: {detail_successes} detail records completed; dashboard CSV saved.")
+
+                                    # LIVE 1-BY-1 CHECKPOINT:
+                                    # Save the successfully extracted tender immediately.
+                                    # The GitHub Actions writer publishes this CSV checkpoint
+                                    # before the scraper moves to the next Tender ID. This makes
+                                    # each completed detail appear on GitHub Pages as soon as
+                                    # the commit reaches the repository.
+                                    write_csv(csv_file, list(existing_by_id.values()))
+                                    complete_count = sum(
+                                        1 for r in existing_by_id.values()
+                                        if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in (
+                                            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+                                            "Total Fee", "Location", "Pincode", "Work Description",
+                                            "Product Category", "Contract Type", "Bid Validity"
+                                        ))
+                                    )
+                                    write_extraction_status(csv_file, {
+                                        "status": "running",
+                                        "process_started_at": process_started_at,
+                                        "total_tenders": portal_total_tenders,
+                                        "portal_total_tenders": portal_total_tenders,
+                                        "organisation_count": len(organisations),
+                                        **status_metrics(existing_by_id.values()),
+                                        "detail_complete": complete_count,
+                                        "detail_remaining": max(0, len(existing_by_id) - complete_count),
+                                        "errors": len(stats["errors"]),
+                                        "latest_error": stats["errors"][-1] if stats["errors"] else "",
+                                        "organisation_progress": f"{index}/{len(organisations)}",
+                                        "detail_batch_size": batch_size,
+                                        "detail_batch_completed": detail_successes,
+                                        "checkpoint_ready": True,
+                                        "checkpoint_tender_id": tender_id,
+                                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                                    })
+                                    print(f"LIVE CHECKPOINT SAVED: {tender_id} ({detail_successes} detail records complete); move to next Tender ID.")
                                 except Exception as detail_exc:
                                     stats["errors"].append(
                                         f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
