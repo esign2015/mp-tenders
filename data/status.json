@@ -1,14 +1,14 @@
 {
   "status": "running",
   "process_started_at": "2026-09-21T07:03:33.231164+00:00",
-  "total_tenders": 30,
+  "total_tenders": 32,
   "detail_complete": 0,
   "detail_remaining": 30,
-  "errors": 30,
-  "latest_error": "Capital Project Administration / 2026_CPA_534387_1: detail RuntimeError: detail page returned portal menu/home content",
-  "organisation_progress": "5/92",
-  "current_organisation": "Commissioner - Commercial Tax",
+  "errors": 32,
+  "latest_error": "Commissioner - Commercial Tax / 2026_CPA_534387_1: detail RuntimeError: detail page returned portal menu/home content",
+  "organisation_progress": "6/92",
+  "current_organisation": "Department of Higher Education",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T07:11:13.808561+00:00"
+  "updated_at": "2026-09-21T07:11:47.643899+00:00"
 }
