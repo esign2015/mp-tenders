@@ -119,8 +119,11 @@ def telegram_document(token, chat_id, path, caption):
             raise RuntimeError(result)
 
 
-def make_pdf(rows, filename, report_title):
+def make_pdf(rows, filename, report_title, total_available=None, filter_detail="All Tenders"):
     path = Path(filename)
+    if total_available is None:
+        total_available = len(rows)
+    report_scope = f"Total Records: {len(rows)} out of {total_available} • Filter: {filter_detail}"
     styles = getSampleStyleSheet()
     cell = ParagraphStyle(
         "cell", parent=styles["Normal"], fontName="Helvetica",
@@ -148,6 +151,10 @@ def make_pdf(rows, filename, report_title):
         Paragraph("MP Tender Live Dashboard", subtitle),
         Spacer(1, 4),
         Paragraph(report_title, subtitle),
+        Paragraph(report_scope, ParagraphStyle(
+            "scope", parent=subtitle, fontName="Helvetica-Bold",
+            fontSize=7.5, textColor=colors.HexColor("#14376e")
+        )),
         Spacer(1, 7),
     ]
 
@@ -234,6 +241,8 @@ def make_pdf(rows, filename, report_title):
         canvas.drawCentredString(w/2, h-18, "MP Tender Live Dashboard")
         canvas.setFont("Helvetica-Bold", 6.5)
         canvas.drawCentredString(w/2, h-26, "For DSC & E-Tendering Services • Contact Admin: t.me/rdgyan")
+        canvas.setFont("Helvetica-Bold", 7)
+        canvas.drawCentredString(w/2, h-34, report_scope)
         canvas.linkURL("https://t.me/rdgyan", (w/2-85, h-31, w/2+85, h-22), relative=0)
 
         # Footer
@@ -280,7 +289,8 @@ def main():
         message = (
             "🔔 एमपी टेंडर्स अलर्ट\n\n"
             f"📅 दिनांक: {display}\n\n"
-            f"⏰ आज बंद होने वाले टेंडर: {len(closing)}\n\n"
+            f"⏰ आज बंद होने वाले टेंडर: {len(closing)}\n"
+            f"📋 PDF में: {len(closing)} out of {len(rows)} total records • Filter: आज Closing\n\n"
             + ("📎 आज कोई भी टेंडर Closing Today में नहीं है, इसलिए इसकी PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
             + f"🌐 वेबसाइट: {SITE_URL}\n"
             f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
@@ -312,7 +322,8 @@ def main():
         message = (
             "🔔 एमपी टेंडर्स अलर्ट\n\n"
             f"📅 दिनांक: {display}\n\n"
-            f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n\n"
+            f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n"
+            f"📋 PDF में: {len(new)} out of {len(rows)} total records • Filter: आज प्रकाशित\n\n"
             + ("📎 आज एक भी नया टेंडर प्रकाशित नहीं हुआ है, इसलिए PDF नहीं भेजी जा रही है।\n\n" if not new else "")
             + f"🌐 वेबसाइट: {SITE_URL}\n"
             f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
@@ -337,7 +348,8 @@ def main():
         message = (
             "🔔 एमपी टेंडर्स अलर्ट\n\n"
             f"📅 दिनांक: {display}\n\n"
-            f"📋 आज तक कुल टेंडर: {len(total_sorted)}\n\n"
+            f"📋 आज तक कुल टेंडर: {len(total_sorted)}\n"
+            f"📋 PDF में: {len(total_sorted)} out of {len(rows)} total records • Filter: All Tenders\n\n"
             f"🌐 वेबसाइट: {SITE_URL}\n"
             f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
             f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
