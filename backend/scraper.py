@@ -1726,6 +1726,8 @@ def scrape_mp_tenders(csv_file):
         if clean(row.get("Tender ID"))
     }
 
+    now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
+
     # Retention policy: keep a tender for 3 days after its closing date.
     # After that, remove the complete record from the local dataset so the
     # dashboard/API does not carry stale detail indefinitely. If a later
