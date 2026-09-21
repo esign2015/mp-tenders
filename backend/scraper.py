@@ -54,7 +54,7 @@ SESSION_URL_RE = re.compile(r"(?:[?&])session=", re.I)
 
 
 def clean(value):
-    # Portal tables sometimes expose numeric values (e.g. tender counts).
+    # Portal tables sometimes expose numeric values (e.g. tender counts); normalize them before regex parsing.
     if value is None:
         return ""
     return re.sub(r"\s+", " ", str(value)).strip()
