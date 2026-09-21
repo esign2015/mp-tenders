@@ -2435,7 +2435,8 @@ function renderVirtualWindow(){
 
   body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
-
+    const tenderId = escapeHtml(row["Tender ID"]);
+    const title = escapeHtml(row["Title"]);
     const titleHtml = title;
 
     return `
