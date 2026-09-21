@@ -63,10 +63,14 @@ function dateValue(v){
 let all=[];
 function render(){
  const q=clean($("q").value).toLowerCase();
- const now=Date.now();
+ const nowDate=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
+ const now=nowDate.getTime();
  const archived=all.filter(r=>{
    const t=dateValue(r["Closing Date"]||r["Last Date"]||r["Bid Submission End"]);
-   return Number.isFinite(t)&&t<now&&now-t<=10*86400000 &&
+   const closeDate=Number.isFinite(t)?new Date(t):null;
+   const eligibleAt=closeDate?new Date(closeDate):null;
+   if(eligibleAt) eligibleAt.setHours(19,0,0,0);
+   return Number.isFinite(t)&&eligibleAt&&now>=eligibleAt.getTime()&&now-t<=10*86400000 &&
      (!q||["Tender ID","Title","Reference Number","Organisation","Department","Division"].some(k=>clean(r[k]).toLowerCase().includes(q)));
  }).sort((a,b)=>dateValue(b["Closing Date"]||b["Last Date"])-dateValue(a["Closing Date"]||a["Last Date"]));
  $("count").textContent=archived.length+" archived tenders";
