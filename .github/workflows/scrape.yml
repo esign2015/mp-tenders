@@ -9,7 +9,7 @@ on:
       - "index.html"
   workflow_dispatch:
   schedule:
-    - cron: "15 15 * * *"   # 8:45 PM IST — data extraction
+    - cron: "45 15 * * *"   # 9:15 PM IST — full organisation/tender snapshot (after evening alert)
     - cron: "25 15 * * *"   # 8:55 PM IST — New Published Telegram
     - cron: "30 15 * * *"   # 9:00 PM IST — Total Tenders Telegram
     - cron: "50 4 * * *"    # 10:20 AM IST — Closing Today Telegram
@@ -74,8 +74,8 @@ jobs:
   scrape_full:
     concurrency:
       group: mp-tender-data-writer
-      cancel-in-progress: true
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '15 15 * * *') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+      cancel-in-progress: false
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '45 15 * * *') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
@@ -257,7 +257,7 @@ jobs:
             git push || echo "Checkpoint commit push failed; retained in workspace/logs."
           fi
   corrigendum_watch:
-    if: github.event_name == "schedule" && (github.event.schedule == "35 4 * * *" || github.event.schedule == "35 10 * * *" || github.event.schedule == "15 15 * * *" || github.event.schedule == "45 21 * * *")
+    if: github.event_name == "schedule" && (github.event.schedule == "35 4 * * *" || github.event.schedule == "35 10 * * *" || github.event.schedule == "15 15 * * *" || github.event.schedule == "15 21 * * *")
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
@@ -296,8 +296,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
-      group: mp-tender-corrigendum-urgent
-      cancel-in-progress: true
+      group: mp-tender-data-writer
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
