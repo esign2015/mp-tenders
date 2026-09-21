@@ -3373,6 +3373,24 @@ function clearFilters(){
   applyFilters();
 }
 
+function showLiveTenders(){
+  clearFilters();
+  quickFilterMode = "live";
+  const now = Date.now();
+  filteredTenders = allTenders.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    const isCancelled = clean(row["Status"]).toLowerCase() === "cancelled";
+    return !isCancelled && closing && closing.getTime() > now;
+  });
+  filteredTenders.sort((a,b) =>
+    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
+    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
+  );
+  $("tableHeading").textContent = "Live Tender Records";
+  renderTable(filteredTenders);
+  updateCounts(allTenders);
+}
+
 function showArchived(){
   archivedMode = true;
   quickFilterMode = "";
@@ -4143,7 +4161,7 @@ updateTableSortHeaders();
 
 $("reloadBtn").addEventListener("click",clearFilters);
 $("headerReloadBtn").addEventListener("click",clearFilters);
-$("liveCountBox").addEventListener("click",clearFilters);
+$("liveCountBox").addEventListener("click",showLiveTenders);
 $("closingTodayBox").addEventListener("click",showClosingToday);
 $("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
 
