@@ -140,6 +140,12 @@ def do_search(page, tender_id):
     return detail
 
 def main():
+    # The 20:15 recovery scraper run was already launched from an older
+    # workflow and its detail child must not race the dedicated recovery job.
+    # This guard is temporary and is removed after the current recovery.
+    if os.environ.get("GITHUB_RUN_ID") == "35649935496":
+        print("Skipping superseded detail child for workflow run 35649935496.", flush=True)
+        return
     if not CSV.exists():
         raise RuntimeError("all_tenders_org_detailed.csv not found")
 
