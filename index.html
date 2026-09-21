@@ -1337,6 +1337,29 @@ td.title-cell{
 body.telegram-locked .main-area,
 body.telegram-locked .site-footer{visibility:hidden}
 </style>
+
+<style>
+/* User-wise favourites, saved filters, organisation display and column controls */
+.user-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:5px}
+.user-tool-btn{background:#fff!important;color:#17346d!important;border:1px solid #b8c6dc!important;padding:6px 9px!important;font-size:11px!important}
+.user-tool-btn.active{background:#fef3c7!important;color:#92400e!important;border-color:#f59e0b!important}
+.user-pref-menu{display:none;position:fixed;z-index:2147483000;background:#fff;border:1px solid #cbd5e1;border-radius:9px;box-shadow:0 12px 30px rgba(15,23,42,.22);padding:10px;width:min(330px,calc(100vw - 20px));max-height:70vh;overflow:auto}
+.user-pref-menu.open{display:block}
+.user-pref-title{font-weight:800;font-size:13px;color:#17346d;margin-bottom:7px}
+.user-pref-row{display:flex;align-items:center;gap:6px;margin:5px 0}
+.user-pref-row button{flex:1;text-align:left;background:#f8fafc;color:#172033;border:1px solid #e2e8f0;padding:7px;font-size:11px}
+.user-pref-empty{font-size:11px;color:#64748b;padding:5px 0}
+.org-fav-star{margin-left:5px;border:0;background:transparent!important;color:#f59e0b!important;padding:0!important;font-size:14px;cursor:pointer}
+.org-display-short .org-full{display:none}
+.org-display-short .org-short{display:inline}
+.org-display-full .org-short{display:none}
+.org-display-full .org-full{display:inline}
+.column-hidden{display:none!important}
+@media(max-width:850px){
+ .user-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+ .user-tool-btn{width:100%;font-size:10px!important;padding:6px 4px!important}
+}
+</style>
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
@@ -1411,6 +1434,11 @@ body.telegram-locked .site-footer{visibility:hidden}
         <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
         <button class="btn-light" id="archivedBtn">Archived Tenders</button><button class="btn-dark" id="reloadBtn">↻ Reload</button>
         <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
+        <button class="user-tool-btn" id="favOrgBtn" type="button">⭐ Fav Organisation</button>
+        <button class="user-tool-btn" id="favDistrictBtn" type="button">⭐ Fav District</button>
+        <button class="user-tool-btn" id="savedFilterBtn" type="button">💾 Saved Filters</button>
+        <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
+        <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
         <a class="telegram-alert-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Get Daily Alert</a>
       </div>
     </div>
@@ -1439,6 +1467,14 @@ body.telegram-locked .site-footer{visibility:hidden}
     </div>
 
     <div class="search-bottom">
+      <select id="favouriteFilter" aria-label="Favourite filter">
+        <option value="">All Favourites</option>
+        <option value="org">⭐ My Favourite Organisations</option>
+        <option value="district">⭐ My Favourite Districts</option>
+      </select>
+      <select id="savedFilterSelect" aria-label="Saved filters">
+        <option value="">Saved Filter</option>
+      </select>
       <select id="closingExpire" aria-label="Closing Date filter">
         <option value="0">Closing Date</option>
         <option value="1">Closing Today</option>
@@ -1449,6 +1485,7 @@ body.telegram-locked .site-footer{visibility:hidden}
         <option value="30">Closing within 30 Days</option>
         <option value="45">Closing within 45 Days</option>
         <option value="gt45">Closing greater than 45 Days</option>
+        <option value="recently-changed">🆕 Recently Changed</option>
       </select>
 
       <select id="sortSelect" aria-label="Sort order">
@@ -1598,6 +1635,11 @@ body.telegram-locked .site-footer{visibility:hidden}
 
   </section>
 
+
+<div id="userPrefMenu" class="user-pref-menu" role="dialog" aria-label="User preferences">
+  <div class="user-pref-title">⭐ मेरी Personal Preferences</div>
+  <div id="userPrefContent"></div>
+</div>
 </main>
 
 <footer class="site-footer">
@@ -3031,6 +3073,7 @@ function applyFilters(refreshHeader=true){
 
   const organisation = clean($("organisationSearch").value).toLowerCase();
   const districtSearch = clean($("districtSearch").value).toLowerCase();
+  const favouriteFilter = clean($("favouriteFilter").value);
 
   const closingExpire = clean($("closingExpire").value);
   const status = clean($("statusSelect").value).toLowerCase();
@@ -3085,6 +3128,9 @@ function applyFilters(refreshHeader=true){
       row["Product Category"],row["Sub Category"],row["Work Description"]
     ].join(" ").toLowerCase();
     if(general && !combined.includes(general)) return false;
+
+    if(favouriteFilter==="org" && !isFav("favOrgs",row["Organisation"])) return false;
+    if(favouriteFilter==="district" && !isFav("favDistricts",getDistrictInfo(row).name)) return false;
 
     if(organisation){
       const rowOrganisation = clean(row["Organisation"]).toLowerCase();
@@ -3146,6 +3192,14 @@ function applyFilters(refreshHeader=true){
 
       if(pacMode === "below" && pacAmount >= pacLimit) return false;
       if(pacMode === "above" && pacAmount <= pacLimit) return false;
+    }
+
+    if(closingExpire === "recently-changed"){
+      const changed = clean(row["Latest Corrigendum"]||row["Corrigendum"]||row["Change Status"]||row["Last Updated"]);
+      const original = clean(row["Original Closing Date"]||row["Previous Closing Date"]||row["Old Closing Date"]);
+      const hasDateChange = original && clean(row["Closing Date"]) && original !== clean(row["Closing Date"]);
+      const changedFlag = /corrigendum|change|amend|updated|revised/i.test(changed);
+      if(!hasDateChange && !changedFlag) return false;
     }
 
     if(closingExpire){
@@ -3284,6 +3338,10 @@ function clearFilters(){
   if(pacLabel) pacLabel.textContent = "All PAC";
   $("sortSelect").value = "closing-asc";
   $("statusSelect").value = "";
+  $("favouriteFilter").value = "";
+  $("savedFilterSelect").value = "";
+  $("favouriteFilter").value = "";
+  $("savedFilterSelect").value = "";
 
   applyFilters();
 }
@@ -3362,7 +3420,124 @@ function showNextThreeDays(){
 
 }
 
-function updateDateTime(){
+
+/* ================= USER-WISE PERSONAL FEATURES =================
+   Preferences are keyed by the verified Telegram numeric user ID.
+   No tender copies are stored per user; only small preference lists.
+*/
+let userPrefs = {favOrgs:[], favDistricts:[], savedFilters:[]};
+let orgDisplayMode = "full";
+const USER_PREF_PREFIX = "mp_tender_user_prefs_";
+
+function currentTelegramUserId(){
+  return String(telegramAuthData?.id || "");
+}
+function prefsKey(){
+  const id=currentTelegramUserId();
+  return id ? USER_PREF_PREFIX+id : "";
+}
+function loadUserPrefs(){
+  const key=prefsKey();
+  if(!key){ userPrefs={favOrgs:[],favDistricts:[],savedFilters:[]}; return; }
+  try{
+    const parsed=JSON.parse(localStorage.getItem(key)||"{}");
+    userPrefs={
+      favOrgs:Array.isArray(parsed.favOrgs)?parsed.favOrgs:[],
+      favDistricts:Array.isArray(parsed.favDistricts)?parsed.favDistricts:[],
+      savedFilters:Array.isArray(parsed.savedFilters)?parsed.savedFilters:[]
+    };
+  }catch(e){ userPrefs={favOrgs:[],favDistricts:[],savedFilters:[]}; }
+}
+function saveUserPrefs(){
+  const key=prefsKey();
+  if(key) localStorage.setItem(key,JSON.stringify(userPrefs));
+  refreshUserPreferenceUI();
+}
+function togglePref(listName,value){
+  value=clean(value);
+  if(!value)return;
+  const list=userPrefs[listName]||[];
+  const i=list.findIndex(x=>x.toLowerCase()===value.toLowerCase());
+  if(i>=0) list.splice(i,1); else list.push(value);
+  userPrefs[listName]=list;
+  saveUserPrefs();
+  applyFilters();
+}
+function isFav(listName,value){
+  return (userPrefs[listName]||[]).some(x=>x.toLowerCase()===clean(value).toLowerCase());
+}
+function currentFilterState(){
+  return {
+    general:$("generalSearch").value,
+    organisation:$("organisationSearch").value,
+    district:$("districtSearch").value,
+    favourite:$("favouriteFilter").value,
+    closing:$("closingExpire").value,
+    sort:$("sortSelect").value,
+    status:$("statusSelect").value,
+    pac:$("pacFilter").value
+  };
+}
+function applySavedFilter(item){
+  const s=item.state||{};
+  $("generalSearch").value=s.general||"";
+  $("organisationSearch").value=s.organisation||"";
+  $("districtSearch").value=s.district||"";
+  $("favouriteFilter").value=s.favourite||"";
+  $("closingExpire").value=s.closing||"0";
+  $("sortSelect").value=s.sort||"closing-asc";
+  $("statusSelect").value=s.status||"";
+  $("pacFilter").value=s.pac||"";
+  quickFilterMode="";
+  archivedMode=false;
+  applyFilters();
+}
+function saveCurrentFilter(){
+  const name=prompt("इस filter का नाम दें:");
+  if(!name)return;
+  userPrefs.savedFilters=userPrefs.savedFilters.filter(x=>x.name!==name);
+  userPrefs.savedFilters.push({name:name,state:currentFilterState()});
+  saveUserPrefs();
+  alert("Filter save हो गया: "+name);
+}
+function openUserPrefMenu(anchor){
+  const menu=$("userPrefMenu"); if(!menu||!anchor)return;
+  const rect=anchor.getBoundingClientRect();
+  menu.style.left=Math.max(8,Math.min(rect.left,window.innerWidth-338))+"px";
+  menu.style.top=Math.min(window.innerHeight-20,rect.bottom+6)+"px";
+  menu.classList.toggle("open");
+}
+function refreshUserPreferenceUI(){
+  const content=$("userPrefContent");
+  if(!content)return;
+  const orgs=userPrefs.favOrgs||[], dists=userPrefs.favDistricts||[], saved=userPrefs.savedFilters||[];
+  content.innerHTML=
+    '<div class="user-pref-title">Favourite Organisations</div>'+
+    (orgs.length?orgs.map((x,i)=>'<div class="user-pref-row"><button type="button" data-pref="org" data-value="'+escapeHtml(x)+'">⭐ '+escapeHtml(x)+'</button><button type="button" style="flex:0 0 auto" data-remove-org="'+i+'">✕</button></div>').join(""):'<div class="user-pref-empty">अभी कोई organisation favourite नहीं है।</div>')+
+    '<div class="user-pref-title" style="margin-top:10px">Favourite Districts</div>'+
+    (dists.length?dists.map((x,i)=>'<div class="user-pref-row"><button type="button" data-pref="district" data-value="'+escapeHtml(x)+'">⭐ '+escapeHtml(x)+'</button><button type="button" style="flex:0 0 auto" data-remove-district="'+i+'">✕</button></div>').join(""):'<div class="user-pref-empty">अभी कोई district favourite नहीं है।</div>')+
+    '<div class="user-pref-title" style="margin-top:10px">Saved Filters</div>'+
+    (saved.length?saved.map((x,i)=>'<div class="user-pref-row"><button type="button" data-saved="'+i+'">💾 '+escapeHtml(x.name)+'</button><button type="button" style="flex:0 0 auto" data-remove-saved="'+i+'">✕</button></div>').join(""):'<div class="user-pref-empty">अभी कोई saved filter नहीं है।</div>')+
+    '<button type="button" id="saveCurrentFilterBtn" class="btn-blue" style="width:100%;margin-top:8px">💾 Save Current Filter</button>';
+  content.querySelectorAll("[data-pref]").forEach(b=>b.onclick=()=>{applyFilters();$("userPrefMenu").classList.remove("open");});
+  content.querySelectorAll("[data-remove-org]").forEach(b=>b.onclick=()=>{userPrefs.favOrgs.splice(Number(b.dataset.removeOrg),1);saveUserPrefs();});
+  content.querySelectorAll("[data-remove-district]").forEach(b=>b.onclick=()=>{userPrefs.favDistricts.splice(Number(b.dataset.removeDistrict),1);saveUserPrefs();});
+  content.querySelectorAll("[data-saved]").forEach(b=>b.onclick=()=>{applySavedFilter(userPrefs.savedFilters[Number(b.dataset.saved)]);$("userPrefMenu").classList.remove("open");});
+  content.querySelectorAll("[data-remove-saved]").forEach(b=>b.onclick=()=>{userPrefs.savedFilters.splice(Number(b.dataset.removeSaved),1);saveUserPrefs();});
+  const saveBtn=$("saveCurrentFilterBtn"); if(saveBtn)saveBtn.onclick=saveCurrentFilter;
+}
+function setupUserFeatures(){
+  loadUserPrefs();
+  const favOrg=$("favOrgBtn"), favDistrict=$("favDistrictBtn"), saved=$("savedFilterBtn"), col=$("columnBtn"), orgBtn=$("orgDisplayBtn");
+  if(favOrg) favOrg.onclick=()=>{const v=clean($("organisationSearch").value); if(!v){alert("पहले Organisation चुनें/लिखें।");return;} togglePref("favOrgs",v);};
+  if(favDistrict) favDistrict.onclick=()=>{const v=clean($("districtSearch").value); if(!v){alert("पहले District चुनें/लिखें।");return;} togglePref("favDistricts",v);};
+  if(saved) saved.onclick=()=>openUserPrefMenu(saved);
+  if(orgBtn) orgBtn.onclick=()=>{orgDisplayMode=orgDisplayMode==="full"?"short":"full";document.body.classList.toggle("org-display-short",orgDisplayMode==="short");document.body.classList.toggle("org-display-full",orgDisplayMode==="full");orgBtn.textContent=orgDisplayMode==="full"?"🏢 Full Org":"🏢 Short Org";};
+  refreshUserPreferenceUI();
+  window.addEventListener("resize",()=>{const m=$("userPrefMenu");if(m?.classList.contains("open"))m.classList.remove("open");});
+  document.addEventListener("click",e=>{const m=$("userPrefMenu");if(m&&!m.contains(e.target)&&!e.target.closest("#savedFilterBtn"))m.classList.remove("open");});
+}
+\nfunction updateDateTime(){
   const now = new Date();
 
   $("dateTime").textContent =
@@ -3832,7 +4007,7 @@ function scheduleFilter(){
 [
   "closingExpire",
   "sortSelect",
-  "statusSelect"
+  "statusSelect","favouriteFilter"
 ].forEach(id => {
   $(id).addEventListener("change",applyFilters);
 });
@@ -3983,6 +4158,10 @@ $("next100Btn").addEventListener("click",() => goVirtualPage(1));
 
 setupOrganisationFilter();
 setupDistrictSearch();
+
+// Initialise personal preference controls after Telegram identity is known.
+setupUserFeatures();
+
 
 updateDateTime();
 setInterval(updateDateTime,1000);
