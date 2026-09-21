@@ -11,6 +11,17 @@ CSV = Path("all_tenders_org_detailed.csv")
 STATUS = Path("data/existing_id_detail_status.json")
 BATCH_SIZE = int(__import__("os").environ.get("EXISTING_ID_BATCH_SIZE", "0"))
 SNAPSHOT = Path("organisation_tenders.csv")
+DETAIL_CSV = Path("tender_details.csv")
+DETAIL_FIELDS = [
+    "Tender ID","Organisation","Department","Division","Sub Division",
+    "Tender Reference Number","Reference Number","Title","Tender Fee",
+    "Processing Fee","EMD Fee","PAC Amount","Total Fee","Location","Pincode",
+    "Work Description","Product Category","Sub Category","Contract Type",
+    "Bid Validity","Pre Qualification Details","Bid Submission Start Date",
+    "Bid Submission End Date","Bid Opening Date","Document Download Start Date",
+    "Document Download End Date","Fee Payable To","Fee Payable At",
+    "Published Date","Closing Date","Opening Date","Detail Extracted","Search Route"
+]
 
 def clean(s):
     return re.sub(r"\s+", " ", str(s or "")).strip()
@@ -163,6 +174,20 @@ def main():
             w.writerows(by_id.values())
         fields = out_fields
 
+    def save_detail_csv():
+        # Separate enrichment dataset: only successfully extracted detail pages.
+        detail_rows = [
+            {k: row.get(k, "") for k in DETAIL_FIELDS}
+            for row in by_id.values()
+            if clean(row.get("Detail Extracted")).upper() == "YES"
+        ]
+        tmp = DETAIL_CSV.with_suffix(".tmp")
+        with tmp.open("w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=DETAIL_FIELDS, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(detail_rows)
+        tmp.replace(DETAIL_CSV)
+
     def save_status(status, last_id=""):
         STATUS.parent.mkdir(parents=True, exist_ok=True)
         STATUS.write_text(json.dumps({
@@ -213,6 +238,7 @@ def main():
 
                 # Persist immediately so one successful Tender ID is never lost.
                 save_csv()
+                save_detail_csv()
                 save_status("running", tid)
                 print(f"DETAIL OK {tid} — SAVED — NEXT ID", flush=True)
 
@@ -254,6 +280,8 @@ def main():
                 final_errors[e["Tender ID"]] = e
             errors[:] = list(final_errors.values())
 
+    save_csv()
+    save_detail_csv()
     save_status("completed")
     print(
         json.dumps(
