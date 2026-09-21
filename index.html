@@ -3467,7 +3467,7 @@ function showNextThreeDays(){
 
 
 /* ================= TABLE DISPLAY CONTROLS ================= */
-let orgDisplayMode = "full";
+let orgDisplayMode = "short";
 
 const COLUMN_PREF_KEY="mp_tender_hidden_columns";
 const COLUMN_DEFS=[
@@ -3478,8 +3478,12 @@ const COLUMN_DEFS=[
 ];
 
 function loadHiddenColumns(){
-  try{return JSON.parse(localStorage.getItem(COLUMN_PREF_KEY)||"[]").map(Number)}
-  catch(e){return []}
+  // Default view: exactly the columns shown in the requested layout.
+  const defaultHidden=[14,15,16]; // Department, Division, Sub Division
+  try{
+    const raw=localStorage.getItem(COLUMN_PREF_KEY);
+    return raw === null ? defaultHidden : JSON.parse(raw).map(Number);
+  }catch(e){ return defaultHidden; }
 }
 function applyColumnVisibility(){
   const hidden=loadHiddenColumns();
