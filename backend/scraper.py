@@ -1672,13 +1672,193 @@ def status_metrics(rows):
     other_pins = {p for p in pincodes if not re.match(r"^(45|46|47|48)\d{4}$", p)}
     return {"department_count": len(departments), "pincode_count": len(pincodes), "pincode_others_count": len(other_pins)}
 
+def run_separate_detail_extraction(csv_file, organisations, process_started_at, stats):
+    """
+    Separate phase: runs only after the complete Tender-by-Organisation snapshot
+    has been copied and verified.
+
+    This phase never opens organisation-count pages. It works from the copied
+    Tender IDs and opens only the detail records that still need extraction.
+    """
+    org_by_name = {clean(o.get("name")).casefold(): o for o in organisations if clean(o.get("name"))}
+    tender_list_csv = csv_file.parent / "organisation_tenders.csv"
+    tender_list_rows = read_existing(tender_list_csv)
+    existing_rows = read_existing(csv_file)
+    existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
+
+    candidates = []
+    new_only = os.getenv("NEW_TENDER_ONLY", "0").lower() in ("1", "true", "yes")
+    today_ist = datetime.now(timezone(timedelta(hours=5, minutes=30))).date()
+
+    for row in tender_list_rows:
+        tender_id = clean(row.get("Tender ID"))
+        if not tender_id:
+            continue
+        old = existing_by_id.get(tender_id, {})
+        if clean(old.get("Detail Extracted")).upper() == "YES":
+            continue
+
+        if new_only:
+            published = parse_portal_datetime(row.get("Published Date"))
+            if not published or published.date() != today_ist:
+                continue
+
+        candidates.append((row, old))
+
+    try:
+        configured_batch = int(os.getenv("DETAIL_BATCH_SIZE", "0") or 0)
+        batch_size = 0 if configured_batch <= 0 else max(10, min(500, configured_batch))
+    except ValueError:
+        batch_size = 0
+
+    if batch_size > 0:
+        candidates = candidates[:batch_size]
+
+    if not candidates:
+        print("DETAIL PHASE: no pending detail records.")
+        return {"detail_opened": 0, "detail_pending": 0, "detail_errors": 0}
+
+    print(
+        f"DETAIL PHASE START: {len(candidates)} pending records "
+        f"(NEW_TENDER_ONLY={'1' if new_only else '0'}, batch={batch_size or 'all'})",
+        flush=True,
+    )
+
+    detail_opened = 0
+    detail_errors = 0
+
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(
+            user_agent=HEADERS["User-Agent"],
+            locale="en-IN",
+            viewport={"width": 1920, "height": 1080},
+        )
+        try:
+            for idx, (row, old) in enumerate(candidates, 1):
+                tender_id = clean(row.get("Tender ID"))
+                tender = {
+                    "tender_id": tender_id,
+                    "title": clean(row.get("Title")),
+                    "reference": clean(row.get("Reference Number")),
+                }
+                org_name = clean(row.get("Organisation Name"))
+                org = org_by_name.get(org_name.casefold(), {
+                    "name": org_name,
+                    "count": clean(row.get("Portal Tender Count")) or 0,
+                })
+                published = clean(row.get("Published Date"))
+                closing = clean(row.get("Closing Date"))
+                opening = clean(row.get("Opening Date"))
+
+                try:
+                    detail_soup = open_tender_detail_dual(page, tender, org)
+                    detail = parse_detail(detail_soup, PORTAL)
+
+                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
+                    detail["Reference Number"] = clean(detail.get("Reference Number")) or tender["reference"]
+                    detail["Title"] = clean(detail.get("Title")) or tender["title"]
+                    detail["Published Date"] = clean(detail.get("Published Date")) or published
+                    detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
+                    detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
+                    detail["Organisation"] = clean(detail.get("Organisation")) or org_name
+                    detail["URL"] = PORTAL
+
+                    if clean(detail.get("Tender ID")).casefold() != tender_id.casefold():
+                        raise RuntimeError("detail parser returned a different Tender ID")
+
+                    detail_blob = " ".join(
+                        clean(detail.get(k)) for k in (
+                            "Department","Division","Sub Division","PAC Amount",
+                            "EMD Fee","Tender Fee","Processing Fee","Location",
+                            "Pincode","Work Description","Product Category",
+                            "Contract Type","Bid Validity"
+                        )
+                    )
+                    if portal_menu_marker.casefold() in detail_blob.casefold():
+                        raise RuntimeError("detail page returned portal menu/home content")
+
+                    if not any(clean(detail.get(k)) for k in (
+                        "Department","Division","Sub Division","PAC Amount","EMD Fee",
+                        "Tender Fee","Processing Fee","Location","Pincode",
+                        "Work Description","Product Category","Contract Type",
+                        "Bid Validity","Pre Qualification Details"
+                    )):
+                        raise RuntimeError("detail page contained no usable tender detail fields")
+
+                    # Preserve the exact organisation hierarchy already captured
+                    # from the tender-list row when it is available.
+                    chain = clean(row.get("Organisation Chain"))
+                    if chain:
+                        chain_org, chain_department, chain_division, chain_sub_division = parse_chain(chain)
+                        detail["Organisation"] = chain_org or org_name
+                        detail["Department"] = chain_department
+                        detail["Division"] = chain_division
+                        detail["Sub Division"] = chain_sub_division
+
+                    existing_by_id[tender_id] = {**old, **detail, "Detail Extracted": "YES"}
+                    detail_opened += 1
+                    stats["detail_opened"] += 1
+
+                    write_csv(csv_file, list(existing_by_id.values()))
+                    write_extraction_status(csv_file, {
+                        "status": "running",
+                        "process_started_at": process_started_at,
+                        "total_tenders": sum(int(o.get("count") or 0) for o in organisations),
+                        "portal_total_tenders": sum(int(o.get("count") or 0) for o in organisations),
+                        "organisation_count": len(organisations),
+                        **status_metrics(existing_by_id.values()),
+                        "detail_complete": detail_opened,
+                        "detail_remaining": max(0, len(candidates) - detail_opened - detail_errors),
+                        "errors": len(stats["errors"]),
+                        "latest_error": stats["errors"][-1] if stats["errors"] else "",
+                        "organisation_progress": "COPY COMPLETE",
+                        "detail_batch_size": batch_size,
+                        "detail_batch_completed": detail_opened,
+                        "checkpoint_ready": True,
+                        "checkpoint_tender_id": tender_id,
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    })
+                    print(
+                        f"DETAIL CHECKPOINT {detail_opened}/{len(candidates)}: {tender_id}",
+                        flush=True,
+                    )
+
+                except Exception as exc:
+                    detail_errors += 1
+                    stats["errors"].append(
+                        f"{org_name} / {tender_id}: detail {type(exc).__name__}: {exc}"
+                    )
+                    print(
+                        f"DETAIL ERROR {idx}/{len(candidates)}: {tender_id} | {exc}",
+                        flush=True,
+                    )
+                    # Do not stop the whole detail phase because one tender failed.
+                    write_csv(csv_file, list(existing_by_id.values()))
+
+        finally:
+            browser.close()
+
+    print(
+        f"DETAIL PHASE COMPLETE: success={detail_opened}, errors={detail_errors}, "
+        f"remaining={max(0, len(candidates)-detail_opened-detail_errors)}",
+        flush=True,
+    )
+    return {
+        "detail_opened": detail_opened,
+        "detail_pending": max(0, len(candidates) - detail_opened - detail_errors),
+        "detail_errors": detail_errors,
+    }
+
+
 def scrape_mp_tenders(csv_file):
     """
     Full MP tender collection:
     1) Save the complete organisation list and portal Tender Count.
     2) Open every organisation one-by-one in the same Chromium session.
     3) Verify copied tender count equals the portal count.
-    4) When FETCH_DETAIL_PAGES=1, open each tender detail page and enrich the main CSV with fees, PAC, organisation chain and critical dates.
+    4) Complete the full copy/verification phase first.
+    5) When FETCH_DETAIL_PAGES=1, run a separate detail phase only after copying is complete.
     """
     process_started_at = datetime.now(timezone.utc).isoformat()
     stats = {
@@ -1874,37 +2054,14 @@ def scrape_mp_tenders(csv_file):
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
 
-    # Detail extraction is intentionally incremental: first run 10 records,
-    # then 50 records per successful run. The complete tender list is still
-    # collected every run, so the dashboard always retains all tenders.
-    batch_state_file = csv_file.parent / "scrape_batch_state.json"
-    try:
-        batch_state = json.loads(batch_state_file.read_text(encoding="utf-8"))
-    except Exception:
-        batch_state = {}
-    # Detail extraction is no longer artificially capped at 10 records.
-    # Use 100 per run by default; an environment override can tune it.
-    try:
-        configured_batch = int(os.getenv("DETAIL_BATCH_SIZE", "0") or 0)
-        # 0 means no artificial batch cap. Checkpoints are still written every 10 successes.
-        batch_size = 0 if configured_batch <= 0 else max(10, min(500, configured_batch))
-    except ValueError:
-        batch_size = 0
+    # The copy phase has no detail-page work. Detail extraction is started
+    # only after all organisations have been copied and the list CSV checkpoint
+    # has been written.
     detail_successes = 0
     detail_candidates_seen = 0
-    detail_completed_ids = []
-
-    # A previous 100-record run completed successfully but older code did not
-    # persist the completed Tender IDs. Recover that checkpoint once, using the
-    # same candidate order, so those records are never opened again.
     recovered_completed_ids = [
         tid for tid, row in existing_by_id.items()
         if tid and clean(row.get("Detail Extracted")).upper() == "YES"
-        and all(clean(row.get(k)) for k in (
-            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
-            "Total Fee", "Location", "Pincode", "Work Description",
-            "Product Category", "Contract Type", "Bid Validity"
-        ))
     ]
     # One Chromium session is used throughout because the portal uses
     # session-bound JSF $DirectLink URLs.
@@ -1925,15 +2082,15 @@ def scrape_mp_tenders(csv_file):
                         "total_tenders": portal_total_tenders,
                         "portal_total_tenders": portal_total_tenders,
                         "organisation_count": len(organisations),
-                        "detail_complete": len(recovered_completed_ids) + detail_successes,
-                        "detail_remaining": max(0, len(existing_by_id) - (len(recovered_completed_ids) + detail_successes)),
+                        "detail_complete": len(recovered_completed_ids),
+                        "detail_remaining": max(0, len(existing_by_id) - len(recovered_completed_ids)),
                         "errors": len(stats["errors"]),
                         "latest_error": stats["errors"][-1] if stats["errors"] else "",
                         "organisation_progress": f"{index-1}/{len(organisations)}",
                         "current_organisation": org["name"],
                         **status_metrics(existing_by_id.values()),
                         "detail_batch_size": batch_size,
-                        "detail_batch_completed": detail_successes,
+                        "detail_batch_completed": 0,
                         "updated_at": datetime.now(timezone.utc).isoformat(),
                     })
                     tender_rows, pages = browser_get_all_tender_rows(
@@ -1993,145 +2150,9 @@ def scrape_mp_tenders(csv_file):
                                 "Detail Extracted": clean(old.get("Detail Extracted")),
                             }
 
-                        if fetch_details and tender_id:
-                            old = existing_by_id.get(tender_id, {})
-
-                            # Organisation hierarchy is available directly in the tender
-                            # list row. Fill it immediately; do not spend a detail-page
-                            # request just to obtain these four fields.
-                            # LOCK the Organisation Chain exactly as it appears on
-                            # the tender-list page. Detail-page parsing must never replace
-                            # these hierarchy fields with a partial/different value.
-                            chain = clean(tender.get("organisation_chain"))
-                            locked_chain = None
-                            if chain:
-                                chain_org, chain_department, chain_division, chain_sub_division = parse_chain(chain)
-                                locked_chain = (
-                                    chain_org or org["name"],
-                                    chain_department,
-                                    chain_division,
-                                    chain_sub_division,
-                                )
-                                old = {
-                                    **old,
-                                    "Organisation": locked_chain[0],
-                                    "Department": locked_chain[1],
-                                    "Division": locked_chain[2],
-                                    "Sub Division": locked_chain[3],
-                                }
-                                existing_by_id[tender_id] = old
-
-                            # Re-open a detail page whenever any important detail is missing,
-                            # including the full Organisation Chain. Older CSV records may contain
-                            # Missing detail fields are backfilled incrementally.
-                            force_detail = os.getenv("FORCE_DETAIL_REFRESH", "0").lower() in ("1", "true", "yes")
-                            new_tender_only = os.getenv("NEW_TENDER_ONLY", "0").lower() in ("1", "true", "yes")
-                            old = existing_by_id.get(tender_id, {})
-                            # Fast daily mode: Tender-by-Organisation is discovery only.
-                            # If the Tender ID already existed before this run, do not reopen
-                            # its detail page. Existing incomplete records are handled by the
-                            # separate backfill/corrigendum jobs.
-                            is_existing_tender = bool(old)
-                            needs_detail = (not new_tender_only or not is_existing_tender) and (
-                                force_detail or not all(clean(old.get(k)) for k in (
-                                "Tender ID", "PAC Amount", "EMD Fee", "Tender Fee",
-                                "Processing Fee", "Total Fee", "Location", "Pincode",
-                                "Work Description", "Product Category", "Sub Category",
-                                "Contract Type", "Bid Validity", "Pre Qualification Details",
-                                "Bid Submission Start Date", "Bid Submission End Date",
-                                "Bid Opening Date", "Document Download Start Date",
-                                "Document Download End Date", "Fee Payable To", "Fee Payable At"
-                            ))
-                            )
-                            if fetch_details and tender_id and needs_detail and not clean(old.get("Detail Extracted")) and (batch_size <= 0 or detail_successes < batch_size):
-                                detail_candidates_seen += 1
-                                try:
-                                    # IMPORTANT: never reuse the tender-list URL.
-                                    # MP Tender DirectLink URLs contain session= and expire.
-                                    # Find this Tender ID again from the stable home-page
-                                    # search box, click the live result title, and parse it.
-                                    detail_soup = open_tender_detail_dual(page, tender, org)
-                                    detail = parse_detail(detail_soup, PORTAL)
-                                    detail["Tender ID"] = clean(detail.get("Tender ID")) or tender_id
-                                    detail["Reference Number"] = clean(detail.get("Reference Number")) or clean(tender.get("reference"))
-                                    detail["Title"] = clean(detail.get("Title")) or clean(tender.get("title"))
-                                    detail["Published Date"] = clean(detail.get("Published Date")) or published
-                                    detail["Closing Date"] = clean(detail.get("Closing Date")) or closing
-                                    detail["Opening Date"] = clean(detail.get("Opening Date")) or opening
-                                    detail["Organisation"] = clean(detail.get("Organisation")) or org["name"]
-                                    detail["URL"] = clean(detail.get("URL")) or clean(tender.get("url"))
-                                    if not detail["Tender ID"]:
-                                        raise RuntimeError("detail Tender ID missing")
-                                    detail_blob = " ".join(
-                                        clean(detail.get(k)) for k in (
-                                            "Department","Division","Sub Division","PAC Amount",
-                                            "EMD Fee","Tender Fee","Processing Fee","Location",
-                                            "Pincode","Work Description","Product Category",
-                                            "Contract Type","Bid Validity"
-                                        )
-                                    )
-                                    if portal_menu_marker.casefold() in detail_blob.casefold():
-                                        raise RuntimeError("detail page returned portal menu/home content")
-                                    if not any(clean(detail.get(k)) for k in (
-                                        "Department","Division","Sub Division","PAC Amount","EMD Fee",
-                                        "Tender Fee","Processing Fee","Location","Pincode",
-                                        "Work Description","Product Category","Contract Type",
-                                        "Bid Validity","Pre Qualification Details"
-                                    )):
-                                        raise RuntimeError("detail page contained no usable tender detail fields")
-                                    merged_detail = {**old, **detail, "Detail Extracted": "YES"}
-                                    # Keep the exact four-level Organisation Chain from
-                                    # the tender-list row, even if detail parsing differs.
-                                    if locked_chain:
-                                        merged_detail["Organisation"] = locked_chain[0]
-                                        merged_detail["Department"] = locked_chain[1]
-                                        merged_detail["Division"] = locked_chain[2]
-                                        merged_detail["Sub Division"] = locked_chain[3]
-                                    existing_by_id[tender_id] = merged_detail
-                                    stats["detail_opened"] += 1
-                                    detail_successes += 1
-                                    detail_completed_ids.append(tender_id)
-
-                                    # LIVE 1-BY-1 CHECKPOINT:
-                                    # Save the successfully extracted tender immediately.
-                                    # The GitHub Actions writer publishes this CSV checkpoint
-                                    # before the scraper moves to the next Tender ID. This makes
-                                    # each completed detail appear on GitHub Pages as soon as
-                                    # the commit reaches the repository.
-                                    write_csv(csv_file, list(existing_by_id.values()))
-                                    complete_count = sum(
-                                        1 for r in existing_by_id.values()
-                                        if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in (
-                                            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
-                                            "Total Fee", "Location", "Pincode", "Work Description",
-                                            "Product Category", "Contract Type", "Bid Validity"
-                                        ))
-                                    )
-                                    write_extraction_status(csv_file, {
-                                        "status": "running",
-                                        "process_started_at": process_started_at,
-                                        "total_tenders": portal_total_tenders,
-                                        "portal_total_tenders": portal_total_tenders,
-                                        "organisation_count": len(organisations),
-                                        **status_metrics(existing_by_id.values()),
-                                        "detail_complete": complete_count,
-                                        "detail_remaining": max(0, len(existing_by_id) - complete_count),
-                                        "errors": len(stats["errors"]),
-                                        "latest_error": stats["errors"][-1] if stats["errors"] else "",
-                                        "organisation_progress": f"{index}/{len(organisations)}",
-                                        "detail_batch_size": batch_size,
-                                        "detail_batch_completed": detail_successes,
-                                        "checkpoint_ready": True,
-                                        "checkpoint_tender_id": tender_id,
-                                        "updated_at": datetime.now(timezone.utc).isoformat(),
-                                    })
-                                    print(f"LIVE CHECKPOINT SAVED: {tender_id} ({detail_successes} detail records complete); move to next Tender ID.")
-                                except Exception as detail_exc:
-                                    stats["errors"].append(
-                                        f"{org['name']} / {tender_id}: detail {type(detail_exc).__name__}: {detail_exc}"
-                                    )
-                                    # Save successful records even when one tender fails.
-                                    write_csv(csv_file, list(existing_by_id.values()))
+                        # DETAIL PHASE IS DELIBERATELY SEPARATE.
+                        # The organisation-copy phase must never open tender detail pages.
+                        # Details are extracted only after all organisations have been copied.
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
                     write_list_csv(
@@ -2171,7 +2192,26 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # Build/refresh the detailed CSV without ever deleting older Tender IDs.
+    # COPY PHASE COMPLETE. Persist the complete organisation snapshot before
+    # starting any detail extraction. This is the key separation: a slow or
+    # failing detail page can no longer hold up organisation copying.
+    write_list_csv(tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows)
+    write_csv(csv_file, list(existing_by_id.values()))
+    print(
+        f"COPY PHASE COMPLETE: organisations={stats['organisations_verified']}/"
+        f"{len(organisations)}, tenders={len(tender_list_rows)}",
+        flush=True,
+    )
+
+    if fetch_details:
+        detail_result = run_separate_detail_extraction(
+            csv_file, organisations, process_started_at, stats
+        )
+        detail_successes = detail_result.get("detail_opened", 0)
+    else:
+        print("DETAIL PHASE: disabled (FETCH_DETAIL_PAGES=0).", flush=True)
+
+    # Build/refresh the detailed CSV after COPY (and optional separate DETAIL) phase.
     current_rows_by_id = {
         clean(r.get("Tender ID")): r
         for r in tender_list_rows
