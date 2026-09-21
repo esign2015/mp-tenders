@@ -11,6 +11,7 @@ import csv
 import json
 import os
 import re
+# Fresh bootstrap validation: every organisation must match its portal tender count exactly.
 import time
 import random
 from datetime import datetime, timezone, timedelta
