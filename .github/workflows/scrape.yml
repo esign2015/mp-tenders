@@ -360,6 +360,7 @@ jobs:
           # Detail pages are opened only after the complete list snapshot is saved.
           # Incremental mode: do not reopen already-complete tender detail pages.
           FORCE_DETAIL_REFRESH: "0"
+          NEW_TENDER_ONLY: "1" # Daily fast mode: existing Tender IDs are discovery-only; detail pages are opened only for new IDs.
           # 0 = process the full remaining dataset; checkpoint every 10 successes.
           # Full recovery run: rebuild the current organisation/tender snapshot first.
           DETAIL_BATCH_SIZE: "0"
