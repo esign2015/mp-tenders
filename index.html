@@ -232,7 +232,7 @@ button:hover{
 
 .search-fields{
   display:grid;
-  grid-template-columns:2fr 1.1fr 1.3fr 1.25fr 110px;
+  grid-template-columns:2fr 1.05fr 1.25fr 1.35fr 1.35fr 110px;
   gap:7px;
   padding:8px 12px 5px;
 }
@@ -277,6 +277,14 @@ button:hover{
 .organisation-filter-wrap input{
   width:100%;
 }
+.district-filter-wrap{position:relative;width:100%;min-width:0}
+.district-filter-wrap input{width:100%}
+.district-search-help{
+  display:none;position:absolute;left:0;right:0;top:34px;z-index:5000;
+  padding:7px 9px;background:#f8fafc;border:1px solid #cbd5e1;border-top:0;
+  border-radius:0 0 6px 6px;color:#64748b;font-size:10px;pointer-events:none;
+}
+.district-filter-wrap:focus-within .district-search-help{display:block}
 .organisation-suggestions{
   display:none;
   position:absolute;
@@ -1395,6 +1403,13 @@ body.telegram-locked .site-footer{visibility:hidden}
                placeholder="Organisation — type to find..."
                aria-label="Organisation filter">
         <div class="organisation-suggestions" id="organisationSuggestions" role="listbox"></div>
+      </div>
+
+      <div class="district-filter-wrap" id="districtFilterWrap">
+        <input id="districtSearch" type="text" autocomplete="off"
+               placeholder="District / PIN / smart search..."
+               aria-label="District or PIN smart search">
+        <div class="district-search-help">Work name → authority → reference → PIN</div>
       </div>
 
       <input id="pincodeSearch"
@@ -2579,6 +2594,11 @@ function goVirtualPage(direction){
   });
 }
 
+function setupDistrictSearch(){
+  const input=$("districtSearch");
+  if(!input)return;
+  input.addEventListener("input",scheduleFilter);
+}
 function setupOrganisationFilter(){
   const input = $("organisationSearch");
   const list = $("organisationSuggestions");
@@ -2695,6 +2715,7 @@ function updateCounts(rows, refreshHeader=true){
       $("tenderIdSearch").value,
       $("titleSearch").value,
       $("organisationSearch").value,
+      $("districtSearch").value,
       $("pincodeSearch").value,
       $("closingDate").value,
       $("pacFilter").value,
@@ -2751,11 +2772,25 @@ const filterControls = [
     filterControls.some(value => clean(value) !== "");
 
 }
+const MP_DISTRICT_PIN_PREFIXES={
+"alirajpur":["457"],"anuppur":["484"],"ashok nagar":["473"],"ashoknagar":["473"],"balaghat":["481"],
+"barwani":["451"],"betul":["460"],"bhind":["477"],"bhopal":["462"],"burhanpur":["450"],"chhatarpur":["471"],
+"chhindwara":["480"],"damoh":["470"],"datia":["475"],"dewas":["455"],"dhar":["454"],"dindori":["481"],
+"guna":["473"],"gwalior":["474"],"harda":["461"],"hoshangabad":["461"],"narmadapuram":["461"],"indore":["452"],
+"jabalpur":["482"],"jhabua":["457"],"katni":["483"],"khandwa":["450"],"khargone":["451"],"mandla":["481"],
+"mandsaur":["458"],"morena":["476"],"narsinghpur":["487"],"neemuch":["458"],"panna":["488"],"rewa":["486"],
+"rajgarh":["465"],"ratlam":["457"],"raisen":["464"],"sagar":["470"],"satna":["485"],"sehore":["466"],
+"seoni":["480"],"shahdol":["484"],"shajapur":["465"],"sheopur":["476"],"shivpuri":["473"],"sidhi":["486"],
+"singrauli":["486"],"tikamgarh":["472"],"ujjain":["456"],"umaria":["484"],"vidisha":["464"],
+"agar malwa":["465"],"niwari":["472"],"maihar":["485"],"mauganj":["486"],"pandhurna":["480"]
+};
+
 function applyFilters(refreshHeader=true){
   const general = clean($("generalSearch").value).toLowerCase();
   const tenderId = clean($("tenderIdSearch").value).toLowerCase();
   const title = clean($("titleSearch").value).toLowerCase();
   const organisation = clean($("organisationSearch").value).toLowerCase();
+  const districtSearch = clean($("districtSearch").value).toLowerCase();
   const pincode = clean($("pincodeSearch").value);
   const closingDate = clean($("closingDate").value);
   const status = clean($("statusSelect").value).toLowerCase();
@@ -2831,8 +2866,27 @@ function applyFilters(refreshHeader=true){
       }
     }
 
+    if(districtSearch){
+      const titleText = clean(row["Title"]).toLowerCase();
+      const authorityText = [row["Organisation"],row["Department"],row["Division"],row["Sub Division"],row["Location"]].join(" ").toLowerCase();
+      const referenceText = clean(row["Reference Number"]).toLowerCase();
+      const pinText = clean(row["Pincode"]).replace(/\D/g,"");
+      let districtHit = false;
+      Object.keys(MP_DISTRICT_PIN_PREFIXES).some(district => {
+        if(district === districtSearch || district.includes(districtSearch)){
+          districtHit = MP_DISTRICT_PIN_PREFIXES[district].some(prefix => pinText.startsWith(prefix));
+          return districtHit;
+        }
+        return false;
+      });
+      const numericQuery = districtSearch.replace(/\D/g,"");
+      const pinHit = numericQuery.length >= 1 && pinText.startsWith(numericQuery);
+      if(!titleText.includes(districtSearch) && !authorityText.includes(districtSearch) &&
+         !referenceText.includes(districtSearch) && !pinHit && !districtHit) return false;
+    }
+
     if(pincode &&
-       clean(row["Pincode"]) !== pincode){
+       !clean(row["Pincode"]).startsWith(pincode)){
       return false;
     }
 
@@ -2956,6 +3010,7 @@ function clearFilters(){
   $("tenderIdSearch").value = "";
   $("titleSearch").value = "";
   $("organisationSearch").value = "";
+  $("districtSearch").value = "";
   $("pincodeSearch").value = "";
   $("closingDate").value = "";
   $("pacFilter").value = "";
@@ -2983,6 +3038,7 @@ function showArchived(){
   $("tenderIdSearch").value = "";
   $("titleSearch").value = "";
   $("organisationSearch").value = "";
+  $("districtSearch").value = "";
   $("pincodeSearch").value = "";
   $("closingDate").value = "";
   $("sortSelect").value = "closing";
@@ -3502,6 +3558,7 @@ function scheduleFilter(){
   "tenderIdSearch",
   "titleSearch",
   "organisationSearch",
+  "districtSearch",
   "pincodeSearch"
 ].forEach(id => {
   $(id).addEventListener("input",scheduleFilter);
@@ -3664,6 +3721,7 @@ $("last100Btn").addEventListener("click",() => goVirtualPage(-1));
 $("next100Btn").addEventListener("click",() => goVirtualPage(1));
 
 setupOrganisationFilter();
+setupDistrictSearch();
 
 updateDateTime();
 setInterval(updateDateTime,1000);
