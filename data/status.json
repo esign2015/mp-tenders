@@ -1,19 +1,12 @@
 {
-  "status": "running",
+  "status": "copy_completed",
   "process_started_at": "2026-09-21T20:16:25.739900+00:00",
   "total_tenders": 5095,
   "portal_total_tenders": 5095,
   "organisation_count": 93,
-  "detail_complete": 0,
-  "detail_remaining": 5571,
+  "organisation_progress": "93/93",
+  "copied_tenders": 5095,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "91/93",
-  "current_organisation": "Tribal Affairs Department-MP",
-  "department_count": 243,
-  "pincode_count": 0,
-  "pincode_others_count": 0,
-  "detail_batch_size": 0,
-  "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T20:28:05.948876+00:00"
+  "updated_at": "2026-09-21T20:28:21.170145+00:00"
 }
