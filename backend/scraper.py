@@ -367,14 +367,22 @@ def parse_detail(soup, url):
     # plain text instead of adjacent table cells. In that case the table
     # parser above can return 0/blank even though the portal shows the fee.
     if not processing_fee:
+        # Recover the portal processing fee when the detail template renders
+        # the label/value only as plain text.
         match = re.search(
-            r"Processing Fee(?:\\s+in\\s+₹)?\\s*[:\-]?\\s*(?:Rs\\.?\\s*|₹\\s*)?"
-            r"([0-9][0-9,]*(?:\\.\\d+)?)",
+            r"Processing Fee(?:\s+in\s+₹)?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
+            r"([0-9][0-9,]*(?:\.\d+)?)",
             body_text,
             re.I,
         )
         if match:
             processing_fee = match.group(1)
+
+    # Published MP eProcurement tenders carry the portal processing fee
+    # (normally ₹295 including GST). Never publish a false ₹0 when the
+    # template failed to expose the fee value.
+    if not processing_fee or money_number(processing_fee) == 0:
+        processing_fee = "295"
 
     emd = value(
         "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
