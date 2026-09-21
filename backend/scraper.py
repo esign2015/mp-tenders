@@ -35,7 +35,7 @@ FIELDS = [
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
-    "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted",
+    "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted", "Corrigendum", "Corrigendum Last Checked", "Corrigendum Detected At", "Corrigendum Type",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
 ORG_TENDER_FIELDS = [
@@ -162,6 +162,26 @@ def parse_chain(chain):
         parts = [text] if text else []
     return tuple(parts[i] if i < len(parts) else "" for i in range(4))
 
+
+def parse_latest_corrigendum(soup):
+    """Read the Latest Corrigendum List shown on a tender detail page."""
+    result = {"title": "", "type": "", "key": ""}
+    for heading in soup.find_all(string=re.compile(r"Latest\\s+Corrigendum\\s+List", re.I)):
+        table = heading.find_parent("table")
+        if not table:
+            continue
+        for tr in table.find_all("tr"):
+            cells = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td","th"])]
+            if len(cells) < 3:
+                continue
+            low = " ".join(c.casefold() for c in cells)
+            if "corrigendum title" in low or "corrigendum type" in low:
+                continue
+            result["title"] = cells[1]
+            result["type"] = cells[2]
+            result["key"] = (result["title"] + "||" + result["type"]).strip().casefold()
+            return result
+    return result
 
 def parse_detail(soup, url):
     """RSP-derived resilient MP Tender detail extraction.
@@ -1245,6 +1265,70 @@ def should_run_monitor_now():
     return remainder <= 4 or remainder >= 10
 
 
+def is_watchable_tender(row, now):
+    closing = parse_portal_datetime(row.get("Closing Date"))
+    opening = parse_portal_datetime(row.get("Opening Date") or row.get("Bid Opening Date"))
+    if closing and closing <= now and opening and opening <= now:
+        return False
+    return True
+
+
+def monitor_corrigendum_changes(csv_file):
+    """Six-hour watch of active/extension-window tenders by permanent Tender ID."""
+    now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
+    existing_rows = read_existing(csv_file)
+    existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
+    watch_rows = [r for r in existing_by_id.values() if is_watchable_tender(r, now)]
+    checked = changed = errors = 0
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(user_agent=HEADERS["User-Agent"], locale="en-IN", viewport={"width":1920,"height":1080})
+        try:
+            for row in watch_rows:
+                tender_id = clean(row.get("Tender ID"))
+                tender = {"tender_id": tender_id, "title": clean(row.get("Title")), "reference": clean(row.get("Reference Number"))}
+                try:
+                    fresh = parse_detail(open_tender_detail_by_search(page, tender), PORTAL)
+                    checked += 1
+                    old_close = clean(row.get("Closing Date"))
+                    new_close = clean(fresh.get("Closing Date"))
+                    old_open = clean(row.get("Opening Date") or row.get("Bid Opening Date"))
+                    new_open = clean(fresh.get("Opening Date") or fresh.get("Bid Opening Date"))
+                    old_corr = clean(row.get("Corrigendum"))
+                    old_type = clean(row.get("Corrigendum Type"))
+                    new_corr = clean(fresh.get("Corrigendum"))
+                    new_type = clean(fresh.get("Corrigendum Type"))
+                    if old_close != new_close or old_open != new_open or old_corr != new_corr or old_type != new_type:
+                        updated = {**row, **fresh, "Tender ID": tender_id, "URL": PORTAL}
+                        old_dt = parse_portal_datetime(old_close)
+                        new_dt = parse_portal_datetime(new_close)
+                        if old_dt and new_dt and new_dt > old_dt:
+                            updated["Corrigendum Type"] = "Date Extension"
+                            updated["Corrigendum"] = new_corr or "Date Extension"
+                        elif old_dt and new_dt and new_dt < old_dt:
+                            updated["Corrigendum Type"] = "Date Changed"
+                            updated["Corrigendum"] = new_corr or "Date Changed"
+                        elif old_open != new_open:
+                            updated["Corrigendum Type"] = "Bid Opening Date Changed"
+                            updated["Corrigendum"] = new_corr or "Bid Opening Date Changed"
+                        else:
+                            updated["Corrigendum Type"] = new_type or "Other"
+                            updated["Corrigendum"] = new_corr or "Other Corrigendum"
+                        updated["Corrigendum Detected At"] = now.isoformat()
+                        changed += 1
+                        existing_by_id[tender_id] = updated
+                    else:
+                        row["Corrigendum Last Checked"] = now.isoformat()
+                        existing_by_id[tender_id] = row
+                except Exception as exc:
+                    errors += 1
+                    print(f"CORRIGENDUM WATCH ERROR {tender_id}: {type(exc).__name__}: {exc}")
+        finally:
+            browser.close()
+    write_csv(csv_file, list(existing_by_id.values()))
+    print(f"CORRIGENDUM WATCH COMPLETE: checked={checked}, changes={changed}, errors={errors}")
+    return {"ok": True, "checked": checked, "changes": changed, "errors": errors}
+
 def monitor_tender_changes(csv_file):
     if not should_run_monitor_now():
         print("MONITOR: outside 14-minute/fixed-time window; skipped.")
@@ -1871,7 +1955,9 @@ if __name__ == "__main__":
         "CSV_FILE",
         Path(__file__).resolve().parent.parent / "all_tenders_org_detailed.csv",
     ))
-    if os.getenv("MONITOR_ONLY") == "1":
+    if os.getenv("MONITOR_CORRIGENDUM_ONLY") == "1":
+        print(monitor_corrigendum_changes(target))
+    elif os.getenv("MONITOR_ONLY") == "1":
         print(monitor_tender_changes(target))
     else:
         try:
