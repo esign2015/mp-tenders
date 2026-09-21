@@ -132,8 +132,9 @@ def main():
         raise RuntimeError("all_tenders_org_detailed.csv not found")
 
     with CSV.open(encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
-        fields = list(f.fieldnames or [])
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        fields = list(reader.fieldnames or [])
 
     # Only current portal IDs are eligible. Existing detailed records are skipped.
     current_ids = []
