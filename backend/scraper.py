@@ -2214,6 +2214,30 @@ def scrape_mp_tenders(csv_file):
         flush=True,
     )
 
+    # Fast list-refresh mode: stop immediately after the complete
+    # organisation/tender-list snapshot. Detail extraction is handled separately.
+    if os.getenv("COPY_ONLY", "0").lower() in ("1", "true", "yes"):
+        write_extraction_status(csv_file, {
+            "status": "copy_completed",
+            "process_started_at": process_started_at,
+            "total_tenders": portal_total_tenders,
+            "portal_total_tenders": portal_total_tenders,
+            "organisation_count": len(organisations),
+            "organisation_progress": f"{len(organisations)}/{len(organisations)}",
+            "copied_tenders": len(tender_list_rows),
+            "errors": len(stats["errors"]),
+            "latest_error": stats["errors"][-1] if stats["errors"] else "",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        })
+        return {
+            "ok": True,
+            "copy_only": True,
+            "organisations_verified": stats["organisations_verified"],
+            "organisation_count": len(organisations),
+            "tenders_copied": len(tender_list_rows),
+            "errors": len(stats["errors"]),
+        }
+
     if fetch_details:
         detail_result = run_separate_detail_extraction(
             csv_file, organisations, process_started_at, stats
