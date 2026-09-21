@@ -2426,6 +2426,10 @@ function getStatusText(row){
   const status = clean(row["Status"]) || "Open";
   const corrigendum = clean(row["Corrigendum"]);
 
+  if(status.toLowerCase() === "cancelled"){
+    return "Cancelled";
+  }
+
   if(corrigendum &&
      corrigendum.toLowerCase() !== "no" &&
      corrigendum.toLowerCase() !== "none"){
@@ -2912,16 +2916,21 @@ function applyFilters(refreshHeader=true){
 
   filteredTenders = allTenders.filter(row => {
     const closing = parseDate(row["Closing Date"]);
+    const isCancelled = clean(row["Status"]).toLowerCase() === "cancelled";
 
     /*
-       A tender leaves Active immediately when its current Closing Date/Time
-       passes. It stays in Archived while waiting for Bid Opening.
-       The six-hour corrigendum watcher can bring it back to Active if the
-       portal extends the Closing Date before Bid Opening.
+       Active uses the CURRENT Closing Date only.
+       - Closing passed => Archived.
+       - A later date-extension corrigendum updates Closing Date and the
+         tender automatically returns to Active.
+       - A cancellation is always removed from Active and shown in Archive
+         with a Cancelled tag, even if its old closing date was in the future.
     */
     const opening = parseDate(row["Opening Date"]);
 
-    if(closing){
+    if(isCancelled){
+      if(!archivedMode) return false;
+    }else if(closing){
       if(archivedMode){
         const closeDay = dateKey(closing);
         const todayDay = todayKey();
@@ -2930,7 +2939,6 @@ function applyFilters(refreshHeader=true){
         const daysAgo = (todayMidnight && closeMidnight)
           ? Math.floor((todayMidnight.getTime() - closeMidnight.getTime()) / 86400000)
           : 999;
-
         if(daysAgo < 1 || daysAgo > 10) return false;
       }else{
         if(closing.getTime() <= Date.now()) return false;
