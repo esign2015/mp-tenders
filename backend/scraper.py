@@ -54,7 +54,10 @@ SESSION_URL_RE = re.compile(r"(?:[?&])session=", re.I)
 
 
 def clean(value):
-    return re.sub(r"\s+", " ", value or "").strip()
+    # Portal tables sometimes expose numeric values (e.g. tender counts).
+    if value is None:
+        return ""
+    return re.sub(r"\s+", " ", str(value)).strip()
 
 
 def money_number(value):
@@ -1579,6 +1582,13 @@ def write_extraction_status(csv_file, status):
         encoding="utf-8",
     )
 
+def status_metrics(rows):
+    rows = rows or []
+    departments = {clean(r.get("Department")) for r in rows if clean(r.get("Department"))}
+    pincodes = {clean(r.get("Pincode")).replace(" ", "") for r in rows if re.fullmatch(r"\d{6}", clean(r.get("Pincode")).replace(" ", ""))}
+    other_pins = {p for p in pincodes if not re.match(r"^(45|46|47|48)\d{4}$", p)}
+    return {"department_count": len(departments), "pincode_count": len(pincodes), "pincode_others_count": len(other_pins)}
+
 def scrape_mp_tenders(csv_file):
     """
     Full MP tender collection:
@@ -1642,6 +1652,8 @@ def scrape_mp_tenders(csv_file):
         organisations = parse_organisation_rows(soup, ORG_URL)
     if not organisations:
         raise RuntimeError("Organisation list could not be parsed from MP Tender portal.")
+
+    portal_total_tenders = sum(int(org.get("count") or 0) for org in organisations)
 
     if os.getenv("DETAIL_VALIDATION_ONLY") == "1":
         return run_detail_validation(csv_file, organisations)
@@ -1719,7 +1731,10 @@ def scrape_mp_tenders(csv_file):
     write_extraction_status(csv_file, {
         "status": "running",
         "process_started_at": process_started_at,
-        "total_tenders": len(existing_by_id),
+        "total_tenders": portal_total_tenders,
+        "portal_total_tenders": portal_total_tenders,
+        "organisation_count": len(organisations),
+        **status_metrics(existing_by_id.values()),
         "detail_complete": initial_complete,
         "detail_remaining": max(0, len(existing_by_id) - initial_complete),
         "errors": 0,
@@ -1778,13 +1793,16 @@ def scrape_mp_tenders(csv_file):
                     write_extraction_status(csv_file, {
                         "status": "running",
                         "process_started_at": process_started_at,
-                        "total_tenders": max(len(existing_by_id), stats.get("tender_listed", 0)),
+                        "total_tenders": portal_total_tenders,
+                        "portal_total_tenders": portal_total_tenders,
+                        "organisation_count": len(organisations),
                         "detail_complete": len(recovered_completed_ids) + detail_successes,
                         "detail_remaining": max(0, len(existing_by_id) - (len(recovered_completed_ids) + detail_successes)),
                         "errors": len(stats["errors"]),
                         "latest_error": stats["errors"][-1] if stats["errors"] else "",
                         "organisation_progress": f"{index-1}/{len(organisations)}",
                         "current_organisation": org["name"],
+                        **status_metrics(existing_by_id.values()),
                         "detail_batch_size": batch_size,
                         "detail_batch_completed": detail_successes,
                         "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -1952,7 +1970,10 @@ def scrape_mp_tenders(csv_file):
                                         write_extraction_status(csv_file, {
                                             "status": "running",
                                             "process_started_at": process_started_at,
-                                            "total_tenders": len(existing_by_id),
+                                            "total_tenders": portal_total_tenders,
+                                            "portal_total_tenders": portal_total_tenders,
+                                            "organisation_count": len(organisations),
+                                            **status_metrics(existing_by_id.values()),
                                             "detail_complete": complete_count,
                                             "detail_remaining": max(0, len(existing_by_id) - complete_count),
                                             "errors": len(stats["errors"]),
@@ -1988,7 +2009,10 @@ def scrape_mp_tenders(csv_file):
                     )
                     write_extraction_status(csv_file, {
                         "status": "running",
-                        "total_tenders": len(existing_by_id),
+                        "total_tenders": portal_total_tenders,
+                        "portal_total_tenders": portal_total_tenders,
+                        "organisation_count": len(organisations),
+                        **status_metrics(existing_by_id.values()),
                         "detail_complete": max(detail_successes, complete_count),
                         "detail_remaining": max(0, len(existing_by_id) - max(detail_successes, complete_count)),
                         "errors": len(stats["errors"]),
@@ -2079,7 +2103,10 @@ def scrape_mp_tenders(csv_file):
     write_extraction_status(csv_file, {
         "status": "completed",
         "process_started_at": process_started_at,
-        "total_tenders": len(merged_rows),
+        "total_tenders": portal_total_tenders,
+        "portal_total_tenders": portal_total_tenders,
+        "organisation_count": len(organisations),
+        **status_metrics(merged_rows),
         "detail_complete": sum(1 for r in merged_rows if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in ("PAC Amount","EMD Fee","Tender Fee","Processing Fee","Department","Division","Sub Division","Location","Pincode"))),
         "detail_remaining": max(0, len(merged_rows) - sum(1 for r in merged_rows if clean(r.get("Detail Extracted")).upper() == "YES" and all(clean(r.get(k)) for k in ("PAC Amount","EMD Fee","Tender Fee","Processing Fee","Department","Division","Sub Division","Location","Pincode")))),
         "errors": len(stats["errors"]),
