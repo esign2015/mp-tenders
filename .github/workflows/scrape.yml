@@ -280,7 +280,9 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          [ -s all_tenders_org_detailed.csv ] && git add all_tenders_org_detailed.csv || true
+          if [ -s all_tenders_org_detailed.csv ]; then
+            git add all_tenders_org_detailed.csv
+          fi
           if git diff --cached --quiet; then
             echo "No corrigendum changes."
           else
