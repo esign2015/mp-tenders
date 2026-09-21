@@ -1993,9 +1993,15 @@ function formatMoney(value){
 }
 
 function totalFee(row){
-  const saved = clean(row["Total Fee"]);
-  if(saved) return moneyNumber(saved);
-  return moneyNumber(row["Tender Fee"]) + moneyNumber(row["Processing Fee"]);
+  // Dashboard Total Fee is always calculated from the three components:
+  // EMD + Tender/Form Fee + Processing Fee.
+  // Do not trust an older saved Total Fee value because older records
+  // were calculated without EMD.
+  return (
+    moneyNumber(row["EMD Fee"]) +
+    moneyNumber(row["Tender Fee"]) +
+    moneyNumber(row["Processing Fee"])
+  );
 }
 
 function cleanDisplayTitle(value){
