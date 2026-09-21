@@ -3896,11 +3896,7 @@ $("closingTodayBox").addEventListener("click",showClosingToday);
 $("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
 $("nextThreeBtn").addEventListener("click",showNextThreeDays);
 $("archivedBtn").addEventListener("click",function(){
-  if(archivedMode){
-    clearFilters();
-  }else{
-    showArchived();
-  }
+  window.location.href = "./archived/";
 });
 $("pdfBtn").addEventListener("click",exportPdf);
 $("pdfBtn2").addEventListener("click",exportPdf);
