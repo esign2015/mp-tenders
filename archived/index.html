@@ -52,8 +52,8 @@ a{color:#0756c9;font-weight:700;text-decoration:none}
 <div class="panel">
 <div class="toolbar"><input id="q" placeholder="Tender ID / Title / Organisation खोजें"><span id="count" class="count">लोड हो रहा है…</span></div>
 <div class="table-wrap"><table><thead><tr>
-<th>Tender ID</th><th>Title</th><th>Ref.No.</th><th>Closing Date</th><th>Published</th><th>PAC</th><th>EMD</th><th>Organisation</th><th>Department</th><th>Division</th><th>Status</th>
-</tr></thead><tbody id="body"><tr><td colspan="11" class="empty">डेटा लोड हो रहा है…</td></tr></tbody></table></div>
+<th>Tender ID</th><th>Title</th><th>Closing Date</th><th>Organisation</th><th>Department</th>
+</tr></thead><tbody id="body"><tr><td colspan="5" class="empty">डेटा लोड हो रहा है…</td></tr></tbody></table></div>
 </div>
 </main>
 <script>
@@ -91,21 +91,15 @@ function render(){
    const eligibleAt=closeDate?new Date(closeDate):null;
    if(eligibleAt) eligibleAt.setHours(19,0,0,0);
    return Number.isFinite(t)&&eligibleAt&&now>=eligibleAt.getTime()&&now-t<=3*86400000 &&
-     (!q||["Tender ID","Title","Reference Number","Organisation","Department","Division"].some(k=>clean(r[k]).toLowerCase().includes(q)));
+     (!q||["Tender ID","Title","Organisation","Department"].some(k=>clean(r[k]).toLowerCase().includes(q)));
  }).sort((a,b)=>dateValue(b["Closing Date"]||b["Last Date"])-dateValue(a["Closing Date"]||a["Last Date"]));
  $("count").textContent=archived.length+" archived tenders";
  $("body").innerHTML=archived.length?archived.map(r=>"<tr>"+
  "<td>"+clean(r["Tender ID"])+"</td>"+
  "<td>"+clean(r["Title"])+"</td>"+
- "<td>"+clean(r["Reference Number"])+"</td>"+
  "<td><span class='badge'>"+clean(r["Closing Date"]||r["Last Date"])+"</span></td>"+
- "<td>"+clean(r["Published Date"])+"</td>"+
- "<td>"+clean(r["PAC Amount"]||r["Tender Value/PAC"])+"</td>"+
- "<td>"+clean(r["EMD Amount"]||r["EMD Fee"])+"</td>"+
  "<td>"+clean(r["Organisation"])+"</td>"+
- "<td>"+clean(r["Department"])+"</td>"+
- "<td>"+clean(r["Division"])+"</td>"+
- "<td>Archived</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 3 दिनों तक tender दिखाई देगा।</td></tr>";
+ "<td>"+clean(r["Department"])+"</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 3 दिनों तक tender दिखाई देगा।</td></tr>";
 }
 (async()=>{
  try{
