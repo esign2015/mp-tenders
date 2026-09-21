@@ -146,50 +146,50 @@ jobs:
           python backend/scraper.py > scraper_live.log 2>&1 &
           SCRAPER_PID=$!
           LAST_PUBLISHED_CHECKPOINT=0
+          LAST_PUBLISHED_ORG_PROGRESS=""
 
-          # The scraper writes the main CSV every 10 successful detail records.
-          # Publish that checkpoint immediately so the live dashboard can refresh.
+          # Publish list progress as soon as each organisation is collected.
+          # Detail checkpoints still publish every 10 successful detail pages.
+          # This prevents the dashboard from remaining empty while detail extraction is slow.
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
             if [ -f data/status.json ]; then
-              CHECKPOINT=$(python - <<'PY'
+              read -r CHECKPOINT ORG_PROGRESS < <(python - <<'PY'
           import json
           from pathlib import Path
           try:
               data=json.loads(Path("data/status.json").read_text(encoding="utf-8"))
-              print(int(data.get("detail_batch_completed", 0) or 0))
+              print(int(data.get("detail_batch_completed", 0) or 0), data.get("organisation_progress", ""))
           except Exception:
-              print(0)
+              print(0, "")
           PY
               )
 
+              SHOULD_PUBLISH="false"
               if [ "$CHECKPOINT" -ge 10 ] && [ "$CHECKPOINT" != "$LAST_PUBLISHED_CHECKPOINT" ]; then
-                echo "Publishing checkpoint: $CHECKPOINT completed detail records"
+                SHOULD_PUBLISH="true"
+              fi
+              if [ -n "$ORG_PROGRESS" ] && [ "$ORG_PROGRESS" != "$LAST_PUBLISHED_ORG_PROGRESS" ]; then
+                SHOULD_PUBLISH="true"
+              fi
+
+              if [ "$SHOULD_PUBLISH" = "true" ]; then
+                echo "Publishing live checkpoint: org=$ORG_PROGRESS detail=$CHECKPOINT"
                 for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
                   if [ -s "$f" ]; then git add "$f"; fi
                 done
 
                 if ! git diff --cached --quiet; then
-                  git commit -m "Checkpoint tender data $CHECKPOINT [skip ci]"
+                  git commit -m "Live tender data checkpoint org $ORG_PROGRESS detail $CHECKPOINT [skip ci]"
                   git fetch origin "${GITHUB_REF_NAME}"
                   git rebase "origin/${GITHUB_REF_NAME}" || true
                   git push origin "HEAD:${GITHUB_REF_NAME}" || true
                 fi
                 LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
+                LAST_PUBLISHED_ORG_PROGRESS="$ORG_PROGRESS"
               fi
             fi
             sleep 10
           done
-
-          # Publish any final partial checkpoint too.
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
-            if [ -s "$f" ]; then git add "$f"; fi
-          done
-          if ! git diff --cached --quiet; then
-            git commit -m "Final tender data checkpoint [skip ci]"
-            git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || true
-            git push origin "HEAD:${GITHUB_REF_NAME}" || true
-          fi
           wait "$SCRAPER_PID"
       - name: Commit whatever tender data was collected
         if: always()
