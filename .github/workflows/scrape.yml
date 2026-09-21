@@ -324,6 +324,109 @@ jobs:
             git push
           fi
 
+  fresh_bootstrap:
+    # One-time clean rebuild requested for the current project state.
+    # It intentionally wipes the old tender/detail inventory, rebuilds the
+    # live organisation snapshot, then runs the Tender-ID detail worker.
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[fresh-bootstrap]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    concurrency:
+      group: mp-tender-data-writer
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Fresh Phase 1 — copy every organisation and every tender list
+        env:
+          FRESH_BOOTSTRAP: "1"
+          FETCH_DETAIL_PAGES: "0"
+          NEW_TENDER_ONLY: "1"
+          DETAIL_BATCH_SIZE: "0"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/scraper.py > fresh_bootstrap_list.log 2>&1 &
+          PID=$!
+          LAST_ORG=""
+          while kill -0 "$PID" 2>/dev/null; do
+            if [ -f data/status.json ]; then
+              ORG="$(python -c 'import json; print(json.load(open("data/status.json")).get("organisation_progress",""))' 2>/dev/null || echo "")"
+              if [ -n "$ORG" ] && [ "$ORG" != "$LAST_ORG" ]; then
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json; do
+                  [ -s "$f" ] && git add "$f"
+                done
+                if ! git diff --cached --quiet; then
+                  git commit -m "Fresh organisation snapshot $ORG [skip ci]"
+                  git push || true
+                fi
+                LAST_ORG="$ORG"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$PID"
+      - name: Commit complete fresh list before detail phase
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete fresh MP tender list snapshot [skip ci]"
+            git push || true
+          fi
+      - name: Fresh Phase 2 — extract each Tender ID by Home Search route
+        env:
+          EXISTING_ID_BATCH_SIZE: "0"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/existing_id_detail.py > fresh_detail_live.log 2>&1 &
+          PID=$!
+          LAST_SUCCESS=0
+          while kill -0 "$PID" 2>/dev/null; do
+            if [ -s data/existing_id_detail_status.json ]; then
+              SUCCESS="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
+              if [ "$SUCCESS" -gt "$LAST_SUCCESS" ]; then
+                git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
+                if ! git diff --cached --quiet; then
+                  git commit -m "Publish fresh Tender detail $SUCCESS [skip ci]"
+                  git push || true
+                fi
+                LAST_SUCCESS="$SUCCESS"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$PID"
+      - name: Final fresh bootstrap commit
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv tender_details.csv data/*.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete fresh MP tender inventory and detail extraction [skip ci]"
+            git push || true
+          fi
+      - name: Show fresh bootstrap logs
+        if: always()
+        run: |
+          echo "===== LIST LOG ====="
+          cat fresh_bootstrap_list.log || true
+          echo "===== DETAIL LOG ====="
+          cat fresh_detail_live.log || true
+
   scrape_full:
     concurrency:
       group: mp-tender-data-writer
