@@ -2048,7 +2048,8 @@ if __name__ == "__main__":
         Path(__file__).resolve().parent.parent / "all_tenders_org_detailed.csv",
     ))
     if os.getenv("MONITOR_CORRIGENDUM_ONLY") == "1":
-        print(monitor_corrigendum_changes(target))
+        urgent = os.getenv("CORRIGENDUM_URGENT_ONLY", "0").lower() in ("1", "true", "yes")
+        print(monitor_corrigendum_changes(target, urgent_only=urgent))
     elif os.getenv("MONITOR_ONLY") == "1":
         print(monitor_tender_changes(target))
     else:
