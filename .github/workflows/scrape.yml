@@ -94,6 +94,64 @@ jobs:
           fi
 
 
+  existing_id_detail:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[existing-id-detail]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    concurrency:
+      group: mp-tender-data-writer
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Extract details using existing Tender IDs only
+        env:
+          EXISTING_ID_BATCH_SIZE: "20"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/existing_id_detail.py > existing_id_detail_live.log 2>&1 &
+          PID=$!
+          LAST=0
+          while kill -0 "$PID" 2>/dev/null; do
+            if [ -s data/existing_id_detail_status.json ]; then
+              COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
+              if [ "$COUNT" -gt "$LAST" ]; then
+                git add all_tenders_org_detailed.csv data/existing_id_detail_status.json
+                if ! git diff --cached --quiet; then
+                  git commit -m "Publish existing-ID detail checkpoint $COUNT [skip ci]"
+                  git push || true
+                fi
+                LAST="$COUNT"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$PID"
+      - name: Commit final existing-ID detail data
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Complete existing Tender ID detail batch [skip ci]"
+            git push || true
+          fi
+      - name: Show existing-ID detail log
+        if: always()
+        run: cat existing_id_detail_live.log || true
+
+
   low_count_detail:
     if: github.event_name == 'push' && (contains(github.event.head_commit.message, '[low-count-detail]') || contains(github.event.head_commit.message, 'tender-count ranges'))
     runs-on: ubuntu-latest
