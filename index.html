@@ -2842,31 +2842,14 @@ function updateCounts(rows, refreshHeader=true){
 
   const live = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
-    const opening = parseDate(row["Opening Date"]);
-
-    /*
-       Keep a tender live during the extension window:
-       closing has passed, but Bid Opening is still in the future.
-    */
-    return !closing ||
-           closing.getTime() > now.getTime() ||
-           (closing.getTime() <= now.getTime() &&
-            opening &&
-            opening.getTime() > now.getTime());
+    return !closing || closing.getTime() > now.getTime();
   }).length;
 
   const closingToday = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
-    const opening = parseDate(row["Opening Date"]);
-    const active =
-      closing &&
-      (closing.getTime() > now.getTime() ||
-       (closing.getTime() <= now.getTime() &&
-        opening &&
-        opening.getTime() > now.getTime()));
-
-    return active &&
-           dateKey(closing) === todayKey();
+    return closing &&
+           dateKey(closing) === todayKey() &&
+           closing.getTime() > now.getTime();
   }).length;
 
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -2931,15 +2914,10 @@ function applyFilters(refreshHeader=true){
     const closing = parseDate(row["Closing Date"]);
 
     /*
-       MP Tender has an important transition window:
-       after Closing Date/Time passes, the tender may still be extended
-       until Bid Opening Date/Time. Therefore a tender whose closing time
-       has passed but whose opening time is still in the future MUST stay
-       visible in Active Tenders.
-       
-       Once Bid Opening Date/Time has passed, an already-closed tender is
-       treated as archived. This also prevents an old closing date from
-       disappearing permanently during the extension window.
+       A tender leaves Active immediately when its current Closing Date/Time
+       passes. It stays in Archived while waiting for Bid Opening.
+       The six-hour corrigendum watcher can bring it back to Active if the
+       portal extends the Closing Date before Bid Opening.
     */
     const opening = parseDate(row["Opening Date"]);
 
@@ -2953,28 +2931,9 @@ function applyFilters(refreshHeader=true){
           ? Math.floor((todayMidnight.getTime() - closeMidnight.getTime()) / 86400000)
           : 999;
 
-        /*
-          Do not archive during the extension window:
-          Closing passed + Opening is still ahead.
-        */
-        if(closing.getTime() <= Date.now() &&
-           opening &&
-           opening.getTime() > Date.now()){
-          return false;
-        }
-
         if(daysAgo < 1 || daysAgo > 10) return false;
       }else{
-        /*
-          Closing passed but Bid Opening is still in the future:
-          keep it active because the portal can still extend the
-          closing date before opening.
-        */
-        if(closing.getTime() <= Date.now()){
-          if(!opening || opening.getTime() <= Date.now()){
-            return false;
-          }
-        }
+        if(closing.getTime() <= Date.now()) return false;
       }
     }else if(archivedMode){
       return false;
