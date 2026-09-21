@@ -1,49 +1,30 @@
 <!doctype html>
 <html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MP Tender Data Extraction Status</title>
+<title>MP Tenders • Data Processing Status</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;color:#172033}.wrap{max-width:900px;margin:40px auto;padding:20px}
-.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 20px #00000012;margin-bottom:18px}
-h1{margin-top:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.box{background:#f8fafc;padding:18px;border-radius:12px}.num{font-size:30px;font-weight:700;margin-top:5px}
-.ok{color:#15803d}.err{color:#b91c1c}.muted{color:#64748b}.bar{height:14px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-top:12px}.fill{height:100%;background:#2563eb;width:0}
-pre{white-space:pre-wrap;background:#fff1f2;padding:14px;border-radius:10px;color:#991b1b}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
+body{font-family:system-ui,Arial;margin:0;background:#f4f7fb;color:#172033}.wrap{max-width:1150px;margin:auto;padding:22px}h1{margin:0 0 6px}.sub{color:#64748b;margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px #0000000b}.n{font-size:28px;font-weight:800}.k{font-size:13px;color:#64748b}.ok{color:#087f5b}.warn{color:#b45309}.bad{color:#c62828}.bar{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden;margin-top:8px}.fill{height:100%;background:#2563eb;width:0}.section{margin-top:18px}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #eef2f7}.note{background:#fff8e1;padding:12px;border-radius:10px;margin-top:16px;color:#7c5b00}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.grid{grid-template-columns:1fr 1fr}.n{font-size:22px}}
 </style></head><body><div class="wrap">
-<div class="card"><h1>📊 MP Tender Data Extraction</h1><p class="muted">यह पेज केवल data collection की स्थिति दिखाता है। Dashboard पर कोई बदलाव नहीं करता।</p>
-<div class="grid">
-<div class="box">कुल Tenders<div class="num" id="total">—</div></div>
-<div class="box">Detail Complete<div class="num ok" id="done">—</div></div>
-<div class="box">बाकी<div class="num" id="remain">—</div></div>
-<div class="box">Errors<div class="num err" id="errors">—</div></div>
-<div class="box">Batch<div class="num" id="batch">—</div></div>
-<div class="box">Progress<div class="num" id="org">—</div></div>
-<div class="box">⏱️ Process Time<div class="num" id="elapsed">—</div></div>
-</div><div class="bar"><div class="fill" id="fill"></div></div><p id="updated" class="muted"></p></div>
-<div class="card" id="errorCard" style="display:none"><h2>❌ Latest Error</h2><pre id="latest"></pre></div>
-<div class="card"><button id="refreshBtn" onclick="manualRefresh()" style="border:0;border-radius:10px;padding:11px 18px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:pointer">🔄 Refresh Now</button><p class="muted" style="margin-bottom:0">Status लगभग 30 सेकंड में अपने आप update होगा। आप चाहें तो ऊपर के बटन से अभी तुरंत status refresh कर सकते हैं।</p></div>
+<h1>MP Tenders — Data Processing Status</h1>
+<div class="sub">Live processing + Tender Detail + Pincode + District quality monitor • auto refresh 15 sec</div>
+<div id="status" class="grid"></div>
+<div class="section card"><h3>Processing</h3><div id="process"></div></div>
+<div class="section card"><h3>Tender Detail / Pincode / District</h3><div id="quality"></div></div>
+<div class="section card"><h3>Organisation Coverage</h3><div id="org"></div></div>
+<div class="note"><b>मतलब:</b> Pincode Missing = PIN नहीं मिला • Pincode Out = PIN MP master/pattern से match नहीं हुआ • District Missing = district खाली • District Out = district MP master में match नहीं हुआ। Tehsil/Block master जुड़ने के बाद इनके भी अलग counters यहाँ दिखेंगे।</div>
 </div>
 <script>
-function manualRefresh(){
- const b=document.getElementById('refreshBtn');
- if(b){b.disabled=true;b.textContent='⏳ Refreshing...';}
- load().finally(()=>setTimeout(()=>{if(b){b.disabled=false;b.textContent='🔄 Refresh Now';}},500));
-}
-async function load(){
- try{
-  const r=await fetch('https://raw.githubusercontent.com/esign2015/mp-tenders/main/data/status.json?t='+Date.now(),{cache:'no-store'}); const s=await r.json();
-  total.textContent=s.total_tenders??'—'; done.textContent=s.detail_complete??'—'; remain.textContent=s.detail_remaining??'—';
-  errors.textContent=s.errors??0; batch.textContent=s.detail_batch_completed??0; org.textContent=s.organisation_progress??'—';
-  const p=s.total_tenders?Math.min(100,(s.detail_complete/s.total_tenders)*100):0; fill.style.width=p+'%';
-  function formatElapsed(ms){
-  const sec=Math.max(0,Math.floor(ms/1000)), h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s2=sec%60;
-  return (h?h+'h ':'')+(m?m+'m ':'')+s2+'s';
-}
-const started=s.process_started_at ? new Date(s.process_started_at).getTime() : 0;
-elapsed.textContent=started ? formatElapsed((s.status==='running'?Date.now():new Date(s.updated_at||Date.now()).getTime())-started) : '—';
-const fmtIST=v=>v?new Date(v).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}):'—';
-updated.textContent='स्थिति: '+(s.status||'unknown')+' • Last update (IST): '+fmtIST(s.updated_at)+' • Started (IST): '+fmtIST(s.process_started_at);
-  if(s.latest_error){errorCard.style.display='block';latest.textContent=s.latest_error}else errorCard.style.display='none';
- }catch(e){updated.textContent='Status अभी उपलब्ध नहीं है।'}
-}
-load();setInterval(load,1000);
+const S='./status.json?ts='+Date.now(), O='../organisations.csv?ts='+Date.now(), D='../all_tenders_org_detailed.csv?ts='+Date.now();
+function csv(t){const a=t.trim().split(/\r?\n/);if(a.length<2)return[];const h=a[0].split(',').map(x=>x.trim());return a.slice(1).map(l=>{const c=[];let q=false,s='';for(const ch of l){if(ch=='"')q=!q;else if(ch==','&&!q){c.push(s);s=''}else s+=ch}c.push(s);const o={};h.forEach((k,i)=>o[k]=(c[i]||'').replace(/^"|"$/g,''));return o})}
+function row(k,v,cls=''){return '<div class="row"><span>'+k+'</span><b class="'+cls+'">'+v+'</b></div>'}
+async function load(){try{
+const st=await fetch(S,{cache:'no-store'}).then(r=>r.json());const total=+st.total_tenders||0,done=+st.detail_complete||0,rem=+st.detail_remaining||Math.max(0,total-done),pct=total?Math.min(100,done/total*100):0;
+document.getElementById('status').innerHTML='<div class="card"><div class="k">Total Tenders</div><div class="n">'+total.toLocaleString()+'</div></div><div class="card"><div class="k">Detail Complete</div><div class="n ok">'+done.toLocaleString()+'</div></div><div class="card"><div class="k">Detail Remaining</div><div class="n warn">'+rem.toLocaleString()+'</div></div><div class="card"><div class="k">Errors</div><div class="n '+(+st.errors?'bad':'ok')+'">'+(+st.errors||0).toLocaleString()+'</div></div>';
+document.getElementById('process').innerHTML=row('Status',st.status||'—')+row('Organisation Progress',st.organisation_progress||'—')+row('Current Organisation',st.current_organisation||'—')+row('Detail Batch Completed',(+st.detail_batch_completed||0).toLocaleString())+row('Last Update',st.updated_at||'—')+'<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="k">'+pct.toFixed(2)+'% detail processed</div>';
+let org=[],det=[];try{org=csv(await fetch(O,{cache:'no-store'}).then(r=>r.text()))}catch(e){}try{det=csv(await fetch(D,{cache:'no-store'}).then(r=>r.text()))}catch(e){}
+let pMissing=0,dMissing=0,pOut=0,dOut=0,complete=0;const mpPins=/^(45|46|47|48)\d{4}$/;const known=['Madhya Pradesh','Bhopal','Indore','Dewas','Rewa','Singrauli','Jabalpur','Gwalior','Ujjain','Sagar','Satna','Dhar','Chhindwara','Sehore','Vidisha','Raisen','Hoshangabad','Narmadapuram'];
+det.forEach(r=>{const pin=(r.Pincode||'').replace(/\D/g,'');const dist=(r.District||'').trim();if(!pin)pMissing++;else if(!mpPins.test(pin))pOut++;if(!dist)dMissing++;else if(!known.some(x=>dist.toLowerCase().includes(x.toLowerCase())))dOut++;if(String(r['Detail Extracted']||'').toUpperCase()=='YES')complete++});
+document.getElementById('quality').innerHTML=row('Detailed CSV rows',det.length.toLocaleString())+row('Detail Extracted = YES',complete.toLocaleString(),complete?'ok':'warn')+row('Pincode Missing',pMissing.toLocaleString(),pMissing?'warn':'ok')+row('Pincode Out',pOut.toLocaleString(),pOut?'bad':'ok')+row('District Missing',dMissing.toLocaleString(),dMissing?'warn':'ok')+row('District Out',dOut.toLocaleString(),dOut?'bad':'ok');
+const names=new Set(org.map(x=>x['Organisation Name']).filter(Boolean));document.getElementById('org').innerHTML=row('Organisation records',org.length.toLocaleString())+row('Unique Organisations',names.size.toLocaleString())+row('Tender rows in organisation CSV',org.filter(x=>x['Tender ID']).length.toLocaleString());
+}catch(e){document.getElementById('process').innerHTML='<span class="bad">Status load error: '+e.message+'</span>'}}
+load();setInterval(load,15000);
 </script></body></html>
