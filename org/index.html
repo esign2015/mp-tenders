@@ -58,7 +58,6 @@ function render(){
  const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
  $('body').innerHTML=rows.map((x,i)=>{
   const name=x['Organisation Name'], count=Number(x['Tender Count']||0);
-  const copied=tenders.filter(t=>clean(t['Organisation Name']).casefold===undefined ? clean(t['Organisation Name'])===name : false).length;
   const actual=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===name.toLowerCase()).length;
   return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span></td><td>'+actual.toLocaleString('en-IN')+'</td><td class="'+(actual===count?'ok':'bad')+'">'+(actual===count?'MATCH':'MISMATCH')+'</td></tr>';
  }).join('')||'<tr><td colspan="5">कोई organisation नहीं मिली।</td></tr>';
