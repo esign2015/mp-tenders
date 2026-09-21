@@ -1485,7 +1485,6 @@ body.telegram-locked .site-footer{visibility:hidden}
         <option value="30">Closing within 30 Days</option>
         <option value="45">Closing within 45 Days</option>
         <option value="gt45">Closing greater than 45 Days</option>
-        <option value="recently-changed">🆕 Recently Changed</option>
       </select>
 
       <select id="sortSelect" aria-label="Sort order">
@@ -1497,6 +1496,11 @@ body.telegram-locked .site-footer{visibility:hidden}
         <option value="title-desc">Sort: Title Z-A</option>
         <option value="organisation-asc">Sort: Organisation A-Z</option>
         <option value="organisation-desc">Sort: Organisation Z-A</option>
+      </select>
+
+      <select id="changeFilter" aria-label="Change filter">
+        <option value="">All Changes</option>
+        <option value="recently-changed">🆕 Recently Changed</option>
       </select>
 
       <select id="statusSelect">
@@ -2650,7 +2654,11 @@ function renderVirtualWindow(){
         <td>${formatMoney(row["Tender Fee"])}</td>
         <td>${formatMoney(row["Processing Fee"])}</td>
         <td><strong>${formatMoney(totalFee(row))}</strong></td>
-        <td>${escapeHtml(row["Organisation"]) || "—"}</td>
+        <td class="org-display-cell">
+  <span class="org-full">${escapeHtml(row["Organisation"]) || "—"}</span>
+  <span class="org-short">${escapeHtml(clean(row["Organisation"]).split(/\s+/).slice(0,4).join(" ")) || "—"}</span>
+  ${isFav("favOrgs",row["Organisation"]) ? '<button class="org-fav-star" type="button" title="Favourite Organisation">⭐</button>' : ''}
+</td>
         <td>${escapeHtml(row["Department"]) || "—"}</td>
         <td>${escapeHtml(row["Division"]) || "—"}</td>
         <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
@@ -3077,6 +3085,7 @@ function applyFilters(refreshHeader=true){
 
   const closingExpire = clean($("closingExpire").value);
   const status = clean($("statusSelect").value).toLowerCase();
+  const changeFilter = clean($("changeFilter").value);
   const pacFilter = clean($("pacFilter").value);
   const pacMode = pacFilter ? pacFilter.split(":")[0] : "";
   const pacLimit = pacFilter ? Number(pacFilter.split(":")[1]) : null;
@@ -3194,7 +3203,7 @@ function applyFilters(refreshHeader=true){
       if(pacMode === "above" && pacAmount <= pacLimit) return false;
     }
 
-    if(closingExpire === "recently-changed"){
+    if(changeFilter === "recently-changed"){
       const changed = clean(row["Latest Corrigendum"]||row["Corrigendum"]||row["Change Status"]||row["Last Updated"]);
       const original = clean(row["Original Closing Date"]||row["Previous Closing Date"]||row["Old Closing Date"]);
       const hasDateChange = original && clean(row["Closing Date"]) && original !== clean(row["Closing Date"]);
@@ -3338,6 +3347,7 @@ function clearFilters(){
   if(pacLabel) pacLabel.textContent = "All PAC";
   $("sortSelect").value = "closing-asc";
   $("statusSelect").value = "";
+  $("changeFilter").value = "";
   $("favouriteFilter").value = "";
   $("savedFilterSelect").value = "";
   $("favouriteFilter").value = "";
@@ -3475,6 +3485,7 @@ function currentFilterState(){
     closing:$("closingExpire").value,
     sort:$("sortSelect").value,
     status:$("statusSelect").value,
+    change:$("changeFilter").value,
     pac:$("pacFilter").value
   };
 }
@@ -3487,6 +3498,7 @@ function applySavedFilter(item){
   $("closingExpire").value=s.closing||"0";
   $("sortSelect").value=s.sort||"closing-asc";
   $("statusSelect").value=s.status||"";
+  $("changeFilter").value=s.change||"";
   $("pacFilter").value=s.pac||"";
   quickFilterMode="";
   archivedMode=false;
@@ -3526,14 +3538,45 @@ function refreshUserPreferenceUI(){
   content.querySelectorAll("[data-remove-saved]").forEach(b=>b.onclick=()=>{userPrefs.savedFilters.splice(Number(b.dataset.removeSaved),1);saveUserPrefs();});
   const saveBtn=$("saveCurrentFilterBtn"); if(saveBtn)saveBtn.onclick=saveCurrentFilter;
 }
+
+const COLUMN_PREF_KEY="mp_tender_hidden_columns";
+const COLUMN_DEFS=[
+  ["S.No.",1],["Tender ID",2],["Title",3],["Ref.No.",4],["Last Date",5],["Time Left",6],
+  ["District",7],["PAC Amount",8],["EMD Fee",9],["Tender Fee",10],["Processing Fee",11],
+  ["Total Fee",12],["Organisation",13],["Department",14],["Division",15],["Sub Division",16]
+];
+function loadHiddenColumns(){try{return JSON.parse(localStorage.getItem(COLUMN_PREF_KEY)||"[]").map(Number)}catch(e){return []}}
+function applyColumnVisibility(){
+  const hidden=loadHiddenColumns();
+  document.querySelectorAll("table tr").forEach(tr=>[...tr.children].forEach((cell,i)=>cell.classList.toggle("column-hidden",hidden.includes(i+1))));
+}
+function openColumnMenu(anchor){
+  const menu=$("userPrefMenu");if(!menu||!anchor)return;
+  const hidden=loadHiddenColumns(),rect=anchor.getBoundingClientRect();
+  menu.style.left=Math.max(8,Math.min(rect.left,window.innerWidth-338))+"px";
+  menu.style.top=Math.min(window.innerHeight-20,rect.bottom+6)+"px";
+  menu.innerHTML='<div class="user-pref-title">☷ Table Columns</div>'+
+    COLUMN_DEFS.map(([name,n])=>'<label class="user-pref-row" style="justify-content:flex-start"><input type="checkbox" data-col="'+n+'" '+(hidden.includes(n)?"":"checked")+' style="width:15px;height:15px"><span>'+escapeHtml(name)+'</span></label>').join("")+
+    '<button type="button" id="resetColumnsBtn" class="btn-light" style="width:100%;margin-top:7px">Reset Columns</button>';
+  menu.classList.add("open");
+  menu.querySelectorAll("[data-col]").forEach(x=>x.onchange=()=>{
+    let h=loadHiddenColumns(),n=Number(x.dataset.col);
+    if(x.checked)h=h.filter(v=>v!==n);else if(!h.includes(n))h.push(n);
+    localStorage.setItem(COLUMN_PREF_KEY,JSON.stringify(h));applyColumnVisibility();
+  });
+  $("resetColumnsBtn").onclick=()=>{localStorage.removeItem(COLUMN_PREF_KEY);applyColumnVisibility();openColumnMenu(anchor)};
+}
+
 function setupUserFeatures(){
   loadUserPrefs();
   const favOrg=$("favOrgBtn"), favDistrict=$("favDistrictBtn"), saved=$("savedFilterBtn"), col=$("columnBtn"), orgBtn=$("orgDisplayBtn");
   if(favOrg) favOrg.onclick=()=>{const v=clean($("organisationSearch").value); if(!v){alert("पहले Organisation चुनें/लिखें।");return;} togglePref("favOrgs",v);};
   if(favDistrict) favDistrict.onclick=()=>{const v=clean($("districtSearch").value); if(!v){alert("पहले District चुनें/लिखें।");return;} togglePref("favDistricts",v);};
-  if(saved) saved.onclick=()=>openUserPrefMenu(saved);
+  if(saved) saved.onclick=()=>{refreshUserPreferenceUI();openUserPrefMenu(saved);};
+  if(col) col.onclick=()=>openColumnMenu(col);
   if(orgBtn) orgBtn.onclick=()=>{orgDisplayMode=orgDisplayMode==="full"?"short":"full";document.body.classList.toggle("org-display-short",orgDisplayMode==="short");document.body.classList.toggle("org-display-full",orgDisplayMode==="full");orgBtn.textContent=orgDisplayMode==="full"?"🏢 Full Org":"🏢 Short Org";};
   refreshUserPreferenceUI();
+  applyColumnVisibility();
   window.addEventListener("resize",()=>{const m=$("userPrefMenu");if(m?.classList.contains("open"))m.classList.remove("open");});
   document.addEventListener("click",e=>{const m=$("userPrefMenu");if(m&&!m.contains(e.target)&&!e.target.closest("#savedFilterBtn"))m.classList.remove("open");});
 }
@@ -4007,7 +4050,7 @@ function scheduleFilter(){
 [
   "closingExpire",
   "sortSelect",
-  "statusSelect","favouriteFilter"
+  "statusSelect","changeFilter","favouriteFilter"
 ].forEach(id => {
   $(id).addEventListener("change",applyFilters);
 });
