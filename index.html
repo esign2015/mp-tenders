@@ -1388,7 +1388,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="search-fields">
       <input id="generalSearch"
              type="text"
-             placeholder="Search ID, title, organisation, department...">
+             placeholder="Search Tender ID, title, authority, department, location, PIN...">
 
       <div class="organisation-filter-wrap" id="organisationFilterWrap">
         <input id="organisationSearch"
@@ -1401,7 +1401,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
       <div class="district-filter-wrap" id="districtFilterWrap">
         <input id="districtSearch" type="text" autocomplete="off"
-               placeholder="District / PIN / smart search..."
+               placeholder="District / PIN smart search..."
                aria-label="District or PIN smart search">
         <div class="district-suggestions" id="districtSuggestions" role="listbox"></div>
         <div class="district-search-help">District name / spelling correction / 1–6 digit PIN prefix</div>
@@ -2879,7 +2879,12 @@ function applyFilters(refreshHeader=true){
       const numericQuery=districtSearch.replace(/\D/g,"").slice(0,6);
       const pinHit=numericQuery.length>=1&&pinText.startsWith(numericQuery);
       const resolved=resolveDistrict(districtSearch);
-      const districtHit=!!resolved&&(resolved.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix)));
+      const districtHit=!!resolved&&(
+        (resolved.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix))) ||
+        authorityText.includes(String(resolved.name).toLowerCase()) ||
+        titleText.includes(String(resolved.name).toLowerCase()) ||
+        workText.includes(String(resolved.name).toLowerCase())
+      );
       const textHit=titleText.includes(districtSearch)||workText.includes(districtSearch)||authorityText.includes(districtSearch)||referenceText.includes(districtSearch);
       if(!textHit&&!pinHit&&!districtHit)return false;
     }
