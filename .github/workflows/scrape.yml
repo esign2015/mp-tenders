@@ -113,21 +113,34 @@ jobs:
                       with local.open(encoding="utf-8-sig",newline="") as f:
                           existing_ids={str(r.get("Tender ID","")).strip() for r in csv.DictReader(f) if str(r.get("Tender ID","")).strip()}
                   if len(rows) > len(existing_ids):
-                      fields=[
-                          "Tender ID","Published Date","Closing Date","Opening Date","Title",
-                          "Reference Number","Organisation","Department","Division","Sub Division",
-                          "PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee",
-                          "Location","Pincode","Work Description","Product Category","Sub Category",
-                          "Contract Type","Bid Validity","Pre Qualification Details",
-                          "Bid Submission Start Date","Bid Submission End Date","Bid Opening Date",
-                          "Document Download Start Date","Document Download End Date",
-                          "Fee Payable To","Fee Payable At","Status","URL"
-                      ]
-                      with Path("all_tenders_org_detailed.csv").open("w",encoding="utf-8",newline="") as f:
+                      local_rows=[]
+                      local=Path("all_tenders_org_detailed.csv")
+                      if local.exists():
+                          with local.open(encoding="utf-8-sig",newline="") as f:
+                              local_rows=list(csv.DictReader(f))
+                      by_id={str(r.get("Tender ID","")).strip():dict(r) for r in local_rows if str(r.get("Tender ID","")).strip()}
+                      order=list(by_id)
+                      for remote in rows:
+                          tid=str(remote.get("Tender ID","")).strip()
+                          if not tid:
+                              continue
+                          if tid not in by_id:
+                              by_id[tid]=dict(remote)
+                              order.append(tid)
+                          else:
+                              for k,v in dict(remote).items():
+                                  if str(v or "").strip():
+                                      by_id[tid][k]=v
+                      fields=[]
+                      for r in list(by_id.values()):
+                          for k in r.keys():
+                              if k not in fields:
+                                  fields.append(k)
+                      with local.open("w",encoding="utf-8",newline="") as f:
                           w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
                           w.writeheader()
-                          w.writerows(rows)
-                      print(f"Recovered larger Render dataset: {len(rows)} records; local had {len(existing_ids)}.")
+                          w.writerows([by_id[k] for k in order])
+                      print(f"Merged larger Render dataset: remote={len(rows)}, local_before={len(existing_ids)}, final={len(order)}; no Tender ID was deleted.")
                   else:
                       print(f"Render dataset ({len(rows)}) is not larger than local ({len(existing_ids)}); keeping local data.")
               else:
