@@ -2232,7 +2232,10 @@ async function refreshPublishedData(){
   if(liveRefreshBusy || document.hidden) return;
   liveRefreshBusy = true;
   try{
-    const data = await loadFromCsv();
+    let data = await loadFromCsv();
+    if(!Array.isArray(data) || !data.length){
+      data = await loadOrganisationTenderCsv();
+    }
     if(Array.isArray(data) && data.length){
       const next = data.map(normaliseTender);
       const oldKey = allTenders.map(x => clean(x["Tender ID"])).join("|");
@@ -2278,21 +2281,26 @@ async function loadData(){
     try{
       data = await loadFromCsv();
     }catch(csvError){
-      console.warn("Detailed CSV unavailable. Trying Render API.",csvError);
+      console.warn("Detailed CSV unavailable. Trying organisation tender CSV.",csvError);
       try{
-        data = await loadFromApi();
-      }catch(apiError){
-        console.warn("API unavailable. Trying organisation tender CSV.",apiError);
         data = await loadOrganisationTenderCsv();
+      }catch(orgError){
+        console.warn("Organisation tender CSV unavailable. Trying Render API.",orgError);
+        data = await loadFromApi();
       }
     }
 
     /*
-       If the detailed CSV is temporarily empty, fall back to the verified
-       organisation tender-list dataset.
+       A header-only/empty detailed CSV is not a valid dashboard dataset.
+       Prefer the organisation tender-list data before falling back to API.
     */
     if(!Array.isArray(data) || data.length === 0){
-      data = await loadOrganisationTenderCsv();
+      try{
+        data = await loadOrganisationTenderCsv();
+      }catch(orgError){
+        console.warn("Organisation tender CSV unavailable after empty detailed CSV.",orgError);
+        data = await loadFromApi();
+      }
     }
 
     allTenders = data.map(normaliseTender);
@@ -2312,7 +2320,7 @@ async function loadData(){
     $("tenderBody").innerHTML =
       `<tr>
         <td colspan="14" class="empty-row">
-          Tender data could not be loaded. Render API or CSV is unavailable.
+          Tender data could not be loaded from GitHub CSV or the organisation tender list.
         </td>
       </tr>`;
 
@@ -2630,8 +2638,7 @@ function setupOrganisationFilter(){
   function showOrganisationSuggestions(){
     const query = clean(input.value).toLowerCase();
     const matches = organisationOptions
-      .filter(org => !query || org.toLowerCase().includes(query))
-      .slice(0, 120);
+      .filter(org => !query || org.toLowerCase().includes(query));
 
     if(!matches.length){
       list.innerHTML = '<div class="organisation-empty">कोई matching organisation नहीं मिली।</div>';
