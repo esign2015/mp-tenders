@@ -1,14 +1,14 @@
 {
   "status": "running",
   "process_started_at": "2026-09-21T07:03:33.231164+00:00",
-  "total_tenders": 8,
+  "total_tenders": 24,
   "detail_complete": 0,
-  "detail_remaining": 8,
-  "errors": 8,
-  "latest_error": "Atal Indore City Transport Services Ltd - Indore / 2026_AICTS_530313_1: detail RuntimeError: detail page returned portal menu/home content",
-  "organisation_progress": "2/92",
-  "current_organisation": "Bhopal City Link Limited",
+  "detail_remaining": 24,
+  "errors": 24,
+  "latest_error": "Bhopal City Link Limited / 2026_BCLL_534111_1: detail RuntimeError: detail page returned portal menu/home content",
+  "organisation_progress": "3/92",
+  "current_organisation": "Board of Secondary Education",
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T07:05:48.867122+00:00"
+  "updated_at": "2026-09-21T07:09:40.248213+00:00"
 }
