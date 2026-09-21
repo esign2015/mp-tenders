@@ -1300,8 +1300,8 @@ td.title-cell{
   font-size:22px;
   box-shadow:0 6px 16px rgba(34,158,217,.28);
 }
-.telegram-gate-title{font-size:16px;font-weight:900;color:#14376e;line-height:1.15}
-.telegram-gate-subtitle{font-size:11px;color:#64748b;margin-top:3px}
+.telegram-gate-title{font-size:18px;font-weight:900;color:#14376e;line-height:1.15}
+.telegram-gate-subtitle{font-size:13px;color:#64748b;margin-top:3px}
 .telegram-gate-heading{
   margin:2px 0 7px;
   color:#14376e;
@@ -1346,8 +1346,8 @@ td.title-cell{
   font-size:11px;
   font-weight:900;
 }
-.telegram-step strong{display:block;color:#172033;font-size:11px}
-.telegram-step small{display:block;margin-top:2px;color:#64748b;font-size:9px;line-height:1.25}
+.telegram-step strong{display:block;color:#172033;font-size:13px}
+.telegram-step small{display:block;margin-top:2px;color:#64748b;font-size:11px;line-height:1.25}
 .telegram-gate-actions{margin-top:2px}
 .telegram-join-btn,.telegram-verify-btn{
   display:block;
@@ -1359,7 +1359,7 @@ td.title-cell{
   border:0;
   font-weight:800;
   cursor:pointer;
-  font-size:13px;
+  font-size:15px;
 }
 .telegram-join-btn{background:#0ea5e9;color:#fff}
 .telegram-verify-btn{background:#7c3aed;color:#fff}
@@ -1371,9 +1371,9 @@ td.title-cell{
   border-radius:8px;
   background:#f8fafc;
   color:#334155;
-  font-size:12px;
+  font-size:14px;
   font-weight:700;
-  line-height:1.4;
+  line-height:1.5;
 }
 .telegram-gate-note{
   display:flex;
@@ -1386,17 +1386,19 @@ td.title-cell{
   background:#eff6ff;
   color:#475569;
   text-align:left;
-  font-size:10px;
-  line-height:1.4;
+  font-size:13px;
+  line-height:1.5;
 }
-.telegram-admin{margin-top:12px;font-size:11px;color:#64748b}
+.telegram-admin{margin-top:14px;font-size:13px;color:#64748b}
 .telegram-admin a{color:#0f766e;font-weight:800;text-decoration:none}
 .telegram-login-wrap{margin-top:12px}
 @media(max-width:520px){
   #telegramGate{padding:10px}
   .telegram-gate-card{padding:18px 14px;border-radius:16px}
-  .telegram-gate-heading{font-size:20px}
-  .telegram-gate-intro{font-size:12px}
+  .telegram-gate-heading{font-size:24px}
+  .telegram-gate-intro{font-size:14px}
+  .telegram-gate-title{font-size:17px}
+  .telegram-gate-subtitle{font-size:12px}
   .telegram-login-steps{grid-template-columns:1fr;gap:5px}
   .telegram-step{padding:7px 8px}
   .telegram-step small{font-size:9px}
@@ -2005,7 +2007,7 @@ async function setupTelegramLogin(){
     script.setAttribute("data-size","large");
     script.setAttribute("data-userpic","true");
     script.setAttribute("data-request-access","write");
-    script.setAttribute("data-onauth","window.onTelegramAuth(user)");
+    script.setAttribute("data-onauth","onTelegramAuth(user)");
     wrap.appendChild(script);
 
     if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
