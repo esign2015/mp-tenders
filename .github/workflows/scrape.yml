@@ -332,8 +332,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
-      group: mp-tender-data-writer
-      cancel-in-progress: false
+      group: mp-tender-fresh-bootstrap
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
