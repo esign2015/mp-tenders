@@ -29,7 +29,7 @@ td{padding:8px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f8
 <div class="stats">
 <div class="stat">कुल Organisations<b id="orgCount">0</b></div>
 <div class="stat">Portal का कुल Tender Count<b id="portalCount">0</b></div>
-<div class="stat">Copied Tender Rows<b id="copiedCount">0</b></div>
+<div class="stat">Copied Tender Count<b id="copiedCount">0</b></div>
 </div>
 <section class="panel">
 <div class="panel-head"><span>Organisation-wise Tender Count</span><input id="search" placeholder="Organisation खोजें"></div>
@@ -84,7 +84,7 @@ async function load(){
   }catch(_){statusData={errors:[]}}
   $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
-  $('copiedCount').textContent=tenders.length.toLocaleString('en-IN');
+  $('copiedCount').textContent=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size.toLocaleString('en-IN');
   $('msg').textContent='Tender Count = 7 PM portal snapshot; Copied Count = organisation page से वास्तव में copy हुए Tender IDs. Detail buckets केवल copied IDs के भीतर हैं।';
   render();
  }catch(e){$('msg').textContent='Data अभी उपलब्ध नहीं है। Fresh collection पूरा होने के बाद यह page स्वतः data दिखाएगा.'}
