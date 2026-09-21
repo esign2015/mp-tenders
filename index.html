@@ -1182,7 +1182,6 @@ td.title-cell{
 #closingTodayBtn{background:#dc2626!important}
 #nextThreeBtn{background:#d97706!important}
 #archivedBtn{background:#475569!important}
-#resetBtn{background:#0f766e!important}
 #reloadBtn{background:#7c3aed!important}
 #pdfBtn,#pdfBtn2{background:#0891b2!important}
 .telegram-alert-btn,.footer-telegram-btn{
@@ -1377,9 +1376,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="action-buttons">
         <button class="btn-red" id="closingTodayBtn">Closing Today</button>
         <button class="btn-orange" id="nextThreeBtn">Next 3 Days</button>
-        <button class="btn-light" id="archivedBtn">Archived Tenders</button>
-        <button class="btn-light" id="resetBtn">Reset</button>
-        <button class="btn-dark" id="reloadBtn">↻ Reload</button>
+        <button class="btn-light" id="archivedBtn">Archived Tenders</button><button class="btn-dark" id="reloadBtn">↻ Reload</button>
         <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
         <a class="telegram-alert-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Get Daily Alert</a>
       </div>
@@ -2661,22 +2658,36 @@ function levenshteinDistance(a,b){
   return prev[b.length];
 }
 function districtCandidates(query){
-  const q=normalizeSearchText(query);if(!q||/^\d+$/.test(q))return [];
+  const q=normalizeSearchText(query);
+  if(!q||/^\d+$/.test(q))return [];
   return MP_DISTRICT_MASTER.map(d=>{
     let best=Infinity;
     for(const name of [d.name,...(d.aliases||[])]){
       const n=normalizeSearchText(name);
-      const score=n===q?0:(n.startsWith(q)||q.startsWith(n)?Math.abs(n.length-q.length)*0.15+0.2:levenshteinDistance(n,q)/Math.max(1,Math.max(n.length,q.length)));
+      let score;
+      if(n===q){
+        score=0;
+      }else if(n.includes(q)){
+        // "ind" must match both Bhind and Indore, not only the first fuzzy hit.
+        score=0.08 + Math.max(0,n.length-q.length)*0.01;
+      }else if(n.startsWith(q)||q.startsWith(n)){
+        score=0.2 + Math.abs(n.length-q.length)*0.015;
+      }else{
+        score=levenshteinDistance(n,q)/Math.max(1,Math.max(n.length,q.length));
+      }
       if(score<best)best=score;
     }
     return {...d,score:best};
-  }).filter(d=>d.score<=0.48).sort((a,b)=>a.score-b.score).slice(0,6);
+  }).filter(d=>d.score<=0.58).sort((a,b)=>a.score-b.score).slice(0,10);
 }
 function resolveDistrict(query){
-  const q=normalizeSearchText(query);if(!q||/^\d+$/.test(q))return null;
-  const exact=MP_DISTRICT_MASTER.find(d=>[d.name,...(d.aliases||[])].some(x=>normalizeSearchText(x)===q));
+  const q=normalizeSearchText(query);
+  if(!q||/^\d+$/.test(q))return null;
+  const exact=MP_DISTRICT_MASTER.find(d=>[d.name,...(d.aliases||[])]
+    .some(x=>normalizeSearchText(x)===q));
   if(exact)return exact;
-  const candidates=districtCandidates(query);return candidates.length&&candidates[0].score<=0.38?candidates[0]:null;
+  const candidates=districtCandidates(query);
+  return candidates.length&&candidates[0].score<=0.40?candidates[0]:null;
 }
 function showDistrictSuggestions(){
   const input=$("districtSearch"),list=$("districtSuggestions");if(!input||!list)return;
@@ -2974,6 +2985,15 @@ function applyFilters(refreshHeader=true){
       const pinText=clean(row["Pincode"]).replace(/\D/g,"");
       const numericQuery=districtSearch.replace(/\D/g,"").slice(0,6);
       const pinHit=numericQuery.length>=1&&pinText.startsWith(numericQuery);
+      const candidates=districtCandidates(districtSearch);
+      const candidateHit=candidates.some(candidate=>{
+        const name=normalizeSearchText(candidate.name);
+        const aliases=(candidate.aliases||[]).map(normalizeSearchText);
+        const names=[name,...aliases];
+        const nameHit=names.some(n=>authorityText.includes(n)||titleText.includes(n)||workText.includes(n));
+        const pinHitForDistrict=(candidate.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix)));
+        return nameHit||pinHitForDistrict;
+      });
       const resolved=resolveDistrict(districtSearch);
       const districtHit=!!resolved&&(
         (resolved.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix))) ||
@@ -2982,7 +3002,7 @@ function applyFilters(refreshHeader=true){
         workText.includes(String(resolved.name).toLowerCase())
       );
       const textHit=titleText.includes(districtSearch)||workText.includes(districtSearch)||authorityText.includes(districtSearch)||referenceText.includes(districtSearch);
-      if(!textHit&&!pinHit&&!districtHit)return false;
+      if(!textHit&&!pinHit&&!candidateHit&&!districtHit)return false;
     }
 
     /*
@@ -3799,8 +3819,7 @@ document.querySelectorAll(".sortable-th").forEach(th => {
 });
 updateTableSortHeaders();
 
-$("resetBtn").addEventListener("click",clearFilters);
-$("reloadBtn").addEventListener("click",loadData);
+$("reloadBtn").addEventListener("click",clearFilters);
 $("closingTodayBtn").addEventListener("click",showClosingToday);
 $("liveCountBox").addEventListener("click",clearFilters);
 $("closingTodayBox").addEventListener("click",showClosingToday);
