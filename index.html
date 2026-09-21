@@ -2041,6 +2041,7 @@ function getTimeLeftClass(value){
 }
 
 function getDistrictInfo(row){
+  if(districtInfoCache.has(row)) return districtInfoCache.get(row);
   const pin = clean(row["Pincode"]).replace(/\D/g,"");
   const candidates = [];
   if(pin && MP_DISTRICT_MASTER.length){
@@ -2051,15 +2052,21 @@ function getDistrictInfo(row){
       });
     });
   }
-  if(!candidates.length) return {name:"—",detail:"PIN not mapped",mentioned:[]};
+  if(!candidates.length){
+    const result={name:"—",detail:"PIN not mapped",mentioned:[]};
+    districtInfoCache.set(row,result); return result;
+  }
   const maxPrefix = Math.max(...candidates.map(x => x.prefix.length));
   const best = candidates.filter(x => x.prefix.length === maxPrefix);
   const unique = [...new Map(best.map(x => [x.district.name,x.district])).values()];
   const text = [row["Location"],row["Title"],row["Work Description"],row["Reference Number"],row["Organisation"],row["Department"],row["Division"],row["Sub Division"]].join(" ").toLowerCase();
   const mentioned = unique.filter(d => [d.name,...(d.aliases || [])].some(n => text.includes(String(n).toLowerCase())));
-  if(unique.length === 1) return {name:unique[0].name,detail:"PIN "+pin,mentioned:[]};
-  if(mentioned.length === 1) return {name:mentioned[0].name,detail:"PIN "+pin+" + tender text",mentioned:unique.filter(d => d.name !== mentioned[0].name).map(d => d.name)};
-  return {name:"PIN zone "+best[0].prefix,detail:"Possible: "+unique.map(d => d.name).join(", "),mentioned:[]};
+  let result;
+  if(unique.length === 1) result={name:unique[0].name,detail:"PIN "+pin,mentioned:[]};
+  else if(mentioned.length === 1) result={name:mentioned[0].name,detail:"PIN "+pin+" + tender text",mentioned:unique.filter(d => d.name !== mentioned[0].name).map(d => d.name)};
+  else result={name:"PIN zone "+best[0].prefix,detail:"Possible: "+unique.map(d => d.name).join(", "),mentioned:[]};
+  districtInfoCache.set(row,result);
+  return result;
 }
 
 function formatDistrictCell(row){
@@ -3064,6 +3071,7 @@ const filterControls = [
 }
 let MP_DISTRICT_MASTER=[];
 let MP_DISTRICT_PIN_PREFIXES={};
+const districtInfoCache = new WeakMap();
 async function loadDistrictMaster(){
   try{
     const response=await fetch("./data/mp_districts.json?ts="+Date.now(),{cache:"no-store"});
@@ -3072,6 +3080,7 @@ async function loadDistrictMaster(){
     MP_DISTRICT_MASTER=Array.isArray(payload.districts)?payload.districts:[];
     MP_DISTRICT_PIN_PREFIXES={};
     MP_DISTRICT_MASTER.forEach(d=>{MP_DISTRICT_PIN_PREFIXES[normalizeSearchText(d.name)]=(d.pinPrefixes||[]).map(String);});
+    districtInfoCache.clear?.();
   }catch(error){console.warn("District master unavailable:",error);MP_DISTRICT_MASTER=[];MP_DISTRICT_PIN_PREFIXES={};}
 }
 
@@ -4022,7 +4031,7 @@ function scheduleFilter(){
       applyFilters(false);
       hideSearchProgress();
     });
-  }, 300);
+  }, 80);
 }
 
 [
