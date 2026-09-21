@@ -152,6 +152,11 @@ def main():
         and clean(row.get("Detail Extracted")).upper() != "YES"
     ]
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
+    skipped_ids = [
+        clean(row.get("Tender ID")) for row in rows
+        if clean(row.get("Tender ID")) in current_set
+        and clean(row.get("Detail Extracted")).upper() == "YES"
+    ]
 
     print(
         f"CSV IDs: {len(rows)} | current portal IDs: {len(current_ids)} | "
@@ -163,6 +168,8 @@ def main():
     errors = []
     failed_bases = []
     success = 0
+    success_ids = set()
+    final_failed_ids = set()
 
     def save_csv():
         nonlocal fields
@@ -201,7 +208,11 @@ def main():
             "initial_incomplete": len(incomplete),
             "batch_targets": len(targets),
             "success": success,
-            "failed": len(errors),
+            "failed": len(final_failed_ids),
+            "success_ids": sorted(success_ids),
+            "failed_ids": sorted(final_failed_ids),
+            "skipped_ids": sorted(set(skipped_ids)),
+            "pending_ids": sorted(current_set - success_ids - final_failed_ids - set(skipped_ids)),
             "last_successful_tender_id": last_id,
             "errors": errors,
             "updated_at": datetime.now(timezone.utc).isoformat()
@@ -252,6 +263,8 @@ def main():
                     "retry_pass": bool(is_retry)
                 }
                 errors.append(failure)
+                if is_retry:
+                    final_failed_ids.add(tid)
                 if not is_retry:
                     failed_bases.append(base)
                 print(
