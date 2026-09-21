@@ -14,7 +14,28 @@ body{font-family:system-ui,Arial;margin:0;background:#f4f7fb;color:#172033}.wrap
 </div>
 <script>
 const S='./status.json?ts='+Date.now(), O='../organisations.csv?ts='+Date.now(), D='../all_tenders_org_detailed.csv?ts='+Date.now();
-function csv(t){const a=t.trim().split(/\r?\n/);if(a.length<2)return[];const h=a[0].split(',').map(x=>x.trim());return a.slice(1).map(l=>{const c=[];let q=false,s='';for(const ch of l){if(ch=='"')q=!q;else if(ch==','&&!q){c.push(s);s=''}else s+=ch}c.push(s);const o={};h.forEach((k,i)=>o[k]=(c[i]||'').replace(/^"|"$/g,''));return o})}
+function csv(t){
+  const rows=[]; let row=[], value='', quoted=false;
+  for(let i=0;i<t.length;i++){
+    const ch=t[i], next=t[i+1];
+    if(ch=='"' && quoted && next=='"'){ value+='"'; i++; continue; }
+    if(ch=='"'){ quoted=!quoted; continue; }
+    if(ch==',' && !quoted){ row.push(value); value=''; continue; }
+    if((ch=='\\n'||ch=='\\r') && !quoted){
+      if(ch=='\\r' && next=='\\n') i++;
+      row.push(value); value='';
+      if(row.some(v=>String(v).trim()!=='')) rows.push(row);
+      row=[]; continue;
+    }
+    value+=ch;
+  }
+  if(value!=='' || row.length){row.push(value); rows.push(row);}
+  if(rows.length<2) return [];
+  const h=rows[0].map(x=>String(x).replace(/^\\uFEFF/,'').trim());
+  return rows.slice(1).map(values=>{
+    const o={}; h.forEach((k,i)=>o[k]=String(values[i]||'').trim()); return o;
+  });
+}
 function row(k,v,cls=''){return '<div class="row"><span>'+k+'</span><b class="'+cls+'">'+v+'</b></div>'}
 async function load(){try{
 const st=await fetch(S,{cache:'no-store'}).then(r=>r.json());const total=+st.total_tenders||0,done=+st.detail_complete||0,rem=+st.detail_remaining||Math.max(0,total-done),pct=total?Math.min(100,done/total*100):0;
@@ -24,7 +45,9 @@ let org=[],det=[];try{org=csv(await fetch(O,{cache:'no-store'}).then(r=>r.text()
 let pMissing=0,dMissing=0,pOut=0,dOut=0,complete=0;const mpPins=/^(45|46|47|48)\d{4}$/;const known=['Madhya Pradesh','Bhopal','Indore','Dewas','Rewa','Singrauli','Jabalpur','Gwalior','Ujjain','Sagar','Satna','Dhar','Chhindwara','Sehore','Vidisha','Raisen','Hoshangabad','Narmadapuram'];
 det.forEach(r=>{const pin=(r.Pincode||'').replace(/\D/g,'');const dist=(r.District||'').trim();if(!pin)pMissing++;else if(!mpPins.test(pin))pOut++;if(!dist)dMissing++;else if(!known.some(x=>dist.toLowerCase().includes(x.toLowerCase())))dOut++;if(String(r['Detail Extracted']||'').toUpperCase()=='YES')complete++});
 document.getElementById('quality').innerHTML=row('Detailed CSV rows',det.length.toLocaleString())+row('Detail Extracted = YES',complete.toLocaleString(),complete?'ok':'warn')+row('Pincode Missing',pMissing.toLocaleString(),pMissing?'warn':'ok')+row('Pincode Out',pOut.toLocaleString(),pOut?'bad':'ok')+row('District Missing',dMissing.toLocaleString(),dMissing?'warn':'ok')+row('District Out',dOut.toLocaleString(),dOut?'bad':'ok');
-const names=new Set(org.map(x=>x['Organisation Name']).filter(Boolean));document.getElementById('org').innerHTML=row('Organisation records',org.length.toLocaleString())+row('Unique Organisations',names.size.toLocaleString())+row('Tender rows in organisation CSV',org.filter(x=>x['Tender ID']).length.toLocaleString());
+const names=new Set(org.map(x=>x['Organisation Name']).filter(Boolean));
+const tenderRows=org.filter(x=>String(x['Tender ID']||'').trim());
+document.getElementById('org').innerHTML=row('Organisation records',org.length.toLocaleString())+row('Unique Organisations',names.size.toLocaleString())+row('Tender rows in organisation CSV',tenderRows.length.toLocaleString());
 }catch(e){document.getElementById('process').innerHTML='<span class="bad">Status load error: '+e.message+'</span>'}}
 load();setInterval(load,15000);
 </script></body></html>
