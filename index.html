@@ -2199,12 +2199,24 @@ function parseCsv(text){
   });
 }
 
-async function fetchCsvText(url){
-  const response = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(),{
-    cache:"no-store"
-  });
-  if(!response.ok) throw new Error("CSV HTTP " + response.status);
-  return await response.text();
+async function fetchCsvText(url, timeoutMs=15000){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try{
+    const response = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(),{
+      cache:"no-store",
+      signal:controller.signal
+    });
+    if(!response.ok) throw new Error("CSV HTTP " + response.status);
+    return await response.text();
+  }catch(error){
+    if(error && error.name === "AbortError"){
+      throw new Error("CSV request timeout");
+    }
+    throw error;
+  }finally{
+    clearTimeout(timer);
+  }
 }
 
 async function loadFromCsv(){
@@ -2283,9 +2295,29 @@ async function refreshPublishedData(){
   }
 }
 
+let dataLoadBusy = false;
+
 async function loadData(){
-  $("tenderBody").innerHTML =
-    `<tr><td colspan="14" class="loading-row">Loading tender data...</td></tr>`;
+  if(dataLoadBusy) return;
+  dataLoadBusy = true;
+
+  /*
+     On Reload, keep the already loaded tender table visible.
+     Replacing thousands of rows with "Loading tender data..." makes a
+     temporary network delay look like data loss. Only the first load
+     shows the blocking loading message.
+  */
+  const hasExistingData = Array.isArray(allTenders) && allTenders.length > 0;
+  if(!hasExistingData){
+    $("tenderBody").innerHTML =
+      `<tr><td colspan="14" class="loading-row">Loading tender data...</td></tr>`;
+  }else{
+    const status = $("searchStatus");
+    if(status){
+      status.textContent = "↻ Refreshing tender data…";
+      status.classList.add("active");
+    }
+  }
 
   try{
     let data = [];
@@ -2332,17 +2364,26 @@ async function loadData(){
   }catch(error){
     console.error("Dashboard data load failed:", error);
 
-    allTenders = [];
-    filteredTenders = [];
+    /*
+       Never throw away a previously loaded dataset because a reload
+       request failed. Keep the last verified data on screen.
+    */
+    if(!hasExistingData){
+      allTenders = [];
+      filteredTenders = [];
 
-    $("tenderBody").innerHTML =
-      `<tr>
-        <td colspan="14" class="empty-row">
-          Tender data load failed: ${clean(error && error.message ? error.message : error)}
-        </td>
-      </tr>`;
+      $("tenderBody").innerHTML =
+        `<tr>
+          <td colspan="14" class="empty-row">
+            Tender data load failed: ${clean(error && error.message ? error.message : error)}
+          </td>
+        </tr>`;
 
-    updateCounts([]);
+      updateCounts([]);
+    }
+  }finally{
+    dataLoadBusy = false;
+    hideSearchProgress();
   }
 }
 
@@ -2872,14 +2913,20 @@ function applyFilters(refreshHeader=true){
   filteredTenders = allTenders.filter(row => {
     const closing = parseDate(row["Closing Date"]);
 
-    /* Active view: expired tenders are hidden.
-       Archived view: only tenders closed within the last 10 days are shown. */
+    /*
+       MP Tender has an important transition window:
+       after Closing Date/Time passes, the tender may still be extended
+       until Bid Opening Date/Time. Therefore a tender whose closing time
+       has passed but whose opening time is still in the future MUST stay
+       visible in Active Tenders.
+       
+       Once Bid Opening Date/Time has passed, an already-closed tender is
+       treated as archived. This also prevents an old closing date from
+       disappearing permanently during the extension window.
+    */
+    const opening = parseDate(row["Opening Date"]);
+
     if(closing){
-      /*
-        IMPORTANT: keep the real closing time for Active view.
-        Resetting today's closing date to 00:00 hid every tender that
-        was closing later today, even though the header correctly counted it.
-      */
       if(archivedMode){
         const closeDay = dateKey(closing);
         const todayDay = todayKey();
@@ -2889,10 +2936,28 @@ function applyFilters(refreshHeader=true){
           ? Math.floor((todayMidnight.getTime() - closeMidnight.getTime()) / 86400000)
           : 999;
 
+        /*
+          Do not archive during the extension window:
+          Closing passed + Opening is still ahead.
+        */
+        if(closing.getTime() <= Date.now() &&
+           opening &&
+           opening.getTime() > Date.now()){
+          return false;
+        }
+
         if(daysAgo < 1 || daysAgo > 10) return false;
       }else{
-        // Active tenders remain visible until their actual closing time.
-        if(closing.getTime() <= Date.now()) return false;
+        /*
+          Closing passed but Bid Opening is still in the future:
+          keep it active because the portal can still extend the
+          closing date before opening.
+        */
+        if(closing.getTime() <= Date.now()){
+          if(!opening || opening.getTime() <= Date.now()){
+            return false;
+          }
+        }
       }
     }else if(archivedMode){
       return false;
@@ -3777,7 +3842,18 @@ setInterval(updateDateTime,1000);
 
 setupVirtualTable();
 updateVirtualPager();
-enforceTelegramAccess().then(async () => { await loadDistrictMaster(); await loadData(); });
+/*
+   Start data loading in parallel with the Telegram access check.
+   The gate still keeps the dashboard hidden until verification succeeds,
+   but the CSV is already being fetched/parsed in the background.
+*/
+const backgroundDataLoad = loadData();
+enforceTelegramAccess().then(async () => {
+  await loadDistrictMaster();
+  await backgroundDataLoad;
+}).catch(error => {
+  console.error("Dashboard startup failed:",error);
+});
 </script>
 
 <style>
