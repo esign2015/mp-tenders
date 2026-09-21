@@ -330,6 +330,10 @@ jobs:
     if: github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: mp-telegram-sender
+      cancel-in-progress: false
+      queue: max
     steps:
       - name: Checkout
         uses: actions/checkout@v4
