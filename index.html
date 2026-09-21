@@ -3250,9 +3250,13 @@ function applyFilters(refreshHeader=true){
         return false;
       }
 
-      if(status === "open" &&
-         rowStatus.includes("closed")){
-        return false;
+      if(status === "open"){
+        // Open is determined by the CURRENT closing date/time, not by a
+        // stale Status text stored in the CSV.
+        // A tender is Open only while its closing time is still in the future.
+        if(isCancelled || !closing || closing.getTime() <= Date.now()){
+          return false;
+        }
       }
     }
 
