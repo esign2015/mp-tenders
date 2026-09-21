@@ -3222,7 +3222,10 @@ function applyFilters(refreshHeader=true){
       const rowDay = new Date(rowClosing.getFullYear(), rowClosing.getMonth(), rowClosing.getDate());
       const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const days = Math.floor((rowDay.getTime() - todayDay.getTime()) / 86400000);
-      if(closingExpire === "1" && days !== 0) return false;
+      // "Closing Today" means tenders that are STILL OPEN and will
+      // close later today. Tenders whose closing time has already passed
+      // today are displayed as Closed, but must not be counted here.
+      if(closingExpire === "1" && (days !== 0 || rowClosing.getTime() <= Date.now())) return false;
       if(closingExpire === "2" && days !== 1) return false;
       if(["3","7","15","30","45"].includes(closingExpire) && (days < 0 || days > Number(closingExpire))) return false;
       if(closingExpire === "gt45" && days <= 45) return false;
