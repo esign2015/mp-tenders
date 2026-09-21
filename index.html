@@ -1860,7 +1860,7 @@ async function setupTelegramLogin(){
     script.setAttribute("data-size","large");
     script.setAttribute("data-userpic","true");
     script.setAttribute("data-request-access","write");
-    script.setAttribute("data-onauth","onTelegramAuth(user)");
+    script.setAttribute("data-onauth","window.onTelegramAuth(user)");
     wrap.appendChild(script);
 
     if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
@@ -1889,6 +1889,10 @@ function onTelegramAuth(user){
   localStorage.removeItem("telegram_logout_lock");
   verifyTelegramMembership(user,true);
 }
+// Telegram's legacy Login Widget resolves data-onauth in the page window.
+// Expose the callback explicitly so the dynamically-created widget iframe
+// can always find it after a fresh page load / re-login.
+window.onTelegramAuth = onTelegramAuth;
 
 async function checkStoredTelegram(){
   const raw=localStorage.getItem("telegram_auth");
