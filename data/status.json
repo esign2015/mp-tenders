@@ -1,17 +1,19 @@
 {
   "status": "running",
+  "process_started_at": "2026-09-21T17:17:28.243533+00:00",
   "total_tenders": 5095,
   "portal_total_tenders": 5095,
   "organisation_count": 93,
-  "department_count": 272,
-  "pincode_count": 5,
-  "pincode_others_count": 0,
   "detail_complete": 0,
   "detail_remaining": 5526,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "37/93",
+  "organisation_progress": "38/93",
+  "current_organisation": "Madhya Pradesh Power Generating Company Limited",
+  "department_count": 272,
+  "pincode_count": 5,
+  "pincode_others_count": 0,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-21T17:23:49.324053+00:00"
+  "updated_at": "2026-09-21T17:23:58.805932+00:00"
 }
