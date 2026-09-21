@@ -1039,6 +1039,43 @@ def write_list_csv(csv_file, fieldnames, rows):
     temp.replace(csv_file)
 
 
+def merge_preserve_existing(existing_rows, new_rows, key_field="Tender ID"):
+    """Merge new rows without deleting prior data or blanking known-good fields."""
+    merged = {}
+    order = []
+    for row in existing_rows or []:
+        key = clean(row.get(key_field))
+        if not key: continue
+        merged[key] = dict(row); order.append(key)
+    for row in new_rows or []:
+        key = clean(row.get(key_field))
+        if not key: continue
+        if key not in merged:
+            merged[key] = dict(row); order.append(key); continue
+        for field, value in dict(row).items():
+            value = clean(value)
+            if value or not clean(merged[key].get(field)): merged[key][field] = value
+    return [merged[k] for k in order if k in merged]
+
+def merge_org_rows(existing_rows, new_rows):
+    """Organisation master is additive; counts are refreshed, old orgs remain."""
+    merged = {}; order = []
+    for row in existing_rows or []:
+        key = clean(row.get("Organisation Name")).casefold()
+        if not key: continue
+        merged[key] = dict(row); order.append(key)
+    for row in new_rows or []:
+        key = clean(row.get("Organisation Name")).casefold()
+        if not key: continue
+        if key not in merged:
+            merged[key] = dict(row); order.append(key)
+        else:
+            for field, value in dict(row).items():
+                value = clean(value)
+                if value or not clean(merged[key].get(field)): merged[key][field] = value
+    for idx, key in enumerate(order, 1): merged[key]["S.No."] = idx
+    return [merged[k] for k in order if k in merged]
+
 def parse_list_dates(tender):
     """Best-effort extraction of dates from a tender-list row.
     The raw row is always retained, so no list information is lost."""
@@ -1430,9 +1467,13 @@ def scrape_mp_tenders(csv_file):
 
     org_csv = csv_file.parent / "organisations.csv"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
-    write_list_csv(org_csv, ORG_FIELDS, org_rows)
+    existing_org_rows = read_existing(org_csv)
+    merged_org_rows = merge_org_rows(existing_org_rows, org_rows)
+    write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
 
-    tender_list_rows = []
+    existing_tender_list_rows = read_existing(tender_list_csv)
+    tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_tender_list_rows if clean(r.get("Tender ID"))}
+    tender_list_rows = list(tender_list_by_id.values())
     existing_detail_rows = read_existing(csv_file)
     existing_by_id = {
         clean(row.get("Tender ID")): dict(row)
@@ -1771,69 +1812,7 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # Build/refresh the main detailed CSV from the complete tender-list collection.
-    # Safety: never replace a known-good dataset with an empty scrape. [detail-run]
-    if not tender_list_rows:
-        write_extraction_status(csv_file, {
-            "status": "error",
-            "process_started_at": process_started_at,
-            "total_tenders": len(existing_by_id),
-            "detail_complete": 0,
-            "detail_remaining": len(existing_by_id),
-            "errors": 1,
-            "latest_error": "Portal tender rows could not be parsed; previous dataset preserved.",
-            "organisation_progress": f"{len(organisations)}/{len(organisations)}",
-            "detail_batch_size": batch_size,
-            "detail_batch_completed": detail_successes,
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-        })
-        print("SCRAPER SAFETY STOP: zero tender-list rows; previous dataset preserved.")
-        return {"ok": False, "preserved_previous_dataset": True, "tender_list_records": 0}
-
-    # Existing detail fields are preserved; the 9-tender validation is run separately
-    # with DETAIL_VALIDATION_ONLY=1 so it can never replace the dashboard dataset.
-    merged_rows = []
-    for row in tender_list_rows:
-        tender_id = clean(row.get("Tender ID"))
-        old = dict(existing_by_id.get(tender_id, {}))
-        base = {
-            "Tender ID": tender_id,
-            "Published Date": clean(row.get("Published Date")),
-            "Closing Date": clean(row.get("Closing Date")),
-            "Opening Date": clean(row.get("Opening Date")),
-            "Title": clean(row.get("Title")),
-            "Reference Number": clean(row.get("Reference Number")),
-            "Organisation": clean(row.get("Organisation Name")),
-            "Department": clean(old.get("Department")),
-            "Division": clean(old.get("Division")),
-            "Sub Division": clean(old.get("Sub Division")),
-            "PAC Amount": clean(old.get("PAC Amount")),
-            "EMD Fee": clean(old.get("EMD Fee")),
-            "Tender Fee": clean(old.get("Tender Fee")),
-            "Processing Fee": clean(old.get("Processing Fee")),
-            "Total Fee": clean(old.get("Total Fee")),
-            "Location": clean(old.get("Location")),
-            "Pincode": clean(old.get("Pincode")),
-            "Work Description": clean(old.get("Work Description")),
-            "Product Category": clean(old.get("Product Category")),
-            "Sub Category": clean(old.get("Sub Category")),
-            "Contract Type": clean(old.get("Contract Type")),
-            "Bid Validity": clean(old.get("Bid Validity")),
-            "Pre Qualification Details": clean(old.get("Pre Qualification Details")),
-            "Bid Submission Start Date": clean(old.get("Bid Submission Start Date")),
-            "Bid Submission End Date": clean(old.get("Bid Submission End Date")),
-            "Bid Opening Date": clean(row.get("Opening Date")) or clean(old.get("Bid Opening Date")),
-            "Document Download Start Date": clean(old.get("Document Download Start Date")),
-            "Document Download End Date": clean(old.get("Document Download End Date")),
-            "Fee Payable To": clean(old.get("Fee Payable To")),
-            "Fee Payable At": clean(old.get("Fee Payable At")),
-            "Status": clean(old.get("Status")) or "Open",
-            "URL": PORTAL,
-            "Detail Extracted": clean(old.get("Detail Extracted")),
-        }
-        merged_rows.append(base)
-    write_csv(csv_file, merged_rows)
-    complete_count = sum(
+    # Build/refresh the detailed CSV without ever deleting older Tender IDs.    current_rows_by_id = {clean(r.get("Tender ID")): r for r in tender_list_rows if clean(r.get("Tender ID"))}    merged_rows = [dict(old) for tid, old in existing_by_id.items() if tid not in current_rows_by_id]    for tender_id, row in current_rows_by_id.items():        old = dict(existing_by_id.get(tender_id, {}))        base = {            "Tender ID": tender_id,            "Published Date": clean(row.get("Published Date")) or clean(old.get("Published Date")),            "Closing Date": clean(row.get("Closing Date")) or clean(old.get("Closing Date")),            "Opening Date": clean(row.get("Opening Date")) or clean(old.get("Opening Date")),            "Title": clean(row.get("Title")) or clean(old.get("Title")),            "Reference Number": clean(row.get("Reference Number")) or clean(old.get("Reference Number")),            "Organisation": clean(row.get("Organisation Name")) or clean(old.get("Organisation")),            "Department": clean(old.get("Department")), "Division": clean(old.get("Division")), "Sub Division": clean(old.get("Sub Division")),            "PAC Amount": clean(old.get("PAC Amount")), "EMD Fee": clean(old.get("EMD Fee")), "Tender Fee": clean(old.get("Tender Fee")),            "Processing Fee": clean(old.get("Processing Fee")), "Total Fee": clean(old.get("Total Fee")), "Location": clean(old.get("Location")),            "Pincode": clean(old.get("Pincode")), "Work Description": clean(old.get("Work Description")), "Product Category": clean(old.get("Product Category")),            "Sub Category": clean(old.get("Sub Category")), "Contract Type": clean(old.get("Contract Type")), "Bid Validity": clean(old.get("Bid Validity")),            "Pre Qualification Details": clean(old.get("Pre Qualification Details")), "Bid Submission Start Date": clean(old.get("Bid Submission Start Date")),            "Bid Submission End Date": clean(old.get("Bid Submission End Date")), "Bid Opening Date": clean(row.get("Opening Date")) or clean(old.get("Bid Opening Date")),            "Document Download Start Date": clean(old.get("Document Download Start Date")), "Document Download End Date": clean(old.get("Document Download End Date")),            "Fee Payable To": clean(old.get("Fee Payable To")), "Fee Payable At": clean(old.get("Fee Payable At")),            "Status": clean(old.get("Status")) or "Open", "URL": PORTAL, "Detail Extracted": clean(old.get("Detail Extracted")),        }        merged_rows.append(base)    if len(merged_rows) < len(existing_by_id):        print(f"SAFETY STOP: merged tender IDs {len(merged_rows)} < existing {len(existing_by_id)}; preserving previous dataset.")        return {"ok": False, "preserved_previous_dataset": True, "tender_list_records": len(tender_list_rows), "total_records": len(existing_by_id)}    write_csv(csv_file, merged_rows)    complete_count = sum(
         1 for r in merged_rows
         if all(clean(r.get(k)) for k in (
             "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
