@@ -2067,7 +2067,8 @@ def scrape_mp_tenders(csv_file):
             "tender_list_records": len(tender_list_rows),
             "total_records": len(existing_by_id),
         }
-    write_csv(csv_file, merged_rows)    complete_count = sum(
+    write_csv(csv_file, merged_rows)
+    complete_count = sum(
         1 for r in merged_rows
         if all(clean(r.get(k)) for k in (
             "PAC Amount", "EMD Fee", "Tender Fee", "Processing Fee",
