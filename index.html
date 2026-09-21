@@ -3338,8 +3338,20 @@ function sortCurrentTable(key){
     tableSortDesc = false;
   }
 
-  // Rebuild the complete filtered result from allTenders first.
-  // The 100-row pager is only a display window and is never the sort scope.
+  // Keep the dropdown and clickable table header on the same sort state.
+  // Sorting is always performed on the COMPLETE filteredTenders array;
+  // the 100-row pager is only the display window.
+  const sortToSelect = {
+    "Closing Date":"closing",
+    "Published Date":"published",
+    "Title":"title",
+    "Organisation":"organisation"
+  };
+  const selectKey = sortToSelect[key];
+  if(selectKey){
+    $("sortSelect").value = selectKey + (tableSortDesc ? "-desc" : "-asc");
+  }
+
   applyFilters(false);
   updateTableSortHeaders();
 }
