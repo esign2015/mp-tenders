@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
-from scraper import parse_detail, PORTAL
+from scraper import parse_detail, parse_tender_rows, PORTAL
 
 IDS = [
     "2026_CPA_534387_1",
@@ -62,22 +62,31 @@ def do_search(page,tender_id):
     go.click()
     page.wait_for_load_state("domcontentloaded",timeout=90000)
     page.wait_for_timeout(2500)
-    links=page.locator("a").all();candidates=[]
-    for a in links:
+    # IMPORTANT: GO only shows the SEARCH RESULT page. The detail page is
+    # reached only by clicking the actual Tender Title link in that result row.
+    result_soup=BeautifulSoup(page.content(),"html.parser")
+    result_rows=parse_tender_rows(result_soup,page.url)
+    match=next((r for r in result_rows if clean(r.get("tender_id")).casefold()==tender_id.casefold()),None)
+    if not match:
+        raise RuntimeError(f"Search returned no matching Tender row for {tender_id}; url={page.url}")
+    title=clean(match.get("title"))
+    reference=clean(match.get("reference"))
+    if not title:
+        raise RuntimeError(f"Tender Title not identified in search result row for {tender_id}")
+    title_link=None
+    anchors=page.locator("a")
+    for i in range(anchors.count()):
+        a=anchors.nth(i)
         if not a.is_visible():continue
-        txt=clean(a.inner_text());href=clean(a.get_attribute("href"))
-        if tender_id.casefold() in (txt+" "+href).casefold():candidates.append(a)
-    if not candidates:
-        for a in links:
-            if not a.is_visible():continue
-            txt=clean(a.inner_text())
-            if txt and len(txt)>8 and not re.search(r"^(home|search|more|next|previous|login)$",txt,re.I):
-                if a.locator("xpath=ancestor::table[1]").count():candidates.append(a)
-    if not candidates:raise RuntimeError(f"Search returned no Tender Title result for {tender_id}; url={page.url}")
-    title_link=candidates[0];title=clean(title_link.inner_text())
+        txt=clean(a.inner_text())
+        if title.casefold() in txt.casefold() or txt.casefold()==title.casefold():
+            title_link=a
+            break
+    if title_link is None:
+        raise RuntimeError(f"Actual Tender Title link not found after GO for {tender_id}; title={title[:160]}")
     title_link.click()
     page.wait_for_load_state("domcontentloaded",timeout=90000)
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(2500)
     soup=BeautifulSoup(page.content(),"html.parser")
     detail=parse_detail(soup,page.url)
     if clean(detail.get("Tender ID"))!=tender_id:
