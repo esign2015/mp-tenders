@@ -2842,14 +2842,31 @@ function updateCounts(rows, refreshHeader=true){
 
   const live = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
-    return !closing || closing.getTime() > now.getTime();
+    const opening = parseDate(row["Opening Date"]);
+
+    /*
+       Keep a tender live during the extension window:
+       closing has passed, but Bid Opening is still in the future.
+    */
+    return !closing ||
+           closing.getTime() > now.getTime() ||
+           (closing.getTime() <= now.getTime() &&
+            opening &&
+            opening.getTime() > now.getTime());
   }).length;
 
   const closingToday = rows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
-    return closing &&
-           dateKey(closing) === todayKey() &&
-           closing.getTime() > now.getTime();
+    const opening = parseDate(row["Opening Date"]);
+    const active =
+      closing &&
+      (closing.getTime() > now.getTime() ||
+       (closing.getTime() <= now.getTime() &&
+        opening &&
+        opening.getTime() > now.getTime()));
+
+    return active &&
+           dateKey(closing) === todayKey();
   }).length;
 
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
