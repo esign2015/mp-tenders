@@ -2648,7 +2648,15 @@ async function refreshPublishedData(){
       data = await loadOrganisationTenderCsv();
     }
     if(Array.isArray(data) && data.length){
-      const next = data.map(normaliseTender);
+      // Keep the current portal snapshot authoritative for Live/active rows.
+      // Historical/detail CSV records are retained only for Archive.
+      let portalRowsForMerge = [];
+      try{
+        portalRowsForMerge = await loadOrganisationTenderCsv();
+      }catch(_e){
+        portalRowsForMerge = [];
+      }
+      const next = mergeCurrentPortalRows(data, portalRowsForMerge);
       const oldKey = allTenders.map(x => clean(x["Tender ID"])).join("|");
       const newKey = next.map(x => clean(x["Tender ID"])).join("|");
 
@@ -3389,19 +3397,23 @@ function applyFilters(refreshHeader=true){
     const opening = parseDate(row["Opening Date"]);
 
     /*
-       Keep a tender visible on the main dashboard until 7:00 PM IST on
-       the calendar day after its closing time. This gives users a clear
-       visual "Closed" state during the day instead of moving it to Archive
-       immediately when the countdown reaches zero.
-       After 7 PM IST, it becomes archived. Archived page keeps closed tenders for 10 days after closing.
+       LIVE mode follows the actual "Tenders by Organisation" portal snapshot.
+       This keeps the dashboard Live count equal to the portal's current
+       organisation total (for example 5,206), instead of dropping records
+       merely because their parsed Closing Date has already passed.
+       ARCHIVE mode uses the historical detailed dataset and the 10-day
+       retention rule below.
     */
-    const nowIST = new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
-    const archiveCutoff = new Date(nowIST);
-    archiveCutoff.setHours(19,0,0,0);
+    if(!archivedMode && portalActiveIds.size){
+      if(!tenderId || !portalActiveIds.has(tenderId)) return false;
+    }else{
+      const nowIST = new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
+      const archiveCutoff = new Date(nowIST);
+      archiveCutoff.setHours(19,0,0,0);
 
-    if(isCancelled){
-      if(!archivedMode) return false;
-    }else if(closing){
+      if(isCancelled){
+        if(!archivedMode) return false;
+      }else if(closing){
       const closeIST = new Date(closing);
       const closeKey = dateKey(closeIST);
       const todayKeyNow = dateKey(nowIST);
@@ -3426,8 +3438,9 @@ function applyFilters(refreshHeader=true){
           }
         }
       }
-    }else if(archivedMode){
-      return false;
+      }else if(archivedMode){
+        return false;
+      }
     }
     const districtInfo = getDistrictInfo(row);
     const combined = [
