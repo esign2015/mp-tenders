@@ -122,6 +122,8 @@ jobs:
       - name: Run new Tender detail worker
         env:
           EXISTING_ID_BATCH_SIZE: "0"
+          RSP_FAST: "1"
+          RSP_FAST_MAX_DETAILS: "900"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
@@ -183,10 +185,12 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium
         run: python -m playwright install --with-deps chromium
-      - name: Extract all copied Tender IDs pending detail
+      - name: Extract copied Tender IDs pending detail using RSP fast route
         env:
           EXISTING_ID_BATCH_SIZE: "0"
           EXTRACT_ALL_INVENTORY: "1"
+          RSP_FAST: "1"
+          RSP_FAST_MAX_DETAILS: "900"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
