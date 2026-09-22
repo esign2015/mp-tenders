@@ -212,6 +212,74 @@ def telegram_verify():
     })
 
 
+def telegram_auth_valid(payload):
+    received_hash = clean(payload.get("hash"))
+    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+    if not received_hash or not token:
+        return None, "Telegram authentication data is missing."
+    try:
+        auth_date = int(payload.get("auth_date", 0) or 0)
+    except Exception:
+        return None, "Invalid Telegram authentication date."
+    now = int(datetime.now(timezone.utc).timestamp())
+    if not auth_date or now - auth_date > 86400:
+        return None, "Telegram verification expired. Please login again."
+    check_fields = {k: str(v) for k, v in payload.items() if k != "hash" and v is not None}
+    data_check_string = "\n".join(f"{k}={check_fields[k]}" for k in sorted(check_fields))
+    secret_key = hashlib.sha256(token.encode("utf-8")).digest()
+    expected_hash = hmac.new(secret_key, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(expected_hash, received_hash):
+        return None, "Telegram authentication could not be validated."
+    try:
+        user_id = int(payload.get("id", 0) or 0)
+    except Exception:
+        user_id = 0
+    if not user_id:
+        return None, "Telegram user ID is missing."
+    return user_id, ""
+
+@app.post("/api/telegram/send-pdf")
+def telegram_send_pdf():
+    """Send a dashboard-generated PDF to the currently logged-in Telegram user."""
+    payload = request.get_json(silent=True) or {}
+    auth = payload.get("auth") or {}
+    user_id, error = telegram_auth_valid(auth)
+    if not user_id:
+        return jsonify({"ok": False, "message": error or "Telegram login required."}), 401
+
+    pdf_b64 = clean(payload.get("pdf_base64"))
+    filename = clean(payload.get("filename")) or "MP_Tender_Dashboard.pdf"
+    if not pdf_b64:
+        return jsonify({"ok": False, "message": "PDF data is missing."}), 400
+    try:
+        import base64, requests
+        pdf_bytes = base64.b64decode(pdf_b64, validate=True)
+        if len(pdf_bytes) > 45 * 1024 * 1024:
+            return jsonify({"ok": False, "message": "PDF is too large for this Telegram delivery."}), 413
+
+        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+        # The user must have opened/started the bot at least once; Telegram
+        # does not allow a bot to initiate a brand-new private conversation.
+        response = requests.post(
+            f"https://api.telegram.org/bot{token}/sendDocument",
+            data={
+                "chat_id": str(user_id),
+                "caption": "📄 MP Tender Dashboard PDF\nयह PDF आपके Telegram private chat में भेजी गई है।",
+            },
+            files={
+                "document": (filename, pdf_bytes, "application/pdf"),
+            },
+            timeout=45,
+        )
+        result = response.json()
+        if not result.get("ok"):
+            description = clean(result.get("description")) or "Telegram PDF delivery failed."
+            return jsonify({"ok": False, "message": description}), 502
+        return jsonify({"ok": True, "message": "PDF Telegram पर भेज दी गई है।"})
+    except Exception as exc:
+        print(f"Telegram PDF send failed: {exc}")
+        return jsonify({"ok": False, "message": "PDF Telegram पर भेजने में समस्या हुई। कृपया Telegram bot chat खोलकर Start दबाएँ।"}), 502
+
 @app.get("/health")
 def health():
     return jsonify({
