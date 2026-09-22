@@ -332,9 +332,8 @@ def main():
     reactivated = int(verification.get("portal_listed_with_past_closing", 0) or 0)
     org_mismatches = int(verification.get("organisation_count_mismatches", 0) or 0)
 
-    # Evening alerts are deliberately split into two independent messages:
-    # 8:55 PM = today's newly published tenders only
-    # 9:00 PM = complete total tender list only
+    # The final evening alert is sent at 11:15 PM IST and reports today's
+    # newly published tenders plus the final portal/copy/detail verification.
     if mode == "evening_new":
         message = (
             "🔔 एमपी टेंडर्स अलर्ट\n\n"
