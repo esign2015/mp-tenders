@@ -783,7 +783,7 @@ jobs:
 
               if [ "$SHOULD_PUBLISH" = "true" ]; then
                 echo "Publishing live checkpoint: org=$ORG_PROGRESS detail=$CHECKPOINT"
-                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json; do
                   if [ -s "$f" ]; then git add "$f"; fi
                 done
 
@@ -818,7 +818,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json; do
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json; do
             if [ -s "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
