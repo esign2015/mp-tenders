@@ -150,12 +150,15 @@ def do_search(page, tender_id):
     return detail
 
 def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_detail_csv, success_ids):
-    """RSP-style detail extraction.
+    """Fast RSP-compatible detail extraction.
 
-    Uses one requests.Session, opens the MP portal/home first, discovers the
-    live tender DirectLinks from the organisation pages, and parses the detail
-    HTML directly with the same resilient RSP-derived parser. Session-bound
-    DirectLink URLs are used only in memory and are never written to CSV.
+    This follows the public RSPTender scraper's proven pattern: one persistent
+    requests.Session, Home -> Organisation index -> each organisation's live
+    tender links -> direct detail GET in the same session.  It deliberately
+    does NOT paginate through every historical tender row before starting
+    detail extraction.  New/current rows therefore reach the detail parser
+    immediately, while the normal Playwright route remains available for
+    backfill when this fast mode is not requested.
     """
     target_ids = {clean(row.get("Tender ID")) for row in target_rows if clean(row.get("Tender ID"))}
     if not target_ids:
@@ -166,123 +169,152 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
     remaining = set(target_ids)
     extracted = []
     failed = []
+    max_fast = int(os.environ.get("RSP_FAST_MAX_DETAILS", "900"))
+    save_every = 10
+    local_success = 0
 
     try:
-        print("RSP-STYLE: opening MP Home and Organisation page...", flush=True)
-        portal_request(session, PORTAL, retries=4, sleep=0.25)
-        org_response = portal_request(session, ORG_URL, retries=4, sleep=0.25, referer=PORTAL)
-        organisations = parse_organisation_rows(BeautifulSoup(org_response.text, "html.parser"), PORTAL)
-        print(f"RSP-STYLE: organisations discovered = {len(organisations)}", flush=True)
+        print("RSP-FAST: opening MP Home and Organisation page...", flush=True)
+        portal_request(session, PORTAL, retries=4, sleep=0.10)
+        org_response = portal_request(session, ORG_URL, retries=4, sleep=0.10, referer=PORTAL)
+        organisations = parse_organisation_rows(
+            BeautifulSoup(org_response.text, "html.parser"), PORTAL
+        )
+        print(f"RSP-FAST: organisations discovered = {len(organisations)}", flush=True)
 
         for org in organisations:
-            if not remaining:
+            if not remaining or local_success >= max_fast:
                 break
-            name = clean(org.get("name"))
-            expected = int(org.get("count") or 0)
+
+            org_name = clean(org.get("name"))
             org_url = clean(org.get("url"))
             if not org_url:
                 continue
+
             try:
-                tender_rows, pages = get_all_tender_rows(
-                    session, org_url, expected
+                response = portal_request(
+                    session, org_url, retries=3, sleep=0.10, referer=ORG_URL
                 )
-                matches = [
-                    row for row in tender_rows
-                    if clean(row.get("Tender ID")) in remaining
-                ]
-                if matches:
-                    print(
-                        f"RSP-STYLE: {name} | portal={expected} | pages={pages} | "
-                        f"target matches={len(matches)}",
-                        flush=True
+                soup = BeautifulSoup(response.text, "html.parser")
+
+                # Exact RSPTender-style link discovery: read the live
+                # Tender Information links from the current organisation page.
+                links = []
+                seen_urls = set()
+                for anchor in soup.find_all("a", href=True):
+                    href = clean(anchor.get("href"))
+                    if not any(
+                        token in href.casefold()
+                        for token in (
+                            "frontendviewtender",
+                            "viewtender",
+                            "frontendtenderdetails",
+                        )
+                    ):
+                        continue
+                    tr = anchor.find_parent("tr")
+                    hint = clean(
+                        tr.get_text(" ", strip=True)
+                        if tr is not None
+                        else anchor.get_text(" ", strip=True)
                     )
-                for listing in matches:
-                    tid = clean(listing.get("Tender ID"))
+                    tid_match = TENDER_ID_RE.search(hint)
+                    tid = tid_match.group(0) if tid_match else ""
                     if not tid or tid not in remaining:
                         continue
+                    live_url = urljoin(PORTAL, href)
+                    if live_url in seen_urls:
+                        continue
+                    seen_urls.add(live_url)
+                    links.append((tid, live_url, hint))
+
+                if not links:
+                    continue
+
+                for tid, live_url, hint in links:
+                    if tid not in remaining or local_success >= max_fast:
+                        continue
                     try:
-                        # This is the key RSP flow: GET the live DirectLink
-                        # with the same requests session that discovered it.
-                        response = portal_request(
+                        detail_response = portal_request(
                             session,
-                            listing.get("url"),
-                            retries=4,
-                            sleep=0.20,
+                            live_url,
+                            retries=3,
+                            sleep=0.05,
                             referer=org_url,
                         )
-                        soup = BeautifulSoup(response.text, "html.parser")
-                        detail = parse_detail(soup, PORTAL)
-                        parsed_id = clean(detail.get("Tender ID"))
-                        if parsed_id and parsed_id.casefold() != tid.casefold():
-                            raise RuntimeError(
-                                f"Detail Tender ID mismatch: expected {tid}, got {parsed_id}"
-                            )
-                        if not parsed_id:
-                            body = clean(soup.get_text(" ", strip=True))
+                        detail_soup = BeautifulSoup(detail_response.text, "html.parser")
+                        detail = parse_detail(detail_soup, live_url)
+
+                        if not detail or clean(detail.get("Tender ID")) != tid:
+                            body = clean(detail_soup.get_text(" ", strip=True))
                             if tid.casefold() not in body.casefold():
                                 raise RuntimeError(
-                                    f"RSP detail page does not contain Tender ID {tid}"
+                                    f"RSP detail validation failed for {tid}"
                                 )
-                            detail["Tender ID"] = tid
-
-                        base = by_id.get(tid, {})
-                        for key in (
-                            "Organisation", "Department", "Division", "Sub Division",
-                        ):
-                            if clean(base.get(key)) and len(clean(base.get(key))) >= len(clean(detail.get(key))):
-                                detail[key] = base.get(key, "")
-                        for key in (
-                            "Title", "Reference Number", "Published Date",
-                            "Closing Date", "Opening Date",
-                        ):
-                            if not clean(detail.get(key)):
-                                detail[key] = base.get(key, "")
+                            if detail is None:
+                                detail = {"Tender ID": tid}
 
                         detail.pop("URL", None)
+                        detail["Tender ID"] = tid
                         detail["Detail Extracted"] = "YES"
                         detail["Search Route"] = (
                             "RSP -> Home -> Organisation -> Live Tender Link -> Detail"
                         )
-                        merged = dict(base)
+
+                        merged = dict(by_id.get(tid, {}))
                         merged.update(detail)
                         by_id[tid] = merged
-                        remaining.remove(tid)
                         success_ids.add(tid)
-                        extracted.append(tid)
+                        remaining.discard(tid)
+                        extracted.append(merged)
+                        local_success += 1
 
-                        if len(extracted) % 10 == 0:
+                        if local_success % save_every == 0:
                             save_csv()
                             save_detail_csv()
-                        save_status("running", tid)
+                            save_status("running", tid)
                         print(
-                            f"RSP-STYLE DETAIL OK {tid} | remaining={len(remaining)}",
+                            f"RSP-FAST OK {tid} "
+                            f"({local_success}/{max_fast})",
                             flush=True,
                         )
                     except Exception as exc:
-                        failed.append((by_id.get(tid, {}), exc))
+                        failed.append((by_id.get(tid, {"Tender ID": tid}), exc))
                         print(
-                            f"RSP-STYLE DETAIL FAIL {tid}: "
+                            f"RSP-FAST FAIL {tid}: "
                             f"{type(exc).__name__}: {exc}",
                             flush=True,
                         )
             except Exception as exc:
                 print(
-                    f"RSP-STYLE ORG FAIL {name}: "
+                    f"RSP-FAST ORG FAIL {org_name}: "
                     f"{type(exc).__name__}: {exc}",
                     flush=True,
                 )
     finally:
         session.close()
 
+    if local_success:
+        save_csv()
+        save_detail_csv()
+        save_status("running", extracted[-1].get("Tender ID", ""))
+
     print(
-        f"RSP-STYLE COMPLETE: extracted={len(extracted)} "
-        f"remaining={len(remaining)}",
+        f"RSP-FAST COMPLETE: extracted={local_success} "
+        f"remaining_targets={len(remaining)}",
         flush=True,
     )
-    # Anything still remaining goes to the existing Playwright search route.
-    fallback = [by_id[tid] for tid in target_ids if tid in remaining and tid in by_id]
-    return fallback, failed
 
+    # In fast mode we intentionally leave unresolved IDs for the next cycle;
+    # do not immediately fall back to 4,000+ Playwright searches.
+    if os.environ.get("RSP_FAST", "0") == "1":
+        return [], failed
+
+    fallback = [
+        by_id[tid] for tid in target_ids
+        if tid in remaining and tid in by_id
+    ]
+    return fallback, failed
 
 def main():
     # The 20:15 recovery scraper run was already launched from an older
