@@ -112,7 +112,7 @@ function render(){
  "<td>"+clean(r["Title"])+"</td>"+
  "<td><span class='badge'>"+clean(r["Closing Date"]||r["Last Date"])+"</span></td>"+
  "<td>"+orgShort(r["Tender ID"],r["Organisation"])+"</td>"+
- "<td>"+clean(r["Department"])+"</td><td>"+clean(r["Division"])+"</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 3 दिनों तक tender दिखाई देगा।</td></tr>";
+ "<td>"+clean(r["Department"])+"</td><td>"+clean(r["Division"])+"</td></tr>").join(""):"<tr><td colspan='11' class='empty'>अभी कोई archived tender उपलब्ध नहीं है। Closing date निकलने के बाद यहाँ अधिकतम 48 घंटे तक tender दिखाई देगा।</td></tr>";
 }
 (async()=>{
  try{
