@@ -91,7 +91,14 @@ function render(){
   const statusSuccessIds=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
   const successSet=new Set([...detailSuccessIds,...statusSuccessIds]);
   const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
-  const skippedSet=new Set((statusData.skipped_ids||[]).filter(id=>ids.has(id)));
+  // A Tender ID with Detail Extracted=YES is successful, not skipped.
+  // Older status files could list the same ID in skipped_ids, causing
+  // misleading "132 Success / 132 Skip" double counting.
+  const skippedSet=new Set(
+    (statusData.skipped_ids||[])
+      .filter(id=>ids.has(id))
+      .filter(id=>!successSet.has(id) && !failedSet.has(id))
+  );
   const success=successSet.size, failed=failedSet.size, skipped=skippedSet.size;
   const pending=Math.max(0,ids.size-success-failed-skipped);
   totals.portal+=count; totals.copied+=ids.size; totals.success+=success; totals.fail+=failed; totals.skip+=skipped; totals.pending+=pending;
