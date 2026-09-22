@@ -115,7 +115,14 @@ async function load(){
   $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
   const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
-  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+((statusData.success_ids||[]).length).toLocaleString('en-IN');
+  const actualDetailSuccess=new Set(
+    details
+      .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
+      .map(d=>clean(d['Tender ID']))
+      .filter(Boolean)
+  );
+  const statusDetailSuccess=new Set((statusData.success_ids||[]).map(clean).filter(Boolean));
+  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+new Set([...actualDetailSuccess,...statusDetailSuccess]).size.toLocaleString('en-IN');
   $('msg').textContent='Status = Portal Tender Count और Copied Tender Count का मिलान. Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
   render();
  }catch(e){
