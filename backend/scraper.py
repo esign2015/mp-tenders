@@ -231,6 +231,11 @@ def parse_detail(soup, url):
         for cell in soup.find_all(["td", "th", "label"]):
             label_text = clean(cell.get_text(" ", strip=True))
             low = label_text.casefold()
+            # Do not treat the section heading
+            # "Tender Fee Details, [Total Fee in ₹ - ...]" as the actual
+            # Tender Fee row. That heading is the source of the ₹795 bug.
+            if "details" in low or "total fee" in low:
+                continue
             if not any(low.startswith(x) for x in wanted):
                 continue
             sibling = cell.find_next_sibling(["td", "th", "label", "div", "span"])
@@ -380,11 +385,48 @@ def parse_detail(soup, url):
     # "Total Fee in ₹ - 795". Exact row lookup must therefore run BEFORE
     # the broad fallback parser, otherwise the heading can be mistaken
     # for the Tender Fee.
-    tender_fee = value(
-        "Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"
-    ) or labeled_amount(["Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"])
+    # Prefer the exact Tender Fee row. Never read the surrounding
+    # "Total Fee in ₹ - ..." section heading as Tender Fee.
+    tender_fee = ""
+    exact_fee_labels = {
+        "tender fee in ₹", "tender fee", "document fee", "tender document fee"
+    }
+    for table in soup.find_all("table"):
+        for tr in table.find_all("tr"):
+            cells = tr.find_all(["td", "th"])
+            for i, cell in enumerate(cells):
+                label_text = clean(cell.get_text(" ", strip=True)).rstrip(":")
+                label_key = label_text.casefold()
+                if label_key not in exact_fee_labels:
+                    continue
+                for nxt in cells[i + 1:]:
+                    raw = clean(nxt.get_text(" ", strip=True))
+                    if raw and raw not in {":", "-"}:
+                        amount = re.search(
+                            r"(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)",
+                            raw
+                        )
+                        if amount:
+                            tender_fee = amount.group(1)
+                            break
+                if tender_fee:
+                    break
+            if tender_fee:
+                break
+        if tender_fee:
+            break
     if not tender_fee:
-        tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
+        tender_fee = value(
+            "Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"
+        )
+    if not tender_fee:
+        tender_fee = labeled_amount(
+            ["Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"]
+        )
+    if not tender_fee:
+        tender_fee = between(
+            "Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"]
+        )
 
     processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee") or labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"])
     if not processing_fee:
