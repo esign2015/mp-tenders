@@ -1915,15 +1915,19 @@ async function verifyTelegramMembership(user, persist=true){
         if(joinBtn) joinBtn.style.display="";
         if(checkBtn) checkBtn.style.display="";
         telegramStatus("❌ Telegram login हो गया, लेकिन @mptendersalert membership नहीं मिली। पहले channel join करें, फिर Check Again दबाएँ।");
-      }else if(response.status===401 && !persist){
-        // A previously stored Telegram authorization can become invalid.
-        // Do not trap the user in a failed auto-check: clear it and show
-        // the fresh Telegram Login widget again.
+      }else if(response.status===401){
+        // 401 can happen for an old stored login OR for a fresh widget
+        // response that the backend rejected. In both cases do not leave
+        // the user trapped behind a dead login state.
         localStorage.removeItem("telegram_auth");
         sessionStorage.removeItem("telegram_verified");
         sessionStorage.removeItem("telegram_user");
         telegramAuthData=null;
-        telegramStatus("🔄 पुराना Telegram login expire/invalid हो गया। कृपया फिर से Login with Telegram करें।");
+        telegramStatus(
+          persist
+            ? "❌ Telegram Login मिला, लेकिन server ने इसे स्वीकार नहीं किया। Retry Telegram Login करके फिर प्रयास करें।"
+            : "🔄 पुराना Telegram login expire/invalid हो गया। कृपया फिर से Login with Telegram करें।"
+        );
         showTelegramLogin();
       }else{
         throw new Error(data.message || "Telegram verification failed.");
@@ -1976,7 +1980,7 @@ async function setupTelegramLogin(){
 
   try{
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
+    const timeout = setTimeout(() => controller.abort(), 30000);
     const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
       cache:"no-store",
       signal:controller.signal
@@ -1987,6 +1991,9 @@ async function setupTelegramLogin(){
     const config=await response.json();
     if(!config.username) throw new Error("Telegram bot username is not configured");
 
+    // A previous failed widget attempt can leave only a script tag behind.
+    // Clear that failed attempt before creating a fresh Telegram widget.
+    wrap.innerHTML = "";
     const script=document.createElement("script");
     script.src="https://telegram.org/js/telegram-widget.js?22";
     script.async=true;
@@ -2022,7 +2029,7 @@ async function setupTelegramLogin(){
         }else{
           showRetry("Telegram Login button load नहीं हुआ। Retry Telegram Login दबाएँ।");
         }
-      }, 1200);
+      }, 2000);
     };
 
     wrap.appendChild(script);
