@@ -79,7 +79,17 @@ function render(){
   const name=x['Organisation Name'], key=clean(name).toLowerCase(), count=Number(x['Tender Count']||0);
   const orgRows=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
   const ids=new Set(orgRows.map(t=>clean(t['Tender ID'])).filter(Boolean));
-  const successSet=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
+  // Count successful detail extraction from the actual detail CSV first.
+  // This avoids showing 0 while the worker has already checkpointed detail rows
+  // but the status file was created by an older worker revision.
+  const detailSuccessIds=new Set(
+    details
+      .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
+      .map(d=>clean(d['Tender ID']))
+      .filter(id=>ids.has(id))
+  );
+  const statusSuccessIds=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
+  const successSet=new Set([...detailSuccessIds,...statusSuccessIds]);
   const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
   const skippedSet=new Set((statusData.skipped_ids||[]).filter(id=>ids.has(id)));
   const success=successSet.size, failed=failedSet.size, skipped=skippedSet.size;
