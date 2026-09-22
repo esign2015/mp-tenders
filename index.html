@@ -570,7 +570,7 @@ button:hover{
   background:#f8fafc;
 }
 .table-scroll-top-inner{
-  width:1980px;
+  width:3555px;
   height:1px;
 }
 .table-wrap{
@@ -3173,7 +3173,12 @@ function setupVirtualTable(){
   const syncTopScrollbarWidth = () => {
     const width = Math.max(wrap.scrollWidth, wrap.clientWidth);
     inner.style.width = width + "px";
-  };\n  syncTopScrollbarWidth();\n  window.addEventListener("resize", syncTopScrollbarWidth);\n  new ResizeObserver(syncTopScrollbarWidth).observe(wrap);
+  };
+  syncTopScrollbarWidth();
+  window.addEventListener("resize", syncTopScrollbarWidth);
+  if(window.ResizeObserver){
+    new ResizeObserver(syncTopScrollbarWidth).observe(wrap);
+  }
 
   topScroll.addEventListener("scroll", () => {
     if(Math.abs(wrap.scrollLeft - topScroll.scrollLeft) > 1){
