@@ -2273,7 +2273,7 @@ def scrape_mp_tenders(csv_file):
 
     previous_count_by_org = {
         clean(row.get("Organisation Name")).casefold(): int(
-            re.sub(r"\\D", "", clean(row.get("Tender Count"))) or 0
+            re.sub(r"\D", "", clean(row.get("Tender Count"))) or 0
         )
         for row in existing_org_rows
         if clean(row.get("Organisation Name"))
