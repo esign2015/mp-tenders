@@ -1869,7 +1869,7 @@ function updateTelegramProfile(user){
   if(menuName) menuName.textContent=name;
   if(menuUser) menuUser.textContent=username;
   if(avatar){
-    const photoUrl = clean(user.photo_url);
+    const photoUrl = (user.photo_url === null || user.photo_url === undefined) ? "" : String(user.photo_url).trim();
     if(photoUrl){
       avatar.onerror = () => {
         avatar.removeAttribute("src");
