@@ -20,11 +20,15 @@ def main():
     current = now.hour * 60 + now.minute
     max_delay = int(cfg.get("telegram_max_delay_minutes", 45))
 
-    candidates = [
-        ("morning", hm(cfg["morning_telegram_ist"])),
-        ("evening_new", hm(cfg["evening_new_telegram_ist"])),
-        ("evening_total", hm(cfg["evening_total_telegram_ist"])),
-    ]
+    candidates = []
+    for mode, key in (
+        ("morning", "morning_telegram_ist"),
+        ("evening_new", "evening_new_telegram_ist"),
+        ("evening_total", "evening_total_telegram_ist"),
+    ):
+        target_value = cfg.get(key)
+        if target_value:
+            candidates.append((mode, hm(target_value)))
 
     state = {}
     if STATE.exists():
