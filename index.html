@@ -1832,6 +1832,7 @@ const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/ve
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
 let telegramAuthData = null;
 let telegramChecking = false;
+let telegramSetupInProgress = false;
 
 function telegramStatus(message, ok=false){
   const status = document.getElementById("telegramGateStatus");
@@ -1846,8 +1847,6 @@ function showTelegramLogin(){
   const loginStart=document.getElementById("telegramLoginStart");
   const joinBtn=document.getElementById("telegramJoinBtn");
   const checkBtn=document.getElementById("telegramCheckBtn");
-
-  if(loginWrap && !loginWrap.querySelector("iframe")) setupTelegramLogin();
 
   if(loginStart && loginWrap?.querySelector("iframe")){
     loginStart.style.display="none";
@@ -1957,7 +1956,8 @@ async function setupTelegramLogin(){
   const status = document.getElementById("telegramGateStatus");
   const wrap=document.getElementById("telegramLoginWrap");
   const start=document.getElementById("telegramLoginStart");
-  if(!wrap || wrap.querySelector("iframe")) return;
+  if(!wrap || wrap.querySelector("iframe") || telegramSetupInProgress) return;
+  telegramSetupInProgress = true;
 
   if(start){
     start.classList.add("loading");
@@ -2000,6 +2000,8 @@ async function setupTelegramLogin(){
       ? "Telegram server से response देर से आ रहा है। Retry Telegram Login दबाएँ।"
       : "Telegram Login अभी load नहीं हुआ। Retry Telegram Login दबाएँ।";
     telegramStatus(message);
+  }finally{
+    telegramSetupInProgress = false;
   }
 }
 
