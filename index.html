@@ -1832,7 +1832,6 @@ const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/ve
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
 let telegramAuthData = null;
 let telegramChecking = false;
-let telegramSetupInProgress = false;
 
 function telegramStatus(message, ok=false){
   const status = document.getElementById("telegramGateStatus");
@@ -1916,20 +1915,6 @@ async function verifyTelegramMembership(user, persist=true){
         if(joinBtn) joinBtn.style.display="";
         if(checkBtn) checkBtn.style.display="";
         telegramStatus("❌ Telegram login हो गया, लेकिन @mptendersalert membership नहीं मिली। पहले channel join करें, फिर Check Again दबाएँ।");
-      }else if(response.status===401){
-        // 401 can happen for an old stored login OR for a fresh widget
-        // response that the backend rejected. In both cases do not leave
-        // the user trapped behind a dead login state.
-        localStorage.removeItem("telegram_auth");
-        sessionStorage.removeItem("telegram_verified");
-        sessionStorage.removeItem("telegram_user");
-        telegramAuthData=null;
-        telegramStatus(
-          persist
-            ? "❌ Telegram Login मिला, लेकिन server ने इसे स्वीकार नहीं किया। Retry Telegram Login करके फिर प्रयास करें।"
-            : "🔄 पुराना Telegram login expire/invalid हो गया। कृपया फिर से Login with Telegram करें।"
-        );
-        showTelegramLogin();
       }else{
         throw new Error(data.message || "Telegram verification failed.");
       }
@@ -1969,8 +1954,6 @@ async function verifyTelegramMembership(user, persist=true){
 }
 
 async function setupTelegramLogin(){
-  if(telegramSetupInProgress) return;
-  telegramSetupInProgress = true;
   const status = document.getElementById("telegramGateStatus");
   const wrap=document.getElementById("telegramLoginWrap");
   const start=document.getElementById("telegramLoginStart");
@@ -1983,7 +1966,7 @@ async function setupTelegramLogin(){
 
   try{
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    const timeout = setTimeout(() => controller.abort(), 12000);
     const response=await fetch(TELEGRAM_CONFIG_API+"?t="+Date.now(),{
       cache:"no-store",
       signal:controller.signal
@@ -1994,9 +1977,6 @@ async function setupTelegramLogin(){
     const config=await response.json();
     if(!config.username) throw new Error("Telegram bot username is not configured");
 
-    // A previous failed widget attempt can leave only a script tag behind.
-    // Clear that failed attempt before creating a fresh Telegram widget.
-    wrap.innerHTML = "";
     const script=document.createElement("script");
     script.src="https://telegram.org/js/telegram-widget.js?22";
     script.async=true;
@@ -2005,38 +1985,10 @@ async function setupTelegramLogin(){
     script.setAttribute("data-userpic","true");
     script.setAttribute("data-request-access","write");
     script.setAttribute("data-onauth","onTelegramAuth(user)");
-
-    let widgetTimer = null;
-    const showRetry = (message) => {
-      if(widgetTimer) clearTimeout(widgetTimer);
-      if(start){
-        start.classList.remove("loading");
-        start.textContent="🔄 Retry Telegram Login";
-        start.style.display="inline-flex";
-      }
-      telegramStatus(message || "Telegram Login load नहीं हुआ। Retry Telegram Login दबाएँ।");
-    };
-
-    script.onerror = () => {
-      console.error("Telegram Login Widget script failed to load");
-      showRetry("Telegram Login widget load नहीं हुआ। Retry Telegram Login दबाएँ।");
-    };
-
-    script.onload = () => {
-      // Telegram inserts its iframe asynchronously after the widget script loads.
-      // Do not hide the retry button until that iframe is actually present.
-      widgetTimer = setTimeout(() => {
-        if(wrap.querySelector("iframe")){
-          if(start) start.style.display="none";
-          if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
-        }else{
-          showRetry("Telegram Login button load नहीं हुआ। Retry Telegram Login दबाएँ।");
-        }
-      }, 2000);
-    };
-
     wrap.appendChild(script);
-    if(status) status.textContent="Telegram Login button load हो रहा है...";
+
+    if(status) status.textContent="Telegram Login button तैयार है। उस पर क्लिक करें।";
+    if(start) start.style.display="none";
   }catch(error){
     console.error("Telegram Login setup failed:",error);
     if(start){
@@ -2048,21 +2000,12 @@ async function setupTelegramLogin(){
       ? "Telegram server से response देर से आ रहा है। Retry Telegram Login दबाएँ।"
       : "Telegram Login अभी load नहीं हुआ। Retry Telegram Login दबाएँ।";
     telegramStatus(message);
-  }finally{
-    telegramSetupInProgress = false;
   }
 }
 
 function onTelegramAuth(user){
-  if(!user || !user.id){
-    telegramStatus("❌ Telegram से user details नहीं मिलीं। कृपया फिर से Login करें।");
-    return;
-  }
   verifyTelegramMembership(user,true);
 }
-// Telegram's legacy Login Widget invokes the callback by name.
-// Keep it explicitly on window so dynamically injected widgets can always find it.
-window.onTelegramAuth = onTelegramAuth;
 
 async function checkStoredTelegram(){
   const raw=localStorage.getItem("telegram_auth");
@@ -2103,8 +2046,8 @@ function setupTelegramFlow(){
 async function enforceTelegramAccess(){
   setupTelegramFlow();
   if(await checkStoredTelegram()) return;
-  await setupTelegramLogin();
   showTelegramLogin();
+  await setupTelegramLogin();
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
