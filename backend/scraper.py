@@ -2015,12 +2015,12 @@ def scrape_mp_tenders(csv_file):
 
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
 
-    # Retention policy: keep a tender for 3 days after its closing date.
+    # Retention policy: keep a tender for 10 days after its closing date.
     # After that, remove the complete record from the local dataset so the
     # dashboard/API does not carry stale detail indefinitely. If a later
     # corrigendum extends the closing date, the tender will be discovered
     # again by the next Tenders-by-Organisation snapshot and re-extracted.
-    retention_cutoff = now - timedelta(days=3)
+    retention_cutoff = now - timedelta(days=10)
     pruned_ids = set()
     for tid, row in list(existing_by_id.items()):
         closing = parse_portal_datetime(row.get("Closing Date"))
