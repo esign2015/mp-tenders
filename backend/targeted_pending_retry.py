@@ -2,7 +2,8 @@ import csv, json
 from pathlib import Path
 from datetime import datetime, timezone
 
-from existing_id_detail import rsp_style_extract_targets, clean
+from existing_id_detail import rsp_style_extract_targets, do_search, clean
+from playwright.sync_api import sync_playwright
 
 CSV = Path("all_tenders_org_detailed.csv")
 SNAPSHOT = Path("organisation_tenders.csv")
@@ -95,36 +96,79 @@ def save_status(status, last_id=""):
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }, indent=2), encoding="utf-8")
 
-targets = []
-for tid in pending_ids:
-    base = by_id.get(tid, {"Tender ID": tid, "Organisation": pending_meta.get(tid, "")})
-    targets.append(base)
+targets = [
+    by_id.get(tid, {"Tender ID": tid, "Organisation": pending_meta.get(tid, "")})
+    for tid in pending_ids
+]
 
 save_status("running")
-
-def checkpoint():
-    save_csv()
-    save_detail_csv()
-    save_status("running", "")
 
 def status(last_id=""):
     save_status("running", last_id)
 
+# First try the fast RSP-compatible route. Any unresolved target is then
+# retried exactly through the user's requested portal UI path:
+# Home -> paste Tender ID -> GO -> click Tender Title -> detail page.
 if targets:
     failed = rsp_style_extract_targets(
         targets, by_id, status, save_csv, save_detail_csv, success_ids
     )[1]
+
+    unresolved = []
     for base, exc in failed:
-        errors.append({
-            "Tender ID": clean(base.get("Tender ID")),
-            "error": f"{type(exc).__name__}: {exc}",
-        })
+        tid = clean(base.get("Tender ID"))
+        if tid and tid not in success_ids:
+            unresolved.append((base, exc))
+
+    print("RSP unresolved; starting Home-page Tender ID fallback:", 
+          [clean(b.get("Tender ID")) for b, _ in unresolved], flush=True)
+
+    if unresolved:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1000})
+            try:
+                for base, rsp_exc in unresolved:
+                    tid = clean(base.get("Tender ID"))
+                    try:
+                        print(f"HOME SEARCH START {tid}", flush=True)
+                        detail = do_search(page, tid)
+
+                        # Keep the organisation identity from the target
+                        # snapshot when the detail parser does not provide it.
+                        for key in ("Organisation","Department","Division","Sub Division"):
+                            if not clean(detail.get(key)) and clean(base.get(key)):
+                                detail[key] = base.get(key, "")
+
+                        merged = dict(base)
+                        merged.update(detail)
+                        merged["Tender ID"] = tid
+                        merged["Detail Extracted"] = "YES"
+                        merged["Search Route"] = "Home -> Tender ID -> GO -> Tender Title -> Detail"
+                        by_id[tid] = merged
+                        success_ids.add(tid)
+                        save_csv()
+                        save_detail_csv()
+                        save_status("running", tid)
+                        print(f"HOME SEARCH OK {tid}", flush=True)
+                    except Exception as exc:
+                        errors.append({
+                            "Tender ID": tid,
+                            "error": (
+                                f"RSP={type(rsp_exc).__name__}: {rsp_exc}; "
+                                f"HOME={type(exc).__name__}: {exc}"
+                            ),
+                        })
+                        print(f"HOME SEARCH FAIL {tid}: {type(exc).__name__}: {exc}", flush=True)
+            finally:
+                browser.close()
 else:
     print("No pending rows found for target organisations.", flush=True)
 
 save_csv()
 save_detail_csv()
 save_status("completed")
+
 print(json.dumps({
     "target_pending": len(pending_ids),
     "success_in_run": len([x for x in pending_ids if x in success_ids]),
