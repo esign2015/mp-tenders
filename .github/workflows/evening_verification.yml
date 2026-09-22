@@ -1,0 +1,116 @@
+name: MP Tender Evening Verification
+
+on:
+  schedule:
+    - cron: "15 14 * * *"   # 7:45 PM IST
+    - cron: "30 17 * * *"   # 11:00 PM IST final completion pass
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout latest data
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Verify portal, copied, dashboard and detail counts
+        run: python backend/evening_verify.py
+      - name: Publish verification report
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add data/evening_verification.json
+          git diff --cached --quiet || git commit -m "Publish evening tender verification [skip ci]"
+          git push
+
+  final_detail:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 190
+    concurrency:
+      group: mp-tender-data-writer
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - name: Checkout latest verification
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Repair portal snapshot only when verification finds a count gap
+        run: |
+          set -e
+          NEED_REPAIR="$(python - <<'PY'
+          import json
+          p=json.load(open("data/evening_verification.json",encoding="utf-8"))
+          print("1" if p.get("organisation_count_mismatches",0) or p.get("portal_ids_missing_in_master",0) else "0")
+          PY
+          )"
+          if [ "$NEED_REPAIR" = "1" ]; then
+            echo "Count gap detected; refreshing Tenders-by-Organisation snapshot before detail extraction."
+            COPY_ONLY=1 FETCH_DETAIL_PAGES=0 NEW_TENDER_ONLY=1 DETAIL_BATCH_SIZE=0 python backend/scraper.py > evening_snapshot_repair.log 2>&1
+            git config user.name "mp-tenders-bot"
+            git config user.email "actions@github.com"
+            git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/organisation_changes.json
+            git diff --cached --quiet || git commit -m "Repair evening organisation snapshot [skip ci]"
+            git push
+          else
+            echo "Portal/copy counts are aligned; no extra organisation scrape required."
+          fi
+
+      - name: Extract remaining and newly discovered details
+        env:
+          EXISTING_ID_BATCH_SIZE: "500"
+          RSP_FAST: "1"
+          RSP_FAST_MAX_DETAILS: "500"
+          REPAIR_COMPLETED_DETAILS: "0"
+        run: |
+          set -o pipefail
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/existing_id_detail.py > evening_detail_live.log 2>&1 &
+          PID=$!
+          LAST=0
+          while kill -0 "$PID" 2>/dev/null; do
+            if [ -s data/existing_id_detail_status.json ]; then
+              COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
+              if [ "$COUNT" -gt "$LAST" ]; then
+                git add all_tenders_org_detailed.csv data/existing_id_detail_status.json || true
+                if ! git diff --cached --quiet; then
+                  git commit -m "Save evening detail checkpoint $COUNT [skip ci]"
+                  git push || true
+                fi
+                LAST="$COUNT"
+              fi
+            fi
+            sleep 5
+          done
+          wait "$PID"
+
+      - name: Final verification after detail extraction
+        if: always()
+        run: |
+          python backend/evening_verify.py || true
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json data/evening_verification.json || true
+          git diff --cached --quiet || git commit -m "Publish final evening tender verification [skip ci]"
+          git push || true
+
+      - name: Show final detail log
+        if: always()
+        run: cat evening_detail_live.log || true
