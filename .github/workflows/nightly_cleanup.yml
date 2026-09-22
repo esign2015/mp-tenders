@@ -1,0 +1,32 @@
+name: MP Tender Nightly Cleanup
+
+on:
+  schedule:
+    - cron: "30 20 * * *"   # 2:00 AM IST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: mp-tender-cleanup
+      cancel-in-progress: false
+    steps:
+      - name: Checkout latest main data
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Run safe 48-hour cleanup
+        run: python backend/nightly_cleanup.py
+      - name: Commit cleanup results
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv tender_details.csv data/cleanup_status.json
+          git diff --cached --quiet || git commit -m "Nightly cleanup of tenders older than 48 hours [skip ci]"
+          git push
