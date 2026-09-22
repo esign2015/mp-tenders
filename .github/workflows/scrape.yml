@@ -9,12 +9,17 @@ on:
       - "index.html"
   workflow_dispatch:
   schedule:
-    - cron: "30 13 * * *"   # 7:00 PM IST — live Tenders by Organisation snapshot + missing-detail backfill
-    - cron: "25 3 * * *"     # 8:55 AM IST — morning Tenders by Organisation snapshot + missing-detail backfill
-    - cron: "35 4 * * *"     # 10:05 AM IST — corrigendum check before morning alert
-    - cron: "35 10 * * *"    # 4:05 PM IST — 6 hours after morning check
-    - cron: "15 15 * * *"    # 8:45 PM IST — final corrigendum check before evening alert + full portal refresh
-    - cron: "15 21 * * *"    # 2:45 AM IST — 6 hours after evening check
+    # Daily Tenders-by-Organisation snapshots: 1:00 PM, 3:00 PM, 5:00 PM,
+    # 6:00 PM and 7:15 PM IST. UTC is used because GitHub schedules are UTC.
+    - cron: "30 7 * * *"     # 1:00 PM IST
+    - cron: "30 9 * * *"     # 3:00 PM IST
+    - cron: "30 11 * * *"    # 5:00 PM IST
+    - cron: "30 12 * * *"    # 6:00 PM IST
+    - cron: "45 13 * * *"    # 7:15 PM IST
+    - cron: "25 3 * * *"     # 8:55 AM IST — morning snapshot
+    - cron: "35 4 * * *"     # 10:05 AM IST — corrigendum check
+    - cron: "35 10 * * *"    # 4:05 PM IST — corrigendum check
+    - cron: "15 21 * * *"    # 2:45 AM IST — corrigendum check
     - cron: "*/5 * * * *"    # 5-minute scheduler: random organisation monitor + urgent corrigendum checks
 
 permissions:
@@ -234,6 +239,7 @@ jobs:
     concurrency:
       group: mp-tender-data-writer
       cancel-in-progress: false
+      queue: max
     steps:
       - name: Checkout latest discovery snapshot
         uses: actions/checkout@v4
@@ -250,9 +256,11 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Run new Tender detail worker
         env:
-          EXISTING_ID_BATCH_SIZE: "0"
+          # Each scheduled snapshot gets a bounded detail batch. This keeps
+          # the next organisation snapshot independent of slow detail pages.
+          EXISTING_ID_BATCH_SIZE: "500"
           RSP_FAST: "1"
-          RSP_FAST_MAX_DETAILS: "6000"
+          RSP_FAST_MAX_DETAILS: "500"
           # Normal scheduled mode: do not reopen completed detail pages.
           REPAIR_COMPLETED_DETAILS: "0"
         run: |
@@ -638,7 +646,8 @@ jobs:
     concurrency:
       group: mp-tender-list-refresh
       cancel-in-progress: false
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '30 13 * * *' || github.event.schedule == '25 3 * * *' || github.event.schedule == '15 15 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+      queue: max
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '45 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
