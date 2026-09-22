@@ -2019,7 +2019,7 @@ def scrape_mp_tenders(csv_file):
     # dashboard/API does not carry stale detail indefinitely. If a later
     # corrigendum extends the closing date, the tender will be discovered
     # again by the next Tenders-by-Organisation snapshot and re-extracted.
-    retention_cutoff = now - timedelta(days=10)
+    retention_cutoff = now - timedelta(days=2)
     pruned_ids = set()
     for tid, row in list(existing_by_id.items()):
         closing = parse_portal_datetime(row.get("Closing Date"))
