@@ -1999,11 +1999,10 @@ def scrape_mp_tenders(csv_file):
         existing_tender_list_rows = read_existing(tender_list_csv)
         existing_detail_rows = read_existing(csv_file)
 
-    if fresh_bootstrap:
-        write_list_csv(org_csv, ORG_FIELDS, org_rows)
-    else:
-        merged_org_rows = merge_org_rows(existing_org_rows, org_rows)
-        write_list_csv(org_csv, ORG_FIELDS, merged_org_rows)
+    # organisations.csv is a LIVE portal snapshot, not historical organisation
+    # storage. Keep only organisations returned by the current portal run.
+    # Historical tender records remain protected in all_tenders_org_detailed.csv.
+    write_list_csv(org_csv, ORG_FIELDS, org_rows)
 
     tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_tender_list_rows if clean(r.get("Tender ID"))}
     tender_list_rows = list(tender_list_by_id.values())
@@ -2255,6 +2254,76 @@ def scrape_mp_tenders(csv_file):
     # failing detail page can no longer hold up organisation copying.
     write_list_csv(tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows)
     write_csv(csv_file, list(existing_by_id.values()))
+    # Compare this fresh portal snapshot with the previous snapshot so the
+    # /data page can show exactly which organisations gained/lost tender rows.
+    # This comparison is based on Tender ID, not only the organisation count.
+    previous_by_org = {}
+    for old_row in existing_tender_list_rows:
+        org_key = clean(old_row.get("Organisation Name")).casefold()
+        tid = clean(old_row.get("Tender ID"))
+        if org_key and tid:
+            previous_by_org.setdefault(org_key, set()).add(tid)
+
+    current_by_org = {}
+    for new_row in tender_list_rows:
+        org_key = clean(new_row.get("Organisation Name")).casefold()
+        tid = clean(new_row.get("Tender ID"))
+        if org_key and tid:
+            current_by_org.setdefault(org_key, set()).add(tid)
+
+    previous_count_by_org = {
+        clean(row.get("Organisation Name")).casefold(): int(
+            re.sub(r"\\D", "", clean(row.get("Tender Count"))) or 0
+        )
+        for row in existing_org_rows
+        if clean(row.get("Organisation Name"))
+    }
+    current_count_by_org = {
+        clean(row.get("Organisation Name")).casefold(): int(row.get("Tender Count") or 0)
+        for row in org_rows
+        if clean(row.get("Organisation Name"))
+    }
+    name_by_key = {
+        clean(row.get("Organisation Name")).casefold(): clean(row.get("Organisation Name"))
+        for row in org_rows
+        if clean(row.get("Organisation Name"))
+    }
+
+    change_rows = []
+    for org_key, current_count in current_count_by_org.items():
+        previous_count = previous_count_by_org.get(org_key, 0)
+        old_ids = previous_by_org.get(org_key, set())
+        new_ids = sorted(current_by_org.get(org_key, set()) - old_ids)
+        if previous_count != current_count or new_ids:
+            change_rows.append({
+                "Organisation Name": name_by_key.get(org_key, org_key),
+                "Previous Tender Count": previous_count,
+                "Current Tender Count": current_count,
+                "Count Difference": current_count - previous_count,
+                "New Tender Count": len(new_ids),
+                "New Tender IDs": new_ids,
+            })
+
+    change_rows.sort(key=lambda x: (-x["New Tender Count"], -abs(x["Count Difference"]), x["Organisation Name"].casefold()))
+    change_report = {
+        "status": "completed",
+        "snapshot_at": datetime.now(timezone(timedelta(hours=5, minutes=30))).isoformat(),
+        "previous_organisation_count": len(existing_org_rows),
+        "current_organisation_count": len(org_rows),
+        "previous_tender_count": sum(previous_count_by_org.values()),
+        "current_tender_count": portal_total_tenders,
+        "organisations_with_changes": len(change_rows),
+        "organisations_with_new_tenders": sum(1 for x in change_rows if x["New Tender Count"] > 0),
+        "new_tender_count": sum(x["New Tender Count"] for x in change_rows),
+        "changes": change_rows,
+    }
+    change_file = csv_file.parent / "data" / "organisation_changes.json"
+    change_file.parent.mkdir(parents=True, exist_ok=True)
+    change_file.write_text(
+        json.dumps(change_report, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
     print(
         f"COPY PHASE COMPLETE: organisations={stats['organisations_verified']}/"
         f"{len(organisations)}, tenders={len(tender_list_rows)}",
