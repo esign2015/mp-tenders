@@ -1,0 +1,79 @@
+name: MP Tender Telegram Alerts
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  telegram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: mp-telegram-sender
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Decide whether a Telegram alert is due
+        id: gate
+        run: |
+          python backend/telegram_scheduler.py | tee /tmp/telegram_schedule.txt
+          if grep -q '^run=true$' /tmp/telegram_schedule.txt; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+          grep '^mode=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_mode || true
+          grep '^key=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_key || true
+
+      - name: Install ReportLab
+        if: steps.gate.outputs.run == 'true'
+        run: pip install reportlab
+
+      - name: Send scheduled Telegram alert
+        if: steps.gate.outputs.run == 'true'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MODE="$(cat /tmp/telegram_mode)"
+          NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
+
+      - name: Mark Telegram alert complete
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          mode = Path("/tmp/telegram_mode").read_text(encoding="utf-8").strip()
+          key = Path("/tmp/telegram_key").read_text(encoding="utf-8").strip()
+          path = Path("data/telegram_schedule.json")
+          state = {}
+          if path.exists():
+              try:
+                  state = json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  state = {}
+          state[mode] = key
+          path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+          PY
+
+      - name: Commit Telegram scheduler state
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add data/telegram_schedule.json
+          git diff --cached --quiet || git commit -m "Record Telegram alert schedule state [skip ci]"
+          git push
