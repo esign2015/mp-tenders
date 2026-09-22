@@ -3198,10 +3198,14 @@ async function buildOrganisationOptions(){
     console.warn("Permanent organisation master unavailable:", error);
   }
 
-  // Add any newly discovered organisation from live tender data as well.
+  // Add only real organisation names from live tender data.
+  // Never allow a Tender ID (or a value that looks like one) to leak into
+  // the organisation search dropdown.
   allTenders.forEach(row => {
     const org = clean(row["Organisation"]);
-    if(org) set.add(org);
+    const tenderId = clean(row["Tender ID"]);
+    const looksLikeTenderId = /^\d{4}_[A-Za-z0-9-]+_\d+(?:_\d+)?$/i.test(org);
+    if(org && org !== tenderId && !looksLikeTenderId) set.add(org);
   });
 
   organisationOptions = [...set].sort((a,b) =>
@@ -3281,18 +3285,22 @@ function updateCounts(rows, refreshHeader=true){
     return;
   }
 
-  // Current portal inventory is authoritative for the Live count.
-  // Do not reduce it just because detail extraction is still pending.
-  const live = portalActiveIds.size
-    ? portalActiveIds.size
-    : rows.filter(row => {
-        const closing = parseDate(row["Closing Date"]);
-        return !closing || closing.getTime() > now.getTime();
-      }).length;
-
+  /*
+     Current portal inventory is authoritative for WHICH Tender IDs are
+     candidates for Live. But Live must also respect the actual closing
+     date/time. A tender remains Live even when detail extraction is pending;
+     it leaves Live as soon as its closing date/time has passed.
+  */
   const currentRows = portalActiveIds.size
     ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"])))
     : rows;
+
+  const live = currentRows.filter(row => {
+    const closing = parseDate(row["Closing Date"]);
+    // Portal rows should have a closing date. If one is missing/unparseable,
+    // do not claim it is Live without a verifiable deadline.
+    return closing && closing.getTime() > now.getTime();
+  }).length;
 
   const closingToday = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
