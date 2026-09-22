@@ -4496,8 +4496,15 @@ updateVirtualPager();
    The gate still keeps the dashboard hidden until verification succeeds,
    but the CSV is already being fetched/parsed in the background.
 */
-const backgroundDataLoad = loadData();
+/*
+   Do not parse the 5,000+ tender CSV while the Telegram login gate is
+   waiting for the user. Heavy CSV parsing can occupy the browser main
+   thread and make the Telegram widget look unclickable.
+   First make Telegram login responsive; only after successful access load
+   the dashboard data.
+*/
 enforceTelegramAccess().then(async () => {
+  const backgroundDataLoad = loadData();
   await loadDistrictMaster();
   if(Array.isArray(allTenders) && allTenders.length) applyFilters(false);
   await backgroundDataLoad;
