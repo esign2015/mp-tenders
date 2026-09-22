@@ -299,7 +299,10 @@ def main():
         rows = list(reader)
         fields = list(reader.fieldnames or [])
 
-    # Only current portal IDs are eligible. Existing detailed records are skipped.
+    # By default extract only current portal IDs. For the explicit full
+    # inventory backfill, include every Tender ID already copied to CSV so
+    # the organisation snapshot's Pending count is fully processed.
+    extract_all_inventory = os.environ.get("EXTRACT_ALL_INVENTORY", "0") == "1"
     current_ids = []
     if SNAPSHOT.exists():
         with SNAPSHOT.open(encoding="utf-8-sig", newline="") as sf:
@@ -307,6 +310,10 @@ def main():
                 tid = clean(sr.get("Tender ID"))
                 if tid and tid not in current_ids:
                     current_ids.append(tid)
+    if extract_all_inventory:
+        current_ids = list(dict.fromkeys(
+            clean(r.get("Tender ID")) for r in rows if clean(r.get("Tender ID"))
+        ))
     current_set = set(current_ids)
 
     # Deduplicate by Tender ID before extraction. The organisation snapshot
