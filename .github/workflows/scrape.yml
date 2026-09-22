@@ -22,6 +22,135 @@ permissions:
 
 jobs:
 
+  rsp_bulk_import:
+    # Immediate bulk load of the latest public RSP MP snapshot.
+    # Trigger by committing a message containing [run-rsp-import].
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[run-rsp-import]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: mp-rsp-import
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Import latest RSP MP snapshot
+        run: |
+          python - <<'PY'
+          import csv, json, urllib.request
+          from pathlib import Path
+
+          RSP_URL = "https://raw.githubusercontent.com/rsparvat/RSPTender/main/data/tenders.json"
+          dst = Path("all_tenders_org_detailed.csv")
+
+          with urllib.request.urlopen(RSP_URL, timeout=120) as r:
+              data = json.load(r)
+
+          generated = data.get("generated_at", "")
+          rsp_rows = [x for x in data.get("tenders", []) if x.get("source") == "MP"]
+          print("RSP generated:", generated, "MP rows:", len(rsp_rows))
+          if len(rsp_rows) < 5000:
+              raise SystemExit("RSP MP snapshot unexpectedly small; refusing to replace dashboard data.")
+
+          existing = []
+          if dst.exists():
+              with dst.open(encoding="utf-8-sig", newline="") as f:
+                  existing = list(csv.DictReader(f))
+          old = {str(r.get("Tender ID","")).strip(): dict(r) for r in existing if str(r.get("Tender ID","")).strip()}
+
+          fields = [
+            "Tender ID","Published Date","Closing Date","Opening Date","Title","Reference Number",
+            "Organisation","Department","Division","Sub Division","PAC Amount","EMD Fee","Tender Fee",
+            "Processing Fee","Total Fee","Location","Pincode","Work Description","Product Category",
+            "Sub Category","Contract Type","Bid Validity","Pre Qualification Details",
+            "Bid Submission Start Date","Bid Submission End Date","Bid Opening Date",
+            "Document Download Start Date","Document Download End Date","Fee Payable To","Fee Payable At",
+            "Status","Detail Extracted","Corrigendum","Corrigendum Last Checked","Corrigendum Detected At",
+            "Corrigendum Type","Corrigendum 15m Checked","Corrigendum 5m Checked","URL","Search Route",
+            "Search Result Title","Tested At"
+          ]
+
+          def pf(row, key):
+              return (row.get("portal_fields") or {}).get(key, "") or ""
+
+          def choose(a, b=""):
+              return a if a is not None and str(a) != "" else b
+
+          merged = {}
+          for r in rsp_rows:
+              tid = str(r.get("tender_id","")).strip()
+              if not tid:
+                  continue
+              prev = old.get(tid, {})
+              chain = [x.strip() for x in str(pf(r, "Organisation Chain")).split("||") if x.strip()]
+              out = {k: prev.get(k,"") for k in fields}
+              out.update({
+                "Tender ID": tid,
+                "Published Date": choose(r.get("published_date"), prev.get("Published Date","")),
+                "Closing Date": choose(r.get("bid_end"), prev.get("Closing Date","")),
+                "Opening Date": choose(pf(r,"Bid Opening Date"), prev.get("Opening Date","")),
+                "Title": choose(pf(r,"Title"), choose(r.get("work_en"), prev.get("Title",""))),
+                "Reference Number": choose(r.get("nit_ref"), choose(pf(r,"Tender Reference Number"), prev.get("Reference Number",""))),
+                "Organisation": choose(r.get("organisation"), prev.get("Organisation","")),
+                "Department": chain[1] if len(chain)>1 else prev.get("Department",""),
+                "Division": chain[2] if len(chain)>2 else prev.get("Division",""),
+                "Sub Division": chain[3] if len(chain)>3 else prev.get("Sub Division",""),
+                "PAC Amount": choose(r.get("pac"), prev.get("PAC Amount","")),
+                "EMD Fee": choose(r.get("emd"), prev.get("EMD Fee","")),
+                "Tender Fee": choose(r.get("tender_fee"), prev.get("Tender Fee","")),
+                "Processing Fee": choose(r.get("processing_fee"), prev.get("Processing Fee","")),
+                "Total Fee": choose(r.get("total_fee"), prev.get("Total Fee","")),
+                "Location": choose(r.get("location"), prev.get("Location","")),
+                "Pincode": choose(r.get("pincode"), prev.get("Pincode","")),
+                "Work Description": choose(pf(r,"Work Description"), choose(r.get("work_en"), prev.get("Work Description",""))),
+                "Product Category": choose(pf(r,"Product Category"), prev.get("Product Category","")),
+                "Sub Category": choose(pf(r,"Sub category"), prev.get("Sub Category","")),
+                "Contract Type": choose(pf(r,"Contract Type"), prev.get("Contract Type","")),
+                "Bid Validity": choose(pf(r,"Bid Validity(Days)"), prev.get("Bid Validity","")),
+                "Pre Qualification Details": choose(pf(r,"NDA/Pre Qualification"), prev.get("Pre Qualification Details","")),
+                "Bid Submission Start Date": choose(pf(r,"Bid Submission Start Date"), prev.get("Bid Submission Start Date","")),
+                "Bid Submission End Date": choose(pf(r,"Bid Submission End Date"), choose(r.get("bid_end"), prev.get("Bid Submission End Date",""))),
+                "Bid Opening Date": choose(pf(r,"Bid Opening Date"), prev.get("Bid Opening Date","")),
+                "Document Download Start Date": choose(pf(r,"Document Download / Sale Start Date"), prev.get("Document Download Start Date","")),
+                "Document Download End Date": choose(pf(r,"Document Download / Sale End Date"), prev.get("Document Download End Date","")),
+                "Fee Payable To": choose(pf(r,"Fee Payable To"), prev.get("Fee Payable To","")),
+                "Fee Payable At": choose(pf(r,"Fee Payable At"), prev.get("Fee Payable At","")),
+                "Detail Extracted": "YES" if r.get("detail_fetched") else prev.get("Detail Extracted",""),
+                "Corrigendum": "YES" if (r.get("corrigendum_count") or 0) > 0 else prev.get("Corrigendum",""),
+                "Corrigendum Last Checked": generated,
+                "Corrigendum Detected At": choose(r.get("corrigendum_latest"), prev.get("Corrigendum Detected At","")),
+                "URL": choose(r.get("detail_url"), prev.get("URL","")),
+                "Search Route": "RSP -> Home -> Organisation -> Live Tender Link -> Detail" if r.get("detail_fetched") else prev.get("Search Route",""),
+                "Tested At": choose(r.get("detail_fetched"), prev.get("Tested At",""))
+              })
+              if not out["Status"]:
+                  out["Status"] = "Open"
+              merged[tid] = out
+
+          # Preserve any currently known MP rows not in this RSP snapshot so
+          # the dashboard never loses live coverage while RSP data is refreshed.
+          for tid, row in old.items():
+              if tid and tid not in merged:
+                  merged[tid] = {k: row.get(k,"") for k in fields}
+
+          with dst.open("w", encoding="utf-8-sig", newline="") as f:
+              w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+              w.writeheader()
+              w.writerows(merged.values())
+
+          print("Wrote", len(merged), "rows; RSP MP rows", len(rsp_rows), "snapshot", generated)
+          PY
+      - name: Commit RSP bulk data
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add all_tenders_org_detailed.csv
+          git commit -m "Load latest RSP MP tender snapshot [skip ci]"
+          git push
+
+
   manual_detail_test:
     if: github.event_name == 'push' && contains(github.event.head_commit.message, '[manual-detail-test]')
     runs-on: ubuntu-latest
