@@ -28,7 +28,7 @@ const [st,manual,detailStatus,changes,verify]=await Promise.all([
   fetch(verifyUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
 ]);
 const total=+(st.portal_total_tenders||st.total_tenders)||0;
-const scraperDone=+st.detail_complete||0;
+const scraperDone=Math.max(+st.detail_complete||0,+detailStatus.success||0);
 const manualDone=+manual.success||0;
 const done=Math.max(scraperDone,manualDone);
 const rem=Math.max(0,total-done),pct=total?Math.min(100,done/total*100):0;
