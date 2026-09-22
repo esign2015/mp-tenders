@@ -1,0 +1,30 @@
+name: Import RSP live MP data
+on:
+  push:
+    paths:
+      - "backend/import_rsp_live.py"
+      - ".github/workflows/import-rsp-live.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mp-rsp-live-import
+  cancel-in-progress: true
+jobs:
+  import-rsp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import live RSP MP dataset
+        run: python backend/import_rsp_live.py
+      - name: Commit imported data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add all_tenders_org_detailed.csv data/rsp_import_status.json
+          if git diff --cached --quiet; then
+            echo "No RSP data changes."
+            exit 0
+          fi
+          git commit -m "Import live RSP MP tender data [skip ci]"
+          git push
