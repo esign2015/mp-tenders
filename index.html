@@ -798,16 +798,29 @@ td.title-cell{
 /* ================= FOOTER ================= */
 
 .site-footer{
-  flex:0 0 var(--footer-height);
-  height:var(--footer-height);
+  flex:0 0 60px;
+  height:60px;
   background:var(--blue);
   color:white;
-  display:grid;
-  grid-template-columns:1fr 2fr 1fr;
+  display:flex;
   align-items:center;
-  gap:12px;
+  justify-content:center;
+  gap:36px;
   padding:6px 15px;
   border-top:3px solid #10245e;
+  text-align:center;
+}
+
+.footer-left,
+.footer-center,
+.footer-right{
+  flex:0 0 auto;
+  min-width:0;
+  text-align:center;
+}
+
+.footer-center{
+  max-width:720px;
 }
 
 .footer-left{
@@ -2643,55 +2656,52 @@ async function loadData(){
   }
 
   try{
-    let data = [];
-
     /*
-       GitHub Pages CSV is the authoritative published dashboard dataset.
-       The Render API can contain an older/smaller working copy while its
-       service is being redeployed, so do not let a 10-row API response
-       hide the complete CSV dataset.
+       Fetch both large CSV files in parallel. Previously the detailed CSV
+       and organisation snapshot were downloaded one after another, which
+       unnecessarily delayed the first visible tender rows.
     */
-    try{
-      data = await loadFromCsv();
-    }catch(csvError){
-      console.warn("Detailed CSV unavailable. Trying organisation tender CSV.",csvError);
-      try{
-        data = await loadOrganisationTenderCsv();
-      }catch(orgError){
-        console.warn("Organisation tender CSV unavailable. Trying Render API.",orgError);
-        data = await loadFromApi();
-      }
+    const [detailedResult, portalResult] = await Promise.allSettled([
+      loadFromCsv(),
+      loadOrganisationTenderCsv()
+    ]);
+
+    let data = detailedResult.status === "fulfilled"
+      ? detailedResult.value
+      : [];
+
+    if(detailedResult.status === "rejected"){
+      console.warn("Detailed CSV unavailable:", detailedResult.reason);
+    }
+
+    const portalRows = portalResult.status === "fulfilled"
+      ? portalResult.value
+      : [];
+
+    if(portalResult.status === "rejected"){
+      console.warn("Organisation tender CSV unavailable:", portalResult.reason);
     }
 
     /*
-       A header-only/empty detailed CSV is not a valid dashboard dataset.
-       Prefer the organisation tender-list data before falling back to API.
+       If the detailed CSV is empty/unavailable, use the organisation
+       snapshot before falling back to the Render API.
     */
     if(!Array.isArray(data) || data.length === 0){
-      try{
-        data = await loadOrganisationTenderCsv();
-      }catch(orgError){
-        console.warn("Organisation tender CSV unavailable after empty detailed CSV.",orgError);
+      if(Array.isArray(portalRows) && portalRows.length){
+        data = portalRows;
+      }else{
         data = await loadFromApi();
       }
     }
 
     allTenders = dedupeTenderRows(data.map(normaliseTender));
 
-    // Load the same portal snapshot used to discover current tenders.
-    // The detailed CSV is retained for historical/archive records.
-    try{
-      const portalRows = await loadOrganisationTenderCsv();
-      portalActiveIds = new Set(
-        portalRows
-          .map(row => clean(row["Tender ID"]))
-          .filter(Boolean)
-      );
-      console.info("Portal snapshot loaded:", portalActiveIds.size, "Tender IDs");
-    }catch(portalError){
-      portalActiveIds = new Set();
-      console.warn("Portal snapshot unavailable; falling back to Closing Date rules.", portalError);
-    }
+    // The organisation snapshot is the authoritative current-tender list.
+    portalActiveIds = new Set(
+      (Array.isArray(portalRows) ? portalRows : [])
+        .map(row => clean(row["Tender ID"]))
+        .filter(Boolean)
+    );
 
     buildOrganisationOptions();
     applyFilters();
