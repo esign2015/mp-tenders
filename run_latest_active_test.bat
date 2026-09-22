@@ -11,11 +11,11 @@ if errorlevel 1 (
 )
 
 echo [1/3] Python packages install हो रहे हैं...
-py -m pip install --upgrade pip
-py -m pip install playwright beautifulsoup4
+python -m pip install --upgrade pip
+python -m pip install playwright beautifulsoup4
 
 echo [2/3] Chromium browser install हो रहा है...
-py -m playwright install chromium
+python -m playwright install chromium
 
 echo [3/3] Latest Active Tenders test शुरू...
 py backend\latest_active_manual_test.py
