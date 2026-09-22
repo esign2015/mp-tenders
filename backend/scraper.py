@@ -2035,7 +2035,7 @@ def scrape_mp_tenders(csv_file):
         tender_list_rows = list(tender_list_by_id.values())
         write_csv(csv_file, list(existing_by_id.values()))
         write_csv(tender_list_csv, tender_list_rows)
-        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 3 days after closing")
+        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 10 days after closing")
 
     # IMPORTANT: this file is a CURRENT portal snapshot, not a history table.
     # [run-scrape-details] force an immediate verification run after this fix.
