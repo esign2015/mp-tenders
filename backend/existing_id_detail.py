@@ -353,21 +353,42 @@ def main():
     # opened only once per Tender ID.
     incomplete = []
     seen_incomplete = set()
-    for row in rows:
-        tid = clean(row.get("Tender ID"))
-        if (
-            tid
-            and tid in current_set
+
+    # Optional one-time repair mode: re-open already extracted records first
+    # so parser corrections (especially fee fields) are applied to existing
+    # dashboard rows, then continue with the normal pending inventory.
+    repair_completed = os.environ.get("REPAIR_COMPLETED_DETAILS", "0") == "1"
+
+    if repair_completed:
+        candidate_rows = [
+            row for row in rows
+            if clean(row.get("Tender ID")) in current_set
+            and clean(row.get("Detail Extracted")).upper() == "YES"
+        ] + [
+            row for row in rows
+            if clean(row.get("Tender ID")) in current_set
             and clean(row.get("Detail Extracted")).upper() != "YES"
-            and tid not in seen_incomplete
-        ):
+        ]
+    else:
+        candidate_rows = [
+            row for row in rows
+            if clean(row.get("Tender ID")) in current_set
+            and clean(row.get("Detail Extracted")).upper() != "YES"
+        ]
+
+    for row in candidate_rows:
+        tid = clean(row.get("Tender ID"))
+        if tid and tid not in seen_incomplete:
             seen_incomplete.add(tid)
             incomplete.append(row)
+
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
+    target_set = {clean(row.get("Tender ID")) for row in targets}
     skipped_ids = [
         clean(row.get("Tender ID")) for row in rows
         if clean(row.get("Tender ID")) in current_set
         and clean(row.get("Detail Extracted")).upper() == "YES"
+        and clean(row.get("Tender ID")) not in target_set
     ]
 
     print(
