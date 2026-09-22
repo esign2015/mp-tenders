@@ -897,7 +897,7 @@ jobs:
   telegram_scheduler:
     # Single source of truth: data/schedule_config.json.
     # GitHub only ticks every 5 minutes; Python decides the actual alert time.
-    if: github.event_name == 'schedule' && github.event.schedule == '*/5 * * * *'
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
