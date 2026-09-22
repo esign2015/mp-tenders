@@ -1,15 +1,13 @@
 {
-  "status": "completed",
+  "status": "running",
   "batch_size": 0,
   "total_csv_ids": 5716,
   "current_portal_ids": 5716,
-  "initial_incomplete": 5686,
-  "batch_targets": 5686,
-  "success": 0,
+  "initial_incomplete": 5716,
+  "batch_targets": 5716,
+  "success": 30,
   "failed": 0,
-  "success_ids": [],
-  "failed_ids": [],
-  "skipped_ids": [
+  "success_ids": [
     "2026_AICTS_530313_1",
     "2026_AICTS_531642_1",
     "2026_AICTS_531643_1",
@@ -41,6 +39,8 @@
     "2026_MPBSE_534948_1",
     "2026_MPBSE_537146_1"
   ],
+  "failed_ids": [],
+  "skipped_ids": [],
   "pending_ids": [
     "2023_UAD_295104_8",
     "2023_UAD_298906_16",
@@ -5731,5 +5731,5 @@
   ],
   "last_successful_tender_id": "",
   "errors": [],
-  "updated_at": "2026-09-22T10:41:35.321114+00:00"
+  "updated_at": "2026-09-22T10:49:41.205829+00:00"
 }
