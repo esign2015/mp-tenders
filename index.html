@@ -2111,6 +2111,51 @@ function dedupeTenderRows(rows){
   return order;
 }
 
+/*
+  Merge the current Tenders-by-Organisation snapshot into the detailed CSV.
+  The portal snapshot is authoritative for the current inventory and supplies
+  the basic fields even when a tender's detail page has not been extracted yet.
+  Detailed rows then enrich those same tenders with fees, EMD, PAC, description,
+  department fields, etc. Later detail extraction enriches the same Tender ID.
+*/
+function mergeCurrentPortalRows(detailedRows, portalRows){
+  const detailed = dedupeTenderRows((detailedRows || []).map(normaliseTender));
+  const portal = dedupeTenderRows((portalRows || []).map(normaliseTender));
+  const detailedById = new Map(
+    detailed.map(row => [clean(row["Tender ID"]), row]).filter(([id]) => id)
+  );
+
+  const merged = portal.map(portalRow => {
+    const id = clean(portalRow["Tender ID"]);
+    const detailRow = detailedById.get(id);
+    if(!detailRow) return {...portalRow};
+
+    const mergedRow = {...portalRow};
+    const portalAuthoritative = [
+      "Tender ID","Title","Reference Number","Organisation",
+      "Organisation Chain","Opening Date","Closing Date","Published Date"
+    ];
+
+    for(const [key,value] of Object.entries(detailRow)){
+      if(portalAuthoritative.includes(key)){
+        if(!clean(mergedRow[key]) && clean(value)) mergedRow[key] = value;
+      }else if(clean(value)){
+        mergedRow[key] = value;
+      }
+    }
+    return mergedRow;
+  });
+
+  // Keep older detailed records for Archive.
+  const currentIds = new Set(merged.map(row => clean(row["Tender ID"])).filter(Boolean));
+  detailed.forEach(row => {
+    const id = clean(row["Tender ID"]);
+    if(!id || !currentIds.has(id)) merged.push(row);
+  });
+
+  return dedupeTenderRows(merged);
+}
+
 function escapeHtml(value){
   return clean(value)
     .replaceAll("&","&amp;")
@@ -2694,7 +2739,13 @@ async function loadData(){
       }
     }
 
-    allTenders = dedupeTenderRows(data.map(normaliseTender));
+    /*
+       Always merge the current portal snapshot into the detailed dataset.
+       A tender with no extracted detail page is still visible immediately
+       with Tender ID, title, organisation chain and dates. Later detail
+       extraction enriches the same Tender ID automatically.
+    */
+    allTenders = mergeCurrentPortalRows(data, portalRows);
 
     // The organisation snapshot is the authoritative current-tender list.
     portalActiveIds = new Set(
@@ -3230,18 +3281,20 @@ function updateCounts(rows, refreshHeader=true){
     return;
   }
 
+  // Current portal inventory is authoritative for the Live count.
+  // Do not reduce it just because detail extraction is still pending.
   const live = portalActiveIds.size
-    ? new Set(rows
-        .filter(row => portalActiveIds.has(clean(row["Tender ID"])))
-        .map(row => clean(row["Tender ID"]))
-        .filter(Boolean)
-      ).size
+    ? portalActiveIds.size
     : rows.filter(row => {
         const closing = parseDate(row["Closing Date"]);
         return !closing || closing.getTime() > now.getTime();
       }).length;
 
-  const closingToday = rows.filter(row => {
+  const currentRows = portalActiveIds.size
+    ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"])))
+    : rows;
+
+  const closingToday = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     return closing &&
            dateKey(closing) === todayKey() &&
@@ -3249,7 +3302,7 @@ function updateCounts(rows, refreshHeader=true){
   }).length;
 
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const closingTomorrow = rows.filter(row => {
+  const closingTomorrow = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     return closing &&
            dateKey(closing) === dateKey(tomorrow) &&
