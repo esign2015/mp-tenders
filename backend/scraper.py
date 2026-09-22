@@ -228,7 +228,7 @@ def parse_detail(soup, url):
         """Extract the numeric amount from fee/EMD labels even when the portal
         appends text such as '(18.00% GST Incl.)' to the label."""
         wanted = [clean(x).casefold() for x in prefixes]
-        for cell in soup.find_all(["td", "th", "label", "div", "span"]):
+        for cell in soup.find_all(["td", "th", "label"]):
             label_text = clean(cell.get_text(" ", strip=True))
             low = label_text.casefold()
             if not any(low.startswith(x) for x in wanted):
@@ -375,13 +375,18 @@ def parse_detail(soup, url):
         if match:
             pac = match.group(1)
 
-    tender_fee = labeled_amount(["Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"]) or value(
+    # IMPORTANT: MP detail pages put the real Tender Fee (e.g. 500) in a
+    # table row while the surrounding section heading may contain
+    # "Total Fee in ₹ - 795". Exact row lookup must therefore run BEFORE
+    # the broad fallback parser, otherwise the heading can be mistaken
+    # for the Tender Fee.
+    tender_fee = value(
         "Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"
-    )
+    ) or labeled_amount(["Tender Fee in ₹", "Tender Fee", "Document Fee", "Tender Document Fee"])
     if not tender_fee:
         tender_fee = between("Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"])
 
-    processing_fee = labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"]) or value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
+    processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee") or labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"])
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
     # Some MP Tender detail templates render the fee label and amount as
@@ -400,9 +405,9 @@ def parse_detail(soup, url):
             processing_fee = match.group(1)
 
 
-    emd = labeled_amount(["EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"]) or value(
+    emd = value(
         "EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"
-    )
+    ) or labeled_amount(["EMD Amount in ₹", "EMD Amount", "EMD Fee", "Earnest Money Deposit"])
     if not emd:
         emd = between("EMD Amount in ₹", ["EMD Exemption Allowed", "EMD Fee Type"])
 
