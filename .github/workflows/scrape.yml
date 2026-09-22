@@ -122,7 +122,6 @@ jobs:
       - name: Run new Tender detail worker
         env:
           EXISTING_ID_BATCH_SIZE: "0"
-          EXTRACT_ALL_INVENTORY: "1"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
@@ -184,9 +183,10 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium
         run: python -m playwright install --with-deps chromium
-      - name: Extract all incomplete current Tender IDs
+      - name: Extract all copied Tender IDs pending detail
         env:
           EXISTING_ID_BATCH_SIZE: "0"
+          EXTRACT_ALL_INVENTORY: "1"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
