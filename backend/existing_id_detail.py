@@ -384,12 +384,10 @@ def main():
 
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
     target_set = {clean(row.get("Tender ID")) for row in targets}
-    skipped_ids = [
-        clean(row.get("Tender ID")) for row in rows
-        if clean(row.get("Tender ID")) in current_set
-        and clean(row.get("Detail Extracted")).upper() == "YES"
-        and clean(row.get("Tender ID")) not in target_set
-    ]
+    # No implicit skips: an already extracted tender is a Success,
+    # not a Skip. Keep this list empty unless a future explicit skip rule
+    # is added.
+    skipped_ids = []
 
     print(
         f"CSV IDs: {len(rows)} | current portal IDs: {len(current_ids)} | "
@@ -400,8 +398,17 @@ def main():
     by_id = {clean(r.get("Tender ID")): r for r in rows if clean(r.get("Tender ID"))}
     errors = []
     failed_bases = []
-    success = 0
-    success_ids = set()
+    # Keep previously extracted IDs in the success set. "Skip" must mean
+    # an explicit skip, not "already successfully extracted"; otherwise the
+    # dashboard misleadingly shows Success == Skip.
+    success_ids = {
+        clean(r.get("Tender ID"))
+        for r in rows
+        if clean(r.get("Tender ID"))
+        and clean(r.get("Detail Extracted")).upper() == "YES"
+        and clean(r.get("Tender ID")) in current_set
+    }
+    success = len(success_ids)
     final_failed_ids = set()
 
     def save_csv():
@@ -440,7 +447,7 @@ def main():
             "current_portal_ids": len(current_ids),
             "initial_incomplete": len(incomplete),
             "batch_targets": len(targets),
-            "success": success,
+            "success": len(success_ids),
             "failed": len(final_failed_ids),
             "success_ids": sorted(success_ids),
             "failed_ids": sorted(final_failed_ids),
