@@ -163,7 +163,7 @@ jobs:
     # One-shot backfill for the current portal Tender IDs. It deliberately
     # shares the list-refresh concurrency group so it waits for the current
     # organisation copy to finish before touching the same CSV.
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[run-detail-now]')
+    if: github.event_name == 'push' && (contains(github.event.head_commit.message, '[run-detail-now]') || contains(github.event.head_commit.message, '[run-rsp-detail]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
