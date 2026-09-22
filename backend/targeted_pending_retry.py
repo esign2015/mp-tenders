@@ -110,15 +110,24 @@ def status(last_id=""):
 # retried exactly through the user's requested portal UI path:
 # Home -> paste Tender ID -> GO -> click Tender Title -> detail page.
 if targets:
-    failed = rsp_style_extract_targets(
+    rsp_failed = rsp_style_extract_targets(
         targets, by_id, status, save_csv, save_detail_csv, success_ids
     )[1]
 
-    unresolved = []
-    for base, exc in failed:
-        tid = clean(base.get("Tender ID"))
-        if tid and tid not in success_ids:
-            unresolved.append((base, exc))
+    # IMPORTANT: RSP-FAST may leave a target unresolved simply because its
+    # live tender link was not discovered. Such an ID is not necessarily
+    # returned in rsp_failed. Therefore the Home-page fallback must run for
+    # EVERY target that is still unresolved, not only RSP-reported failures.
+    rsp_error_by_id = {
+        clean(base.get("Tender ID")): exc
+        for base, exc in rsp_failed
+        if clean(base.get("Tender ID"))
+    }
+    unresolved = [
+        (base, rsp_error_by_id.get(clean(base.get("Tender ID"))))
+        for base in targets
+        if clean(base.get("Tender ID")) and clean(base.get("Tender ID")) not in success_ids
+    ]
 
     print("RSP unresolved; starting Home-page Tender ID fallback:", 
           [clean(b.get("Tender ID")) for b, _ in unresolved], flush=True)
