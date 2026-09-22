@@ -1,12 +1,19 @@
 {
-  "status": "copy_completed",
-  "process_started_at": "2026-09-21T20:16:25.739900+00:00",
-  "total_tenders": 5095,
-  "portal_total_tenders": 5095,
-  "organisation_count": 93,
-  "organisation_progress": "93/93",
-  "copied_tenders": 5095,
+  "status": "running",
+  "process_started_at": "2026-09-22T08:40:55.412634+00:00",
+  "total_tenders": 5206,
+  "portal_total_tenders": 5206,
+  "organisation_count": 94,
+  "detail_complete": 30,
+  "detail_remaining": 5541,
   "errors": 0,
   "latest_error": "",
-  "updated_at": "2026-09-21T20:28:21.170145+00:00"
+  "organisation_progress": "0/94",
+  "current_organisation": "Atal Bihari Vajpayee Institute of Good Governance and policy Analysis Bhopal",
+  "department_count": 243,
+  "pincode_count": 5,
+  "pincode_others_count": 0,
+  "detail_batch_size": 0,
+  "detail_batch_completed": 0,
+  "updated_at": "2026-09-22T08:41:03.174518+00:00"
 }
