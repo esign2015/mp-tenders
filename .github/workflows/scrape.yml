@@ -124,6 +124,9 @@ jobs:
           EXISTING_ID_BATCH_SIZE: "0"
           RSP_FAST: "1"
           RSP_FAST_MAX_DETAILS: "900"
+          # One-time repair: re-fetch already extracted details first so
+          # corrected fee parsing is applied, then continue with pending IDs.
+          REPAIR_COMPLETED_DETAILS: "1"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"
