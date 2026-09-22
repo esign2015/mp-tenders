@@ -30,6 +30,10 @@ jobs:
 
   final_detail:
     needs: verify
+    # The 7:45 PM pass owns the full evening recovery window. The 11:00 PM
+    # run is verification-only so Telegram at 11:15 PM is sent after the
+    # planned extraction window.
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '15 14 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 190
     concurrency:
@@ -74,9 +78,9 @@ jobs:
 
       - name: Extract remaining and newly discovered details
         env:
-          EXISTING_ID_BATCH_SIZE: "500"
+          EXISTING_ID_BATCH_SIZE: "5000"
           RSP_FAST: "1"
-          RSP_FAST_MAX_DETAILS: "500"
+          RSP_FAST_MAX_DETAILS: "5000"
           REPAIR_COMPLETED_DETAILS: "0"
         run: |
           set -o pipefail
