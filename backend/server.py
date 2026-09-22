@@ -274,6 +274,22 @@ def telegram_send_pdf():
         result = response.json()
         if not result.get("ok"):
             description = clean(result.get("description")) or "Telegram PDF delivery failed."
+            # Telegram cannot send the first private message until the user
+            # has opened the bot and pressed START once.
+            lower_description = description.lower()
+            bot_not_started = any(text in lower_description for text in (
+                "chat not found",
+                "bot can't initiate conversation",
+                "bot cannot initiate conversation",
+                "user is deactivated",
+                "forbidden"
+            ))
+            if bot_not_started:
+                return jsonify({
+                    "ok": False,
+                    "bot_not_started": True,
+                    "message": "Telegram bot को पहले START करना जरूरी है।"
+                }), 409
             return jsonify({"ok": False, "message": description}), 502
         return jsonify({"ok": True, "message": "PDF Telegram पर भेज दी गई है।"})
     except Exception as exc:
