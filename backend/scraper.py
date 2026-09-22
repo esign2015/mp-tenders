@@ -2014,7 +2014,7 @@ def scrape_mp_tenders(csv_file):
 
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
 
-    # Retention policy: keep a tender for 10 days after its closing date.
+    # Retention policy: keep a tender for 48 hours after its closing date.
     # After that, remove the complete record from the local dataset so the
     # dashboard/API does not carry stale detail indefinitely. If a later
     # corrigendum extends the closing date, the tender will be discovered
@@ -2035,7 +2035,7 @@ def scrape_mp_tenders(csv_file):
         tender_list_rows = list(tender_list_by_id.values())
         write_csv(csv_file, list(existing_by_id.values()))
         write_csv(tender_list_csv, tender_list_rows)
-        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 10 days after closing")
+        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 48 hours after closing")
 
     # IMPORTANT: this file is a CURRENT portal snapshot, not a history table.
     # [run-scrape-details] force an immediate verification run after this fix.
