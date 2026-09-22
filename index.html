@@ -1737,12 +1737,12 @@ body.telegram-locked .site-footer{visibility:hidden}
 
       <div class="legend-item">
         <span class="legend-color legend-orange"></span>
-        Closing within 3 days
+        Closing within 48 hours
       </div>
 
       <div class="legend-item">
         <span class="legend-color legend-green"></span>
-        Closing after 3 days
+        Closing after 48 hours
       </div>
 
       <div id="recordCountWrap">
@@ -3427,7 +3427,7 @@ function applyFilters(refreshHeader=true){
         if(closeIsToday && nowIST.getTime() < archiveCutoff.getTime()) return false;
 
         const daysAgo = Math.floor((nowIST.getTime() - closeIST.getTime()) / 86400000);
-        if(daysAgo > 10) return false;
+        if(daysAgo > 2) return false;
       }else{
         // Before 7 PM on the closing day, keep the tender visible as
         // "Closed" so users can see that it has just expired.
