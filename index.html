@@ -3377,23 +3377,14 @@ function applyFilters(refreshHeader=true){
     const closing = parseDate(row["Closing Date"]);
     const isCancelled = clean(row["Status"]).toLowerCase() === "cancelled";
     const tenderId = clean(row["Tender ID"]);
-    const hasPortalSnapshot = portalActiveIds.size > 0;
-    const isPortalListed = hasPortalSnapshot && portalActiveIds.has(tenderId);
-
     /*
-       The portal's current Tenders-by-Organisation snapshot is authoritative
-       for what belongs on the main dashboard. This prevents the dashboard
-       from inventing a different "live" count merely from Closing Date math.
-       Detailed CSV records not present in the current portal snapshot remain
-       available for Archive.
+       IMPORTANT:
+       all_tenders_org_detailed.csv is the dashboard master dataset.
+       organisation_tenders.csv is only a current-portal snapshot/checkpoint.
+       It must never hide master records when the snapshot is empty, delayed,
+       or incomplete. Live/Archive membership is decided from Closing Date
+       below, so old records remain available.
     */
-    if(hasPortalSnapshot){
-      if(archivedMode){
-        if(isPortalListed) return false;
-      }else{
-        if(!isPortalListed) return false;
-      }
-    }
 
     const opening = parseDate(row["Opening Date"]);
 
