@@ -1,12 +1,13 @@
 {
-  "status": "copy_completed",
-  "process_started_at": "2026-09-22T14:47:28.876411+00:00",
-  "total_tenders": 5094,
-  "portal_total_tenders": 5094,
-  "organisation_count": 93,
-  "organisation_progress": "93/93",
-  "copied_tenders": 5094,
+  "status": "running",
+  "process_started_at": "2026-09-22T17:41:17.044237+00:00",
+  "total_tenders": 0,
+  "detail_complete": 0,
+  "detail_remaining": 0,
   "errors": 0,
   "latest_error": "",
-  "updated_at": "2026-09-22T14:58:17.845398+00:00"
+  "organisation_progress": "0/0",
+  "detail_batch_size": 0,
+  "detail_batch_completed": 0,
+  "updated_at": "2026-09-22T17:41:17.044237+00:00"
 }
