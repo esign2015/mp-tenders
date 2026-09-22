@@ -9,8 +9,9 @@ on:
       - "index.html"
   workflow_dispatch:
   schedule:
-    # Daily Tenders-by-Organisation snapshots: 1:00 PM, 3:00 PM, 5:00 PM,
-    # 6:00 PM and 7:15 PM IST. UTC is used because GitHub schedules are UTC.
+    # Daily Tenders-by-Organisation snapshots: 10:35 AM, 1:00 PM, 3:00 PM,
+    # 5:00 PM, 6:00 PM and 7:15 PM IST. UTC is used because GitHub schedules are UTC.
+    - cron: "5 5 * * *"      # 10:35 AM IST
     - cron: "30 7 * * *"     # 1:00 PM IST
     - cron: "30 9 * * *"     # 3:00 PM IST
     - cron: "30 11 * * *"    # 5:00 PM IST
@@ -647,7 +648,7 @@ jobs:
       group: mp-tender-list-refresh
       cancel-in-progress: false
       queue: max
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '45 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '45 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
