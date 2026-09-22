@@ -1,3 +1,4 @@
+import csv
 import re
 from datetime import datetime
 from pathlib import Path
@@ -152,9 +153,9 @@ def main():
 
         out = Path("latest_active_today_test.csv")
         with out.open("w", encoding="utf-8-sig", newline="") as f:
-            f.write("S.No.\tPublished Date\tBid Submission Closing Date\tTender Opening Date\tTitle and Ref.No./Tender ID\tOrganisation Chain\tTender Value\n")
-            for r in rows_out:
-                f.write("\t".join(r).replace("\n", " ") + "\n")
+            writer = csv.writer(f)
+            writer.writerow(["S.No.", "Published Date", "Bid Submission Closing Date", "Tender Opening Date", "Title and Ref.No./Tender ID", "Organisation Chain", "Tender Value"])
+            writer.writerows(rows_out)
 
         print(f"\nTEST COMPLETE: आज के {len(rows_out)} unique rows मिले।")
         print(f"CSV: {out.resolve()}")
