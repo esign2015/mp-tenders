@@ -4,10 +4,20 @@
 import csv, json, os, re, time
 from pathlib import Path
 from datetime import datetime, timezone
+import requests
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
-from scraper import parse_detail, parse_tender_rows, PORTAL
+from scraper import (
+    parse_detail,
+    parse_tender_rows,
+    parse_organisation_rows,
+    get_all_tender_rows,
+    request as portal_request,
+    PORTAL,
+    ORG_URL,
+    HEADERS,
+)
 
 CSV = Path("all_tenders_org_detailed.csv")
 STATUS = Path("data/existing_id_detail_status.json")
@@ -138,6 +148,141 @@ def do_search(page, tender_id):
     detail["Detail Extracted"] = "YES"
     detail["Search Route"] = "Home -> Tender ID -> GO -> Tender Title -> Detail"
     return detail
+
+def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_detail_csv, success_ids):
+    """RSP-style detail extraction.
+
+    Uses one requests.Session, opens the MP portal/home first, discovers the
+    live tender DirectLinks from the organisation pages, and parses the detail
+    HTML directly with the same resilient RSP-derived parser. Session-bound
+    DirectLink URLs are used only in memory and are never written to CSV.
+    """
+    target_ids = {clean(row.get("Tender ID")) for row in target_rows if clean(row.get("Tender ID"))}
+    if not target_ids:
+        return [], []
+
+    session = requests.Session()
+    session.headers.update(HEADERS)
+    remaining = set(target_ids)
+    extracted = []
+    failed = []
+
+    try:
+        print("RSP-STYLE: opening MP Home and Organisation page...", flush=True)
+        portal_request(session, PORTAL, retries=4, sleep=0.25)
+        org_response = portal_request(session, ORG_URL, retries=4, sleep=0.25, referer=PORTAL)
+        organisations = parse_organisation_rows(BeautifulSoup(org_response.text, "html.parser"), PORTAL)
+        print(f"RSP-STYLE: organisations discovered = {len(organisations)}", flush=True)
+
+        for org in organisations:
+            if not remaining:
+                break
+            name = clean(org.get("name"))
+            expected = int(org.get("count") or 0)
+            org_url = clean(org.get("url"))
+            if not org_url:
+                continue
+            try:
+                tender_rows, pages = get_all_tender_rows(
+                    session, org_url, expected
+                )
+                matches = [
+                    row for row in tender_rows
+                    if clean(row.get("Tender ID")) in remaining
+                ]
+                if matches:
+                    print(
+                        f"RSP-STYLE: {name} | portal={expected} | pages={pages} | "
+                        f"target matches={len(matches)}",
+                        flush=True
+                    )
+                for listing in matches:
+                    tid = clean(listing.get("Tender ID"))
+                    if not tid or tid not in remaining:
+                        continue
+                    try:
+                        # This is the key RSP flow: GET the live DirectLink
+                        # with the same requests session that discovered it.
+                        response = portal_request(
+                            session,
+                            listing.get("url"),
+                            retries=4,
+                            sleep=0.20,
+                            referer=org_url,
+                        )
+                        soup = BeautifulSoup(response.text, "html.parser")
+                        detail = parse_detail(soup, PORTAL)
+                        parsed_id = clean(detail.get("Tender ID"))
+                        if parsed_id and parsed_id.casefold() != tid.casefold():
+                            raise RuntimeError(
+                                f"Detail Tender ID mismatch: expected {tid}, got {parsed_id}"
+                            )
+                        if not parsed_id:
+                            body = clean(soup.get_text(" ", strip=True))
+                            if tid.casefold() not in body.casefold():
+                                raise RuntimeError(
+                                    f"RSP detail page does not contain Tender ID {tid}"
+                                )
+                            detail["Tender ID"] = tid
+
+                        base = by_id.get(tid, {})
+                        for key in (
+                            "Organisation", "Department", "Division", "Sub Division",
+                        ):
+                            if clean(base.get(key)) and len(clean(base.get(key))) >= len(clean(detail.get(key))):
+                                detail[key] = base.get(key, "")
+                        for key in (
+                            "Title", "Reference Number", "Published Date",
+                            "Closing Date", "Opening Date",
+                        ):
+                            if not clean(detail.get(key)):
+                                detail[key] = base.get(key, "")
+
+                        detail.pop("URL", None)
+                        detail["Detail Extracted"] = "YES"
+                        detail["Search Route"] = (
+                            "RSP -> Home -> Organisation -> Live Tender Link -> Detail"
+                        )
+                        merged = dict(base)
+                        merged.update(detail)
+                        by_id[tid] = merged
+                        remaining.remove(tid)
+                        success_ids.add(tid)
+                        extracted.append(tid)
+
+                        if len(extracted) % 10 == 0:
+                            save_csv()
+                            save_detail_csv()
+                        save_status("running", tid)
+                        print(
+                            f"RSP-STYLE DETAIL OK {tid} | remaining={len(remaining)}",
+                            flush=True,
+                        )
+                    except Exception as exc:
+                        failed.append((by_id.get(tid, {}), exc))
+                        print(
+                            f"RSP-STYLE DETAIL FAIL {tid}: "
+                            f"{type(exc).__name__}: {exc}",
+                            flush=True,
+                        )
+            except Exception as exc:
+                print(
+                    f"RSP-STYLE ORG FAIL {name}: "
+                    f"{type(exc).__name__}: {exc}",
+                    flush=True,
+                )
+    finally:
+        session.close()
+
+    print(
+        f"RSP-STYLE COMPLETE: extracted={len(extracted)} "
+        f"remaining={len(remaining)}",
+        flush=True,
+    )
+    # Anything still remaining goes to the existing Playwright search route.
+    fallback = [by_id[tid] for tid in target_ids if tid in remaining and tid in by_id]
+    return fallback, failed
+
 
 def main():
     # The 20:15 recovery scraper run was already launched from an older
@@ -299,32 +444,56 @@ def main():
             # Reuse the same browser/page for the next Tender ID.
 
     save_status("running")
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(
-            locale="en-IN",
-            timezone_id="Asia/Kolkata",
-            viewport={"width": 1366, "height": 900}
+
+    # Primary route: the proven RSP-style requests/session extraction.
+    # Keep the existing Playwright Tender-ID search route as a safe fallback
+    # for only those IDs that the direct session route cannot resolve.
+    rsp_fallback, rsp_failed = rsp_style_extract_targets(
+        targets,
+        by_id,
+        save_status,
+        save_csv,
+        save_detail_csv,
+        success_ids,
+    )
+    success = len(success_ids)
+
+    for base, exc in rsp_failed:
+        failed_bases.append(base)
+        errors.append({
+            "Tender ID": clean(base.get("Tender ID")),
+            "error": f"RSPStyle: {type(exc).__name__}: {exc}",
+            "retry_pass": False,
+        })
+
+    if rsp_fallback:
+        print(
+            f"PLAYWRIGHT FALLBACK: {len(rsp_fallback)} Tender IDs",
+            flush=True,
         )
-        page = context.new_page()
-        try:
-            # First pass: every new/current incomplete Tender ID.
-            process_targets(page, targets, is_retry=False)
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(
+                locale="en-IN",
+                timezone_id="Asia/Kolkata",
+                viewport={"width": 1366, "height": 900}
+            )
+            page = context.new_page()
+            try:
+                process_targets(page, rsp_fallback, is_retry=False)
 
-            # Exactly one retry for IDs that failed in the first pass.
-            retry_targets = list(failed_bases)
-            if retry_targets:
-                print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
-                process_targets(page, retry_targets, is_retry=True)
+                retry_targets = list(failed_bases)
+                if retry_targets:
+                    print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
+                    process_targets(page, retry_targets, is_retry=True)
 
-                # Keep only the final failure entry for IDs that failed twice.
-                final_errors = {}
-                for e in errors:
-                    final_errors[e["Tender ID"]] = e
-                errors[:] = list(final_errors.values())
-        finally:
-            context.close()
-            browser.close()
+                    final_errors = {}
+                    for e in errors:
+                        final_errors[e["Tender ID"]] = e
+                    errors[:] = list(final_errors.values())
+            finally:
+                context.close()
+                browser.close()
 
     save_csv()
     save_detail_csv()
