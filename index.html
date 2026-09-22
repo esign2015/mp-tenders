@@ -1832,6 +1832,7 @@ const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/ve
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
 let telegramAuthData = null;
 let telegramChecking = false;
+let telegramSetupInProgress = false;
 
 function telegramStatus(message, ok=false){
   const status = document.getElementById("telegramGateStatus");
@@ -1968,6 +1969,8 @@ async function verifyTelegramMembership(user, persist=true){
 }
 
 async function setupTelegramLogin(){
+  if(telegramSetupInProgress) return;
+  telegramSetupInProgress = true;
   const status = document.getElementById("telegramGateStatus");
   const wrap=document.getElementById("telegramLoginWrap");
   const start=document.getElementById("telegramLoginStart");
@@ -2045,6 +2048,8 @@ async function setupTelegramLogin(){
       ? "Telegram server से response देर से आ रहा है। Retry Telegram Login दबाएँ।"
       : "Telegram Login अभी load नहीं हुआ। Retry Telegram Login दबाएँ।";
     telegramStatus(message);
+  }finally{
+    telegramSetupInProgress = false;
   }
 }
 
@@ -2098,8 +2103,8 @@ function setupTelegramFlow(){
 async function enforceTelegramAccess(){
   setupTelegramFlow();
   if(await checkStoredTelegram()) return;
-  showTelegramLogin();
   await setupTelegramLogin();
+  showTelegramLogin();
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
