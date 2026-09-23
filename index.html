@@ -1477,6 +1477,60 @@ body.telegram-locked .site-footer{visibility:hidden}
  .user-tool-btn{width:100%;font-size:10px!important;padding:6px 4px!important}
 }
 </style>
+
+<style id="real-sar-logo-header-fix">
+/* Real SAR Digital Services logo: logo LEFT, branding text RIGHT. */
+.site-header .brand-lockup{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:9px !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+.site-header .brand-logo-wrap{
+  position:relative !important;
+  display:flex !important;
+  flex:0 0 58px !important;
+  width:58px !important;
+  height:40px !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  overflow:visible !important;
+}
+.site-header .brand-logo{
+  display:block !important;
+  width:58px !important;
+  height:40px !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  z-index:5 !important;
+}
+.site-header .brand-copy{
+  min-width:0 !important;
+  flex:1 1 auto !important;
+}
+.site-header .brand-logo-fallback{
+  display:none !important;
+}
+@media(max-width:1100px){
+  .site-header .brand-logo-wrap{
+    flex-basis:52px !important;
+    width:52px !important;
+    height:36px !important;
+  }
+  .site-header .brand-logo{
+    width:52px !important;
+    height:36px !important;
+  }
+}
+</style>
+
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
@@ -1537,7 +1591,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
 <header class="site-header">
 
-  <div class="header-left"><div class="brand-lockup"><span class="brand-logo-wrap"><img class="brand-logo" src="./assets/sar-logo.png?v=4" alt="SAR Digital Services"><span class="brand-logo-fallback">SAR</span></span><div class="brand-copy"><div class="main-brand" data-i18n="brand">SAR Digital Services, Kannod</div><div class="sub-brand" data-i18n="subtitle">MP Tender Live Dashboard</div><div class="date-time" id="dateTime">Loading date...</div><div class="data-refresh-status" id="dataRefreshStatus">● Data: Loading...</div></div></div></div>
+  <div class="header-left"><div class="brand-lockup"><span class="brand-logo-wrap"><img class="brand-logo" src="./assets/sar-logo.png?v=5" alt="SAR Digital Services"></span><div class="brand-copy"><div class="main-brand" data-i18n="brand">SAR Digital Services, Kannod</div><div class="sub-brand" data-i18n="subtitle">MP Tender Live Dashboard</div><div class="date-time" id="dateTime">Loading date...</div><div class="data-refresh-status" id="dataRefreshStatus">● Data: Loading...</div></div></div></div>
 
   <div class="counts">
     <button class="count-box count-box-button" id="liveCountBox" type="button" title="Show all live tenders">
