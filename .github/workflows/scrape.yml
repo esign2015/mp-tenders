@@ -16,7 +16,7 @@ on:
     - cron: "30 9 * * *"     # 3:00 PM IST
     - cron: "30 11 * * *"    # 5:00 PM IST
     - cron: "30 12 * * *"    # 6:00 PM IST
-    - cron: "45 13 * * *"    # 7:15 PM IST
+    - cron: "35 13 * * *"    # 7:05 PM IST
     - cron: "25 3 * * *"     # 8:55 AM IST — morning snapshot
     - cron: "35 4 * * *"     # 10:05 AM IST — corrigendum check
     - cron: "35 10 * * *"    # 4:05 PM IST — corrigendum check
@@ -648,7 +648,7 @@ jobs:
       group: mp-tender-list-refresh
       cancel-in-progress: false
       queue: max
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '45 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '35 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
@@ -784,7 +784,7 @@ jobs:
 
               if [ "$SHOULD_PUBLISH" = "true" ]; then
                 echo "Publishing live checkpoint: org=$ORG_PROGRESS detail=$CHECKPOINT"
-                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json; do
+                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/snapshot_recovery_status.json; do
                   if [ -s "$f" ]; then git add "$f"; fi
                 done
 
@@ -812,6 +812,13 @@ jobs:
 
       # Detail extraction is intentionally NOT run in this job.
       # new_tender_detail_worker starts only after this copy job succeeds.
+      - name: Recover missing Tender IDs from Closing Date and reconcile RSP fallback
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python scripts/recover_closing_date_tenders.py > closing_date_recovery.log 2>&1
+          python backend/reconcile_run_snapshot.py | tee run_snapshot_reconcile.log || true
+
       - name: Detail phase handled by separate worker
         run: echo "Detail phase delegated to new_tender_detail_worker." 
       - name: Commit whatever tender data was collected
