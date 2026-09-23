@@ -1135,9 +1135,13 @@ def browser_get_all_tender_rows(page, org, expected_count):
             flush=True,
         )
         if len(records) != expected_count:
-            raise RuntimeError(
-                f"Organisation tender count mismatch after retry for {clean(org.get('name'))}: "
-                f"portal={expected_count}, collected={len(records)}"
+            # Never discard the rows already copied from a mismatched organisation.
+            # Keep the partial snapshot visible so the missing IDs can be reconciled
+            # instead of silently reducing the global copied count.
+            print(
+                f"COUNT MISMATCH RETAINED: {clean(org.get('name'))} "
+                f"portal={expected_count}, collected={len(records)}",
+                flush=True,
             )
     return records, pages
 
