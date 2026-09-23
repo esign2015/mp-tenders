@@ -1,8 +1,6 @@
 name: MPTenders Closing Date Recovery
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "45 13 * * *"
 permissions:
   contents: write
 jobs:
