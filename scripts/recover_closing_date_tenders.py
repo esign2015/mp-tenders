@@ -1,0 +1,1 @@
+# Placeholder for public MPTenders Closing Date recovery. This job will collect tender IDs from the no-CAPTCHA Closing Date page and write data/closing_date_recovery.csv. It will never automate the Active Tenders CAPTCHA.
