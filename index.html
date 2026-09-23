@@ -11,7 +11,7 @@
   --blue:#203b91;
   --blue-dark:#172d70;
   --border:#cbd5e1;
-  --header-height:112px;
+  --header-height:82px;
   --footer-height:48px;
 }
 
@@ -64,10 +64,10 @@ body{
   background:var(--blue);
   color:white;
   display:grid;
-  grid-template-columns:1fr auto 1fr;
+  grid-template-columns:minmax(300px,1.15fr) auto minmax(390px,1fr);
   align-items:center;
-  gap:12px;
-  padding:10px 18px;
+  gap:10px;
+  padding:6px 14px;
   border-bottom:3px solid #10245e;
 }
 
@@ -77,22 +77,22 @@ body{
 }
 
 .main-brand{
-  font-size:27px;
+  font-size:20px;
   font-weight:800;
   line-height:1.05;
   white-space:nowrap;
 }
 
 .sub-brand{
-  font-size:14px;
+  font-size:10px;
   margin-top:5px;
   color:#ffffff;
 }
 
 .date-time{
-  margin-top:8px;
+  margin-top:3px;
   color:#ffe600;
-  font-size:13px;
+  font-size:10px;
   font-weight:bold;
 }
 
@@ -100,30 +100,30 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:8px;
+  gap:5px;
 }
 
 .count-box{
-  width:105px;
-  min-width:105px;
-  height:61px;
+  width:88px;
+  min-width:88px;
+  height:52px;
   background:white;
   color:#20304c;
   border-radius:7px;
   text-align:center;
-  padding:7px 5px;
+  padding:5px 4px;
   box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
 .count-label{
-  font-size:12px;
+  font-size:10px;
   white-space:nowrap;
 }
 
 .count-number{
-  font-size:22px;
+  font-size:19px;
   font-weight:800;
-  margin-top:5px;
+  margin-top:3px;
 }
 
 .count-number.red{color:#e11d2e}
@@ -144,14 +144,12 @@ body{
   display:inline-block;
   width:12px;
   margin-left:3px;
-  font-size:11px;
+  font-size:10px;
+  color:#64748b;
 }
-.sortable-th.sort-active .sort-arrow::after{
-  content:"▲";
-}
-.sortable-th.sort-active.sort-desc .sort-arrow::after{
-  content:"▼";
-}
+.sort-arrow::after{content:"↕";}
+.sortable-th.sort-active .sort-arrow::after{content:"▲";}
+.sortable-th.sort-active.sort-desc .sort-arrow::after{content:"▼";}
 
 .count-box-button{
   border:0;
@@ -174,13 +172,13 @@ body{
 }
 
 .right-brand{
-  font-size:18px;
+  font-size:12px;
   font-weight:800;
   white-space:nowrap;
 }
 
 .right-sub{
-  font-size:12px;
+  font-size:9px;
   margin-top:5px;
 }
 
@@ -1186,7 +1184,8 @@ td.title-cell{
   padding:5px 10px;
   font-size:10px;
 }
-<style>.brand-lockup{display:flex;align-items:center;gap:10px;min-width:0}.brand-logo{width:58px;height:58px;object-fit:contain;flex:0 0 58px}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}.lang-btn,.header-contact{height:30px;padding:5px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:11px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:45px;height:45px}.header-contact-row{justify-content:center}}</style>
+<style>.brand-lockup{display:flex;align-items:center;gap:7px;min-width:0}.brand-logo{display:block;width:42px;height:42px;object-fit:contain;object-position:center;flex:0 0 42px;visibility:visible;opacity:1}.brand-copy{min-width:0}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:4px;flex-wrap:nowrap;white-space:nowrap}.lang-btn,.header-contact{height:26px;padding:4px 7px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.latest-alert{background:#0ea5e9;color:#fff}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:1100px){.site-header{grid-template-columns:minmax(250px,1fr) auto minmax(330px,1fr);gap:6px;padding:5px 10px}.main-brand{font-size:18px}.brand-logo{width:38px;height:38px;flex-basis:38px}.count-box{width:78px;min-width:78px;height:48px}.count-label{font-size:9px}.count-number{font-size:17px}.header-contact{padding:4px 5px;font-size:9px}}
+@media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:42px;height:42px;flex-basis:42px}.header-contact-row{justify-content:center;flex-wrap:wrap}}</style>
 
 <style>
 /* ===== Telegram access gate + distinct action buttons ===== */
@@ -1404,16 +1403,16 @@ td.title-cell{
 }
 .telegram-profile.visible{display:flex}
 .telegram-avatar{
-  width:28px;height:28px;border-radius:50%;
+  width:22px;height:22px;border-radius:50%;
   object-fit:cover;border:2px solid rgba(255,255,255,.82);
-  flex:0 0 28px;
+  flex:0 0 22px;
 }
 .telegram-profile-display{font-weight:800;font-size:12px;color:#fff;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis}
 .telegram-profile-btn{
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:4px;
   border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.10);color:#fff;
-  font-weight:800;font-size:12px;cursor:pointer;padding:4px 7px;border-radius:7px;
-  max-width:170px;
+  font-weight:800;font-size:12px;cursor:pointer;padding:4px 6px;border-radius:7px;
+  max-width:145px;
 }
 .telegram-profile-btn:hover{background:rgba(255,255,255,.18)}
 .telegram-profile-arrow{font-size:15px;line-height:1;opacity:.95}
@@ -1561,7 +1560,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
   </div>
 
-  <div class="header-right"><div class="header-contact-row"><button class="lang-btn active" id="langEnglish" type="button">English</button><button class="lang-btn" id="langHindi" type="button">हिन्दी</button><a class="header-contact whatsapp" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a><button class="header-contact install-app" id="installAppBtn" type="button">📱 Install App</button><div class="telegram-profile" id="telegramProfile">
+  <div class="header-right"><div class="header-contact-row"><button class="lang-btn active" id="langEnglish" type="button">English</button><button class="lang-btn" id="langHindi" type="button">हिन्दी</button><a class="header-contact whatsapp" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a><button class="header-contact install-app" id="installAppBtn" type="button">📱 Install App</button><a class="header-contact latest-alert" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer" data-i18n="latestAlert">🔔 Latest Alert</a><div class="telegram-profile" id="telegramProfile">
       <button class="telegram-profile-btn" id="telegramProfileBtn" type="button" aria-label="Telegram profile menu"><img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile" referrerpolicy="no-referrer" crossorigin="anonymous"><span class="telegram-profile-display" id="telegramProfileName">Telegram User</span><span class="telegram-profile-arrow">▾</span></button>
       <div class="telegram-profile-menu" id="telegramProfileMenu">
         <div class="telegram-profile-name" id="telegramMenuName">Telegram User</div>
@@ -1582,7 +1581,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading" data-i18n="searchHeading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">📊 Tender Count by Org</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
+        <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">🏢 Organisation Summary</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
@@ -3819,7 +3818,7 @@ function setupUserFeatures(){
   });
 }
 
-let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"📊 Tender Count by Org",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"📊 संगठन के अनुसार निविदा संख्या",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText()}
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText()}
 function updateDynamicHindiText(){
   const hi=currentLanguage==="hi";
   const count=document.getElementById("recordCount");
