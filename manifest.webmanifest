@@ -1,0 +1,18 @@
+{
+  "name": "MP Tender Live Dashboard",
+  "short_name": "MP Tenders",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#203b91",
+  "description": "SAR Digital Services Kannod — MP Tender Live Dashboard",
+  "icons": [
+    {
+      "src": "./assets/sar-logo.png",
+      "sizes": "96x54",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
