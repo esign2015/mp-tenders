@@ -1,19 +1,12 @@
 {
-  "status": "running",
+  "status": "copy_completed",
   "process_started_at": "2026-09-23T15:33:19.220020+00:00",
   "total_tenders": 5142,
   "portal_total_tenders": 5142,
   "organisation_count": 93,
-  "detail_complete": 3815,
-  "detail_remaining": 1951,
+  "organisation_progress": "93/93",
+  "copied_tenders": 5139,
   "errors": 1,
   "latest_error": "Madhya Pradesh Bhawan: TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(12)\n    - locator resolved to <a class=\"link1\" target=\"_self\" id=\"PageLink_0\" title=\"Tenders by Organisation\" href=\"/nicgep/app?page=FrontEndTendersByOrganisation&service=page\">Tenders by Organisation</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-  "organisation_progress": "91/93",
-  "current_organisation": "Tribal Affairs Department-MP",
-  "department_count": 299,
-  "pincode_count": 333,
-  "pincode_others_count": 2,
-  "detail_batch_size": 0,
-  "detail_batch_completed": 0,
-  "updated_at": "2026-09-23T15:44:50.268152+00:00"
+  "updated_at": "2026-09-23T15:45:04.665059+00:00"
 }

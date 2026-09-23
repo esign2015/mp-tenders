@@ -1,13 +1,13 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-09-23T20:00:13.649481+05:30",
+  "snapshot_at": "2026-09-23T21:15:04.664242+05:30",
   "previous_organisation_count": 93,
   "current_organisation_count": 93,
-  "previous_tender_count": 5129,
+  "previous_tender_count": 5142,
   "current_tender_count": 5142,
-  "organisations_with_changes": 63,
-  "organisations_with_new_tenders": 63,
-  "new_tender_count": 281,
+  "organisations_with_changes": 58,
+  "organisations_with_new_tenders": 58,
+  "new_tender_count": 259,
   "changes": [
     {
       "Organisation Name": "Madhya Pradesh Road Development Corporation Limited",
@@ -65,10 +65,10 @@
       ]
     },
     {
-      "Organisation Name": "Director General of Prisons and Correctional Services",
-      "Previous Tender Count": 39,
+      "Organisation Name": "Department of Higher Education",
+      "Previous Tender Count": 41,
       "Current Tender Count": 41,
-      "Count Difference": 2,
+      "Count Difference": 0,
       "New Tender Count": 41,
       "New Tender IDs": [
         "2026_HED_527553_1",
@@ -115,7 +115,7 @@
       ]
     },
     {
-      "Organisation Name": "MP Police",
+      "Organisation Name": "Directorate of Town And Country Planning",
       "Previous Tender Count": 24,
       "Current Tender Count": 24,
       "Count Difference": 0,
@@ -169,25 +169,6 @@
       ]
     },
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2983,
-      "Current Tender Count": 2985,
-      "Count Difference": 2,
-      "New Tender Count": 10,
-      "New Tender IDs": [
-        "2026_UAD_533756_1",
-        "2026_UAD_537788_1",
-        "2026_UAD_537791_1",
-        "2026_UAD_537794_1",
-        "2026_UAD_537795_1",
-        "2026_UAD_537796_1",
-        "2026_UAD_537797_1",
-        "2026_UAD_537798_1",
-        "2026_UAD_537908_1",
-        "2026_UAD_538306_1"
-      ]
-    },
-    {
       "Organisation Name": "Atal Indore City Transport Services Ltd - Indore",
       "Previous Tender Count": 7,
       "Current Tender Count": 7,
@@ -233,21 +214,6 @@
         "2026_AICTS_531646_1",
         "2026_AICTS_531647_1",
         "2026_AICTS_531648_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 252,
-      "Current Tender Count": 258,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_MPPGC_507816_1",
-        "2026_MPPGC_513550_1",
-        "2026_MPPGC_536969_1",
-        "2026_MPPGC_537452_1",
-        "2026_MPPGC_537650_1",
-        "2026_MPPGC_538124_1"
       ]
     },
     {
@@ -426,18 +392,6 @@
       ]
     },
     {
-      "Organisation Name": "Madhya Pradesh Bhawan",
-      "Previous Tender Count": 3,
-      "Current Tender Count": 3,
-      "Count Difference": 0,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_DFWAD_533409_1",
-        "2026_DFWAD_537621_1",
-        "2026_DFWAD_538072_1"
-      ]
-    },
-    {
       "Organisation Name": "Minor Forest Produce Processing and Research Center",
       "Previous Tender Count": 3,
       "Current Tender Count": 3,
@@ -471,17 +425,6 @@
         "2026_DFWAD_533409_1",
         "2026_DFWAD_537621_1",
         "2026_DFWAD_538072_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 22,
-      "Current Tender Count": 24,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_DTCP_538235_1",
-        "2026_DTCP_538380_1"
       ]
     },
     {
@@ -625,16 +568,6 @@
       "New Tender IDs": [
         "2026_CPA_534387_1",
         "2026_CPA_536129_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 49,
-      "Current Tender Count": 50,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPKV_537770_1"
       ]
     },
     {
