@@ -1742,6 +1742,21 @@ body.telegram-locked .site-footer{visibility:hidden}
 }
 </style>
 
+
+<style id="logo-lightbox-fix">
+.site-header .brand-logo{cursor:zoom-in!important;}
+.logo-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:999999;padding:24px;}
+.logo-lightbox.open{display:flex;}
+.logo-lightbox-card{position:relative;max-width:min(760px,92vw);max-height:88vh;background:#fff;border-radius:14px;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.45);text-align:center;}
+.logo-lightbox-card img{display:block;width:min(620px,80vw);height:auto;max-height:62vh;object-fit:contain;image-rendering:auto;margin:auto;}
+.logo-lightbox-caption{margin-top:12px;font-size:18px;font-weight:800;color:#203b91;}
+.logo-lightbox-close{position:fixed;right:22px;top:18px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#172033;font-size:30px;line-height:1;cursor:pointer;z-index:1000000;}
+.hi-translate-status{font-size:9px;font-weight:700;color:#dbeafe;margin-left:5px;white-space:nowrap;}
+.tender-translating{opacity:.62;}
+@media(max-width:850px){
+ .logo-lightbox{padding:12px}.logo-lightbox-card{padding:14px}.logo-lightbox-card img{width:88vw}.logo-lightbox-caption{font-size:14px}
+}
+</style>
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
@@ -1843,6 +1858,14 @@ body.telegram-locked .site-footer{visibility:hidden}
   </div>
 
 </header>
+<div class="logo-lightbox" id="logoLightbox" aria-hidden="true">
+  <button class="logo-lightbox-close" id="logoLightboxClose" type="button" aria-label="Close">×</button>
+  <div class="logo-lightbox-card" role="dialog" aria-modal="true" aria-label="SAR Digital Services logo">
+    <img id="logoLightboxImg" alt="SAR Digital Services">
+    <div class="logo-lightbox-caption">SAR Digital Services, Kannod</div>
+  </div>
+</div>
+
 
 <main class="main-area">
 
@@ -3123,6 +3146,79 @@ function virtualSpacerRow(height, className){
   `;
 }
 
+
+const TRANSLATE_CACHE_KEY="mpTenderHindiTranslationsV1";
+let tenderTranslationCache=(()=>{try{return JSON.parse(localStorage.getItem(TRANSLATE_CACHE_KEY)||"{}")}catch(e){return {}}})();
+let translationRunToken=0;
+function saveTenderTranslationCache(){try{localStorage.setItem(TRANSLATE_CACHE_KEY,JSON.stringify(tenderTranslationCache))}catch(e){}}
+function translationFields(row){
+  return ["Title","Reference Number","Organisation","Location","Product Category","Contract Type","Work Description","Corrigendum","Department","Division","Sub Division"];
+}
+async function translateTenderRow(row){
+  if(currentLanguage!=="hi") return;
+  const id=String(row["Tender ID"]||"");
+  if(!id) return;
+  const cached=tenderTranslationCache[id];
+  if(cached){Object.assign(row,{_hi:cached});return;}
+  const fields=translationFields(row);
+  const values=fields.map(k=>String(row[k]??""));
+  if(!values.some(Boolean)) return;
+  try{
+    const q=values.map((v,i)=>"["+i+"] "+v.replace(/\s+/g," ").trim()).join("\n");
+    const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q="+encodeURIComponent(q);
+    const r=await fetch(url,{cache:"force-cache"});
+    if(!r.ok) return;
+    const data=await r.json();
+    const out=(data?.[0]||[]).map(x=>x?.[0]||"").join("");
+    if(!out) return;
+    const translated={};
+    // Google Translate returns the numbered lines together; split on our [n] markers.
+    const matches=[...out.matchAll(/\[(\d+)\]\s*/g)];
+    if(matches.length){
+      for(let i=0;i<matches.length;i++){
+        const n=Number(matches[i][1]);
+        const start=matches[i].index+matches[i][0].length;
+        const end=i+1<matches.length?matches[i+1].index:out.length;
+        translated[fields[n]]=out.slice(start,end).trim();
+      }
+    }
+    if(Object.keys(translated).length){
+      tenderTranslationCache[id]=translated;
+      row._hi=translated;
+      saveTenderTranslationCache();
+    }
+  }catch(e){}
+}
+function displayTenderValue(row,key){
+  if(currentLanguage==="hi" && row._hi && row._hi[key]) return row._hi[key];
+  return row[key];
+}
+async function translateVisibleTenderRows(){
+  if(currentLanguage!=="hi") return;
+  const token=++translationRunToken;
+  const rows=virtualRows.slice(virtualStart,virtualEnd);
+  if(!rows.length) return;
+  const pending=rows.filter(r=>!r._hi);
+  if(!pending.length) return;
+  const status=$("dataRefreshStatus");
+  if(status){
+    status.classList.add("hi-translate-status");
+    status.textContent="● "+I18N.hi.translating;
+  }
+  // Small concurrency keeps the portal responsive and avoids a burst of requests.
+  let cursor=0;
+  const worker=async()=>{
+    while(cursor<pending.length){
+      const row=pending[cursor++];
+      await translateTenderRow(row);
+    }
+  };
+  await Promise.all([worker(),worker()]);
+  if(token!==translationRunToken || currentLanguage!=="hi") return;
+  renderVirtualWindow();
+  updateRefreshBadge();
+}
+
 function renderVirtualWindow(){
   const body = $("tenderBody");
   if(!body) return;
@@ -3144,7 +3240,7 @@ function renderVirtualWindow(){
   body.innerHTML = visibleRows.map((row,index) => {
     const closingClass = getClosingClass(row);
     const tenderId = escapeHtml(row["Tender ID"]);
-    const title = escapeHtml(row["Title"]);
+    const title = escapeHtml(displayTenderValue(row,"Title"));
     const titleHtml = title;
 
     return `
@@ -3154,7 +3250,7 @@ function renderVirtualWindow(){
         <td>${escapeHtml(row["Pincode"]) || "—"}</td>
         <td>${tenderId || "—"}</td>
         <td class="title-cell">${titleHtml || "—"}</td>
-        <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Reference Number")) || "—"}</td>
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
@@ -3165,16 +3261,16 @@ function renderVirtualWindow(){
         <td>${formatMoney(row["Processing Fee"])}</td>
         <td><strong>${formatMoney(totalFee(row))}</strong></td>
         <td class="org-display-cell">
-  <span class="org-full">${escapeHtml(row["Organisation"]) || "—"}</span>
+  <span class="org-full">${escapeHtml(displayTenderValue(row,"Organisation")) || "—"}</span>
   <span class="org-short">${escapeHtml((clean(row["Tender ID"]).split("_")[1] || clean(row["Organisation"]).split(/\s+/)[0] || "—").toUpperCase()) || "—"}</span>
 </td>
         <td>${escapeHtml(row["Published Date"]) || "—"}</td>
-        <td>${escapeHtml(row["Location"]) || "—"}</td>
-        <td>${escapeHtml(row["Product Category"]) || "—"}</td><td>${escapeHtml(row["Contract Type"]) || "—"}</td>
-        <td>${escapeHtml(row["Bid Validity"]) || "—"}</td><td class="work-description-cell">${escapeHtml(row["Work Description"]) || "—"}</td>
-        <td>${escapeHtml(row["Corrigendum"]) || "—"}</td><td>${escapeHtml(row["Department"]) || "—"}</td>
-        <td>${escapeHtml(row["Division"]) || "—"}</td>
-        <td>${escapeHtml(row["Sub Division"]) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Location")) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Product Category")) || "—"}</td><td>${escapeHtml(displayTenderValue(row,"Contract Type")) || "—"}</td>
+        <td>${escapeHtml(row["Bid Validity"]) || "—"}</td><td class="work-description-cell">${escapeHtml(displayTenderValue(row,"Work Description")) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Corrigendum")) || "—"}</td><td>${escapeHtml(displayTenderValue(row,"Department")) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Division")) || "—"}</td>
+        <td>${escapeHtml(displayTenderValue(row,"Sub Division")) || "—"}</td>
       </tr>
     `;
   }).join("");
@@ -4083,7 +4179,7 @@ function setupUserFeatures(){
   });
 }
 
-let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText()}
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();renderVirtualWindow();}
 function updateDynamicHindiText(){
   const hi=currentLanguage==="hi";
   const count=document.getElementById("recordCount");
@@ -5044,3 +5140,18 @@ enforceTelegramAccess().then(async () => {
 </script>
 </body>
 </html>
+
+(function setupLogoLightbox(){
+  function init(){
+    const img=document.querySelector(".site-header .brand-logo");
+    const modal=$("logoLightbox"), big=$("logoLightboxImg"), close=$("logoLightboxClose");
+    if(!img||!modal||!big) return;
+    const open=()=>{big.src=img.currentSrc||img.src;modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";};
+    const hide=()=>{modal.classList.remove("open");modal.setAttribute("aria-hidden","true");document.body.style.overflow="";};
+    img.addEventListener("click",open);
+    close?.addEventListener("click",hide);
+    modal.addEventListener("click",e=>{if(e.target===modal)hide();});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")hide();});
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init,{once:true}); else init();
+})();
