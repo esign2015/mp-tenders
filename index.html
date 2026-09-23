@@ -1613,11 +1613,8 @@ body.telegram-locked .site-footer{visibility:hidden}
         <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;">📊 Tender Count by Org</a>
         <button class="btn-light" id="archivedBtn">Archived Tenders</button>
         <button class="btn-dark" id="reloadBtn">↻ Reload</button>
-        <button class="btn-blue" id="pdfBtn">▤ Send PDF to Telegram</button>
-        <div id="pdfDeliveryStatus" style="width:100%;font-size:12px;font-weight:700;color:#475569;margin-top:4px;">
-          PDF भेजने के लिए Telegram bot को एक बार <strong>START</strong> करना जरूरी है।
-          <button type="button" id="pdfTelegramStartBtn" style="display:none;margin-left:6px;background:#229ed9;color:#fff;padding:5px 9px;border-radius:5px;font-size:11px;">🔵 Telegram Bot खोलें</button>
-        </div>
+        <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
+        <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
         <a class="telegram-alert-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Get Daily Alert</a>
@@ -4349,7 +4346,7 @@ async function exportPdf(){
 
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   const filename="MP_Tender_Dashboard_" + stamp + ".pdf";
-  await sendDashboardPdfToTelegram(doc, filename);
+  doc.save(filename);
 }
 
 /*
