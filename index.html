@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#203b91"><link rel="manifest" href="./manifest.webmanifest">
 <title>SAR Digital Services, Kannod | MP Tender Live Dashboard</title>
 
 <style>
@@ -590,31 +590,8 @@ table{
   font-size:12px;
 }
 
-/* Column widths: keep Ref.No. compact and give organisation hierarchy room to wrap. */
-table th:nth-child(1), table td:nth-child(1){width:55px;}
-table th:nth-child(2), table td:nth-child(2){width:125px;}  /* District */
-table th:nth-child(3), table td:nth-child(3){width:145px;}  /* Tender ID */
-table th:nth-child(4), table td:nth-child(4){width:260px;}  /* Title */
-table th:nth-child(5), table td:nth-child(5){width:125px;}  /* Ref.No. */
-table th:nth-child(6), table td:nth-child(6){width:125px;}  /* Last Date */
-table th:nth-child(7), table td:nth-child(7){width:110px;}  /* Time Left */
-table th:nth-child(8), table td:nth-child(8){width:125px;}  /* PAC */
-table th:nth-child(9), table td:nth-child(9){width:110px;}
-table th:nth-child(10), table td:nth-child(10){width:110px;}
-table th:nth-child(11), table td:nth-child(11){width:110px;}
-table th:nth-child(12), table td:nth-child(12){width:125px;}  /* Total Fee */
-table th:nth-child(13), table td:nth-child(13){width:220px;}  /* Organisation */
-table th:nth-child(14), table td:nth-child(14){width:140px;}  /* Published Date */
-table th:nth-child(15), table td:nth-child(15){width:190px;}  /* Location */
-table th:nth-child(16), table td:nth-child(16){width:95px;}   /* Pincode */
-table th:nth-child(17), table td:nth-child(17){width:170px;}  /* Product Category */
-table th:nth-child(18), table td:nth-child(18){width:140px;}  /* Contract Type */
-table th:nth-child(19), table td:nth-child(19){width:105px;}  /* Bid Validity */
-table th:nth-child(20), table td:nth-child(20){width:300px;}  /* Work Description */
-table th:nth-child(21), table td:nth-child(21){width:120px;}  /* Corrigendum */
-table th:nth-child(22), table td:nth-child(22){width:190px;}  /* Department */
-table th:nth-child(23), table td:nth-child(23){width:190px;}  /* Division */
-table th:nth-child(24), table td:nth-child(24){width:170px;}  /* Sub Division */
+/* Column widths */
+table th:nth-child(1),table td:nth-child(1){width:55px} table th:nth-child(2),table td:nth-child(2){width:125px} table th:nth-child(3),table td:nth-child(3){width:85px} table th:nth-child(4),table td:nth-child(4){width:145px} table th:nth-child(5),table td:nth-child(5){width:260px} table th:nth-child(6),table td:nth-child(6){width:125px} table th:nth-child(7),table td:nth-child(7){width:125px} table th:nth-child(8),table td:nth-child(8){width:110px} table th:nth-child(9),table td:nth-child(9){width:125px} table th:nth-child(10),table td:nth-child(10){width:110px} table th:nth-child(11),table td:nth-child(11){width:110px} table th:nth-child(12),table td:nth-child(12){width:110px} table th:nth-child(13),table td:nth-child(13){width:125px} table th:nth-child(14),table td:nth-child(14){width:220px} table th:nth-child(15),table td:nth-child(15){width:140px} table th:nth-child(16),table td:nth-child(16){width:190px} table th:nth-child(17),table td:nth-child(17){width:170px} table th:nth-child(18),table td:nth-child(18){width:140px} table th:nth-child(19),table td:nth-child(19){width:105px} table th:nth-child(20),table td:nth-child(20){width:300px} table th:nth-child(21),table td:nth-child(21){width:120px} table th:nth-child(22),table td:nth-child(22){width:190px} table th:nth-child(23),table td:nth-child(23){width:190px} table th:nth-child(24),table td:nth-child(24){width:170px}
 
 thead{
   position:sticky;
@@ -1209,7 +1186,7 @@ td.title-cell{
   padding:5px 10px;
   font-size:10px;
 }
-</style>
+<style>.brand-lockup{display:flex;align-items:center;gap:10px;min-width:0}.brand-logo{width:58px;height:58px;object-fit:contain;flex:0 0 58px}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}.lang-btn,.header-contact{height:30px;padding:5px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:11px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:45px;height:45px}.header-contact-row{justify-content:center}}</style></style>
 
 <style>
 /* ===== Telegram access gate + distinct action buttons ===== */
@@ -1556,11 +1533,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
 <header class="site-header">
 
-  <div class="header-left">
-    <div class="main-brand">SAR Digital Services, Kannod</div>
-    <div class="sub-brand">MP Tender Live Dashboard</div>
-    <div class="date-time" id="dateTime">Loading date...</div>
-  </div>
+  <div class="header-left"><div class="brand-lockup"><img class="brand-logo" src="./assets/sar-logo.png" alt="SAR Digital Services"><div class="brand-copy"><div class="main-brand" data-i18n="brand">SAR Digital Services, Kannod</div><div class="sub-brand" data-i18n="subtitle">MP Tender Live Dashboard</div><div class="date-time" id="dateTime">Loading date...</div><div class="data-refresh-status" id="dataRefreshStatus">● Data: Loading...</div></div></div></div>
 
   <div class="counts">
     <button class="count-box count-box-button" id="liveCountBox" type="button" title="Show all live tenders">
@@ -1584,9 +1557,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
   </div>
 
-  <div class="header-right">
-    <div class="right-sub">For DSC &amp; E-Tendering Services</div>
-    <div class="telegram-profile" id="telegramProfile">
+  <div class="header-right"><div class="header-contact-row"><button class="lang-btn active" id="langEnglish" type="button">English</button><button class="lang-btn" id="langHindi" type="button">हिन्दी</button><a class="header-contact whatsapp" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a><button class="header-contact install-app" id="installAppBtn" type="button">📱 Install App</button></div><div class="right-sub" data-i18n="dsc">For DSC &amp; E-Tendering Services</div><div class="telegram-profile" id="telegramProfile">
       <img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile" referrerpolicy="no-referrer" crossorigin="anonymous">
       <span class="telegram-profile-display" id="telegramProfileName">Telegram User</span>
       <button class="telegram-logout-front" id="telegramLogoutFrontBtn" type="button">🚪 Logout</button>
@@ -1610,26 +1581,22 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;">📊 Tender Count by Org</a>
-        <button class="btn-light" id="archivedBtn">Archived Tenders</button>
-        <button class="btn-dark" id="reloadBtn">↻ Reload</button>
-        <button class="btn-blue" id="pdfBtn">▤ Export PDF</button>
+        <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">📊 Tender Count by Org</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
-        <a class="telegram-alert-btn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Get Daily Alert</a>
+        <a class="header-contact whatsapp action-contact" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram action-contact" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a>
       </div>
     </div>
 
     <div class="search-fields">
-      <input id="generalSearch"
-             type="text"
-             placeholder="Search Tender ID, title, authority, department, location, PIN...">
+      <input id="generalSearch" type="text" data-i18n-placeholder="searchPlaceholder" placeholder="Search Tender ID, title, authority, department, location, PIN...">
 
       <div class="organisation-filter-wrap" id="organisationFilterWrap">
         <input id="organisationSearch"
                type="text"
                autocomplete="off"
+               data-i18n-placeholder="orgPlaceholder"
                placeholder="Organisation — type to find..."
                aria-label="Organisation filter">
         <div class="organisation-suggestions" id="organisationSuggestions" role="listbox"></div>
@@ -1637,10 +1604,11 @@ body.telegram-locked .site-footer{visibility:hidden}
 
       <div class="district-filter-wrap" id="districtFilterWrap">
         <input id="districtSearch" type="text" autocomplete="off"
-               placeholder="District / PIN smart search..."
+               data-i18n-placeholder="districtPlaceholder"
+               placeholder="District / PIN search..."
                aria-label="District or PIN smart search">
         <div class="district-suggestions" id="districtSuggestions" role="listbox"></div>
-        <div class="district-search-help">District name / spelling correction / 1–6 digit PIN prefix</div>
+        <div class="district-search-help" data-i18n="districtHelp">District name / spelling correction / 1–6 digit PIN prefix</div>
       </div>
     </div>
 
@@ -1773,8 +1741,7 @@ body.telegram-locked .site-footer{visibility:hidden}
         <thead>
           <tr>
             <th>S.No.</th>
-            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Tender ID">Tender ID <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Pincode">Pincode <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Tender ID">Tender ID <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Title">Title <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
@@ -1786,7 +1753,7 @@ body.telegram-locked .site-footer{visibility:hidden}
             <th class="sortable-th" data-sort-key="Total Fee">Total Fee <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Organisation">Organisation <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Published Date">Published <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Location">Location <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Pincode">Pincode <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Product Category">Product Category <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Contract Type">Contract Type <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Bid Validity">Bid Validity <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Work Description">Work Description <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Corrigendum">Corrigendum <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Location">Location <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Product Category">Product Category <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Contract Type">Contract Type <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Bid Validity">Bid Validity <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Work Description">Work Description <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Corrigendum">Corrigendum <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Department">Department <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Division">Division <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Sub Division">Sub Division <span class="sort-arrow"></span></th>
@@ -2761,6 +2728,8 @@ async function loadData(){
 
     buildOrganisationOptions();
     applyFilters();
+    lastDataRefreshAt=new Date();
+    updateRefreshBadge();
 
     if(!liveRefreshTimer){
       liveRefreshTimer = setInterval(refreshPublishedData, 15000);
@@ -2893,6 +2862,7 @@ function renderVirtualWindow(){
       <tr data-row-index="${filteredTenders.indexOf(row)}">
         <td>${virtualStart + index + 1}</td>
         <td class="district-cell">${formatDistrictCell(row)}</td>
+        <td>${escapeHtml(row["Pincode"]) || "—"}</td>
         <td>${tenderId || "—"}</td>
         <td class="title-cell">${titleHtml || "—"}</td>
         <td>${escapeHtml(row["Reference Number"]) || "—"}</td>
@@ -2910,7 +2880,7 @@ function renderVirtualWindow(){
   <span class="org-short">${escapeHtml((clean(row["Tender ID"]).split("_")[1] || clean(row["Organisation"]).split(/\s+/)[0] || "—").toUpperCase()) || "—"}</span>
 </td>
         <td>${escapeHtml(row["Published Date"]) || "—"}</td>
-        <td>${escapeHtml(row["Location"]) || "—"}</td><td>${escapeHtml(row["Pincode"]) || "—"}</td>
+        <td>${escapeHtml(row["Location"]) || "—"}</td>
         <td>${escapeHtml(row["Product Category"]) || "—"}</td><td>${escapeHtml(row["Contract Type"]) || "—"}</td>
         <td>${escapeHtml(row["Bid Validity"]) || "—"}</td><td class="work-description-cell">${escapeHtml(row["Work Description"]) || "—"}</td>
         <td>${escapeHtml(row["Corrigendum"]) || "—"}</td><td>${escapeHtml(row["Department"]) || "—"}</td>
@@ -3462,33 +3432,10 @@ function applyFilters(refreshHeader=true){
     }
 
     if(districtSearch){
-      const titleText=clean(row["Title"]).toLowerCase();
-      const workText=clean(row["Work Description"]).toLowerCase();
-      const authorityText=[row["Organisation"],row["Department"],row["Division"],row["Sub Division"],row["Location"]].join(" ").toLowerCase();
-      const referenceText=clean(row["Reference Number"]).toLowerCase();
       const pinText=clean(row["Pincode"]).replace(/\D/g,"");
       const numericQuery=districtSearch.replace(/\D/g,"").slice(0,6);
-      const pinHit=numericQuery.length>=1&&pinText.startsWith(numericQuery);
-      const candidates=districtCandidates(districtSearch);
-      const candidateHit=candidates.some(candidate=>{
-        const name=normalizeSearchText(candidate.name);
-        const aliases=(candidate.aliases||[]).map(normalizeSearchText);
-        const names=[name,...aliases];
-        const nameHit=names.some(n=>authorityText.includes(n)||titleText.includes(n)||workText.includes(n));
-        const pinHitForDistrict=(candidate.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix)));
-        const othersHit=candidate.isOthers && /^\d{6}$/.test(pinText) &&
-          !MP_DISTRICT_MASTER.some(d=>(d.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix))));
-        return nameHit||pinHitForDistrict||othersHit;
-      });
-      const resolved=resolveDistrict(districtSearch);
-      const districtHit=!!resolved&&(
-        (resolved.pinPrefixes||[]).some(prefix=>pinText.startsWith(String(prefix))) ||
-        authorityText.includes(String(resolved.name).toLowerCase()) ||
-        titleText.includes(String(resolved.name).toLowerCase()) ||
-        workText.includes(String(resolved.name).toLowerCase())
-      );
-      const textHit=titleText.includes(districtSearch)||workText.includes(districtSearch)||authorityText.includes(districtSearch)||referenceText.includes(districtSearch);
-      if(!textHit&&!pinHit&&!candidateHit&&!districtHit)return false;
+      if(/^\d+$/.test(districtSearch)){ if(!numericQuery || !pinText.startsWith(numericQuery)) return false; }
+      else { const resolved=resolveDistrict(districtSearch); const districtInfo=getDistrictInfo(row); if(resolved){ if(normalizeSearchText(districtInfo.name)!==normalizeSearchText(resolved.name)) return false; } else if(normalizeSearchText(districtInfo.name)!==normalizeSearchText(districtSearch)) return false; }
     }
 
     /*
@@ -3785,16 +3732,14 @@ let orgDisplayMode = "short";
 
 const COLUMN_PREF_KEY="mp_tender_hidden_columns_v3";
 const COLUMN_DEFS=[
-  ["S.No.",1],["District",2],["Tender ID",3],["Title",4],["Ref.No.",5],
-  ["Last Date",6],["Time Left",7],["PAC Amount",8],["EMD Fee",9],
-  ["Tender Fee",10],["Processing Fee",11],["Total Fee",12],["Organisation",13],
-  ["Published Date",14],["Location",15],["Pincode",16],["Product Category",17],["Contract Type",18],
-  ["Bid Validity",19],["Work Description",20],["Corrigendum",21],["Department",22],["Division",23],["Sub Division",24]
+  ["S.No.",1],["District",2],["Pincode",3],["Tender ID",4],["Title",5],["Ref.No.",6],
+  ["Last Date",7],["Time Left",8],["PAC Amount",9],["EMD Fee",10],["Tender Fee",11],["Processing Fee",12],["Total Fee",13],["Organisation",14],
+  ["Published Date",15],["Location",16],["Product Category",17],["Contract Type",18],["Bid Validity",19],["Work Description",20],["Corrigendum",21],["Department",22],["Division",23],["Sub Division",24]
 ];
 
 function loadHiddenColumns(){
   // Default view: exactly the columns shown in the requested layout.
-  const defaultHidden=[14,15,16,17,18,19,20,21,22,23,24]; // Published, Location, Pincode + advanced/detail columns hidden by default
+  const defaultHidden=[15,16,17,18,19,20,21,22,23,24]; // Published, Location + advanced/detail columns hidden; Pincode stays visible
   try{
     const raw=localStorage.getItem(COLUMN_PREF_KEY);
     return raw === null ? defaultHidden : JSON.parse(raw).map(Number);
@@ -3847,17 +3792,11 @@ function setupUserFeatures(){
   });
 }
 
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"📊 Tender Count by Org",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"📊 संगठन के अनुसार निविदा संख्या",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge()}function updateRefreshBadge(){const e=$("dataRefreshStatus");if(!e)return;if(!lastDataRefreshAt){e.textContent=currentLanguage==="hi"?"● डेटा: लोड हो रहा है...":"● Data: Loading...";return}e.textContent=(currentLanguage==="hi"?"● डेटा अपडेट: ":"● Data updated: ")+lastDataRefreshAt.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short",hour12:true})+" IST"}window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;$("installAppBtn").disabled=false});window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;$("installAppBtn").disabled=true});function installDashboardApp(){if(!deferredInstallPrompt){alert(currentLanguage==="hi"?"Chrome के ⋮ मेनू से Install app चुनें।":"Use Chrome ⋮ menu → Install app.");return}deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>deferredInstallPrompt=null)}
 function updateDateTime(){
   const now = new Date();
 
-  $("dateTime").textContent =
-    now.toLocaleDateString("en-IN",{
-      weekday:"long",
-      day:"2-digit",
-      month:"long",
-      year:"numeric"
-    }) + " at " +
-    now.toLocaleTimeString("en-IN");
+  $("dateTime").textContent=now.toLocaleDateString("en-IN",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})+(currentLanguage==="hi"?" • ":" at ")+now.toLocaleTimeString("en-IN");updateRefreshBadge();
 }
 
 async function openTelegramBotForPdf(){
@@ -4562,6 +4501,10 @@ $("next100Btn").addEventListener("click",() => goVirtualPage(1));
 
 setupOrganisationFilter();
 setupDistrictSearch();
+$("langEnglish")?.addEventListener("click",()=>applyLanguage("en"));
+$("langHindi")?.addEventListener("click",()=>applyLanguage("hi"));
+$("installAppBtn")?.addEventListener("click",installDashboardApp);
+applyLanguage(currentLanguage);
 
 // Initialise personal preference controls after Telegram identity is known.
 setupUserFeatures();
