@@ -8,12 +8,12 @@
   "detail_remaining": 1951,
   "errors": 1,
   "latest_error": "Madhya Pradesh Bhawan: TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(12)\n    - locator resolved to <a class=\"link1\" target=\"_self\" id=\"PageLink_0\" title=\"Tenders by Organisation\" href=\"/nicgep/app?page=FrontEndTendersByOrganisation&service=page\">Tenders by Organisation</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-  "organisation_progress": "42/93",
-  "current_organisation": "Madhya Pradesh State Electronics Development Corporation Ltd.",
+  "organisation_progress": "43/93",
+  "current_organisation": "Madhya Pradesh State Mining Corporation Ltd",
   "department_count": 299,
   "pincode_count": 333,
   "pincode_others_count": 2,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-23T15:39:13.673298+00:00"
+  "updated_at": "2026-09-23T15:39:20.227544+00:00"
 }
