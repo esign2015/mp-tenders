@@ -4511,6 +4511,7 @@ setupUserFeatures();
 
 
 updateDateTime();
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("Service worker registration failed:",error));}
 setInterval(updateDateTime,1000);
 // Re-evaluate archive/closed state continuously so the 7:00 PM IST
 // transition happens automatically without requiring a page reload.
