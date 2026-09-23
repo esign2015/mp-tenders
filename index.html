@@ -11,7 +11,7 @@
   --blue:#203b91;
   --blue-dark:#172d70;
   --border:#cbd5e1;
-  --header-height:82px;
+  --header-height:74px;
   --footer-height:48px;
 }
 
@@ -64,10 +64,10 @@ body{
   background:var(--blue);
   color:white;
   display:grid;
-  grid-template-columns:minmax(300px,1.15fr) auto minmax(390px,1fr);
+  grid-template-columns:minmax(280px,360px) minmax(330px,370px) minmax(0,1fr);
   align-items:center;
-  gap:10px;
-  padding:6px 14px;
+  gap:8px;
+  padding:5px 12px;
   border-bottom:3px solid #10245e;
 }
 
@@ -77,22 +77,22 @@ body{
 }
 
 .main-brand{
-  font-size:20px;
+  font-size:19px;
   font-weight:800;
   line-height:1.05;
   white-space:nowrap;
 }
 
 .sub-brand{
-  font-size:10px;
-  margin-top:5px;
+  font-size:9px;
+  margin-top:2px;
   color:#ffffff;
 }
 
 .date-time{
-  margin-top:3px;
+  margin-top:1px;
   color:#ffe600;
-  font-size:10px;
+  font-size:8px;
   font-weight:bold;
 }
 
@@ -104,26 +104,26 @@ body{
 }
 
 .count-box{
-  width:88px;
-  min-width:88px;
-  height:52px;
+  width:82px;
+  min-width:82px;
+  height:46px;
   background:white;
   color:#20304c;
   border-radius:7px;
   text-align:center;
-  padding:5px 4px;
+  padding:4px 3px;
   box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
 .count-label{
-  font-size:10px;
+  font-size:9px;
   white-space:nowrap;
 }
 
 .count-number{
-  font-size:19px;
+  font-size:17px;
   font-weight:800;
-  margin-top:3px;
+  margin-top:2px;
 }
 
 .count-number.red{color:#e11d2e}
@@ -169,17 +169,18 @@ body{
 .header-right{
   min-width:0;
   text-align:right;
+  overflow:visible;
 }
 
-.right-brand{
-  font-size:12px;
+ .right-brand{
+  font-size:10px;
   font-weight:800;
   white-space:nowrap;
 }
 
 .right-sub{
-  font-size:9px;
-  margin-top:5px;
+  font-size:8px;
+  margin-top:2px;
 }
 
 /* ================= MAIN SCROLL AREA ================= */
@@ -702,7 +703,7 @@ td.title-cell{
 .time-left-normal{color:#047857;}
 .time-left-closed{color:#b91c1c;}
 .district-cell{line-height:1.25;}
-.district-cell-note,.district-cell-warning{display:block;margin-top:2px;font-size:9px;color:#64748b;}
+.district-cell-note,.district-cell-warning{display:none!important;}
 .district-cell-warning{color:#b45309;font-weight:700;}
 
 .closing-today{
@@ -1184,7 +1185,7 @@ td.title-cell{
   padding:5px 10px;
   font-size:10px;
 }
-<style>.brand-lockup{display:flex;align-items:center;gap:7px;min-width:0}.brand-logo{display:block;width:42px;height:42px;object-fit:contain;object-position:center;flex:0 0 42px;visibility:visible;opacity:1}.brand-copy{min-width:0}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:4px;flex-wrap:nowrap;white-space:nowrap}.lang-btn,.header-contact{height:26px;padding:4px 7px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.latest-alert{background:#0ea5e9;color:#fff}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:1100px){.site-header{grid-template-columns:minmax(250px,1fr) auto minmax(330px,1fr);gap:6px;padding:5px 10px}.main-brand{font-size:18px}.brand-logo{width:38px;height:38px;flex-basis:38px}.count-box{width:78px;min-width:78px;height:48px}.count-label{font-size:9px}.count-number{font-size:17px}.header-contact{padding:4px 5px;font-size:9px}}
+<style>.brand-lockup{display:flex;align-items:center;gap:7px;min-width:0}.brand-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border-radius:7px;background:rgba(255,255,255,.12);overflow:hidden}.brand-logo{display:block;width:38px;height:38px;object-fit:contain;object-position:center;visibility:visible;opacity:1;position:relative;z-index:2}.brand-logo-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#203b91;background:#fff;font-weight:900;font-size:11px;z-index:1}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex-wrap:nowrap;white-space:nowrap}.lang-btn,.header-contact{height:24px;padding:3px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:9px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.latest-alert{background:#0ea5e9;color:#fff}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:1100px){.site-header{grid-template-columns:minmax(240px,300px) minmax(300px,340px) minmax(0,1fr);gap:5px;padding:4px 8px}.main-brand{font-size:17px}.brand-logo-wrap,.brand-logo{width:34px;height:34px}.brand-logo-wrap{flex-basis:34px}.count-box{width:76px;min-width:76px;height:44px}.count-label{font-size:8px}.count-number{font-size:16px}.header-contact{padding:3px 4px;font-size:8px}}
 @media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:42px;height:42px;flex-basis:42px}.header-contact-row{justify-content:center;flex-wrap:wrap}}</style>
 
 <style>
@@ -1412,7 +1413,7 @@ td.title-cell{
   display:inline-flex;align-items:center;gap:4px;
   border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.10);color:#fff;
   font-weight:800;font-size:12px;cursor:pointer;padding:4px 6px;border-radius:7px;
-  max-width:145px;
+  max-width:130px;
 }
 .telegram-profile-btn:hover{background:rgba(255,255,255,.18)}
 .telegram-profile-arrow{font-size:15px;line-height:1;opacity:.95}
@@ -1536,7 +1537,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
 <header class="site-header">
 
-  <div class="header-left"><div class="brand-lockup"><img class="brand-logo" src="./assets/sar-logo.png?v=3" alt="SAR Digital Services"><div class="brand-copy"><div class="main-brand" data-i18n="brand">SAR Digital Services, Kannod</div><div class="sub-brand" data-i18n="subtitle">MP Tender Live Dashboard</div><div class="date-time" id="dateTime">Loading date...</div><div class="data-refresh-status" id="dataRefreshStatus">● Data: Loading...</div></div></div></div>
+  <div class="header-left"><div class="brand-lockup"><span class="brand-logo-wrap"><img class="brand-logo" src="./assets/sar-logo.png?v=4" alt="SAR Digital Services"><span class="brand-logo-fallback">SAR</span></span><div class="brand-copy"><div class="main-brand" data-i18n="brand">SAR Digital Services, Kannod</div><div class="sub-brand" data-i18n="subtitle">MP Tender Live Dashboard</div><div class="date-time" id="dateTime">Loading date...</div><div class="data-refresh-status" id="dataRefreshStatus">● Data: Loading...</div></div></div></div>
 
   <div class="counts">
     <button class="count-box count-box-button" id="liveCountBox" type="button" title="Show all live tenders">
@@ -1581,7 +1582,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading" data-i18n="searchHeading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">🏢 Organisation Summary</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
+        <a class="btn-blue org-summary-btn" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">🏢 Organisation Summary</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
@@ -2267,20 +2268,14 @@ function getDistrictInfo(row){
   let result;
   if(unique.length === 1) result={name:unique[0].name,detail:"PIN "+pin,mentioned:[]};
   else if(mentioned.length === 1) result={name:mentioned[0].name,detail:"PIN "+pin+" + tender text",mentioned:unique.filter(d => d.name !== mentioned[0].name).map(d => d.name)};
-  else result={name:"PIN zone "+best[0].prefix,detail:"Possible: "+unique.map(d => d.name).join(", "),mentioned:[]};
+  else result={name:"—",detail:"District not uniquely mapped",mentioned:unique.map(d => d.name)};
   districtInfoCache.set(row,result);
   return result;
 }
 
 function formatDistrictCell(row){
   const info = getDistrictInfo(row);
-  if(info.name === "—") return "—";
-  let html = "<strong>"+escapeHtml(info.name)+"</strong>";
-  html += "<small class=\"district-cell-note\">"+escapeHtml(info.detail)+"</small>";
-  if(info.mentioned && info.mentioned.length){
-    html += "<small class=\"district-cell-warning\">⚠ Other PIN-match: "+escapeHtml(info.mentioned.join(", "))+"</small>";
-  }
-  return html;
+  return info.name === "—" ? "—" : "<strong>"+escapeHtml(info.name)+"</strong>";
 }
 
 function formatClosingDateTime(value){
