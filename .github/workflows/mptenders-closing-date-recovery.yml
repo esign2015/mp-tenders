@@ -1,0 +1,22 @@
+name: MPTenders Closing Date Recovery
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 13 * * *"
+permissions:
+  contents: write
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.55.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/recover_closing_date_tenders.py
+      - name: Commit recovery data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/closing_date_recovery.csv
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "chore: refresh closing-date recovery"; git push; fi
