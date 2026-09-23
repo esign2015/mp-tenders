@@ -1,4 +1,4 @@
-const CACHE_NAME="mp-tenders-shell-v1";
+const CACHE_NAME="mp-tenders-shell-v2";
 const SHELL=["./","./index.html","./manifest.webmanifest","./assets/sar-logo.png"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
