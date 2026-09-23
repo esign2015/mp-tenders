@@ -2351,6 +2351,7 @@ async function enforceTelegramAccess(){
 const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
 const CSV_URL = "./all_tenders_org_detailed.csv";
 const ORG_TENDER_CSV_URL = "./organisation_tenders.csv";
+const LIVE_SNAPSHOT_URL = "./data/live_snapshot.json";
 
 let allTenders = [];
 let filteredTenders = [];
@@ -2884,6 +2885,19 @@ async function loadFromCsv(){
   throw lastError || new Error("CSV not found");
 }
 
+async function loadLiveSnapshot(){
+  try{
+    const response=await fetch(LIVE_SNAPSHOT_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!response.ok) throw new Error("Live snapshot HTTP "+response.status);
+    const snapshot=await response.json();
+    if(!Array.isArray(snapshot.tender_ids)||!snapshot.tender_ids.length) throw new Error("Live snapshot is empty");
+    return snapshot;
+  }catch(error){
+    console.warn("Live snapshot unavailable; using organisation CSV:",error);
+    return null;
+  }
+}
+
 async function loadOrganisationTenderCsv(){
   let lastError = null;
   for(const url of [
@@ -2912,8 +2926,11 @@ async function refreshPublishedData(){
     let data = await loadFromCsv();
     try{
       const portalRows = await loadOrganisationTenderCsv();
+      const liveSnapshot = await loadLiveSnapshot();
       const nextPortalIds = new Set(
-        portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
+        liveSnapshot && Array.isArray(liveSnapshot.tender_ids)
+          ? liveSnapshot.tender_ids.map(clean).filter(Boolean)
+          : portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
       );
       portalActiveIds = nextPortalIds;
     }catch(portalError){
@@ -2989,9 +3006,10 @@ async function loadData(){
        and organisation snapshot were downloaded one after another, which
        unnecessarily delayed the first visible tender rows.
     */
-    const [detailedResult, portalResult] = await Promise.allSettled([
+    const [detailedResult, portalResult, snapshotResult] = await Promise.allSettled([
       loadFromCsv(),
-      loadOrganisationTenderCsv()
+      loadOrganisationTenderCsv(),
+      loadLiveSnapshot()
     ]);
 
     let data = detailedResult.status === "fulfilled"
@@ -3032,9 +3050,11 @@ async function loadData(){
 
     // The organisation snapshot is the authoritative current-tender list.
     portalActiveIds = new Set(
-      (Array.isArray(portalRows) ? portalRows : [])
-        .map(row => clean(row["Tender ID"]))
-        .filter(Boolean)
+      liveSnapshot && Array.isArray(liveSnapshot.tender_ids)
+        ? liveSnapshot.tender_ids.map(clean).filter(Boolean)
+        : (Array.isArray(portalRows) ? portalRows : [])
+            .map(row => clean(row["Tender ID"]))
+            .filter(Boolean)
     );
 
     buildOrganisationOptions();
