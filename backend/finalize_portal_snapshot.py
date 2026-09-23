@@ -83,7 +83,7 @@ def main():
     copied_total=len({clean(r.get("Tender ID")) for r in output if clean(r.get("Tender ID"))})
     report={"status":"verified" if not mismatches else "mismatch","snapshot_at":now.isoformat(),"portal_organisation_count":len(orgs),"portal_tender_count":portal_total,"copied_unique_tender_ids":copied_total,"organisation_mismatches":mismatches,"mismatch_count":len(mismatches),"recovered_from_mptenders_closing_14_days":sum(x["Source"].startswith("MPTenders") for x in recovery_log),"recovered_from_rsp_id_only":sum(x["Source"].startswith("RSP") for x in recovery_log),"recovery_log":recovery_log}
     (ROOT/"data").mkdir(exist_ok=True)
-    (ROOT/"data"/"run_snapshot.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
+    # Publish the exact run-time Tender-ID inventory for the dashboard.\n    live_ids = [clean(r.get("Tender ID")) for r in output if clean(r.get("Tender ID"))]\n    (ROOT/"data"/"live_snapshot.json").write_text(json.dumps({\n        "snapshot_at": now.isoformat(),\n        "portal_tender_count": portal_total,\n        "copied_unique_tender_ids": copied_total,\n        "tender_ids": live_ids\n    }, ensure_ascii=False, indent=2), encoding="utf-8")\n    (ROOT/"data"/"run_snapshot.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
     with (ROOT/"data"/"run_history.jsonl").open("a",encoding="utf-8") as f: f.write(json.dumps(report,ensure_ascii=False)+"\n")
     print(json.dumps(report,ensure_ascii=False,indent=2))
     if mismatches: raise SystemExit("FINAL SNAPSHOT MISMATCH")
