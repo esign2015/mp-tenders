@@ -55,26 +55,21 @@ jobs:
       - name: Install Chromium
         run: python -m playwright install --with-deps chromium
 
-      - name: Repair portal snapshot only when verification finds a count gap
+      - name: Keep the 7:05 PM portal snapshot immutable
         run: |
-          set -e
-          NEED_REPAIR="$(python - <<'PY'
+          echo "The scheduled portal snapshot is authoritative for this evening run."
+          echo "No later portal re-scrape is allowed to change the run-time tender count."
+          test -s data/run_snapshot.json
+          python - <<'PY'
           import json
-          p=json.load(open("data/evening_verification.json",encoding="utf-8"))
-          print("1" if p.get("organisation_count_mismatches",0) or p.get("portal_ids_missing_in_master",0) else "0")
+          p=json.load(open("data/run_snapshot.json",encoding="utf-8"))
+          print("Snapshot:",p.get("snapshot_at"))
+          print("Portal tender count:",p.get("portal_tender_count"))
+          print("Copied unique IDs:",p.get("copied_unique_tender_ids"))
+          print("Mismatch organisations:",p.get("mismatch_count"))
+          if p.get("status") != "verified":
+              raise SystemExit("Run snapshot is not verified; refusing to continue with a false evening dataset.")
           PY
-          )"
-          if [ "$NEED_REPAIR" = "1" ]; then
-            echo "Count gap detected; refreshing Tenders-by-Organisation snapshot before detail extraction."
-            COPY_ONLY=1 FETCH_DETAIL_PAGES=0 NEW_TENDER_ONLY=1 DETAIL_BATCH_SIZE=0 python backend/scraper.py > evening_snapshot_repair.log 2>&1
-            git config user.name "mp-tenders-bot"
-            git config user.email "actions@github.com"
-            git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/organisation_changes.json
-            git diff --cached --quiet || git commit -m "Repair evening organisation snapshot [skip ci]"
-            git push
-          else
-            echo "Portal/copy counts are aligned; no extra organisation scrape required."
-          fi
 
       - name: Extract remaining and newly discovered details
         env:
