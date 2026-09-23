@@ -11,7 +11,7 @@
   --blue:#203b91;
   --blue-dark:#172d70;
   --border:#cbd5e1;
-  --header-height:74px;
+  --header-height:106px;
   --footer-height:48px;
 }
 
@@ -1531,6 +1531,217 @@ body.telegram-locked .site-footer{visibility:hidden}
 }
 </style>
 
+
+<style id="compact-header-search-fix">
+/* ===== Compact WebGIS-style tender search/filter bar ===== */
+.site-header{
+  grid-template-columns:minmax(300px,355px) minmax(330px,370px) minmax(0,1fr);
+  grid-template-rows:56px 34px;
+  align-items:center;
+  row-gap:2px;
+  column-gap:8px;
+  padding:4px 10px 5px;
+  height:106px;
+  flex-basis:106px;
+}
+.header-left{grid-column:1;grid-row:1;}
+.site-header > .counts{grid-column:2;grid-row:1;}
+.header-right{grid-column:3;grid-row:1;}
+.header-search-toolbar{
+  grid-column:1 / -1;
+  grid-row:2;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-width:0;
+  width:100%;
+  padding:2px 3px;
+  color:#172033;
+  background:#fff;
+  border-radius:5px;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  overflow:visible;
+}
+.header-search-label{
+  flex:0 0 auto;
+  height:28px;
+  display:flex;
+  align-items:center;
+  padding:0 7px;
+  border-radius:4px;
+  background:#dfe7f2;
+  color:#172033;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.header-search-toolbar .search-fields{
+  display:contents !important;
+  padding:0 !important;
+}
+.header-search-toolbar .search-fields > input,
+.header-search-toolbar .search-fields > .organisation-filter-wrap,
+.header-search-toolbar .search-fields > .district-filter-wrap{
+  height:28px;
+  min-width:0;
+}
+.header-search-toolbar #generalSearch{
+  flex:2 1 300px;
+  min-width:180px;
+}
+.header-search-toolbar #organisationFilterWrap{
+  flex:1.15 1 190px;
+  min-width:145px;
+}
+.header-search-toolbar #districtFilterWrap{
+  flex:1.15 1 190px;
+  min-width:145px;
+}
+.header-search-toolbar input{
+  height:28px !important;
+  border:1px solid #b9c5d6 !important;
+  border-radius:4px !important;
+  padding:4px 7px !important;
+  font-size:11px !important;
+  background:#fff !important;
+}
+.header-search-toolbar .search-bottom{
+  display:contents !important;
+  padding:0 !important;
+}
+.header-search-toolbar #closingExpire,
+.header-search-toolbar #sortSelect,
+.header-search-toolbar #statusSelect,
+.header-search-toolbar #pacFilterWrap{
+  flex:0 0 auto;
+  width:auto !important;
+  min-width:105px;
+  height:28px;
+}
+.header-search-toolbar #closingExpire{min-width:120px;}
+.header-search-toolbar #sortSelect{min-width:125px;}
+.header-search-toolbar #pacFilterWrap{min-width:105px;}
+.header-search-toolbar #statusSelect{min-width:105px;}
+.header-search-toolbar select,
+.header-search-toolbar .pac-filter-button{
+  height:28px !important;
+  padding:3px 6px !important;
+  font-size:10px !important;
+  border-radius:4px !important;
+}
+.header-search-toolbar .pac-filter-button{width:100% !important;}
+.header-search-toolbar .organisation-suggestions,
+.header-search-toolbar .district-suggestions{
+  top:29px;
+}
+.header-search-toolbar .district-search-help{top:29px;}
+.header-search-toolbar #recordCountWrap{
+  flex:0 0 auto;
+  min-width:70px;
+  font-size:9px;
+  white-space:nowrap;
+}
+.header-search-toolbar .legend-item{display:none;}
+.header-search-toolbar .legend-row{
+  display:contents !important;
+  padding:0 !important;
+}
+.header-search-toolbar #recordCount{
+  font-size:9px;
+  color:#475569;
+}
+.header-search-toolbar #searchStatus{
+  font-size:9px;
+}
+
+/* Original search area becomes a compact action strip only. */
+.search-panel{
+  margin-bottom:7px;
+}
+.search-panel .search-fields,
+.search-panel .search-bottom,
+.search-panel .legend-row{
+  display:none !important;
+}
+.search-heading-row{
+  min-height:36px;
+  height:36px;
+  padding:4px 8px;
+}
+.search-heading{
+  font-size:13px;
+}
+.search-heading-row .action-buttons{
+  flex-wrap:nowrap;
+  gap:4px;
+}
+.search-heading-row .action-buttons button,
+.search-heading-row .action-buttons a{
+  height:26px;
+  padding:3px 7px !important;
+  font-size:10px !important;
+}
+.search-heading-row .action-buttons #columnBtn,
+.search-heading-row .action-buttons #orgDisplayBtn{
+  display:inline-flex;
+}
+.search-heading-row .action-buttons #pdfDeliveryStatus{display:none!important;}
+
+@media(max-width:1250px){
+  .site-header{
+    grid-template-columns:minmax(250px,315px) minmax(285px,330px) minmax(0,1fr);
+  }
+  .header-search-label{display:none;}
+  .header-search-toolbar #generalSearch{min-width:150px;}
+  .header-search-toolbar #organisationFilterWrap,
+  .header-search-toolbar #districtFilterWrap{min-width:120px;}
+  .header-search-toolbar #closingExpire,
+  .header-search-toolbar #sortSelect,
+  .header-search-toolbar #statusSelect,
+  .header-search-toolbar #pacFilterWrap{min-width:90px;}
+}
+@media(max-width:850px){
+  .site-header{
+    height:auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    padding:8px;
+  }
+  .header-search-toolbar{
+    order:5;
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    height:auto;
+    min-height:0;
+    padding:4px;
+    gap:4px;
+  }
+  .header-search-toolbar .header-search-label{display:none;}
+  .header-search-toolbar #generalSearch,
+  .header-search-toolbar #organisationFilterWrap,
+  .header-search-toolbar #districtFilterWrap,
+  .header-search-toolbar #closingExpire,
+  .header-search-toolbar #sortSelect,
+  .header-search-toolbar #statusSelect,
+  .header-search-toolbar #pacFilterWrap{
+    width:100% !important;
+    min-width:0 !important;
+  }
+  .header-search-toolbar #generalSearch{grid-column:1 / -1;}
+  .header-search-toolbar #recordCountWrap{grid-column:1 / -1;justify-content:center;}
+  .search-panel .search-heading-row{
+    height:auto;
+    min-height:34px;
+  }
+  .search-heading-row .action-buttons{
+    flex-wrap:wrap;
+  }
+}
+</style>
+
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
@@ -1615,7 +1826,12 @@ body.telegram-locked .site-footer{visibility:hidden}
 
   </div>
 
-  <div class="header-right"><div class="header-contact-row"><button class="lang-btn active" id="langEnglish" type="button">English</button><button class="lang-btn" id="langHindi" type="button">हिन्दी</button><a class="header-contact whatsapp" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a><button class="header-contact install-app" id="installAppBtn" type="button">📱 Install App</button><a class="header-contact latest-alert" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer" data-i18n="latestAlert">🔔 Latest Alert</a><div class="telegram-profile" id="telegramProfile">
+  
+<div class="header-search-toolbar" id="headerSearchToolbar">
+  <div class="header-search-label">🔎 <span data-i18n="searchHeading">Tender Search</span></div>
+</div>
+
+<div class="header-right"><div class="header-contact-row"><button class="lang-btn active" id="langEnglish" type="button">English</button><button class="lang-btn" id="langHindi" type="button">हिन्दी</button><a class="header-contact whatsapp" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a><button class="header-contact install-app" id="installAppBtn" type="button">📱 Install App</button><a class="header-contact latest-alert" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer" data-i18n="latestAlert">🔔 Latest Alert</a><div class="telegram-profile" id="telegramProfile">
       <button class="telegram-profile-btn" id="telegramProfileBtn" type="button" aria-label="Telegram profile menu"><img class="telegram-avatar" id="telegramAvatar" alt="Telegram profile" referrerpolicy="no-referrer" crossorigin="anonymous"><span class="telegram-profile-display" id="telegramProfileName">Telegram User</span><span class="telegram-profile-arrow">▾</span></button>
       <div class="telegram-profile-menu" id="telegramProfileMenu">
         <div class="telegram-profile-name" id="telegramMenuName">Telegram User</div>
@@ -4372,6 +4588,31 @@ async function exportPdf(){
    event only updates the small "Searching..." indicator and schedules the
    heavier filter work after the user pauses typing.
 */
+
+/* Move existing tender search/filter controls into the compact header bar.
+   IDs stay unchanged, so all existing search, filter and sorting handlers
+   continue to work. */
+(function moveSearchControlsToHeader(){
+  const toolbar = document.getElementById("headerSearchToolbar");
+  const fields = document.querySelector(".search-panel .search-fields");
+  const bottom = document.querySelector(".search-panel .search-bottom");
+  const legend = document.querySelector(".search-panel .legend-row");
+  if(!toolbar || !fields || !bottom) return;
+
+  toolbar.appendChild(fields);
+  toolbar.appendChild(bottom);
+  if(legend){
+    toolbar.appendChild(legend);
+  }
+
+  const label = toolbar.querySelector(".header-search-label");
+  if(label && fields) toolbar.insertBefore(label, fields);
+
+  // Keep the action strip below the header very small.
+  const heading = document.querySelector(".search-heading");
+  if(heading) heading.textContent = "Tender Search & Filters";
+})();
+
 let filterTimer = null;
 
 function showSearchProgress(){
