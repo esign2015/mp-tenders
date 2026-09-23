@@ -2866,13 +2866,14 @@ function renderVirtualWindow(){
   const visibleRows = virtualRows.slice(virtualStart, virtualEnd);
 
   if(!visibleRows.length){
+    const noRecords = currentLanguage === "hi" ? "कोई निविदा रिकॉर्ड नहीं मिला।" : "No tender records found.";
     body.innerHTML =
       `<tr class="empty-state-row">
-        <td colspan="2" class="empty-state-side empty-state-left">कोई tender record नहीं मिला।</td>
-        <td colspan="10" class="empty-state-center">कोई tender record नहीं मिला।</td>
-        <td colspan="2" class="empty-state-side empty-state-right">कोई tender record नहीं मिला।</td>
+        <td colspan="2" class="empty-state-side empty-state-left">${noRecords}</td>
+        <td colspan="10" class="empty-state-center">${noRecords}</td>
+        <td colspan="2" class="empty-state-side empty-state-right">${noRecords}</td>
       </tr>`;
-    $("recordCount").textContent = "0 record(s) shown";
+    $("recordCount").textContent = currentLanguage === "hi" ? "0 रिकॉर्ड दिखाए गए" : "0 record(s) shown";
     return;
   }
 
@@ -2916,8 +2917,10 @@ function renderVirtualWindow(){
 
   $("recordCount").textContent =
     virtualRows.length > virtualEnd
-      ? virtualRows.length + " matched • page " + (Math.floor(virtualStart / VIRTUAL_CHUNK_SIZE) + 1)
-      : virtualRows.length + " record(s) shown";
+      ? (currentLanguage === "hi"
+          ? virtualRows.length + " परिणाम • पेज " + (Math.floor(virtualStart / VIRTUAL_CHUNK_SIZE) + 1)
+          : virtualRows.length + " matched • page " + (Math.floor(virtualStart / VIRTUAL_CHUNK_SIZE) + 1))
+      : (currentLanguage === "hi" ? virtualRows.length + " रिकॉर्ड दिखाए गए" : virtualRows.length + " record(s) shown");
 }
 
 function updateVirtualSpacerHeights(){
@@ -3017,7 +3020,7 @@ function updateVirtualPager(){
   if(!info || !prev || !next) return;
 
   if(!virtualRows.length){
-    info.textContent = "0 records";
+    info.textContent = currentLanguage === "hi" ? "0 रिकॉर्ड" : "0 records";
     prev.disabled = true;
     next.disabled = true;
     return;
