@@ -812,12 +812,12 @@ jobs:
 
       # Detail extraction is intentionally NOT run in this job.
       # new_tender_detail_worker starts only after this copy job succeeds.
-      - name: Recover missing Tender IDs from Closing Date and reconcile RSP fallback
-        continue-on-error: true
+      - name: Finalize exact portal snapshot with recovery chain
         run: |
+          set -e
           set -o pipefail
           python scripts/recover_closing_date_tenders.py > closing_date_recovery.log 2>&1
-          python backend/reconcile_run_snapshot.py | tee run_snapshot_reconcile.log || true
+          python backend/finalize_portal_snapshot.py | tee run_snapshot_finalize.log
 
       - name: Detail phase handled by separate worker
         run: echo "Detail phase delegated to new_tender_detail_worker." 
@@ -826,7 +826,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json; do
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/run_snapshot.json data/run_history.jsonl; do
             if [ -s "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
