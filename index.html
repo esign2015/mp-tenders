@@ -1537,17 +1537,17 @@ body.telegram-locked .site-footer{visibility:hidden}
 
   <div class="counts">
     <button class="count-box count-box-button" id="liveCountBox" type="button" title="Show all live tenders">
-      <div class="count-label">Live Tenders</div>
+      <div class="count-label" data-i18n="live">Live Tenders</div>
       <div class="count-number green" id="liveCount">0</div>
     </button>
 
     <button class="count-box count-box-button" id="closingTodayBox" type="button" title="Show tenders closing today">
-      <div class="count-label">Closing Today</div>
+      <div class="count-label" data-i18n="today">Closing Today</div>
       <div class="count-number orange" id="closingTodayCount">0</div>
     </button>
 
     <button class="count-box count-box-button" id="closingTomorrowBox" type="button" title="Show tenders closing tomorrow">
-      <div class="count-label">Closing Tomorrow</div>
+      <div class="count-label" data-i18n="tomorrow">Closing Tomorrow</div>
       <div class="count-number blue" id="closingTomorrowCount">0</div>
     </button>
     <button class="count-box count-box-button" id="headerReloadBtn" type="button" title="Reload dashboard">
@@ -1578,14 +1578,13 @@ body.telegram-locked .site-footer{visibility:hidden}
   <section class="search-panel">
 
     <div class="search-heading-row">
-      <div class="search-heading">Search &amp; Smart Filters</div>
+      <div class="search-heading" data-i18n="searchHeading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
         <a class="btn-light" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">📊 Tender Count by Org</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
-        <a class="header-contact whatsapp action-contact" href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a><a class="header-contact telegram action-contact" href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a>
       </div>
     </div>
 
@@ -1725,7 +1724,7 @@ body.telegram-locked .site-footer{visibility:hidden}
   <section class="table-panel">
 
     <div class="table-heading-row">
-      <div class="table-heading" id="tableHeading">Live Tender Records</div>
+      <div class="table-heading" id="tableHeading" data-i18n="tableHeading">Live Tender Records</div>
 
       <div class="table-tools">
         <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
@@ -1740,18 +1739,18 @@ body.telegram-locked .site-footer{visibility:hidden}
       <table id="tenderTable">
         <thead>
           <tr>
-            <th>S.No.</th>
-            <th class="sortable-th" data-sort-key="District">District <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Pincode">Pincode <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Tender ID">Tender ID <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Title">Title <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Reference Number">Ref.No. <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Closing Date">Last Date <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Time Left">Time Left <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="PAC Amount">PAC Amount <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="EMD Fee">EMD Fee <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Tender Fee">Tender Fee <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Processing Fee">Processing Fee <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Total Fee">Total Fee <span class="sort-arrow"></span></th>
-            <th class="sortable-th" data-sort-key="Organisation">Organisation <span class="sort-arrow"></span></th>
+            <th data-i18n="sno">S.No.</th>
+            <th class="sortable-th" data-sort-key="District" data-i18n="thDistrict">District <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Pincode" data-i18n="thPincode">Pincode <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Tender ID" data-i18n="thTenderId">Tender ID <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Title" data-i18n="thTitle">Title <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Reference Number" data-i18n="thRef">Ref.No. <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Closing Date" data-i18n="thLastDate">Last Date <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Time Left" data-i18n="thTimeLeft">Time Left <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="PAC Amount" data-i18n="thPac">PAC Amount <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="EMD Fee" data-i18n="thEmd">EMD Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Tender Fee" data-i18n="thTenderFee">Tender Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Processing Fee" data-i18n="thProcessing">Processing Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Total Fee" data-i18n="thTotalFee">Total Fee <span class="sort-arrow"></span></th>
+            <th class="sortable-th" data-sort-key="Organisation" data-i18n="thOrganisation">Organisation <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Published Date">Published <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Location">Location <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Product Category">Product Category <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Contract Type">Contract Type <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Bid Validity">Bid Validity <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Work Description">Work Description <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Corrigendum">Corrigendum <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Department">Department <span class="sort-arrow"></span></th>
@@ -3792,7 +3791,7 @@ function setupUserFeatures(){
   });
 }
 
-let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"📊 Tender Count by Org",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"📊 संगठन के अनुसार निविदा संख्या",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge()}function updateRefreshBadge(){const e=$("dataRefreshStatus");if(!e)return;if(!lastDataRefreshAt){e.textContent=currentLanguage==="hi"?"● डेटा: लोड हो रहा है...":"● Data: Loading...";return}e.textContent=(currentLanguage==="hi"?"● डेटा अपडेट: ":"● Data updated: ")+lastDataRefreshAt.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short",hour12:true})+" IST"}window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;$("installAppBtn").disabled=false});window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;$("installAppBtn").disabled=true});function installDashboardApp(){if(!deferredInstallPrompt){alert(currentLanguage==="hi"?"Chrome के ⋮ मेनू से Install app चुनें।":"Use Chrome ⋮ menu → Install app.");return}deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>deferredInstallPrompt=null)}
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"📊 Tender Count by Org",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"📊 संगठन के अनुसार निविदा संख्या",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge()}function updateRefreshBadge(){const e=$("dataRefreshStatus");if(!e)return;if(!lastDataRefreshAt){e.textContent=currentLanguage==="hi"?"● डेटा: लोड हो रहा है...":"● Data: Loading...";return}e.textContent=(currentLanguage==="hi"?"● डेटा अपडेट: ":"● Data updated: ")+lastDataRefreshAt.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short",hour12:true})+" IST"}window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;$("installAppBtn").disabled=false});window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;$("installAppBtn").disabled=true});function installDashboardApp(){if(!deferredInstallPrompt){alert(currentLanguage==="hi"?"Chrome के ⋮ मेनू से Install app चुनें।":"Use Chrome ⋮ menu → Install app.");return}deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>deferredInstallPrompt=null)}
 function updateDateTime(){
   const now = new Date();
 
