@@ -1,13 +1,13 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-09-24T21:36:47.276407+05:30",
+  "snapshot_at": "2026-09-24T23:11:43.979937+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 5275,
+  "previous_tender_count": 5277,
   "current_tender_count": 5277,
-  "organisations_with_changes": 59,
-  "organisations_with_new_tenders": 59,
-  "new_tender_count": 333,
+  "organisations_with_changes": 58,
+  "organisations_with_new_tenders": 58,
+  "new_tender_count": 331,
   "changes": [
     {
       "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
@@ -520,17 +520,6 @@
         "2026_DFWAD_533409_1",
         "2026_DFWAD_537621_1",
         "2026_DFWAD_538072_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3032,
-      "Current Tender Count": 3034,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_UAD_529613_1",
-        "2026_UAD_529616_1"
       ]
     },
     {
