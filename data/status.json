@@ -6,14 +6,14 @@
   "organisation_count": 90,
   "detail_complete": 3431,
   "detail_remaining": 2209,
-  "errors": 0,
-  "latest_error": "",
-  "organisation_progress": "36/90",
-  "current_organisation": "Madhya Pradesh Power Generating Company Limited",
+  "errors": 1,
+  "latest_error": "Madhya Pradesh Power Generating Company Limited: RuntimeError: Live organisation count link not found: Madhya Pradesh Power Generating Company Limited",
+  "organisation_progress": "37/90",
+  "current_organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
   "department_count": 289,
   "pincode_count": 325,
   "pincode_others_count": 2,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-24T12:56:06.482230+00:00"
+  "updated_at": "2026-09-24T12:56:12.893187+00:00"
 }
