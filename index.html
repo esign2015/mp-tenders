@@ -2157,6 +2157,7 @@ function updateTelegramProfile(user){
 
 function logoutTelegram(){
   localStorage.removeItem("telegram_auth");
+  localStorage.removeItem("telegram_session");
   sessionStorage.removeItem("telegram_verified");
   sessionStorage.removeItem("telegram_user");
   telegramAuthData=null;
@@ -2206,6 +2207,7 @@ async function verifyTelegramMembership(user, persist=true){
     };
     telegramAuthData = verifiedUser;
     if(persist) localStorage.setItem("telegram_auth",JSON.stringify(verifiedUser));
+    if(data.session_token) localStorage.setItem("telegram_session",data.session_token);
     sessionStorage.setItem("telegram_verified","1");
     sessionStorage.setItem("telegram_user",JSON.stringify(verifiedUser));
     updateTelegramProfile(verifiedUser);
@@ -2280,6 +2282,29 @@ function onTelegramAuth(user){
 }
 
 async function checkStoredTelegram(){
+  const sessionToken=localStorage.getItem("telegram_session");
+  if(sessionToken){
+    try{
+      const response=await fetch(TELEGRAM_VERIFY_API.replace("/verify","/session"),{
+        method:"POST",headers:{"Content-Type":"application/json"},cache:"no-store",
+        body:JSON.stringify({session_token:sessionToken})
+      });
+      const data=await response.json().catch(()=>({}));
+      if(response.ok && data.verified && data.id){
+        let oldUser={};
+        try{ const raw=localStorage.getItem("telegram_auth"); oldUser=raw ? JSON.parse(raw) : {}; }catch(_e){}
+        telegramAuthData={...oldUser,id:data.id};
+        if(data.session_token) localStorage.setItem("telegram_session",data.session_token);
+        localStorage.setItem("telegram_auth",JSON.stringify(telegramAuthData));
+        updateTelegramProfile(telegramAuthData);
+        document.body.classList.remove("telegram-locked");
+        const gate=document.getElementById("telegramGate");
+        if(gate) gate.remove();
+        return true;
+      }
+    }catch(e){ console.warn("Persistent Telegram session check failed:",e); }
+    localStorage.removeItem("telegram_session");
+  }
   const raw=localStorage.getItem("telegram_auth");
   if(!raw) return false;
   try{
@@ -2292,7 +2317,6 @@ async function checkStoredTelegram(){
     return false;
   }
 }
-
 function positionTelegramProfileMenu(){
   const button=document.getElementById("telegramProfileBtn");
   const menu=document.getElementById("telegramProfileMenu");
