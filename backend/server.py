@@ -45,6 +45,33 @@ def home():
 def clean(value):
     return str(value or "").strip()
 
+TELEGRAM_SESSION_TTL = int(os.getenv("TELEGRAM_SESSION_TTL", "604800"))  # 7 days
+
+def make_telegram_session(user_id):
+    import base64, time
+    payload = {"uid": int(user_id), "exp": int(time.time()) + TELEGRAM_SESSION_TTL}
+    raw = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    body = base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+    secret = clean(os.getenv("TELEGRAM_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+    sig = hmac.new(secret.encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
+    return body + "." + sig
+
+def read_telegram_session(token):
+    import base64, time
+    if not token or "." not in token: return None
+    body, received_sig = token.rsplit(".", 1)
+    secret = clean(os.getenv("TELEGRAM_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+    expected_sig = hmac.new(secret.encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(expected_sig, received_sig): return None
+    try:
+        padded = body + "=" * (-len(body) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(padded.encode("ascii")).decode("utf-8"))
+        if int(payload.get("exp", 0)) < int(time.time()): return None
+        user_id = int(payload.get("uid", 0))
+        return user_id or None
+    except Exception:
+        return None
+
 
 def telegram_profile_photo_url(user_id):
     """
@@ -201,8 +228,10 @@ def telegram_verify():
     if not photo_url:
         photo_url = telegram_profile_photo_url(user_id)
 
+    session_token = make_telegram_session(user_id)
     return jsonify({
         "verified": True,
+        "session_token": session_token,
         "id": user_id,
         "username": payload.get("username", ""),
         "first_name": payload.get("first_name", ""),
@@ -211,6 +240,26 @@ def telegram_verify():
         "message": "Telegram membership verified."
     })
 
+
+@app.post("/api/telegram/session")
+def telegram_session():
+    payload = request.get_json(silent=True) or {}
+    user_id = read_telegram_session(clean(payload.get("session_token")))
+    if not user_id:
+        return jsonify({"verified": False, "message": "Telegram session expired. Please login again."}), 401
+    channel = clean(os.getenv("TELEGRAM_CHANNEL", "@mptendersalert"))
+    try:
+        member = telegram_api("getChatMember", {"chat_id": channel, "user_id": user_id})
+    except Exception as exc:
+        return jsonify({"verified": False, "message": "Membership check unavailable.", "error": str(exc)}), 503
+    if not member.get("ok"):
+        return jsonify({"verified": False, "message": "Membership check failed."}), 403
+    status = member.get("result", {}).get("status", "")
+    is_member = bool(member.get("result", {}).get("is_member", False))
+    allowed = status in {"creator", "administrator", "member"} or (status == "restricted" and is_member)
+    if not allowed:
+        return jsonify({"verified": False, "message": "Telegram channel membership is no longer active."}), 403
+    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "message": "Telegram session verified."})
 
 def telegram_auth_valid(payload):
     received_hash = clean(payload.get("hash"))
