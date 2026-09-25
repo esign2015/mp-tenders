@@ -8,12 +8,12 @@
   "detail_remaining": 2714,
   "errors": 1,
   "latest_error": "Engineer-in-Chief - Water Resources Department: TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"tr\").nth(10).locator(\"a\").nth(45)\n    - locator resolved to <a class=\"link2\" id=\"DirectLink_25\" href=\"/nicgep/app?component=%24DirectLink&page=FrontEndTendersByOrganisation&service=direct&session=T&sp=SsUAEZn2%2B4xbOLHKRycwwxw%3D%3D\">     ⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆ ↵       ⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆⇆ …</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-  "organisation_progress": "57/94",
-  "current_organisation": "MP Industrial Development Corporation Limited",
+  "organisation_progress": "59/94",
+  "current_organisation": "MP Police",
   "department_count": 282,
   "pincode_count": 315,
   "pincode_others_count": 2,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-25T16:04:05.094783+00:00"
+  "updated_at": "2026-09-25T16:04:19.525918+00:00"
 }
