@@ -2540,6 +2540,14 @@ function getTimeLeftClass(value){
 
 function getDistrictInfo(row){
   if(districtInfoCache.has(row)) return districtInfoCache.get(row);
+
+  const savedDistrict = clean(row["District"]);
+  if(savedDistrict){
+    const result={name:savedDistrict,detail:"Saved tender district",mentioned:[]};
+    districtInfoCache.set(row,result);
+    return result;
+  }
+
   const pin = clean(row["Pincode"]).replace(/\D/g,"");
   const candidates = [];
   if(pin && MP_DISTRICT_MASTER.length){
@@ -3820,7 +3828,7 @@ function applyFilters(refreshHeader=true){
     const combined = [
       row["Tender ID"],row["Title"],row["Reference Number"],row["Organisation"],
       row["Department"],row["Division"],row["Sub Division"],row["Location"],
-      row["Pincode"],districtInfo.name,districtInfo.detail,
+      row["Pincode"],districtInfo.name,
       row["Product Category"],row["Sub Category"],row["Work Description"]
     ].join(" ").toLowerCase();
     if(general && !combined.includes(general)) return false;
