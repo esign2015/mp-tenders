@@ -36,7 +36,7 @@ FIELDS = [
     "Title", "Reference Number", "Organisation", "Department",
     "Division", "Sub Division", "PAC Amount", "EMD Fee",
     "Tender Fee", "Processing Fee", "Total Fee", "Location", "Pincode",
-    "Work Description", "Product Category", "Sub Category", "Contract Type",
+    "Work Description", "Product Category", "Sub Category", "Contract Type", "District",
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
@@ -190,6 +190,48 @@ def parse_latest_corrigendum(soup):
             result["key"] = (result["title"] + "||" + result["type"]).strip().casefold()
             return result
     return result
+
+def infer_mp_district(pincode, location="", title="", work_description="", organisation="", department="", division="", sub_division=""):
+    """Resolve an MP district conservatively from the local district master.
+
+    Rules:
+    - explicit district/alias in tender text wins;
+    - exact 6-digit PIN mapping is accepted only when it maps uniquely;
+    - ambiguous PIN-prefix matches are left blank rather than guessing.
+    """
+    pin = re.sub(r"\D", "", clean(pincode))[:6]
+    if not pin:
+        return ""
+    master_path = Path(__file__).resolve().parent.parent / "data" / "mp_districts.json"
+    try:
+        with master_path.open("r", encoding="utf-8") as f:
+            master = json.load(f)
+    except Exception:
+        return ""
+
+    text = " ".join(clean(x) for x in [
+        location, title, work_description, organisation, department, division, sub_division
+    ]).casefold()
+
+    candidates = []
+    for district in master if isinstance(master, list) else []:
+        name = clean(district.get("name"))
+        aliases = [clean(x) for x in (district.get("aliases") or [])]
+        prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
+        if any((name and name.casefold() in text) or (a and a.casefold() in text) for a in aliases + [name]):
+            candidates.append(name)
+
+    if len(set(candidates)) == 1:
+        return candidates[0]
+
+    exact = []
+    for district in master if isinstance(master, list) else []:
+        name = clean(district.get("name"))
+        prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
+        if pin in prefixes:
+            exact.append(name)
+    exact = list(dict.fromkeys(x for x in exact if x))
+    return exact[0] if len(exact) == 1 else ""
 
 def parse_detail(soup, url):
     """RSP-derived resilient MP Tender detail extraction.
@@ -496,6 +538,11 @@ def parse_detail(soup, url):
         + money_number(processing_fee)
     )
 
+    district = infer_mp_district(
+        pincode, location, title, work_description,
+        organisation, department, division, sub_division
+    )
+
     return {
         "Tender ID": clean(tender_id),
         "Published Date": clean(published),
@@ -514,6 +561,7 @@ def parse_detail(soup, url):
         "Total Fee": str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}",
         "Location": clean(location),
         "Pincode": re.sub(r"\D", "", clean(pincode))[:6],
+        "District": clean(district),
         "Work Description": clean(work_description),
         "Product Category": clean(product_category),
         "Sub Category": clean(sub_category),
