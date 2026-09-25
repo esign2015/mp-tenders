@@ -6,14 +6,14 @@
   "organisation_count": 94,
   "detail_complete": 3156,
   "detail_remaining": 2561,
-  "errors": 1,
-  "latest_error": "Directorate Urban Administration and Development: RuntimeError: Live organisation count link not found: Directorate Urban Administration and Development",
-  "organisation_progress": "41/94",
-  "current_organisation": "Madhya Pradesh Power Generating Company Limited",
+  "errors": 2,
+  "latest_error": "Madhya Pradesh Power Generating Company Limited: RuntimeError: Live organisation count link not found: Madhya Pradesh Power Generating Company Limited",
+  "organisation_progress": "43/94",
+  "current_organisation": "Madhya Pradesh Public Health Services Corporation Ltd.",
   "department_count": 284,
   "pincode_count": 315,
   "pincode_others_count": 2,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-25T12:59:08.910589+00:00"
+  "updated_at": "2026-09-25T12:59:23.176077+00:00"
 }
