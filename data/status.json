@@ -1,19 +1,12 @@
 {
-  "status": "running",
+  "status": "copy_completed",
   "process_started_at": "2026-09-25T12:53:31.477917+00:00",
   "total_tenders": 5295,
   "portal_total_tenders": 5295,
   "organisation_count": 94,
-  "detail_complete": 3156,
-  "detail_remaining": 2682,
+  "organisation_progress": "94/94",
+  "copied_tenders": 2066,
   "errors": 2,
   "latest_error": "Madhya Pradesh Power Generating Company Limited: RuntimeError: Live organisation count link not found: Madhya Pradesh Power Generating Company Limited",
-  "organisation_progress": "92/94",
-  "current_organisation": "Tribal Affairs Department-MP",
-  "department_count": 284,
-  "pincode_count": 315,
-  "pincode_others_count": 2,
-  "detail_batch_size": 0,
-  "detail_batch_completed": 0,
-  "updated_at": "2026-09-25T13:06:04.408296+00:00"
+  "updated_at": "2026-09-25T13:06:19.781508+00:00"
 }
