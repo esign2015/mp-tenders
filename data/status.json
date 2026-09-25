@@ -6,14 +6,14 @@
   "organisation_count": 94,
   "detail_complete": 3156,
   "detail_remaining": 2557,
-  "errors": 0,
-  "latest_error": "",
-  "organisation_progress": "20/94",
-  "current_organisation": "Directorate Sports and Youth Welfare",
+  "errors": 1,
+  "latest_error": "Directorate Urban Administration and Development: RuntimeError: Live organisation count link not found: Directorate Urban Administration and Development",
+  "organisation_progress": "22/94",
+  "current_organisation": "Director General of Prisons and Correctional Services",
   "department_count": 284,
   "pincode_count": 315,
   "pincode_others_count": 2,
   "detail_batch_size": 0,
   "detail_batch_completed": 0,
-  "updated_at": "2026-09-25T12:56:16.033464+00:00"
+  "updated_at": "2026-09-25T12:56:30.041069+00:00"
 }
