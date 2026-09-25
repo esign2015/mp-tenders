@@ -1,13 +1,13 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-09-25T21:39:05.310962+05:30",
+  "snapshot_at": "2026-09-25T23:46:28.777079+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
   "previous_tender_count": 5308,
   "current_tender_count": 5308,
-  "organisations_with_changes": 59,
-  "organisations_with_new_tenders": 59,
-  "new_tender_count": 396,
+  "organisations_with_changes": 60,
+  "organisations_with_new_tenders": 60,
+  "new_tender_count": 398,
   "changes": [
     {
       "Organisation Name": "District Collectorate",
@@ -590,6 +590,17 @@
       "New Tender IDs": [
         "2026_DFWAD_537621_1",
         "2026_DFWAD_538072_1"
+      ]
+    },
+    {
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Previous Tender Count": 10,
+      "Current Tender Count": 10,
+      "Count Difference": 0,
+      "New Tender Count": 2,
+      "New Tender IDs": [
+        "2026_WRD_528866_1",
+        "2026_WRD_528873_1"
       ]
     },
     {
