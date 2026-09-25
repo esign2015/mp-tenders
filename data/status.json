@@ -1,13 +1,18 @@
 {
-  "status": "failed",
-  "process_started_at": "",
-  "total_tenders": 6783,
-  "detail_complete": 1033,
-  "detail_remaining": 5750,
-  "errors": 1,
-  "latest_error": "ReadTimeout: HTTPSConnectionPool(host='mptenders.gov.in', port=443): Read timed out. (read timeout=60)",
-  "organisation_progress": "failed",
+  "status": "running",
+  "process_started_at": "2026-09-25T18:04:10.591347+00:00",
+  "total_tenders": 5308,
+  "portal_total_tenders": 5308,
+  "organisation_count": 94,
+  "department_count": 282,
+  "pincode_count": 315,
+  "pincode_others_count": 2,
+  "detail_complete": 3131,
+  "detail_remaining": 2560,
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/94",
   "detail_batch_size": 0,
-  "detail_batch_completed": 1033,
-  "updated_at": "2026-09-25T17:35:16.337361+00:00"
+  "detail_batch_completed": 0,
+  "updated_at": "2026-09-25T18:04:19.688923+00:00"
 }
