@@ -1,12 +1,19 @@
 {
-  "status": "copy_completed",
-  "process_started_at": "2026-09-26T12:21:07.886240+00:00",
-  "total_tenders": 5369,
-  "portal_total_tenders": 5369,
+  "status": "running",
+  "process_started_at": "2026-09-26T13:48:14.652442+00:00",
+  "total_tenders": 5325,
+  "portal_total_tenders": 5325,
   "organisation_count": 95,
-  "organisation_progress": "95/95",
-  "copied_tenders": 4947,
-  "errors": 1,
-  "latest_error": "PWD- Roads and Bridges: RuntimeError: Live organisation count link not found: PWD- Roads and Bridges",
-  "updated_at": "2026-09-26T12:31:53.972665+00:00"
+  "detail_complete": 2890,
+  "detail_remaining": 2707,
+  "errors": 0,
+  "latest_error": "",
+  "organisation_progress": "0/95",
+  "current_organisation": "Atal Indore City Transport Services Ltd - Indore",
+  "department_count": 274,
+  "pincode_count": 308,
+  "pincode_others_count": 2,
+  "detail_batch_size": 0,
+  "detail_batch_completed": 0,
+  "updated_at": "2026-09-26T13:48:24.044197+00:00"
 }
