@@ -46,6 +46,7 @@ jobs:
         run: pip install reportlab
 
       - name: Send scheduled Telegram alert
+        id: send_alert
         if: steps.gate.outputs.run == 'true'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -53,6 +54,27 @@ jobs:
         run: |
           MODE="$(cat /tmp/telegram_mode)"
           NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
+
+      - name: Record Telegram delivery attempt
+        if: always() && steps.gate.outputs.run == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          mode = Path("/tmp/telegram_mode").read_text(encoding="utf-8").strip()
+          key = Path("/tmp/telegram_key").read_text(encoding="utf-8").strip()
+          outcome = "${{ steps.send_alert.outcome }}"
+          Path("data/telegram_last_attempt.json").write_text(
+              json.dumps({
+                  "attempted_at": datetime.now(timezone.utc).isoformat(),
+                  "mode": mode,
+                  "key": key,
+                  "send_outcome": outcome
+              }, indent=2),
+              encoding="utf-8"
+          )
+          PY
 
       - name: Mark Telegram alert complete
         if: steps.gate.outputs.run == 'true'
@@ -78,6 +100,6 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add data/telegram_schedule.json
+          git add data/telegram_schedule.json data/telegram_last_attempt.json
           git diff --cached --quiet || git commit -m "Record Telegram alert schedule state [skip ci]"
           git push
