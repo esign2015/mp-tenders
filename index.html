@@ -3060,6 +3060,17 @@ async function loadData(){
       console.warn("Organisation tender CSV unavailable:", portalResult.reason);
     }
 
+    // Promise.allSettled stores the live snapshot in snapshotResult.
+    // Keep it explicit so the first dashboard load never references an
+    // undeclared liveSnapshot variable.
+    const liveSnapshot = snapshotResult.status === "fulfilled"
+      ? snapshotResult.value
+      : null;
+
+    if(snapshotResult.status === "rejected"){
+      console.warn("Live snapshot request failed:", snapshotResult.reason);
+    }
+
     /*
        If the detailed CSV is empty/unavailable, use the organisation
        snapshot before falling back to the Render API.
