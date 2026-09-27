@@ -1,19 +1,12 @@
 {
-  "status": "running",
+  "status": "copy_completed",
   "process_started_at": "2026-09-27T19:29:37.104005+00:00",
   "total_tenders": 5325,
   "portal_total_tenders": 5325,
   "organisation_count": 95,
-  "detail_complete": 2553,
-  "detail_remaining": 2844,
+  "organisation_progress": "95/95",
+  "copied_tenders": 5325,
   "errors": 0,
   "latest_error": "",
-  "organisation_progress": "94/95",
-  "current_organisation": "Vikram University",
-  "department_count": 269,
-  "pincode_count": 290,
-  "pincode_others_count": 2,
-  "detail_batch_size": 0,
-  "detail_batch_completed": 0,
-  "updated_at": "2026-09-27T19:42:36.428809+00:00"
+  "updated_at": "2026-09-27T19:42:44.050566+00:00"
 }
