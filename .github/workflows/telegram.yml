@@ -96,7 +96,7 @@ jobs:
           PY
 
       - name: Commit Telegram scheduler state
-        if: steps.gate.outputs.run == 'true'
+        if: always() && steps.gate.outputs.run == 'true'
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
