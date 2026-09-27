@@ -5,7 +5,7 @@ on:
     # Exact alert ticks plus the 5-minute catch-up window. The scheduler
     # still applies the 45-minute lateness gate and de-duplication state.
     - cron: "20 4 * * *"   # 10:20 AM IST
-    - cron: "45 15 * * *"  # 9:15 PM IST catch-up window for the 8:45 PM target
+    - cron: "15 15 * * *"  # 8:45 PM IST
     - cron: "*/5 * * * *"
   workflow_dispatch:
 
