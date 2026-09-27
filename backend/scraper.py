@@ -845,7 +845,7 @@ def next_page_url(soup, base, current):
         text = clean(a.get_text(" ", strip=True)).lower()
         title = clean(a.get("title", "")).lower()
         aria = clean(a.get("aria-label", "")).lower()
-        if text in {"next", ">", "»", "next >"} or "next page" in title or "next page" in aria:
+        if text in {"next", ">", ">>", "»", "»»", "next >", "next >>", "next »", "next »»"} or "next page" in title or "next page" in aria:
             href = link_from_anchor(a, base)
             if href and href != current:
                 return href
