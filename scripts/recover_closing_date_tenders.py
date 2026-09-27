@@ -36,7 +36,7 @@ with sync_playwright() as p:
                 "Closing Date":clean(cells[2]),"Opening Date":clean(cells[3]),
                 "Source":"Closing within 14 days","Retrieved At":datetime.now(timezone.utc).isoformat()
             }
-        nxt=page.locator("a").filter(has_text=re.compile(r"^(?:>{1,2}|»{1,2}|next(?:\s*[>»]{1,2})?)$",re.I)).first
+        nxt=page.locator("a").filter(has_text=re.compile(r"^(?:>|»|next(?:\s*[>»])?)$",re.I)).first
         if not nxt.count() or not nxt.is_visible(): break
         try:
             nxt.click(timeout=10000)
