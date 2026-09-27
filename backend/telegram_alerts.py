@@ -296,25 +296,17 @@ def main():
             f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
             f"🕒 मॉर्निंग अलर्ट: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
         )
-        # Send the text alert first. PDF generation/delivery must never
-        # prevent the Telegram message itself from reaching the channel.
+        pdf = make_pdf(
+            closing,
+            f"Closing Date {d} Tenders List on MPTenders.pdf",
+            f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
+        )
         telegram_message(token, chat_id, message)
         if closing:
-            try:
-                pdf = make_pdf(
-                    closing,
-                    f"Closing Date {d} Tenders List on MPTenders.pdf",
-                    f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
-                )
-                telegram_document(
-                    token, chat_id, pdf,
-                    f"📎 Closing Date {d} Tenders List on MPTenders"
-                )
-            except Exception as exc:
-                telegram_message(
-                    token, chat_id,
-                    f"⚠️ Closing-date PDF delivery failed: {type(exc).__name__}: {exc}"
-                )
+            telegram_document(
+                token, chat_id, pdf,
+                f"📎 Closing Date {d} Tenders List on MPTenders"
+            )
         return 0
     new = sorted(
         [r for r in rows if is_on_date(r.get("Published Date"), today)],
@@ -361,25 +353,18 @@ def main():
             f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
             f"🕒 New Published Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
         )
-        # Send the text alert first. PDF generation/delivery is best-effort
-        # so a PDF problem cannot suppress the scheduled Telegram message.
+        if new:
+            new_pdf = make_pdf(
+                new,
+                f"New Publish Tender List on Date {d} on MPTenders.pdf",
+                f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
+            )
         telegram_message(token, chat_id, message)
         if new:
-            try:
-                new_pdf = make_pdf(
-                    new,
-                    f"New Publish Tender List on Date {d} on MPTenders.pdf",
-                    f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
-                )
-                telegram_document(
-                    token, chat_id, new_pdf,
-                    f"📎 New Publish Tender List on Date {d} on MPTenders"
-                )
-            except Exception as exc:
-                telegram_message(
-                    token, chat_id,
-                    f"⚠️ New-published PDF delivery failed: {type(exc).__name__}: {exc}"
-                )
+            telegram_document(
+                token, chat_id, new_pdf,
+                f"📎 New Publish Tender List on Date {d} on MPTenders"
+            )
         return 0
 
     if mode == "evening_total":
