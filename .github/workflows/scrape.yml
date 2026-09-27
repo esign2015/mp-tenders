@@ -826,7 +826,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/run_snapshot.json data/run_history.jsonl; do
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl; do
             if [ -s "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
