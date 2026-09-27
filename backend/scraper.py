@@ -1,3 +1,4 @@
+# [run-scrape-details] force retry after stale pagination worker
 # [run-scrape-details] safe stop for portal last-page controls
 # [run-scrape-details] pagination recovery for double-arrow next links
 # [run-scrape-details] data extraction engine: dual live routes + checkpoint-safe full run
