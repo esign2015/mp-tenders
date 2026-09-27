@@ -1,16 +1,16 @@
 {
   "status": "verified",
-  "verified_at": "2026-09-27T23:50:13.333542+05:30",
+  "verified_at": "2026-09-28T01:49:57.986399+05:30",
   "portal_organisation_count": 95,
   "portal_tender_count": 5325,
   "copied_unique_tender_ids": 5153,
   "master_total_tenders": 5397,
-  "portal_ids_present_in_master": 5043,
-  "portal_ids_missing_in_master": 110,
+  "portal_ids_present_in_master": 5044,
+  "portal_ids_missing_in_master": 109,
   "missing_tender_ids": [
     "2025_PSNSU_454220_2",
     "2026_AVOMT_532276_1",
-    "2026_COSK_534067_1",
+    "2026_COSK_535978_1",
     "2026_DAVV_534347_1",
     "2026_DC_532346_1",
     "2026_DC_532395_1",
@@ -58,9 +58,8 @@
     "2026_DSJW_538764_1",
     "2026_DSYW_532439_1",
     "2026_DSYW_533245_1",
-    "2026_DSYW_533992_1",
-    "2026_DSYW_534391_1",
     "2026_DSYW_534400_1",
+    "2026_DSYW_534723_1",
     "2026_DTE_525675_2",
     "2026_DTE_530051_1",
     "2026_DTE_530103_1",
@@ -119,7 +118,7 @@
     "2026_RVSKV_533448_1",
     "2026_SEDC_523761_1"
   ],
-  "live_dashboard_equivalent_count": 5043,
+  "live_dashboard_equivalent_count": 5044,
   "portal_listed_with_past_closing_reactivated": 5,
   "reactivated_tender_ids": [
     "2026_DHS_535711_1",
@@ -129,10 +128,10 @@
     "2026_PKVVC_537276_1"
   ],
   "archive_candidates_not_in_portal": 144,
-  "detail_success": 2408,
+  "detail_success": 2409,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2745,
+  "detail_pending": 2744,
   "organisation_count_mismatches": 10,
   "organisation_mismatches": [
     {
