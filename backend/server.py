@@ -559,6 +559,21 @@ def users_register():
         }
     })
 
+@app.get("/api/users/list")
+def users_list():
+    user_id = telegram_user_from_session(request.args)
+    if not user_id or not is_user_admin(user_id):
+        return jsonify({"ok": False, "message": "Admin access required."}), 403
+    conn = user_db()
+    try:
+        rows = conn.execute("""
+            SELECT name, mobile, username, signup_at, last_login_at, login_count
+            FROM users ORDER BY signup_at DESC
+        """).fetchall()
+        return jsonify({"ok": True, "users": [dict(row) for row in rows]})
+    finally:
+        conn.close()
+
 @app.get("/api/users/stats")
 def users_stats():
     user_id = telegram_user_from_session(request.args)
