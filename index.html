@@ -2223,6 +2223,7 @@ const USER_PROFILE_API = "https://mp-tenders-api.onrender.com/api/users/profile"
 const USER_REGISTER_API = "https://mp-tenders-api.onrender.com/api/users/register";
 const USER_EXPORT_API = "https://mp-tenders-api.onrender.com/api/users/export";
 const USER_STATS_API = "https://mp-tenders-api.onrender.com/api/users/stats";
+const USER_LIST_API = "https://mp-tenders-api.onrender.com/api/users/list";
 let telegramAuthData = null;
 let telegramChecking = false;
 let telegramSetupInProgress = false;
@@ -2363,11 +2364,13 @@ async function loadAdminUserPanel(){
     document.getElementById("adminTodayNew").textContent=data.today_new_users ?? 0;
     document.getElementById("adminTodayUsers").textContent=data.today_unique_users ?? 0;
     document.getElementById("adminTodayLogins").textContent=data.today_logins ?? 0;
+    const listResponse=await fetch(USER_LIST_API+"?session_token="+encodeURIComponent(token),{cache:"no-store"});
+    const listData=await listResponse.json().catch(()=>({}));
+    if(!listResponse.ok || !listData.ok) throw new Error(listData.message || "User list load failed.");
     if(body){
-      // Stats endpoint currently returns aggregate data; the detailed user list
-      // is loaded from the Excel endpoint only. Keep the panel ready for the
-      // detailed API when available.
-      body.innerHTML='<tr><td colspan="7" class="admin-user-empty">User count ऊपर उपलब्ध है। Excel में पूरी user list देखें।</td></tr>';
+      const users=listData.users || [];
+      if(!users.length){ body.innerHTML='<tr><td colspan="7" class="admin-user-empty">अभी कोई user record नहीं है।</td></tr>'; }
+      else body.innerHTML=users.map((u,i)=>'<tr><td>'+(i+1)+'</td><td>'+escapeHtml(u.name||'—')+'</td><td>'+escapeHtml(u.mobile||'—')+'</td><td>'+escapeHtml(u.username?'@'+u.username:'—')+'</td><td>'+escapeHtml(u.signup_at||'—')+'</td><td>'+escapeHtml(u.last_login_at||'—')+'</td><td>'+escapeHtml(String(u.login_count??0))+'</td></tr>').join('');
     }
     if(msg) msg.textContent="✓ User statistics updated.";
   }catch(e){
