@@ -1461,6 +1461,44 @@ td.title-cell{
 .user-report-btn:hover{background:#dbeafe}
 .user-report-box{margin-top:10px;padding:9px;border-radius:8px;background:#f8fafc;font-size:11px;color:#334155;display:none}
 .user-report-box.show{display:block}
+
+.admin-user-panel{
+  position:fixed;inset:0;z-index:999998;display:none;background:rgba(15,23,42,.72);
+  backdrop-filter:blur(5px);padding:18px;overflow:auto;
+}
+.admin-user-panel.open{display:block}
+.admin-user-panel-card{
+  width:min(1180px,100%);margin:20px auto;background:#fff;border-radius:18px;
+  box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;
+}
+.admin-user-panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 20px;background:#14376e;color:#fff;
+}
+.admin-user-panel-title{font-size:20px;font-weight:900}
+.admin-user-panel-close{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:8px;padding:7px 11px;cursor:pointer;font-size:18px}
+.admin-user-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:15px 20px;background:#f8fafc;
+}
+.admin-user-stat{padding:13px;border:1px solid #e2e8f0;border-radius:10px;background:#fff}
+.admin-user-stat-label{font-size:11px;color:#64748b;font-weight:800}
+.admin-user-stat-value{font-size:24px;color:#14376e;font-weight:900;margin-top:3px}
+.admin-user-actions{display:flex;gap:8px;align-items:center;padding:0 20px 12px}
+.admin-user-action{border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;padding:8px 11px;border-radius:8px;font-weight:800;cursor:pointer}
+.admin-user-table-wrap{padding:0 20px 20px;overflow:auto}
+.admin-user-table{width:100%;border-collapse:collapse;font-size:12px;min-width:850px}
+.admin-user-table th,.admin-user-table td{border-bottom:1px solid #e2e8f0;padding:8px;text-align:left;white-space:nowrap}
+.admin-user-table th{background:#f1f5f9;color:#334155;font-weight:900;position:sticky;top:0}
+.admin-user-empty{text-align:center;padding:25px;color:#64748b}
+.admin-user-msg{padding:8px 20px;color:#64748b;font-size:12px}
+@media(max-width:700px){
+ .admin-user-stats{grid-template-columns:repeat(2,1fr)}
+ .admin-user-panel{padding:8px}
+ .admin-user-panel-card{margin:8px auto}
+ .admin-user-panel-head{padding:13px 14px}
+ .admin-user-table-wrap{padding:0 10px 12px}
+ .admin-user-actions{padding:0 10px 10px}
+}
 .telegram-logout-btn{
   width:100%;margin-top:10px;padding:8px;border:0;border-radius:7px;
   background:#fee2e2;color:#b91c1c;font-weight:800;cursor:pointer;
@@ -1847,6 +1885,32 @@ body.telegram-locked .site-footer{visibility:hidden}
   </div>
 </div>
 
+<div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
+  <div class="admin-user-panel-card">
+    <div class="admin-user-panel-head">
+      <div class="admin-user-panel-title">📊 MP Tender User Panel</div>
+      <button class="admin-user-panel-close" id="adminUserPanelClose" type="button">×</button>
+    </div>
+    <div class="admin-user-stats">
+      <div class="admin-user-stat"><div class="admin-user-stat-label">कुल Users</div><div class="admin-user-stat-value" id="adminTotalUsers">—</div></div>
+      <div class="admin-user-stat"><div class="admin-user-stat-label">आज के नए Users</div><div class="admin-user-stat-value" id="adminTodayNew">—</div></div>
+      <div class="admin-user-stat"><div class="admin-user-stat-label">आज के Unique Users</div><div class="admin-user-stat-value" id="adminTodayUsers">—</div></div>
+      <div class="admin-user-stat"><div class="admin-user-stat-label">आज के Total Logins</div><div class="admin-user-stat-value" id="adminTodayLogins">—</div></div>
+    </div>
+    <div class="admin-user-actions">
+      <button class="admin-user-action" id="adminUserRefresh" type="button">↻ Refresh</button>
+      <button class="admin-user-action" id="adminUserExcel" type="button">⬇ Export Excel</button>
+    </div>
+    <div class="admin-user-msg" id="adminUserMsg">Loading user records...</div>
+    <div class="admin-user-table-wrap">
+      <table class="admin-user-table">
+        <thead><tr><th>#</th><th>Name</th><th>Mobile</th><th>Telegram</th><th>First Signup</th><th>Last Login</th><th>Login Count</th></tr></thead>
+        <tbody id="adminUserTableBody"><tr><td colspan="7" class="admin-user-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div class="user-profile-modal" id="userProfileModal" aria-hidden="true">
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="userProfileTitle">
     <div class="user-profile-title" id="userProfileTitle">👤 अपना प्रोफाइल पूरा करें</div>
@@ -1905,6 +1969,7 @@ body.telegram-locked .site-footer{visibility:hidden}
         <div class="telegram-profile-username" id="telegramMenuUsername"></div>
         <div class="telegram-profile-status" data-i18n="telegramVerified">✓ Telegram Verified</div>
         <button class="user-report-btn" id="userReportBtn" type="button" style="display:none">📊 User Report / Excel</button>
+        <button class="user-report-btn" id="adminUserPanelBtn" type="button" style="display:none">👥 User Panel</button>
         <div class="user-report-box" id="userReportBox"></div>
         <button class="telegram-logout-btn" id="telegramLogoutBtn" type="button" data-i18n="logout">🚪 Logout</button>
       </div>
@@ -2157,6 +2222,7 @@ const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/co
 const USER_PROFILE_API = "https://mp-tenders-api.onrender.com/api/users/profile";
 const USER_REGISTER_API = "https://mp-tenders-api.onrender.com/api/users/register";
 const USER_EXPORT_API = "https://mp-tenders-api.onrender.com/api/users/export";
+const USER_STATS_API = "https://mp-tenders-api.onrender.com/api/users/stats";
 let telegramAuthData = null;
 let telegramChecking = false;
 let telegramSetupInProgress = false;
@@ -2221,8 +2287,8 @@ async function loadUserProfile(){
     const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.ok) return false;
     if(data.is_admin){
-      const btn=document.getElementById("userReportBtn");
-      if(btn) btn.style.display="block";
+      const btn=document.getElementById("userReportBtn"); if(btn) btn.style.display="block";
+      const panelBtn=document.getElementById("adminUserPanelBtn"); if(panelBtn) panelBtn.style.display="block";
     }
     if(data.registered) return true;
     const tgName=[telegramAuthData?.first_name || "",telegramAuthData?.last_name || ""].join(" ").trim();
@@ -2280,6 +2346,44 @@ async function saveUserProfile(){
   }finally{
     if(save) save.disabled=false;
   }
+}
+
+
+async function loadAdminUserPanel(){
+  const token=localStorage.getItem("telegram_session");
+  const body=document.getElementById("adminUserTableBody");
+  const msg=document.getElementById("adminUserMsg");
+  if(!token){ if(msg) msg.textContent="Telegram session नहीं मिला।"; return; }
+  if(msg) msg.textContent="⏳ User records load हो रहे हैं...";
+  try{
+    const response=await fetch(USER_STATS_API+"?session_token="+encodeURIComponent(token),{cache:"no-store"});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok || !data.ok) throw new Error(data.message || "Admin access required.");
+    document.getElementById("adminTotalUsers").textContent=data.total_users ?? 0;
+    document.getElementById("adminTodayNew").textContent=data.today_new_users ?? 0;
+    document.getElementById("adminTodayUsers").textContent=data.today_unique_users ?? 0;
+    document.getElementById("adminTodayLogins").textContent=data.today_logins ?? 0;
+    if(body){
+      // Stats endpoint currently returns aggregate data; the detailed user list
+      // is loaded from the Excel endpoint only. Keep the panel ready for the
+      // detailed API when available.
+      body.innerHTML='<tr><td colspan="7" class="admin-user-empty">User count ऊपर उपलब्ध है। Excel में पूरी user list देखें।</td></tr>';
+    }
+    if(msg) msg.textContent="✓ User statistics updated.";
+  }catch(e){
+    if(msg) msg.textContent="❌ "+e.message;
+  }
+}
+function openAdminUserPanel(){
+  const panel=document.getElementById("adminUserPanel");
+  if(!panel) return;
+  panel.classList.add("open"); panel.setAttribute("aria-hidden","false");
+  loadAdminUserPanel();
+}
+function closeAdminUserPanel(){
+  const panel=document.getElementById("adminUserPanel");
+  if(!panel) return;
+  panel.classList.remove("open"); panel.setAttribute("aria-hidden","true");
 }
 
 async function downloadUserReport(){
@@ -2508,6 +2612,14 @@ function setupTelegramFlow(){
   if(saveBtn) saveBtn.onclick=saveUserProfile;
   const reportBtn=document.getElementById("userReportBtn");
   if(reportBtn) reportBtn.onclick=downloadUserReport;
+  const adminPanelBtn=document.getElementById("adminUserPanelBtn");
+  if(adminPanelBtn) adminPanelBtn.onclick=openAdminUserPanel;
+  const adminClose=document.getElementById("adminUserPanelClose");
+  if(adminClose) adminClose.onclick=closeAdminUserPanel;
+  const adminRefresh=document.getElementById("adminUserRefresh");
+  if(adminRefresh) adminRefresh.onclick=loadAdminUserPanel;
+  const adminExcel=document.getElementById("adminUserExcel");
+  if(adminExcel) adminExcel.onclick=downloadUserReport;
   window.addEventListener("resize",positionTelegramProfileMenu);
   window.addEventListener("scroll",positionTelegramProfileMenu,true);
   document.addEventListener("click",(event)=>{
