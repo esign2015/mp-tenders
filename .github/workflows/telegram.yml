@@ -44,17 +44,21 @@ jobs:
           grep '^key=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_key || true
 
       - name: Install ReportLab
-        if: steps.gate.outputs.run == 'true'
+        if: steps.gate.outputs.run == 'true' || github.event_name == 'push'
         run: pip install reportlab
 
       - name: Send scheduled Telegram alert
         id: send_alert
-        if: steps.gate.outputs.run == 'true'
+        if: steps.gate.outputs.run == 'true' || github.event_name == 'push'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          MODE="$(cat /tmp/telegram_mode)"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            MODE="evening_new"
+          else
+            MODE="$(cat /tmp/telegram_mode)"
+          fi
           NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
 
       - name: Mark Telegram alert complete
