@@ -3,7 +3,7 @@ import os
 import hashlib
 import hmac
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib import request as urllib_request, parse as urllib_parse
 
@@ -44,6 +44,257 @@ def home():
 
 def clean(value):
     return str(value or "").strip()
+
+
+# ================= USER REGISTRATION / ANALYTICS =================
+# Telegram Login does not expose a user's phone number. We therefore ask the
+# user for their name + mobile number after the first verified Telegram login.
+# Data is stored in SQLite. Set USER_DB_PATH to a directory/file on a Render
+# persistent disk for durable storage (for example /var/data/users.db).
+USER_DB_PATH = Path(os.getenv("USER_DB_PATH", str(ROOT / "data" / "users.db")))
+USER_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def user_db():
+    import sqlite3
+    conn = sqlite3.connect(str(USER_DB_PATH), timeout=30)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=30000")
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS users (
+            telegram_id INTEGER PRIMARY KEY,
+            first_name TEXT NOT NULL DEFAULT '',
+            last_name TEXT NOT NULL DEFAULT '',
+            username TEXT NOT NULL DEFAULT '',
+            name TEXT NOT NULL DEFAULT '',
+            mobile TEXT NOT NULL DEFAULT '',
+            mobile_verified INTEGER NOT NULL DEFAULT 0,
+            signup_at TEXT NOT NULL,
+            last_login_at TEXT NOT NULL,
+            login_count INTEGER NOT NULL DEFAULT 0
+        );
+        CREATE TABLE IF NOT EXISTS login_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            telegram_id INTEGER NOT NULL,
+            login_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_login_events_time
+            ON login_events(login_at);
+    """)
+    return conn
+
+def now_ist():
+    return datetime.now(IST)
+
+def normalise_mobile(value):
+    digits = "".join(ch for ch in clean(value) if ch.isdigit())
+    if digits.startswith("91") and len(digits) == 12:
+        digits = digits[2:]
+    if len(digits) != 10 or digits[0] not in "6789":
+        return ""
+    return "+91" + digits
+
+def admin_telegram_ids():
+    raw = clean(os.getenv("ADMIN_TELEGRAM_IDS", ""))
+    ids = set()
+    for item in raw.split(","):
+        item = clean(item)
+        if item.isdigit():
+            ids.add(int(item))
+    return ids
+
+def is_user_admin(user_id):
+    if int(user_id or 0) in admin_telegram_ids():
+        return True
+    # The channel owner (creator) may access the user report without another
+    # secret being placed in the frontend.
+    try:
+        channel = clean(os.getenv("TELEGRAM_CHANNEL", "@mptendersalert"))
+        member = telegram_api("getChatMember", {"chat_id": channel, "user_id": int(user_id)})
+        return bool(member.get("ok")) and member.get("result", {}).get("status") == "creator"
+    except Exception:
+        return False
+
+def touch_user_login(user_id, telegram_payload=None):
+    telegram_payload = telegram_payload or {}
+    uid = int(user_id)
+    now = now_ist().isoformat()
+    first_name = clean(telegram_payload.get("first_name"))
+    last_name = clean(telegram_payload.get("last_name"))
+    username = clean(telegram_payload.get("username"))
+    display_name = " ".join(x for x in (first_name, last_name) if x).strip()
+
+    conn = user_db()
+    try:
+        row = conn.execute("SELECT * FROM users WHERE telegram_id=?", (uid,)).fetchone()
+        if row is None:
+            conn.execute("""
+                INSERT INTO users
+                (telegram_id, first_name, last_name, username, name, mobile,
+                 mobile_verified, signup_at, last_login_at, login_count)
+                VALUES (?, ?, ?, ?, ?, '', 0, ?, ?, 1)
+            """, (uid, first_name, last_name, username, display_name, now, now))
+        else:
+            conn.execute("""
+                UPDATE users
+                SET first_name=COALESCE(NULLIF(?, ''), first_name),
+                    last_name=COALESCE(NULLIF(?, ''), last_name),
+                    username=COALESCE(NULLIF(?, ''), username),
+                    last_login_at=?,
+                    login_count=login_count+1
+                WHERE telegram_id=?
+            """, (first_name, last_name, username, now, uid))
+        conn.execute(
+            "INSERT INTO login_events (telegram_id, login_at) VALUES (?, ?)",
+            (uid, now),
+        )
+        conn.commit()
+        row = conn.execute("SELECT * FROM users WHERE telegram_id=?", (uid,)).fetchone()
+        return dict(row)
+    finally:
+        conn.close()
+
+def get_user(user_id):
+    conn = user_db()
+    try:
+        row = conn.execute("SELECT * FROM users WHERE telegram_id=?", (int(user_id),)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+def update_user_profile(user_id, name, mobile):
+    name = clean(name)
+    mobile = normalise_mobile(mobile)
+    if len(name) < 2:
+        raise ValueError("कृपया अपना पूरा नाम दर्ज करें।")
+    if not mobile:
+        raise ValueError("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।")
+    conn = user_db()
+    try:
+        conn.execute("""
+            UPDATE users
+            SET name=?, mobile=?, mobile_verified=0
+            WHERE telegram_id=?
+        """, (name, mobile, int(user_id)))
+        conn.commit()
+        row = conn.execute("SELECT * FROM users WHERE telegram_id=?", (int(user_id),)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+def user_stats():
+    conn = user_db()
+    try:
+        total = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        registered_mobile = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE mobile<>''"
+        ).fetchone()[0]
+        today = now_ist().date().isoformat()
+        today_new = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE substr(signup_at,1,10)=?", (today,)
+        ).fetchone()[0]
+        today_users = conn.execute(
+            "SELECT COUNT(DISTINCT telegram_id) FROM login_events WHERE substr(login_at,1,10)=?",
+            (today,),
+        ).fetchone()[0]
+        today_logins = conn.execute(
+            "SELECT COUNT(*) FROM login_events WHERE substr(login_at,1,10)=?",
+            (today,),
+        ).fetchone()[0]
+        daily_rows = conn.execute("""
+            SELECT substr(signup_at,1,10) AS day, COUNT(*) AS new_users
+            FROM users
+            GROUP BY substr(signup_at,1,10)
+            ORDER BY day DESC
+            LIMIT 90
+        """).fetchall()
+        return {
+            "total_users": total,
+            "registered_mobile": registered_mobile,
+            "today_new_users": today_new,
+            "today_unique_users": today_users,
+            "today_logins": today_logins,
+            "daily_signups": [dict(r) for r in daily_rows],
+        }
+    finally:
+        conn.close()
+
+def build_user_excel():
+    from io import BytesIO
+    from openpyxl import Workbook
+    from openpyxl.utils import get_column_letter
+
+    conn = user_db()
+    try:
+        users = conn.execute("""
+            SELECT telegram_id, name, mobile, username, first_name, last_name,
+                   signup_at, last_login_at, login_count, mobile_verified
+            FROM users
+            ORDER BY signup_at DESC
+        """).fetchall()
+        daily = conn.execute("""
+            SELECT substr(signup_at,1,10) AS day,
+                   COUNT(*) AS new_users,
+                   (SELECT COUNT(DISTINCT le.telegram_id)
+                    FROM login_events le
+                    WHERE substr(le.login_at,1,10)=substr(u.signup_at,1,10)) AS unique_logins,
+                   (SELECT COUNT(*)
+                    FROM login_events le2
+                    WHERE substr(le2.login_at,1,10)=substr(u.signup_at,1,10)) AS total_logins
+            FROM users u
+            GROUP BY substr(signup_at,1,10)
+            ORDER BY day DESC
+        """).fetchall()
+    finally:
+        conn.close()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Users"
+    headers = [
+        "S.No.", "Name", "Mobile", "Telegram Username", "Telegram ID",
+        "First Signup (IST)", "Last Login (IST)", "Login Count",
+        "Mobile Verified"
+    ]
+    ws.append(headers)
+    for i, row in enumerate(users, 1):
+        ws.append([
+            i, row["name"], row["mobile"], ("@" + row["username"]) if row["username"] else "",
+            row["telegram_id"], row["signup_at"], row["last_login_at"],
+            row["login_count"], "Yes" if row["mobile_verified"] else "No"
+        ])
+    for cell in ws[1]:
+        cell.font = cell.font.copy(bold=True)
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = ws.dimensions
+
+    ds = wb.create_sheet("Daily Stats")
+    ds.append(["Date (IST)", "New Users", "Unique Users", "Total Logins"])
+    for row in daily:
+        ds.append([row["day"], row["new_users"], row["unique_logins"], row["total_logins"]])
+    for cell in ds[1]:
+        cell.font = cell.font.copy(bold=True)
+    ds.freeze_panes = "A2"
+
+    for sheet in (ws, ds):
+        for col in range(1, sheet.max_column + 1):
+            max_len = max(
+                len(str(sheet.cell(row=r, column=col).value or ""))
+                for r in range(1, min(sheet.max_row, 200) + 1)
+            )
+            sheet.column_dimensions[get_column_letter(col)].width = min(max(max_len + 2, 12), 34)
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+    return output.read()
+
+def telegram_user_from_session(payload):
+    token = clean((payload or {}).get("session_token"))
+    return read_telegram_session(token)
+
 
 TELEGRAM_SESSION_TTL = int(os.getenv("TELEGRAM_SESSION_TTL", "604800"))  # 7 days
 
@@ -222,6 +473,9 @@ def telegram_verify():
     if not allowed:
         return jsonify({"verified": False, "message": "You are not a member of the Telegram channel. Please join it first."}), 403
 
+    # Create/update the user record and record this login event.
+    user_record = touch_user_login(user_id, payload)
+
     # Use the Login Widget photo when available; otherwise fetch the
     # latest Telegram profile photo through the Bot API.
     photo_url = clean(payload.get("photo_url"))
@@ -259,7 +513,72 @@ def telegram_session():
     allowed = status in {"creator", "administrator", "member"} or (status == "restricted" and is_member)
     if not allowed:
         return jsonify({"verified": False, "message": "Telegram channel membership is no longer active."}), 403
-    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "message": "Telegram session verified."})
+    user_record = touch_user_login(user_id)
+    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "profile_registered": bool(user_record.get("name") and user_record.get("mobile")), "is_admin": is_user_admin(user_id), "message": "Telegram session verified."})
+
+
+@app.get("/api/users/profile")
+def users_profile():
+    user_id = telegram_user_from_session(request.args)
+    if not user_id:
+        return jsonify({"ok": False, "message": "Valid Telegram session required."}), 401
+    row = get_user(user_id)
+    if not row:
+        return jsonify({"ok": True, "registered": False, "is_admin": is_user_admin(user_id)})
+    return jsonify({
+        "ok": True,
+        "registered": bool(row.get("name") and row.get("mobile")),
+        "is_admin": is_user_admin(user_id),
+        "user": {
+            "name": row.get("name", ""),
+            "mobile": row.get("mobile", ""),
+            "username": row.get("username", ""),
+            "telegram_id": row.get("telegram_id"),
+        }
+    })
+
+@app.post("/api/users/register")
+def users_register():
+    payload = request.get_json(silent=True) or {}
+    user_id = telegram_user_from_session(payload)
+    if not user_id:
+        return jsonify({"ok": False, "message": "Valid Telegram session required."}), 401
+    try:
+        row = update_user_profile(user_id, payload.get("name", ""), payload.get("mobile", ""))
+    except ValueError as exc:
+        return jsonify({"ok": False, "message": str(exc)}), 400
+    if not row:
+        return jsonify({"ok": False, "message": "User record was not found. Please login again."}), 404
+    return jsonify({
+        "ok": True,
+        "registered": True,
+        "message": "Profile saved successfully.",
+        "user": {
+            "name": row.get("name", ""),
+            "mobile": row.get("mobile", ""),
+        }
+    })
+
+@app.get("/api/users/stats")
+def users_stats():
+    user_id = telegram_user_from_session(request.args)
+    if not user_id or not is_user_admin(user_id):
+        return jsonify({"ok": False, "message": "Admin access required."}), 403
+    return jsonify({"ok": True, **user_stats()})
+
+@app.post("/api/users/export")
+def users_export():
+    payload = request.get_json(silent=True) or {}
+    user_id = telegram_user_from_session(payload)
+    if not user_id or not is_user_admin(user_id):
+        return jsonify({"ok": False, "message": "Admin access required."}), 403
+    data = build_user_excel()
+    filename = "MP_Tender_Users_Report.xlsx"
+    return Response(
+        data,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
 
 def telegram_auth_valid(payload):
     received_hash = clean(payload.get("hash"))
