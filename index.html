@@ -1428,6 +1428,39 @@ td.title-cell{
 .telegram-profile-name{font-weight:800;font-size:14px}
 .telegram-profile-username{font-size:11px;color:#64748b;margin-top:2px}
 .telegram-profile-status{font-size:11px;color:#166534;margin-top:8px}
+
+.user-profile-modal{
+  position:fixed;inset:0;z-index:1000000;display:none;align-items:center;justify-content:center;
+  padding:16px;background:rgba(15,23,42,.72);backdrop-filter:blur(5px);
+}
+.user-profile-modal.open{display:flex}
+.user-profile-card{
+  width:min(440px,100%);background:#fff;border-radius:18px;padding:22px;
+  box-shadow:0 24px 70px rgba(0,0,0,.40);
+}
+.user-profile-title{font-size:22px;font-weight:900;color:#14376e}
+.user-profile-sub{margin:6px 0 16px;color:#64748b;font-size:13px;line-height:1.5}
+.user-profile-label{display:block;margin:12px 0 5px;font-size:12px;font-weight:800;color:#334155}
+.user-profile-input{
+  width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;
+  font-size:15px;outline:none;
+}
+.user-profile-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+.user-profile-consent{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:11px;color:#64748b;line-height:1.45}
+.user-profile-consent input{margin-top:2px}
+.user-profile-save{
+  width:100%;margin-top:15px;padding:11px;border:0;border-radius:9px;
+  background:#203b91;color:#fff;font-weight:900;cursor:pointer;
+}
+.user-profile-save:disabled{opacity:.55;cursor:not-allowed}
+.user-profile-status{min-height:20px;margin-top:9px;font-size:12px;font-weight:700;color:#b91c1c}
+.user-report-btn{
+  width:100%;margin-top:10px;padding:8px;border:1px solid #bfdbfe;border-radius:7px;
+  background:#eff6ff;color:#1d4ed8;font-weight:800;cursor:pointer;
+}
+.user-report-btn:hover{background:#dbeafe}
+.user-report-box{margin-top:10px;padding:9px;border-radius:8px;background:#f8fafc;font-size:11px;color:#334155;display:none}
+.user-report-box.show{display:block}
 .telegram-logout-btn{
   width:100%;margin-top:10px;padding:8px;border:0;border-radius:7px;
   background:#fee2e2;color:#b91c1c;font-weight:800;cursor:pointer;
@@ -1814,6 +1847,25 @@ body.telegram-locked .site-footer{visibility:hidden}
   </div>
 </div>
 
+<div class="user-profile-modal" id="userProfileModal" aria-hidden="true">
+  <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="userProfileTitle">
+    <div class="user-profile-title" id="userProfileTitle">👤 अपना प्रोफाइल पूरा करें</div>
+    <div class="user-profile-sub">
+      Dashboard उपयोग करने के लिए अपना नाम और मोबाइल नंबर दर्ज करें।
+      मोबाइल नंबर केवल user registration और usage statistics के लिए सुरक्षित रखा जाएगा।
+    </div>
+    <label class="user-profile-label" for="userProfileName">नाम</label>
+    <input class="user-profile-input" id="userProfileName" type="text" maxlength="80" autocomplete="name" placeholder="अपना पूरा नाम">
+    <label class="user-profile-label" for="userProfileMobile">मोबाइल नंबर</label>
+    <input class="user-profile-input" id="userProfileMobile" type="tel" maxlength="14" inputmode="numeric" autocomplete="tel" placeholder="10 अंकों का मोबाइल नंबर">
+    <label class="user-profile-consent">
+      <input id="userProfileConsent" type="checkbox">
+      <span>मैं सहमत हूँ कि मेरा नाम और मोबाइल नंबर MP Tender Dashboard के user registration record में रखा जाए।</span>
+    </label>
+    <button class="user-profile-save" id="userProfileSave" type="button">सहेजें और Dashboard खोलें</button>
+    <div class="user-profile-status" id="userProfileStatus"></div>
+  </div>
+</div>
 
 <header class="site-header">
 
@@ -1852,6 +1904,8 @@ body.telegram-locked .site-footer{visibility:hidden}
         <div class="telegram-profile-name" id="telegramMenuName">Telegram User</div>
         <div class="telegram-profile-username" id="telegramMenuUsername"></div>
         <div class="telegram-profile-status" data-i18n="telegramVerified">✓ Telegram Verified</div>
+        <button class="user-report-btn" id="userReportBtn" type="button" style="display:none">📊 User Report / Excel</button>
+        <div class="user-report-box" id="userReportBox"></div>
         <button class="telegram-logout-btn" id="telegramLogoutBtn" type="button" data-i18n="logout">🚪 Logout</button>
       </div>
     </div>
@@ -2100,6 +2154,9 @@ body.telegram-locked .site-footer{visibility:hidden}
 <script>
 const TELEGRAM_VERIFY_API = "https://mp-tenders-api.onrender.com/api/telegram/verify";
 const TELEGRAM_CONFIG_API = "https://mp-tenders-api.onrender.com/api/telegram/config";
+const USER_PROFILE_API = "https://mp-tenders-api.onrender.com/api/users/profile";
+const USER_REGISTER_API = "https://mp-tenders-api.onrender.com/api/users/register";
+const USER_EXPORT_API = "https://mp-tenders-api.onrender.com/api/users/export";
 let telegramAuthData = null;
 let telegramChecking = false;
 let telegramSetupInProgress = false;
@@ -2153,6 +2210,102 @@ function updateTelegramProfile(user){
     }
   }
   profile.classList.add("visible");
+}
+
+
+async function loadUserProfile(){
+  const token=localStorage.getItem("telegram_session");
+  if(!token) return false;
+  try{
+    const response=await fetch(USER_PROFILE_API+"?session_token="+encodeURIComponent(token),{cache:"no-store"});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok || !data.ok) return false;
+    if(data.is_admin){
+      const btn=document.getElementById("userReportBtn");
+      if(btn) btn.style.display="block";
+    }
+    if(data.registered) return true;
+    const tgName=[telegramAuthData?.first_name || "",telegramAuthData?.last_name || ""].join(" ").trim();
+    const nameInput=document.getElementById("userProfileName");
+    if(nameInput && !nameInput.value) nameInput.value=data.user?.name || tgName || "";
+    openUserProfileModal();
+    return false;
+  }catch(e){
+    console.warn("User profile lookup failed:",e);
+    return false;
+  }
+}
+
+function openUserProfileModal(){
+  const modal=document.getElementById("userProfileModal");
+  if(!modal) return;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  setTimeout(()=>document.getElementById("userProfileName")?.focus(),50);
+}
+function closeUserProfileModal(){
+  const modal=document.getElementById("userProfileModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+}
+async function saveUserProfile(){
+  const token=localStorage.getItem("telegram_session");
+  const name=(document.getElementById("userProfileName")?.value || "").trim();
+  const mobile=(document.getElementById("userProfileMobile")?.value || "").trim();
+  const consent=document.getElementById("userProfileConsent")?.checked;
+  const status=document.getElementById("userProfileStatus");
+  const save=document.getElementById("userProfileSave");
+  if(!token){ if(status) status.textContent="Telegram session नहीं मिला। कृपया फिर से login करें।"; return; }
+  if(name.length<2){ if(status) status.textContent="कृपया अपना पूरा नाम दर्ज करें।"; return; }
+  const digits=mobile.replace(/\D/g,"").replace(/^91(?=\d{10}$)/,"");
+  if(!/^[6-9]\d{9}$/.test(digits)){ if(status) status.textContent="कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।"; return; }
+  if(!consent){ if(status) status.textContent="कृपया consent checkbox को tick करें।"; return; }
+  if(save) save.disabled=true;
+  if(status){status.style.color="#475569";status.textContent="⏳ प्रोफाइल save हो रही है...";}
+  try{
+    const response=await fetch(USER_REGISTER_API,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({session_token:token,name,mobile:digits})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok || !data.ok) throw new Error(data.message || "Profile save failed.");
+    closeUserProfileModal();
+    const box=document.getElementById("userReportBox");
+    if(box) box.textContent="आपका user profile सुरक्षित रूप से save हो गया है।";
+  }catch(e){
+    if(status){status.style.color="#b91c1c";status.textContent="❌ "+e.message;}
+  }finally{
+    if(save) save.disabled=false;
+  }
+}
+
+async function downloadUserReport(){
+  const token=localStorage.getItem("telegram_session");
+  const box=document.getElementById("userReportBox");
+  if(!token) return;
+  if(box){box.classList.add("show");box.textContent="⏳ User Excel report तैयार हो रही है...";}
+  try{
+    const response=await fetch(USER_EXPORT_API,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({session_token:token})
+    });
+    if(!response.ok){
+      const data=await response.json().catch(()=>({}));
+      throw new Error(data.message || "Report download failed.");
+    }
+    const blob=await response.blob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download="MP_Tender_Users_Report.xlsx";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+    if(box) box.textContent="✓ Excel report download हो गई।";
+  }catch(e){
+    if(box) box.textContent="❌ "+e.message;
+  }
 }
 
 function logoutTelegram(){
@@ -2211,6 +2364,7 @@ async function verifyTelegramMembership(user, persist=true){
     sessionStorage.setItem("telegram_verified","1");
     sessionStorage.setItem("telegram_user",JSON.stringify(verifiedUser));
     updateTelegramProfile(verifiedUser);
+    loadUserProfile();
     document.body.classList.remove("telegram-locked");
     const gate=document.getElementById("telegramGate");
     if(gate) gate.remove();
@@ -2297,6 +2451,7 @@ async function checkStoredTelegram(){
         if(data.session_token) localStorage.setItem("telegram_session",data.session_token);
         localStorage.setItem("telegram_auth",JSON.stringify(telegramAuthData));
         updateTelegramProfile(telegramAuthData);
+        loadUserProfile();
         document.body.classList.remove("telegram-locked");
         const gate=document.getElementById("telegramGate");
         if(gate) gate.remove();
@@ -2349,6 +2504,10 @@ function setupTelegramFlow(){
     if(open) requestAnimationFrame(positionTelegramProfileMenu);
   };
   if(logoutBtn) logoutBtn.onclick=logoutTelegram;
+  const saveBtn=document.getElementById("userProfileSave");
+  if(saveBtn) saveBtn.onclick=saveUserProfile;
+  const reportBtn=document.getElementById("userReportBtn");
+  if(reportBtn) reportBtn.onclick=downloadUserReport;
   window.addEventListener("resize",positionTelegramProfileMenu);
   window.addEventListener("scroll",positionTelegramProfileMenu,true);
   document.addEventListener("click",(event)=>{
