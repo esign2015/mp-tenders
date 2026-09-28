@@ -2,12 +2,14 @@ name: MP Tender Telegram Alerts
 
 on:
   schedule:
-    # Exact alert ticks plus the 5-minute catch-up window. The scheduler
-    # still applies the 45-minute lateness gate and de-duplication state.
+    # Exact alert ticks plus the 5-minute catch-up window.
     - cron: "50 4 * * *"   # 10:20 AM IST
     - cron: "15 15 * * *"  # 8:45 PM IST
     - cron: "*/5 * * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - "data/telegram_health_test.trigger"
 
 permissions:
   contents: write
