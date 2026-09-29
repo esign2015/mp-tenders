@@ -15,7 +15,7 @@ from reportlab.platypus import SimpleDocTemplate, LongTable, TableStyle, Paragra
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
 TELEGRAM_URL = "https://t.me/mptendersalert"
-CSV_PATH = Path("organisation_tenders.csv")
+CSV_PATH = Path(os.getenv("TENDER_CSV_PATH", "organisation_tenders.csv"))
 
 
 def clean(value):
