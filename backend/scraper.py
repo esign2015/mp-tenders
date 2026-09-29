@@ -550,6 +550,26 @@ def parse_detail(soup, url):
         )
 
     processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee") or labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"])
+
+    # MP Tender always has a portal/processing component when a tender is
+    # published. Some templates do not expose it as a clean adjacent row, but
+    # the Tender Fee section heading still exposes a subtotal such as:
+    # "Total Fee in ₹ - 1295". Use that authoritative subtotal to recover
+    # Processing Fee = portal subtotal - Tender Fee.
+    portal_fee_total = ""
+    for text_node in soup.find_all(string=True):
+        txt = clean(text_node)
+        if "total fee" not in txt.casefold():
+            continue
+        m = re.search(
+            r"Total\s+Fee(?:\s+in\s+₹)?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
+            r"([0-9][0-9,]*(?:\.\d+)?)",
+            txt,
+            re.I,
+        )
+        if m:
+            portal_fee_total = m.group(1)
+            break
     if not processing_fee:
         processing_fee = between("Processing Fee in ₹", ["Fee Payable To", "Fee Payable At"])
     # Some MP Tender detail templates render the fee label and amount as
@@ -566,6 +586,11 @@ def parse_detail(soup, url):
         )
         if match:
             processing_fee = match.group(1)
+
+    if money_number(processing_fee) <= 0 and money_number(portal_fee_total) > 0:
+        inferred_processing = money_number(portal_fee_total) - money_number(tender_fee)
+        if inferred_processing > 0:
+            processing_fee = str(int(inferred_processing)) if inferred_processing.is_integer() else f"{inferred_processing:.2f}"
 
 
     emd = value(
@@ -1878,7 +1903,12 @@ def detail_is_complete(row):
     """
     if clean((row or {}).get("Detail Extracted")).upper() != "YES":
         return False
-    return all(clean((row or {}).get(field)) for field in DETAIL_REQUIRED_FIELDS)
+    if not all(clean((row or {}).get(field)) for field in DETAIL_REQUIRED_FIELDS):
+        return False
+    # A published MP Tender must have a real processing/portal charge.
+    # Blank or numeric zero means the fee extraction is incomplete and the
+    # Tender ID must be retried instead of being counted as Success.
+    return money_number((row or {}).get("Processing Fee")) > 0
 
 
 def status_metrics(rows):
