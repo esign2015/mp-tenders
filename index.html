@@ -6107,7 +6107,7 @@ enforceTelegramAccess().then(async () => {
   function init(){
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
-    byId("affidavitRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
+    byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
     ["affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
