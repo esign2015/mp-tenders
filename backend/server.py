@@ -73,7 +73,9 @@ def user_db():
             mobile_verified INTEGER NOT NULL DEFAULT 0,
             signup_at TEXT NOT NULL,
             last_login_at TEXT NOT NULL,
-            login_count INTEGER NOT NULL DEFAULT 0
+            login_count INTEGER NOT NULL DEFAULT 0,
+            email TEXT NOT NULL DEFAULT '',
+            district TEXT NOT NULL DEFAULT ''
         );
         CREATE TABLE IF NOT EXISTS login_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -83,6 +85,12 @@ def user_db():
         CREATE INDEX IF NOT EXISTS idx_login_events_time
             ON login_events(login_at);
     """)
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
+    if "email" not in existing:
+        conn.execute("ALTER TABLE users ADD COLUMN email TEXT NOT NULL DEFAULT ''")
+    if "district" not in existing:
+        conn.execute("ALTER TABLE users ADD COLUMN district TEXT NOT NULL DEFAULT ''")
+    conn.commit()
     return conn
 
 def now_ist():
@@ -164,20 +172,27 @@ def get_user(user_id):
     finally:
         conn.close()
 
-def update_user_profile(user_id, name, mobile):
+def update_user_profile(user_id, name, mobile, email="", district=""):
+    import re
     name = clean(name)
     mobile = normalise_mobile(mobile)
+    email = clean(email).lower()
+    district = clean(district)
     if len(name) < 2:
         raise ValueError("कृपया अपना पूरा नाम दर्ज करें।")
     if not mobile:
-        raise ValueError("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।")
+        raise ValueError("कृपया सही नंबर डालिए।")
+    if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]{2,}", email):
+        raise ValueError("कृपया सही ईमेल आईडी डालिए।")
+    if len(district) < 2:
+        raise ValueError("कृपया सही जिला दर्ज करें।")
     conn = user_db()
     try:
         conn.execute("""
             UPDATE users
-            SET name=?, mobile=?, mobile_verified=0
+            SET name=?, mobile=?, email=?, district=?, mobile_verified=0
             WHERE telegram_id=?
-        """, (name, mobile, int(user_id)))
+        """, (name, mobile, email, district, int(user_id)))
         conn.commit()
         row = conn.execute("SELECT * FROM users WHERE telegram_id=?", (int(user_id),)).fetchone()
         return dict(row) if row else None
@@ -229,7 +244,7 @@ def build_user_excel():
     conn = user_db()
     try:
         users = conn.execute("""
-            SELECT telegram_id, name, mobile, username, first_name, last_name,
+            SELECT telegram_id, name, mobile, email, district, username, first_name, last_name,
                    signup_at, last_login_at, login_count, mobile_verified
             FROM users
             ORDER BY signup_at DESC
@@ -254,14 +269,14 @@ def build_user_excel():
     ws = wb.active
     ws.title = "Users"
     headers = [
-        "S.No.", "Name", "Mobile", "Telegram Username", "Telegram ID",
+        "S.No.", "Name", "Mobile", "Email", "District", "Telegram Username", "Telegram ID",
         "First Signup (IST)", "Last Login (IST)", "Login Count",
         "Mobile Verified"
     ]
     ws.append(headers)
     for i, row in enumerate(users, 1):
         ws.append([
-            i, row["name"], row["mobile"], ("@" + row["username"]) if row["username"] else "",
+            i, row["name"], row["mobile"], row["email"], row["district"], ("@" + row["username"]) if row["username"] else "",
             row["telegram_id"], row["signup_at"], row["last_login_at"],
             row["login_count"], "Yes" if row["mobile_verified"] else "No"
         ])
@@ -527,11 +542,13 @@ def users_profile():
         return jsonify({"ok": True, "registered": False, "is_admin": is_user_admin(user_id)})
     return jsonify({
         "ok": True,
-        "registered": bool(row.get("name") and row.get("mobile")),
+        "registered": bool(row.get("name") and row.get("mobile") and row.get("email") and row.get("district")),
         "is_admin": is_user_admin(user_id),
         "user": {
             "name": row.get("name", ""),
             "mobile": row.get("mobile", ""),
+            "email": row.get("email", ""),
+            "district": row.get("district", ""),
             "username": row.get("username", ""),
             "telegram_id": row.get("telegram_id"),
         }
@@ -544,7 +561,7 @@ def users_register():
     if not user_id:
         return jsonify({"ok": False, "message": "Valid Telegram session required."}), 401
     try:
-        row = update_user_profile(user_id, payload.get("name", ""), payload.get("mobile", ""))
+        row = update_user_profile(user_id, payload.get("name", ""), payload.get("mobile", ""), payload.get("email", ""), payload.get("district", ""))
     except ValueError as exc:
         return jsonify({"ok": False, "message": str(exc)}), 400
     if not row:
@@ -567,7 +584,7 @@ def users_list():
     conn = user_db()
     try:
         rows = conn.execute("""
-            SELECT name, mobile, username, signup_at, last_login_at, login_count
+            SELECT name, mobile, email, district, username, signup_at, last_login_at, login_count
             FROM users ORDER BY signup_at DESC
         """).fetchall()
         return jsonify({"ok": True, "users": [dict(row) for row in rows]})
