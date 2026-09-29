@@ -5972,11 +5972,11 @@ enforceTelegramAccess().then(async () => {
       "(To be contained in Envelope A)",
       "(On Non Judicial Stamp of Rs. 200)",
       "",
-      "I/we "+d.bidderName+" who is/ are "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
+      "I am "+d.bidderName+" who is "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
       "",
-      "I/we am/are "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
+      "I am "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
       "",
-      "I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:",
+      "I am fully responsible for the correctness of following self-certified information/ documents and certificates:",
       "1. That the self-certified information given in the bid document is fully true and authentic.",
       "2. That:",
       "a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",
@@ -5986,7 +5986,7 @@ enforceTelegramAccess().then(async () => {
       "",
       "Signature with Seal of the Deponent (bidder)",
       "",
-      "I/ We, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",
+      "I, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",
       "",
       "Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).",
       "",
@@ -6002,9 +6002,9 @@ enforceTelegramAccess().then(async () => {
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
       '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200)</em></p>'+
-      '<p class="aff-prev-justify">I/we <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is/ are <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
-      '<p class="aff-prev-justify">I/we am/are <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(d.tenderRef)+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
-      '<p class="aff-prev-justify">I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
+      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
+      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(d.tenderRef)+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
+      '<p class="aff-prev-justify">I am fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
       '<p class="aff-prev-list">1. That the self-certified information given in the bid document is fully true and authentic.</p>'+
       '<p class="aff-prev-list">2. That:</p>'+
       '<p class="aff-prev-sublist">a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.</p>'+
@@ -6012,7 +6012,7 @@ enforceTelegramAccess().then(async () => {
       '<p class="aff-prev-sublist">c. Information regarding various technical qualifications is correct.</p>'+
       relHtml+
       '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+
-      '<p class="aff-prev-justify">I/ We, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
+      '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
       '<p class="aff-prev-left">Verified today <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> (dated) at <strong><u>'+escapeHtml(d.place)+'</u></strong> (place).</p>'+
       '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>';
   }
@@ -6054,7 +6054,7 @@ enforceTelegramAccess().then(async () => {
     const d=documentData();if(!validateDoc(d))return;saveProfile();
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
-      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType}=window.docx;
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer}=window.docx;
       const run=(text,bold=false,italic=false,size=20,underline=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
@@ -6070,18 +6070,18 @@ enforceTelegramAccess().then(async () => {
       paragraphs.push(para([run("(On Non Judicial Stamp of Rs. 200)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
       // Main declaration paragraphs: justified, 0.5" first-line indent.
       paragraphs.push(para([
-        run("I/we "),run(d.bidderName,true,false,20,true),run(" who is/ are "),run(d.status,true,false,20,true),
+        run("I am "),run(d.bidderName,true,false,20,true),run(" who is "),run(d.status,true,false,20,true),
         run(" (status in the firm/ company) and competent for submission of the affidavit on behalf of "),
         run("M/S "+d.firmName,true,false,20,true),run(" (contractor) do solemnly affirm an oath and state that:")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
       paragraphs.push(para([
-        run("I/we am/are "),run(d.bidderName,true,false,20,true),
+        run("I am "),run(d.bidderName,true,false,20,true),
         run(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
         run(d.tenderRef,true,false,20,true),run(" for "),run(d.workName,true,false,20,true),
         run(" (name of work) dated "),run(d.noticeDate||"____________________________",true,false,20,true),
         run(" issued by the "),run(d.department,true,false,20,true),run(" (name of the department).")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
+      paragraphs.push(para([run("I am fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
       // Numbered/list section follows the left/hanging positions in the supplied file.
       paragraphs.push(para([run("1. That the self-certified information given in the bid document is fully true and authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
       paragraphs.push(para([run("2. That:")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
@@ -6098,7 +6098,7 @@ enforceTelegramAccess().then(async () => {
       paragraphs.push(para([run(" ")],{spacing:{before:360,after:360}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
       paragraphs.push(para([
-        run("I/ We, "),run(d.bidderName,true,false,20,true),run(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
+        run("I, "),run(d.bidderName,true,false,20,true),run(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
       // Verification line is left-positioned with 0.5" left indent, not centered/right.
       paragraphs.push(para([run("Verified today "),run(d.verifyDate,true,false,20,true),run(" (dated) at "),run(d.place,true,false,20,true),run(" (place).")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
@@ -6107,7 +6107,7 @@ enforceTelegramAccess().then(async () => {
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
-        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},children:paragraphs}]
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated form • tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
@@ -6173,16 +6173,16 @@ enforceTelegramAccess().then(async () => {
       center("(To be contained in Envelope A)",true,false,14,3);
       center("(On Non Judicial Stamp of Rs. 200)",false,true,10,4);
       richParagraph([
-        {text:"I/we "},
+        {text:"I am "},
         {text:d.bidderName,bold:true,underline:true},
-        {text:" who is/ are "},
+        {text:" who is "},
         {text:d.status,bold:true,underline:true},
         {text:" (status in the firm/ company) and competent for submission of the affidavit on behalf of "},
         {text:"M/S "+d.firmName,bold:true,underline:true},
         {text:" (contractor) do solemnly affirm an oath and state that:"}
       ],{indent:12.7,after:3});
       richParagraph([
-        {text:"I/we am/are "},
+        {text:"I am "},
         {text:d.bidderName,bold:true,underline:true},
         {text:" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "},
         {text:d.tenderRef,bold:true,underline:true},
@@ -6194,7 +6194,7 @@ enforceTelegramAccess().then(async () => {
         {text:d.department,bold:true,underline:true},
         {text:" (name of the department)."}
       ],{indent:12.7,leading:5.7,after:3});
-      textBlock("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
+      textBlock("I am fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
       textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
       textBlock("2. That:",{indent:12.7,after:1});
       textBlock("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",{indent:19.05,align:"justify",after:1});
@@ -6212,7 +6212,7 @@ enforceTelegramAccess().then(async () => {
       }
       y+=12; rightText("Signature with Seal of the Deponent (bidder)",true);
       richParagraph([
-        {text:"I/ We, "},
+        {text:"I, "},
         {text:d.bidderName,bold:true,underline:true},
         {text:" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief."}
       ],{indent:12.7,after:4});
@@ -6229,7 +6229,7 @@ enforceTelegramAccess().then(async () => {
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,285,192,285);
         doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(90);
-        doc.text("SAR Digital Services, Kannod  •  MP Tender Live Dashboard  •  tenders.codinglms.xyz",105,290,{align:"center"});
+        doc.text("This Affidavit is generated form • tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",105,290,{align:"center"});
         doc.setTextColor(0);
       }
       doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit source alignment और website branding के साथ तैयार है।";
