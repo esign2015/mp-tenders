@@ -1,0 +1,65 @@
+name: MP Tenders — Admin Manual Telegram PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      report:
+        description: "PDF to send"
+        required: true
+        default: "closing_today"
+        type: choice
+        options:
+          - closing_today
+          - new_today
+          - all
+
+permissions:
+  contents: write
+
+jobs:
+  send-manual-pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout latest data
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ReportLab
+        run: pip install reportlab
+
+      - name: Send latest PDF to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NOTIFY_MODE: manual
+          MANUAL_REPORT: ${{ inputs.report }}
+        run: python backend/telegram_alerts.py
+
+      - name: Record manual Telegram delivery
+        if: always()
+        env:
+          REPORT: ${{ inputs.report }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          path=Path("data/telegram_manual_last_send.json")
+          path.write_text(json.dumps({
+            "sent_at": datetime.now(timezone.utc).isoformat(),
+            "report": os.environ.get("REPORT","—"),
+            "status": os.environ.get("JOB_STATUS","unknown"),
+            "type": "admin_manual"
+          }, ensure_ascii=False, indent=2), encoding="utf-8")
+          PY
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add data/telegram_manual_last_send.json
+          git diff --cached --quiet || git commit -m "Record admin manual Telegram PDF delivery [skip ci]"
+          git push
