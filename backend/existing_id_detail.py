@@ -38,6 +38,21 @@ DETAIL_FIELDS = [
 def clean(s):
     return re.sub(r"\s+", " ", str(s or "")).strip()
 
+def money_number(value):
+    text = clean(value).replace(",", "")
+    m = re.search(r"-?\d+(?:\.\d+)?", text)
+    try:
+        return float(m.group(0)) if m else 0.0
+    except Exception:
+        return 0.0
+
+def detail_complete(row):
+    if clean(row.get("Detail Extracted")).upper() != "YES":
+        return False
+    if money_number(row.get("Processing Fee")) <= 0:
+        return False
+    return True
+
 def visible_text_inputs(scope):
     return [x for x in scope.locator("input").all()
             if x.is_visible() and (x.get_attribute("type") or "text").lower() in ("text","search")]
@@ -263,6 +278,10 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
 
                         merged = dict(by_id.get(tid, {}))
                         merged.update(detail)
+                        if money_number(merged.get("Processing Fee")) <= 0:
+                            merged["Detail Extracted"] = ""
+                            by_id[tid] = merged
+                            raise RuntimeError("Processing Fee missing/zero after detail extraction")
                         by_id[tid] = merged
                         success_ids.add(tid)
                         remaining.discard(tid)
@@ -367,7 +386,7 @@ def main():
         ] + [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and clean(row.get("Detail Extracted")).upper() != "YES"
+            and not detail_complete(row)
         ]
     else:
         candidate_rows = [
@@ -405,7 +424,7 @@ def main():
         clean(r.get("Tender ID"))
         for r in rows
         if clean(r.get("Tender ID"))
-        and clean(r.get("Detail Extracted")).upper() == "YES"
+        and detail_complete(r)
         and clean(r.get("Tender ID")) in current_set
     }
     success = len(success_ids)
@@ -480,6 +499,10 @@ def main():
                 merged = dict(base)
                 merged.update(detail)
                 merged.pop("URL", None)
+                if money_number(merged.get("Processing Fee")) <= 0:
+                    merged["Detail Extracted"] = ""
+                    by_id[tid] = merged
+                    raise RuntimeError("Processing Fee missing/zero after detail extraction")
                 by_id[tid] = merged
                 success += 1
                 success_ids.add(tid)
