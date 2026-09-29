@@ -2027,9 +2027,9 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="affidavit-relative-box">
         <div class="affidavit-field"><label for="affRelative">Close relative working in department?</label><select id="affRelative"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
         <div class="affidavit-relative-fields" id="affRelativeFields" hidden>
-          <div class="affidavit-field"><label for="affRelativeName">Relative Name</label><input id="affRelativeName" type="text" maxlength="120"></div>
-          <div class="affidavit-field"><label for="affRelativePost">Post</label><input id="affRelativePost" type="text" maxlength="120"></div>
-          <div class="affidavit-field"><label for="affRelativePosting">Present Posting</label><input id="affRelativePosting" type="text" maxlength="160"></div>
+          <div class="affidavit-field"><label for="affRelativeName">Relative Name</label><input id="affRelativeName" type="text" maxlength="120" disabled></div>
+          <div class="affidavit-field"><label for="affRelativePost">Post</label><input id="affRelativePost" type="text" maxlength="120" disabled></div>
+          <div class="affidavit-field"><label for="affRelativePosting">Present Posting</label><input id="affRelativePosting" type="text" maxlength="160" disabled></div>
         </div>
       </div>
     </div>
@@ -5885,6 +5885,35 @@ enforceTelegramAccess().then(async () => {
   function getSavedProfile(){
     try{return JSON.parse(localStorage.getItem(profileKey())||"{}")||{};}catch(e){return {};}
   }
+  function telegramGeneralProfileKey(){
+    const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "";
+    return telegramId ? "mp_tender_user_profile_v1_"+telegramId : "";
+  }
+  function getSavedGeneralProfile(){
+    const key=telegramGeneralProfileKey();
+    if(!key) return {};
+    try{return JSON.parse(localStorage.getItem(key)||"{}")||{};}catch(e){return {};}
+  }
+  function fullOrganisationChain(row){
+    const raw=safe(row?.["Organisation Chain"] || row?.["Organisation_Chain"] || row?.["DepartmentDivisionSub Division"] || row?.["Department Division Sub Division"]);
+    let parts=raw ? raw.split("||").map(safe).filter(Boolean) : [];
+    if(!parts.length){
+      parts=[safe(row?.["Organisation"]),safe(row?.["Department"]),safe(row?.["Division"]),safe(row?.["Sub Division"] || row?.["Sub_Division"])].filter(Boolean);
+    }
+    const unique=[];
+    for(const p of parts){
+      if(!unique.some(x=>x.toLowerCase()===p.toLowerCase())) unique.push(p);
+    }
+    return unique.join(" - ");
+  }
+  function setRelativeFieldsEnabled(isYes){
+    const box=byId("affRelativeFields");
+    if(box) box.hidden=!isYes;
+    ["affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>{
+      const el=byId(id);
+      if(el) el.disabled=!isYes;
+    });
+  }
   function readProfile(){
     return {
       bidderName:safe(byId("affBidderName")?.value),
@@ -5967,19 +5996,21 @@ enforceTelegramAccess().then(async () => {
   function fillFromTender(row){
     selectedAffidavitTender=row;
     const saved=getSavedProfile();
-    byId("affBidderName").value=saved.bidderName||safe(byId("userProfileName")?.value)||((typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"");
-    byId("affFirmName").value=saved.firmName||"";
-    byId("affStatus").value=saved.status||"Proprietor";
-    byId("affPlace").value=saved.place||"";
+    const general=getSavedGeneralProfile();
+    const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
+    byId("affBidderName").value=saved.bidderName||general.name||safe(byId("userProfileName")?.value)||telegramName;
+    byId("affFirmName").value=saved.firmName||general.firmName||"";
+    byId("affStatus").value=saved.status||general.bidderStatus||"Proprietor";
+    byId("affPlace").value=saved.place||general.place||general.district||"";
     byId("affRelative").value=saved.relative||"no";
     byId("affRelativeName").value=saved.relativeName||"";
     byId("affRelativePost").value=saved.relativePost||"";
     byId("affRelativePosting").value=saved.relativePosting||"";
-    byId("affRelativeFields").hidden=byId("affRelative").value!=="yes";
+    setRelativeFieldsEnabled(byId("affRelative").value==="yes");
     byId("affTenderId").value=safe(row["Tender ID"]);
     byId("affTenderRef").value=safe(row["Reference Number"])||safe(row["Tender ID"]);
     byId("affWorkName").value=safe(row["Title"])||safe(row["Work Description"]);
-    byId("affDepartment").value=safe(row["Department"])||safe(row["Organisation"]);
+    byId("affDepartment").value=fullOrganisationChain(row)||safe(row["Organisation"])||safe(row["Department"]);
     byId("affNoticeDate").value=safe(row["Published Date"]);
     byId("affVerifyDate").value=todayIst();
     byId("affidavitTenderSummary").textContent=(safe(row["Tender ID"])||"Selected tender")+" • "+(safe(row["Title"])||"");
@@ -5997,21 +6028,63 @@ enforceTelegramAccess().then(async () => {
   function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
   function downloadBlob(blob,name){const a=document.createElement("a");const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
   async function downloadWord(){
-    const d=documentData();if(!validateDoc(d))return;saveProfile();const lines=affidavitLines(d);
+    const d=documentData();if(!validateDoc(d))return;saveProfile();
     try{
-      if(window.docx && window.docx.Document){
-        const {Document,Packer,Paragraph,TextRun,AlignmentType}=window.docx;
-        const paras=lines.map((line,i)=>{
-          const isHead=i===0;
-          return new Paragraph({alignment:isHead?AlignmentType.CENTER:AlignmentType.LEFT,spacing:{after:isHead?180:80},children:[new TextRun({text:line,bold:isHead,size:isHead?32:24,font:"Times New Roman"})]});
-        });
-        const doc=new Document({sections:[{properties:{},children:paras}]});
-        const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
+      if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType}=window.docx;
+      const bodyRun=(text,bold=false,italic=false)=>new TextRun({text,bold,italics:italic,size:20,font:"Times New Roman"});
+      const p=(children,opts={})=>new Paragraph({
+        alignment:opts.alignment||AlignmentType.JUSTIFIED,
+        indent:opts.indent,
+        spacing:opts.spacing,
+        children
+      });
+      const bodySpacing={before:100,after:100};
+      const listSpacing={after:0,line:288,lineRule:LineRuleType.AUTO};
+      const paragraphs=[];
+      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:bodySpacing,children:[new TextRun({text:"|| AFFIDAVIT ||",bold:true,size:28,font:"Times New Roman"})]}));
+      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:bodySpacing,children:[new TextRun({text:"(To be contained in Envelope A)",bold:true,size:28,font:"Times New Roman"})]}));
+      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO},children:[new TextRun({text:"(On Non Judicial Stamp of Rs. 200)",italics:true,size:20,font:"Times New Roman"})]}));
+      paragraphs.push(p([
+        bodyRun("I/we "),bodyRun(d.bidderName,true),bodyRun(" who is/ are "),bodyRun(d.status,true),
+        bodyRun(" (status in the firm/ company) and competent for submission of the affidavit on behalf of "),
+        bodyRun("M/S "+d.firmName,true),bodyRun(" (contractor) do solemnly affirm an oath and state that:")
+      ],{indent:{firstLine:720},spacing:bodySpacing}));
+      paragraphs.push(p([
+        bodyRun("I/we am/are "),bodyRun(d.bidderName,true),
+        bodyRun(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
+        bodyRun(d.tenderRef,true),bodyRun(" for "),bodyRun(d.workName,true),
+        bodyRun(" (name of work) dated "),bodyRun(d.noticeDate,true),
+        bodyRun(" issued by the "),bodyRun(d.department,true),bodyRun(" (name of the department).")
+      ],{indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(p([bodyRun("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:")],{indent:{firstLine:720},spacing:bodySpacing}));
+      paragraphs.push(p([bodyRun("1. That the self-certified information given in the bid document is fully true and authentic.")],{indent:{left:720,hanging:360},spacing:listSpacing}));
+      paragraphs.push(p([bodyRun("2. That:")],{indent:{left:720,hanging:360},spacing:listSpacing}));
+      paragraphs.push(p([bodyRun("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
+      paragraphs.push(p([bodyRun("b. Information regarding financial qualification and annual turnover is correct.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
+      paragraphs.push(p([bodyRun("c. Information regarding various technical qualifications is correct.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
+      if(d.relative==="yes"){
+        paragraphs.push(p([bodyRun("4. Following close relatives are working in the department:")],{indent:{left:720,hanging:360},spacing:listSpacing}));
+        paragraphs.push(p([bodyRun("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting)],{indent:{left:720},spacing:listSpacing}));
       }else{
-        const html='<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;line-height:1.5}h1{text-align:center;font-size:16pt}</style></head><body><h1>AFFIDAVIT</h1>'+lines.slice(1).map(x=>x?'<p>'+String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</p>':'<p>&nbsp;</p>').join("")+'</body></html>';
-        downloadBlob(new Blob([html],{type:"application/msword"}),fileBase(d)+".doc");
+        paragraphs.push(p([bodyRun("3. No close relative of the undersigned and our firm/company is working in the department.")],{indent:{left:720,hanging:360},spacing:listSpacing}));
       }
-      byId("affidavitStatus").textContent="✓ Word affidavit download तैयार है।";
+      paragraphs.push(new Paragraph({alignment:AlignmentType.RIGHT,spacing:bodySpacing,children:[new TextRun({text:"Signature with Seal of the Deponent (bidder)",bold:true,size:20,font:"Times New Roman"})]}));
+      paragraphs.push(p([
+        bodyRun("I/ We, "),bodyRun(d.bidderName,true),
+        bodyRun(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
+      ],{indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(new Paragraph({indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO},children:[
+        bodyRun("Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).")
+      ]}));
+      paragraphs.push(new Paragraph({alignment:AlignmentType.RIGHT,spacing:bodySpacing,children:[new TextRun({text:"Signature with Seal of the Deponent (bidder)",bold:true,size:20,font:"Times New Roman"})]}));
+
+      const doc=new Document({
+        styles:{default:{document:{run:{font:"Times New Roman",size:24},paragraph:{spacing:{line:240,lineRule:LineRuleType.AUTO}}}}},
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},children:paragraphs}]
+      });
+      const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
+      byId("affidavitStatus").textContent="✓ Word affidavit original drafting/alignment के अनुसार तैयार है।";
     }catch(e){byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
   }
   function downloadPdf(){
@@ -6034,7 +6107,7 @@ enforceTelegramAccess().then(async () => {
   function init(){
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
-    byId("affidavitRelative")?.addEventListener("change",()=>{byId("affRelativeFields").hidden=byId("affRelative").value!=="yes";updatePreview();});
+    byId("affidavitRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
     ["affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
