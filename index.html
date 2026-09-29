@@ -6141,6 +6141,30 @@ enforceTelegramAccess().then(async () => {
         doc.setLineWidth(0.25);doc.line(x,yPos+0.8,x+w,yPos+0.8);
         return w;
       };
+      const richParagraph=(segments,opts={})=>{
+        const size=opts.size||10, leading=opts.leading||5.2, indent=opts.indent||0;
+        const startX=left+indent, maxX=right, gapAfter=opts.after??2;
+        let x=startX;
+        const words=[];
+        segments.forEach(seg=>{
+          const txt=String(seg.text||"");
+          const parts=txt.split(/(\s+)/).filter(Boolean);
+          parts.forEach(part=>words.push({text:part,bold:!!seg.bold,underline:!!seg.underline}));
+        });
+        const newLine=()=>{y+=leading;x=startX;addPageIf(leading+3);};
+        addPageIf(leading+3);
+        for(const w of words){
+          doc.setFont("times",w.bold?"bold":"normal");doc.setFontSize(size);
+          const ww=doc.getTextWidth(w.text);
+          if(x+ww>maxX && w.text.trim()){newLine();}
+          doc.text(w.text,x,y);
+          if(w.underline && w.text.trim()){
+            doc.setLineWidth(0.22);doc.line(x,y+0.8,x+ww,y+0.8);
+          }
+          x+=ww;
+        }
+        y+=leading+gapAfter;
+      };
       const rightText=(text,bold=false)=>{
         doc.setFont("times",bold?"bold":"normal");doc.setFontSize(10);addPageIf(7);
         doc.text(text,right,y,{align:"right"});y+=7;
@@ -6148,8 +6172,28 @@ enforceTelegramAccess().then(async () => {
       center("|| AFFIDAVIT ||",true,false,14,3);
       center("(To be contained in Envelope A)",true,false,14,3);
       center("(On Non Judicial Stamp of Rs. 200)",false,true,10,4);
-      textBlock("I/we "+d.bidderName+" who is/ are "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",{indent:12.7,align:"justify",after:3,bold:false});
-      textBlock("I/we am/are "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",{indent:12.7,align:"justify",leading:5.7,after:3});
+      richParagraph([
+        {text:"I/we "},
+        {text:d.bidderName,bold:true,underline:true},
+        {text:" who is/ are "},
+        {text:d.status,bold:true,underline:true},
+        {text:" (status in the firm/ company) and competent for submission of the affidavit on behalf of "},
+        {text:"M/S "+d.firmName,bold:true,underline:true},
+        {text:" (contractor) do solemnly affirm an oath and state that:"}
+      ],{indent:12.7,after:3});
+      richParagraph([
+        {text:"I/we am/are "},
+        {text:d.bidderName,bold:true,underline:true},
+        {text:" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "},
+        {text:d.tenderRef,bold:true,underline:true},
+        {text:" for "},
+        {text:d.workName,bold:true,underline:true},
+        {text:" (name of work) dated "},
+        {text:d.noticeDate||"____________________________",bold:true,underline:true},
+        {text:" issued by the "},
+        {text:d.department,bold:true,underline:true},
+        {text:" (name of the department)."}
+      ],{indent:12.7,leading:5.7,after:3});
       textBlock("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
       textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
       textBlock("2. That:",{indent:12.7,after:1});
@@ -6158,13 +6202,27 @@ enforceTelegramAccess().then(async () => {
       textBlock("c. Information regarding various technical qualifications is correct.",{indent:19.05,align:"justify",after:1});
       if(d.relative==="yes"){
         textBlock("4. Following close relatives are working in the department:",{after:1});
-        textBlock("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting,{indent:12.7,after:2,bold:true});
+        richParagraph([
+          {text:"Name "},{text:d.relativeName,bold:true,underline:true},
+          {text:"     Post "},{text:d.relativePost,bold:true,underline:true},
+          {text:"     Present Posting "},{text:d.relativePosting,bold:true,underline:true}
+        ],{indent:12.7,after:2});
       }else{
         textBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,align:"justify",after:2});
       }
       y+=12; rightText("Signature with Seal of the Deponent (bidder)",true);
-      textBlock("I/ We, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",{indent:12.7,align:"justify",after:4});
-      textBlock("Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).",{indent:12.7,after:5});
+      richParagraph([
+        {text:"I/ We, "},
+        {text:d.bidderName,bold:true,underline:true},
+        {text:" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief."}
+      ],{indent:12.7,after:4});
+      richParagraph([
+        {text:"Verified today "},
+        {text:d.verifyDate,bold:true,underline:true},
+        {text:" (dated) at "},
+        {text:d.place,bold:true,underline:true},
+        {text:" (place)."}
+      ],{indent:12.7,after:5});
       y+=12; rightText("Signature with Seal of the Deponent (bidder)",true);
 
       const pageCount=doc.getNumberOfPages();
