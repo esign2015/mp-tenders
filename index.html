@@ -1218,6 +1218,7 @@ td.title-cell{
 @media(max-width:1100px){.tender-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{grid-template-columns:1fr}}
 @media(max-width:520px){.tender-card-grid{grid-template-columns:1fr;padding:7px}.tender-card{min-height:auto}.tender-card-metrics{grid-template-columns:repeat(2,1fr)}}
+.affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}
 </style>
 
 <style>
@@ -1867,7 +1868,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 .affidavit-modal{position:fixed;inset:0;z-index:1000002;background:rgba(15,23,42,.72);display:none;align-items:center;justify-content:center;padding:18px}
 .affidavit-modal.open{display:flex}
 .affidavit-card{width:min(940px,96vw);max-height:94vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.35);padding:18px}
-.affidavit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e8f0;padding-bottom:10px;margin-bottom:12px}
+.affidavit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e8f0;padding:12px 18px 10px;margin:-18px -18px 12px;position:sticky;top:-18px;z-index:6;background:#fff;box-shadow:0 4px 10px rgba(15,23,42,.06)}
 .affidavit-title{font-size:20px;font-weight:900;color:#203b91}.affidavit-sub{font-size:12px;color:#475569;margin-top:3px}
 .affidavit-close{width:36px;height:36px;border-radius:50%;background:#eef2ff;color:#1e3a8a;font-size:24px;line-height:1;padding:0}
 .affidavit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}.affidavit-field.full{grid-column:1/-1}
@@ -1878,10 +1879,10 @@ body.telegram-locked .site-footer{visibility:hidden}
 .affidavit-relative-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .affidavit-note{margin:12px 0 8px;padding:9px 10px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.4}
 .affidavit-preview{margin-top:12px;border:1px solid #cbd5e1;border-radius:10px;padding:18px;background:#fff;font-family:"Times New Roman",serif;font-size:14px;line-height:1.55;white-space:pre-wrap;color:#111;max-height:320px;overflow:auto}
-.affidavit-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:12px}
+.affidavit-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin:12px -18px -18px;padding:10px 18px;position:sticky;bottom:-18px;z-index:6;background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -4px 12px rgba(15,23,42,.08)}
 .affidavit-actions button{padding:9px 12px}.affidavit-save{background:#0f766e;color:#fff}.affidavit-word{background:#1d4ed8;color:#fff}.affidavit-pdf{background:#b91c1c;color:#fff}
 .affidavit-status{font-size:11px;font-weight:700;color:#475569;margin-top:8px}
-@media(max-width:700px){.affidavit-card{padding:12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
+@media(max-width:700px){.affidavit-card{padding:12px}.affidavit-head{margin:-12px -12px 10px;padding:10px 12px;top:-12px}.affidavit-actions{margin:10px -12px -12px;padding:9px 12px;bottom:-12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
 </style>
 
 </head>
@@ -5992,7 +5993,29 @@ enforceTelegramAccess().then(async () => {
       "Signature with Seal of the Deponent (bidder)"
     ];
   }
-  function updatePreview(){byId("affidavitPreview").textContent=affidavitLines(documentData()).join("\n");}
+  function updatePreview(){
+    const d=documentData();
+    const relHtml=d.relative==="yes"
+      ? '<p class="aff-prev-list">4. Following close relatives are working in the department:</p><p class="aff-prev-left">Name '+escapeHtml(d.relativeName)+' &nbsp;&nbsp; Post '+escapeHtml(d.relativePost)+' &nbsp;&nbsp; Present Posting '+escapeHtml(d.relativePosting)+'</p>'
+      : '<p class="aff-prev-list">3. No close relative of the undersigned and our firm/company is working in the department.</p>';
+    byId("affidavitPreview").innerHTML=
+      '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
+      '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
+      '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200)</em></p>'+
+      '<p class="aff-prev-justify">I/we <strong>'+escapeHtml(d.bidderName)+'</strong> who is/ are <strong>'+escapeHtml(d.status)+'</strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong>M/S '+escapeHtml(d.firmName)+'</strong> (contractor) do solemnly affirm an oath and state that:</p>'+
+      '<p class="aff-prev-justify">I/we am/are <strong>'+escapeHtml(d.bidderName)+'</strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong>'+escapeHtml(d.tenderRef)+'</strong> for <strong>'+escapeHtml(d.workName)+'</strong> (name of work) dated <strong>'+escapeHtml(d.noticeDate||"____________________________")+'</strong> issued by the <strong>'+escapeHtml(d.department)+'</strong> (name of the department).</p>'+
+      '<p class="aff-prev-justify">I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
+      '<p class="aff-prev-list">1. That the self-certified information given in the bid document is fully true and authentic.</p>'+
+      '<p class="aff-prev-list">2. That:</p>'+
+      '<p class="aff-prev-sublist">a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.</p>'+
+      '<p class="aff-prev-sublist">b. Information regarding financial qualification and annual turnover is correct.</p>'+
+      '<p class="aff-prev-sublist">c. Information regarding various technical qualifications is correct.</p>'+
+      relHtml+
+      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+
+      '<p class="aff-prev-justify">I/ We, <strong>'+escapeHtml(d.bidderName)+'</strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
+      '<p class="aff-prev-left">Verified today '+escapeHtml(d.verifyDate)+' (dated) at '+escapeHtml(d.place)+' (place).</p>'+
+      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>';
+  }
   function fillFromTender(row){
     selectedAffidavitTender=row;
     const saved=getSavedProfile();
@@ -6032,88 +6055,116 @@ enforceTelegramAccess().then(async () => {
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
       const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType}=window.docx;
-      const bodyRun=(text,bold=false,italic=false)=>new TextRun({text,bold,italics:italic,size:20,font:"Times New Roman"});
-      const p=(children,opts={})=>new Paragraph({
-        alignment:opts.alignment||AlignmentType.JUSTIFIED,
+      const run=(text,bold=false,italic=false,size=20)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman"});
+      const para=(children,opts={})=>new Paragraph({
+        alignment:opts.alignment,
         indent:opts.indent,
         spacing:opts.spacing,
         children
       });
-      const bodySpacing={before:100,after:100};
-      const listSpacing={after:0,line:288,lineRule:LineRuleType.AUTO};
+      const normal={before:100,after:100};
       const paragraphs=[];
-      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:bodySpacing,children:[new TextRun({text:"|| AFFIDAVIT ||",bold:true,size:28,font:"Times New Roman"})]}));
-      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:bodySpacing,children:[new TextRun({text:"(To be contained in Envelope A)",bold:true,size:28,font:"Times New Roman"})]}));
-      paragraphs.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO},children:[new TextRun({text:"(On Non Judicial Stamp of Rs. 200)",italics:true,size:20,font:"Times New Roman"})]}));
-      paragraphs.push(p([
-        bodyRun("I/we "),bodyRun(d.bidderName,true),bodyRun(" who is/ are "),bodyRun(d.status,true),
-        bodyRun(" (status in the firm/ company) and competent for submission of the affidavit on behalf of "),
-        bodyRun("M/S "+d.firmName,true),bodyRun(" (contractor) do solemnly affirm an oath and state that:")
-      ],{indent:{firstLine:720},spacing:bodySpacing}));
-      paragraphs.push(p([
-        bodyRun("I/we am/are "),bodyRun(d.bidderName,true),
-        bodyRun(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
-        bodyRun(d.tenderRef,true),bodyRun(" for "),bodyRun(d.workName,true),
-        bodyRun(" (name of work) dated "),bodyRun(d.noticeDate||"____________________________",true),
-        bodyRun(" issued by the "),bodyRun(d.department,true),bodyRun(" (name of the department).")
-      ],{indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(p([bodyRun("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:")],{indent:{firstLine:720},spacing:bodySpacing}));
-      paragraphs.push(p([bodyRun("1. That the self-certified information given in the bid document is fully true and authentic.")],{indent:{left:720,hanging:360},spacing:listSpacing}));
-      paragraphs.push(p([bodyRun("2. That:")],{indent:{left:720,hanging:360},spacing:listSpacing}));
-      paragraphs.push(p([bodyRun("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
-      paragraphs.push(p([bodyRun("b. Information regarding financial qualification and annual turnover is correct.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
-      paragraphs.push(p([bodyRun("c. Information regarding various technical qualifications is correct.")],{indent:{left:1080,hanging:360},spacing:listSpacing}));
+      // These first three lines are centered in the supplied affidavit.
+      paragraphs.push(para([run("|| AFFIDAVIT ||",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
+      paragraphs.push(para([run("(To be contained in Envelope A)",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
+      paragraphs.push(para([run("(On Non Judicial Stamp of Rs. 200)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
+      // Main declaration paragraphs: justified, 0.5" first-line indent.
+      paragraphs.push(para([
+        run("I/we "),run(d.bidderName,true),run(" who is/ are "),run(d.status,true),
+        run(" (status in the firm/ company) and competent for submission of the affidavit on behalf of "),
+        run("M/S "+d.firmName,true),run(" (contractor) do solemnly affirm an oath and state that:")
+      ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
+      paragraphs.push(para([
+        run("I/we am/are "),run(d.bidderName,true),
+        run(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
+        run(d.tenderRef,true),run(" for "),run(d.workName,true),
+        run(" (name of work) dated "),run(d.noticeDate||"____________________________",true),
+        run(" issued by the "),run(d.department,true),run(" (name of the department).")
+      ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
+      // Numbered/list section follows the left/hanging positions in the supplied file.
+      paragraphs.push(para([run("1. That the self-certified information given in the bid document is fully true and authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
+      paragraphs.push(para([run("2. That:")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
+      paragraphs.push(para([run("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0}}));
+      paragraphs.push(para([run("b. Information regarding financial qualification and annual turnover is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("c. Information regarding various technical qualifications is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       if(d.relative==="yes"){
-        paragraphs.push(p([bodyRun("4. Following close relatives are working in the department:")],{indent:{left:720,hanging:360},spacing:listSpacing}));
-        paragraphs.push(p([bodyRun("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting)],{indent:{left:720},spacing:listSpacing}));
+        paragraphs.push(para([run("4. Following close relatives are working in the department:")],{alignment:AlignmentType.JUSTIFIED,spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+        paragraphs.push(para([run("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting)],{alignment:AlignmentType.JUSTIFIED,indent:{left:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       }else{
-        paragraphs.push(p([bodyRun("3. No close relative of the undersigned and our firm/company is working in the department.")],{indent:{left:720,hanging:360},spacing:listSpacing}));
+        paragraphs.push(para([run("3. No close relative of the undersigned and our firm/company is working in the department.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       }
-      paragraphs.push(new Paragraph({alignment:AlignmentType.RIGHT,spacing:bodySpacing,children:[new TextRun({text:"Signature with Seal of the Deponent (bidder)",bold:true,size:20,font:"Times New Roman"})]}));
-      paragraphs.push(p([
-        bodyRun("I/ We, "),bodyRun(d.bidderName,true),
-        bodyRun(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
-      ],{indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(new Paragraph({indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO},children:[
-        bodyRun("Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).")
-      ]}));
-      paragraphs.push(new Paragraph({alignment:AlignmentType.RIGHT,spacing:bodySpacing,children:[new TextRun({text:"Signature with Seal of the Deponent (bidder)",bold:true,size:20,font:"Times New Roman"})]}));
+      // Signature is right aligned in the supplied file.
+      paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([
+        run("I/ We, "),run(d.bidderName,true),run(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
+      ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
+      // Verification line is left-positioned with 0.5" left indent, not centered/right.
+      paragraphs.push(para([run("Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
       const doc=new Document({
-        styles:{default:{document:{run:{font:"Times New Roman",size:24},paragraph:{spacing:{line:240,lineRule:LineRuleType.AUTO}}}}},
+        styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
         sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
-      byId("affidavitStatus").textContent="✓ Word affidavit original drafting/alignment के अनुसार तैयार है।";
+      byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
     }catch(e){byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
   }
   function downloadPdf(){
     const d=documentData();if(!validateDoc(d))return;saveProfile();
     try{
       const jsPDF=window.jspdf?.jsPDF;if(!jsPDF) throw new Error("PDF library load नहीं हुई");
-      const doc=new jsPDF({unit:"mm",format:"a4"});const margin=18,maxWidth=174;let y=18;
-      const lines=affidavitLines(d);
-      lines.forEach((line,i)=>{
-        if(i===0){doc.setFont("times","bold");doc.setFontSize(16);doc.text(line,105,y,{align:"center"});y+=8;return;}
-        doc.setFont("times","normal");doc.setFontSize(11);
-        if(!line){y+=4;return;}
-        const wrapped=doc.splitTextToSize(line,maxWidth);
-        if(y+wrapped.length*5.5>274){doc.addPage();y=18;}
-        doc.text(wrapped,margin,y);y+=wrapped.length*5.5+1.5;
-      });
+      const doc=new jsPDF({unit:"mm",format:"a4"});
+      const left=18,right=192,width=174,bottomLimit=274;let y=18;
+      const addPageIf=(need)=>{if(y+need>bottomLimit){doc.addPage();y=18;}};
+      const textBlock=(text,opts={})=>{
+        const size=opts.size||10; const leading=opts.leading||5.2; const indent=opts.indent||0;
+        doc.setFont("times",opts.bold?"bold":(opts.italic?"italic":"normal"));doc.setFontSize(size);
+        const max=width-indent;
+        const wrapped=doc.splitTextToSize(text,max);
+        addPageIf(wrapped.length*leading+3);
+        doc.text(wrapped,left+indent,y,{align:opts.align||"left",maxWidth:max});
+        y+=wrapped.length*leading+(opts.after??2);
+      };
+      const center=(text,bold=false,italic=false,size=10,after=3)=>{
+        doc.setFont("times",bold?"bold":(italic?"italic":"normal"));doc.setFontSize(size);addPageIf(7);
+        doc.text(text,105,y,{align:"center"});y+=after+4;
+      };
+      const rightText=(text,bold=false)=>{
+        doc.setFont("times",bold?"bold":"normal");doc.setFontSize(10);addPageIf(7);
+        doc.text(text,right,y,{align:"right"});y+=7;
+      };
+      center("|| AFFIDAVIT ||",true,false,14,3);
+      center("(To be contained in Envelope A)",true,false,14,3);
+      center("(On Non Judicial Stamp of Rs. 200)",false,true,10,4);
+      textBlock("I/we "+d.bidderName+" who is/ are "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",{indent:12.7,align:"justify",after:3});
+      textBlock("I/we am/are "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",{indent:12.7,align:"justify",leading:5.7,after:3});
+      textBlock("I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
+      textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
+      textBlock("2. That:",{indent:12.7,after:1});
+      textBlock("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",{indent:19.05,align:"justify",after:1});
+      textBlock("b. Information regarding financial qualification and annual turnover is correct.",{indent:19.05,align:"justify",after:1});
+      textBlock("c. Information regarding various technical qualifications is correct.",{indent:19.05,align:"justify",after:1});
+      if(d.relative==="yes"){
+        textBlock("4. Following close relatives are working in the department:",{after:1});
+        textBlock("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting,{indent:12.7,after:2});
+      }else{
+        textBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,align:"justify",after:2});
+      }
+      rightText("Signature with Seal of the Deponent (bidder)",true);
+      textBlock("I/ We, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",{indent:12.7,align:"justify",after:4});
+      textBlock("Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).",{indent:12.7,after:5});
+      rightText("Signature with Seal of the Deponent (bidder)",true);
+
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
-        doc.setPage(pageNo);
-        doc.setDrawColor(190);
-        doc.setLineWidth(0.2);
-        doc.line(18,285,192,285);
-        doc.setFont("helvetica","normal");
-        doc.setFontSize(8.5);
-        doc.setTextColor(90);
+        doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,285,192,285);
+        doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(90);
         doc.text("SAR Digital Services, Kannod  •  MP Tender Live Dashboard  •  tenders.codinglms.xyz",105,290,{align:"center"});
         doc.setTextColor(0);
       }
-      doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit website branding के साथ तैयार है।";
+      doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit source alignment और website branding के साथ तैयार है।";
     }catch(e){byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
   function init(){
