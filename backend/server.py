@@ -875,6 +875,66 @@ def github_dispatch(workflow, inputs=None):
         if response.status not in (200, 201, 202, 204):
             raise RuntimeError(f"GitHub dispatch returned HTTP {response.status}")
 
+def github_latest_workflow_run(workflow):
+    token = clean(os.getenv("GITHUB_ACTIONS_TOKEN"))
+    if not token:
+        raise RuntimeError("GITHUB_ACTIONS_TOKEN is not configured on Render.")
+    owner = clean(os.getenv("GITHUB_REPO_OWNER", "esign2015"))
+    repo = clean(os.getenv("GITHUB_REPO_NAME", "mp-tenders"))
+    url = (
+        f"https://api.github.com/repos/{owner}/{repo}/actions/workflows/"
+        f"{urllib_parse.quote(workflow, safe='')}/runs?event=workflow_dispatch&per_page=1"
+    )
+    req = urllib_request.Request(
+        url,
+        method="GET",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "User-Agent": "mp-tenders-admin",
+        },
+    )
+    with urllib_request.urlopen(req, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    runs = payload.get("workflow_runs") or []
+    if not runs:
+        return {}
+    run = runs[0]
+    return {
+        "id": run.get("id"),
+        "run_number": run.get("run_number"),
+        "status": run.get("status"),
+        "conclusion": run.get("conclusion"),
+        "created_at": run.get("created_at"),
+        "updated_at": run.get("updated_at"),
+        "html_url": run.get("html_url"),
+        "head_sha": run.get("head_sha"),
+    }
+
+@app.get("/api/admin/workflow-status")
+def admin_workflow_status():
+    email, error = require_admin()
+    if error:
+        return error
+    action = clean(request.args.get("action")).lower()
+    mapping = {
+        "data_refresh": "scrape.yml",
+        "retry_pending": "targeted-pending-retry.yml",
+        "telegram_test": "telegram-test.yml",
+        "closing_today": "telegram_manual_pdf.yml",
+        "new_today": "telegram_manual_pdf.yml",
+        "all": "telegram_manual_pdf.yml",
+    }
+    workflow = mapping.get(action)
+    if not workflow:
+        return jsonify({"ok": False, "message": "Unknown workflow status request."}), 400
+    try:
+        return jsonify({"ok": True, "action": action, "workflow": workflow, "run": github_latest_workflow_run(workflow), "requested_by": email})
+    except Exception as exc:
+        return jsonify({"ok": False, "message": str(exc)}), 502
+
+
 @app.post("/api/admin/action")
 def admin_action():
     email, error = require_admin()
