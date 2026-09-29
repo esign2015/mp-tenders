@@ -7,24 +7,24 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#172033}
-header{position:relative;background:#203b91;color:#fff;padding:16px 24px}h1{margin:0;font-size:26px}header p{margin:5px 0 0;opacity:.9}
-main{max-width:1380px;margin:14px auto;padding:0 16px}.card{background:#fff;border:1px solid #d7deeb;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 4px 14px #1720330d}
+header{position:relative;background:#203b91;color:#fff;padding:10px 18px}h1{margin:0;font-size:22px}header p{margin:3px 0 0;opacity:.9;font-size:13px}
+main{max-width:1380px;margin:9px auto;padding:0 10px}.card{background:#fff;border:1px solid #d7deeb;border-radius:11px;padding:11px;margin-bottom:8px;box-shadow:0 3px 10px #1720330a}
 #login{max-width:520px;margin:55px auto;text-align:center}.google-box{display:flex;justify-content:center;margin:24px 0}
 .hidden{display:none!important}.user{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;padding-right:120px}
-button{border:0;border-radius:9px;padding:10px 14px;margin:4px;cursor:pointer;font-weight:700;background:#203b91;color:#fff}
+button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;font-weight:700;font-size:12px;background:#203b91;color:#fff}
 button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
-.user button.danger{position:fixed;top:14px;right:18px;z-index:1000;margin:0;box-shadow:0 6px 18px #0003}
-.card h2{margin:0 0 14px;font-size:22px}
-.grid{display:grid;gap:10px}
+.user button.danger{position:fixed;top:9px;right:12px;z-index:1000;margin:0;box-shadow:0 5px 14px #0003}
+.card h2{margin:0 0 9px;font-size:18px}
+.grid{display:grid;gap:7px}
 .telegram-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.action{border:1px solid #d7deeb;border-radius:11px;padding:14px;display:flex;flex-direction:column;min-height:150px}
-.action h3{margin:0 0 7px;font-size:18px}.action p{color:#637083;font-size:14px;line-height:1.4;margin:0 0 12px;min-height:0;flex:1}.action button{align-self:flex-start;margin-left:0}
+.action{border:1px solid #d7deeb;border-radius:9px;padding:10px;display:flex;flex-direction:column;min-height:108px}
+.action h3{margin:0 0 5px;font-size:15px}.action p{color:#637083;font-size:12px;line-height:1.35;margin:0 0 8px;min-height:0;flex:1}.action button{align-self:flex-start;margin-left:0}
 #result{white-space:pre-wrap;background:#111827;color:#d1fae5;border-radius:10px;padding:13px;min-height:52px}
 @media(max-width:1050px){.telegram-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){header{padding:14px 86px 14px 14px}h1{font-size:21px}main{padding:0 9px;margin-top:10px}.telegram-grid,.data-grid{grid-template-columns:1fr}.card{padding:12px}.action{min-height:auto}.user{padding-right:0}.user button.danger{top:10px;right:10px;padding:9px 11px}.card h2{font-size:19px}}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;max-width:min(92vw,650px);padding:14px 18px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 10px 35px #0004;opacity:0;pointer-events:none;transition:.22s ease}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.error{background:#b42318}.toast.success{background:#087443}.toast.info{background:#203b91}
-.small{font-size:13px;color:#637083}.ok{color:#087443}.bad{color:#b42318}
+.small{font-size:11px;color:#637083}.ok{color:#087443}.bad{color:#b42318}
 </style>
 </head>
 <body>
