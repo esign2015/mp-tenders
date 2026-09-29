@@ -517,6 +517,7 @@ def telegram_verify():
         "first_name": payload.get("first_name", ""),
         "last_name": payload.get("last_name", ""),
         "photo_url": photo_url,
+        "profile_registered": bool(user_record.get("name") and user_record.get("mobile") and user_record.get("email") and user_record.get("state") and user_record.get("district")),
         "message": "Telegram membership verified."
     })
 
@@ -540,7 +541,7 @@ def telegram_session():
     if not allowed:
         return jsonify({"verified": False, "message": "Telegram channel membership is no longer active."}), 403
     user_record = touch_user_login(user_id)
-    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "profile_registered": bool(user_record.get("name") and user_record.get("mobile")), "is_admin": is_user_admin(user_id), "message": "Telegram session verified."})
+    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "profile_registered": bool(user_record.get("name") and user_record.get("mobile") and user_record.get("email") and user_record.get("state") and user_record.get("district")), "is_admin": is_user_admin(user_id), "message": "Telegram session verified."})
 
 
 @app.get("/api/users/profile")
