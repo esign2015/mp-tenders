@@ -392,7 +392,7 @@ def main():
         candidate_rows = [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and clean(row.get("Detail Extracted")).upper() != "YES"
+            and not detail_complete(row)
         ]
 
     for row in candidate_rows:
@@ -408,9 +408,16 @@ def main():
     # is added.
     skipped_ids = []
 
+    fee_repair_count = sum(
+        1 for row in rows
+        if clean(row.get("Tender ID")) in current_set
+        and clean(row.get("Detail Extracted")).upper() == "YES"
+        and money_number(row.get("Processing Fee")) <= 0
+    )
     print(
         f"CSV IDs: {len(rows)} | current portal IDs: {len(current_ids)} | "
-        f"new/incomplete current IDs: {len(incomplete)} | targets: {len(targets)}",
+        f"incomplete current IDs: {len(incomplete)} | fee-repair rows: {fee_repair_count} | "
+        f"targets: {len(targets)}",
         flush=True
     )
 
@@ -448,7 +455,7 @@ def main():
         detail_rows = [
             {k: row.get(k, "") for k in DETAIL_FIELDS}
             for row in by_id.values()
-            if clean(row.get("Detail Extracted")).upper() == "YES"
+            if detail_complete(row)
         ]
         tmp = DETAIL_CSV.with_suffix(".tmp")
         with tmp.open("w", encoding="utf-8-sig", newline="") as f:
