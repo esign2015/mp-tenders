@@ -10,7 +10,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+from reportlab.platypus import SimpleDocTemplate, LongTable, TableStyle, Paragraph, Spacer
 
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
@@ -139,7 +139,7 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
 
     doc = SimpleDocTemplate(
         str(path), pagesize=landscape(A3),
-        leftMargin=18, rightMargin=18, topMargin=58, bottomMargin=24,
+        leftMargin=18, rightMargin=18, topMargin=78, bottomMargin=24,
         title=report_title, author="SAR Digital Services, Kannod",
     )
 
@@ -167,47 +167,43 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
     ]
 
     # Keep the PDF in exact Closing Date + Closing Time order.
-    # The portal commonly uses formats such as 18-Sep-2026 03:00 PM.
+    # LongTable automatically fills each page with as many complete rows as
+    # fit. There is deliberately NO fixed 15-row page limit.
     rows = sorted(rows, key=closing_sort_key)
 
-    # Fewer records per page gives a much more readable Telegram PDF.
-    # A3 landscape is retained; 15 tenders per page with a larger font.
-    page_size = 15
-    for chunk_start in range(0, len(rows), page_size):
-        chunk = rows[chunk_start:chunk_start + page_size]
-        data = [header]
-        for offset, row in enumerate(chunk, chunk_start + 1):
-            data.append([
-                Paragraph(str(offset), center),
-                Paragraph(strip_brackets(row.get("Tender ID")), cell),
-                Paragraph(clean(row.get("Closing Date")), center),
-                Paragraph(strip_brackets(row.get("Title")), cell),
-                Paragraph(strip_brackets(row.get("Reference Number")), cell),
-                Paragraph(clean(row.get("Tender Fee")), center),
-            ])
+    data = [header]
+    for offset, row in enumerate(rows, 1):
+        data.append([
+            Paragraph(str(offset), center),
+            Paragraph(strip_brackets(row.get("Tender ID")), cell),
+            Paragraph(clean(row.get("Closing Date")), center),
+            Paragraph(strip_brackets(row.get("Title")), cell),
+            Paragraph(strip_brackets(row.get("Reference Number")), cell),
+            Paragraph(clean(row.get("Tender Fee")), center),
+        ])
 
-        table = Table(
-            data,
-            colWidths=[32, 150, 110, 360, 300, 95],
-            repeatRows=1,
-        )
-        table.setStyle(TableStyle([
-            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#14376e")),
-            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
-            ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
-            ("FONTSIZE", (0,0), (-1,0), 9),
-            ("ALIGN", (0,0), (-1,0), "CENTER"),
-            ("VALIGN", (0,0), (-1,-1), "TOP"),
-            ("GRID", (0,0), (-1,-1), 0.35, colors.HexColor("#cdd7e4")),
-            ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white, colors.HexColor("#ebf3fc")]),
-            ("LEFTPADDING", (0,0), (-1,-1), 5),
-            ("RIGHTPADDING", (0,0), (-1,-1), 5),
-            ("TOPPADDING", (0,0), (-1,-1), 5),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-        ]))
-        if chunk_start:
-            story.append(PageBreak())
-        story.append(table)
+    table = LongTable(
+        data,
+        colWidths=[32, 150, 110, 360, 300, 95],
+        repeatRows=1,
+        splitByRow=1,
+        splitInRow=0,
+    )
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#14376e")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,0), 9),
+        ("ALIGN", (0,0), (-1,0), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "TOP"),
+        ("GRID", (0,0), (-1,-1), 0.35, colors.HexColor("#cdd7e4")),
+        ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white, colors.HexColor("#ebf3fc")]),
+        ("LEFTPADDING", (0,0), (-1,-1), 5),
+        ("RIGHTPADDING", (0,0), (-1,-1), 5),
+        ("TOPPADDING", (0,0), (-1,-1), 5),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+    ]))
+    story.append(table)
 
     generated = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
 
@@ -215,34 +211,36 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         w, h = landscape(A3)
         canvas.saveState()
 
-        # Header
+        # Dedicated header band: keep ALL header text inside the band and
+        # leave enough top margin so the table can never overlap it.
+        header_h = 56
         canvas.setFillColor(colors.HexColor("#14376e"))
-        canvas.rect(0, h-32, w, 32, fill=1, stroke=0)
+        canvas.rect(0, h-header_h, w, header_h, fill=1, stroke=0)
 
         # Telegram button - left
         canvas.setFillColor(colors.HexColor("#0088cc"))
-        canvas.roundRect(18, h-25, 55, 12, 3, fill=1, stroke=0)
+        canvas.roundRect(18, h-22, 58, 12, 3, fill=1, stroke=0)
         canvas.setFillColor(colors.white)
         canvas.setFont("Helvetica-Bold", 7.5)
-        canvas.drawCentredString(45.5, h-21, "Get Daily Alert")
-        canvas.linkURL(TELEGRAM_URL, (18, h-25, 73, h-13), relative=0)
+        canvas.drawCentredString(47, h-18, "Get Daily Alert")
+        canvas.linkURL(TELEGRAM_URL, (18, h-22, 76, h-10), relative=0)
 
         # Website button - right
         canvas.setFillColor(colors.HexColor("#2563eb"))
-        canvas.roundRect(w-73, h-25, 55, 12, 3, fill=1, stroke=0)
+        canvas.roundRect(w-76, h-22, 58, 12, 3, fill=1, stroke=0)
         canvas.setFillColor(colors.white)
-        canvas.drawCentredString(w-45.5, h-21, "Website")
-        canvas.linkURL(SITE_URL, (w-73, h-25, w-18, h-13), relative=0)
+        canvas.drawCentredString(w-47, h-18, "Website")
+        canvas.linkURL(SITE_URL, (w-76, h-22, w-18, h-10), relative=0)
 
         canvas.setFont("Helvetica-Bold", 12)
-        canvas.drawCentredString(w/2, h-10, "SAR Digital Services, Kannod")
+        canvas.drawCentredString(w/2, h-13, "SAR Digital Services, Kannod")
         canvas.setFont("Helvetica", 7)
-        canvas.drawCentredString(w/2, h-18, "MP Tender Live Dashboard")
+        canvas.drawCentredString(w/2, h-26, "MP Tender Live Dashboard")
         canvas.setFont("Helvetica-Bold", 6.5)
-        canvas.drawCentredString(w/2, h-26, "For DSC & E-Tendering Services • Contact Admin: t.me/rdgyan")
+        canvas.drawCentredString(w/2, h-38, "For DSC & E-Tendering Services • Contact Admin: t.me/rdgyan")
         canvas.setFont("Helvetica-Bold", 7)
-        canvas.drawCentredString(w/2, h-34, report_scope)
-        canvas.linkURL("https://t.me/rdgyan", (w/2-85, h-31, w/2+85, h-22), relative=0)
+        canvas.drawCentredString(w/2, h-50, report_scope)
+        canvas.linkURL("https://t.me/rdgyan", (w/2-85, h-53, w/2+85, h-41), relative=0)
 
         # Footer
         canvas.setFillColor(colors.HexColor("#14376e"))
