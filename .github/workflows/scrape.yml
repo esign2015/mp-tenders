@@ -240,7 +240,6 @@ jobs:
     concurrency:
       group: mp-tender-data-writer
       cancel-in-progress: false
-      queue: max
     steps:
       - name: Checkout latest discovery snapshot
         uses: actions/checkout@v4
@@ -647,7 +646,6 @@ jobs:
     concurrency:
       group: mp-tender-list-refresh
       cancel-in-progress: true
-      queue: max
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '35 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     runs-on: ubuntu-latest
     timeout-minutes: 350
