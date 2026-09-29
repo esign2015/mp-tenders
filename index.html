@@ -6154,28 +6154,57 @@ enforceTelegramAccess().then(async () => {
         return w;
       };
       const richParagraph=(segments,opts={})=>{
-        const size=opts.size||10, leading=opts.leading||5.2, indent=opts.indent||0;
-        const startX=left+indent, maxX=right, gapAfter=opts.after??2;
-        let x=startX;
-        const words=[];
+        const size=opts.size||10, leading=opts.leading||5.2;
+        const firstIndent=opts.firstIndent ?? opts.indent ?? 0;
+        const gapAfter=opts.after??2;
+        const tokens=[];
         segments.forEach(seg=>{
-          const txt=String(seg.text||"");
-          const parts=txt.split(/(\s+)/).filter(Boolean);
-          parts.forEach(part=>words.push({text:part,bold:!!seg.bold,underline:!!seg.underline}));
+          String(seg.text||"").trim().split(/\s+/).filter(Boolean).forEach(word=>{
+            doc.setFont("times",seg.bold?"bold":"normal");doc.setFontSize(size);
+            tokens.push({text:word,bold:!!seg.bold,underline:!!seg.underline,width:doc.getTextWidth(word)});
+          });
         });
-        const newLine=()=>{y+=leading;x=startX;addPageIf(leading+3);};
-        addPageIf(leading+3);
-        for(const w of words){
-          doc.setFont("times",w.bold?"bold":"normal");doc.setFontSize(size);
-          const ww=doc.getTextWidth(w.text);
-          if(x+ww>maxX && w.text.trim()){newLine();}
-          doc.text(w.text,x,y);
-          if(w.underline && w.text.trim()){
-            doc.setLineWidth(0.22);doc.line(x,y+0.8,x+ww,y+0.8);
+        const lines=[];
+        let line=[],lineWidth=0,lineIndex=0;
+        for(const token of tokens){
+          doc.setFont("times","normal");doc.setFontSize(size);
+          const spaceWidth=doc.getTextWidth(" ");
+          const available=width-(lineIndex===0?firstIndent:0);
+          const need=(line.length?spaceWidth:0)+token.width;
+          if(line.length && lineWidth+need>available){
+            lines.push(line);line=[token];lineWidth=token.width;lineIndex++;
+          }else{
+            if(line.length) lineWidth+=spaceWidth;
+            line.push(token);lineWidth+=token.width;
           }
-          x+=ww;
         }
-        y+=leading+gapAfter;
+        if(line.length) lines.push(line);
+        addPageIf(lines.length*leading+3);
+        lines.forEach((ln,idx)=>{
+          const currentIndent=idx===0?firstIndent:0;
+          const startX=left+currentIndent;
+          const available=width-currentIndent;
+          const isLast=idx===lines.length-1;
+          let wordsWidth=0;
+          ln.forEach(t=>wordsWidth+=t.width);
+          doc.setFont("times","normal");doc.setFontSize(size);
+          const normalSpace=doc.getTextWidth(" ");
+          const gaps=Math.max(0,ln.length-1);
+          const spaceWidth=(!isLast && gaps>0)?Math.max(normalSpace,(available-wordsWidth)/gaps):normalSpace;
+          let x=startX;
+          ln.forEach((t,j)=>{
+            doc.setFont("times",t.bold?"bold":"normal");doc.setFontSize(size);
+            doc.text(t.text,x,y);
+            if(t.underline){
+              doc.setLineWidth(0.22);doc.line(x,y+0.8,x+t.width,y+0.8);
+            }
+            x+=t.width;
+            if(j<ln.length-1) x+=spaceWidth;
+          });
+          y+=leading;
+          if(idx<lines.length-1) addPageIf(leading+3);
+        });
+        y+=gapAfter;
       };
       const strikeTextBlock=(text,opts={})=>{
         const size=opts.size||10, leading=opts.leading||5.2, indent=opts.indent||0;
@@ -6208,7 +6237,7 @@ enforceTelegramAccess().then(async () => {
         {text:" (status in the firm/ company) and competent for submission of the affidavit on behalf of "},
         {text:"M/S "+d.firmName,bold:true,underline:true},
         {text:" (contractor) do solemnly affirm an oath and state that:"}
-      ],{indent:12.7,after:3});
+      ],{firstIndent:12.7,after:3});
       richParagraph([
         {text:"I am "},
         {text:d.bidderName,bold:true,underline:true},
@@ -6221,7 +6250,7 @@ enforceTelegramAccess().then(async () => {
         {text:" issued by the "},
         {text:d.department,bold:true,underline:true},
         {text:" (name of the department)."}
-      ],{indent:12.7,leading:5.7,after:3});
+      ],{firstIndent:12.7,leading:5.7,after:3});
       textBlock("I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
       textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
       textBlock("2. That:",{indent:12.7,after:1});
@@ -6237,14 +6266,14 @@ enforceTelegramAccess().then(async () => {
         {text:"I, "},
         {text:d.bidderName,bold:true,underline:true},
         {text:" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief."}
-      ],{indent:12.7,after:4});
+      ],{firstIndent:12.7,after:4});
       richParagraph([
         {text:"Verified today "},
         {text:d.verifyDate,bold:true,underline:true},
         {text:" (dated) at "},
         {text:d.place,bold:true,underline:true},
         {text:" (place)."}
-      ],{indent:12.7,after:5});
+      ],{firstIndent:12.7,after:5});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
       const pageCount=doc.getNumberOfPages();
