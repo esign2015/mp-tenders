@@ -5967,7 +5967,7 @@ enforceTelegramAccess().then(async () => {
     const strikeText=s=>"~~"+s+"~~";
     const point3="3. No close relative of the undersigned and our firm/company is working in the department.";
     const point4="4. Following close relatives are working in the department:";
-    const details="Name "+(d.relativeName||"________________")+"    Post "+(d.relativePost||"________________")+"    Present Posting "+(d.relativePosting||"________________");
+    const details=d.relative==="yes" ? ("Name "+d.relativeName+"    Post "+d.relativePost+"    Present Posting "+d.relativePosting) : "Name NA    Post NA    Present Posting NA";
     const rel=d.relative==="yes"
       ? [strikeText(point3),point4,details]
       : [point3,strikeText(point4),strikeText(details)];
@@ -6001,7 +6001,9 @@ enforceTelegramAccess().then(async () => {
     const d=documentData();
     const point3='<p class="aff-prev-list'+(d.relative==="yes"?' aff-strike':'')+'">3. No close relative of the undersigned and our firm/company is working in the department.</p>';
     const point4='<p class="aff-prev-list'+(d.relative==="no"?' aff-strike':'')+'">4. Following close relatives are working in the department:</p>';
-    const relativeDetails='<p class="aff-prev-relative-detail'+(d.relative==="no"?' aff-strike':'')+'">Name <strong><u>'+escapeHtml(d.relativeName||"________________")+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost||"________________")+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting||"________________")+'</u></strong></p>';
+    const relativeDetails=d.relative==="yes"
+      ? '<p class="aff-prev-relative-detail">Name <strong><u>'+escapeHtml(d.relativeName)+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost)+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting)+'</u></strong></p>'
+      : '<p class="aff-prev-relative-detail aff-strike">Name <strong><u>NA</u></strong> &nbsp;&nbsp; Post <strong><u>NA</u></strong> &nbsp;&nbsp; Present Posting <strong><u>NA</u></strong></p>';
     const relHtml=point3+point4+relativeDetails;
     byId("affidavitPreview").innerHTML=
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
@@ -6098,11 +6100,11 @@ enforceTelegramAccess().then(async () => {
       paragraphs.push(para([run("4. Following close relatives are working in the department:",false,false,20,false,!relYes)],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([
         run("Name ",false,false,20,false,!relYes),
-        run(d.relativeName||"________________",true,false,20,true,!relYes),
+        run(relYes?d.relativeName:"NA",true,false,20,true,!relYes),
         run("     Post ",false,false,20,false,!relYes),
-        run(d.relativePost||"________________",true,false,20,true,!relYes),
+        run(relYes?d.relativePost:"NA",true,false,20,true,!relYes),
         run("     Present Posting ",false,false,20,false,!relYes),
-        run(d.relativePosting||"________________",true,false,20,true,!relYes)
+        run(relYes?d.relativePosting:"NA",true,false,20,true,!relYes)
       ],{alignment:AlignmentType.LEFT,indent:{left:900},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       // Leave physical space for seal/signature before the right-aligned signature label.
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
@@ -6229,7 +6231,7 @@ enforceTelegramAccess().then(async () => {
       const relYes=d.relative==="yes";
       strikeTextBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,strike:relYes,after:1});
       strikeTextBlock("4. Following close relatives are working in the department:",{indent:12.7,strike:!relYes,after:1});
-      strikeTextBlock("Name "+(d.relativeName||"________________")+"     Post "+(d.relativePost||"________________")+"     Present Posting "+(d.relativePosting||"________________"),{indent:15.5,strike:!relYes,bold:relYes,after:2});
+      strikeTextBlock("Name "+(relYes?d.relativeName:"NA")+"     Post "+(relYes?d.relativePost:"NA")+"     Present Posting "+(relYes?d.relativePosting:"NA"),{indent:15.5,strike:!relYes,bold:true,after:2});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
       richParagraph([
         {text:"I, "},
