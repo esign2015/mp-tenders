@@ -1704,6 +1704,10 @@ def monitor_tender_changes(csv_file):
 
     org_csv = csv_file.parent / "organisations.csv"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
+    working_dir = Path(os.getenv("RUNNER_TEMP", "/tmp")) / "mp-tenders-working"
+    working_dir.mkdir(parents=True, exist_ok=True)
+    working_org_csv = working_dir / "organisations.csv"
+    working_tender_list_csv = working_dir / "organisation_tenders.csv"
     existing_rows = read_existing(csv_file)
     existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
     old_org_rows = read_existing(org_csv)
@@ -2168,10 +2172,10 @@ def scrape_mp_tenders(csv_file):
         existing_tender_list_rows = read_existing(tender_list_csv)
         existing_detail_rows = read_existing(csv_file)
 
-    # organisations.csv is a LIVE portal snapshot, not historical organisation
-    # storage. Keep only organisations returned by the current portal run.
-    # Historical tender records remain protected in all_tenders_org_detailed.csv.
-    write_list_csv(org_csv, ORG_FIELDS, org_rows)
+    # Build the new portal snapshot in a private working area first.
+    # Public /org must continue serving the last verified snapshot until all
+    # organisations finish, so a cancelled/failed run can never expose a half-run.
+    write_list_csv(working_org_csv, ORG_FIELDS, org_rows)
 
     tender_list_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_tender_list_rows if clean(r.get("Tender ID"))}
     tender_list_rows = list(tender_list_by_id.values())
@@ -2203,8 +2207,7 @@ def scrape_mp_tenders(csv_file):
         }
         tender_list_rows = list(tender_list_by_id.values())
         write_csv(csv_file, list(existing_by_id.values()))
-        write_csv(tender_list_csv, tender_list_rows)
-        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender records older than 48 hours after closing")
+        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender detail records older than 48 hours after closing")
 
     # IMPORTANT: this file is a CURRENT portal snapshot, not a history table.
     # [run-scrape-details] force an immediate verification run after this fix.
@@ -2257,6 +2260,7 @@ def scrape_mp_tenders(csv_file):
         "errors": 0,
         "latest_error": "",
         "organisation_progress": f"0/{len(organisations)}",
+        "snapshot_published": False,
         "detail_batch_size": int(os.getenv("DETAIL_BATCH_SIZE", "100") or 100),
         "detail_batch_completed": 0,
         "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -2305,6 +2309,7 @@ def scrape_mp_tenders(csv_file):
                         "errors": len(stats["errors"]),
                         "latest_error": stats["errors"][-1] if stats["errors"] else "",
                         "organisation_progress": f"{index-1}/{len(organisations)}",
+                        "snapshot_published": False,
                         "current_organisation": org["name"],
                         **status_metrics(existing_by_id.values()),
                         "detail_batch_size": batch_size,
@@ -2411,7 +2416,7 @@ def scrape_mp_tenders(csv_file):
                     # Persist after every organisation so a long run keeps
                     # previously collected list data.
                     write_list_csv(
-                        tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
+                        working_tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows
                     )
                     # Also checkpoint all successful detail records after every
                     # organisation, so a long full extraction can resume safely.
@@ -2435,6 +2440,7 @@ def scrape_mp_tenders(csv_file):
                         "errors": len(stats["errors"]),
                         "latest_error": stats["errors"][-1] if stats["errors"] else "",
                         "organisation_progress": f"{index}/{len(organisations)}",
+                        "snapshot_published": False,
                         "detail_batch_size": batch_size,
                         "detail_batch_completed": detail_successes,
                         "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -2447,9 +2453,11 @@ def scrape_mp_tenders(csv_file):
         finally:
             browser.close()
 
-    # COPY PHASE COMPLETE. Persist the complete organisation snapshot before
-    # starting any detail extraction. This is the key separation: a slow or
-    # failing detail page can no longer hold up organisation copying.
+    # COPY PHASE COMPLETE. Publish the organisation counts and copied Tender IDs
+    # together only after the full organisation loop has finished. Until this
+    # point /org continues to show the last verified snapshot.
+    write_list_csv(working_tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows)
+    write_list_csv(org_csv, ORG_FIELDS, org_rows)
     write_list_csv(tender_list_csv, ORG_TENDER_FIELDS, tender_list_rows)
     write_csv(csv_file, list(existing_by_id.values()))
     # Compare this fresh portal snapshot with the previous snapshot so the
@@ -2553,6 +2561,7 @@ def scrape_mp_tenders(csv_file):
             "portal_total_tenders": portal_total_tenders,
             "organisation_count": len(organisations),
             "organisation_progress": f"{len(organisations)}/{len(organisations)}",
+            "snapshot_published": True,
             "copied_tenders": len(tender_list_rows),
             "errors": len(stats["errors"]),
             "latest_error": stats["errors"][-1] if stats["errors"] else "",
