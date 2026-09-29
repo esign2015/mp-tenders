@@ -278,6 +278,55 @@ def main():
         "corrigendum, eligibility requirements, fees, and deadline on the official tender portal."
     )
 
+    if mode == "manual":
+        report = clean(os.getenv("MANUAL_REPORT", "closing_today")).lower()
+        today = datetime.now(IST).date()
+        display = today.strftime("%d/%m/%Y")
+        stamp = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
+
+        if report == "closing_today":
+            selected = sorted(
+                [r for r in rows if is_on_date(r.get("Closing Date"), today)],
+                key=closing_sort_key
+            )
+            title = f"Admin Manual — Closing Today {today.strftime('%d-%m-%Y')} • {len(selected)} tenders"
+            filename = f"ADMIN Latest Closing Today {today.strftime('%d-%m-%Y')} MPTenders.pdf"
+            label = f"आज Closing वाले {len(selected)} टेंडर"
+        elif report == "new_today":
+            selected = sorted(
+                [r for r in rows if is_on_date(r.get("Published Date"), today)],
+                key=closing_sort_key
+            )
+            title = f"Admin Manual — New Published {today.strftime('%d-%m-%Y')} • {len(selected)} tenders"
+            filename = f"ADMIN Latest New Published {today.strftime('%d-%m-%Y')} MPTenders.pdf"
+            label = f"आज Published हुए {len(selected)} टेंडर"
+        elif report == "all":
+            selected = sorted(rows, key=closing_sort_key)
+            title = f"Admin Manual — Latest All Tender Data • {len(selected)} tenders"
+            filename = f"ADMIN Latest All Tenders {today.strftime('%d-%m-%Y')} MPTenders.pdf"
+            label = f"कुल latest data: {len(selected)} टेंडर"
+        else:
+            raise RuntimeError(f"Unknown MANUAL_REPORT: {report}")
+
+        message = (
+            "👤 ADMIN MANUAL TELEGRAM UPDATE\n\n"
+            f"📅 दिनांक: {display}\n"
+            f"🕒 Data/PDF generated: {stamp}\n"
+            f"📋 {label}\n\n"
+            "यह PDF Admin द्वारा manually भेजी गई latest available data से बनाई गई है।\n"
+            f"🌐 वेबसाइट: {SITE_URL}\n"
+            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n"
+            "👤 Admin: https://t.me/rdgyan\n\n"
+            + warning + "\n"
+        )
+        telegram_message(token, chat_id, message)
+        if selected:
+            pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
+            telegram_document(token, chat_id, pdf, f"📎 {title}")
+        else:
+            telegram_message(token, chat_id, "ℹ️ चुने गए filter में अभी कोई tender नहीं मिला, इसलिए PDF नहीं भेजी गई।")
+        return 0
+
     if mode == "morning":
         closing = sorted(
             [r for r in rows if is_on_date(r.get("Closing Date"), today)],
