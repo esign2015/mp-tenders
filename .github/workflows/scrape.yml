@@ -811,6 +811,7 @@ jobs:
       # Detail extraction is intentionally NOT run in this job.
       # new_tender_detail_worker starts only after this copy job succeeds.
       - name: Reconcile portal count — 3 MPTenders attempts, then RSP fallback
+        if: always()
         run: |
           set -o pipefail
           FINAL_RC=1
