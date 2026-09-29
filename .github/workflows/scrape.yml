@@ -817,32 +817,32 @@ jobs:
           set -o pipefail
           FINAL_RC=1
           for ATTEMPT in 1 2 3; do
-            echo "===== PORTAL RECONCILIATION ATTEMPT \${ATTEMPT}/3 ====="
-            python scripts/recover_closing_date_tenders.py > "closing_date_recovery_attempt_\${ATTEMPT}.log" 2>&1 || {
-              echo "MPTenders closing-date recovery attempt \${ATTEMPT} failed; continuing to the next attempt."
+            echo "===== PORTAL RECONCILIATION ATTEMPT ${ATTEMPT}/3 ====="
+            python scripts/recover_closing_date_tenders.py > "closing_date_recovery_attempt_${ATTEMPT}.log" 2>&1 || {
+              echo "MPTenders closing-date recovery attempt ${ATTEMPT} failed; continuing to the next attempt."
             }
 
             if [ "$ATTEMPT" -lt 3 ]; then
               set +e
-              ALLOW_RSP_RECOVERY=0 python backend/finalize_portal_snapshot.py | tee "run_snapshot_finalize_attempt_\${ATTEMPT}.log"
-              RC=\${PIPESTATUS[0]}
+              ALLOW_RSP_RECOVERY=0 python backend/finalize_portal_snapshot.py | tee "run_snapshot_finalize_attempt_${ATTEMPT}.log"
+              RC=${PIPESTATUS[0]}
               set -e
             else
               echo "Three MPTenders attempts completed. RSP ID-only recovery is now allowed."
               set +e
-              ALLOW_RSP_RECOVERY=1 python backend/finalize_portal_snapshot.py | tee "run_snapshot_finalize_attempt_\${ATTEMPT}.log"
-              RC=\${PIPESTATUS[0]}
+              ALLOW_RSP_RECOVERY=1 python backend/finalize_portal_snapshot.py | tee "run_snapshot_finalize_attempt_${ATTEMPT}.log"
+              RC=${PIPESTATUS[0]}
               set -e
             fi
 
             if [ "$RC" -eq 0 ]; then
               FINAL_RC=0
-              echo "Portal Tender-ID inventory matched on attempt \${ATTEMPT}/3."
+              echo "Portal Tender-ID inventory matched on attempt ${ATTEMPT}/3."
               break
             fi
 
             if [ "$ATTEMPT" -lt 3 ]; then
-              echo "Mismatch remains after attempt \${ATTEMPT}/3. Retrying MPTenders reconciliation."
+              echo "Mismatch remains after attempt ${ATTEMPT}/3. Retrying MPTenders reconciliation."
             else
               echo "Mismatch remains after 3 MPTenders attempts + RSP fallback."
               FINAL_RC="$RC"
