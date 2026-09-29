@@ -2484,6 +2484,7 @@ async function saveUserProfile(){
     });
     const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.ok) throw new Error(data.message || "Profile save failed.");
+    markProfileCompleted();
     closeUserProfileModal();
     const box=document.getElementById("userReportBox");
     if(box) box.textContent="आपका user profile सुरक्षित रूप से save हो गया है।";
