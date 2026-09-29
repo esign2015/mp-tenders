@@ -62,7 +62,7 @@ jobs:
             "attempted_at": datetime.now(timezone.utc).isoformat(),
             "mode": mode,
             "key": key,
-            "send_outcome": ${{ job.status }}
+            "send_outcome": "${{ job.status }}"
           }, indent=2), encoding="utf-8")
           PY
 
