@@ -2862,6 +2862,7 @@ async function enforceTelegramAccess(){
 const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
 const CSV_URL = "./all_tenders_org_detailed.csv";
 const ORG_TENDER_CSV_URL = "./organisation_tenders.csv";
+const ORG_COUNT_CSV_URL = "./organisations.csv";
 const LIVE_SNAPSHOT_URL = "./data/live_snapshot.json";
 
 let allTenders = [];
@@ -2870,6 +2871,7 @@ let organisationOptions = [];
 // Current Tenders by Organisation snapshot is the authoritative list of tenders
 // currently visible on the MP portal. Detailed CSV keeps historical records for Archive.
 let portalActiveIds = new Set();
+let portalTenderCountTotal = 0;
 let archivedMode = false;
 let quickFilterMode = "";
 let tableSortKey = "Closing Date";
@@ -3463,6 +3465,27 @@ async function loadOrganisationTenderCsv(){
   throw lastError || new Error("Organisation tender CSV not found");
 }
 
+async function loadPortalTenderCountTotal(){
+  let lastError=null;
+  for(const url of [
+    ORG_COUNT_CSV_URL,
+    "https://raw.githubusercontent.com/esign2015/mp-tenders/main/organisations.csv"
+  ]){
+    try{
+      const text=await fetchCsvText(url);
+      const rows=parseCsv(text);
+      if(!rows.length) throw new Error("Organisation count CSV is empty");
+      const total=rows.reduce((sum,row)=>{
+        const n=Number(String(row["Tender Count"]||"").replace(/[^0-9]/g,""));
+        return sum+(Number.isFinite(n)?n:0);
+      },0);
+      if(total>0) return total;
+      lastError=new Error("Portal tender count total is zero");
+    }catch(error){lastError=error;}
+  }
+  throw lastError||new Error("Portal tender count unavailable");
+}
+
 let liveRefreshTimer = null;
 let liveRefreshBusy = false;
 
@@ -3474,6 +3497,11 @@ async function refreshPublishedData(){
     try{
       const portalRows = await loadOrganisationTenderCsv();
       const liveSnapshot = await loadLiveSnapshot();
+      try{
+        portalTenderCountTotal = Number(liveSnapshot?.portal_tender_count||0) || await loadPortalTenderCountTotal();
+      }catch(_countError){
+        portalTenderCountTotal = Number(liveSnapshot?.portal_tender_count||0) || portalTenderCountTotal;
+      }
       const nextPortalIds = new Set(
         liveSnapshot && Array.isArray(liveSnapshot.tender_ids)
           ? liveSnapshot.tender_ids.map(clean).filter(Boolean)
@@ -3553,10 +3581,11 @@ async function loadData(){
        and organisation snapshot were downloaded one after another, which
        unnecessarily delayed the first visible tender rows.
     */
-    const [detailedResult, portalResult, snapshotResult] = await Promise.allSettled([
+    const [detailedResult, portalResult, snapshotResult, portalCountResult] = await Promise.allSettled([
       loadFromCsv(),
       loadOrganisationTenderCsv(),
-      loadLiveSnapshot()
+      loadLiveSnapshot(),
+      loadPortalTenderCountTotal()
     ]);
 
     let data = detailedResult.status === "fulfilled"
@@ -3581,6 +3610,11 @@ async function loadData(){
     const liveSnapshot = snapshotResult.status === "fulfilled"
       ? snapshotResult.value
       : null;
+
+    portalTenderCountTotal =
+      Number(liveSnapshot?.portal_tender_count||0) ||
+      (portalCountResult.status === "fulfilled" ? Number(portalCountResult.value||0) : 0) ||
+      portalTenderCountTotal;
 
     if(snapshotResult.status === "rejected"){
       console.warn("Live snapshot request failed:", snapshotResult.reason);
@@ -4373,12 +4407,14 @@ function updateCounts(rows, refreshHeader=true){
     ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"])))
     : rows;
 
-  const live = currentRows.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    // Portal rows should have a closing date. If one is missing/unparseable,
-    // do not claim it is Live without a verifiable deadline.
-    return closing && closing.getTime() > now.getTime();
-  }).length;
+  // Tenders-by-Organisation is the authoritative LIVE inventory.
+  // In the overnight window the portal can keep tenders in this inventory
+  // even after their local closing time, so do not reduce the header count
+  // by Closing Date. The organisation total must match /org.
+  const live =
+    portalTenderCountTotal > 0
+      ? portalTenderCountTotal
+      : (portalActiveIds.size ? portalActiveIds.size : currentRows.length);
 
   const closingToday = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
