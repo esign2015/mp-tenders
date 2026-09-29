@@ -820,13 +820,75 @@ jobs:
           python backend/finalize_portal_snapshot.py | tee run_snapshot_finalize.log
 
       - name: Detail phase handled by separate worker
-        run: echo "Detail phase delegated to new_tender_detail_worker." 
+        run: echo "Detail phase delegated to new_tender_detail_worker."
+
+      - name: Alert admin if final portal count still mismatches
+        if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          from pathlib import Path
+
+          path = Path("data/run_snapshot.json")
+          if not path.exists():
+              print("No run_snapshot.json; no mismatch alert sent.")
+              raise SystemExit(0)
+
+          report = json.loads(path.read_text(encoding="utf-8"))
+          if report.get("status") == "verified":
+              print("Final portal snapshot verified; no mismatch alert.")
+              raise SystemExit(0)
+
+          mismatches = report.get("organisation_mismatches") or []
+          lines = [
+              "⚠️ MP Tenders DATA MISMATCH",
+              "",
+              "3 attempts + recovery were completed, but the final portal snapshot still does not match.",
+              f"Portal total: {report.get('portal_tender_count', '—')}",
+              f"Copied total: {report.get('copied_unique_tender_ids', '—')}",
+              f"Mismatch organisations: {len(mismatches)}",
+              "",
+          ]
+          for item in mismatches[:30]:
+              lines.append(
+                  f"• {item.get('Organisation Name','—')}: "
+                  f"portal {item.get('Portal Count','—')} / "
+                  f"copied {item.get('Copied Count','—')} / "
+                  f"diff {item.get('Difference','—')}"
+              )
+          if len(mismatches) > 30:
+              lines.append(f"…and {len(mismatches)-30} more.")
+          lines += ["", "👤 Admin: https://t.me/rdgyan"]
+
+          token = os.environ.get("TELEGRAM_BOT_TOKEN","").strip()
+          chat_id = os.environ.get("TELEGRAM_ADMIN_CHAT_ID","").strip() or os.environ.get("TELEGRAM_CHAT_ID","").strip()
+          if not token or not chat_id:
+              print("Telegram admin alert skipped: bot token/chat ID secret missing.")
+              raise SystemExit(0)
+
+          data = urllib.parse.urlencode({
+              "chat_id": chat_id,
+              "text": "\n".join(lines),
+              "disable_web_page_preview": "true",
+          }).encode()
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+          with urllib.request.urlopen(urllib.request.Request(url, data=data), timeout=30) as r:
+              body = r.read().decode()
+          if '"ok":true' not in body:
+              raise RuntimeError(body)
+          print("Admin mismatch alert sent.")
+          PY
+
       - name: Commit whatever tender data was collected
         if: always()
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl; do
+          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json; do
             if [ -s "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
