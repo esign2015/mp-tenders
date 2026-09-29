@@ -6069,7 +6069,7 @@ enforceTelegramAccess().then(async () => {
     const d=documentData();if(!validateDoc(d))return;saveProfile();
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
-      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer}=window.docx;
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink}=window.docx;
       const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
@@ -6134,7 +6134,7 @@ enforceTelegramAccess().then(async () => {
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
-        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from https://tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial"})]})]})},children:paragraphs}]
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from ",size:16,font:"Arial"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:16,font:"Arial",style:"Hyperlink"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
@@ -6327,7 +6327,18 @@ enforceTelegramAccess().then(async () => {
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,285,192,285);
         doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(90);
-        doc.text("This Affidavit is generated from https://tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",105,290,{align:"center"});
+        const footerPrefix="This Affidavit is generated from ";
+        const footerUrl="https://tenders.codinglms.xyz";
+        const footerSuffix=" • SAR Digital Services, Kannod • MP Tender Live Dashboard";
+        const footerFull=footerPrefix+footerUrl+footerSuffix;
+        const footerStartX=105-(doc.getTextWidth(footerFull)/2);
+        const footerY=290;
+        doc.text(footerPrefix,footerStartX,footerY);
+        const urlX=footerStartX+doc.getTextWidth(footerPrefix);
+        doc.text(footerUrl,urlX,footerY);
+        const urlW=doc.getTextWidth(footerUrl);
+        doc.link(urlX,footerY-3.3,urlW,4.2,{url:footerUrl});
+        doc.text(footerSuffix,urlX+urlW,footerY);
         doc.setTextColor(0);
       }
       doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit source alignment और website branding के साथ तैयार है।";
