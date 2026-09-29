@@ -2332,9 +2332,25 @@ function updateTelegramProfile(user){
 }
 
 
+function profileCompletionKey(){
+  const id=telegramAuthData?.id || (()=>{try{return JSON.parse(localStorage.getItem("telegram_auth")||"{}").id||""}catch(e){return ""}})();
+  return id ? "mp_profile_completed_"+String(id) : "";
+}
+function markProfileCompleted(){
+  const key=profileCompletionKey();
+  if(key) localStorage.setItem(key,"1");
+}
+function profileCompletedLocally(){
+  const key=profileCompletionKey();
+  return !!(key && localStorage.getItem(key)==="1");
+}
+
 async function loadUserProfile(){
   const token=localStorage.getItem("telegram_session");
   if(!token) return false;
+  // Once this Telegram ID has completed registration on this device, do not
+  // repeatedly interrupt later logins even if the Render instance was redeployed.
+  if(profileCompletedLocally()) return true;
   try{
     const response=await fetch(USER_PROFILE_API+"?session_token="+encodeURIComponent(token),{cache:"no-store"});
     const data=await response.json().catch(()=>({}));
@@ -2343,7 +2359,7 @@ async function loadUserProfile(){
       const btn=document.getElementById("userReportBtn"); if(btn) btn.style.display="block";
       const panelBtn=document.getElementById("adminUserPanelBtn"); if(panelBtn) panelBtn.style.display="block";
     }
-    if(data.registered) return true;
+    if(data.registered){ markProfileCompleted(); return true; }
     const nameInput=document.getElementById("userProfileName");
     const mobileInput=document.getElementById("userProfileMobile");
     const emailUserInput=document.getElementById("userProfileEmailUser");
@@ -2687,6 +2703,7 @@ async function checkStoredTelegram(){
         if(data.session_token) localStorage.setItem("telegram_session",data.session_token);
         localStorage.setItem("telegram_auth",JSON.stringify(telegramAuthData));
         updateTelegramProfile(telegramAuthData);
+        if(data.profile_registered) markProfileCompleted();
         loadUserProfile();
         document.body.classList.remove("telegram-locked");
         const gate=document.getElementById("telegramGate");
