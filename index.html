@@ -2357,7 +2357,32 @@ document.getElementById("userProfileEmailDomain")?.addEventListener("change",fun
   if(other) other.style.display=this.value==="other"?"block":"none";
 });
 document.getElementById("userProfileEmailUser")?.addEventListener("input",function(){
-  this.value=this.value.replace(/@/g,"").replace(/\s/g,"");
+  const raw=this.value;
+  if(raw.includes("@")){
+    const beforeAt=raw.split("@",1)[0].replace(/\s/g,"");
+    this.value=beforeAt;
+    const status=document.getElementById("userProfileStatus");
+    if(status){status.style.color="#b91c1c";status.textContent="ईमेल में @ के बाद domain न लिखें; दाईं ओर से domain चुनें।";}
+    return;
+  }
+  this.value=raw.replace(/\s/g,"");
+});
+document.getElementById("userProfileEmailUser")?.addEventListener("keydown",function(e){
+  if(e.key==="@" || (e.key==="2" && e.shiftKey)){
+    e.preventDefault();
+    const status=document.getElementById("userProfileStatus");
+    if(status){status.style.color="#b91c1c";status.textContent="ईमेल में @ के बाद domain न लिखें; दाईं ओर से domain चुनें।";}
+  }
+});
+document.getElementById("userProfileEmailUser")?.addEventListener("paste",function(e){
+  const text=(e.clipboardData||window.clipboardData)?.getData("text")||"";
+  if(text.includes("@")){
+    e.preventDefault();
+    const local=text.split("@",1)[0].replace(/[^A-Za-z0-9._%+-]/g,"");
+    this.value=local;
+    const status=document.getElementById("userProfileStatus");
+    if(status){status.style.color="#b91c1c";status.textContent="पूरा email paste न करें; username रखा गया है, domain दाईं ओर चुनें।";}
+  }
 });
 
 function openUserProfileModal(){
