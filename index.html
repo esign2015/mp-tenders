@@ -6112,9 +6112,46 @@ enforceTelegramAccess().then(async () => {
   };
   function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
   function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
-  function downloadBlob(blob,name){const a=document.createElement("a");const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+  function isMobileChrome(){
+    const ua=navigator.userAgent||"";
+    return /Android/i.test(ua) && /Chrome\//i.test(ua);
+  }
+  function reserveMobileDownloadWindow(){
+    if(!isMobileChrome()) return null;
+    try{
+      const w=window.open("about:blank","_blank");
+      if(w){
+        w.document.write('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Preparing file…</title><body style="font-family:Arial;padding:24px">Preparing affidavit file…</body>');
+        w.document.close();
+      }
+      return w;
+    }catch(_e){return null;}
+  }
+  function downloadBlob(blob,name,reservedWindow=null){
+    const u=URL.createObjectURL(blob);
+    if(reservedWindow && !reservedWindow.closed){
+      try{
+        reservedWindow.location.replace(u);
+        setTimeout(()=>URL.revokeObjectURL(u),60000);
+        return;
+      }catch(_e){}
+    }
+    const a=document.createElement("a");
+    a.href=u;
+    a.download=name;
+    a.rel="noopener";
+    a.style.display="none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{
+      a.remove();
+      URL.revokeObjectURL(u);
+    },60000);
+  }
   async function downloadWord(){
     const d=documentData();if(!validateDoc(d))return;saveProfile();
+    const mobileWindow=reserveMobileDownloadWindow();
+    byId("affidavitStatus").textContent="⏳ Word affidavit तैयार हो रही है…";
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
       const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink}=window.docx;
@@ -6184,12 +6221,14 @@ enforceTelegramAccess().then(async () => {
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
         sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
       });
-      const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
+      const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx",mobileWindow);
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
-    }catch(e){byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
+    }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
   }
   function downloadPdf(){
     const d=documentData();if(!validateDoc(d))return;saveProfile();
+    const mobileWindow=reserveMobileDownloadWindow();
+    byId("affidavitStatus").textContent="⏳ PDF affidavit तैयार हो रही है…";
     try{
       const jsPDF=window.jspdf?.jsPDF;if(!jsPDF) throw new Error("PDF library load नहीं हुई");
       const doc=new jsPDF({unit:"mm",format:"a4"});
@@ -6397,8 +6436,16 @@ enforceTelegramAccess().then(async () => {
         doc.text(footerSuffix,urlX+urlW,footerY);
         doc.setTextColor(0);
       }
-      doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit source alignment और website branding के साथ तैयार है।";
-    }catch(e){byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
+      const pdfName=fileBase(d)+".pdf";
+      if(isMobileChrome()){
+        const pdfBlob=doc.output("blob");
+        downloadBlob(pdfBlob,pdfName,mobileWindow);
+      }else{
+        if(mobileWindow && !mobileWindow.closed) mobileWindow.close();
+        doc.save(pdfName);
+      }
+      byId("affidavitStatus").textContent="✓ PDF affidavit तैयार है। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
+    }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
   function init(){
     byId("affidavitClose")?.addEventListener("click",closeModal);
