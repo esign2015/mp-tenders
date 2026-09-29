@@ -3136,6 +3136,13 @@ function extractReferenceFromTitle(value){
   return parts.length >= 3 ? parts[1] : "";
 }
 
+function normaliseCorrigendumValue(value){
+  const text=clean(value);
+  const low=text.toLowerCase();
+  if(!text || ["yes","no","true","false","1","0","none","na","n/a","-"].includes(low)) return "";
+  return text;
+}
+
 function normaliseTender(row){
   const item = {...row};
 
@@ -3198,7 +3205,7 @@ function normaliseTender(row){
     clean(row["Status"] || "Open");
 
   item["Corrigendum"] =
-    clean(row["Corrigendum"] || row["Corrigendum Status"]);
+    normaliseCorrigendumValue(row["Corrigendum"] || row["Corrigendum Status"]);
 
   // Tender links are intentionally not kept in dashboard records.
   // MP Tender detail links are session-bound and expire.
