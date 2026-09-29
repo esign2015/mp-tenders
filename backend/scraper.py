@@ -1972,6 +1972,7 @@ def scrape_mp_tenders(csv_file):
         "organisations_count_mismatch": 0,
         "tender_listed": 0,
         "errors": [],
+        "mismatches": [],
     }
     write_extraction_status(csv_file, {
         "status": "running",
@@ -2205,16 +2206,53 @@ def scrape_mp_tenders(csv_file):
                         "detail_batch_completed": 0,
                         "updated_at": datetime.now(timezone.utc).isoformat(),
                     })
-                    tender_rows, pages = browser_get_all_tender_rows(
-                        page, org, org["count"]
-                    )
+                    # The portal can return a transient/incomplete page set.
+                    # Retry ONLY the organisation that mismatched; do not rebuild
+                    # already-matched organisations. Three attempts total.
+                    expected_count = int(org.get("count") or 0)
+                    tender_rows = []
+                    pages = 0
+                    retry_counts = []
+                    for attempt in range(1, 4):
+                        tender_rows, pages = browser_get_all_tender_rows(
+                            page, org, expected_count
+                        )
+                        copied_now = len(tender_rows)
+                        if copied_now == expected_count:
+                            break
+                        retry_counts.append({"attempt": attempt, "copied": copied_now, "expected": expected_count})
+                        if attempt < 3:
+                            wait_seconds = 2 + attempt * 3
+                            print(
+                                f"COUNT MISMATCH RETRY {attempt}/2: {org['name']} "
+                                f"portal={expected_count} copied={copied_now}; waiting {wait_seconds}s",
+                                flush=True,
+                            )
+                            time.sleep(wait_seconds)
 
                     copied_count = len(tender_rows)
-                    count_match = copied_count == org["count"]
+                    count_match = copied_count == expected_count
                     if count_match:
                         stats["organisations_verified"] += 1
                     else:
                         stats["organisations_count_mismatch"] += 1
+                        mismatch_detail = {
+                            "Organisation Name": org["name"],
+                            "Portal Count": expected_count,
+                            "Copied Count": copied_count,
+                            "Difference": expected_count - copied_count,
+                            "Attempts": retry_counts + [{
+                                "attempt": 3,
+                                "copied": copied_count,
+                                "expected": expected_count
+                            }]
+                        }
+                        stats.setdefault("mismatches", []).append(mismatch_detail)
+                        print(
+                            f"COUNT MISMATCH AFTER 3 ATTEMPTS: {org['name']} "
+                            f"portal={expected_count} copied={copied_count}",
+                            flush=True,
+                        )
 
                     stats["tender_listed"] += copied_count
 
