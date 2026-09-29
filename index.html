@@ -1922,10 +1922,22 @@ body.telegram-locked .site-footer{visibility:hidden}
     <input class="user-profile-input" id="userProfileName" type="text" maxlength="80" autocomplete="off" placeholder="अपना पूरा नाम">
     <label class="user-profile-label" for="userProfileMobile">मोबाइल नंबर</label>
     <input class="user-profile-input" id="userProfileMobile" type="tel" maxlength="10" inputmode="numeric" autocomplete="off" placeholder="10 अंकों का मोबाइल नंबर">
-    <label class="user-profile-label" for="userProfileEmail">ईमेल आईडी</label>
-    <input class="user-profile-input" id="userProfileEmail" type="email" maxlength="120" autocomplete="off" placeholder="अपनी ईमेल आईडी">
+    <label class="user-profile-label" for="userProfileEmailUser">ईमेल आईडी</label>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 145px;gap:8px">
+      <input class="user-profile-input" id="userProfileEmailUser" type="text" maxlength="64" autocomplete="off" placeholder="ईमेल username">
+      <select class="user-profile-input" id="userProfileEmailDomain" aria-label="ईमेल domain">
+        <option value="@gmail.com">@gmail.com</option>
+        <option value="@yahoo.com">@yahoo.com</option>
+        <option value="@yahoo.co.in">@yahoo.co.in</option>
+        <option value="@rediffmail.com">@rediffmail.com</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <input class="user-profile-input" id="userProfileEmailOther" type="text" maxlength="80" autocomplete="off" placeholder="@example.com" style="display:none;margin-top:8px">
+    <label class="user-profile-label" for="userProfileState">राज्य</label>
+    <select class="user-profile-input" id="userProfileState"><option value="Madhya Pradesh">Madhya Pradesh</option></select>
     <label class="user-profile-label" for="userProfileDistrict">जिला</label>
-    <input class="user-profile-input" id="userProfileDistrict" type="text" maxlength="80" autocomplete="off" placeholder="अपना जिला">
+    <select class="user-profile-input" id="userProfileDistrict"><option value="">जिला चुनें</option></select>
     <label class="user-profile-consent">
       <input id="userProfileConsent" type="checkbox">
       <span>मैं सहमत हूँ कि मेरी दी गई profile जानकारी MP Tender Dashboard के user registration record में रखी जाए।</span>
@@ -2298,19 +2310,55 @@ async function loadUserProfile(){
     if(data.registered) return true;
     const nameInput=document.getElementById("userProfileName");
     const mobileInput=document.getElementById("userProfileMobile");
-    const emailInput=document.getElementById("userProfileEmail");
+    const emailUserInput=document.getElementById("userProfileEmailUser");
+    const emailOtherInput=document.getElementById("userProfileEmailOther");
     const districtInput=document.getElementById("userProfileDistrict");
     if(nameInput) nameInput.value="";
     if(mobileInput) mobileInput.value="";
-    if(emailInput) emailInput.value="";
-    if(districtInput) districtInput.value="";
+    if(emailUserInput) emailUserInput.value="";
+    if(emailOtherInput) emailOtherInput.value="";
     openUserProfileModal();
+    await initProfileLocations();
     return false;
   }catch(e){
     console.warn("User profile lookup failed:",e);
     return false;
   }
 }
+
+let profileLocationData=null;
+async function initProfileLocations(){
+  try{
+    if(!profileLocationData){
+      const r=await fetch("data/india_states_districts.json",{cache:"force-cache"});
+      if(!r.ok) throw new Error("location data");
+      profileLocationData=await r.json();
+    }
+    const stateEl=document.getElementById("userProfileState");
+    if(!stateEl) return;
+    stateEl.innerHTML=profileLocationData.map(x=>'<option value="'+String(x.state).replace(/"/g,"&quot;")+'">'+x.state+'</option>').join("");
+    stateEl.value="Madhya Pradesh";
+    fillProfileDistricts();
+  }catch(e){
+    const status=document.getElementById("userProfileStatus");
+    if(status) status.textContent="राज्य/जिला सूची load नहीं हुई। कृपया page refresh करें।";
+  }
+}
+function fillProfileDistricts(){
+  const state=document.getElementById("userProfileState")?.value || "";
+  const districtEl=document.getElementById("userProfileDistrict");
+  if(!districtEl || !profileLocationData) return;
+  const item=profileLocationData.find(x=>x.state===state);
+  districtEl.innerHTML='<option value="">जिला चुनें</option>'+(item?.districts||[]).map(d=>'<option value="'+String(d).replace(/"/g,"&quot;")+'">'+d+'</option>').join("");
+}
+document.getElementById("userProfileState")?.addEventListener("change",fillProfileDistricts);
+document.getElementById("userProfileEmailDomain")?.addEventListener("change",function(){
+  const other=document.getElementById("userProfileEmailOther");
+  if(other) other.style.display=this.value==="other"?"block":"none";
+});
+document.getElementById("userProfileEmailUser")?.addEventListener("input",function(){
+  this.value=this.value.replace(/@/g,"").replace(/\s/g,"");
+});
 
 function openUserProfileModal(){
   const modal=document.getElementById("userProfileModal");
@@ -2331,8 +2379,15 @@ async function saveUserProfile(){
   const token=localStorage.getItem("telegram_session");
   const name=(document.getElementById("userProfileName")?.value || "").trim();
   const mobile=(document.getElementById("userProfileMobile")?.value || "").trim();
-  const email=(document.getElementById("userProfileEmail")?.value || "").trim();
+  const emailUser=(document.getElementById("userProfileEmailUser")?.value || "").trim();
+  const domainChoice=(document.getElementById("userProfileEmailDomain")?.value || "").trim();
+  const otherDomain=(document.getElementById("userProfileEmailOther")?.value || "").trim().toLowerCase();
+  const state=(document.getElementById("userProfileState")?.value || "").trim();
   const district=(document.getElementById("userProfileDistrict")?.value || "").trim();
+  if(!/^[A-Za-z0-9._%+-]+$/.test(emailUser)){ if(status) status.textContent="कृपया सही ईमेल username डालिए।"; return; }
+  const domain=domainChoice==="other" ? otherDomain : domainChoice;
+  if(!/^@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(domain)){ if(status) status.textContent="कृपया सही email domain डालिए।"; return; }
+  const email=emailUser+domain;
   const consent=document.getElementById("userProfileConsent")?.checked;
   const status=document.getElementById("userProfileStatus");
   const save=document.getElementById("userProfileSave");
@@ -2340,15 +2395,15 @@ async function saveUserProfile(){
   if(name.length<2){ if(status) status.textContent="कृपया अपना पूरा नाम दर्ज करें।"; return; }
   const digits=mobile.replace(/\D/g,"").replace(/^91(?=\d{10}$)/,"");
   if(!/^[6-9]\d{9}$/.test(digits)){ if(status) status.textContent="कृपया सही नंबर डालिए।"; return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ if(status) status.textContent="कृपया सही ईमेल आईडी डालिए।"; return; }
-  if(district.length<2){ if(status) status.textContent="कृपया सही जिला दर्ज करें।"; return; }
+  if(!state){ if(status) status.textContent="कृपया राज्य चुनें।"; return; }
+  if(!district){ if(status) status.textContent="कृपया जिला चुनें।"; return; }
   if(!consent){ if(status) status.textContent="कृपया consent checkbox को tick करें।"; return; }
   if(save) save.disabled=true;
   if(status){status.style.color="#475569";status.textContent="⏳ प्रोफाइल save हो रही है...";}
   try{
     const response=await fetch(USER_REGISTER_API,{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({session_token:token,name,mobile:digits,email,district})
+      body:JSON.stringify({session_token:token,name,mobile:digits,email,state,district})
     });
     const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.ok) throw new Error(data.message || "Profile save failed.");
