@@ -1218,7 +1218,7 @@ td.title-cell{
 @media(max-width:1100px){.tender-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{grid-template-columns:1fr}}
 @media(max-width:520px){.tender-card-grid{grid-template-columns:1fr;padding:7px}.tender-card{min-height:auto}.tender-card-metrics{grid-template-columns:repeat(2,1fr)}}
-.affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}.aff-sign-space{height:42px}
+.affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}.aff-sign-space{height:66px}
 </style>
 
 <style>
@@ -6095,14 +6095,14 @@ enforceTelegramAccess().then(async () => {
         paragraphs.push(para([run("3. No close relative of the undersigned and our firm/company is working in the department.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       }
       // Leave physical space for seal/signature before the right-aligned signature label.
-      paragraphs.push(para([run(" ")],{spacing:{before:360,after:360}}));
+      paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
       paragraphs.push(para([
         run("I, "),run(d.bidderName,true,false,20,true),run(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
       // Verification line is left-positioned with 0.5" left indent, not centered/right.
       paragraphs.push(para([run("Verified today "),run(d.verifyDate,true,false,20,true),run(" (dated) at "),run(d.place,true,false,20,true),run(" (place).")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run(" ")],{spacing:{before:360,after:360}}));
+      paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
       const doc=new Document({
@@ -6210,7 +6210,7 @@ enforceTelegramAccess().then(async () => {
       }else{
         textBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,align:"justify",after:2});
       }
-      y+=12; rightText("Signature with Seal of the Deponent (bidder)",true);
+      y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
       richParagraph([
         {text:"I, "},
         {text:d.bidderName,bold:true,underline:true},
@@ -6223,7 +6223,7 @@ enforceTelegramAccess().then(async () => {
         {text:d.place,bold:true,underline:true},
         {text:" (place)."}
       ],{indent:12.7,after:5});
-      y+=12; rightText("Signature with Seal of the Deponent (bidder)",true);
+      y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
