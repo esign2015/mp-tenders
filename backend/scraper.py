@@ -622,6 +622,8 @@ def parse_detail(soup, url):
         organisation, department, division, sub_division
     )
 
+    latest_corrigendum = parse_latest_corrigendum(soup)
+
     return {
         "Tender ID": clean(tender_id),
         "Published Date": clean(published),
@@ -655,6 +657,10 @@ def parse_detail(soup, url):
         "Fee Payable To": clean(fee_payable_to),
         "Fee Payable At": clean(fee_payable_at),
         "Status": ("Cancelled" if re.search(r"\\b(cancelled|canceled|tender cancelled|tender canceled|withdrawn|withdrawal)\\b", body_text, re.I) else "Open"),
+        # Corrigendum is positive only when the actual Latest Corrigendum table
+        # contains a real row. Generic YES/NO flags are intentionally ignored.
+        "Corrigendum": clean(latest_corrigendum.get("title")),
+        "Corrigendum Type": clean(latest_corrigendum.get("type")),
         # Never persist a JSF session URL.
         "URL": PORTAL,
     }
@@ -1635,6 +1641,11 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
                     updated["URL"] = PORTAL
                     updated["Corrigendum Last Checked"] = now.isoformat()
 
+                    # Fresh detail page is authoritative for corrigendum presence.
+                    # This removes legacy false values such as "YES".
+                    updated["Corrigendum"] = new_corr
+                    updated["Corrigendum Type"] = new_type
+
                     if _is_cancelled_detail(fresh):
                         was_cancelled = clean(row.get("Status")).casefold() == "cancelled"
                         updated["Status"] = "Cancelled"
@@ -1648,17 +1659,21 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
                         old_dt = parse_portal_datetime(old_close)
                         new_dt = parse_portal_datetime(new_close)
                         if old_dt and new_dt and new_dt > old_dt:
-                            updated["Corrigendum Type"] = "Date Extension"
-                            updated["Corrigendum"] = new_corr or "Date Extension"
+                            if new_corr:
+                                updated["Corrigendum Type"] = new_type or "Date Extension"
+                                updated["Corrigendum"] = new_corr
                         elif old_dt and new_dt and new_dt < old_dt:
-                            updated["Corrigendum Type"] = "Date Changed"
-                            updated["Corrigendum"] = new_corr or "Date Changed"
+                            if new_corr:
+                                updated["Corrigendum Type"] = new_type or "Date Changed"
+                                updated["Corrigendum"] = new_corr
                         elif old_open != new_open:
-                            updated["Corrigendum Type"] = "Bid Opening Date Changed"
-                            updated["Corrigendum"] = new_corr or "Bid Opening Date Changed"
+                            if new_corr:
+                                updated["Corrigendum Type"] = new_type or "Bid Opening Date Changed"
+                                updated["Corrigendum"] = new_corr
                         else:
-                            updated["Corrigendum Type"] = new_type or "Other"
-                            updated["Corrigendum"] = new_corr or "Other Corrigendum"
+                            if new_corr:
+                                updated["Corrigendum Type"] = new_type or "Other"
+                                updated["Corrigendum"] = new_corr
                         updated["Corrigendum Detected At"] = now.isoformat()
                         changed += 1
 
