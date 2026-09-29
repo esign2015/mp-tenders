@@ -55,15 +55,104 @@ def clean(value):
 # persistent disk for durable storage (for example /var/data/users.db).
 USER_DB_PATH = Path(os.getenv("USER_DB_PATH", str(ROOT / "data" / "users.db")))
 USER_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+DATABASE_URL = clean(os.getenv("DATABASE_URL"))
+
+class _DBRow(dict):
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.values())[key]
+        return super().__getitem__(key)
+
+class _DBCursor:
+    def __init__(self, cursor):
+        self.cursor = cursor
+    def fetchone(self):
+        row = self.cursor.fetchone()
+        if row is None:
+            return None
+        if isinstance(row, dict):
+            return _DBRow(row)
+        try:
+            return _DBRow(dict(row))
+        except Exception:
+            return row
+    def fetchall(self):
+        rows = self.cursor.fetchall()
+        out = []
+        for row in rows:
+            if isinstance(row, dict):
+                out.append(_DBRow(row))
+            else:
+                try:
+                    out.append(_DBRow(dict(row)))
+                except Exception:
+                    out.append(row)
+        return out
+
+class _DBConnection:
+    def __init__(self, conn, postgres=False):
+        self.conn = conn
+        self.postgres = postgres
+    def execute(self, sql, params=()):
+        if self.postgres:
+            sql = sql.replace("?", "%s")
+        return _DBCursor(self.conn.execute(sql, params))
+    def executescript(self, script):
+        if self.postgres:
+            for statement in script.split(";"):
+                statement = statement.strip()
+                if statement:
+                    self.conn.execute(statement)
+        else:
+            self.conn.executescript(script)
+    def commit(self):
+        self.conn.commit()
+    def close(self):
+        self.conn.close()
 
 IST = timezone(timedelta(hours=5, minutes=30))
 
 def user_db():
+    if DATABASE_URL:
+        import psycopg
+        from psycopg.rows import dict_row
+        raw = psycopg.connect(DATABASE_URL, row_factory=dict_row, connect_timeout=15)
+        conn = _DBConnection(raw, postgres=True)
+        conn.executescript("""
+            CREATE TABLE IF NOT EXISTS users (
+                telegram_id BIGINT PRIMARY KEY,
+                first_name TEXT NOT NULL DEFAULT '',
+                last_name TEXT NOT NULL DEFAULT '',
+                username TEXT NOT NULL DEFAULT '',
+                name TEXT NOT NULL DEFAULT '',
+                mobile TEXT NOT NULL DEFAULT '',
+                mobile_verified INTEGER NOT NULL DEFAULT 0,
+                signup_at TEXT NOT NULL,
+                last_login_at TEXT NOT NULL,
+                login_count INTEGER NOT NULL DEFAULT 0,
+                email TEXT NOT NULL DEFAULT '',
+                district TEXT NOT NULL DEFAULT '',
+                state TEXT NOT NULL DEFAULT ''
+            );
+            CREATE TABLE IF NOT EXISTS login_events (
+                id BIGSERIAL PRIMARY KEY,
+                telegram_id BIGINT NOT NULL,
+                login_at TEXT NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS idx_login_events_time ON login_events(login_at);
+        """)
+        conn.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT NOT NULL DEFAULT ''")
+        conn.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS district TEXT NOT NULL DEFAULT ''")
+        conn.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS state TEXT NOT NULL DEFAULT ''")
+        conn.commit()
+        return conn
+
     import sqlite3
-    conn = sqlite3.connect(str(USER_DB_PATH), timeout=30)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA busy_timeout=30000")
+    raw = sqlite3.connect(str(USER_DB_PATH), timeout=30)
+    raw.row_factory = sqlite3.Row
+    raw.execute("PRAGMA journal_mode=WAL")
+    raw.execute("PRAGMA busy_timeout=30000")
+    conn = _DBConnection(raw, postgres=False)
     conn.executescript("""
         CREATE TABLE IF NOT EXISTS users (
             telegram_id INTEGER PRIMARY KEY,
@@ -87,15 +176,18 @@ def user_db():
         CREATE INDEX IF NOT EXISTS idx_login_events_time
             ON login_events(login_at);
     """)
-    existing = {row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
+    existing = {row[1] for row in raw.execute("PRAGMA table_info(users)").fetchall()}
     if "email" not in existing:
-        conn.execute("ALTER TABLE users ADD COLUMN email TEXT NOT NULL DEFAULT ''")
+        raw.execute("ALTER TABLE users ADD COLUMN email TEXT NOT NULL DEFAULT ''")
     if "district" not in existing:
-        conn.execute("ALTER TABLE users ADD COLUMN district TEXT NOT NULL DEFAULT ''")
+        raw.execute("ALTER TABLE users ADD COLUMN district TEXT NOT NULL DEFAULT ''")
     if "state" not in existing:
-        conn.execute("ALTER TABLE users ADD COLUMN state TEXT NOT NULL DEFAULT ''")
-    conn.commit()
+        raw.execute("ALTER TABLE users ADD COLUMN state TEXT NOT NULL DEFAULT ''")
+    raw.commit()
     return conn
+
+def user_db_backend():
+    return "postgres" if DATABASE_URL else "sqlite"
 
 def now_ist():
     return datetime.now(IST)
@@ -972,6 +1064,7 @@ def health():
         "status": "healthy",
         "csv_exists": CSV_FILE.exists(),
         "records": len(read_rows()),
+        "user_db_backend": user_db_backend(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
     })
 
