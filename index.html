@@ -5311,15 +5311,14 @@ async function exportPdf(){
     }
   };
 
-  // Keep exactly 20 tender records in each PDF page batch.
-  const pdfPageSize = 20;
-  for(let i = 0; i < body.length; i += pdfPageSize){
-    if(i > 0) doc.addPage();
-    doc.autoTable({
-      ...pdfTableOptions,
-      body: body.slice(i, i + pdfPageSize)
-    });
-  }
+  // Let jsPDF-AutoTable paginate continuously across the available page height.
+  // Manual 20-row batching caused a batch to overflow (for example 15 + 5 rows)
+  // and then forced a fresh page for the next batch, leaving large blank areas.
+  // rowPageBreak:"avoid" still keeps an individual tender row together whenever possible.
+  doc.autoTable({
+    ...pdfTableOptions,
+    body: body
+  });
 
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   const filename="MP_Tender_Dashboard_" + stamp + ".pdf";
