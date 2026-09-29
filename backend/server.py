@@ -679,6 +679,167 @@ def telegram_send_pdf():
         print(f"Telegram PDF send failed: {exc}")
         return jsonify({"ok": False, "message": "PDF Telegram पर भेजने में समस्या हुई। कृपया Telegram bot chat खोलकर Start दबाएँ।"}), 502
 
+
+# ================= GOOGLE ADMIN CONTROL PANEL =================
+ADMIN_EMAIL_ALLOWLIST = {
+    x.strip().lower()
+    for x in clean(os.getenv(
+        "ADMIN_GOOGLE_EMAILS",
+        "imriteshdhoot@gmail.com,shikhadhoot@gmail.com",
+    )).split(",")
+    if x.strip()
+}
+ADMIN_SESSION_TTL = int(os.getenv("ADMIN_SESSION_TTL", "28800"))  # 8 hours
+
+def admin_session_secret():
+    return clean(os.getenv("ADMIN_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+
+def make_admin_session(email):
+    import base64, time
+    payload = {"email": email.lower(), "exp": int(time.time()) + ADMIN_SESSION_TTL}
+    raw = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    body = base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+    sig = hmac.new(admin_session_secret().encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
+    return body + "." + sig
+
+def read_admin_session(token):
+    import base64, time
+    if not token or "." not in token:
+        return None
+    body, received_sig = token.rsplit(".", 1)
+    expected = hmac.new(admin_session_secret().encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(expected, received_sig):
+        return None
+    try:
+        padded = body + "=" * (-len(body) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(padded.encode("ascii")).decode("utf-8"))
+        if int(payload.get("exp", 0)) < int(time.time()):
+            return None
+        email = clean(payload.get("email")).lower()
+        return email if email in ADMIN_EMAIL_ALLOWLIST else None
+    except Exception:
+        return None
+
+def require_admin():
+    token = clean(request.headers.get("Authorization", "")).removeprefix("Bearer ").strip()
+    email = read_admin_session(token)
+    if not email:
+        return None, (jsonify({"ok": False, "message": "Admin login required."}), 401)
+    return email, None
+
+@app.get("/api/admin/config")
+def admin_config():
+    return jsonify({
+        "ok": True,
+        "google_client_id": clean(os.getenv("GOOGLE_CLIENT_ID")),
+        "allowed_domains": ["google.com"],
+    })
+
+@app.post("/api/admin/google")
+def admin_google_login():
+    payload = request.get_json(silent=True) or {}
+    credential = clean(payload.get("credential"))
+    if not credential:
+        return jsonify({"ok": False, "message": "Google authentication token missing."}), 400
+    client_id = clean(os.getenv("GOOGLE_CLIENT_ID"))
+    if not client_id:
+        return jsonify({"ok": False, "message": "Google Admin login is not configured on the server yet."}), 503
+
+    # Verify the Google ID token server-side. The tokeninfo endpoint validates
+    # the signature and exposes aud/email/email_verified for our checks.
+    try:
+        url = "https://oauth2.googleapis.com/tokeninfo?" + urllib_parse.urlencode({"id_token": credential})
+        with urllib_request.urlopen(url, timeout=20) as response:
+            info = json.loads(response.read().decode("utf-8"))
+    except Exception:
+        return jsonify({"ok": False, "message": "Google login verification failed."}), 401
+
+    email = clean(info.get("email")).lower()
+    if clean(info.get("aud")) != client_id:
+        return jsonify({"ok": False, "message": "Google client verification failed."}), 401
+    if str(info.get("email_verified", "")).lower() != "true":
+        return jsonify({"ok": False, "message": "Google email is not verified."}), 403
+    if email not in ADMIN_EMAIL_ALLOWLIST:
+        return jsonify({"ok": False, "message": "इस Google account को Admin access नहीं दिया गया है।"}), 403
+
+    return jsonify({
+        "ok": True,
+        "email": email,
+        "session_token": make_admin_session(email),
+        "expires_in": ADMIN_SESSION_TTL,
+        "message": "Admin login successful.",
+    })
+
+@app.get("/api/admin/session")
+def admin_session():
+    email, error = require_admin()
+    if error:
+        return error
+    return jsonify({"ok": True, "email": email})
+
+@app.post("/api/admin/logout")
+def admin_logout():
+    # Sessions are stateless and short-lived. Clearing the browser token is
+    # sufficient; this endpoint exists for a clean client-side logout flow.
+    return jsonify({"ok": True})
+
+def github_dispatch(workflow, inputs=None):
+    token = clean(os.getenv("GITHUB_ACTIONS_TOKEN"))
+    if not token:
+        raise RuntimeError("GITHUB_ACTIONS_TOKEN is not configured on Render.")
+    owner = clean(os.getenv("GITHUB_REPO_OWNER", "esign2015"))
+    repo = clean(os.getenv("GITHUB_REPO_NAME", "mp-tenders"))
+    body = {"ref": clean(os.getenv("GITHUB_REPO_BRANCH", "main"))}
+    if inputs:
+        body["inputs"] = inputs
+    url = f"https://api.github.com/repos/{owner}/{repo}/actions/workflows/{urllib_parse.quote(workflow, safe='')}/dispatches"
+    data = json.dumps(body).encode("utf-8")
+    req = urllib_request.Request(
+        url,
+        data=data,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "Content-Type": "application/json",
+            "User-Agent": "mp-tenders-admin",
+        },
+    )
+    with urllib_request.urlopen(req, timeout=30) as response:
+        if response.status not in (200, 201, 202, 204):
+            raise RuntimeError(f"GitHub dispatch returned HTTP {response.status}")
+
+@app.post("/api/admin/action")
+def admin_action():
+    email, error = require_admin()
+    if error:
+        return error
+    payload = request.get_json(silent=True) or {}
+    action = clean(payload.get("action")).lower()
+    try:
+        if action == "telegram_pdf":
+            report = clean(payload.get("report", "closing_today"))
+            if report not in {"closing_today", "new_today", "all"}:
+                return jsonify({"ok": False, "message": "Invalid PDF report."}), 400
+            github_dispatch("telegram_manual_pdf.yml", {"report": report})
+            message = f"Telegram PDF workflow started: {report}"
+        elif action == "data_refresh":
+            github_dispatch("scrape.yml")
+            message = "Full data refresh workflow started."
+        elif action == "retry_pending":
+            github_dispatch("targeted-pending-retry.yml")
+            message = "Pending detail retry workflow started."
+        elif action == "telegram_test":
+            github_dispatch("telegram-test.yml")
+            message = "Telegram test workflow started."
+        else:
+            return jsonify({"ok": False, "message": "Unknown admin command."}), 400
+        return jsonify({"ok": True, "message": message, "requested_by": email})
+    except Exception as exc:
+        print(f"Admin action failed: {exc}")
+        return jsonify({"ok": False, "message": str(exc)}), 502
+
 @app.get("/health")
 def health():
     return jsonify({
