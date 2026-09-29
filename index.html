@@ -1218,7 +1218,7 @@ td.title-cell{
 @media(max-width:1100px){.tender-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{grid-template-columns:1fr}}
 @media(max-width:520px){.tender-card-grid{grid-template-columns:1fr;padding:7px}.tender-card{min-height:auto}.tender-card-metrics{grid-template-columns:repeat(2,1fr)}}
-.affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}.aff-sign-space{height:66px}
+.affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}.aff-strike{text-decoration:line-through;text-decoration-thickness:1.5px}.aff-prev-relative-detail{margin-left:.62in!important;text-align:left}.aff-sign-space{height:66px}
 </style>
 
 <style>
@@ -5964,9 +5964,13 @@ enforceTelegramAccess().then(async () => {
     return true;
   }
   function affidavitLines(d){
+    const strikeText=s=>"~~"+s+"~~";
+    const point3="3. No close relative of the undersigned and our firm/company is working in the department.";
+    const point4="4. Following close relatives are working in the department:";
+    const details="Name "+(d.relativeName||"________________")+"    Post "+(d.relativePost||"________________")+"    Present Posting "+(d.relativePosting||"________________");
     const rel=d.relative==="yes"
-      ? ["4. Following close relatives are working in the department:","Name "+d.relativeName+"    Post "+d.relativePost+"    Present Posting "+d.relativePosting]
-      : ["3. No close relative of the undersigned and our firm/company is working in the department."];
+      ? [strikeText(point3),point4,details]
+      : [point3,strikeText(point4),strikeText(details)];
     return [
       "AFFIDAVIT",
       "(To be contained in Envelope A)",
@@ -5976,7 +5980,7 @@ enforceTelegramAccess().then(async () => {
       "",
       "I am "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
       "",
-      "I am fully responsible for the correctness of following self-certified information/ documents and certificates:",
+      "I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:",
       "1. That the self-certified information given in the bid document is fully true and authentic.",
       "2. That:",
       "a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",
@@ -5995,16 +5999,17 @@ enforceTelegramAccess().then(async () => {
   }
   function updatePreview(){
     const d=documentData();
-    const relHtml=d.relative==="yes"
-      ? '<p class="aff-prev-list">4. Following close relatives are working in the department:</p><p class="aff-prev-left">Name <strong><u>'+escapeHtml(d.relativeName)+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost)+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting)+'</u></strong></p>'
-      : '<p class="aff-prev-list">3. No close relative of the undersigned and our firm/company is working in the department.</p>';
+    const point3='<p class="aff-prev-list'+(d.relative==="yes"?' aff-strike':'')+'">3. No close relative of the undersigned and our firm/company is working in the department.</p>';
+    const point4='<p class="aff-prev-list'+(d.relative==="no"?' aff-strike':'')+'">4. Following close relatives are working in the department:</p>';
+    const relativeDetails='<p class="aff-prev-relative-detail'+(d.relative==="no"?' aff-strike':'')+'">Name <strong><u>'+escapeHtml(d.relativeName||"________________")+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost||"________________")+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting||"________________")+'</u></strong></p>';
+    const relHtml=point3+point4+relativeDetails;
     byId("affidavitPreview").innerHTML=
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
       '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200)</em></p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(d.tenderRef)+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
-      '<p class="aff-prev-justify">I am fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
+      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
       '<p class="aff-prev-list">1. That the self-certified information given in the bid document is fully true and authentic.</p>'+
       '<p class="aff-prev-list">2. That:</p>'+
       '<p class="aff-prev-sublist">a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.</p>'+
@@ -6055,7 +6060,7 @@ enforceTelegramAccess().then(async () => {
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
       const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer}=window.docx;
-      const run=(text,bold=false,italic=false,size=20,underline=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined});
+      const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
         indent:opts.indent,
@@ -6081,19 +6086,24 @@ enforceTelegramAccess().then(async () => {
         run(" (name of work) dated "),run(d.noticeDate||"____________________________",true,false,20,true),
         run(" issued by the "),run(d.department,true,false,20,true),run(" (name of the department).")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run("I am fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
+      paragraphs.push(para([run("I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
       // Numbered/list section follows the left/hanging positions in the supplied file.
       paragraphs.push(para([run("1. That the self-certified information given in the bid document is fully true and authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
       paragraphs.push(para([run("2. That:")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
       paragraphs.push(para([run("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0}}));
       paragraphs.push(para([run("b. Information regarding financial qualification and annual turnover is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run("c. Information regarding various technical qualifications is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
-      if(d.relative==="yes"){
-        paragraphs.push(para([run("4. Following close relatives are working in the department:")],{alignment:AlignmentType.JUSTIFIED,spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
-        paragraphs.push(para([run("Name "+d.relativeName+"     Post "+d.relativePost+"     Present Posting "+d.relativePosting,true,false,20,true)],{alignment:AlignmentType.JUSTIFIED,indent:{left:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
-      }else{
-        paragraphs.push(para([run("3. No close relative of the undersigned and our firm/company is working in the department.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
-      }
+      const relYes=d.relative==="yes";
+      paragraphs.push(para([run("3. No close relative of the undersigned and our firm/company is working in the department.",false,false,20,false,relYes)],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("4. Following close relatives are working in the department:",false,false,20,false,!relYes)],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([
+        run("Name ",false,false,20,false,!relYes),
+        run(d.relativeName||"________________",true,false,20,true,!relYes),
+        run("     Post ",false,false,20,false,!relYes),
+        run(d.relativePost||"________________",true,false,20,true,!relYes),
+        run("     Present Posting ",false,false,20,false,!relYes),
+        run(d.relativePosting||"________________",true,false,20,true,!relYes)
+      ],{alignment:AlignmentType.LEFT,indent:{left:900},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       // Leave physical space for seal/signature before the right-aligned signature label.
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
@@ -6165,6 +6175,22 @@ enforceTelegramAccess().then(async () => {
         }
         y+=leading+gapAfter;
       };
+      const strikeTextBlock=(text,opts={})=>{
+        const size=opts.size||10, leading=opts.leading||5.2, indent=opts.indent||0;
+        doc.setFont("times",opts.bold?"bold":"normal");doc.setFontSize(size);
+        const max=width-indent;
+        const wrapped=doc.splitTextToSize(text,max);
+        addPageIf(wrapped.length*leading+3);
+        wrapped.forEach(line=>{
+          doc.text(line,left+indent,y);
+          if(opts.strike){
+            const w=doc.getTextWidth(line);
+            doc.setLineWidth(0.22);doc.line(left+indent,y-1.6,left+indent+w,y-1.6);
+          }
+          y+=leading;
+        });
+        y+=(opts.after??1);
+      };
       const rightText=(text,bold=false)=>{
         doc.setFont("times",bold?"bold":"normal");doc.setFontSize(10);addPageIf(7);
         doc.text(text,right,y,{align:"right"});y+=7;
@@ -6194,22 +6220,16 @@ enforceTelegramAccess().then(async () => {
         {text:d.department,bold:true,underline:true},
         {text:" (name of the department)."}
       ],{indent:12.7,leading:5.7,after:3});
-      textBlock("I am fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
+      textBlock("I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:",{indent:12.7,align:"justify",after:2});
       textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
       textBlock("2. That:",{indent:12.7,after:1});
       textBlock("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",{indent:19.05,align:"justify",after:1});
       textBlock("b. Information regarding financial qualification and annual turnover is correct.",{indent:19.05,align:"justify",after:1});
       textBlock("c. Information regarding various technical qualifications is correct.",{indent:19.05,align:"justify",after:1});
-      if(d.relative==="yes"){
-        textBlock("4. Following close relatives are working in the department:",{after:1});
-        richParagraph([
-          {text:"Name "},{text:d.relativeName,bold:true,underline:true},
-          {text:"     Post "},{text:d.relativePost,bold:true,underline:true},
-          {text:"     Present Posting "},{text:d.relativePosting,bold:true,underline:true}
-        ],{indent:12.7,after:2});
-      }else{
-        textBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,align:"justify",after:2});
-      }
+      const relYes=d.relative==="yes";
+      strikeTextBlock("3. No close relative of the undersigned and our firm/company is working in the department.",{indent:12.7,strike:relYes,after:1});
+      strikeTextBlock("4. Following close relatives are working in the department:",{indent:12.7,strike:!relYes,after:1});
+      strikeTextBlock("Name "+(d.relativeName||"________________")+"     Post "+(d.relativePost||"________________")+"     Present Posting "+(d.relativePosting||"________________"),{indent:15.5,strike:!relYes,bold:relYes,after:2});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
       richParagraph([
         {text:"I, "},
