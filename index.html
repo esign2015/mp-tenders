@@ -3172,6 +3172,18 @@ function totalFee(row){
   return moneyNumber(row["EMD Fee"]) + tenderFeeWithPortal(row);
 }
 
+function feeDataVerified(row){
+  return effectiveProcessingFee(row) > 0;
+}
+
+function verifiedTenderFeeText(row){
+  return feeDataVerified(row) ? formatMoney(tenderFeeWithPortal(row)) : "Checking…";
+}
+
+function verifiedTotalFeeText(row){
+  return feeDataVerified(row) ? formatMoney(totalFee(row)) : "Checking…";
+}
+
 function cleanDisplayTitle(value){
   let text = clean(value);
   text = text.replace(new RegExp("\\[([^\\]]+)\\]\\([^)]*\\)", "g"), "$1");
@@ -3835,9 +3847,9 @@ function whatsappShareUrl(row){
     "*Published Date:* "+clean(row["Published Date"]),
     "*PAC / Estimated Cost:* "+formatMoney(row["PAC Amount"]),
     "*EMD:* "+formatMoney(row["EMD Fee"]),
-    "*Tender Fee + Portal:* "+formatMoney(tenderFeeWithPortal(row)),
-    "*Processing Fee:* "+formatMoney(effectiveProcessingFee(row)),
-    "*EMD + Tender Fee:* "+formatMoney(totalFee(row)),
+    "*Tender Fee + Portal:* "+verifiedTenderFeeText(row),
+    "*Processing Fee:* "+(feeDataVerified(row)?formatMoney(effectiveProcessingFee(row)):"Checking…"),
+    "*EMD + Tender Fee:* "+verifiedTotalFeeText(row),
     "*Submission End Date:* "+formatClosingDateTime(row["Closing Date"]),
     "",
     "*Tender Dashboard Link:* "+stableTenderUrl(row)
@@ -3877,8 +3889,8 @@ function renderCardWindow(){
           <div class="tender-card-metric"><span>Contract</span><b>${contract}</b></div>
           <div class="tender-card-metric"><span>PAC / Estimate</span><b>${formatMoney(row["PAC Amount"])}</b></div>
           <div class="tender-card-metric"><span>EMD</span><b>${formatMoney(row["EMD Fee"])}</b></div>
-          <div class="tender-card-metric"><span>Tender Fee + Portal</span><b>${formatMoney(tenderFeeWithPortal(row))}</b></div>
-          <div class="tender-card-metric"><span>EMD + Tender Fee</span><b>${formatMoney(totalFee(row))}</b></div>
+          <div class="tender-card-metric"><span>Tender Fee + Portal</span><b>${verifiedTenderFeeText(row)}</b></div>
+          <div class="tender-card-metric"><span>EMD + Tender Fee</span><b>${verifiedTotalFeeText(row)}</b></div>
         </div>
         <div class="tender-card-extra"><span>PIN: ${escapeHtml(row["Pincode"])||"—"}</span><span>Corrigendum: ${corr}</span></div>
         <div class="tender-card-close"><span>SUBMISSION END</span><span>${escapeHtml(formatClosingDateTime(row["Closing Date"]))}</span></div>
