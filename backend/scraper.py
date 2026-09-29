@@ -49,7 +49,7 @@ ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retri
 ORG_TENDER_FIELDS = [
     "S.No.", "Organisation Name", "Portal Tender Count", "Copied Tender Count",
     "Count Status", "Tender ID", "Title", "Reference Number",
-    "Published Date", "Closing Date", "Opening Date", "Tender URL", "Raw Row"
+    "Published Date", "Closing Date", "Opening Date", "Organisation Chain", "Tender URL", "Raw Row"
 ]
 TENDER_ID_RE = re.compile(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", re.I)
 
@@ -1697,6 +1697,7 @@ def monitor_tender_changes(csv_file):
                             "Published Date": published,
                             "Closing Date": closing,
                             "Opening Date": opening,
+                            "Organisation Chain": clean(tender.get("organisation_chain")),
                             "Tender URL": "",
                             "Raw Row": tender.get("row_text", ""),
                         }
