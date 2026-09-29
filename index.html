@@ -3085,16 +3085,25 @@ function formatMoney(value){
   });
 }
 
+function effectiveProcessingFee(row){
+  const explicit=moneyNumber(row["Processing Fee"]);
+  if(explicit>0) return explicit;
+
+  // Older extracted rows may have the portal/processing charge folded only
+  // into saved Total Fee. Recover that missing component conservatively.
+  const savedTotal=moneyNumber(row["Total Fee"]);
+  const emd=moneyNumber(row["EMD Fee"]);
+  const tender=moneyNumber(row["Tender Fee"]);
+  const inferred=savedTotal-emd-tender;
+  return inferred>0 ? inferred : 0;
+}
+
+function tenderFeeWithPortal(row){
+  return moneyNumber(row["Tender Fee"]) + effectiveProcessingFee(row);
+}
+
 function totalFee(row){
-  // Dashboard Total Fee is always calculated from the three components:
-  // EMD + Tender/Form Fee + Processing Fee.
-  // Do not trust an older saved Total Fee value because older records
-  // were calculated without EMD.
-  return (
-    moneyNumber(row["EMD Fee"]) +
-    moneyNumber(row["Tender Fee"]) +
-    moneyNumber(row["Processing Fee"])
-  );
+  return moneyNumber(row["EMD Fee"]) + tenderFeeWithPortal(row);
 }
 
 function cleanDisplayTitle(value){
@@ -3760,9 +3769,9 @@ function whatsappShareUrl(row){
     "*Published Date:* "+clean(row["Published Date"]),
     "*PAC / Estimated Cost:* "+formatMoney(row["PAC Amount"]),
     "*EMD:* "+formatMoney(row["EMD Fee"]),
-    "*Tender Fee:* "+formatMoney(row["Tender Fee"]),
-    "*Processing Fee:* "+formatMoney(row["Processing Fee"]),
-    "*Total Fee:* "+formatMoney(totalFee(row)),
+    "*Tender Fee + Portal:* "+formatMoney(tenderFeeWithPortal(row)),
+    "*Processing Fee:* "+formatMoney(effectiveProcessingFee(row)),
+    "*EMD + Tender Fee:* "+formatMoney(totalFee(row)),
     "*Submission End Date:* "+formatClosingDateTime(row["Closing Date"]),
     "",
     "*Tender Dashboard Link:* "+stableTenderUrl(row)
@@ -3802,8 +3811,8 @@ function renderCardWindow(){
           <div class="tender-card-metric"><span>Contract</span><b>${contract}</b></div>
           <div class="tender-card-metric"><span>PAC / Estimate</span><b>${formatMoney(row["PAC Amount"])}</b></div>
           <div class="tender-card-metric"><span>EMD</span><b>${formatMoney(row["EMD Fee"])}</b></div>
-          <div class="tender-card-metric"><span>Tender Fee</span><b>${formatMoney(row["Tender Fee"])}</b></div>
-          <div class="tender-card-metric"><span>Total Fee</span><b>${formatMoney(totalFee(row))}</b></div>
+          <div class="tender-card-metric"><span>Tender Fee + Portal</span><b>${formatMoney(tenderFeeWithPortal(row))}</b></div>
+          <div class="tender-card-metric"><span>EMD + Tender Fee</span><b>${formatMoney(totalFee(row))}</b></div>
         </div>
         <div class="tender-card-extra"><span>PIN: ${escapeHtml(row["Pincode"])||"—"}</span><span>Corrigendum: ${corr}</span></div>
         <div class="tender-card-close"><span>SUBMISSION END</span><span>${escapeHtml(formatClosingDateTime(row["Closing Date"]))}</span></div>
