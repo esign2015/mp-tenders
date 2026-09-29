@@ -2254,8 +2254,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="table-heading" id="tableHeading" data-i18n="tableHeading">Live Tender Records</div>
 
       <div class="table-tools">
-        <button class="btn-dark view-toggle-btn active" id="cardViewBtn" type="button">▦ Card View</button>
-        <button class="btn-light view-toggle-btn" id="tableViewBtn" type="button">▤ Table View</button>
+        <button class="btn-dark view-toggle-btn" id="viewToggleBtn" type="button">▤ Table View</button>
         <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
       </div>
     </div>
@@ -3904,8 +3903,13 @@ function applyTenderView(){
   if(grid) grid.hidden=!card;
   if(wrap) wrap.hidden=card;
   if(top) top.hidden=card;
-  $("cardViewBtn")?.classList.toggle("active",card);
-  $("tableViewBtn")?.classList.toggle("active",!card);
+  const toggle=$("viewToggleBtn");
+  if(toggle){
+    toggle.textContent=card ? "▤ Table View" : "▦ Card View";
+    toggle.classList.add("active");
+    toggle.setAttribute("aria-label",card ? "Switch to Table View" : "Switch to Card View");
+    toggle.title=card ? "Switch to Table View" : "Switch to Card View";
+  }
   if(card) renderCardWindow(); else renderVirtualWindow();
 }
 
@@ -4873,9 +4877,8 @@ function applySharedTenderQuery(){
 
 function setupUserFeatures(){
   const col=$("columnBtn"),orgBtn=$("orgDisplayBtn");
-  const cardBtn=$("cardViewBtn"),tableBtn=$("tableViewBtn");
-  if(cardBtn) cardBtn.onclick=()=>setTenderView("card");
-  if(tableBtn) tableBtn.onclick=()=>setTenderView("table");
+  const viewToggle=$("viewToggleBtn");
+  if(viewToggle) viewToggle.onclick=()=>setTenderView(tenderViewMode==="card" ? "table" : "card");
   if(col)col.onclick=()=>openColumnMenu(col);
   if(orgBtn)orgBtn.onclick=()=>{
     orgDisplayMode=orgDisplayMode==="full"?"short":"full";
