@@ -82,14 +82,20 @@ function render(){
   // Count successful detail extraction from the actual detail CSV first.
   // This avoids showing 0 while the worker has already checkpointed detail rows
   // but the status file was created by an older worker revision.
+  const requiredDetailFields=[
+    'Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
+    'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'
+  ];
   const detailSuccessIds=new Set(
     details
       .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
+      .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
       .map(d=>clean(d['Tender ID']))
       .filter(id=>ids.has(id))
   );
-  const statusSuccessIds=new Set((statusData.success_ids||[]).filter(id=>ids.has(id)));
-  const successSet=new Set([...detailSuccessIds,...statusSuccessIds]);
+  // Success must come from the same current verified Tender-ID snapshot.
+  // Do not union historical/targeted-retry status files into this count.
+  const successSet=detailSuccessIds;
   const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
   // A Tender ID with Detail Extracted=YES is successful, not skipped.
   // Older status files could list the same ID in skipped_ids, causing
@@ -123,14 +129,19 @@ async function load(){
   $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
   const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
+  const currentIds=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean));
+  const requiredDetailFields=[
+    'Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
+    'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'
+  ];
   const actualDetailSuccess=new Set(
     details
       .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
+      .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
       .map(d=>clean(d['Tender ID']))
-      .filter(Boolean)
+      .filter(id=>currentIds.has(id))
   );
-  const statusDetailSuccess=new Set((statusData.success_ids||[]).map(clean).filter(Boolean));
-  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+new Set([...actualDetailSuccess,...statusDetailSuccess]).size.toLocaleString('en-IN');
+  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+actualDetailSuccess.size.toLocaleString('en-IN');
   $('msg').textContent='Status = current Portal Tender Count और current copied Tender IDs का मिलान। Closing Date recovery file को सीधे count में नहीं जोड़ा जाता; recovered ID तभी गिनी जाएगी जब वह current organisation snapshot में शामिल हो। Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
   render();
  }catch(e){
