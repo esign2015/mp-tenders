@@ -1,6 +1,7 @@
 name: Targeted Pending Detail Retry
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
     paths:
