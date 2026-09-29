@@ -5,7 +5,7 @@ import hmac
 import json
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from urllib import request as urllib_request, parse as urllib_parse
+from urllib import request as urllib_request, parse as urllib_parse\nimport subprocess\nimport tempfile
 
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
@@ -782,6 +782,42 @@ def admin_logout():
     # Sessions are stateless and short-lived. Clearing the browser token is
     # sufficient; this endpoint exists for a clean client-side logout flow.
     return jsonify({"ok": True})
+
+def run_manual_telegram_pdf(report):
+    """Send an admin PDF directly from Render using the latest committed live snapshot.
+
+    This intentionally does not depend on GitHub workflow dispatch/PAT. The admin
+    PDF buttons therefore keep working even when GITHUB_ACTIONS_TOKEN is absent.
+    """
+    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
+    chat_id = clean(os.getenv("TELEGRAM_CHAT_ID"))
+    if not token or not chat_id:
+        raise RuntimeError("Telegram configuration missing: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID.")
+    owner = clean(os.getenv("GITHUB_REPO_OWNER", "esign2015"))
+    repo = clean(os.getenv("GITHUB_REPO_NAME", "mp-tenders"))
+    branch = clean(os.getenv("GITHUB_REPO_BRANCH", "main"))
+    source_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/organisation_tenders.csv"
+    try:
+        with urllib_request.urlopen(source_url, timeout=45) as response:
+            csv_bytes = response.read()
+    except Exception as exc:
+        raise RuntimeError(f"Latest tender snapshot download failed: {type(exc).__name__}: {exc}") from exc
+    if not csv_bytes or b"Tender ID" not in csv_bytes[:4096]:
+        raise RuntimeError("Latest tender snapshot is empty or invalid; PDF was not sent.")
+    with tempfile.TemporaryDirectory(prefix="mptender_admin_") as tmp:
+        csv_path = Path(tmp) / "organisation_tenders.csv"
+        csv_path.write_bytes(csv_bytes)
+        env = os.environ.copy()
+        env.update({"NOTIFY_MODE":"manual", "MANUAL_REPORT":report, "TENDER_CSV_PATH":str(csv_path)})
+        proc = subprocess.run(
+            [os.getenv("PYTHON", "python"), str(ROOT / "backend" / "telegram_alerts.py")],
+            cwd=str(ROOT), env=env, capture_output=True, text=True, timeout=240,
+        )
+        if proc.returncode != 0:
+            detail = clean(proc.stderr) or clean(proc.stdout) or f"exit code {proc.returncode}"
+            raise RuntimeError("Telegram PDF failed: " + detail[-1200:])
+    return "Latest GitHub tender snapshot से Telegram PDF भेज दी गई है।"
+
 
 def github_dispatch(workflow, inputs=None):
     token = clean(os.getenv("GITHUB_ACTIONS_TOKEN"))
