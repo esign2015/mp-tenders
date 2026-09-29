@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MP Tenders — Admin Control Panel</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#172033}
+header{background:#203b91;color:#fff;padding:22px 24px}h1{margin:0;font-size:28px}header p{margin:7px 0 0;opacity:.9}
+main{max-width:1100px;margin:24px auto;padding:0 16px}.card{background:#fff;border:1px solid #d7deeb;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 20px #17203312}
+#login{max-width:520px;margin:70px auto;text-align:center}.google-box{display:flex;justify-content:center;margin:28px 0}
+.hidden{display:none!important}.user{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:12px 16px;margin:6px;cursor:pointer;font-weight:700;background:#203b91;color:#fff}
+button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.action{border:1px solid #d7deeb;border-radius:12px;padding:16px}.action h3{margin:0 0 8px}.action p{color:#637083;font-size:14px;min-height:38px}
+#result{white-space:pre-wrap;background:#111827;color:#d1fae5;border-radius:10px;padding:14px;min-height:70px}
+.small{font-size:13px;color:#637083}.ok{color:#087443}.bad{color:#b42318}
+</style>
+</head>
+<body>
+<header><h1>🔐 MP Tenders — Admin Control Panel</h1><p>Google verified Admin access • Data / Telegram controls</p></header>
+
+<main>
+<section id="login" class="card">
+  <h2>Admin Login</h2>
+  <p>केवल पहले से अनुमत Google accounts को Admin access मिलेगा। कोई Sign Up नहीं है।</p>
+  <div id="googleButton" class="google-box"></div>
+  <p id="loginStatus" class="small">Google login configuration जाँची जा रही है…</p>
+</section>
+
+<section id="panel" class="hidden">
+  <div class="card user">
+    <div><strong>👤 Admin:</strong> <span id="adminEmail">—</span><br><span class="small">Session automatically expires after a limited period.</span></div>
+    <button class="danger" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="card">
+    <h2>📩 Telegram Controls</h2>
+    <div class="grid">
+      <div class="action"><h3>Closing Today PDF</h3><p>Latest current data से आज closing वाले tenders की नई PDF भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'closing_today'})">Send Telegram PDF</button></div>
+      <div class="action"><h3>New Today PDF</h3><p>आज published tenders की latest PDF भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'new_today'})">Send Telegram PDF</button></div>
+      <div class="action"><h3>All Latest Data PDF</h3><p>Latest available tender data की complete PDF बनाकर भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'all'})">Send Telegram PDF</button></div>
+      <div class="action"><h3>Telegram Test</h3><p>Telegram delivery ठीक है या नहीं जाँचने के लिए test message/PDF।</p><button class="warn" onclick="run('telegram_test')">Send Test</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚙️ Data Controls</h2>
+    <div class="grid">
+      <div class="action"><h3>🔄 Full Data Refresh</h3><p>MPTenders organisation snapshot और reconciliation workflow फिर से चलाएँ।</p><button onclick="confirmRun('data_refresh','Full data refresh शुरू करें?')">Start Refresh</button></div>
+      <div class="action"><h3>🔁 Pending Detail Retry</h3><p>Pending detail extraction को targeted retry करें।</p><button onclick="confirmRun('retry_pending','Pending detail retry शुरू करें?')">Retry Pending</button></div>
+    </div>
+  </div>
+
+  <div class="card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div></div>
+</section>
+</main>
+
+<script>
+const API="https://mp-tenders-api.onrender.com";
+const KEY="mp_admin_session";
+const $=id=>document.getElementById(id);
+
+async function boot(){
+  try{
+    const r=await fetch(API+"/api/admin/config",{cache:"no-store"});
+    const cfg=await r.json();
+    if(!cfg.google_client_id){ $("loginStatus").textContent="Google Admin login अभी server पर configure नहीं है।"; return; }
+    if(!window.google){ setTimeout(boot,500); return; }
+    google.accounts.id.initialize({client_id:cfg.google_client_id,callback:googleLogin,auto_select:false});
+    google.accounts.id.renderButton($("googleButton"),{theme:"outline",size:"large",text:"signin_with",shape:"rectangular"});
+    const token=localStorage.getItem(KEY);
+    if(token) await restore(token);
+  }catch(e){$("loginStatus").textContent="Admin server से connection नहीं हो सका।";}
+}
+async function googleLogin(resp){
+  $("loginStatus").textContent="Google account verify हो रहा है…";
+  const r=await fetch(API+"/api/admin/google",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({credential:resp.credential})});
+  const d=await r.json();
+  if(!r.ok||!d.ok){$("loginStatus").textContent=d.message||"Access denied";return;}
+  localStorage.setItem(KEY,d.session_token); showPanel(d.email);
+}
+async function restore(token){
+  const r=await fetch(API+"/api/admin/session",{headers:{Authorization:"Bearer "+token}});
+  if(!r.ok){localStorage.removeItem(KEY);return}
+  const d=await r.json(); if(d.ok) showPanel(d.email);
+}
+function showPanel(email){$("login").classList.add("hidden");$("panel").classList.remove("hidden");$("adminEmail").textContent=email}
+function logout(){localStorage.removeItem(KEY);$("panel").classList.add("hidden");$("login").classList.remove("hidden");}
+async function run(action,extra={}){
+  const token=localStorage.getItem(KEY);
+  $("result").textContent="⏳ Command भेजी जा रही है…";
+  try{
+    const r=await fetch(API+"/api/admin/action",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});
+    const d=await r.json(); $("result").textContent=(d.ok?"✅ ":"❌ ")+(d.message||"Unknown result");
+  }catch(e){$("result").textContent="❌ "+e.message}
+}
+function confirmRun(action,msg){if(confirm(msg))run(action)}
+boot();
+</script>
+</body></html>
