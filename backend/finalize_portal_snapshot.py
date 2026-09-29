@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import csv, json, re, urllib.request
+import csv, json, re, urllib.request, os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -52,8 +52,8 @@ def main():
         name=clean(org.get("Organisation Name")); expected=count(org.get("Tender Count")); have=len(org_ids(name))
         if have!=expected: unresolved.append((name,expected,have))
 
-    # Source 2: RSP only supplies candidate Tender IDs.
-    if unresolved:
+    # Source 2: RSP is last-resort recovery only, explicitly enabled by the caller.
+    if unresolved and os.getenv("ALLOW_RSP_RECOVERY", "0").strip() == "1":
         req=urllib.request.Request(RSP_URL,headers={"User-Agent":"mp-tenders-recovery/1.0"})
         with urllib.request.urlopen(req,timeout=180) as f: payload=json.load(f)
         rsp_by_org={}
