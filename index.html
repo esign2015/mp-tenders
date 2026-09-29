@@ -1919,12 +1919,16 @@ body.telegram-locked .site-footer{visibility:hidden}
       मोबाइल नंबर केवल user registration और usage statistics के लिए सुरक्षित रखा जाएगा।
     </div>
     <label class="user-profile-label" for="userProfileName">नाम</label>
-    <input class="user-profile-input" id="userProfileName" type="text" maxlength="80" autocomplete="name" placeholder="अपना पूरा नाम">
+    <input class="user-profile-input" id="userProfileName" type="text" maxlength="80" autocomplete="off" placeholder="अपना पूरा नाम">
     <label class="user-profile-label" for="userProfileMobile">मोबाइल नंबर</label>
-    <input class="user-profile-input" id="userProfileMobile" type="tel" maxlength="14" inputmode="numeric" autocomplete="tel" placeholder="10 अंकों का मोबाइल नंबर">
+    <input class="user-profile-input" id="userProfileMobile" type="tel" maxlength="10" inputmode="numeric" autocomplete="off" placeholder="10 अंकों का मोबाइल नंबर">
+    <label class="user-profile-label" for="userProfileEmail">ईमेल आईडी</label>
+    <input class="user-profile-input" id="userProfileEmail" type="email" maxlength="120" autocomplete="off" placeholder="अपनी ईमेल आईडी">
+    <label class="user-profile-label" for="userProfileDistrict">जिला</label>
+    <input class="user-profile-input" id="userProfileDistrict" type="text" maxlength="80" autocomplete="off" placeholder="अपना जिला">
     <label class="user-profile-consent">
       <input id="userProfileConsent" type="checkbox">
-      <span>मैं सहमत हूँ कि मेरा नाम और मोबाइल नंबर MP Tender Dashboard के user registration record में रखा जाए।</span>
+      <span>मैं सहमत हूँ कि मेरी दी गई profile जानकारी MP Tender Dashboard के user registration record में रखी जाए।</span>
     </label>
     <button class="user-profile-save" id="userProfileSave" type="button">सहेजें और Dashboard खोलें</button>
     <div class="user-profile-status" id="userProfileStatus"></div>
@@ -2292,9 +2296,14 @@ async function loadUserProfile(){
       const panelBtn=document.getElementById("adminUserPanelBtn"); if(panelBtn) panelBtn.style.display="block";
     }
     if(data.registered) return true;
-    const tgName=[telegramAuthData?.first_name || "",telegramAuthData?.last_name || ""].join(" ").trim();
     const nameInput=document.getElementById("userProfileName");
-    if(nameInput && !nameInput.value) nameInput.value=data.user?.name || tgName || "";
+    const mobileInput=document.getElementById("userProfileMobile");
+    const emailInput=document.getElementById("userProfileEmail");
+    const districtInput=document.getElementById("userProfileDistrict");
+    if(nameInput) nameInput.value="";
+    if(mobileInput) mobileInput.value="";
+    if(emailInput) emailInput.value="";
+    if(districtInput) districtInput.value="";
     openUserProfileModal();
     return false;
   }catch(e){
@@ -2322,20 +2331,24 @@ async function saveUserProfile(){
   const token=localStorage.getItem("telegram_session");
   const name=(document.getElementById("userProfileName")?.value || "").trim();
   const mobile=(document.getElementById("userProfileMobile")?.value || "").trim();
+  const email=(document.getElementById("userProfileEmail")?.value || "").trim();
+  const district=(document.getElementById("userProfileDistrict")?.value || "").trim();
   const consent=document.getElementById("userProfileConsent")?.checked;
   const status=document.getElementById("userProfileStatus");
   const save=document.getElementById("userProfileSave");
   if(!token){ if(status) status.textContent="Telegram session नहीं मिला। कृपया फिर से login करें।"; return; }
   if(name.length<2){ if(status) status.textContent="कृपया अपना पूरा नाम दर्ज करें।"; return; }
   const digits=mobile.replace(/\D/g,"").replace(/^91(?=\d{10}$)/,"");
-  if(!/^[6-9]\d{9}$/.test(digits)){ if(status) status.textContent="कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।"; return; }
+  if(!/^[6-9]\d{9}$/.test(digits)){ if(status) status.textContent="कृपया सही नंबर डालिए।"; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ if(status) status.textContent="कृपया सही ईमेल आईडी डालिए।"; return; }
+  if(district.length<2){ if(status) status.textContent="कृपया सही जिला दर्ज करें।"; return; }
   if(!consent){ if(status) status.textContent="कृपया consent checkbox को tick करें।"; return; }
   if(save) save.disabled=true;
   if(status){status.style.color="#475569";status.textContent="⏳ प्रोफाइल save हो रही है...";}
   try{
     const response=await fetch(USER_REGISTER_API,{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({session_token:token,name,mobile:digits})
+      body:JSON.stringify({session_token:token,name,mobile:digits,email,district})
     });
     const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.ok) throw new Error(data.message || "Profile save failed.");
