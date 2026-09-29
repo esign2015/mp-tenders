@@ -86,21 +86,75 @@ def money_text(value):
     return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
-def request(session, url, retries=3, sleep=1.0, referer=None):
+def request(session, url, retries=None, sleep=0.35, referer=None):
+    """MP portal request with session-timeout recovery and bounded backoff.
+
+    This is MP-only. If NIC returns a timed-out/unauthorised JSF page, refresh
+    the stable portal home session and retry the requested page.
+    """
     last = None
+    retries = retries or int(os.getenv("REQUEST_RETRIES", "4") or 4)
     request_headers = dict(HEADERS)
     if referer:
         request_headers["Referer"] = referer
+    backoff = (2, 5, 10, 15)
     for attempt in range(retries):
         try:
-            response = session.get(url, headers=request_headers, timeout=60, allow_redirects=True)
+            response = session.get(
+                url,
+                headers=request_headers,
+                timeout=(10, 60),
+                allow_redirects=True,
+            )
             response.raise_for_status()
+            body = response.text.casefold()
+            stale = (
+                "your session has timed out" in body
+                or "unauthorised access" in body
+                or "unauthorized access" in body
+                or "unauthorisedaccesspage" in response.url.casefold()
+            )
+            if stale:
+                try:
+                    session.get(
+                        PORTAL,
+                        headers=HEADERS,
+                        timeout=(10, 30),
+                        allow_redirects=True,
+                    )
+                except Exception:
+                    pass
+                time.sleep(0.7)
+                response = session.get(
+                    url,
+                    headers=request_headers,
+                    timeout=(10, 60),
+                    allow_redirects=True,
+                )
+                response.raise_for_status()
+                retry_body = response.text.casefold()
+                if (
+                    "your session has timed out" in retry_body
+                    or "unauthorised access" in retry_body
+                    or "unauthorized access" in retry_body
+                ):
+                    raise RuntimeError("MP portal session remained stale after refresh")
             time.sleep(sleep)
             return response
         except Exception as exc:
             last = exc
-            time.sleep(2 + attempt * 2)
-    raise last
+            if attempt < retries - 1:
+                time.sleep(backoff[min(attempt, len(backoff) - 1)])
+                try:
+                    session.get(
+                        PORTAL,
+                        headers=HEADERS,
+                        timeout=(10, 30),
+                        allow_redirects=True,
+                    )
+                except Exception:
+                    pass
+    raise last or RuntimeError("MP portal request failed")
 
 
 def absolute(base, href):
@@ -175,23 +229,44 @@ def parse_chain(chain):
 
 
 def parse_latest_corrigendum(soup):
-    """Read the Latest Corrigendum List shown on a tender detail page."""
+    """Read the real Latest Corrigendum table, not the surrounding heading table."""
     result = {"title": "", "type": "", "key": ""}
-    for heading in soup.find_all(string=re.compile(r"Latest\s+Corrigendum\s+List", re.I)):
-        table = heading.find_parent("table")
-        if not table:
+    tables = []
+    heading = soup.find(
+        string=lambda value: isinstance(value, str)
+        and re.search(r"^\s*Latest\s+Corrigendum\s+List\s*$", value, re.I)
+    )
+    if heading is not None:
+        parent = heading.parent
+        for table in parent.find_all_next("table", limit=8):
+            text = " ".join(table.stripped_strings)
+            if re.search(r"Corrigendum\s+Title", text, re.I) and re.search(r"Corrigendum\s+Type", text, re.I):
+                tables.append(table)
+                break
+    if not tables:
+        for table in soup.find_all("table"):
+            text = " ".join(table.stripped_strings)
+            if re.search(r"Corrigendum\s+Title", text, re.I) and re.search(r"Corrigendum\s+Type", text, re.I):
+                tables.append(table)
+                break
+    if not tables:
+        return result
+    for tr in tables[0].find_all("tr"):
+        cells = tr.find_all("td")
+        if not cells:
             continue
-        for tr in table.find_all("tr"):
-            cells = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td","th"])]
-            if len(cells) < 3:
-                continue
-            low = " ".join(c.casefold() for c in cells)
-            if "corrigendum title" in low or "corrigendum type" in low:
-                continue
-            result["title"] = cells[1]
-            result["type"] = cells[2]
-            result["key"] = (result["title"] + "||" + result["type"]).strip().casefold()
-            return result
+        vals = [clean(cell.get_text(" ", strip=True)) for cell in cells]
+        joined = " ".join(vals).casefold()
+        if not joined or "corrigendum title" in joined:
+            continue
+        title = vals[1] if len(vals) >= 3 else (vals[0] if vals else "")
+        ctype = vals[2] if len(vals) >= 3 else (vals[1] if len(vals) >= 2 else "")
+        if not title and not ctype:
+            continue
+        result["title"] = title or "Corrigendum"
+        result["type"] = ctype
+        result["key"] = (result["title"] + "||" + result["type"]).strip().casefold()
+        return result
     return result
 
 def infer_mp_district(pincode, location="", title="", work_description="", organisation="", department="", division="", sub_division=""):
@@ -203,8 +278,6 @@ def infer_mp_district(pincode, location="", title="", work_description="", organ
     - ambiguous PIN-prefix matches are left blank rather than guessing.
     """
     pin = re.sub(r"\D", "", clean(pincode))[:6]
-    if not pin:
-        return ""
     master_path = Path(__file__).resolve().parent.parent / "data" / "mp_districts.json"
     try:
         with master_path.open("r", encoding="utf-8") as f:
@@ -227,14 +300,17 @@ def infer_mp_district(pincode, location="", title="", work_description="", organ
     if len(set(candidates)) == 1:
         return candidates[0]
 
-    exact = []
-    for district in master if isinstance(master, list) else []:
-        name = clean(district.get("name"))
-        prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
-        if pin in prefixes:
-            exact.append(name)
-    exact = list(dict.fromkeys(x for x in exact if x))
-    return exact[0] if len(exact) == 1 else ""
+    if pin:
+        exact = []
+        for district in master if isinstance(master, list) else []:
+            name = clean(district.get("name"))
+            prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
+            if pin in prefixes:
+                exact.append(name)
+        exact = list(dict.fromkeys(x for x in exact if x))
+        if len(exact) == 1:
+            return exact[0]
+    return ""
 
 def parse_detail(soup, url):
     """RSP-derived resilient MP Tender detail extraction.
@@ -1768,6 +1844,24 @@ def write_extraction_status(csv_file, status):
         encoding="utf-8",
     )
 
+DETAIL_REQUIRED_FIELDS = (
+    "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
+    "Total Fee", "Location", "Pincode", "Work Description",
+    "Product Category", "Contract Type", "Bid Validity",
+)
+
+def detail_is_complete(row):
+    """Single completion rule used by status + retry selection.
+
+    A stale 'Detail Extracted=YES' flag alone is not enough. Every required
+    detail field must still be present, so incomplete current tenders are
+    automatically eligible for retry.
+    """
+    if clean((row or {}).get("Detail Extracted")).upper() != "YES":
+        return False
+    return all(clean((row or {}).get(field)) for field in DETAIL_REQUIRED_FIELDS)
+
+
 def status_metrics(rows):
     rows = rows or []
     departments = {clean(r.get("Department")) for r in rows if clean(r.get("Department"))}
@@ -1791,22 +1885,18 @@ def run_separate_detail_extraction(csv_file, organisations, process_started_at, 
     existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
 
     candidates = []
-    new_only = os.getenv("NEW_TENDER_ONLY", "0").lower() in ("1", "true", "yes")
-    today_ist = datetime.now(timezone(timedelta(hours=5, minutes=30))).date()
 
     for row in tender_list_rows:
         tender_id = clean(row.get("Tender ID"))
         if not tender_id:
             continue
         old = existing_by_id.get(tender_id, {})
-        if clean(old.get("Detail Extracted")).upper() == "YES":
+        # Process every CURRENT Tender ID whose detail is incomplete.
+        # NEW_TENDER_ONLY is intentionally ignored here: an older current
+        # tender must not remain pending forever merely because it was not
+        # published today.
+        if detail_is_complete(old):
             continue
-
-        if new_only:
-            published = parse_portal_datetime(row.get("Published Date"))
-            if not published or published.date() != today_ist:
-                continue
-
         candidates.append((row, old))
 
     try:
@@ -1823,8 +1913,8 @@ def run_separate_detail_extraction(csv_file, organisations, process_started_at, 
         return {"detail_opened": 0, "detail_pending": 0, "detail_errors": 0}
 
     print(
-        f"DETAIL PHASE START: {len(candidates)} pending records "
-        f"(NEW_TENDER_ONLY={'1' if new_only else '0'}, batch={batch_size or 'all'})",
+        f"DETAIL PHASE START: {len(candidates)} current incomplete records "
+        f"(completion-based retry, batch={batch_size or 'all'})",
         flush=True,
     )
 
@@ -1900,7 +1990,14 @@ def run_separate_detail_extraction(csv_file, organisations, process_started_at, 
                         detail["Division"] = chain_division
                         detail["Sub Division"] = chain_sub_division
 
-                    existing_by_id[tender_id] = {**old, **detail, "Detail Extracted": "YES"}
+                    merged_detail = {**old, **detail, "Detail Extracted": "YES"}
+                    existing_by_id[tender_id] = merged_detail
+                    if not detail_is_complete(merged_detail):
+                        # Keep partial values but do not falsely mark this ID complete.
+                        existing_by_id[tender_id]["Detail Extracted"] = ""
+                        write_csv(csv_file, list(existing_by_id.values()))
+                        missing = [field for field in DETAIL_REQUIRED_FIELDS if not clean(merged_detail.get(field))]
+                        raise RuntimeError("detail incomplete after extraction: " + ", ".join(missing))
                     detail_opened += 1
                     stats["detail_opened"] += 1
 
@@ -2132,15 +2229,7 @@ def scrape_mp_tenders(csv_file):
 
     # Publish the real starting inventory immediately; never show a fake 0
     # while the detail extraction job is still running.
-    initial_complete = sum(
-        1 for r in existing_by_id.values()
-        if clean(r.get("Detail Extracted")).upper() == "YES"
-        and all(clean(r.get(k)) for k in (
-            "Tender ID", "Tender Fee", "Processing Fee", "EMD Fee",
-            "Total Fee", "Location", "Pincode", "Work Description",
-            "Product Category", "Contract Type", "Bid Validity"
-        ))
-    )
+    initial_complete = sum(1 for r in existing_by_id.values() if detail_is_complete(r))
     write_extraction_status(csv_file, {
         "status": "running",
         "process_started_at": process_started_at,
@@ -2165,7 +2254,7 @@ def scrape_mp_tenders(csv_file):
     detail_candidates_seen = 0
     recovered_completed_ids = [
         tid for tid, row in existing_by_id.items()
-        if tid and clean(row.get("Detail Extracted")).upper() == "YES"
+        if tid and detail_is_complete(row)
     ]
     # Compatibility state for the final run summary. Detail extraction itself
     # now owns its own candidate/checkpoint state.
