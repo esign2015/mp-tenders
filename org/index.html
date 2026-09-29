@@ -77,7 +77,7 @@ function render(){
  const totals={portal:0,copied:0,success:0,fail:0,skip:0,pending:0};
  const html=rows.map((x,i)=>{
   const name=x['Organisation Name'], key=clean(name).toLowerCase(), count=Number(x['Tender Count']||0);
-  const orgRows=[...tenders,...recovery].filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
+  const orgRows=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
   const ids=new Set(orgRows.map(t=>clean(t['Tender ID'])).filter(Boolean));
   // Count successful detail extraction from the actual detail CSV first.
   // This avoids showing 0 while the worker has already checkpointed detail rows
@@ -122,7 +122,7 @@ async function load(){
   }catch(_){statusData={errors:[]}}
   $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
-  const copied=new Set([...tenders,...recovery].map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
+  const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
   const actualDetailSuccess=new Set(
     details
       .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
@@ -131,7 +131,7 @@ async function load(){
   );
   const statusDetailSuccess=new Set((statusData.success_ids||[]).map(clean).filter(Boolean));
   $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+new Set([...actualDetailSuccess,...statusDetailSuccess]).size.toLocaleString('en-IN');
-  $('msg').textContent='Status = Portal Tender Count और Copied Tender Count का मिलान. Closing Date (14 days) recovery IDs भी dedupe करके शामिल हैं। Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
+  $('msg').textContent='Status = current Portal Tender Count और current copied Tender IDs का मिलान। Closing Date recovery file को सीधे count में नहीं जोड़ा जाता; recovered ID तभी गिनी जाएगी जब वह current organisation snapshot में शामिल हो। Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
   render();
  }catch(e){
   console.error(e);
