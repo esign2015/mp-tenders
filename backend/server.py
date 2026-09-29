@@ -5,7 +5,9 @@ import hmac
 import json
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from urllib import request as urllib_request, parse as urllib_parse\nimport subprocess\nimport tempfile
+from urllib import request as urllib_request, parse as urllib_parse
+import subprocess
+import tempfile
 
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
