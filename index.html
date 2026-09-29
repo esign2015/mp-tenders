@@ -6134,7 +6134,7 @@ enforceTelegramAccess().then(async () => {
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
-        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated form • tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial"})]})]})},children:paragraphs}]
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from https://tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
@@ -6327,7 +6327,7 @@ enforceTelegramAccess().then(async () => {
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,285,192,285);
         doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(90);
-        doc.text("This Affidavit is generated form • tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",105,290,{align:"center"});
+        doc.text("This Affidavit is generated from https://tenders.codinglms.xyz • SAR Digital Services, Kannod • MP Tender Live Dashboard",105,290,{align:"center"});
         doc.setTextColor(0);
       }
       doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit source alignment और website branding के साथ तैयार है।";
