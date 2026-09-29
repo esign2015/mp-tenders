@@ -1208,6 +1208,9 @@ td.title-cell{
 .tender-card-close{margin-top:7px;border-radius:8px;padding:8px;background:#173d70;color:#fff;display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:12px}
 .tender-card.closing-today .tender-card-close{background:#b91c1c}
 .tender-card-extra{margin-top:6px;font-size:11px;color:#475569;display:flex;justify-content:space-between;gap:8px}
+.tender-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.tender-card-actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid #cbd5e1;border-radius:7px;padding:7px 8px;font-size:11px;font-weight:800;color:#173d70;background:#fff}
+.tender-card-actions a.share{color:#087443;border-color:#86efac;background:#f0fdf4}
 .sar-ad-card{grid-column:1/-1;border:2px solid #d4a514;border-radius:14px;background:linear-gradient(120deg,#173d70,#245b8f);color:#fff;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
 .sar-ad-kicker{font-size:10px;font-weight:800;letter-spacing:.08em;color:#fde68a;text-transform:uppercase}
 .sar-ad-card h3{margin:4px 0 3px;font-size:20px}.sar-ad-card p{margin:0;font-size:13px;opacity:.92}
@@ -3692,8 +3695,8 @@ function sarAdCard(){
     <aside class="sar-ad-card" aria-label="Advertisement">
       <div>
         <div class="sar-ad-kicker">Advertisement • SAR Digital Services, Kannod</div>
-        <h3>DSC &amp; E-Tendering Services</h3>
-        <p>MP Tender users के लिए सहायता • WhatsApp या Telegram पर संपर्क करें।</p>
+        <h3>DSC Sale • PWD Registration • Tender Submission</h3>
+        <p>Tender Submission only ₹1,000 per tender • DSC और PWD registration assistance available.</p>
       </div>
       <div class="sar-ad-actions">
         <a href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
@@ -3710,6 +3713,34 @@ function cardClosingClass(row){
   if(dateKey(d)===todayKey()) return "closing-today";
   if(diff<=48*60*60*1000) return "closing-soon";
   return "";
+}
+
+
+function stableTenderUrl(row){
+  const id=clean(row["Tender ID"]);
+  return location.origin+location.pathname+"?tender="+encodeURIComponent(id);
+}
+function whatsappShareUrl(row){
+  const lines=[
+    "*SAR Digital Services - MP Tender*",
+    "",
+    "*Tender ID:* "+clean(row["Tender ID"]),
+    "*District / City:* "+(getDistrictInfo(row).name||clean(row["Location"])||"—"),
+    "*Organisation:* "+clean(displayTenderValue(row,"Organisation")),
+    "*Category:* "+clean(displayTenderValue(row,"Product Category")),
+    "*Work Name:* "+clean(displayTenderValue(row,"Title")),
+    "*Ref. No.:* "+clean(displayTenderValue(row,"Reference Number")),
+    "*Published Date:* "+clean(row["Published Date"]),
+    "*PAC / Estimated Cost:* "+formatMoney(row["PAC Amount"]),
+    "*EMD:* "+formatMoney(row["EMD Fee"]),
+    "*Tender Fee:* "+formatMoney(row["Tender Fee"]),
+    "*Processing Fee:* "+formatMoney(row["Processing Fee"]),
+    "*Total Fee:* "+formatMoney(totalFee(row)),
+    "*Submission End Date:* "+formatClosingDateTime(row["Closing Date"]),
+    "",
+    "*Tender Dashboard Link:* "+stableTenderUrl(row)
+  ];
+  return "https://api.whatsapp.com/send/?text="+encodeURIComponent(lines.join("\n"))+"&type=custom_url&app_absent=0";
 }
 
 function renderCardWindow(){
@@ -3749,6 +3780,10 @@ function renderCardWindow(){
         </div>
         <div class="tender-card-extra"><span>PIN: ${escapeHtml(row["Pincode"])||"—"}</span><span>Corrigendum: ${corr}</span></div>
         <div class="tender-card-close"><span>SUBMISSION END</span><span>${escapeHtml(formatClosingDateTime(row["Closing Date"]))}</span></div>
+        <div class="tender-card-actions">
+          <a class="share" href="${escapeHtml(whatsappShareUrl(row))}" target="_blank" rel="noopener noreferrer">💬 Share on WhatsApp</a>
+          <a href="${escapeHtml(stableTenderUrl(row))}" target="_blank" rel="noopener noreferrer">Open</a>
+        </div>
       </article>`);
     if((index+1)%CARD_AD_INTERVAL===0 && index<visibleRows.length-1) blocks.push(sarAdCard());
   });
@@ -3924,7 +3959,7 @@ function updateVirtualWindow(){
     virtualTopHeight = Math.max(0, virtualTopHeight - addedHeight);
     virtualBottomHeight += removedBottomHeight || VIRTUAL_CHUNK_SIZE * ESTIMATED_ROW_HEIGHT;
 
-    renderVirtualWindow();
+    renderCurrentView();
 
     requestAnimationFrame(() => {
       wrap.scrollTop += addedHeight;
@@ -3972,7 +4007,7 @@ function goVirtualPage(direction){
   virtualTopHeight = virtualStart * ESTIMATED_ROW_HEIGHT;
   virtualBottomHeight = Math.max(0, virtualRows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
 
-  renderVirtualWindow();
+  renderCurrentView();
 
   requestAnimationFrame(() => {
     if(wrap){
@@ -4720,6 +4755,18 @@ function openColumnMenu(anchor){
     localStorage.removeItem(COLUMN_PREF_KEY);applyColumnVisibility();openColumnMenu(anchor);
   };
 }
+
+function applySharedTenderQuery(){
+  try{
+    const tid=new URLSearchParams(location.search).get("tender");
+    if(!tid) return;
+    const input=$("generalSearch");
+    if(!input) return;
+    input.value=tid;
+    applyFilters(false);
+  }catch(e){}
+}
+
 function setupUserFeatures(){
   const col=$("columnBtn"),orgBtn=$("orgDisplayBtn");
   const cardBtn=$("cardViewBtn"),tableBtn=$("tableViewBtn");
@@ -5491,7 +5538,7 @@ $("installAppBtn")?.addEventListener("click",installDashboardApp);
 applyLanguage(currentLanguage);
 
 // Initialise personal preference controls after Telegram identity is known.
-setupUserFeatures();
+setupUserFeatures();applySharedTenderQuery();
 
 
 updateDateTime();
