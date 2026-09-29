@@ -63,7 +63,7 @@ button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger
     </div>
   </div>
 
-  <div class="card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div></div>
+  <div class="card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div><div id="workflowState" class="small" style="margin-top:8px"></div></div>
 </section>
 </main>
 
@@ -100,12 +100,34 @@ function showPanel(email){$("login").classList.add("hidden");$("panel").classLis
 function logout(){localStorage.removeItem(KEY);$("panel").classList.add("hidden");$("login").classList.remove("hidden");}
 let toastTimer;
 function showToast(message,type="info"){const t=$("toast");clearTimeout(toastTimer);t.textContent=message;t.className="toast "+type+" show";toastTimer=setTimeout(()=>t.classList.remove("show"),6000)}
+let workflowPollTimer=null;
+async function pollWorkflow(action,attempt=0){
+  const token=localStorage.getItem(KEY);
+  try{
+    const r=await fetch(API+"/api/admin/workflow-status?action="+encodeURIComponent(action),{headers:{Authorization:"Bearer "+token},cache:"no-store"});
+    const d=await r.json();
+    if(!r.ok||!d.ok) throw new Error(d.message||"Status check failed");
+    const run=d.run||{};
+    if(!run.id){$("workflowState").textContent="Workflow अभी GitHub पर दिखाई नहीं दिया है…";return;}
+    const label="Run #"+(run.run_number||run.id)+" • "+(run.status||"unknown")+(run.conclusion?" • "+run.conclusion:"");
+    $("workflowState").textContent=label;
+    if(run.status==="completed"){
+      const ok=run.conclusion==="success";
+      showToast((ok?"✅ ":"❌ ")+label,ok?"success":"error");
+      return;
+    }
+    if(attempt<40) workflowPollTimer=setTimeout(()=>pollWorkflow(action,attempt+1),5000);
+  }catch(e){
+    $("workflowState").textContent="Workflow status: "+e.message;
+  }
+}
 async function run(action,extra={}){
   const token=localStorage.getItem(KEY);
   $("result").textContent="⏳ Command भेजी जा रही है…";
+  $("workflowState").textContent="";
   try{
     const r=await fetch(API+"/api/admin/action",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});
-    const d=await r.json(); const message=(d.ok?"✅ ":"❌ ")+(d.message||"Unknown result"); $("result").textContent=message; showToast(message,d.ok?"success":"error");
+    const d=await r.json(); const message=(d.ok?"✅ ":"❌ ")+(d.message||"Unknown result"); $("result").textContent=message; showToast(message,d.ok?"success":"error"); if(d.ok){clearTimeout(workflowPollTimer);setTimeout(()=>pollWorkflow(action),2500);}
   }catch(e){const message="❌ "+e.message; $("result").textContent=message; showToast(message,"error")}
 }
 function confirmRun(action,msg){if(confirm(msg))run(action)}
