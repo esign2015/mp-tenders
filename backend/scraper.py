@@ -2417,6 +2417,21 @@ def scrape_mp_tenders(csv_file):
         encoding="utf-8",
     )
 
+    # Explicit retry audit: only organisations that still mismatched after
+    # three portal-copy attempts are listed here.
+    mismatch_retry_report = {
+        "status": "mismatch" if stats.get("mismatches") else "match",
+        "retry_limit": 3,
+        "snapshot_at": datetime.now(timezone(timedelta(hours=5, minutes=30))).isoformat(),
+        "mismatches": stats.get("mismatches", []),
+    }
+    mismatch_retry_file = csv_file.parent / "data" / "count_mismatch_retry.json"
+    mismatch_retry_file.parent.mkdir(parents=True, exist_ok=True)
+    mismatch_retry_file.write_text(
+        json.dumps(mismatch_retry_report, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
     print(
         f"COPY PHASE COMPLETE: organisations={stats['organisations_verified']}/"
         f"{len(organisations)}, tenders={len(tender_list_rows)}",
