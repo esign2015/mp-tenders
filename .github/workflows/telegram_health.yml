@@ -1,0 +1,58 @@
+name: Telegram Health Test
+
+on:
+  push:
+    paths:
+      - "data/telegram_health_test.trigger"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  telegram-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Telegram health test
+        id: send
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          token=os.environ["TELEGRAM_BOT_TOKEN"].strip()
+          chat_id=os.environ["TELEGRAM_CHAT_ID"].strip()
+          text="🧪 MP Tenders Telegram Health Test\n\nTelegram bot delivery is being tested.\nTime: GitHub Actions\n\nIf you received this message, Telegram delivery is working."
+          url=f"https://api.telegram.org/bot{token}/sendMessage"
+          data=urllib.parse.urlencode({"chat_id":chat_id,"text":text}).encode()
+          with urllib.request.urlopen(urllib.request.Request(url,data=data,method="POST"),timeout=30) as r:
+              body=json.loads(r.read().decode())
+          if not body.get("ok"):
+              raise SystemExit(json.dumps(body))
+          print("Telegram API ok:", body.get("result",{}).get("message_id"))
+          PY
+
+      - name: Record health result
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          Path("data/telegram_health_result.json").write_text(json.dumps({
+            "tested_at": datetime.now(timezone.utc).isoformat(),
+            "status": "${{ steps.send.outcome }}",
+            "workflow": "${{ github.workflow }}",
+            "run_id": "${{ github.run_id }}"
+          }, indent=2), encoding="utf-8")
+          PY
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          git add data/telegram_health_result.json
+          git diff --cached --quiet || git commit -m "Record Telegram health test result [skip ci]"
+          git push
