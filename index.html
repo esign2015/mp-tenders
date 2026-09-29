@@ -1186,7 +1186,36 @@ td.title-cell{
   font-size:10px;
 }
 <style>.brand-lockup{display:flex;align-items:center;gap:7px;min-width:0}.brand-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border-radius:7px;background:rgba(255,255,255,.12);overflow:hidden}.brand-logo{display:block;width:38px;height:38px;object-fit:contain;object-position:center;visibility:visible;opacity:1;position:relative;z-index:2}.brand-logo-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#203b91;background:#fff;font-weight:900;font-size:11px;z-index:1}.brand-copy{min-width:0}.header-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex-wrap:nowrap;white-space:nowrap}.lang-btn,.header-contact{height:24px;padding:3px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:9px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}.lang-btn{background:#fff;color:#203b91}.lang-btn:not(.active){background:transparent;color:#fff}.header-contact.whatsapp{background:#22c55e;color:#fff}.header-contact.telegram{background:#229ed9;color:#fff}.header-contact.install-app{background:#f59e0b;color:#172033}.header-contact.latest-alert{background:#0ea5e9;color:#fff}.header-contact.install-app[disabled]{opacity:.7}.data-refresh-status{margin-top:3px;font-size:10px;color:#b7f7d0;font-weight:800}.action-contact{padding:8px 10px!important}@media(max-width:1100px){.site-header{grid-template-columns:minmax(240px,300px) minmax(300px,340px) minmax(0,1fr);gap:5px;padding:4px 8px}.main-brand{font-size:17px}.brand-logo-wrap,.brand-logo{width:34px;height:34px}.brand-logo-wrap{flex-basis:34px}.count-box{width:76px;min-width:76px;height:44px}.count-label{font-size:8px}.count-number{font-size:16px}.header-contact{padding:3px 4px;font-size:8px}}
-@media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:42px;height:42px;flex-basis:42px}.header-contact-row{justify-content:center;flex-wrap:wrap}}</style>
+@media(max-width:850px){.brand-lockup{justify-content:center}.brand-logo{width:42px;height:42px;flex-basis:42px}.header-contact-row{justify-content:center;flex-wrap:wrap}}
+/* Tender card/table dual view */
+.view-toggle-btn.active{background:#173d70;color:#fff;border-color:#173d70}
+.tender-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px}
+.tender-card-grid[hidden]{display:none!important}
+.tender-card{border:1px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 2px 7px #0f172a12;padding:10px;display:flex;flex-direction:column;min-height:280px}
+.tender-card.closing-today{border-color:#dc2626;box-shadow:0 0 0 1px #dc262622}
+.tender-card.closing-soon{border-color:#f59e0b}
+.tender-card-id-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.tender-card-id{font-weight:800;color:#0f4c81;font-size:14px;word-break:break-word}
+.tender-card-time{font-size:11px;font-weight:800;background:#eef6ff;color:#0f4c81;border-radius:999px;padding:4px 7px;white-space:nowrap}
+.tender-card.closing-today .tender-card-time{background:#b91c1c;color:#fff}
+.tender-card-title{font-weight:800;line-height:1.25;font-size:14px;margin:4px 0 3px}
+.tender-card-ref{font-size:11px;color:#64748b;margin-bottom:4px}
+.tender-card-org{font-size:12px;font-weight:700;color:#0f4c81;margin-bottom:7px}
+.tender-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:auto}
+.tender-card-metric{background:#f5f7fb;border-radius:7px;padding:6px;min-width:0}
+.tender-card-metric span{display:block;color:#64748b;font-size:9px;text-transform:uppercase;line-height:1.15}
+.tender-card-metric b{display:block;font-size:12px;margin-top:2px;word-break:break-word}
+.tender-card-close{margin-top:7px;border-radius:8px;padding:8px;background:#173d70;color:#fff;display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:12px}
+.tender-card.closing-today .tender-card-close{background:#b91c1c}
+.tender-card-extra{margin-top:6px;font-size:11px;color:#475569;display:flex;justify-content:space-between;gap:8px}
+.sar-ad-card{grid-column:1/-1;border:2px solid #d4a514;border-radius:14px;background:linear-gradient(120deg,#173d70,#245b8f);color:#fff;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.sar-ad-kicker{font-size:10px;font-weight:800;letter-spacing:.08em;color:#fde68a;text-transform:uppercase}
+.sar-ad-card h3{margin:4px 0 3px;font-size:20px}.sar-ad-card p{margin:0;font-size:13px;opacity:.92}
+.sar-ad-actions{display:flex;gap:8px;flex-wrap:wrap}.sar-ad-actions a{display:inline-flex;align-items:center;text-decoration:none;border-radius:8px;padding:9px 12px;font-weight:800;font-size:12px;background:#fff;color:#173d70}.sar-ad-actions a:first-child{background:#22c55e;color:#fff}
+@media(max-width:1100px){.tender-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{grid-template-columns:1fr}}
+@media(max-width:520px){.tender-card-grid{grid-template-columns:1fr;padding:7px}.tender-card{min-height:auto}.tender-card-metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
 
 <style>
 /* ===== Telegram access gate + distinct action buttons ===== */
@@ -2156,15 +2185,19 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="table-heading" id="tableHeading" data-i18n="tableHeading">Live Tender Records</div>
 
       <div class="table-tools">
+        <button class="btn-dark view-toggle-btn active" id="cardViewBtn" type="button">▦ Card View</button>
+        <button class="btn-light view-toggle-btn" id="tableViewBtn" type="button">▤ Table View</button>
         <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
       </div>
     </div>
 
-    <div class="table-scroll-top" id="tableScrollTop" aria-label="Horizontal table scrollbar">
+    <div class="tender-card-grid" id="tenderCardGrid" aria-live="polite"></div>
+
+    <div class="table-scroll-top" id="tableScrollTop" aria-label="Horizontal table scrollbar" hidden>
       <div class="table-scroll-top-inner" id="tableScrollTopInner"></div>
     </div>
 
-    <div class="table-wrap" id="tableWrap">
+    <div class="table-wrap" id="tableWrap" hidden>
       <table id="tenderTable">
         <thead>
           <tr>
@@ -3645,8 +3678,106 @@ async function translateVisibleTenderRows(){
   };
   await Promise.all([worker(),worker()]);
   if(token!==translationRunToken || currentLanguage!=="hi") return;
-  renderVirtualWindow();
+  renderCurrentView();
   updateRefreshBadge();
+}
+
+
+const VIEW_PREF_KEY="mpTenderViewMode";
+let tenderViewMode=localStorage.getItem(VIEW_PREF_KEY)||"card";
+const CARD_AD_INTERVAL=12;
+
+function sarAdCard(){
+  return `
+    <aside class="sar-ad-card" aria-label="Advertisement">
+      <div>
+        <div class="sar-ad-kicker">Advertisement • SAR Digital Services, Kannod</div>
+        <h3>DSC &amp; E-Tendering Services</h3>
+        <p>MP Tender users के लिए सहायता • WhatsApp या Telegram पर संपर्क करें।</p>
+      </div>
+      <div class="sar-ad-actions">
+        <a href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+        <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">✈ Telegram</a>
+      </div>
+    </aside>`;
+}
+
+function cardClosingClass(row){
+  const d=parseDate(row["Closing Date"]);
+  if(!d) return "";
+  const diff=d.getTime()-Date.now();
+  if(diff<=0) return "";
+  if(dateKey(d)===todayKey()) return "closing-today";
+  if(diff<=48*60*60*1000) return "closing-soon";
+  return "";
+}
+
+function renderCardWindow(){
+  const grid=$("tenderCardGrid");
+  if(!grid) return;
+  const visibleRows=virtualRows.slice(virtualStart,virtualEnd);
+  if(!visibleRows.length){
+    grid.innerHTML='<div class="tender-card" style="grid-column:1/-1;text-align:center">No tender records found.</div>';
+    $("recordCount").textContent=currentLanguage==="hi"?"0 रिकॉर्ड दिखाए गए":"0 record(s) shown";
+    return;
+  }
+  const blocks=[];
+  visibleRows.forEach((row,index)=>{
+    const n=virtualStart+index+1;
+    const title=escapeHtml(displayTenderValue(row,"Title"))||"—";
+    const org=escapeHtml(displayTenderValue(row,"Organisation"))||"—";
+    const district=escapeHtml(getDistrictInfo(row).name||"—");
+    const category=escapeHtml(displayTenderValue(row,"Product Category"))||"—";
+    const contract=escapeHtml(displayTenderValue(row,"Contract Type"))||"—";
+    const corr=escapeHtml(displayTenderValue(row,"Corrigendum"))||"—";
+    blocks.push(`
+      <article class="tender-card ${cardClosingClass(row)}">
+        <div class="tender-card-id-row">
+          <div class="tender-card-id">${escapeHtml(row["Tender ID"])||"—"}</div>
+          <div class="tender-card-time">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
+        </div>
+        <div class="tender-card-ref">#${n} • Ref: ${escapeHtml(displayTenderValue(row,"Reference Number"))||"—"}</div>
+        <div class="tender-card-title">${title}</div>
+        <div class="tender-card-org">${org} • ${district}</div>
+        <div class="tender-card-metrics">
+          <div class="tender-card-metric"><span>Category</span><b>${category}</b></div>
+          <div class="tender-card-metric"><span>Contract</span><b>${contract}</b></div>
+          <div class="tender-card-metric"><span>PAC / Estimate</span><b>${formatMoney(row["PAC Amount"])}</b></div>
+          <div class="tender-card-metric"><span>EMD</span><b>${formatMoney(row["EMD Fee"])}</b></div>
+          <div class="tender-card-metric"><span>Tender Fee</span><b>${formatMoney(row["Tender Fee"])}</b></div>
+          <div class="tender-card-metric"><span>Total Fee</span><b>${formatMoney(totalFee(row))}</b></div>
+        </div>
+        <div class="tender-card-extra"><span>PIN: ${escapeHtml(row["Pincode"])||"—"}</span><span>Corrigendum: ${corr}</span></div>
+        <div class="tender-card-close"><span>SUBMISSION END</span><span>${escapeHtml(formatClosingDateTime(row["Closing Date"]))}</span></div>
+      </article>`);
+    if((index+1)%CARD_AD_INTERVAL===0 && index<visibleRows.length-1) blocks.push(sarAdCard());
+  });
+  grid.innerHTML=blocks.join("");
+  $("recordCount").textContent=
+    virtualRows.length>virtualEnd
+      ? (currentLanguage==="hi"?virtualRows.length+" परिणाम • पेज "+(Math.floor(virtualStart/VIRTUAL_CHUNK_SIZE)+1):virtualRows.length+" matched • page "+(Math.floor(virtualStart/VIRTUAL_CHUNK_SIZE)+1))
+      : (currentLanguage==="hi"?virtualRows.length+" रिकॉर्ड दिखाए गए":virtualRows.length+" record(s) shown");
+}
+
+function applyTenderView(){
+  const card=tenderViewMode==="card";
+  const grid=$("tenderCardGrid"),wrap=$("tableWrap"),top=$("tableScrollTop");
+  if(grid) grid.hidden=!card;
+  if(wrap) wrap.hidden=card;
+  if(top) top.hidden=card;
+  $("cardViewBtn")?.classList.toggle("active",card);
+  $("tableViewBtn")?.classList.toggle("active",!card);
+  if(card) renderCardWindow(); else renderVirtualWindow();
+}
+
+function setTenderView(mode){
+  tenderViewMode=mode==="table"?"table":"card";
+  localStorage.setItem(VIEW_PREF_KEY,tenderViewMode);
+  applyTenderView();
+}
+
+function renderCurrentView(){
+  if(tenderViewMode==="card") renderCardWindow(); else renderVirtualWindow();
 }
 
 function renderVirtualWindow(){
@@ -4049,7 +4180,7 @@ function renderTable(rows){
   virtualEnd = Math.min(VIRTUAL_CHUNK_SIZE, rows.length);
   virtualTopHeight = 0;
   virtualBottomHeight = Math.max(0, rows.length - virtualEnd) * ESTIMATED_ROW_HEIGHT;
-  renderVirtualWindow();
+  renderCurrentView();
   applyColumnVisibility();
   updateVirtualPager();
 }
@@ -4591,6 +4722,9 @@ function openColumnMenu(anchor){
 }
 function setupUserFeatures(){
   const col=$("columnBtn"),orgBtn=$("orgDisplayBtn");
+  const cardBtn=$("cardViewBtn"),tableBtn=$("tableViewBtn");
+  if(cardBtn) cardBtn.onclick=()=>setTenderView("card");
+  if(tableBtn) tableBtn.onclick=()=>setTenderView("table");
   if(col)col.onclick=()=>openColumnMenu(col);
   if(orgBtn)orgBtn.onclick=()=>{
     orgDisplayMode=orgDisplayMode==="full"?"short":"full";
@@ -4607,6 +4741,7 @@ function setupUserFeatures(){
     const m=$("userPrefMenu");
     if(m&&!m.contains(e.target)&&!e.target.closest("#columnBtn"))m.classList.remove("open");
   });
+  applyTenderView();
 }
 
 let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();renderVirtualWindow();}
