@@ -6176,7 +6176,7 @@ enforceTelegramAccess().then(async () => {
         segments.forEach(seg=>{
           String(seg.text||"").trim().split(/\s+/).filter(Boolean).forEach(word=>{
             doc.setFont("times",seg.bold?"bold":"normal");doc.setFontSize(size);
-            tokens.push({text:word,bold:!!seg.bold,underline:!!seg.underline,width:doc.getTextWidth(word)});
+            tokens.push({text:word,bold:!!seg.bold,underline:!!seg.underline,strike:!!seg.strike,width:doc.getTextWidth(word)});
           });
         });
         const lines=[];
@@ -6212,6 +6212,9 @@ enforceTelegramAccess().then(async () => {
             doc.text(t.text,x,y);
             if(t.underline){
               doc.setLineWidth(0.22);doc.line(x,y+0.8,x+t.width,y+0.8);
+            }
+            if(t.strike){
+              doc.setLineWidth(0.22);doc.line(x,y-1.6,x+t.width,y-1.6);
             }
             x+=t.width;
             if(j<ln.length-1) x+=spaceWidth;
@@ -6297,22 +6300,14 @@ enforceTelegramAccess().then(async () => {
         doc.setFont("times","normal");doc.setFontSize(10);
         drawCheck(Math.min(right-4,left+12.7+doc.getTextWidth(p4)+2),p4Y);
       }
-      const detailStartY=y;
-      const detailText="Name "+(relYes?d.relativeName:"NA")+"     Post "+(relYes?d.relativePost:"NA")+"     Present Posting "+(relYes?d.relativePosting:"NA");
       richParagraph([
-        {text:"Name "},
-        {text:relYes?d.relativeName:"NA",bold:true,underline:true},
-        {text:" Post "},
-        {text:relYes?d.relativePost:"NA",bold:true,underline:true},
-        {text:" Present Posting "},
-        {text:relYes?d.relativePosting:"NA",bold:true,underline:true}
+        {text:"Name ",strike:!relYes},
+        {text:relYes?d.relativeName:"NA",bold:true,underline:true,strike:!relYes},
+        {text:" Post ",strike:!relYes},
+        {text:relYes?d.relativePost:"NA",bold:true,underline:true,strike:!relYes},
+        {text:" Present Posting ",strike:!relYes},
+        {text:relYes?d.relativePosting:"NA",bold:true,underline:true,strike:!relYes}
       ],{firstIndent:15.5,after:2});
-      if(!relYes){
-        doc.setFont("times","normal");doc.setFontSize(10);
-        const strikeWidth=Math.min(width-15.5,doc.getTextWidth(detailText));
-        doc.setLineWidth(0.22);
-        doc.line(left+15.5,detailStartY-1.6,left+15.5+strikeWidth,detailStartY-1.6);
-      }
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
       richParagraph([
         {text:"I, "},
