@@ -1860,6 +1860,30 @@ body.telegram-locked .site-footer{visibility:hidden}
  .logo-lightbox{padding:12px}.logo-lightbox-card{padding:14px}.logo-lightbox-card img{width:88vw}.logo-lightbox-caption{font-size:14px}
 }
 </style>
+
+<style id="affidavit-generator-styles">
+.affidavit-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1px solid #1d4ed8;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:5px 7px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap}
+.affidavit-btn:hover{background:#dbeafe}
+.affidavit-modal{position:fixed;inset:0;z-index:1000002;background:rgba(15,23,42,.72);display:none;align-items:center;justify-content:center;padding:18px}
+.affidavit-modal.open{display:flex}
+.affidavit-card{width:min(940px,96vw);max-height:94vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.35);padding:18px}
+.affidavit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e8f0;padding-bottom:10px;margin-bottom:12px}
+.affidavit-title{font-size:20px;font-weight:900;color:#203b91}.affidavit-sub{font-size:12px;color:#475569;margin-top:3px}
+.affidavit-close{width:36px;height:36px;border-radius:50%;background:#eef2ff;color:#1e3a8a;font-size:24px;line-height:1;padding:0}
+.affidavit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}.affidavit-field.full{grid-column:1/-1}
+.affidavit-field label{display:block;font-size:11px;font-weight:800;color:#334155;margin:0 0 4px}
+.affidavit-field input,.affidavit-field select,.affidavit-field textarea{width:100%;border:1px solid #cbd5e1;border-radius:7px;padding:8px 9px;font-size:12px;background:#fff;color:#172033}
+.affidavit-field textarea{min-height:64px;resize:vertical}
+.affidavit-relative-box{grid-column:1/-1;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:10px}
+.affidavit-relative-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.affidavit-note{margin:12px 0 8px;padding:9px 10px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.4}
+.affidavit-preview{margin-top:12px;border:1px solid #cbd5e1;border-radius:10px;padding:18px;background:#fff;font-family:"Times New Roman",serif;font-size:14px;line-height:1.55;white-space:pre-wrap;color:#111;max-height:320px;overflow:auto}
+.affidavit-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:12px}
+.affidavit-actions button{padding:9px 12px}.affidavit-save{background:#0f766e;color:#fff}.affidavit-word{background:#1d4ed8;color:#fff}.affidavit-pdf{background:#b91c1c;color:#fff}
+.affidavit-status{font-size:11px;font-weight:700;color:#475569;margin-top:8px}
+@media(max-width:700px){.affidavit-card{padding:12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
+</style>
+
 </head>
 
 <!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
@@ -1976,6 +2000,47 @@ body.telegram-locked .site-footer{visibility:hidden}
     </label>
     <button class="user-profile-save" id="userProfileSave" type="button">सहेजें और Dashboard खोलें</button>
     <div class="user-profile-status" id="userProfileStatus"></div>
+  </div>
+</div>
+
+
+<div class="affidavit-modal" id="affidavitModal" aria-hidden="true">
+  <div class="affidavit-card" role="dialog" aria-modal="true" aria-labelledby="affidavitTitle">
+    <div class="affidavit-head">
+      <div>
+        <div class="affidavit-title" id="affidavitTitle">📄 Tender Affidavit Generator</div>
+        <div class="affidavit-sub" id="affidavitTenderSummary">Bidder profile + selected tender data से affidavit तैयार करें</div>
+      </div>
+      <button class="affidavit-close" id="affidavitClose" type="button" aria-label="Close">×</button>
+    </div>
+    <div class="affidavit-grid">
+      <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="जैसे: Rakesh Tandi"></div>
+      <div class="affidavit-field"><label for="affFirmName">Firm / Company Name</label><input id="affFirmName" type="text" maxlength="160" placeholder="जैसे: Tandi Construction"></div>
+      <div class="affidavit-field"><label for="affStatus">Status in Firm / Company</label><select id="affStatus"><option value="Proprietor">Proprietor</option><option value="Partner">Partner</option><option value="Director">Director</option><option value="Authorized Signatory">Authorized Signatory</option><option value="Other">Other</option></select></div>
+      <div class="affidavit-field"><label for="affPlace">Verification Place</label><input id="affPlace" type="text" maxlength="100" placeholder="जैसे: Kannod"></div>
+      <div class="affidavit-field"><label for="affTenderRef">Notice Inviting e-Tender No. / Reference No.</label><input id="affTenderRef" type="text" maxlength="180"></div>
+      <div class="affidavit-field"><label for="affNoticeDate">Notice / Published Date</label><input id="affNoticeDate" type="text" maxlength="80"></div>
+      <div class="affidavit-field full"><label for="affWorkName">Name of Work</label><textarea id="affWorkName"></textarea></div>
+      <div class="affidavit-field full"><label for="affDepartment">Name of Department / Organisation</label><input id="affDepartment" type="text" maxlength="220"></div>
+      <div class="affidavit-field"><label for="affVerifyDate">Verification Date</label><input id="affVerifyDate" type="date"></div>
+      <div class="affidavit-field"><label for="affTenderId">Tender ID</label><input id="affTenderId" type="text" readonly></div>
+      <div class="affidavit-relative-box">
+        <div class="affidavit-field"><label for="affRelative">Close relative working in department?</label><select id="affRelative"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
+        <div class="affidavit-relative-fields" id="affRelativeFields" hidden>
+          <div class="affidavit-field"><label for="affRelativeName">Relative Name</label><input id="affRelativeName" type="text" maxlength="120"></div>
+          <div class="affidavit-field"><label for="affRelativePost">Post</label><input id="affRelativePost" type="text" maxlength="120"></div>
+          <div class="affidavit-field"><label for="affRelativePosting">Present Posting</label><input id="affRelativePosting" type="text" maxlength="160"></div>
+        </div>
+      </div>
+    </div>
+    <div class="affidavit-note">यह draft आपके चुने हुए tender और profile की जानकारी से बनता है। Notary/submit करने से पहले bidder स्वयं सभी नाम, reference number, work name, department, date और close-relative declaration verify करे।</div>
+    <div class="affidavit-preview" id="affidavitPreview"></div>
+    <div class="affidavit-actions">
+      <button class="affidavit-save" id="affidavitSaveProfile" type="button">💾 Save Bidder Profile</button>
+      <button class="affidavit-word" id="affidavitWord" type="button">⬇ Word (.docx)</button>
+      <button class="affidavit-pdf" id="affidavitPdf" type="button">⬇ PDF</button>
+    </div>
+    <div class="affidavit-status" id="affidavitStatus"></div>
   </div>
 </div>
 
@@ -2790,7 +2855,7 @@ async function enforceTelegramAccess(){
   showTelegramLogin();
   telegramStatus("ऊपर दिए गए 🔵 Login with Telegram button पर क्लिक करें।");
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 const API_URL = "https://mp-tenders-api.onrender.com/api/tenders";
@@ -3818,6 +3883,7 @@ function renderCardWindow(){
         <div class="tender-card-close"><span>SUBMISSION END</span><span>${escapeHtml(formatClosingDateTime(row["Closing Date"]))}</span></div>
         <div class="tender-card-actions">
           <a class="share" href="${escapeHtml(whatsappShareUrl(row))}" target="_blank" rel="noopener noreferrer">💬 Share on WhatsApp</a>
+          <button class="affidavit-btn" type="button" data-affidavit-id="${escapeHtml(row["Tender ID"])}">📄 Affidavit</button>
           <a href="${escapeHtml(stableTenderUrl(row))}" target="_blank" rel="noopener noreferrer">Open</a>
         </div>
       </article>`);
@@ -3880,7 +3946,7 @@ function renderVirtualWindow(){
         <td>${virtualStart + index + 1}</td>
         <td class="district-cell">${formatDistrictCell(row)}</td>
         <td>${escapeHtml(row["Pincode"]) || "—"}</td>
-        <td>${tenderId || "—"}</td>
+        <td>${tenderId || "—"}<br><button class="affidavit-btn" type="button" data-affidavit-id="${tenderId}">📄 Affidavit</button></td>
         <td class="title-cell">${titleHtml || "—"}</td>
         <td>${escapeHtml(displayTenderValue(row,"Reference Number")) || "—"}</td>
         <td class="date-closing ${closingClass}">
@@ -5801,5 +5867,183 @@ enforceTelegramAccess().then(async () => {
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init,{once:true}); else init();
 })();
 </script>
+
+<script id="affidavit-generator-script">
+(function(){
+  let selectedAffidavitTender=null;
+  const byId=id=>document.getElementById(id);
+  const profileKey=()=>{
+    const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "local";
+    return "mp_tender_affidavit_profile_v1_"+telegramId;
+  };
+  const safe=v=>String(v??"").trim();
+  const todayIst=()=>{
+    const d=new Date(Date.now()+5.5*60*60*1000);
+    return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0");
+  };
+  function getSavedProfile(){
+    try{return JSON.parse(localStorage.getItem(profileKey())||"{}")||{};}catch(e){return {};}
+  }
+  function readProfile(){
+    return {
+      bidderName:safe(byId("affBidderName")?.value),
+      firmName:safe(byId("affFirmName")?.value),
+      status:safe(byId("affStatus")?.value)||"Proprietor",
+      place:safe(byId("affPlace")?.value),
+      relative:safe(byId("affRelative")?.value)||"no",
+      relativeName:safe(byId("affRelativeName")?.value),
+      relativePost:safe(byId("affRelativePost")?.value),
+      relativePosting:safe(byId("affRelativePosting")?.value)
+    };
+  }
+  function saveProfile(){
+    const p=readProfile();
+    if(!p.bidderName || !p.firmName || !p.place){
+      byId("affidavitStatus").textContent="Bidder name, firm name और verification place भरना जरूरी है।";
+      return false;
+    }
+    if(p.relative==="yes" && (!p.relativeName || !p.relativePost || !p.relativePosting)){
+      byId("affidavitStatus").textContent="Close relative Yes होने पर Name, Post और Present Posting भरें।";
+      return false;
+    }
+    localStorage.setItem(profileKey(),JSON.stringify(p));
+    byId("affidavitStatus").textContent="✓ Bidder profile इस browser में save हो गया।";
+    return true;
+  }
+  function formatVerifyDate(v){
+    const m=safe(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m?m[3]+"/"+m[2]+"/"+m[1]:safe(v);
+  }
+  function documentData(){
+    return {
+      ...readProfile(),
+      tenderId:safe(byId("affTenderId")?.value),
+      tenderRef:safe(byId("affTenderRef")?.value),
+      noticeDate:safe(byId("affNoticeDate")?.value),
+      workName:safe(byId("affWorkName")?.value),
+      department:safe(byId("affDepartment")?.value),
+      verifyDate:formatVerifyDate(byId("affVerifyDate")?.value)
+    };
+  }
+  function validateDoc(d){
+    const required=[["Bidder / Deponent Name",d.bidderName],["Firm / Company Name",d.firmName],["Status",d.status],["Verification Place",d.place],["Tender Reference",d.tenderRef],["Name of Work",d.workName],["Department / Organisation",d.department],["Verification Date",d.verifyDate]];
+    const miss=required.filter(x=>!x[1]).map(x=>x[0]);
+    if(d.relative==="yes" && (!d.relativeName || !d.relativePost || !d.relativePosting)) miss.push("Close-relative details");
+    if(miss.length){byId("affidavitStatus").textContent="पहले यह जानकारी भरें: "+miss.join(", ");return false;}
+    return true;
+  }
+  function affidavitLines(d){
+    const rel=d.relative==="yes"
+      ? ["4. Following close relatives are working in the department:","Name "+d.relativeName+"    Post "+d.relativePost+"    Present Posting "+d.relativePosting]
+      : ["3. No close relative of the undersigned and our firm/company is working in the department."];
+    return [
+      "AFFIDAVIT",
+      "(To be contained in Envelope A)",
+      "(On Non Judicial Stamp of Rs. 200)",
+      "",
+      "I/we "+d.bidderName+" who is/ are "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
+      "",
+      "I/we am/are "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+d.noticeDate+" issued by the "+d.department+" (name of the department).",
+      "",
+      "I/we am/ are fully responsible for the correctness of following self-certified information/ documents and certificates:",
+      "1. That the self-certified information given in the bid document is fully true and authentic.",
+      "2. That:",
+      "a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",
+      "b. Information regarding financial qualification and annual turnover is correct.",
+      "c. Information regarding various technical qualifications is correct.",
+      ...rel,
+      "",
+      "Signature with Seal of the Deponent (bidder)",
+      "",
+      "I/ We, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",
+      "",
+      "Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).",
+      "",
+      "Signature with Seal of the Deponent (bidder)"
+    ];
+  }
+  function updatePreview(){byId("affidavitPreview").textContent=affidavitLines(documentData()).join("\n");}
+  function fillFromTender(row){
+    selectedAffidavitTender=row;
+    const saved=getSavedProfile();
+    byId("affBidderName").value=saved.bidderName||safe(byId("userProfileName")?.value)||((typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"");
+    byId("affFirmName").value=saved.firmName||"";
+    byId("affStatus").value=saved.status||"Proprietor";
+    byId("affPlace").value=saved.place||"";
+    byId("affRelative").value=saved.relative||"no";
+    byId("affRelativeName").value=saved.relativeName||"";
+    byId("affRelativePost").value=saved.relativePost||"";
+    byId("affRelativePosting").value=saved.relativePosting||"";
+    byId("affRelativeFields").hidden=byId("affRelative").value!=="yes";
+    byId("affTenderId").value=safe(row["Tender ID"]);
+    byId("affTenderRef").value=safe(row["Reference Number"])||safe(row["Tender ID"]);
+    byId("affWorkName").value=safe(row["Title"])||safe(row["Work Description"]);
+    byId("affDepartment").value=safe(row["Department"])||safe(row["Organisation"]);
+    byId("affNoticeDate").value=safe(row["Published Date"]);
+    byId("affVerifyDate").value=todayIst();
+    byId("affidavitTenderSummary").textContent=(safe(row["Tender ID"])||"Selected tender")+" • "+(safe(row["Title"])||"");
+    byId("affidavitStatus").textContent="";
+    updatePreview();
+  }
+  window.openAffidavitForTender=function(tenderId){
+    const id=safe(tenderId);
+    const source=(typeof allTenders!=="undefined"?allTenders:[]).find(r=>safe(r["Tender ID"])===id) || (typeof filteredTenders!=="undefined"?filteredTenders:[]).find(r=>safe(r["Tender ID"])===id);
+    if(!source){alert("Tender record नहीं मिला।");return;}
+    fillFromTender(source);
+    const modal=byId("affidavitModal");modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+  };
+  function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
+  function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
+  function downloadBlob(blob,name){const a=document.createElement("a");const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+  async function downloadWord(){
+    const d=documentData();if(!validateDoc(d))return;saveProfile();const lines=affidavitLines(d);
+    try{
+      if(window.docx && window.docx.Document){
+        const {Document,Packer,Paragraph,TextRun,AlignmentType}=window.docx;
+        const paras=lines.map((line,i)=>{
+          const isHead=i===0;
+          return new Paragraph({alignment:isHead?AlignmentType.CENTER:AlignmentType.LEFT,spacing:{after:isHead?180:80},children:[new TextRun({text:line,bold:isHead,size:isHead?32:24,font:"Times New Roman"})]});
+        });
+        const doc=new Document({sections:[{properties:{},children:paras}]});
+        const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx");
+      }else{
+        const html='<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;line-height:1.5}h1{text-align:center;font-size:16pt}</style></head><body><h1>AFFIDAVIT</h1>'+lines.slice(1).map(x=>x?'<p>'+String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</p>':'<p>&nbsp;</p>').join("")+'</body></html>';
+        downloadBlob(new Blob([html],{type:"application/msword"}),fileBase(d)+".doc");
+      }
+      byId("affidavitStatus").textContent="✓ Word affidavit download तैयार है।";
+    }catch(e){byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
+  }
+  function downloadPdf(){
+    const d=documentData();if(!validateDoc(d))return;saveProfile();
+    try{
+      const jsPDF=window.jspdf?.jsPDF;if(!jsPDF) throw new Error("PDF library load नहीं हुई");
+      const doc=new jsPDF({unit:"mm",format:"a4"});const margin=18,maxWidth=174;let y=18;
+      const lines=affidavitLines(d);
+      lines.forEach((line,i)=>{
+        if(i===0){doc.setFont("times","bold");doc.setFontSize(16);doc.text(line,105,y,{align:"center"});y+=8;return;}
+        doc.setFont("times","normal");doc.setFontSize(11);
+        if(!line){y+=4;return;}
+        const wrapped=doc.splitTextToSize(line,maxWidth);
+        if(y+wrapped.length*5.5>282){doc.addPage();y=18;}
+        doc.text(wrapped,margin,y);y+=wrapped.length*5.5+1.5;
+      });
+      doc.save(fileBase(d)+".pdf");byId("affidavitStatus").textContent="✓ PDF affidavit download तैयार है।";
+    }catch(e){byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
+  }
+  function init(){
+    byId("affidavitClose")?.addEventListener("click",closeModal);
+    byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
+    byId("affidavitRelative")?.addEventListener("change",()=>{byId("affRelativeFields").hidden=byId("affRelative").value!=="yes";updatePreview();});
+    ["affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
+    byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
+    byId("affidavitWord")?.addEventListener("click",downloadWord);
+    byId("affidavitPdf")?.addEventListener("click",downloadPdf);
+    document.addEventListener("click",e=>{const b=e.target.closest("[data-affidavit-id]");if(!b)return;e.preventDefault();e.stopPropagation();window.openAffidavitForTender(b.getAttribute("data-affidavit-id"));});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape" && byId("affidavitModal")?.classList.contains("open")) closeModal();});
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
+})();
+</script>
+
 </body>
 </html>
