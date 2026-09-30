@@ -1,6 +1,9 @@
 name: Targeted Pending Detail Retry
 
 on:
+  # Resume unfinished live details even when no new list refresh is requested.
+  schedule:
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       tender_ids:
@@ -18,11 +21,11 @@ permissions:
 
 jobs:
   retry_pending:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[retry-pending]')
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[retry-pending]')
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
-      group: mp-targeted-pending-retry
+      group: mp-tender-details
       cancel-in-progress: false
     steps:
       - name: Checkout
@@ -38,9 +41,9 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium for Home Tender ID search
         run: python -m playwright install --with-deps chromium
-      - name: Retry incomplete live details, prioritising the reported tender
+      - name: Resume incomplete live details
         env:
-          PRIORITY_TENDER_IDS: ${{ github.event_name == 'push' && '2026_MIDCL_529130_2' || inputs.tender_ids }}
+          PRIORITY_TENDER_IDS: ${{ inputs.tender_ids || '' }}
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"

@@ -60,6 +60,32 @@ class CleanupTests(unittest.TestCase):
         self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
+    def test_batch_status_keeps_last_success_and_does_not_count_partial_details(self):
+        for valid in (True, False):
+            with self.subTest(valid=valid), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                write_csv(root/"master.csv", [{"Tender ID": "a", "Closing Date": "01-Jan-2099 03:00 PM"}])
+                write_csv(root/"listing.csv", [{"Tender ID": "a"}])
+                page = SimpleNamespace()
+                context = SimpleNamespace(new_page=lambda: page, close=lambda: None)
+                browser = SimpleNamespace(new_context=lambda **kw: context, close=lambda: None)
+                pw = SimpleNamespace(chromium=SimpleNamespace(launch=lambda **kw: browser))
+                result = completed("a") if valid else {"Tender ID":"a", "Detail Extracted":"YES", "Processing Fee":"295"}
+                with patch.dict(os.environ, {"PRIMARY_ID_SEARCH":"1", "PRIORITY_TENDER_IDS":"", "EXTRACT_ALL_INVENTORY":"1"}), \
+                     patch.object(worker,"CSV",root/"master.csv"), \
+                     patch.object(worker,"SNAPSHOT",root/"listing.csv"), \
+                     patch.object(worker,"DETAIL_CSV",root/"details.csv"), \
+                     patch.object(worker,"STATUS",root/"data/status.json"), \
+                     patch.object(worker,"sync_playwright",lambda: nullcontext(pw)), \
+                     patch.object(worker,"do_search",return_value=result):
+                    worker.main()
+                status = json.loads((root/"data/status.json").read_text())
+                self.assertEqual(status["batch_attempted"],1)
+                self.assertEqual(status["batch_complete"],int(valid))
+                self.assertEqual(status["last_successful_tender_id"],"a" if valid else "")
+                self.assertEqual(status["success"],int(valid))
+                self.assertEqual(status["failed_ids"],[] if valid else ["a"])
+
     def test_imported_listing_cannot_claim_complete_details(self):
         row = import_rsp_live.map_row({"tender_id": "2026_MIDCL_529130_2", "nit_ref": "24 Bhopal of 2026-27"}, "now")
         self.assertEqual(row["Detail Extracted"], "")

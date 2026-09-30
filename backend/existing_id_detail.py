@@ -278,6 +278,10 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
                             merged["Detail Extracted"] = ""
                             by_id[tid] = merged
                             raise RuntimeError("Processing Fee missing/zero after detail extraction")
+                        if not detail_complete(merged):
+                            merged["Detail Extracted"] = ""
+                            by_id[tid] = merged
+                            raise RuntimeError("Required detail fields missing after extraction")
                         by_id[tid] = merged
                         success_ids.add(tid)
                         remaining.discard(tid)
@@ -462,6 +466,9 @@ def main():
     }
     success = len(success_ids)
     final_failed_ids = set()
+    attempted_ids = set()
+    last_successful_id = ""
+    started_at = datetime.now(timezone.utc).isoformat()
 
     def save_csv():
         nonlocal fields
@@ -491,6 +498,9 @@ def main():
         tmp.replace(DETAIL_CSV)
 
     def save_status(status, last_id=""):
+        nonlocal last_successful_id
+        if last_id:
+            last_successful_id = last_id
         STATUS.parent.mkdir(parents=True, exist_ok=True)
         STATUS.write_text(json.dumps({
             "status": status,
@@ -499,13 +509,16 @@ def main():
             "current_portal_ids": len(current_ids),
             "initial_incomplete": len(incomplete),
             "batch_targets": len(targets),
+            "batch_attempted": len((attempted_ids | success_ids | {error["Tender ID"] for error in errors}) & target_set),
+            "batch_complete": len(target_set & success_ids),
+            "started_at": started_at,
             "success": len(success_ids),
             "failed": len(final_failed_ids),
             "success_ids": sorted(success_ids),
             "failed_ids": sorted(final_failed_ids),
             "skipped_ids": sorted(set(skipped_ids)),
             "pending_ids": sorted(current_set - success_ids - final_failed_ids - set(skipped_ids)),
-            "last_successful_tender_id": last_id,
+            "last_successful_tender_id": last_successful_id,
             "errors": errors,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }, indent=2), encoding="utf-8")
@@ -515,6 +528,8 @@ def main():
         nonlocal success
         for base in target_rows:
             tid = clean(base.get("Tender ID"))
+            attempted_ids.add(tid)
+            save_status("running")
             try:
                 print(
                     f"DETAIL {'RETRY ' if is_retry else ''}START {tid}",
@@ -536,6 +551,10 @@ def main():
                     merged["Detail Extracted"] = ""
                     by_id[tid] = merged
                     raise RuntimeError("Processing Fee missing/zero after detail extraction")
+                if not detail_complete(merged):
+                    merged["Detail Extracted"] = ""
+                    by_id[tid] = merged
+                    raise RuntimeError("Required detail fields missing after extraction")
                 by_id[tid] = merged
                 success += 1
                 success_ids.add(tid)
@@ -563,6 +582,7 @@ def main():
                     f"{type(e).__name__}: {e}",
                     flush=True
                 )
+                save_status("running")
             # Reuse the same browser/page for the next Tender ID.
 
     save_status("running")
