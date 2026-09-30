@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:54:51.821832+00:00",
+  "updated_at": "2026-09-30T21:56:54.484458+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 433,
+  "detail_failed": 451,
   "detail_skipped": 0,
-  "detail_pending": 1997,
+  "detail_pending": 1979,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -732,9 +732,9 @@
       "portal_tender_count": 29,
       "copied_tenders": 29,
       "detail_complete": 22,
-      "detail_failed": 0,
+      "detail_failed": 6,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
@@ -919,9 +919,9 @@
       "portal_tender_count": 368,
       "copied_tenders": 368,
       "detail_complete": 240,
-      "detail_failed": 38,
+      "detail_failed": 50,
       "detail_skipped": 0,
-      "detail_pending": 90
+      "detail_pending": 78
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1993,
+  "legacy_verification_pending": 1975,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
