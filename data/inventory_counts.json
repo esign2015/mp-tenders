@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T19:14:20.513341+00:00",
+  "updated_at": "2026-09-30T19:16:16.406084+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2545,
+  "detail_complete": 2573,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2767,
+  "detail_pending": 2739,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 16,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 11
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 15,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1247,
+      "detail_complete": 1266,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1638
+      "detail_pending": 1619
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 27,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 24
+      "detail_pending": 21
     },
     {
       "organisation": "District Collectorate",
@@ -621,10 +621,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
-      "detail_complete": 6,
+      "detail_complete": 7,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 9
     },
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 14,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 22
+      "detail_pending": 20
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2762,
+  "legacy_verification_pending": 2734,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
