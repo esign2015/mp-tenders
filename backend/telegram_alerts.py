@@ -4,6 +4,8 @@ import os
 import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from decimal import Decimal, InvalidOperation
+from xml.sax.saxutils import escape
 from urllib import request, parse
 
 from reportlab.lib import colors
@@ -15,7 +17,7 @@ from reportlab.platypus import SimpleDocTemplate, LongTable, TableStyle, Paragra
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
 TELEGRAM_URL = "https://t.me/mptendersalert"
-CSV_PATH = Path(os.getenv("TENDER_CSV_PATH", "organisation_tenders.csv"))
+CSV_PATH = Path(os.getenv("TENDER_CSV_PATH", "all_tenders_org_detailed.csv"))
 
 
 def clean(value):
@@ -65,6 +67,84 @@ def parse_date(value):
         except ValueError:
             pass
     return None
+
+
+def valid_reference(value):
+    text = strip_brackets(value)
+    return "" if re.search(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", text, re.I) else text
+
+
+def load_report_rows(path=CSV_PATH):
+    """Join the same detail and current-list fields used by the dashboard."""
+    path = Path(path)
+    by_id = {}
+    for source in (path,):
+        if not source.exists():
+            continue
+        with source.open(encoding="utf-8-sig", newline="") as stream:
+            for row in csv.DictReader(stream):
+                tid = clean(row.get("Tender ID"))
+                if not tid:
+                    continue
+                row["Reference Number"] = valid_reference(row.get("Reference Number"))
+                base = by_id.setdefault(tid, dict(row))
+                for key, value in row.items():
+                    if not clean(base.get(key)) and clean(value):
+                        base[key] = value
+    listing = path.parent / "organisation_tenders.csv"
+    if listing.exists():
+        with listing.open(encoding="utf-8-sig", newline="") as stream:
+            for row in csv.DictReader(stream):
+                tid = clean(row.get("Tender ID"))
+                if not tid:
+                    continue
+                base = by_id.setdefault(tid, {})
+                for key in ("Tender ID", "Title", "Published Date", "Closing Date", "Opening Date"):
+                    if clean(row.get(key)):
+                        base[key] = row[key]
+                reference = valid_reference(row.get("Reference Number"))
+                if reference:
+                    base["Reference Number"] = reference
+                base["Reference Number"] = valid_reference(base.get("Reference Number"))
+    details = path.parent / "tender_details.csv"
+    if details.exists():
+        with details.open(encoding="utf-8-sig", newline="") as stream:
+            for row in csv.DictReader(stream):
+                base = by_id.get(clean(row.get("Tender ID")))
+                if base is None:
+                    continue  # Do not add historical detail-only records.
+                row["Reference Number"] = valid_reference(row.get("Reference Number"))
+                for key, value in row.items():
+                    if not clean(base.get(key)) and clean(value):
+                        base[key] = value
+    return list(by_id.values())
+
+
+def live_rows(rows, now=None):
+    now = now or datetime.now(IST)
+    return [row for row in rows if clean(row.get("Status")).lower() != "cancelled"
+            and (closing := parse_date(row.get("Closing Date"))) and closing > now]
+
+
+def fee_amount(value):
+    text = clean(value).replace(",", "").replace("₹", "").strip()
+    if not re.fullmatch(r"\d+(?:\.\d+)?", text):
+        return None
+    try:
+        return Decimal(text)
+    except InvalidOperation:
+        return None
+
+
+def total_tender_fee(row):
+    values = [fee_amount(row.get(key)) for key in ("EMD Fee", "Tender Fee", "Processing Fee")]
+    return sum(values, Decimal(0)) if all(value is not None for value in values) else None
+
+
+def fee_text(value):
+    if value is None:
+        return "Checking"
+    return format(value, ",.2f").removesuffix(".00")
 
 
 def is_on_date(value, target):
@@ -121,6 +201,7 @@ def telegram_document(token, chat_id, path, caption):
 
 
 def make_pdf(rows, filename, report_title, total_available=None, filter_detail="All Tenders"):
+    rows = live_rows(rows)
     path = Path(filename)
     if total_available is None:
         total_available = len(rows)
@@ -159,13 +240,12 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         Spacer(1, 7),
     ]
 
-    # Telegram PDFs: temporarily hide financial fields that are not yet
-    # consistently reliable across all extracted tender details.
-    # The dashboard/CSV data is unchanged; this only affects Telegram PDF output.
-    header = [
-        "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.", "Tender Fee"
-    ]
-
+    header_style = ParagraphStyle("table_header", parent=center, fontName="Helvetica-Bold",
+                                  fontSize=7.5, leading=9, textColor=colors.white)
+    header = [Paragraph(label, header_style) for label in (
+        "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.", "PAC Amount",
+        "EMD Fee", "Form Fee", "Processing Fee", "Total Fee<br/>(EMD + Form + Processing)"
+    )]
     # Keep the PDF in exact Closing Date + Closing Time order.
     # LongTable automatically fills each page with as many complete rows as
     # fit. There is deliberately NO fixed 15-row page limit.
@@ -175,16 +255,20 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
     for offset, row in enumerate(rows, 1):
         data.append([
             Paragraph(str(offset), center),
-            Paragraph(strip_brackets(row.get("Tender ID")), cell),
+            Paragraph(escape(strip_brackets(row.get("Tender ID"))), cell),
             Paragraph(clean(row.get("Closing Date")), center),
-            Paragraph(strip_brackets(row.get("Title")), cell),
-            Paragraph(strip_brackets(row.get("Reference Number")), cell),
-            Paragraph(clean(row.get("Tender Fee")), center),
+            Paragraph(escape(strip_brackets(row.get("Title"))), cell),
+            Paragraph(escape(valid_reference(row.get("Reference Number"))) or "-", cell),
+            Paragraph(fee_text(fee_amount(row.get("PAC Amount"))) if clean(row.get("PAC Amount")).upper() not in {"NA", "N/A"} else "NA", center),
+            Paragraph(fee_text(fee_amount(row.get("EMD Fee"))), center),
+            Paragraph(fee_text(fee_amount(row.get("Tender Fee"))), center),
+            Paragraph(fee_text(fee_amount(row.get("Processing Fee"))), center),
+            Paragraph(fee_text(total_tender_fee(row)), center),
         ])
 
     table = LongTable(
         data,
-        colWidths=[32, 150, 110, 360, 300, 95],
+        colWidths=[30, 125, 105, 290, 175, 74, 74, 74, 80, 85],
         repeatRows=1,
         splitByRow=1,
         splitInRow=0,
@@ -266,8 +350,7 @@ def main():
     if not CSV_PATH.exists():
         raise FileNotFoundError(CSV_PATH)
 
-    with CSV_PATH.open("r", encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
+    rows = live_rows(load_report_rows())
 
     today = datetime.now(IST).date()
     d = today.strftime("%d-%m-%Y")
@@ -302,9 +385,9 @@ def main():
             label = f"आज Published हुए {len(selected)} टेंडर"
         elif report == "all":
             selected = sorted(rows, key=closing_sort_key)
-            title = f"Admin Manual — Latest All Tender Data • {len(selected)} tenders"
+            title = f"Admin Manual — All Live Tender Data • {len(selected)} tenders"
             filename = f"ADMIN Latest All Tenders {today.strftime('%d-%m-%Y')} MPTenders.pdf"
-            label = f"कुल latest data: {len(selected)} टेंडर"
+            label = f"कुल live tenders: {len(selected)} टेंडर"
         else:
             raise RuntimeError(f"Unknown MANUAL_REPORT: {report}")
 
