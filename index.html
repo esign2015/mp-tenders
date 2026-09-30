@@ -1188,8 +1188,8 @@ td.title-cell{
 .tender-card{border:1px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 2px 7px #0f172a12;padding:10px;display:flex;flex-direction:column;min-height:280px}
 .tender-card.closing-today{border-color:#dc2626;box-shadow:0 0 0 1px #dc262622}
 .tender-card.closing-soon{border-color:#f59e0b}
-.tender-card.closing-final-minutes{border-color:#dc2626;box-shadow:0 0 0 2px #dc262655;animation:tender-deadline-blink 2s steps(1,end) infinite}
-@keyframes tender-deadline-blink{0%,100%{opacity:1}50%{opacity:0}}
+.tender-card.closing-final-minutes{border-color:#dc2626;box-shadow:0 0 0 2px #dc262655;animation:tender-deadline-blink 5s steps(1,end) infinite}
+@keyframes tender-deadline-blink{0%,100%{opacity:1}80%{opacity:0}}
 .tender-card.closing-final-minutes:focus-within{animation:none;opacity:1}
 @media(prefers-reduced-motion:reduce){.tender-card.closing-final-minutes{animation:none;opacity:1}}
 .tender-card-id-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
@@ -3865,7 +3865,7 @@ function cardClosingClass(row){
 
 function isDeadlineAlertActive(closingTime,now=Date.now()){
   const remaining=Number(closingTime)-now;
-  return remaining>0 && remaining<=15*60*1000;
+  return remaining>0 && remaining<=10*60*1000;
 }
 
 function updateCardDeadlineAlerts(){

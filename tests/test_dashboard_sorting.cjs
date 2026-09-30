@@ -33,8 +33,8 @@ for(const name of names){
  assert(loaded,name);
 }
 const alertNow=Date.now();
-assert.equal(context.isDeadlineAlertActive(alertNow+15*60*1000,alertNow),true);
-assert.equal(context.isDeadlineAlertActive(alertNow+15*60*1000+1,alertNow),false);
+assert.equal(context.isDeadlineAlertActive(alertNow+10*60*1000,alertNow),true);
+assert.equal(context.isDeadlineAlertActive(alertNow+10*60*1000+1,alertNow),false);
 assert.equal(context.isDeadlineAlertActive(alertNow+1,alertNow),true);
 assert.equal(context.isDeadlineAlertActive(alertNow,alertNow),false);
 assert.equal(context.isDeadlineAlertActive('invalid',alertNow),false);
