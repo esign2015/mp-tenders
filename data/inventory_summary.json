@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:36:00.993699+00:00",
+  "updated_at": "2026-09-30T23:38:07.138471+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3107,
+  "detail_complete": 3135,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2205,
+  "detail_pending": 2177,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 20,
+      "detail_complete": 21,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 32,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 9
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 46,
+      "detail_complete": 50,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 9
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 172,
+      "detail_complete": 187,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 93
+      "detail_pending": 78
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 55,
+      "detail_complete": 58,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 31
+      "detail_pending": 28
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -621,10 +621,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
-      "detail_complete": 7,
+      "detail_complete": 10,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 6
     },
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2200,
+  "legacy_verification_pending": 2172,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
