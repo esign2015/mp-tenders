@@ -22,7 +22,8 @@ const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','currentPortalA
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
   'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
-  'updateTableSortHeaders','sortCurrentTable','applyFilters','renderTable'];
+  'updateTableSortHeaders','sortCurrentTable','applyFilters','renderTable',
+  'clearFilters','showLiveTenders','showClosingToday','showClosingTomorrow','showNextThreeDays'];
 // Some functions have declarations between them; only include their exact body
 // by taking the shortest prefix that compiles as a complete function.
 for(const name of names){
@@ -135,3 +136,33 @@ assert.equal(context.formatMoney('NA'),'NA');
 assert.equal(context.formatMoney(''),'—');
 assert.equal(context.formatMoney('0'),'₹ 0.00');
 assert.equal(context.formatMoney('123.4'),'₹ 123.40');
+
+// Quick count buttons must use the same verified live membership as counts,
+// and preserve their date filter when periodic refresh reapplies filters.
+const fixedNow=Date.parse('2026-09-30T20:25:00+05:30');
+context.Date=class extends Date {
+ constructor(...args){super(...(args.length ? args : [fixedNow]));}
+ static now(){return fixedNow;}
+};
+context.portalSnapshot={verified:true,snapshot_at:'2026-09-30T19:51:00+05:30'};
+context.portalActiveIds=new Set(['tomorrow-live','tomorrow-cancelled','today-live','expired']);
+context.allTenders=[
+ {'Tender ID':'tomorrow-live','Closing Date':'01-Oct-2026 03:00 PM'},
+ {'Tender ID':'old-master-only','Closing Date':'01-Oct-2026 03:00 PM'},
+ {'Tender ID':'tomorrow-cancelled','Closing Date':'01-Oct-2026 03:00 PM',Status:'Cancelled'},
+ {'Tender ID':'today-live','Closing Date':'30-Sep-2026 10:00 PM'},
+ {'Tender ID':'expired','Closing Date':'30-Sep-2026 03:00 PM'}
+];
+context.getStatusText=()=> 'Open';
+for(const [fn,expected] of [
+ ['showClosingTomorrow',['tomorrow-live']],
+ ['showClosingToday',['today-live']],
+ ['showLiveTenders',['today-live','tomorrow-live']],
+ ['showNextThreeDays',['today-live','tomorrow-live']]
+]){
+ context[fn]();
+ assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected.slice().sort(),fn);
+ context.applyFilters(false,true);
+ assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected.slice().sort(),fn+' after refresh');
+}
+console.log('PASS: all quick buttons reject old master-only, cancelled and expired rows; tomorrow selection survives refresh.');

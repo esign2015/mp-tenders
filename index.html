@@ -4800,19 +4800,9 @@ function clearFilters(){
 function showLiveTenders(){
   clearFilters();
   quickFilterMode = "live";
-  const now = Date.now();
-  filteredTenders = allTenders.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    const isCancelled = clean(row["Status"]).toLowerCase() === "cancelled";
-    return !isCancelled && closing && closing.getTime() > now;
-  });
-  filteredTenders.sort((a,b) =>
-    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
-    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
-  );
+  $("closingExpire").value = "0";
   $("tableHeading").textContent = "Live Tender Records";
-  renderTable(filteredTenders);
-  updateCounts(allTenders);
+  applyFilters();
 }
 
 function showClosingToday(){
@@ -4826,61 +4816,16 @@ function showClosingToday(){
 function showClosingTomorrow(){
   clearFilters();
   quickFilterMode = "closingTomorrow";
-
-  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  const tomorrowKey = dateKey(tomorrow);
-
-  filteredTenders = allTenders.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    return closing &&
-           dateKey(closing) === tomorrowKey &&
-           closing.getTime() > Date.now();
-  });
-
-  filteredTenders.sort((a,b) =>
-    (parseDate(a["Closing Date"]) || new Date("2999-12-31")) -
-    (parseDate(b["Closing Date"]) || new Date("2999-12-31"))
-  );
-
-  renderTable(filteredTenders);
-  updateCounts(allTenders);
-
+  $("closingExpire").value = "2";
+  applyFilters();
 }
 
 function showNextThreeDays(){
   clearFilters();
   quickFilterMode = "nextThreeDays";
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  filteredTenders = allTenders.filter(row => {
-    const closing = parseDate(row["Closing Date"]);
-    if(!closing) return false;
-
-    const close = new Date(closing);
-    close.setHours(0,0,0,0);
-
-    const days = Math.round((close-today)/86400000);
-
-    return days >= 0 && days <= 3;
-  });
-
-  renderTable(filteredTenders);
-  updateCounts(allTenders);
-
+  $("closingExpire").value = "3";
+  applyFilters();
 }
-
-
-/* ================= TABLE DISPLAY CONTROLS ================= */
-let orgDisplayMode = "short";
-
-const COLUMN_PREF_KEY="mp_tender_hidden_columns_v3";
-const COLUMN_DEFS=[
-  ["S.No.",1],["District",2],["Pincode",3],["Tender ID",4],["Title",5],["Ref.No.",6],
-  ["Last Date",7],["Time Left",8],["PAC Amount",9],["EMD Fee",10],["Tender Fee",11],["Processing Fee",12],["Total Fee",13],["Organisation",14],
-  ["Published Date",15],["Location",16],["Product Category",17],["Contract Type",18],["Bid Validity",19],["Work Description",20],["Corrigendum",21],["Department",22],["Division",23],["Sub Division",24]
-];
 
 function loadHiddenColumns(){
   // Default view: exactly the columns shown in the requested layout.
