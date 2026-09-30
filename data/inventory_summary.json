@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:22:06.751187+00:00",
+  "updated_at": "2026-09-30T21:24:09.584799+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 189,
+  "detail_failed": 203,
   "detail_skipped": 0,
-  "detail_pending": 2241,
+  "detail_pending": 2227,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 137,
+      "detail_failed": 145,
       "detail_skipped": 0,
-      "detail_pending": 1319
+      "detail_pending": 1311
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -919,9 +919,9 @@
       "portal_tender_count": 368,
       "copied_tenders": 368,
       "detail_complete": 240,
-      "detail_failed": 12,
+      "detail_failed": 18,
       "detail_skipped": 0,
-      "detail_pending": 116
+      "detail_pending": 110
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2237,
+  "legacy_verification_pending": 2223,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
