@@ -1,0 +1,1 @@
+{"name":"mp-tenders-api","private":true,"type":"module","scripts":{"dev":"wrangler dev","deploy":"wrangler deploy","check":"wrangler deploy --dry-run","test":"node test/worker.test.mjs"},"dependencies":{"fflate":"0.8.2"},"devDependencies":{"wrangler":"4.76.0"}}

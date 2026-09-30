@@ -1,0 +1,15 @@
+{
+  "name": "mp-tenders-api",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-09-30",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGIN": "https://tenders.codinglms.xyz",
+    "TELEGRAM_CHANNEL": "@mptendersalert",
+    "ADMIN_GOOGLE_EMAILS": "imriteshdhoot@gmail.com,shikhadhoot@gmail.com",
+    "GITHUB_REPO_OWNER": "esign2015",
+    "GITHUB_REPO_NAME": "mp-tenders",
+    "GITHUB_REPO_BRANCH": "main"
+  },
+  "d1_databases": [{"binding":"DB","database_name":"mp-tenders-users","database_id":"00000000-0000-0000-0000-000000000000","migrations_dir":"migrations"}]
+}

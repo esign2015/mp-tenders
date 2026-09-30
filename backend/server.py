@@ -902,6 +902,26 @@ def admin_session():
         return error
     return jsonify({"ok": True, "email": email})
 
+@app.get("/api/admin/users-migration")
+def users_migration_snapshot():
+    """Private, consistent export for moving users and their login history."""
+    email, error = require_admin()
+    if error:
+        return error
+    conn = user_db()
+    try:
+        if conn.postgres:
+            conn.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+        else:
+            conn.execute("BEGIN")
+        users = [dict(row) for row in conn.execute("SELECT * FROM users ORDER BY telegram_id").fetchall()]
+        events = [dict(row) for row in conn.execute("SELECT * FROM login_events ORDER BY id").fetchall()]
+        return Response(json.dumps({"version": 1, "users": users, "login_events": events}),
+                        mimetype="application/json", headers={"Cache-Control": "no-store",
+                        "Content-Disposition": 'attachment; filename="mp-users-migration.private.json"'})
+    finally:
+        conn.close()
+
 @app.post("/api/admin/logout")
 def admin_logout():
     # Sessions are stateless and short-lived. Clearing the browser token is
