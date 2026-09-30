@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:23:29.377549+00:00",
+  "updated_at": "2026-09-30T23:25:34.880548+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2932,
+  "detail_complete": 2961,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2380,
+  "detail_pending": 2351,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 16,
+      "detail_complete": 17,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 16
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 33,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 17
     },
     {
       "organisation": "Directorate of Industries",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 16,
+      "detail_complete": 17,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1479,
+      "detail_complete": 1493,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1406
+      "detail_pending": 1392
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -302,10 +302,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 19,
       "copied_tenders": 19,
-      "detail_complete": 11,
+      "detail_complete": 12,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "Excise Department",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 48,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 38
+      "detail_pending": 34
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -874,10 +874,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 51,
+      "detail_complete": 53,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 12
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 240,
+      "detail_complete": 244,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 128
+      "detail_pending": 124
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2375,
+  "legacy_verification_pending": 2346,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
