@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:38:07.138471+00:00",
+  "updated_at": "2026-09-30T23:40:12.077088+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3135,
+  "detail_complete": 3165,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2177,
+  "detail_pending": 2147,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 34,
+      "detail_complete": 38,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 13
     },
     {
       "organisation": "Directorate of Industries",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 31,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 20
+      "detail_pending": 15
     },
     {
       "organisation": "District Collectorate",
@@ -335,10 +335,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 23,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 13
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 187,
+      "detail_complete": 195,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 78
+      "detail_pending": 70
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 58,
+      "detail_complete": 60,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 26
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 20,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 8
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 71,
+      "detail_complete": 74,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 25
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -720,10 +720,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Coperative Marketing Federation Ltd.",
@@ -841,10 +841,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Office of the Labour Commissioner Indore M P",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2172,
+  "legacy_verification_pending": 2142,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
