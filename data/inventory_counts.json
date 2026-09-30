@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:31:50.129727+00:00",
+  "updated_at": "2026-09-30T23:33:55.689727+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3049,
+  "detail_complete": 3077,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2263,
+  "detail_pending": 2235,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1550,
+      "detail_complete": 1567,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1335
+      "detail_pending": 1318
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 52,
+      "detail_complete": 53,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 34
+      "detail_pending": 33
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 70,
+      "detail_complete": 71,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 29
+      "detail_pending": 28
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 57,
+      "detail_complete": 59,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 251,
+      "detail_complete": 258,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 117
+      "detail_pending": 110
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2258,
+  "legacy_verification_pending": 2230,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
