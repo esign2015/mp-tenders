@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:30:18.047745+00:00",
+  "updated_at": "2026-09-30T21:32:21.053805+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 248,
+  "detail_failed": 263,
   "detail_skipped": 0,
-  "detail_pending": 2182,
+  "detail_pending": 2167,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -413,9 +413,9 @@
       "portal_tender_count": 59,
       "copied_tenders": 59,
       "detail_complete": 44,
-      "detail_failed": 2,
+      "detail_failed": 6,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 9
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -424,9 +424,9 @@
       "portal_tender_count": 38,
       "copied_tenders": 38,
       "detail_complete": 23,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 14
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -435,9 +435,9 @@
       "portal_tender_count": 265,
       "copied_tenders": 265,
       "detail_complete": 171,
-      "detail_failed": 14,
+      "detail_failed": 23,
       "detail_skipped": 0,
-      "detail_pending": 80
+      "detail_pending": 71
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -677,9 +677,9 @@
       "portal_tender_count": 31,
       "copied_tenders": 31,
       "detail_complete": 18,
-      "detail_failed": 2,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 10
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2178,
+  "legacy_verification_pending": 2163,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
