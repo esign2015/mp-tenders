@@ -15,12 +15,13 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
 .shortcut{display:inline-block;background:#203b91;color:#fff;border-radius:7px;padding:9px 12px;text-decoration:none;font-size:13px;font-weight:700;margin:3px}button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
 .user button.danger{position:fixed;top:9px;right:12px;z-index:1000;margin:0;box-shadow:0 5px 14px #0003}
 .card h2{margin:0 0 9px;font-size:18px}
-.grid{display:grid;gap:7px}.controls-card{width:fit-content;max-width:100%}.quick-links{display:flex;align-items:center;flex-wrap:wrap;gap:5px;width:fit-content;max-width:100%}.quick-links h2{margin:0 8px 0 0}
-.telegram-grid{grid-template-columns:repeat(4,minmax(0,240px))}
-.data-grid{grid-template-columns:repeat(2,minmax(0,340px))}
+.grid{display:grid;gap:7px}.controls-card{width:fit-content;max-width:100%}.controls-layout{display:grid;grid-template-columns:minmax(0,509px) minmax(0,362px);gap:8px;width:fit-content;max-width:100%;align-items:start}.controls-layout>.card{width:100%;margin-bottom:0}.quick-links{display:flex;align-items:center;flex-wrap:wrap;gap:5px;width:fit-content;max-width:100%}.quick-links h2{margin:0 8px 0 0}
+.telegram-grid{grid-template-columns:repeat(2,minmax(0,240px))}
+.data-grid{grid-template-columns:minmax(0,340px)}
 .action{border:1px solid #d7deeb;border-radius:9px;padding:10px;display:flex;flex-direction:column;min-height:108px}
 .action h3{margin:0 0 5px;font-size:15px}.action p{color:#637083;font-size:12px;line-height:1.35;margin:0 0 8px;min-height:0;flex:1}.action button{align-self:flex-start;margin-left:0}
 #result{white-space:pre-wrap;background:#111827;color:#d1fae5;border-radius:10px;padding:13px;min-height:52px}
+@media(max-width:900px){.controls-layout{grid-template-columns:1fr;width:100%}.controls-layout>.card{width:fit-content;max-width:100%}}
 @media(max-width:1050px){.telegram-grid{grid-template-columns:repeat(2,minmax(0,240px))}}
 @media(max-width:650px){header{padding:14px 86px 14px 14px}h1{font-size:21px}main{padding:0 9px;margin-top:10px}.controls-card{width:100%}.telegram-grid,.data-grid{grid-template-columns:1fr}.card{padding:12px}.action{min-height:auto}.user{padding-right:0}.user button.danger{top:10px;right:10px;padding:9px 11px}.card h2{font-size:19px}}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;max-width:min(92vw,650px);padding:14px 18px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 10px 35px #0004;opacity:0;pointer-events:none;transition:.22s ease}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.error{background:#b42318}.toast.success{background:#087443}.toast.info{background:#203b91}
@@ -45,8 +46,9 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
     <button class="danger" onclick="logout()">Logout</button>
   </div>
 
-  <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a></div>
+  <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a> <button id="usersDownload" onclick="downloadUsers()" title="Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें">👥 Download Users Excel</button></div>
 
+  <div class="controls-layout">
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
     <div class="grid telegram-grid">
@@ -65,9 +67,6 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
     </div>
   </div>
 
-  <div class="card controls-card">
-    <h2>👥 Onboarded Users</h2>
-    <div class="grid data-grid"><div class="action"><h3>Users Data Download</h3><p>Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें।</p><button id="usersDownload" onclick="downloadUsers()">Download Users Excel</button></div></div>
   </div>
 
   <div class="card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div><div id="workflowState" class="small" style="margin-top:8px"></div></div>
