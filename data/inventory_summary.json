@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:33:55.689727+00:00",
+  "updated_at": "2026-09-30T23:36:00.993699+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3077,
+  "detail_complete": 3107,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2235,
+  "detail_pending": 2205,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -49,10 +49,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Capital Project Administration",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 18,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 13
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -181,10 +181,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Social Justice and Welfare",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1567,
+      "detail_complete": 1577,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1318
+      "detail_pending": 1308
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 15,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 31
+      "detail_pending": 26
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 44,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 13
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 171,
+      "detail_complete": 172,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 94
+      "detail_pending": 93
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 53,
+      "detail_complete": 55,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 31
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 20,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 12
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 19,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2230,
+  "legacy_verification_pending": 2200,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
