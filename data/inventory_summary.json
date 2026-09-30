@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T16:44:43.952490+00:00",
+  "updated_at": "2026-09-30T16:48:37.531249+00:00",
   "snapshot_at": "2026-09-30T20:35:54.117762+05:30",
   "organisation_count": 92,
   "portal_tender_count": 5312,
@@ -7,5 +7,7 @@
   "detail_complete": 1399,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3913
+  "detail_pending": 3913,
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
