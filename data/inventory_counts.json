@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:09:49.238138+00:00",
+  "updated_at": "2026-09-30T21:11:52.458878+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 92,
+  "detail_failed": 110,
   "detail_skipped": 0,
-  "detail_pending": 2338,
+  "detail_pending": 2320,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -160,9 +160,9 @@
       "portal_tender_count": 29,
       "copied_tenders": 29,
       "detail_complete": 18,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 9
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 73,
+      "detail_failed": 75,
       "detail_skipped": 0,
-      "detail_pending": 1383
+      "detail_pending": 1381
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -655,9 +655,9 @@
       "portal_tender_count": 36,
       "copied_tenders": 36,
       "detail_complete": 19,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 16
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -666,9 +666,9 @@
       "portal_tender_count": 43,
       "copied_tenders": 43,
       "detail_complete": 14,
-      "detail_failed": 1,
+      "detail_failed": 9,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 20
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -677,9 +677,9 @@
       "portal_tender_count": 31,
       "copied_tenders": 31,
       "detail_complete": 18,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -688,9 +688,9 @@
       "portal_tender_count": 99,
       "copied_tenders": 99,
       "detail_complete": 66,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 30
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -897,9 +897,9 @@
       "portal_tender_count": 65,
       "copied_tenders": 65,
       "detail_complete": 51,
-      "detail_failed": 2,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "PWD-PIU",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2334,
+  "legacy_verification_pending": 2316,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
