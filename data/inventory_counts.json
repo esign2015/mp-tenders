@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:32:13.451539+00:00",
+  "updated_at": "2026-09-30T18:34:19.597285+00:00",
   "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2043,
+  "detail_complete": 2074,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3269,
+  "detail_pending": 3238,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -489,10 +489,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 488,
       "copied_tenders": 488,
-      "detail_complete": 250,
+      "detail_complete": 281,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 238
+      "detail_pending": 207
     },
     {
       "organisation": "Madhya Pradesh State Disaster Management Authority",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 3264,
+  "legacy_verification_pending": 3233,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
