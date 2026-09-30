@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T19:22:34.341504+00:00",
+  "updated_at": "2026-09-30T19:24:40.077102+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2644,
+  "detail_complete": 2671,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2668,
+  "detail_pending": 2641,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 22,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 15
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -610,10 +610,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "MP Industrial Development Corporation Limited",
@@ -632,10 +632,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "MP Lokayukt Organisation",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 56,
+      "detail_complete": 66,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 43
+      "detail_pending": 33
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -830,10 +830,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 19,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 25
+      "detail_pending": 19
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 46,
+      "detail_complete": 51,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 14
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 172,
+      "detail_complete": 175,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 196
+      "detail_pending": 193
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2663,
+  "legacy_verification_pending": 2636,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
