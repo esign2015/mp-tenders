@@ -1,62 +1,152 @@
 {
   "status": "mismatch",
-  "snapshot_at": "2026-09-30T11:12:13.180002+05:30",
-  "portal_organisation_count": 96,
-  "portal_tender_count": 5355,
-  "copied_unique_tender_ids": 5269,
+  "snapshot_at": "2026-09-30T13:35:00.279798+05:30",
+  "portal_organisation_count": 95,
+  "portal_tender_count": 285,
+  "copied_unique_tender_ids": 248,
   "organisation_mismatches": [
     {
       "Organisation Name": "Bhopal Co-Operative Central Bank Ltd",
-      "Portal Count": 1,
-      "Copied Count": 0,
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Directorate of Animal Husbandry",
+      "Portal Count": 3,
+      "Copied Count": 2,
       "Difference": 1
     },
     {
-      "Organisation Name": "Directorate Farmer Welfare And Agriculture Development",
-      "Portal Count": 2,
+      "Organisation Name": "Directorate of Food Civil Supplies and Consumer Protection",
+      "Portal Count": 3,
       "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Directorate of Industries",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Directorate of Social Justice and Welfare",
+      "Portal Count": 3,
+      "Copied Count": 2,
       "Difference": 1
     },
     {
-      "Organisation Name": "Directorate of Panchayati Raj",
-      "Portal Count": 9,
+      "Organisation Name": "District Education Officer Office Neemuch",
+      "Portal Count": 3,
       "Copied Count": 1,
-      "Difference": 8
+      "Difference": 2
     },
     {
-      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
-      "Portal Count": 5,
-      "Copied Count": 0,
-      "Difference": 5
-    },
-    {
-      "Organisation Name": "Jiwaji University - Gwalior",
-      "Portal Count": 6,
+      "Organisation Name": "Economic Offences Wing",
+      "Portal Count": 3,
       "Copied Count": 1,
-      "Difference": 5
+      "Difference": 2
     },
     {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Portal Count": 46,
-      "Copied Count": 13,
-      "Difference": 33
+      "Organisation Name": "Homeguard Civil Defence and Disaster Management",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
     },
     {
-      "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
-      "Portal Count": 18,
-      "Copied Count": 4,
-      "Difference": 14
+      "Organisation Name": "Krantivir Tatya Tope Vishwavidyalaya - Guna M P",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
     },
     {
-      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
-      "Portal Count": 22,
-      "Copied Count": 3,
-      "Difference": 19
+      "Organisation Name": "Madhya Pradesh Madhyam",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Rajya Van Vikas Nigam Ltd.",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Madhya Pradesh State Disaster Management Authority",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Madhya Pradesh State Mining Corporation Ltd",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
+    },
+    {
+      "Organisation Name": "Madhya Pradesh State Seeds and Farm Development Corporation",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Yatri Parivahan and Infrastructure Ltd.",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "M.P. Hindi Granth Academy - MPHGA",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
+    },
+    {
+      "Organisation Name": "MP Lokayukt Organisation",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "M.P.State Minor Forest Produce Cooperative Federation Limited",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "M.P. Textbook Corporation - Bhopal",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
+    },
+    {
+      "Organisation Name": "Office of the Labour Commissioner Indore M P",
+      "Portal Count": 3,
+      "Copied Count": 1,
+      "Difference": 2
+    },
+    {
+      "Organisation Name": "Professional Examination Board",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
+    },
+    {
+      "Organisation Name": "Rewa Ultra Mega Solar Limited",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
+    },
+    {
+      "Organisation Name": "State Level Employment and Training Center",
+      "Portal Count": 3,
+      "Copied Count": 2,
+      "Difference": 1
     }
   ],
-  "mismatch_count": 8,
+  "mismatch_count": 23,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 373,
+  "recovered_from_rsp_id_only": 193,
   "recovery_log": [
     {
       "Tender ID": "2026_AICTS_531643_1",
@@ -74,12 +164,67 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_BCLL_533970_1",
+      "Organisation Name": "Bhopal City Link Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_BCLL_534099_1",
+      "Organisation Name": "Bhopal City Link Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_BCLL_534100_1",
+      "Organisation Name": "Bhopal City Link Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_BCCB_537330_1",
+      "Organisation Name": "Bhopal Co-Operative Central Bank Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_MPBSE_534548_1",
       "Organisation Name": "Board of Secondary Education",
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_MPBSE_534553_1",
+      "Organisation Name": "Board of Secondary Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPBSE_534948_1",
+      "Organisation Name": "Board of Secondary Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CPA_534387_1",
+      "Organisation Name": "Capital Project Administration",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CPA_535105_1",
+      "Organisation Name": "Capital Project Administration",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CPA_535106_1",
+      "Organisation Name": "Capital Project Administration",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_DAVV_534347_1",
+      "Organisation Name": "Devi Ahilya Vishwavidyalaya - Indore",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DAVV_534347_2",
+      "Organisation Name": "Devi Ahilya Vishwavidyalaya - Indore",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DAVV_537178_1",
       "Organisation Name": "Devi Ahilya Vishwavidyalaya - Indore",
       "Source": "RSP Tender ID recovery only"
     },
@@ -89,12 +234,37 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_DFWAD_537621_1",
+      "Organisation Name": "Directorate Farmer Welfare And Agriculture Development",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DFWAD_538072_1",
+      "Organisation Name": "Directorate Farmer Welfare And Agriculture Development",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_MPDAH_530642_1",
       "Organisation Name": "Directorate of Animal Husbandry",
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_MPDAH_538616_1",
+      "Organisation Name": "Directorate of Animal Husbandry",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_DES_534503_1",
+      "Organisation Name": "Directorate of Economics and Statistics",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DES_534526_1",
+      "Organisation Name": "Directorate of Economics and Statistics",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DES_534526_2",
       "Organisation Name": "Directorate of Economics and Statistics",
       "Source": "RSP Tender ID recovery only"
     },
@@ -110,6 +280,16 @@
     },
     {
       "Tender ID": "2026_DoPR_532389_1",
+      "Organisation Name": "Directorate of Panchayati Raj",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DoPR_537166_1",
+      "Organisation Name": "Directorate of Panchayati Raj",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DoPR_538242_1",
       "Organisation Name": "Directorate of Panchayati Raj",
       "Source": "RSP Tender ID recovery only"
     },
@@ -134,13 +314,18 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_DTE_530103_1",
-      "Organisation Name": "Directorate of Technical Education",
+      "Tender ID": "2026_DTCP_515964_1",
+      "Organisation Name": "Directorate of Town And Country Planning",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_DTE_530778_2",
-      "Organisation Name": "Directorate of Technical Education",
+      "Tender ID": "2026_DTCP_515976_1",
+      "Organisation Name": "Directorate of Town And Country Planning",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTCP_519708_1",
+      "Organisation Name": "Directorate of Town And Country Planning",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -154,8 +339,33 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_MPWCD_533418_1",
+      "Organisation Name": "Directorate Of Women and Child Development",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_DSYW_532439_1",
       "Organisation Name": "Directorate Sports and Youth Welfare",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DSYW_533245_1",
+      "Organisation Name": "Directorate Sports and Youth Welfare",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DSYW_533992_1",
+      "Organisation Name": "Directorate Sports and Youth Welfare",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_532346_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_532395_1",
+      "Organisation Name": "District Collectorate",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -166,6 +376,21 @@
     {
       "Tender ID": "2026_EOW_536143_1",
       "Organisation Name": "Economic Offences Wing",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2025_WRD_461722_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_485735_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_502552_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -194,7 +419,52 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_GADR_538617_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GVMP_538751_1",
+      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GVMP_538792_1",
+      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GVMP_539216_1",
+      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPHC_530107_1",
+      "Organisation Name": "High Court of Madhya Pradesh",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPHC_530618_1",
+      "Organisation Name": "High Court of Madhya Pradesh",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPHC_533481_1",
+      "Organisation Name": "High Court of Madhya Pradesh",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_JIWAJ_533405_1",
+      "Organisation Name": "Jiwaji University - Gwalior",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_JIWAJ_534377_1",
+      "Organisation Name": "Jiwaji University - Gwalior",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_JIWAJ_534380_1",
       "Organisation Name": "Jiwaji University - Gwalior",
       "Source": "RSP Tender ID recovery only"
     },
@@ -205,6 +475,11 @@
     },
     {
       "Tender ID": "2026_MPB_532857_1",
+      "Organisation Name": "Madhya Pradesh Bhawan",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPB_538078_1",
       "Organisation Name": "Madhya Pradesh Bhawan",
       "Source": "RSP Tender ID recovery only"
     },
@@ -224,1328 +499,18 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPJNM_534845_1",
-      "Organisation Name": "Madhya Pradesh Jal Nigam Maryadit",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPJNM_536537_1",
-      "Organisation Name": "Madhya Pradesh Jal Nigam Maryadit",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_529716_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_533126_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_533126_2",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_533847_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_533911_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_533945_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_536094_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_536716_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_536849_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_537125_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_537577_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_538283_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MKVVC_538285_1",
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
       "Tender ID": "2026_MADHY_537834_1",
       "Organisation Name": "Madhya Pradesh Madhyam",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2025_MPPGC_434827_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Tender ID": "2026_MPPKV_512117_1",
+      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2025_MPPGC_434834_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_437171_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_439336_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_454244_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_458982_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_460045_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_463842_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_465416_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_465556_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_468118_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_MPPGC_470690_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_472475_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_474131_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_478962_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_483546_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_487468_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_489796_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_491851_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_494960_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_498324_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_498410_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_498452_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_498785_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_501347_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_501357_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_502182_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_502612_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_504455_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505379_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505578_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505582_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505758_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505776_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_505954_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_506201_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_507461_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_507606_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_508027_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_508523_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_508529_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_508707_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_509618_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_510042_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_511175_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_511390_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_511581_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_512591_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_512749_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_513034_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_513263_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_513512_3",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_513550_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515364_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515460_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515462_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515480_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515487_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_515539_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_516158_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_516331_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_516436_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_516438_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517092_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517362_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517686_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517687_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517687_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517756_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517765_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517783_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517795_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_517944_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_518436_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_518440_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_518905_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_518992_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519005_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519141_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519237_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519263_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519304_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519323_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519577_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519630_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519894_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519896_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_519919_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520167_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520228_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520309_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520310_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520374_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520382_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520385_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520386_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520530_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520542_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520581_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520584_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520586_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520595_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520652_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520658_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520667_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520694_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520729_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_520892_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521400_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521483_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521652_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521653_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521660_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521662_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521776_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_521837_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522061_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522062_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522104_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522132_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522238_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522251_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522263_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522265_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522304_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522343_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_522843_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523000_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523324_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523325_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523445_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523446_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523540_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523772_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523781_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523896_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_523897_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524050_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524097_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524169_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524338_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524340_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524342_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524722_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524875_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_524878_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525019_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525457_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525483_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525489_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525548_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525565_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525738_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525739_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525812_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_525827_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526033_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526049_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526051_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526076_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526084_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526104_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526112_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526128_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526184_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526185_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526188_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526431_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526432_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526434_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526436_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526437_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526443_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526508_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526769_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_526807_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527041_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527152_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527532_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527537_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527538_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527565_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527629_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527631_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527632_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527635_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527642_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527644_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527649_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527679_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527679_2",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527681_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527695_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527721_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527743_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527756_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527757_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527882_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527884_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527992_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527993_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_527994_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_528351_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_528422_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_528943_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_528987_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529001_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529279_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529286_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529287_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529324_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529325_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529338_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529341_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529343_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529344_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529493_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529822_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529845_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529864_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529896_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529899_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529902_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_529961_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530082_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530229_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530260_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530340_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530688_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530823_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530872_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530904_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530906_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530960_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530961_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_530962_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531019_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531020_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531024_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531028_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531170_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531237_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531375_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531408_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531411_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_531415_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_532005_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_532012_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPGC_532033_1",
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Tender ID": "2026_MPPKV_525914_1",
+      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -1564,33 +529,48 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPPMC_537905_1",
-      "Organisation Name": "Madhya Pradesh Power Management Company Limited-Jabalpur",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
       "Tender ID": "2026_PHSCL_524633_1",
       "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_PHSCL_531333_1",
+      "Tender ID": "2026_PHSCL_524733_1",
       "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_PHSCL_531413_1",
-      "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHSCL_533247_1",
+      "Tender ID": "2026_PHSCL_530233_1",
       "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
     {
       "Tender ID": "2026_MPVVN_533449_1",
       "Organisation Name": "Madhya Pradesh Rajya Van Vikas Nigam Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPRDC_494728_1",
+      "Organisation Name": "Madhya Pradesh Road Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPRDC_496918_1",
+      "Organisation Name": "Madhya Pradesh Road Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPRRD_526985_10",
+      "Organisation Name": "Madhya Pradesh Rural Road Development Authority",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPRRD_526985_11",
+      "Organisation Name": "Madhya Pradesh Rural Road Development Authority",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPRRD_526985_15",
+      "Organisation Name": "Madhya Pradesh Rural Road Development Authority",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -1610,16 +590,6 @@
     },
     {
       "Tender ID": "2026_SEDC_534746_1",
-      "Organisation Name": "Madhya Pradesh State Electronics Development Corporation Ltd.",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_SEDC_536878_1",
-      "Organisation Name": "Madhya Pradesh State Electronics Development Corporation Ltd.",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_SEDC_537910_1",
       "Organisation Name": "Madhya Pradesh State Electronics Development Corporation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1650,21 +620,6 @@
     },
     {
       "Tender ID": "2026_MPUDC_522047_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPUDC_525880_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPUDC_534385_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPUDC_535498_1",
       "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1729,8 +684,8 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPHID_535866_1",
-      "Organisation Name": "MP Housing and Infrastructure Development Board",
+      "Tender ID": "2026_MIDCL_529866_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -1744,8 +699,78 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_MPLUN_538332_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_MPLO_539376_1",
       "Organisation Name": "MP Lokayukt Organisation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPP_516789_1",
+      "Organisation Name": "MP Police",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPP_523886_2",
+      "Organisation Name": "MP Police",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPPHC_533412_1",
+      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPPHC_533413_1",
+      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPPHC_533414_1",
+      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPPTC_513077_2",
+      "Organisation Name": "MP Power Transmission Co. Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPPTC_523121_1",
+      "Organisation Name": "MP Power Transmission Co. Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSAM_532206_1",
+      "Organisation Name": "MP State Agricultural Marketing Board",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSAM_532465_1",
+      "Organisation Name": "MP State Agricultural Marketing Board",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSAM_532466_1",
+      "Organisation Name": "MP State Agricultural Marketing Board",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_533687_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_538483_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_538483_10",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -1759,27 +784,32 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPCDF_535829_1",
-      "Organisation Name": "MP State Cooperative Dairy Federation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
       "Tender ID": "2026_MPSCU_536474_1",
       "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_SCMFL_535185_1",
+      "Tender ID": "2026_MPSCU_536899_1",
+      "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCU_537500_1",
+      "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_1",
       "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_SCMFL_535207_1",
+      "Tender ID": "2026_SCMFL_507708_10",
       "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_SCMFL_536730_1",
+      "Tender ID": "2026_SCMFL_507708_12",
       "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1819,6 +849,21 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_STDC_531278_1",
+      "Organisation Name": "MP State Tourism Development Corporation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_STDC_532304_1",
+      "Organisation Name": "MP State Tourism Development Corporation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_STDC_534567_1",
+      "Organisation Name": "MP State Tourism Development Corporation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_MPTBC_514718_1",
       "Organisation Name": "M.P. Textbook Corporation - Bhopal",
       "Source": "RSP Tender ID recovery only"
@@ -1839,12 +884,22 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_MPTB_538256_1",
+      "Organisation Name": "M.P. Tourism Board",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_MPVS_532803_1",
       "Organisation Name": "M P Vidhan Sabha",
       "Source": "RSP Tender ID recovery only"
     },
     {
       "Tender ID": "2026_MPVS_537274_2",
+      "Organisation Name": "M P Vidhan Sabha",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPVS_537479_1",
       "Organisation Name": "M P Vidhan Sabha",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1864,12 +919,32 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_NVDA_533070_1",
+      "Organisation Name": "Narmada Valley Development Authority",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_NVDA_533860_1",
+      "Organisation Name": "Narmada Valley Development Authority",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_NVDA_534174_1",
+      "Organisation Name": "Narmada Valley Development Authority",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_COSK_534067_1",
       "Organisation Name": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
       "Source": "RSP Tender ID recovery only"
     },
     {
       "Tender ID": "2026_COSK_535977_1",
+      "Organisation Name": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_COSK_535978_1",
       "Organisation Name": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1904,6 +979,66 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_KSGAC_535411_1",
+      "Organisation Name": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_KSGAC_535472_1",
+      "Organisation Name": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_KSGAC_535492_1",
+      "Organisation Name": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_PWPIU_533208_1",
+      "Organisation Name": "PWD-PIU",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_PWPIU_533788_1",
+      "Organisation Name": "PWD-PIU",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_PWPIU_533867_1",
+      "Organisation Name": "PWD-PIU",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RVSKV_533448_1",
+      "Organisation Name": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RVSKV_538860_1",
+      "Organisation Name": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RVSKV_538917_1",
+      "Organisation Name": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RSK_538412_1",
+      "Organisation Name": "Rajya Shiksha Kendra M.P",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RSK_538830_1",
+      "Organisation Name": "Rajya Shiksha Kendra M.P",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RSK_538863_1",
+      "Organisation Name": "Rajya Shiksha Kendra M.P",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_RDVJ_537099_1",
       "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
       "Source": "RSP Tender ID recovery only"
@@ -1919,8 +1054,63 @@
       "Source": "RSP Tender ID recovery only"
     },
     {
+      "Tender ID": "2026_RUMSL_528528_1",
+      "Organisation Name": "Rewa Ultra Mega Solar Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RUMSL_528984_1",
+      "Organisation Name": "Rewa Ultra Mega Solar Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
       "Tender ID": "2026_AVOMT_532276_1",
       "Organisation Name": "Shri Omkareshwar Mandir Trust- Omkareshwar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_AVOMT_536248_1",
+      "Organisation Name": "Shri Omkareshwar Mandir Trust- Omkareshwar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SETC_536588_1",
+      "Organisation Name": "State Level Employment and Training Center",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SETC_536604_1",
+      "Organisation Name": "State Level Employment and Training Center",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CEO_535797_1",
+      "Organisation Name": "THE CHIEF ELECTORAL OFFICER",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CEO_538308_1",
+      "Organisation Name": "THE CHIEF ELECTORAL OFFICER",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_CEO_538325_1",
+      "Organisation Name": "THE CHIEF ELECTORAL OFFICER",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_534269_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_534941_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_534943_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
       "Source": "RSP Tender ID recovery only"
     }
   ],
