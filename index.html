@@ -3034,7 +3034,8 @@ function formatTimeLeft(value){
   const minutes = totalMinutes % 60;
   if(days > 0) return days + "d " + hours + "h";
   if(hours > 0) return hours + "h " + minutes + "m";
-  return Math.max(1,minutes) + "m";
+  const seconds=Math.floor((ms % 60000)/1000);
+  return minutes + "m " + seconds + "s";
 }
 
 function getTimeLeftClass(value){
@@ -3485,6 +3486,38 @@ async function loadPortalTenderCountTotal(){
 let liveRefreshTimer = null;
 let liveRefreshBusy = false;
 
+// Fixed IST quarter-hour slots, 30 seconds after the portal's update.
+function nextDashboardRefreshAt(now=Date.now()){
+  const day=24*60*60*1000, istOffset=5.5*60*60*1000;
+  const dayStart=Math.floor((now+istOffset)/day)*day-istOffset;
+  const start=dayStart+9*60*60*1000+30000;
+  const end=dayStart+19*60*60*1000+30000;
+  if(now<start) return start;
+  const next=start+(Math.floor((now-start)/(15*60*1000))+1)*(15*60*1000);
+  return next<=end?next:start+day;
+}
+
+function startDashboardRefreshSchedule(){
+  if(liveRefreshTimer!==null) return;
+  liveRefreshTimer=setTimeout(async()=>{
+    liveRefreshTimer=null;
+    try{await refreshPublishedData();}
+    finally{startDashboardRefreshSchedule();}
+  },Math.max(0,nextDashboardRefreshAt()-Date.now()));
+}
+
+function updateVisibleTimeLeft(){
+  document.querySelectorAll("[data-time-left]").forEach(element=>{
+    const closing=element.dataset.timeLeft;
+    element.textContent=formatTimeLeft(closing);
+    if(element.classList.contains("time-left")){
+      element.classList.remove("time-left-urgent","time-left-soon","time-left-normal","time-left-closed");
+      const cls=getTimeLeftClass(closing);
+      if(cls) element.classList.add(cls);
+    }
+  });
+}
+
 async function refreshPublishedData(){
   if(liveRefreshBusy || document.hidden) return;
   liveRefreshBusy = true;
@@ -3654,9 +3687,7 @@ async function loadData(){
     lastDataRefreshAt=new Date();
     updateRefreshBadge();
 
-    if(!liveRefreshTimer){
-      liveRefreshTimer = setInterval(refreshPublishedData, 15000);
-    }
+    startDashboardRefreshSchedule();
 
   }catch(error){
     console.error("Dashboard data load failed:", error);
@@ -3926,7 +3957,7 @@ function renderCardWindow(){
       <article class="tender-card ${cardClosingClass(row)}" data-closing-time="${parseDate(row["Closing Date"])?.getTime()||0}">
         <div class="tender-card-id-row">
           <div class="tender-card-id">${escapeHtml(row["Tender ID"])||"—"}</div>
-          <div class="tender-card-time">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
+          <div class="tender-card-time" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
         </div>
         <div class="tender-card-ref">#${n} • Ref: ${escapeHtml(displayTenderValue(row,"Reference Number"))||"—"}</div>
         <div class="tender-card-title">${title}</div>
@@ -4017,7 +4048,7 @@ function renderVirtualWindow(){
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
-        <td class="time-left ${getTimeLeftClass(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
+        <td class="time-left ${getTimeLeftClass(row["Closing Date"])}" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
         <td>${formatMoney(row["PAC Amount"])}</td>
         <td>${formatMoney(row["EMD Fee"])}</td>
         <td>${formatMoney(row["Tender Fee"])}</td>
@@ -5669,7 +5700,7 @@ setInterval(() => {
     }
   }
 },1000);
-setInterval(() => { if(Array.isArray(virtualRows) && virtualRows.length) renderVirtualWindow(); },60000);
+setInterval(updateVisibleTimeLeft,20000);
 
 setupVirtualTable();
 updateVirtualPager();

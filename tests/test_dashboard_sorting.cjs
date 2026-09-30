@@ -18,6 +18,7 @@ const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=
   VIRTUAL_CHUNK_SIZE:100, ESTIMATED_ROW_HEIGHT:40});
 const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','parseDate','istParts','todayKey',
   'isDeadlineAlertActive',
+  'formatTimeLeft','getTimeLeftClass','updateVisibleTimeLeft','nextDashboardRefreshAt',
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
   'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
@@ -38,6 +39,25 @@ assert.equal(context.isDeadlineAlertActive(alertNow+10*60*1000+1,alertNow),false
 assert.equal(context.isDeadlineAlertActive(alertNow+1,alertNow),true);
 assert.equal(context.isDeadlineAlertActive(alertNow,alertNow),false);
 assert.equal(context.isDeadlineAlertActive('invalid',alertNow),false);
+for(const [now,next] of [
+ ['2026-09-30T08:59:00+05:30','2026-09-30T09:00:30+05:30'],
+ ['2026-09-30T09:00:29+05:30','2026-09-30T09:00:30+05:30'],
+ ['2026-09-30T09:00:30+05:30','2026-09-30T09:15:30+05:30'],
+ ['2026-09-30T09:15:31+05:30','2026-09-30T09:30:30+05:30'],
+ ['2026-09-30T18:59:59+05:30','2026-09-30T19:00:30+05:30'],
+ ['2026-09-30T19:00:30+05:30','2026-10-01T09:00:30+05:30']
+]) assert.equal(context.nextDashboardRefreshAt(Date.parse(now)),Date.parse(next));
+let clockNow=Date.parse('2026-09-30T09:00:00+05:30');
+context.Date=class extends Date{static now(){return clockNow;}};
+const countdowns=Array.from({length:2},()=>({dataset:{timeLeft:'30-Sep-2026 09:02 AM'},textContent:'',classList:{contains:()=>false}}));
+context.document.querySelectorAll=selector=>selector==='[data-time-left]'?countdowns:[];
+context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='2m 0s'));
+clockNow+=20000;
+context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='1m 40s'));
+context.Date=Date;
+context.document.querySelectorAll=()=>[];
 for(const [id,ref] of [['2026_MPCDF_536489_1','1666/JSDSM/2026/Jabalpur'],['2026_MPTAX_534364_2','CTD/DC-2/STORE/2026/393']]){
  const rows=context.mergeCurrentPortalRows([{'Tender ID':id,'Reference Number':ref}], [{'Tender ID':id,'Reference Number':id}]);
  assert.equal(rows[0]['Reference Number'],ref);
