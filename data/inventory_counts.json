@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:07:46.475460+00:00",
+  "updated_at": "2026-09-30T21:09:49.238138+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 77,
+  "detail_failed": 92,
   "detail_skipped": 0,
-  "detail_pending": 2353,
+  "detail_pending": 2338,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -72,9 +72,9 @@
       "portal_tender_count": 33,
       "copied_tenders": 33,
       "detail_complete": 16,
-      "detail_failed": 1,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 15
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -204,9 +204,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 1,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Town And Country Planning",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 61,
+      "detail_failed": 73,
       "detail_skipped": 0,
-      "detail_pending": 1395
+      "detail_pending": 1383
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -666,9 +666,9 @@
       "portal_tender_count": 43,
       "copied_tenders": 43,
       "detail_complete": 14,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 29
+      "detail_pending": 28
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2349,
+  "legacy_verification_pending": 2334,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
