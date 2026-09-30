@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:34:23.899152+00:00",
+  "updated_at": "2026-09-30T21:36:26.657515+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 278,
+  "detail_failed": 296,
   "detail_skipped": 0,
-  "detail_pending": 2152,
+  "detail_pending": 2134,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -138,9 +138,9 @@
       "portal_tender_count": 51,
       "copied_tenders": 51,
       "detail_complete": 33,
-      "detail_failed": 2,
+      "detail_failed": 5,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 13
     },
     {
       "organisation": "Directorate of Industries",
@@ -259,9 +259,9 @@
       "portal_tender_count": 51,
       "copied_tenders": 51,
       "detail_complete": 31,
-      "detail_failed": 4,
+      "detail_failed": 5,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 15
     },
     {
       "organisation": "District Collectorate",
@@ -336,9 +336,9 @@
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -490,9 +490,9 @@
       "portal_tender_count": 488,
       "copied_tenders": 488,
       "detail_complete": 292,
-      "detail_failed": 0,
+      "detail_failed": 4,
       "detail_skipped": 0,
-      "detail_pending": 196
+      "detail_pending": 192
     },
     {
       "organisation": "Madhya Pradesh State Disaster Management Authority",
@@ -589,9 +589,9 @@
       "portal_tender_count": 86,
       "copied_tenders": 86,
       "detail_complete": 48,
-      "detail_failed": 11,
+      "detail_failed": 12,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 26
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -655,9 +655,9 @@
       "portal_tender_count": 36,
       "copied_tenders": 36,
       "detail_complete": 19,
-      "detail_failed": 5,
+      "detail_failed": 7,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 10
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -666,9 +666,9 @@
       "portal_tender_count": 43,
       "copied_tenders": 43,
       "detail_complete": 14,
-      "detail_failed": 9,
+      "detail_failed": 15,
       "detail_skipped": 0,
-      "detail_pending": 20
+      "detail_pending": 14
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2148,
+  "legacy_verification_pending": 2130,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
