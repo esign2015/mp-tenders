@@ -357,6 +357,20 @@ class PipelineTests(unittest.TestCase):
             summary = build_summary(root)
             self.assertEqual([summary[key] for key in ("copied_tenders", "detail_complete", "detail_failed", "detail_skipped", "detail_pending")], [3, 1, 1, 0, 1])
 
+    def test_summary_has_same_global_and_organisation_policy(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            write_csv(root / "organisations.csv", [{"Organisation Name": "UAD", "Tender Count": "2"}, {"Organisation Name": "Other", "Tender Count": "1"}])
+            write_csv(root / "organisation_tenders.csv", [{"Tender ID": "a", "Organisation Name": "UAD"}, {"Tender ID": "b", "Organisation Name": "UAD"}, {"Tender ID": "c", "Organisation Name": "Other"}])
+            write_csv(root / "all_tenders_org_detailed.csv", [{**completed("a"), "Search Route": "Official", "District": "Jabalpur"}, {**completed("b"), "Search Route": "RSP -> live dataset import", "District": "Jabalpur"}, {**completed("c"), "Search Route": "Official", "District": "", "Pincode": "NA"}])
+            summary = build_summary(root)
+            self.assertEqual(summary["policy_version"], "official-portal-v1")
+            for key in ("portal_tender_count", "copied_tenders", "detail_complete", "detail_failed", "detail_skipped", "detail_pending"):
+                self.assertEqual(summary[key], sum(row[key] for row in summary["organisations"]))
+            self.assertEqual((summary["detail_complete"], summary["detail_pending"], summary["legacy_verification_pending"]), (1, 2, 1))
+            self.assertEqual(summary["missing_pincode_ids"], ["c"])
+            self.assertEqual(summary["missing_district_ids"], ["c"])
+
     def test_fast_route_resolves_link_and_saves_before_status(self):
         tid = "2026_UAD_123456_1"
         html = f'<table><tr><td>{tid}</td><td><a href="/nicgep/app?page=FrontEndViewTender">Work</a></td></tr></table>'

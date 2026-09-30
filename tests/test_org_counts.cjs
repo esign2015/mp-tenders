@@ -1,13 +1,13 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const html=fs.readFileSync('org/index.html','utf8');
-for(const script of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
-const start=html.indexOf('function detailComplete('),end=html.indexOf('\nfunction render',start);
-const ctx=vm.createContext({clean:v=>String(v??'').replace(/\s+/g,' ').trim()});
-vm.runInContext(html.slice(start,end),ctx);
-const complete=Object.fromEntries(['Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee','Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'].map(k=>[k,'value']));
-Object.assign(complete,{'Detail Extracted':'YES','Processing Fee':'295','Pincode':'482001','Search Route':'Home Search -> Tender ID -> GO -> Tender Title'});
-assert(ctx.detailComplete(complete));
-for(const changes of [{'Search Route':'RSP -> live dataset import'},{'Pincode':'NA'},{'Pincode':'000000'},{'Processing Fee':'0'},{'Detail Extracted':''},{'Work Description':''}])assert(!ctx.detailComplete({...complete,...changes}));
-assert(ctx.detailComplete({...complete,'Processing Fee':'₹1,295.00'}));
-assert.equal((html.match(/\.filter\(detailComplete\)/g)||[]).length,2);
-console.log('PASS: both organisation totals use official provenance, valid PIN, required fields and real processing fee.');
+const script=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)][0][1];
+new vm.Script(script);
+const nodes={};const document={getElementById:id=>nodes[id]??=( {value:'',textContent:'',innerHTML:'',addEventListener(){}} )};
+const snapshot={policy_version:'official-portal-v1',organisation_count:2,portal_tender_count:5,copied_tenders:5,detail_complete:2,detail_failed:0,detail_skipped:0,detail_pending:3,organisations:[{organisation:'UAD',serial:1,portal_tender_count:4,copied_tenders:4,detail_complete:2,detail_failed:0,detail_skipped:0,detail_pending:2},{organisation:'Other',serial:2,portal_tender_count:1,copied_tenders:1,detail_complete:0,detail_failed:0,detail_skipped:0,detail_pending:1}]};
+const ctx=vm.createContext({document,console,setInterval(){},fetch:async url=>{assert(url.includes('inventory_counts.json'));return{ok:true,json:async()=>snapshot}}});
+vm.runInContext(script.slice(0,script.indexOf("$('search').addEventListener")),ctx);
+(async()=>{
+ await ctx.load();assert.equal(nodes.copiedCount.textContent,'5 / 2');assert(nodes.body.innerHTML.includes('UAD'));assert(nodes.body.innerHTML.includes('Other'));
+ nodes.search.value='UAD';ctx.render();assert(!nodes.body.innerHTML.includes('Other'));assert.equal(nodes.copiedCount.textContent,'5 / 2');assert(nodes.body.innerHTML.includes('कुल — सभी organisations'));
+ console.log('PASS: /org uses one summary and keeps global counts stable when filtering.');
+})().catch(e=>{console.error(e);process.exitCode=1});

@@ -51,14 +51,37 @@ def build_summary(root):
     skipped = (set(status.get("skipped_ids") or []) & ids) - success - failed
     pending = ids - success - failed - skipped
     missing_pins = sorted(tid for tid in ids if not valid_pincode(details.get(tid, {}).get("Pincode")))
+    missing_districts = sorted(tid for tid in ids if not clean(details.get(tid, {}).get("District")))
+    legacy = sorted(tid for tid in pending if clean(details.get(tid, {}).get("Search Route")) == "RSP -> live dataset import")
+    organisation_rows = []
+    for org in orgs:
+        name = clean(org.get("Organisation Name"))
+        org_ids = {clean(row.get("Tender ID")) for row in listed
+                   if clean(row.get("Organisation Name")).casefold() == name.casefold()} - {""}
+        organisation_rows.append({
+            "organisation": name, "serial": org.get("S.No.", ""),
+            "snapshot_at": org.get("Retrieved At", ""),
+            "portal_tender_count": int(re.sub(r"\D", "", clean(org.get("Tender Count"))) or 0),
+            "copied_tenders": len(org_ids), "detail_complete": len(org_ids & success),
+            "detail_failed": len(org_ids & failed), "detail_skipped": len(org_ids & skipped),
+            "detail_pending": len(org_ids & pending),
+        })
     portal = sum(int(re.sub(r"\D", "", clean(row.get("Tender Count"))) or 0) for row in orgs)
     return {
+        "policy_version": "official-portal-v1",
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "snapshot_at": orgs[0].get("Retrieved At", "") if orgs else "",
         "organisation_count": len(orgs), "portal_tender_count": portal,
         "copied_tenders": len(ids), "detail_complete": len(success),
         "detail_failed": len(failed), "detail_skipped": len(skipped),
         "detail_pending": len(pending),
+        "organisations": organisation_rows,
+        "organisation_count_mismatches": sum(row["portal_tender_count"] != row["copied_tenders"] for row in organisation_rows),
+        "legacy_verification_pending": len(legacy),
+        "missing_district_count": len(missing_districts),
+        "missing_district_ids": missing_districts,
+        "known_pincode_count": len({clean(details.get(tid, {}).get("Pincode")) for tid in ids if valid_pincode(details.get(tid, {}).get("Pincode"))}),
+        "department_count": len({clean(details.get(tid, {}).get("Department")) for tid in ids} - {""}),
         "missing_pincode_count": len(missing_pins),
         "missing_pincode_ids": missing_pins,
     }
@@ -66,11 +89,14 @@ def build_summary(root):
 def write_summary(root):
     root = Path(root)
     result = build_summary(root)
-    destination = root / "data/inventory_summary.json"
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    temporary = destination.with_suffix(".tmp")
-    temporary.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    temporary.replace(destination)
+    # Existing workers may still write the old summary with a previous policy.
+    # The shared consumer file is only produced by this policy's publisher.
+    for filename in ("inventory_summary.json", "inventory_counts.json"):
+        destination = root / "data" / filename
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        temporary = destination.with_suffix(".tmp")
+        temporary.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        temporary.replace(destination)
     return result
 
 if __name__ == "__main__":

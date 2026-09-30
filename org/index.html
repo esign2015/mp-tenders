@@ -39,124 +39,44 @@ td{padding:8px;border:1px solid #d7dee8}tr:nth-child(even){background:#f8fafc}
 </section>
 </main>
 <script>
-let orgs=[],tenders=[],recovery=[],details=[],statusData={errors:[]};
+let inventory=null;
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;")}
-function parseCSV(text){
- let rows=[],row=[],v='',q=false;
- for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];
-  if(c=='"'&&q&&n=='"'){v+='"';i++;continue} if(c=='"'){q=!q;continue}
-  if(c==','&&!q){row.push(v);v='';continue}
-  if((c=='\n'||c=='\r')&&!q){if(c=='\r'&&n=='\n')i++;row.push(v);v='';if(row.some(x=>x.trim()))rows.push(row);row=[];continue}
-  v+=c;
- }
- if(v!==''||row.length){row.push(v);rows.push(row)}
- const h=rows.shift()||[]; return rows.map(r=>Object.fromEntries(h.map((x,i)=>[x,r[i]||''])));
-}
-async function csv(name){
-  const urls=[
-    'https://raw.githubusercontent.com/esign2015/mp-tenders/main/'+name,
-    '../'+name
-  ];
-  let lastError=null;
-  for(const url of urls){
-    try{
-      const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'});
-      if(!r.ok) throw Error(name+' HTTP '+r.status);
-      const text=await r.text();
-      const data=parseCSV(text);
-      if(data.length) return data;
-      throw Error(name+' empty');
-    }catch(e){lastError=e;}
-  }
-  throw lastError||Error(name);
-}
 function snapshotTime(value){
- const date=new Date(clean(value));
- if(!clean(value)||Number.isNaN(date.getTime())) return 'समय उपलब्ध नहीं';
+ const date=new Date(value);
+ if(!value||Number.isNaN(date.getTime())) return 'समय उपलब्ध नहीं';
  return date.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})+' IST';
 }
-function detailComplete(row){
- const required=['Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
-  'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'];
- if(clean(row['Search Route'])==='RSP -> live dataset import') return false;
- if(clean(row['Detail Extracted']).toUpperCase()!=='YES') return false;
- if(!required.every(k=>clean(row[k]))) return false;
- if(!/^[1-9]\d{5}$/.test(clean(row['Pincode']))) return false;
- const fee=clean(row['Processing Fee']).replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
- return !!fee && Number(fee[0])>0;
+function countCells(x){
+ const match=x.portal_tender_count===x.copied_tenders;
+ return '<td>'+x.portal_tender_count.toLocaleString('en-IN')+'</td><td>'+x.copied_tenders.toLocaleString('en-IN')+'</td><td class="'+(match?'ok':'bad')+'">'+(match?'MATCH':'MISMATCH')+'</td><td>'+x.detail_complete+'</td><td>'+x.detail_failed+'</td><td>'+x.detail_skipped+'</td><td>'+x.detail_pending+'</td>';
 }
 function render(){
- const q=$('search').value.toLowerCase();
- const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
- const totals={portal:0,copied:0,success:0,fail:0,skip:0,pending:0};
- const html=rows.map((x,i)=>{
-  const name=x['Organisation Name'], key=clean(name).toLowerCase(), count=Number(x['Tender Count']||0);
-  const orgRows=tenders.filter(t=>clean(t['Organisation Name']).toLowerCase()===key);
-  const ids=new Set(orgRows.map(t=>clean(t['Tender ID'])).filter(Boolean));
-  // Count successful detail extraction from the actual detail CSV first.
-  // This avoids showing 0 while the worker has already checkpointed detail rows
-  // but the status file was created by an older worker revision.
-  const detailSuccessIds=new Set(
-    details
-      .filter(detailComplete)
-      .map(d=>clean(d['Tender ID']))
-      .filter(id=>ids.has(id))
-  );
-  // Success must come from the same current verified Tender-ID snapshot.
-  // Do not union historical/targeted-retry status files into this count.
-  const successSet=detailSuccessIds;
-  const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id) && !successSet.has(id)));
-  // A Tender ID with Detail Extracted=YES is successful, not skipped.
-  // Older status files could list the same ID in skipped_ids, causing
-  // misleading "132 Success / 132 Skip" double counting.
-  const skippedSet=new Set(
-    (statusData.skipped_ids||[])
-      .filter(id=>ids.has(id))
-      .filter(id=>!successSet.has(id) && !failedSet.has(id))
-  );
-  const success=successSet.size, failed=failedSet.size, skipped=skippedSet.size;
-  const pending=Math.max(0,ids.size-success-failed-skipped);
-  totals.portal+=count; totals.copied+=ids.size; totals.success+=success; totals.fail+=failed; totals.skip+=skipped; totals.pending+=pending;
-  const status=ids.size===count?'MATCH':'MISMATCH';
-  return '<tr><td>'+esc(x['S.No.']||i+1)+'</td><td>'+esc(name)+'</td><td><span class="count">'+count.toLocaleString('en-IN')+'</span><small class="snapshot-time">'+esc(snapshotTime(x['Retrieved At']))+'</small></td><td>'+ids.size.toLocaleString('en-IN')+'</td><td class="'+(status==='MATCH'?'ok':'bad')+'">'+status+'</td><td>'+success+'</td><td>'+failed+'</td><td>'+skipped+'</td><td>'+pending+'</td></tr>';
- }).join('');
- const totalRow='<tr class="total-row"><td></td><td class="total-label">कुल</td><td class="total-value">'+totals.portal.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.copied.toLocaleString('en-IN')+'</td><td class="total-value">'+(totals.portal===totals.copied?'MATCH':'—')+'</td><td class="total-value">'+totals.success.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.fail.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.skip.toLocaleString('en-IN')+'</td><td class="total-value">'+totals.pending.toLocaleString('en-IN')+'</td></tr>';
- $('body').innerHTML=totalRow+(html||'<tr><td colspan="9">कोई organisation नहीं मिली।</td></tr>');
- $('copiedCount').textContent=totals.copied.toLocaleString('en-IN')+' / '+totals.success.toLocaleString('en-IN');
+ if(!inventory)return;
+ const q=$('search').value.trim().toLowerCase();
+ const rows=inventory.organisations.filter(x=>x.organisation.toLowerCase().includes(q));
+ const html=rows.map((x,i)=>'<tr><td>'+esc(x.serial||i+1)+'</td><td>'+esc(x.organisation)+'</td>'+countCells(x)+'</tr>').join('');
+ // Global totals stay global while the search filters organisation rows.
+ $('body').innerHTML='<tr class="total-row"><td></td><td>कुल — सभी organisations</td>'+countCells(inventory)+'</tr>'+(html||'<tr><td colspan="9">कोई organisation नहीं मिली।</td></tr>');
+ $('copiedCount').textContent=inventory.copied_tenders.toLocaleString('en-IN')+' / '+inventory.detail_complete.toLocaleString('en-IN');
 }
-function clean(v){return String(v??'').replace(/\s+/g,' ').trim()}
 async function load(){
  $('msg').textContent='Live organisation data loading...';
  try{
-  [orgs,tenders]=await Promise.all([csv('organisations.csv'),csv('organisation_tenders.csv')]);
-  try{recovery=await csv('data/closing_date_recovery.csv')}catch(_){recovery=[]}
-  try{details=await csv('all_tenders_org_detailed.csv')}catch(_){details=[]}
-  try{
-   const sr=await fetch('../data/existing_id_detail_status.json?t='+Date.now(),{cache:'no-store'});
-   if(sr.ok) statusData=await sr.json();
-  }catch(_){statusData={errors:[]}}
-  $('orgCount').textContent=orgs.length.toLocaleString('en-IN');
-  const copiedAt=orgs.map(x=>clean(x['Retrieved At'])).filter(Boolean).sort()[0]||'';
-  $('portalCountTime').textContent='Count copied: '+snapshotTime(copiedAt);
-  $('portalColumnTime').textContent=snapshotTime(copiedAt);
-  $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
-  const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
-  const currentIds=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean));
-  const actualDetailSuccess=new Set(
-    details
-      .filter(detailComplete)
-      .map(d=>clean(d['Tender ID']))
-      .filter(id=>currentIds.has(id))
-  );
-  $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+actualDetailSuccess.size.toLocaleString('en-IN');
-  $('msg').textContent='Status = current Portal Tender Count और current copied Tender IDs का मिलान। Closing Date recovery file को सीधे count में नहीं जोड़ा जाता; recovered ID तभी गिनी जाएगी जब वह current organisation snapshot में शामिल हो। Success = official MP portal से verified complete details। Pending = अधूरी details या पुराने RSP import की official verification बाकी। Organisation की Pending संख्या केवल उसी organisation की है; कुल Pending सभी organisations का योग है।';
+  const response=await fetch('https://raw.githubusercontent.com/esign2015/mp-tenders/main/data/inventory_counts.json?t='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('Summary HTTP '+response.status);
+  const next=await response.json();
+  if(next.policy_version!=='official-portal-v1'||!Array.isArray(next.organisations))throw Error('Updated summary pending');
+  inventory=next;
+  $('orgCount').textContent=inventory.organisation_count.toLocaleString('en-IN');
+  $('portalCount').textContent=inventory.portal_tender_count.toLocaleString('en-IN');
+  $('portalCountTime').textContent='Count copied: '+snapshotTime(inventory.snapshot_at);
+  $('portalColumnTime').textContent=snapshotTime(inventory.snapshot_at);
+  $('msg').textContent='Counts updated: '+snapshotTime(inventory.updated_at)+'। /org और /data एक ही automated summary का उपयोग करते हैं। Success = official MP portal से verified complete details। Pending = अधूरी details या पुराने RSP import की official verification बाकी। प्रत्येक organisation का Pending केवल उसी का है; कुल सभी organisations का है।';
   render();
- }catch(e){
-  console.error(e);
-  $('msg').textContent='Data अभी उपलब्ध नहीं है। organisations.csv / organisation_tenders.csv load नहीं हो सका।';
- }
+ }catch(e){$('msg').textContent='नया verified count उपलब्ध नहीं है; retry जारी है। '+e.message;}
 }
 $('search').addEventListener('input',render);$('reload').addEventListener('click',load);load();
+setInterval(load,15000);
 </script>
 </body></html>

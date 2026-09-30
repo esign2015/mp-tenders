@@ -1,0 +1,48 @@
+name: Unified Inventory Counts
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - backend/inventory_summary.py
+      - backend/publish_data_checkpoint.py
+      - org/index.html
+      - data/index.html
+      - tests/test_org_counts.cjs
+      - tests/test_data_monitor.cjs
+      - .github/workflows/inventory-summary.yml
+permissions:
+  contents: write
+concurrency:
+  group: mp-inventory-counts
+  cancel-in-progress: false
+jobs:
+  verify_and_publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - if: github.event_name == 'push'
+        run: pip install -r backend/requirements.txt
+      - name: Check shared count rules
+        if: github.event_name == 'push'
+        run: |
+          node tests/test_org_counts.cjs
+          node tests/test_data_monitor.cjs
+          python -m unittest discover -s tests -p test_data_pipeline.py -q
+      - name: Publish counts from the latest merged checkpoint
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/inventory_summary.py
+          python backend/publish_data_checkpoint.py data/inventory_counts.json

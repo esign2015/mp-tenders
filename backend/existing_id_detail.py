@@ -593,6 +593,9 @@ def main():
         STATUS.parent.mkdir(parents=True, exist_ok=True)
         STATUS.write_text(json.dumps({
             "status": status,
+            "github_run_id": os.getenv("GITHUB_RUN_ID", ""),
+            "github_run_number": os.getenv("GITHUB_RUN_NUMBER", ""),
+            "github_commit_sha": os.getenv("GITHUB_SHA", ""),
             "batch_size": BATCH_SIZE,
             "total_csv_ids": len(rows),
             "current_portal_ids": len(current_ids),

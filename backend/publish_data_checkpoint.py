@@ -128,7 +128,8 @@ def publish(paths):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(updates.get(path, blob(parent, path)))
             write_summary(root)
-            updates["data/inventory_summary.json"] = (root / "data/inventory_summary.json").read_bytes()
+            for filename in ("inventory_summary.json", "inventory_counts.json"):
+                updates["data/" + filename] = (root / "data" / filename).read_bytes()
         with tempfile.TemporaryDirectory() as index_dir:
             env = dict(os.environ, GIT_INDEX_FILE=str(Path(index_dir) / "index"))
             git("read-tree", parent, env=env)
