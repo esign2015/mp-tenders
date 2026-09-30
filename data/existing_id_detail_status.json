@@ -5,10 +5,10 @@
   "current_portal_ids": 7895,
   "initial_incomplete": 2797,
   "batch_targets": 500,
-  "batch_attempted": 20,
-  "batch_complete": 17,
+  "batch_attempted": 24,
+  "batch_complete": 20,
   "started_at": "2026-09-30T07:38:28.399184+00:00",
-  "success": 2983,
+  "success": 2986,
   "failed": 0,
   "success_ids": [
     "2023_UAD_298906_16",
@@ -220,6 +220,7 @@
     "2026_MKVVC_538293_1",
     "2026_MPCDF_536489_1",
     "2026_MPCDF_537819_1",
+    "2026_MPCDF_538615_1",
     "2026_MPFD_506731_2",
     "2026_MPFD_518971_2",
     "2026_MPFD_534399_1",
@@ -685,11 +686,13 @@
     "2026_MPTBC_514718_1",
     "2026_MPTBC_534451_1",
     "2026_MPVS_537479_1",
+    "2026_MPVVN_533449_1",
     "2026_MPWCD_525038_1",
     "2026_MPWCD_532710_1",
     "2026_MPWCD_533418_1",
     "2026_MPWCD_535991_2",
     "2026_MPWCD_537779_1",
+    "2026_NDVSU_536069_1",
     "2026_NVDA_535697_1",
     "2026_NVDA_535702_1",
     "2026_NVDA_535707_1",
@@ -3556,7 +3559,6 @@
     "2026_MPCDF_536324_1",
     "2026_MPCDF_537199_1",
     "2026_MPCDF_538559_1",
-    "2026_MPCDF_538615_1",
     "2026_MPDAH_530642_1",
     "2026_MPDAH_538616_1",
     "2026_MPFD_510207_2",
@@ -4651,12 +4653,10 @@
     "2026_MPUDC_537534_1",
     "2026_MPVS_532803_1",
     "2026_MPVS_537274_2",
-    "2026_MPVVN_533449_1",
     "2026_MSCHF_517916_2",
     "2026_NDVSU_534033_1",
     "2026_NDVSU_534058_1",
     "2026_NDVSU_534137_1",
-    "2026_NDVSU_536069_1",
     "2026_NVDA_533070_1",
     "2026_NVDA_533860_1",
     "2026_NVDA_534174_1",
@@ -7911,7 +7911,7 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_MPSFD_537702_1",
+  "last_successful_tender_id": "2026_MPCDF_538615_1",
   "errors": [
     {
       "Tender ID": "2026_PWDRB_535652_1",
@@ -7922,7 +7922,12 @@
       "Tender ID": "2026_UAD_535588_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535588_1",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DHS_535349_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-09-30T07:41:08.373813+00:00"
+  "updated_at": "2026-09-30T07:41:42.089976+00:00"
 }
