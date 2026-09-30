@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:25:34.880548+00:00",
+  "updated_at": "2026-09-30T23:27:39.990271+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2961,
+  "detail_complete": 2991,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2351,
+  "detail_pending": 2321,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 17,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 15
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 18,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 9
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -203,10 +203,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Town And Country Planning",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1493,
+      "detail_complete": 1504,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1392
+      "detail_pending": 1381
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 19,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 16
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -665,10 +665,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 14,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 29
+      "detail_pending": 20
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 18,
+      "detail_complete": 19,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 66,
+      "detail_complete": 70,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 29
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2346,
+  "legacy_verification_pending": 2316,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
