@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:28:01.775546+00:00",
+  "updated_at": "2026-09-30T18:30:07.279637+00:00",
   "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 1981,
+  "detail_complete": 2012,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3331,
+  "detail_pending": 3300,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 11,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 22
+      "detail_pending": 19
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 23,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 27
     },
     {
       "organisation": "Directorate of Industries",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 934,
+      "detail_complete": 947,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1951
+      "detail_pending": 1938
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 19,
+      "detail_complete": 21,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 24
+      "detail_pending": 22
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 25,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 34
+      "detail_pending": 27
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 18,
+      "detail_complete": 19,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 20
+      "detail_pending": 19
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 160,
+      "detail_complete": 161,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 105
+      "detail_pending": 104
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 37,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 49
+      "detail_pending": 47
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 12,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 18
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 3326,
+  "legacy_verification_pending": 3295,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
