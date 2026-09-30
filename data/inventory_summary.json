@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:51:06.210084+00:00",
+  "updated_at": "2026-09-30T18:53:12.321623+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2323,
+  "detail_complete": 2354,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2989,
+  "detail_pending": 2958,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 24,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 26
     },
     {
       "organisation": "Directorate of Industries",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1111,
+      "detail_complete": 1131,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1774
+      "detail_pending": 1754
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -302,10 +302,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 19,
       "copied_tenders": 19,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Excise Department",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 44,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 21
+      "detail_pending": 19
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 166,
+      "detail_complete": 167,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 202
+      "detail_pending": 201
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 25,
+      "detail_complete": 26,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 52
+      "detail_pending": 51
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1017,14 +1017,14 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 22,
       "copied_tenders": 22,
-      "detail_complete": 3,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 14
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2984,
+  "legacy_verification_pending": 2953,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
