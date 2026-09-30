@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:11:52.458878+00:00",
+  "updated_at": "2026-09-30T21:13:55.287132+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 110,
+  "detail_failed": 125,
   "detail_skipped": 0,
-  "detail_pending": 2320,
+  "detail_pending": 2305,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 75,
+      "detail_failed": 78,
       "detail_skipped": 0,
-      "detail_pending": 1381
+      "detail_pending": 1378
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -688,9 +688,9 @@
       "portal_tender_count": 99,
       "copied_tenders": 99,
       "detail_complete": 66,
-      "detail_failed": 3,
+      "detail_failed": 4,
       "detail_skipped": 0,
-      "detail_pending": 30
+      "detail_pending": 29
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -897,9 +897,9 @@
       "portal_tender_count": 65,
       "copied_tenders": 65,
       "detail_complete": 51,
-      "detail_failed": 3,
+      "detail_failed": 6,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 8
     },
     {
       "organisation": "PWD-PIU",
@@ -919,9 +919,9 @@
       "portal_tender_count": 368,
       "copied_tenders": 368,
       "detail_complete": 240,
-      "detail_failed": 4,
+      "detail_failed": 11,
       "detail_skipped": 0,
-      "detail_pending": 124
+      "detail_pending": 117
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -974,9 +974,9 @@
       "portal_tender_count": 77,
       "copied_tenders": 77,
       "detail_complete": 33,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 44
+      "detail_pending": 43
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2316,
+  "legacy_verification_pending": 2301,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
