@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:50:46.374740+00:00",
+  "updated_at": "2026-09-30T21:52:49.035666+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 403,
+  "detail_failed": 417,
   "detail_skipped": 0,
-  "detail_pending": 2027,
+  "detail_pending": 2013,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -380,9 +380,9 @@
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 2,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
@@ -424,9 +424,9 @@
       "portal_tender_count": 38,
       "copied_tenders": 38,
       "detail_complete": 23,
-      "detail_failed": 2,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -611,9 +611,9 @@
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 2,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP Industrial Development Corporation Limited",
@@ -831,9 +831,9 @@
       "portal_tender_count": 44,
       "copied_tenders": 44,
       "detail_complete": 25,
-      "detail_failed": 0,
+      "detail_failed": 5,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 14
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -897,9 +897,9 @@
       "portal_tender_count": 65,
       "copied_tenders": 65,
       "detail_complete": 51,
-      "detail_failed": 8,
+      "detail_failed": 10,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 4
     },
     {
       "organisation": "PWD-PIU",
@@ -919,9 +919,9 @@
       "portal_tender_count": 368,
       "copied_tenders": 368,
       "detail_complete": 240,
-      "detail_failed": 18,
+      "detail_failed": 22,
       "detail_skipped": 0,
-      "detail_pending": 110
+      "detail_pending": 106
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2023,
+  "legacy_verification_pending": 2009,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
