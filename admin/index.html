@@ -167,7 +167,7 @@ async function pollWorkflow(action,attempt=0,startedAt=null,watchId=workflowWatc
     }
   }catch(error){
     if(watchId!==workflowWatchId) return;
-    if(error.status===401 || error.status===403){
+    if(!publicWorkflowStatus && (error.status===401 || error.status===403)){
       $("workflowState").textContent="Admin session समाप्त है या अनुमति नहीं मिली। दोबारा login करें।";
       return;
     }
