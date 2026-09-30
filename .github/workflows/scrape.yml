@@ -260,6 +260,7 @@ jobs:
       - name: Verify reported fees through Home Tender-ID search
         env:
           PRIMARY_ID_SEARCH: "1"
+          DETAIL_SEARCH_WORKERS: "3"
           EXISTING_ID_BATCH_SIZE: "8"
           PRIORITY_TENDER_IDS: "2026_DHS_535951_1,2026_DHS_535830_1,2026_DHS_535817_1,2026_MKVVC_535931_1,2026_MKVVC_535987_1,2026_MKVVC_535593_1,2026_MKVVC_535638_1,2026_DME_530646_2"
         run: python backend/existing_id_detail.py
@@ -304,6 +305,7 @@ jobs:
           # Normal scheduled mode: do not reopen completed detail pages.
           REPAIR_COMPLETED_DETAILS: "0"
           PRIMARY_ID_SEARCH: "1"
+          DETAIL_SEARCH_WORKERS: "3"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"

@@ -33,6 +33,57 @@ def completed(tid):
     return {**{key: "value" for key in REQUIRED_FIELDS}, "Tender ID": tid,
             "Processing Fee": "295", "Detail Extracted": "YES"}
 
+class OrganisationAndParallelTests(unittest.TestCase):
+    def test_live_count_uses_exact_cell_not_ancestor_table(self):
+        class Locator:
+            def __init__(self, items): self.items = items
+            def count(self): return len(self.items)
+            def nth(self, i): return self.items[i]
+        class Cell:
+            def __init__(self, text, anchors=()): self.text, self.anchors = text, anchors
+            def inner_text(self): return self.text
+            def locator(self, selector): return Locator(self.anchors)
+        class Row:
+            def __init__(self, cells): self.cells = cells
+            def locator(self, selector):
+                self.assert_selector = selector
+                return Locator(self.cells)
+        first = Cell("3")
+        target = Cell("2,993")
+        rows = [Row([Cell("Atal 3 Directorate Urban 2993", [first, target])]),
+                Row([Cell("1"), Cell("Atal"), Cell("3", [first])]),
+                Row([Cell("22"), Cell("Directorate Urban"), Cell("2993", [target])])]
+        page = SimpleNamespace(locator=lambda selector: Locator(rows))
+        org = {"name": "Directorate Urban", "count": 3000}
+        with patch.object(scraper, "open_organisation_page_from_home"), \
+             patch.object(scraper, "click_live_anchor", return_value="detail") as click:
+            self.assertEqual(scraper.open_organisation_list_by_click(page, org), "detail")
+        click.assert_called_once_with(page, target)
+        self.assertEqual(org["count"], 2993)
+
+    def test_parallel_sessions_keep_id_association_and_isolate_failure(self):
+        from threading import Barrier
+        barrier = Barrier(3)
+        pages = []
+        def playwright():
+            page = object()
+            pages.append(page)
+            context = SimpleNamespace(new_page=lambda: page, close=lambda: None)
+            browser = SimpleNamespace(new_context=lambda **kw: context, close=lambda: None)
+            return nullcontext(SimpleNamespace(chromium=SimpleNamespace(launch=lambda **kw: browser)))
+        def search(page, tid):
+            barrier.wait(timeout=5)
+            if tid == "bad": raise ValueError("failed tender")
+            return {"Tender ID": tid}
+        with patch.object(worker, "sync_playwright", side_effect=playwright), \
+             patch.object(worker, "do_search", side_effect=search):
+            results = list(worker.iter_id_search_results([{"Tender ID": tid} for tid in ("one", "bad", "two")], 3))
+        self.assertEqual(len({id(page) for page in pages}), 3)
+        self.assertEqual(len(results), 3)
+        for base, detail, error in results:
+            if base["Tender ID"] == "bad": self.assertIsInstance(error, ValueError)
+            else: self.assertEqual(base["Tender ID"], detail["Tender ID"])
+
 class CleanupTests(unittest.TestCase):
     def test_cleanup_expires_even_portal_listed_rows_but_keeps_extensions_and_unknown_dates(self):
         with tempfile.TemporaryDirectory() as temporary:

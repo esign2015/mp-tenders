@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Replace legacy checkpoint frequency with current deadline priority
+      - name: Resume saved details with three independent search sessions
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -24,11 +24,10 @@ jobs:
               data = json.dumps(body).encode() if body is not None else None
               with urllib.request.urlopen(urllib.request.Request(base+path, data=data, headers=headers, method=method), timeout=30) as response:
                   return json.loads(response.read() or '{}')
-          # This legacy run publishes every 30 seconds and prevents Pages
-          # deployment from finishing. Its saved checkpoints remain on main.
-          run = request('/actions/runs/36684805430')
-          if run['head_sha'] == 'e16e96b33f596eed080276f8b2607db7c0265714' and run['status'] != 'completed':
-              request('/actions/runs/36684805430/cancel', 'POST')
+          # Replace the serial run only; its published checkpoints remain on main.
+          run = request('/actions/runs/36690376398')
+          if run['head_sha'] == '9536213be5b2fe421106b92879a702c2eeec8e6e' and run['status'] != 'completed':
+              request('/actions/runs/36690376398/cancel', 'POST')
           request('/actions/workflows/targeted-pending-retry.yml/dispatches','POST',{'ref':'main','inputs':{'tender_ids':''}})
-          print('Current deadline priority queued; previously saved tender details preserved.')
+          print('Parallel deadline-priority extraction queued; saved details preserved.')
           PY

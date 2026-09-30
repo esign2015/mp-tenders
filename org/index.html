@@ -55,8 +55,8 @@ function parseCSV(text){
 }
 async function csv(name){
   const urls=[
-    '../'+name,
-    'https://raw.githubusercontent.com/esign2015/mp-tenders/main/'+name
+    'https://raw.githubusercontent.com/esign2015/mp-tenders/main/'+name,
+    '../'+name
   ];
   let lastError=null;
   for(const url of urls){

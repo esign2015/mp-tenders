@@ -798,6 +798,9 @@ def parse_organisation_rows(soup, base):
             })
 
         if result:
+            if len(result)>=20 and len({row["count"] for row in result})==1:
+                print("Rejected uniform organisation-count snapshot; rediscover from portal.",flush=True)
+                return []
             # Preserve the portal's S.No. order; never sort by tender count.
             result.sort(key=lambda x: x["sno"])
             return result
@@ -1203,19 +1206,21 @@ def open_organisation_list_by_click(page, org):
     chosen = None
     for i in range(rows.count()):
         row = rows.nth(i)
-        text = clean(row.inner_text())
-        if org_name.casefold() not in text.casefold():
-            continue
-        anchors = row.locator("a")
-        for j in range(anchors.count()):
-            a = anchors.nth(j)
-            txt = clean(a.inner_text())
-            if txt.replace(",", "").isdigit():
-                count = int(txt.replace(",", ""))
-                # Counts can change while a long organisation run is active.
-                # Click the current numeric link and reconcile its current count.
-                org["count"] = count
-                chosen = a
+        cells = row.locator(":scope > td")
+        for j in range(cells.count() - 1):
+            # Exact direct-cell match excludes ancestor layout rows containing
+            # the entire organisation table and its first numeric link.
+            if clean(cells.nth(j).inner_text()).casefold() != org_name.casefold():
+                continue
+            anchors = cells.nth(j + 1).locator("a")
+            for k in range(anchors.count()):
+                anchor = anchors.nth(k)
+                text = clean(anchor.inner_text()).replace(",", "")
+                if text.isdigit():
+                    org["count"] = int(text)
+                    chosen = anchor
+                    break
+            if chosen is not None:
                 break
         if chosen is not None:
             break

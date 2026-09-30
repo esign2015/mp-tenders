@@ -705,9 +705,12 @@ def users_stats():
 
 @app.post("/api/users/export")
 def users_export():
+    # /admin uses the verified Google admin session; retain Telegram admin
+    # access for the dashboard's existing export option.
+    email, _ = require_admin()
     payload = request.get_json(silent=True) or {}
-    user_id = telegram_user_from_session(payload)
-    if not user_id or not is_user_admin(user_id):
+    user_id = telegram_user_from_session(payload) if not email else None
+    if not email and (not user_id or not is_user_admin(user_id)):
         return jsonify({"ok": False, "message": "Admin access required."}), 403
     data = build_user_excel()
     filename = "MP_Tender_Users_Report.xlsx"

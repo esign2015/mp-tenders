@@ -5,6 +5,8 @@ import csv, json, os, re, time
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import requests
+from concurrent.futures import ThreadPoolExecutor
+from queue import Queue, Empty
 from urllib.parse import urljoin
 from inventory_summary import detail_complete, write_summary
 from playwright.sync_api import sync_playwright
@@ -110,8 +112,7 @@ def find_search_area(page):
     return page
 
 def do_search(page, tender_id):
-    page.goto(PORTAL, wait_until="domcontentloaded", timeout=90000)
-    page.wait_for_timeout(500)
+    page.goto(PORTAL, wait_until="domcontentloaded", timeout=45000)
     area = find_search_area(page)
     inputs = visible_text_inputs(area)
     if not inputs:
@@ -202,6 +203,55 @@ def do_search(page, tender_id):
     detail["Detail Extracted"] = "YES"
     detail["Search Route"] = "Home -> Tender ID -> GO -> Tender Title -> Detail"
     return detail
+
+def iter_id_search_results(target_rows, workers=1):
+    """Independent ID-search sessions; only the caller writes shared datasets."""
+    pending, results = Queue(), Queue()
+    for base in target_rows:
+        pending.put(base)
+
+    def run_worker():
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(locale="en-IN", timezone_id="Asia/Kolkata",
+                                          viewport={"width":1366,"height":900})
+            page = context.new_page()
+            if hasattr(page,"set_default_timeout"):
+                page.set_default_timeout(12000)
+            try:
+                while True:
+                    try:
+                        base = pending.get_nowait()
+                    except Empty:
+                        break
+                    tid = clean(base.get("Tender ID"))
+                    print(f"ID SEARCH START {tid}",flush=True)
+                    try:
+                        results.put((base,do_search(page,tid),None))
+                    except Exception as exc:
+                        results.put((base,None,exc))
+            finally:
+                context.close()
+                browser.close()
+
+    if not target_rows:
+        return
+    with ThreadPoolExecutor(max_workers=max(1,min(workers,len(target_rows)))) as pool:
+        futures = [pool.submit(run_worker) for _ in range(max(1,min(workers,len(target_rows))))]
+        received = 0
+        while received < len(target_rows):
+            try:
+                result = results.get(timeout=1)
+            except Empty:
+                if all(f.done() for f in futures):
+                    for future in futures:
+                        future.result()
+                    raise RuntimeError("ID-search workers ended before all targets returned")
+                continue
+            received += 1
+            yield result
+        for future in futures:
+            future.result()
 
 def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_detail_csv, success_ids):
     """Fast RSP-compatible detail extraction.
@@ -563,9 +613,10 @@ def main():
         }, indent=2), encoding="utf-8")
         write_summary(CSV.parent)
 
-    def process_targets(page, target_rows, is_retry=False):
+    search_workers = max(1,min(3,int(os.getenv("DETAIL_SEARCH_WORKERS","1"))))
+    def process_targets(target_rows, is_retry=False):
         nonlocal success
-        for base in target_rows:
+        for base, detail, search_error in iter_id_search_results(target_rows,search_workers):
             tid = clean(base.get("Tender ID"))
             attempted_ids.add(tid)
             save_status("running")
@@ -574,7 +625,8 @@ def main():
                     f"DETAIL {'RETRY ' if is_retry else ''}START {tid}",
                     flush=True
                 )
-                detail = do_search(page, tid)
+                if search_error:
+                    raise search_error
 
                 for key in ("Organisation","Department","Division","Sub Division"):
                     if clean(base.get(key)) and len(clean(base.get(key))) >= len(clean(detail.get(key))):
@@ -649,29 +701,16 @@ def main():
             f"PLAYWRIGHT FALLBACK: {len(rsp_fallback)} Tender IDs",
             flush=True,
         )
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                locale="en-IN",
-                timezone_id="Asia/Kolkata",
-                viewport={"width": 1366, "height": 900}
-            )
-            page = context.new_page()
-            try:
-                process_targets(page, rsp_fallback, is_retry=False)
-
-                retry_targets = list(failed_bases)
-                if retry_targets:
-                    print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
-                    process_targets(page, retry_targets, is_retry=True)
-
-                    final_errors = {}
-                    for e in errors:
-                        final_errors[e["Tender ID"]] = e
-                    errors[:] = list(final_errors.values())
-            finally:
-                context.close()
-                browser.close()
+        print(f"ID SEARCH WORKERS: {search_workers}",flush=True)
+        process_targets(rsp_fallback, is_retry=False)
+        retry_targets = list(failed_bases)
+        if retry_targets:
+            print(f"RETRY PASS START: {len(retry_targets)} IDs", flush=True)
+            process_targets(retry_targets, is_retry=True)
+            final_errors = {}
+            for e in errors:
+                final_errors[e["Tender ID"]] = e
+            errors[:] = list(final_errors.values())
 
     save_csv()
     save_detail_csv()
