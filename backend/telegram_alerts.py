@@ -144,7 +144,7 @@ def total_tender_fee(row):
 def fee_text(value):
     if value is None:
         return "Checking"
-    return format(value, ",.2f").removesuffix(".00")
+    return format(value, ",.2f")
 
 
 def is_on_date(value, target):
@@ -209,7 +209,7 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
     styles = getSampleStyleSheet()
     cell = ParagraphStyle(
         "cell", parent=styles["Normal"], fontName="Helvetica",
-        fontSize=8.2, leading=10.0, textColor=colors.HexColor("#233044")
+        fontSize=8.2, leading=10.0, alignment=TA_CENTER, textColor=colors.HexColor("#233044")
     )
     center = ParagraphStyle("center", parent=cell, alignment=TA_CENTER)
     subtitle = ParagraphStyle(
@@ -278,8 +278,8 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         ("TEXTCOLOR", (0,0), (-1,0), colors.white),
         ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
         ("FONTSIZE", (0,0), (-1,0), 9),
-        ("ALIGN", (0,0), (-1,0), "CENTER"),
-        ("VALIGN", (0,0), (-1,-1), "TOP"),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
         ("GRID", (0,0), (-1,-1), 0.35, colors.HexColor("#cdd7e4")),
         ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.white, colors.HexColor("#ebf3fc")]),
         ("LEFTPADDING", (0,0), (-1,-1), 5),

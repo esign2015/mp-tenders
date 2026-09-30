@@ -33,6 +33,12 @@ class TelegramPdfTests(unittest.TestCase):
             self.assertEqual(rows[0]['Reference Number'],'CTD/DC-2/STORE/2026/393')
             self.assertEqual(alerts.total_tender_fee(rows[0]),Decimal('3295'))
 
+    def test_fee_text_always_retains_two_decimal_places(self):
+        for value in ('1000','1000.0','1000.00'):
+            self.assertEqual(alerts.fee_text(Decimal(value)), '1,000.00')
+        self.assertEqual(alerts.fee_text(Decimal('123.4')), '123.40')
+        self.assertEqual(alerts.fee_text(None), 'Checking')
+
     def test_closing_instant_excludes_expired_equal_cancelled_and_unknown(self):
         now = datetime(2026,9,30,12,45,tzinfo=alerts.IST)
         rows = [{'Tender ID':name,'Closing Date':date} for name,date in (

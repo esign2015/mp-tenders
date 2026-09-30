@@ -18,7 +18,7 @@ const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=
   portalSnapshot:null,portalActiveIds:new Set(),VIRTUAL_CHUNK_SIZE:100, ESTIMATED_ROW_HEIGHT:40});
 const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','currentPortalAllows','parseDate','istParts','todayKey',
   'isDeadlineAlertActive',
-  'formatTimeLeft','getTimeLeftClass','updateVisibleTimeLeft','nextDashboardRefreshAt',
+  'formatMoney','formatPdfAmount','formatTimeLeft','getTimeLeftClass','updateVisibleTimeLeft','nextDashboardRefreshAt',
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
   'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
@@ -126,3 +126,12 @@ context.portalSnapshot={verified:true,snapshot_at:'2026-09-29T19:51:00+05:30'};
 assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
 context.portalSnapshot=null;
 console.log('PASS: complete same-day evening inventory excludes stale imported IDs; partial and old snapshots do not.');
+
+for(const value of ['1000','1000.0','1000.00']){
+ assert.equal(context.formatMoney(value),'₹ 1,000.00');
+ assert.equal(context.formatPdfAmount(value),'1,000.00');
+}
+assert.equal(context.formatMoney('NA'),'NA');
+assert.equal(context.formatMoney(''),'—');
+assert.equal(context.formatMoney('0'),'₹ 0.00');
+assert.equal(context.formatMoney('123.4'),'₹ 123.40');

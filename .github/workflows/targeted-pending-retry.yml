@@ -14,6 +14,7 @@ on:
     branches: ["main"]
     paths:
       - "backend/targeted_pending_retry.py"
+      - "backend/inventory_summary.py"
       - ".github/workflows/targeted-pending-retry.yml"
 
 permissions:

@@ -1,4 +1,4 @@
-"""Retry incomplete live tenders and refresh details once sale/bid starts arrive."""
+"""Verify incomplete and historical imported live rows on the official MP portal."""
 import os
 
 # Inventory includes copied live rows missing from a partial organisation file.

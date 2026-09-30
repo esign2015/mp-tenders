@@ -3155,13 +3155,20 @@ function moneyNumber(value){
 }
 
 function formatMoney(value){
+  if(/^(NA|N\/A|Not Available)$/i.test(clean(value))) return "NA";
+  if(/^Checking/i.test(clean(value))) return clean(value);
   const number = moneyNumber(value);
 
   if(number === 0 && !clean(value)) return "—";
 
   return "₹ " + number.toLocaleString("en-IN",{
+    minimumFractionDigits:2,
     maximumFractionDigits:2
   });
+}
+
+function formatPdfAmount(value){
+  return formatMoney(value).replace(/^₹\s*/, "");
 }
 
 function effectiveProcessingFee(row){
@@ -3890,7 +3897,7 @@ function sarAdCard(){
       <div>
         <div class="sar-ad-kicker">Advertisement • SAR Digital Services, Kannod</div>
         <h3>DSC Sale • PWD Registration • Tender Submission</h3>
-        <p>Tender Submission only ₹1,000 per tender • DSC और PWD registration assistance available.</p>
+        <p>Tender Submission only ₹1,000.00 per tender • DSC और PWD registration assistance available.</p>
       </div>
       <div class="sar-ad-actions">
         <a href="https://wa.me/919893610244" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
@@ -5092,11 +5099,11 @@ async function exportPdf(){
       formatClosingDateTime(row["Closing Date"]),
       clean(row["Title"]).replace(/^\\[|\\]$/g,""),
       clean(row["Reference Number"]).replace(/^\\[|\\]$/g,""),
-      clean(row["PAC Amount"]),
-      clean(row["EMD Fee"]),
-      clean(row["Tender Fee"]),
-      clean(row["Processing Fee"]),
-      clean(row["Total Fee"])
+      formatPdfAmount(row["PAC Amount"]),
+      formatPdfAmount(row["EMD Fee"]),
+      formatPdfAmount(row["Tender Fee"]),
+      formatPdfAmount(row["Processing Fee"]),
+      formatPdfAmount(row["Total Fee"])
     ];
     pdfRow.__source = row;
     return pdfRow;
@@ -5124,7 +5131,8 @@ async function exportPdf(){
       fontSize:8,
       cellPadding:2,
       overflow:"linebreak",
-      valign:"top",
+      valign:"middle",
+      halign:"center",
       lineColor:[205,215,228],
       lineWidth:0.2,
       textColor:[35,45,60]
@@ -5165,15 +5173,15 @@ async function exportPdf(){
     columnStyles:{
       /* A3 landscape: keep the complete Tender ID visible; long IDs wrap instead of becoming "…". */
       0:{cellWidth:10,halign:"center"},
-      1:{cellWidth:45,overflow:"linebreak",halign:"left"},
+      1:{cellWidth:45,overflow:"linebreak",halign:"center"},
       2:{cellWidth:30},
       3:{cellWidth:75},
       4:{cellWidth:70},
-      5:{cellWidth:28,halign:"right"},
-      6:{cellWidth:28,halign:"right"},
-      7:{cellWidth:28,halign:"right"},
-      8:{cellWidth:28,halign:"right"},
-      9:{cellWidth:28,halign:"right"}
+      5:{cellWidth:28,halign:"center"},
+      6:{cellWidth:28,halign:"center"},
+      7:{cellWidth:28,halign:"center"},
+      8:{cellWidth:28,halign:"center"},
+      9:{cellWidth:28,halign:"center"}
     },
 
     /*
@@ -5878,6 +5886,7 @@ enforceTelegramAccess().then(async () => {
     return fields.map(([key,label]) => {
       if(key === "Time Left") return label + ": " + formatTimeLeft(row["Closing Date"]);
       if(key === "District") return label + ": " + getDistrictInfo(row).name;
+      if(["PAC Amount","EMD Fee","Tender Fee","Processing Fee","Total Fee"].includes(key)) return label + ": " + formatMoney(row[key]);
       return label + ": " + clean(row[key]);
     }).join("\n");
   }
@@ -6038,7 +6047,7 @@ enforceTelegramAccess().then(async () => {
     return [
       "AFFIDAVIT",
       "(To be contained in Envelope A)",
-      "(On Non Judicial Stamp of Rs. 200)",
+      "(On Non Judicial Stamp of Rs. 200.00)",
       "",
       "I am "+d.bidderName+" who is "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
       "",
@@ -6077,7 +6086,7 @@ enforceTelegramAccess().then(async () => {
     byId("affidavitPreview").innerHTML=
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
-      '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200)</em></p>'+
+      '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200.00)</em></p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(d.tenderRef)+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
@@ -6180,7 +6189,7 @@ enforceTelegramAccess().then(async () => {
       // These first three lines are centered in the supplied affidavit.
       paragraphs.push(para([run("|| AFFIDAVIT ||",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       paragraphs.push(para([run("(To be contained in Envelope A)",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
-      paragraphs.push(para([run("(On Non Judicial Stamp of Rs. 200)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("(On Non Judicial Stamp of Rs. 200.00)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
       // Main declaration paragraphs: justified, 0.5" first-line indent.
       paragraphs.push(para([
         run("I am "),run(d.bidderName,true,false,20,true),run(" who is "),run(d.status,true,false,20,true),
@@ -6346,7 +6355,7 @@ enforceTelegramAccess().then(async () => {
       };
       center("|| AFFIDAVIT ||",true,false,14,3);
       center("(To be contained in Envelope A)",true,false,14,3);
-      center("(On Non Judicial Stamp of Rs. 200)",false,true,10,4);
+      center("(On Non Judicial Stamp of Rs. 200.00)",false,true,10,4);
       richParagraph([
         {text:"I am "},
         {text:d.bidderName,bold:true,underline:true},
