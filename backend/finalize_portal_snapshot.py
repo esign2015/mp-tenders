@@ -53,7 +53,7 @@ def main():
         if have!=expected: unresolved.append((name,expected,have))
 
     # Source 2: RSP is last-resort recovery only, explicitly enabled by the caller.
-    if unresolved and os.getenv("ALLOW_RSP_RECOVERY", "0").strip() == "1":
+    if unresolved and os.getenv("ALLOW_RSP_RECOVERY", "0").strip() == "1" and int(os.getenv("MPTENDERS_RECONCILIATION_ATTEMPTS", "0") or 0) >= 3:
         req=urllib.request.Request(RSP_URL,headers={"User-Agent":"mp-tenders-recovery/1.0"})
         with urllib.request.urlopen(req,timeout=180) as f: payload=json.load(f)
         rsp_by_org={}

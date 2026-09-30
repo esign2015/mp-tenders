@@ -12,6 +12,7 @@ Rules:
   portal total.
 """
 import csv
+import os
 import json
 import re
 import urllib.request
@@ -160,7 +161,7 @@ def main():
         if len(have) < meta["count"]:
             still_missing.append((org, meta["name"], meta["count"]-len(have), have))
 
-    if still_missing:
+    if still_missing and os.getenv("ALLOW_RSP_RECOVERY", "0") == "1" and int(os.getenv("MPTENDERS_RECONCILIATION_ATTEMPTS", "0") or 0) >= 3:
         rsp = load_rsp()
         rsp_by_org = {}
         for r in rsp:

@@ -1210,12 +1210,12 @@ td.title-cell{
 .tender-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
 .tender-card-actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid #cbd5e1;border-radius:7px;padding:7px 8px;font-size:11px;font-weight:800;color:#173d70;background:#fff}
 .tender-card-actions a.share{color:#087443;border-color:#86efac;background:#f0fdf4}
-.sar-ad-card{grid-column:1/-1;border:2px solid #d4a514;border-radius:14px;background:linear-gradient(120deg,#173d70,#245b8f);color:#fff;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.sar-ad-card{min-width:0;min-height:360px;border:2px solid #d4a514;border-radius:14px;background:linear-gradient(120deg,#173d70,#245b8f);color:#fff;padding:16px 18px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;align-items:stretch}
 .sar-ad-kicker{font-size:10px;font-weight:800;letter-spacing:.08em;color:#fde68a;text-transform:uppercase}
 .sar-ad-card h3{margin:4px 0 3px;font-size:20px}.sar-ad-card p{margin:0;font-size:13px;opacity:.92}
-.sar-ad-actions{display:flex;gap:8px;flex-wrap:wrap}.sar-ad-actions a{display:inline-flex;align-items:center;text-decoration:none;border-radius:8px;padding:9px 12px;font-weight:800;font-size:12px;background:#fff;color:#173d70}.sar-ad-actions a:first-child{background:#22c55e;color:#fff}
+.sar-ad-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sar-ad-actions a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:8px;padding:9px 12px;font-weight:800;font-size:12px;background:#fff;color:#173d70}.sar-ad-actions a:first-child{background:#22c55e;color:#fff}
 @media(max-width:1100px){.tender-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{grid-template-columns:1fr}}
+@media(max-width:820px){.tender-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sar-ad-card{min-height:300px}}
 @media(max-width:520px){.tender-card-grid{grid-template-columns:1fr;padding:7px}.tender-card{min-height:auto}.tender-card-metrics{grid-template-columns:repeat(2,1fr)}}
 .affidavit-preview .aff-prev-center{text-align:center}.affidavit-preview .aff-prev-right{text-align:right}.affidavit-preview .aff-prev-justify{text-align:justify;text-indent:.5in}.affidavit-preview .aff-prev-left{text-align:left;margin-left:.5in}.affidavit-preview .aff-prev-list{margin-left:.5in;text-align:justify}.affidavit-preview .aff-prev-sublist{margin-left:.75in;text-align:justify}.affidavit-preview p{margin:.25em 0}.aff-strike{text-decoration:line-through;text-decoration-thickness:1.5px}.aff-strike-inline{display:table;text-decoration:line-through;text-decoration-thickness:1.5px}.aff-prev-or{text-align:center;margin:.1em 0!important}.aff-prev-relative-detail{margin-left:.62in!important;text-align:left}.aff-sign-space{height:66px}
 </style>

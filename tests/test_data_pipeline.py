@@ -213,12 +213,19 @@ class PipelineTests(unittest.TestCase):
                 self.assertEqual(status["success"],int(valid))
                 self.assertEqual(status["failed_ids"],[] if valid else ["a"])
 
-    def test_imported_listing_cannot_claim_complete_details(self):
-        row = import_rsp_live.map_row({"tender_id": "2026_MIDCL_529130_2", "nit_ref": "24 Bhopal of 2026-27"}, "now")
-        self.assertEqual(row["Detail Extracted"], "")
-        self.assertEqual(row["Total Fee"], "")
-        fees = import_rsp_live.map_row({"tender_id": "example", "emd": "1000", "tender_fee": "2000", "processing_fee": "295"}, "now")
-        self.assertEqual(fees["Total Fee"], "3295")
+
+    def test_rsp_bulk_import_is_disabled_without_network_or_csv_write(self):
+        with patch("urllib.request.urlopen") as fetch, patch("builtins.open") as write:
+            import_rsp_live.main()
+        fetch.assert_not_called()
+        write.assert_not_called()
+
+    def test_historical_rsp_import_is_not_portal_verified(self):
+        from inventory_summary import detail_complete
+        row=completed("imported")
+        self.assertTrue(detail_complete(row))
+        row["Search Route"]="RSP -> live dataset import"
+        self.assertFalse(detail_complete(row))
 
     def test_cleanup_does_not_remove_extended_live_id_for_stale_detail_deadline(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -230,16 +237,6 @@ class PipelineTests(unittest.TestCase):
             cleanup.cleanup(root,datetime(2026,9,30,20,25,tzinfo=cleanup.IST))
             self.assertEqual(json.loads((root/'data/live_snapshot.json').read_text())['tender_ids'],['extended'])
 
-    def test_import_uses_portal_deadline_even_when_summary_keeps_later_time(self):
-        record = {"tender_id": "2026_MPPGC_519250_1", "bid_end": "30-Sep-2026 10:19 PM",
-                  "portal_fields": {"Bid Submission End Date": "30-Sep-2026 03:00 PM"}}
-        row = import_rsp_live.map_row(record, "now")
-        self.assertEqual(row["Closing Date"], "30-Sep-2026 03:00 PM")
-        self.assertEqual(row["Bid Submission End Date"], row["Closing Date"])
-        record["portal_fields"] = {}
-        self.assertEqual(import_rsp_live.imported_bid_end(record), "30-Sep-2026 10:19 PM")
-        record["bid_end"] = "not a date"
-        self.assertEqual(import_rsp_live.imported_bid_end(record), "")
 
     def test_reported_live_tender_missing_from_partial_snapshot_gets_retry(self):
         with tempfile.TemporaryDirectory() as temporary:

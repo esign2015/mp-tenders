@@ -15,6 +15,8 @@ def clean(value):
     return re.sub(r"\s+", " ", str(value if value is not None else "")).strip()
 
 def detail_complete(row):
+    if clean(row.get("Search Route")) == "RSP -> live dataset import":
+        return False  # Historical imports must be verified on the official portal.
     if clean(row.get("Detail Extracted")).upper() != "YES":
         return False
     if not all(clean(row.get(field)) for field in REQUIRED_FIELDS):

@@ -110,11 +110,16 @@ async function downloadUsers(){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),90000);
   try{
+    const token=localStorage.getItem(KEY);
+    if(!token){logout();throw new Error("Admin login करें।");}
+    const session=await fetch(API+"/api/admin/session",{headers:{Authorization:"Bearer "+token},cache:"no-store",signal:controller.signal});
+    if(session.status===401||session.status===403){logout();throw new Error("Admin session समाप्त है। Google से login करें।");}
+    if(!session.ok) throw new Error("Admin server से connection नहीं हो सका।");
     showToast("Users की Excel तैयार हो रही है…");
     const response=await fetch(API+"/api/users/export",{method:"POST",headers:{Authorization:"Bearer "+localStorage.getItem(KEY),"Content-Type":"application/json"},body:"{}",signal:controller.signal});
     if(!response.ok){
       const data=await response.json().catch(()=>({}));
-      throw new Error(response.status===401||response.status===403?"Admin login दोबारा करें।":data.message||"Users data download नहीं हो सका।");
+      throw new Error(response.status===401||response.status===403?"Excel export की अनुमति server ने नहीं दी। Admin session जाँच सफल थी; कृपया फिर प्रयास करें।":data.message||"Users data download नहीं हो सका।");
     }
     const blob=await response.blob();
     const url=URL.createObjectURL(blob);
