@@ -17,6 +17,7 @@ const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=
   normalizeSearchText:s=>s, archivedMode:false, quickFilterMode:'',tableSortKey:'',tableSortDesc:false,
   VIRTUAL_CHUNK_SIZE:100, ESTIMATED_ROW_HEIGHT:40});
 const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','parseDate','istParts','todayKey',
+  'isDeadlineAlertActive',
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
   'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
@@ -31,6 +32,12 @@ for(const name of names){
  }
  assert(loaded,name);
 }
+const alertNow=Date.now();
+assert.equal(context.isDeadlineAlertActive(alertNow+15*60*1000,alertNow),true);
+assert.equal(context.isDeadlineAlertActive(alertNow+15*60*1000+1,alertNow),false);
+assert.equal(context.isDeadlineAlertActive(alertNow+1,alertNow),true);
+assert.equal(context.isDeadlineAlertActive(alertNow,alertNow),false);
+assert.equal(context.isDeadlineAlertActive('invalid',alertNow),false);
 for(const [id,ref] of [['2026_MPCDF_536489_1','1666/JSDSM/2026/Jabalpur'],['2026_MPTAX_534364_2','CTD/DC-2/STORE/2026/393']]){
  const rows=context.mergeCurrentPortalRows([{'Tender ID':id,'Reference Number':ref}], [{'Tender ID':id,'Reference Number':id}]);
  assert.equal(rows[0]['Reference Number'],ref);
