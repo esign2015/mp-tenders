@@ -327,7 +327,8 @@ button:hover{
   border-radius:0 0 7px 7px;
   box-shadow:0 10px 24px rgba(15,23,42,.16);
 }
-.organisation-suggestions.open{display:block}
+.organisation-suggestions.open{display:block;width:min(720px,calc(100vw - 24px));right:auto;overflow-x:hidden}
+.organisation-option{white-space:normal;overflow-wrap:anywhere;line-height:1.4}
 .organisation-option{
   display:block;
   width:100%;
@@ -4250,6 +4251,18 @@ function setupOrganisationFilter(){
   const list = $("organisationSuggestions");
   if(!input || !list) return;
 
+  function positionOrganisationSuggestions(){
+    const rect=input.getBoundingClientRect();
+    const width=Math.min(720,Math.max(0,window.innerWidth-24));
+    const popupLeft=Math.max(12,Math.min(rect.left,window.innerWidth-width-12));
+    list.style.width=width+"px";
+    list.style.left=(popupLeft-rect.left)+"px";
+  }
+
+  window.addEventListener("resize",()=>{
+    if(list.classList.contains("open")) positionOrganisationSuggestions();
+  });
+
   function showOrganisationSuggestions(){
     const query = clean(input.value).toLowerCase();
     const matches = organisationOptions
@@ -4265,6 +4278,7 @@ function setupOrganisationFilter(){
     }
 
     list.classList.add("open");
+    positionOrganisationSuggestions();
   }
 
   input.addEventListener("focus", showOrganisationSuggestions);
