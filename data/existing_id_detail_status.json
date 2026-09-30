@@ -5,12 +5,13 @@
   "current_portal_ids": 7895,
   "initial_incomplete": 2797,
   "batch_targets": 500,
-  "batch_attempted": 32,
-  "batch_complete": 26,
+  "batch_attempted": 36,
+  "batch_complete": 29,
   "started_at": "2026-09-30T07:38:28.399184+00:00",
-  "success": 2992,
+  "success": 2995,
   "failed": 0,
   "success_ids": [
+    "2023_UAD_295104_9",
     "2023_UAD_298906_16",
     "2024_UAD_375838_2",
     "2024_UAD_377552_5",
@@ -92,6 +93,7 @@
     "2026_DGPCS_534136_1",
     "2026_DGPCS_536089_1",
     "2026_DGPCS_536786_1",
+    "2026_DGPCS_537022_1",
     "2026_DGPCS_537277_1",
     "2026_DGPCS_537284_1",
     "2026_DGPCS_537366_1",
@@ -123,6 +125,7 @@
     "2026_DHS_536850_1",
     "2026_DHS_537972_1",
     "2026_DME_516392_3",
+    "2026_DME_530118_1",
     "2026_DME_530583_2",
     "2026_DME_530646_2",
     "2026_DME_530797_1",
@@ -3009,7 +3012,6 @@
   "pending_ids": [
     "2023_UAD_255290_15",
     "2023_UAD_295104_8",
-    "2023_UAD_295104_9",
     "2023_UAD_309946_2",
     "2023_UAD_312847_4",
     "2023_UAD_313945_3",
@@ -3213,7 +3215,6 @@
     "2026_DGPCS_536842_1",
     "2026_DGPCS_536873_1",
     "2026_DGPCS_536910_1",
-    "2026_DGPCS_537022_1",
     "2026_DGPCS_537369_1",
     "2026_DGPCS_537369_2",
     "2026_DGPCS_537382_1",
@@ -3313,7 +3314,6 @@
     "2026_DME_519801_2",
     "2026_DME_526672_1",
     "2026_DME_530115_1",
-    "2026_DME_530118_1",
     "2026_DME_530120_1",
     "2026_DME_531219_1",
     "2026_DME_531220_1",
@@ -7911,7 +7911,7 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_MPSMC_537021_1",
+  "last_successful_tender_id": "2026_DME_530118_1",
   "errors": [
     {
       "Tender ID": "2026_PWDRB_535652_1",
@@ -7937,7 +7937,12 @@
       "Tender ID": "2026_DHS_535394_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535394_1",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_526293_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_526293_1",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-09-30T07:42:50.326695+00:00"
+  "updated_at": "2026-09-30T07:43:25.116500+00:00"
 }
