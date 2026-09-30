@@ -13,6 +13,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 import scraper
 import existing_id_detail as worker
 import publish_data_checkpoint as publisher
+import home_latest
+from bs4 import BeautifulSoup
 from inventory_summary import REQUIRED_FIELDS, build_summary
 from admin_mismatch_alert import resolve_private_admin, send_alert
 
@@ -28,6 +30,28 @@ def completed(tid):
             "Processing Fee": "295", "Detail Extracted": "YES"}
 
 class PipelineTests(unittest.TestCase):
+    def test_portal_gst_label_is_processing_amount_not_gst_percentage(self):
+        soup = BeautifulSoup('''<table><tr><td>Tender Fee in ₹</td><td>2,000.50</td></tr>
+          <tr><td>Processing Fee in ₹ (18.00% GST Incl.)</td><td>295.25</td></tr>
+          <tr><td>EMD Amount in ₹</td><td>3,290</td></tr>
+          <tr><td>Bid Validity(Days)</td><td>180</td></tr></table>''', 'html.parser')
+        row = scraper.parse_detail(soup, scraper.PORTAL)
+        self.assertEqual(row['Tender Fee'], '2000.50')
+        self.assertEqual(row['Processing Fee'], '295.25')
+        self.assertEqual(row['Total Fee'], '5585.75')
+        self.assertEqual(row['Bid Validity'], '180')
+
+    def test_home_copy_caps_each_table_and_preserves_reference_punctuation(self):
+        html = ''.join('<table id="'+table+'">'+''.join(
+            f'<tr><td><a href="session-only">{i}. Work</a></td><td>A/{i}</td><td>close</td><td>open</td></tr>'
+            for i in range(12))+'</table>' for table in ('activeTenders','activeCorrigendums'))
+        entries = home_latest.home_entries(BeautifulSoup(html, 'html.parser'))
+        self.assertEqual(len(entries), 20)
+        self.assertNotIn('href', entries[0])
+        self.assertNotEqual(home_latest.reference_key('A/12'), home_latest.reference_key('A-12'))
+        self.assertIsNone(home_latest.matching_row(entries[0], [
+            {'Reference Number':'A/0','Tender ID':'a'}, {'Reference Number':'A/0','Tender ID':'b'}]))
+
     def test_full_copy_paths_and_current_counts(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -230,6 +230,36 @@ jobs:
           fi
 
 
+  visible_fee_repair:
+    # Repair reported cards immediately while the full organisation run finishes.
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[repair-visible-fees]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: mp-visible-fee-repair
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r backend/requirements.txt
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify reported fees through Home Tender-ID search
+        env:
+          PRIMARY_ID_SEARCH: "1"
+          EXISTING_ID_BATCH_SIZE: "8"
+          PRIORITY_TENDER_IDS: "2026_DHS_535951_1,2026_DHS_535830_1,2026_DHS_535817_1,2026_MKVVC_535931_1,2026_MKVVC_535987_1,2026_MKVVC_535593_1,2026_MKVVC_535638_1,2026_DME_530646_2"
+        run: python backend/existing_id_detail.py
+      - name: Publish confirmed fee repair
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
+
   new_tender_detail_worker:
     # Discovery finishes first; this second job immediately processes only
     # current portal Tender IDs that do not yet have details.
@@ -238,7 +268,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
-      group: mp-tender-data-writer
+      group: mp-tender-details
       cancel-in-progress: false
     steps:
       - name: Checkout latest discovery snapshot
@@ -263,6 +293,7 @@ jobs:
           RSP_FAST_MAX_DETAILS: "500"
           # Normal scheduled mode: do not reopen completed detail pages.
           REPAIR_COMPLETED_DETAILS: "0"
+          PRIMARY_ID_SEARCH: "1"
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"

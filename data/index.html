@@ -19,6 +19,7 @@ body{font-family:system-ui,Arial;margin:0;background:#f4f7fb;color:#172033}.wrap
 <div class="top"><div><h1 style="margin:0">MP Tenders — Live Monitor</h1><div class="sub">Deployment + GitHub Actions Run + Scraper + Data Quality</div></div><div class="actions"><button id="refresh">↻ Manual Refresh</button><span class="time" id="refreshTime">—</span></div></div>
 <div id="status" class="grid"></div>
 <div class="section card"><h3>🚀 Deployment / Current Run</h3><div id="run"></div></div>
+<div class="section card"><h3>🆕 Home Latest — 14 minute worker</h3><div id="homeLatest"></div></div>
 <div class="section card"><h3>⚙️ Scraper Progress</h3><div id="process"></div></div>
 <div id="errBox" class="section" style="display:none"><h3>❌ Latest Error</h3><div id="error" class="error"></div></div>
 <div class="section card"><h3>📊 Tender Detail / Pincode / District</h3><div id="quality"></div></div>
@@ -84,7 +85,7 @@ function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++
 function row(k,v,c=''){return '<div class="row"><span>'+k+'</span><b class="'+c+'">'+v+'</b></div>'}
 function esc(x){return String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function load(){const stamp=Date.now();document.getElementById('refreshTime').textContent='Refreshing…';try{
-const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRetry,manualTelegram,inventory]=await Promise.all([
+const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRetry,manualTelegram,inventory,homeLatest]=await Promise.all([
   fetch(statusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.json()),
   fetch(manualTestUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(detailStatusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -94,8 +95,10 @@ const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRet
   fetch(telegramHealthUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(mismatchRetryUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(manualTelegramUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
-  fetch('./inventory_summary.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
+  fetch('./inventory_summary.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
+  fetch('./home_latest_status.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
 ]);
+document.getElementById('homeLatest').innerHTML=row('Worker',esc(homeLatest.status||'Waiting for first run'))+row('Home copy time (IST)',homeLatest.copied_at?esc(new Date(homeLatest.copied_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}))+' IST':'—')+row('Latest Tenders / Corrigenda',(homeLatest.latest_tenders||0)+' / '+(homeLatest.latest_corrigenda||0))+row('Details confirmed',(homeLatest.success_ids||[]).length)+row('Already complete',(homeLatest.unchanged_ids||[]).length)+row('Pending retry',(homeLatest.pending||[]).length)+row('Schedule / extraction budget','14 minutes / 12 minutes');
 const total=+(inventory.portal_tender_count??st.portal_total_tenders??st.total_tenders)||0;
 const copied=+(inventory.copied_tenders??st.detail_inventory_total)||0;
 const scraperDone=+(inventory.detail_complete??st.detail_complete)||0;

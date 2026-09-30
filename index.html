@@ -2108,7 +2108,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading" data-i18n="searchHeading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <a class="btn-blue org-summary-btn" href="./org/" style="display:inline-flex;align-items:center;text-decoration:none;" data-i18n="orgCount">🏢 Organisation Summary</a><button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
+        <button class="btn-light" id="archivedBtn" data-i18n="archived">Archived Tenders</button><button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
@@ -3530,11 +3530,13 @@ async function refreshPublishedData(){
       // Refresh when tender list OR extracted detail fields change.
       const oldSignature = allTenders.map(x => [
         x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
-        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"]
+        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
+        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
       ].join("~")).join("|");
       const newSignature = next.map(x => [
         x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
-        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"]
+        x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
+        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
       ].join("~")).join("|");
 
       if(oldKey !== newKey || oldSignature !== newSignature){
@@ -3543,6 +3545,8 @@ async function refreshPublishedData(){
         applyFilters();
         console.info("Dashboard data refreshed from latest GitHub checkpoint.");
       }
+      // Deadlines can pass even when the downloaded CSV has not changed.
+      updateCounts(allTenders);
     }
   }catch(error){
     console.warn("Live dashboard refresh skipped:",error);
@@ -4403,14 +4407,10 @@ function updateCounts(rows, refreshHeader=true){
      date/time. A tender remains Live even when detail extraction is pending;
      it leaves Live as soon as its closing date/time has passed.
   */
-  const currentRows = portalActiveIds.size
-    ? rows.filter(row => portalActiveIds.has(clean(row["Tender ID"])))
-    : rows;
+  // A partial or old copied-ID snapshot must not hide known live records.
+  // Live is determined by the real closing instant, independently of details.
+  const currentRows = rows.filter(row => clean(row["Status"]).toLowerCase() !== "cancelled");
 
-  // Live means the Tender ID is in the current portal snapshot AND
-  // its closing date/time has not passed yet. Tenders-by-Organisation total
-  // is used for reconciliation only; it can temporarily include tenders whose
-  // submission deadline has already passed.
   const live = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
     return closing && closing.getTime() > now.getTime();
@@ -4502,51 +4502,21 @@ function applyFilters(refreshHeader=true){
 
     const opening = parseDate(row["Opening Date"]);
 
-    /*
-       LIVE mode follows the actual "Tenders by Organisation" portal snapshot.
-       This keeps the dashboard Live count equal to the portal's current
-       organisation total (for example 5,206), instead of dropping records
-       merely because their parsed Closing Date has already passed.
-       ARCHIVE mode uses the historical detailed dataset and the 48-hour
-       retention rule below.
-    */
-    if(!archivedMode && portalActiveIds.size){
-      if(!tenderId || !portalActiveIds.has(tenderId)) return false;
+    const now=new Date();
+    const currentIst=istParts(now);
+    const closingIst=closing?istParts(closing):null;
+    const hasClosed=closing && closing.getTime()<=now.getTime();
+    const closedToday=closingIst && closingIst.year===currentIst.year && closingIst.month===currentIst.month && closingIst.day===currentIst.day;
+    if(archivedMode){
+      if(!hasClosed && !isCancelled) return false;
+      if(hasClosed && closedToday && currentIst.hour<19) return false;
+      if(closing && now.getTime()-closing.getTime()>48*60*60*1000) return false;
+    }else if(status==='closed'){
+      // Closed records remain available through the explicit Closed filter
+      // until the evening archive move; they never inflate the Live view.
+      if(!hasClosed || !closedToday || currentIst.hour>=19 || isCancelled) return false;
     }else{
-      const nowIST = new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
-      const archiveCutoff = new Date(nowIST);
-      archiveCutoff.setHours(19,0,0,0);
-
-      if(isCancelled){
-        if(!archivedMode) return false;
-      }else if(closing){
-      const closeIST = new Date(closing);
-      const closeKey = dateKey(closeIST);
-      const todayKeyNow = dateKey(nowIST);
-      const hasClosed = closeIST.getTime() <= Date.now();
-      const closeIsToday = closeKey === todayKeyNow;
-
-      if(archivedMode){
-        // A closed tender enters Archive at 7:00 PM IST on its closing day.
-        // Anything from an earlier calendar day is already archive-eligible.
-        if(!hasClosed) return false;
-        if(closeIsToday && nowIST.getTime() < archiveCutoff.getTime()) return false;
-
-        const daysAgo = Math.floor((nowIST.getTime() - closeIST.getTime()) / 86400000);
-        if(daysAgo > 2) return false;
-      }else{
-        // Before 7 PM on the closing day, keep the tender visible as
-        // "Closed" so users can see that it has just expired.
-        // At 7 PM it leaves the main dashboard for Archive.
-        if(hasClosed){
-          if(!closeIsToday || nowIST.getTime() >= archiveCutoff.getTime()){
-            return false;
-          }
-        }
-      }
-      }else if(archivedMode){
-        return false;
-      }
+      if(isCancelled || !closing || hasClosed) return false;
     }
     const districtInfo = getDistrictInfo(row);
     const combined = [
@@ -5703,6 +5673,7 @@ setInterval(updateDateTime,1000);
 setInterval(() => {
   if(Array.isArray(allTenders) && allTenders.length){
     applyFilters(false);
+    updateCounts(allTenders);
   }
 },5000);
 setInterval(() => { if(Array.isArray(virtualRows) && virtualRows.length) renderVirtualWindow(); },60000);

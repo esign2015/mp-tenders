@@ -194,7 +194,7 @@ def find_label_value(soup, label_patterns):
         for tr in table.find_all("tr"):
             texts = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td", "th"])]
             for i, text in enumerate(texts):
-                if any(p in text.lower() for p in patterns) and i + 1 < len(texts) and texts[i + 1]:
+                if len(text) < 100 and any(p in text.lower() for p in patterns) and i + 1 < len(texts) and texts[i + 1]:
                     return texts[i + 1]
     return ""
 
@@ -205,7 +205,7 @@ def find_critical_date(soup, label):
         for tr in table.find_all("tr"):
             texts = [clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td", "th"])]
             for i, text in enumerate(texts):
-                if target in text.lower() and i + 1 < len(texts):
+                if len(text) < 100 and target in text.lower() and i + 1 < len(texts):
                     value = texts[i + 1]
                     if value and value.lower() != text.lower():
                         return value
@@ -242,16 +242,17 @@ def parse_latest_corrigendum(soup):
             text = " ".join(table.stripped_strings)
             if re.search(r"Corrigendum\s+Title", text, re.I) and re.search(r"Corrigendum\s+Type", text, re.I):
                 tables.append(table)
-                break
     if not tables:
         for table in soup.find_all("table"):
             text = " ".join(table.stripped_strings)
             if re.search(r"Corrigendum\s+Title", text, re.I) and re.search(r"Corrigendum\s+Type", text, re.I):
                 tables.append(table)
-                break
     if not tables:
         return result
-    for tr in tables[0].find_all("tr"):
+    table = min(tables, key=lambda item: len(item.get_text()))
+    for tr in table.find_all("tr"):
+        if tr.find_parent("table") is not table:
+            continue
         cells = tr.find_all("td")
         if not cells:
             continue
@@ -362,10 +363,10 @@ def parse_detail(soup, url):
             sibling = cell.find_next_sibling(["td", "th", "label", "div", "span"])
             if sibling is not None:
                 raw = clean(sibling.get_text(" ", strip=True))
-                m = re.search(r"(?<![A-Za-z])(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)", raw)
+                m = re.search(r"(?<![A-Za-z])(?:Rs\.?\s*|₹\s*)?([0-9][0-9,]*(?:\.\d+)?)", raw)
                 if m:
                     return m.group(1)
-            m = re.search(r"(?<![A-Za-z])(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)", label_text[len(min((x for x in prefixes if x), key=len, default="")):])
+            m = re.search(r"(?<![A-Za-z])(?:Rs\.?\s*|₹\s*)?([0-9][0-9,]*(?:\.\d+)?)", label_text[len(min((x for x in prefixes if x), key=len, default="")):])
             if m:
                 return m.group(1)
         return ""
@@ -524,7 +525,7 @@ def parse_detail(soup, url):
                     raw = clean(nxt.get_text(" ", strip=True))
                     if raw and raw not in {":", "-"}:
                         amount = re.search(
-                            r"(?:Rs\\.?\\s*|₹\\s*)?([0-9][0-9,]*(?:\\.\\d+)?)",
+                            r"(?:Rs\.?\s*|₹\s*)?([0-9][0-9,]*(?:\.\d+)?)",
                             raw
                         )
                         if amount:
@@ -549,7 +550,7 @@ def parse_detail(soup, url):
             "Tender Fee in ₹", ["Processing Fee in ₹", "Fee Payable To"]
         )
 
-    processing_fee = value("Processing Fee in ₹", "Processing Fee", "Portal Fee") or labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"])
+    processing_fee = labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"]) or exact_value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
 
     # MP Tender always has a portal/processing component when a tender is
     # published. Some templates do not expose it as a clean adjacent row, but
@@ -562,7 +563,7 @@ def parse_detail(soup, url):
         if "total fee" not in txt.casefold():
             continue
         m = re.search(
-            r"Total\s+Fee(?:\s+in\s+₹)?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
+            r"Total\s+Fee(?:\s+in\s+₹)?\s*\*?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
             r"([0-9][0-9,]*(?:\.\d+)?)",
             txt,
             re.I,
@@ -579,7 +580,7 @@ def parse_detail(soup, url):
         # Recover the portal processing fee when the detail template renders
         # the label/value only as plain text.
         match = re.search(
-            r"Processing Fee(?:\s+in\s+₹)?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
+            r"Processing Fee(?:\s+in\s+₹)?\s*\*?\s*[:\-]?\s*(?:Rs\.?\s*|₹\s*)?"
             r"([0-9][0-9,]*(?:\.\d+)?)",
             body_text,
             re.I,
@@ -611,7 +612,7 @@ def parse_detail(soup, url):
     product_category = value("Product Category")
     sub_category = value("Sub Category", "Sub category")
     contract_type = value("Contract Type")
-    bid_validity = value("Bid Validity")
+    bid_validity = value("Bid Validity(Days)", "Bid Validity (Days)", "Bid Validity")
     pre_qualification = value(
         "Pre Qualification Details",
         "Pre-Qualification Details",
@@ -1205,9 +1206,11 @@ def open_organisation_list_by_click(page, org):
             txt = clean(a.inner_text())
             if txt.replace(",", "").isdigit():
                 count = int(txt.replace(",", ""))
-                if count == expected or expected == 0:
-                    chosen = a
-                    break
+                # Counts can change while a long organisation run is active.
+                # Click the current numeric link and reconcile its current count.
+                org["count"] = count
+                chosen = a
+                break
         if chosen is not None:
             break
 
@@ -1234,6 +1237,7 @@ def browser_get_all_tender_rows(page, org, expected_count):
     """Collect an organisation's tender rows using only live clicks.
     No session-bound URL is passed to page.goto(), stored, or reused."""
     soup = open_organisation_list_by_click(page, org)
+    expected_count = int(org.get("count") or 0)
     unique = {}
     pages = 0
 
@@ -2369,6 +2373,10 @@ def scrape_mp_tenders(csv_file):
                         tender_rows, pages = browser_get_all_tender_rows(
                             page, org, expected_count
                         )
+                        expected_count = int(org.get("count") or 0)
+                        org_rows[index - 1]["Tender Count"] = expected_count
+                        portal_total_tenders = sum(int(item.get("count") or 0) for item in organisations)
+                        write_list_csv(working_org_csv, ORG_FIELDS, org_rows)
                         copied_now = len(tender_rows)
                         if copied_now == expected_count:
                             break

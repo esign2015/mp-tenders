@@ -20,6 +20,7 @@ from scraper import (
     ORG_URL,
     HEADERS,
     TENDER_ID_RE,
+    parse_portal_datetime,
 )
 
 CSV = Path("all_tenders_org_detailed.csv")
@@ -412,6 +413,20 @@ def main():
             seen_incomplete.add(tid)
             incomplete.append(row)
 
+    priority_ids = {clean(value) for value in os.getenv("PRIORITY_TENDER_IDS", "").split(",") if clean(value)}
+    if priority_ids:
+        incomplete = [row for row in incomplete if clean(row.get("Tender ID")) in priority_ids]
+    else:
+        # Repair the closest live deadlines first. Expired historical rows
+        # must not consume the entire scheduled fee/detail batch.
+        now = datetime.now(timezone.utc)
+        incomplete = [row for row in incomplete
+                      if not parse_portal_datetime(row.get("Closing Date"))
+                      or parse_portal_datetime(row.get("Closing Date")) > now]
+        incomplete.sort(key=lambda row: (
+            parse_portal_datetime(row.get("Closing Date")) or datetime.max.replace(tzinfo=timezone.utc),
+            clean(row.get("Tender ID")),
+        ))
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
     target_set = {clean(row.get("Tender ID")) for row in targets}
     # No implicit skips: an already extracted tender is a Success,
@@ -555,14 +570,12 @@ def main():
     # Primary route: the proven RSP-style requests/session extraction.
     # Keep the existing Playwright Tender-ID search route as a safe fallback
     # for only those IDs that the direct session route cannot resolve.
-    rsp_fallback, rsp_failed = rsp_style_extract_targets(
-        targets,
-        by_id,
-        save_status,
-        save_csv,
-        save_detail_csv,
-        success_ids,
-    )
+    if os.getenv("PRIMARY_ID_SEARCH", "0") == "1":
+        rsp_fallback, rsp_failed = targets, []
+    else:
+        rsp_fallback, rsp_failed = rsp_style_extract_targets(
+            targets, by_id, save_status, save_csv, save_detail_csv, success_ids,
+        )
     success = len(success_ids)
 
     for base, exc in rsp_failed:

@@ -12,7 +12,7 @@ main{max-width:1380px;margin:9px auto;padding:0 10px}.card{background:#fff;borde
 #login{max-width:520px;margin:55px auto;text-align:center}.google-box{display:flex;justify-content:center;margin:24px 0}
 .hidden{display:none!important}.user{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;padding-right:120px}
 button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;font-weight:700;font-size:12px;background:#203b91;color:#fff}
-button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
+.shortcut{display:inline-block;background:#203b91;color:#fff;border-radius:7px;padding:9px 12px;text-decoration:none;font-size:13px;font-weight:700;margin:3px}button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
 .user button.danger{position:fixed;top:9px;right:12px;z-index:1000;margin:0;box-shadow:0 5px 14px #0003}
 .card h2{margin:0 0 9px;font-size:18px}
 .grid{display:grid;gap:7px}
@@ -44,6 +44,8 @@ button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger
     <div><strong>👤 Admin:</strong> <span id="adminEmail">—</span><br><span class="small">Session automatically expires after a limited period.</span></div>
     <button class="danger" onclick="logout()">Logout</button>
   </div>
+
+  <div class="card"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a></div>
 
   <div class="card">
     <h2>📩 Telegram Controls</h2>
