@@ -60,8 +60,8 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
   <div class="card">
     <h2>⚙️ Data Controls</h2>
     <div class="grid data-grid">
-      <div class="action"><h3>🔄 Full Data Refresh</h3><p>MPTenders organisation snapshot और reconciliation workflow फिर से चलाएँ।</p><button onclick="confirmRun('data_refresh','Full data refresh शुरू करें?')">Start Refresh</button></div>
-      <div class="action"><h3>🔁 Pending Detail Retry</h3><p>Pending detail extraction को targeted retry करें।</p><button onclick="confirmRun('retry_pending','Pending detail retry शुरू करें?')">Retry Pending</button></div>
+      <div class="action"><h3>🔄 Full Data Refresh</h3><p>सभी संगठनों की tender सूची और dates दोबारा मिलाएँ। नए और अधूरे tenders की EMD, fee, PIN आदि निकाले जाएँगे। पूरी details वाले tenders दोबारा नहीं खोले जाएँगे।</p><button onclick="confirmRun('data_refresh','Full data refresh शुरू करें?')">Start Refresh</button></div>
+      <div class="action"><h3>🔁 Pending Detail Retry</h3><p>केवल अधूरे या असफल tenders की details दोबारा निकालें। सही और पूरी details वाले tenders नहीं दोहराए जाएँगे।</p><button onclick="confirmRun('retry_pending','Pending detail retry शुरू करें?')">Retry Pending</button></div>
     </div>
   </div>
 
@@ -103,33 +103,89 @@ function logout(){localStorage.removeItem(KEY);$("panel").classList.add("hidden"
 let toastTimer;
 function showToast(message,type="info"){const t=$("toast");clearTimeout(toastTimer);t.textContent=message;t.className="toast "+type+" show";toastTimer=setTimeout(()=>t.classList.remove("show"),6000)}
 let workflowPollTimer=null;
-async function pollWorkflow(action,attempt=0){
-  const token=localStorage.getItem(KEY);
+let workflowWatchId=0;
+let publicWorkflowStatus=false;
+const WORKFLOWS={data_refresh:"scrape.yml",retry_pending:"targeted-pending-retry.yml",telegram_test:"telegram-test.yml",closing_today:"telegram_manual_pdf.yml",new_today:"telegram_manual_pdf.yml",all:"telegram_manual_pdf.yml"};
+async function fetchStatusJson(url, options={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
   try{
-    const r=await fetch(API+"/api/admin/workflow-status?action="+encodeURIComponent(action),{headers:{Authorization:"Bearer "+token},cache:"no-store"});
-    const d=await r.json();
-    if(!r.ok||!d.ok) throw new Error(d.message||"Status check failed");
-    const run=d.run||{};
-    if(!run.id){$("workflowState").textContent="Workflow अभी GitHub पर दिखाई नहीं दिया है…";return;}
-    const label="Run #"+(run.run_number||run.id)+" • "+(run.status||"unknown")+(run.conclusion?" • "+run.conclusion:"");
-    $("workflowState").textContent=label;
-    if(run.status==="completed"){
-      const ok=run.conclusion==="success";
-      showToast((ok?"✅ ":"❌ ")+label,ok?"success":"error");
+    const response=await fetch(url,{...options,signal:controller.signal,cache:"no-store"});
+    if(!response.ok){
+      const error=new Error("HTTP "+response.status);
+      error.status=response.status;
+      throw error;
+    }
+    return await response.json();
+  }finally{clearTimeout(timer);}
+}
+function workflowLink(url,label){
+  const link=document.createElement("a");
+  link.href=/^https:\/\/github\.com\/esign2015\/mp-tenders\/actions\/runs\/\d+$/.test(url||"") ? url : "https://github.com/esign2015/mp-tenders/actions";
+  link.target="_blank";link.rel="noopener";link.textContent=label;
+  $("workflowState").appendChild(document.createTextNode(" "));
+  $("workflowState").appendChild(link);
+}
+async function workflowStatus(action,startedAt){
+  const token=localStorage.getItem(KEY);
+  if(!publicWorkflowStatus){
+    try{
+      const data=await fetchStatusJson(API+"/api/admin/workflow-status?action="+encodeURIComponent(action),{headers:{Authorization:"Bearer "+token}});
+      if(!data.ok) throw new Error(data.message||"Status unavailable");
+      const run=data.run||{};
+      return !startedAt || Date.parse(run.created_at)>=startedAt-30000 ? run : {};
+    }catch(error){
+      if(error.status===401 || error.status===403) throw error;
+      publicWorkflowStatus=true;
+    }
+  }
+  // Public run status needs no administrator token and remains available
+  // when Render is restarting or an older backend lacks this endpoint.
+  const workflow=WORKFLOWS[action];
+  if(!workflow) throw new Error("Unknown workflow");
+  const data=await fetchStatusJson("https://api.github.com/repos/esign2015/mp-tenders/actions/workflows/"+workflow+"/runs?event=workflow_dispatch&per_page=10");
+  return (data.workflow_runs||[]).find(run=>!startedAt || Date.parse(run.created_at)>=startedAt-30000)||{};
+}
+async function pollWorkflow(action,attempt=0,startedAt=null,watchId=workflowWatchId){
+  if(watchId!==workflowWatchId) return;
+  try{
+    const run=await workflowStatus(action,startedAt);
+    if(watchId!==workflowWatchId) return;
+    if(!run.id){
+      $("workflowState").textContent="अनुरोध भेजा गया है। GitHub पर run आने की प्रतीक्षा है; जाँच अपने आप जारी है।";
+      workflowLink(null,"GitHub पर देखें");
+    }else{
+      const state={queued:"कतार में",in_progress:"चल रहा है",waiting:"प्रतीक्षा में",completed:"पूरा हुआ"}[run.status]||run.status||"प्रतीक्षा में";
+      const result={success:"सफल",failure:"असफल",cancelled:"रद्द",timed_out:"समय सीमा समाप्त",skipped:"नहीं चला"}[run.conclusion]||run.conclusion||"";
+      $("workflowState").textContent="Run #"+(run.run_number||run.id)+" • "+state+(result?" • "+result:"");
+      workflowLink(run.html_url,run.conclusion==="failure"?"गलती का विवरण देखें":"Run खोलें");
+      if(run.status==="completed"){
+        const ok=run.conclusion==="success";
+        showToast(ok?"✅ प्रक्रिया सफल हुई।":"❌ प्रक्रिया "+result+"। Run के लिंक पर विवरण देखें।",ok?"success":"error");
+        return;
+      }
+    }
+  }catch(error){
+    if(watchId!==workflowWatchId) return;
+    if(error.status===401 || error.status===403){
+      $("workflowState").textContent="Admin session समाप्त है या अनुमति नहीं मिली। दोबारा login करें।";
       return;
     }
-    if(attempt<40) workflowPollTimer=setTimeout(()=>pollWorkflow(action,attempt+1),5000);
-  }catch(e){
-    $("workflowState").textContent="Workflow status: "+e.message;
+    $("workflowState").textContent="अभी status का connection नहीं मिला। इससे workflow असफल होना तय नहीं है। जाँच अपने आप फिर होगी।";
+    workflowLink(null,"GitHub पर वास्तविक status देखें");
   }
+  if(attempt<720) workflowPollTimer=setTimeout(()=>pollWorkflow(action,attempt+1,startedAt,watchId),publicWorkflowStatus?90000:15000);
 }
 async function run(action,extra={}){
   const token=localStorage.getItem(KEY);
+  const startedAt=Date.now();
+  const watchId=++workflowWatchId;
+  clearTimeout(workflowPollTimer);
   $("result").textContent="⏳ Command भेजी जा रही है…";
   $("workflowState").textContent="";
   try{
     const r=await fetch(API+"/api/admin/action",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({action,...extra})});
-    const d=await r.json(); const message=(d.ok?"✅ ":"❌ ")+(d.message||"Unknown result"); $("result").textContent=message; showToast(message,d.ok?"success":"error"); if(d.ok){clearTimeout(workflowPollTimer);setTimeout(()=>pollWorkflow(action),2500);}
+    const d=await r.json(); const message=(d.ok?"✅ ":"❌ ")+(d.message||"Unknown result"); $("result").textContent=message; showToast(message,d.ok?"success":"error"); if(d.ok){clearTimeout(workflowPollTimer);setTimeout(()=>pollWorkflow(action==="telegram_pdf"?extra.report:action,0,startedAt,watchId),2500);}
   }catch(e){const message="❌ "+e.message; $("result").textContent=message; showToast(message,"error")}
 }
 function confirmRun(action,msg){if(confirm(msg))run(action)}

@@ -8,6 +8,11 @@ on:
       - ".github/workflows/scrape.yml"
       - "index.html"
   workflow_dispatch:
+    inputs:
+      validate_details:
+        description: "Also run the separate 9-tender detail validation"
+        type: boolean
+        default: false
   schedule:
     # Daily Tenders-by-Organisation snapshots: 10:35 AM, 1:00 PM, 3:00 PM,
     # 5:00 PM, 6:00 PM and 7:15 PM IST. UTC is used because GitHub schedules are UTC.
@@ -512,7 +517,7 @@ jobs:
           cat low_count_detail_live.log || true
 
   detail_validation:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.validate_details == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
