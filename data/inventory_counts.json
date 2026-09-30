@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T19:16:16.406084+00:00",
+  "updated_at": "2026-09-30T19:18:22.403112+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2573,
+  "detail_complete": 2592,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2739,
+  "detail_pending": 2720,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 26,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 25
+      "detail_pending": 24
     },
     {
       "organisation": "Directorate of Industries",
@@ -203,10 +203,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate of Town And Country Planning",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1266,
+      "detail_complete": 1268,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1619
+      "detail_pending": 1617
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 37,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 22
+      "detail_pending": 15
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 167,
+      "detail_complete": 171,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 98
+      "detail_pending": 94
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -445,10 +445,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Public Health Services Corporation Ltd.",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 45,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 41
+      "detail_pending": 40
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 17,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 13
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 171,
+      "detail_complete": 172,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 197
+      "detail_pending": 196
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2734,
+  "legacy_verification_pending": 2715,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
