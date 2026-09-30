@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:50:39.044970+00:00",
+  "updated_at": "2026-09-30T23:52:44.695478+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3321,
+  "detail_complete": 3345,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1991,
+  "detail_pending": 1967,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1578,
+      "detail_complete": 1591,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1307
+      "detail_pending": 1294
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -731,10 +731,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 22,
+      "detail_complete": 28,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 285,
+      "detail_complete": 290,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 83
+      "detail_pending": 78
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1986,
+  "legacy_verification_pending": 1962,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
