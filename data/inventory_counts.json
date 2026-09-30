@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T19:03:41.810323+00:00",
+  "updated_at": "2026-09-30T19:05:47.298190+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2415,
+  "detail_complete": 2442,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2897,
+  "detail_pending": 2870,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -27,10 +27,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
-      "detail_complete": 5,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 0
     },
     {
       "organisation": "Bhopal Co-Operative Central Bank Ltd",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1150,
+      "detail_complete": 1157,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1735
+      "detail_pending": 1728
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 8,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 22
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -665,10 +665,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 10,
+      "detail_complete": 12,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 31
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 26,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 51
+      "detail_pending": 50
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2892,
+  "legacy_verification_pending": 2865,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
