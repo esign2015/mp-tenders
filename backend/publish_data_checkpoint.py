@@ -113,7 +113,12 @@ def publish(paths):
             snapshot_bytes = blob(parent, "data/live_snapshot.json") if cleanup_mode else updates.get("data/live_snapshot.json")
             if snapshot_bytes:
                 snapshot = json.loads(snapshot_bytes)
-                snapshot["tender_ids"] = [tid for tid in snapshot.get("tender_ids", []) if tid not in removed_ids]
+                listing_bytes=updates.get("organisation_tenders.csv",blob(parent,"organisation_tenders.csv"))
+                if listing_bytes:
+                    retained={r.get("Tender ID","").strip() for r in csv.DictReader(io.StringIO(listing_bytes.decode("utf-8-sig")))}
+                    snapshot["tender_ids"]=[tid for tid in snapshot.get("tender_ids",[]) if tid in retained]
+                else:
+                    snapshot["tender_ids"] = [tid for tid in snapshot.get("tender_ids", []) if tid not in removed_ids]
                 updates["data/live_snapshot.json"] = json.dumps(snapshot, ensure_ascii=False, indent=2).encode()
         # Derive progress from the exact CSV bytes being published together.
         with tempfile.TemporaryDirectory() as summary_dir:
