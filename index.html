@@ -2215,9 +2215,7 @@ body.telegram-locked .site-footer{visibility:hidden}
             <button type="button" class="btn-blue" id="pacFilterApply">Apply</button>
           </div>
         </div>
-        <select id="pacFilter" aria-hidden="true" tabindex="-1">
-          <option value="">ALL PAC</option>
-        </select>
+        <input type="hidden" id="pacFilter" value="">
       </div>
     </div>
 
@@ -5596,12 +5594,23 @@ function setupPacFilter(){
     applyFilters();
   });
 
+  function applySelection(){
+    const mode = selectedMode();
+    if(mode && !selectedAmount()) return;
+    syncHidden();
+    syncLabel();
+    applyFilters();
+  }
   panel.querySelectorAll('input[name="pacModeOption"]').forEach(input => {
     input.addEventListener("change", function(){
       if(!this.value){
         panel.querySelectorAll('input[name="pacAmountOption"]').forEach(x => x.checked = false);
       }
+      applySelection();
     });
+  });
+  panel.querySelectorAll('input[name="pacAmountOption"]').forEach(input => {
+    input.addEventListener("change", applySelection);
   });
 
   document.addEventListener("click", function(event){

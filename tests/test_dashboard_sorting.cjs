@@ -166,3 +166,23 @@ for(const [fn,expected] of [
  assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected.slice().sort(),fn+' after refresh');
 }
 console.log('PASS: all quick buttons reject old master-only, cancelled and expired rows; tomorrow selection survives refresh.');
+
+// A select with only a blank option silently discarded values like above:5000000.
+assert.match(html,/<input type="hidden" id="pacFilter" value="">/);
+assert(!html.includes('<select id="pacFilter"'));
+context.portalSnapshot=null;
+for(const threshold of [500000,1000000,2000000,5000000,10000000,20000000,50000000,100000000,200000000]){
+ context.allTenders=[threshold-1,threshold,threshold+1,'NA','',0].map((amount,i)=>({
+  'Tender ID':'pac-'+i,'Closing Date':'01-Oct-2026 03:00 PM','PAC Amount':String(amount)
+ }));
+ for(const mode of ['above','below']){
+  context.clearFilters();
+  controls.pacFilter.value=mode+':'+threshold;
+  context.applyFilters();
+  const expected=mode==='above' ? ['pac-2'] : ['pac-0','pac-5'];
+  assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected,mode+' '+threshold);
+  context.applyFilters(false,true);
+  assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected,'PAC persists on refresh');
+ }
+}
+console.log('PASS: all nine PAC thresholds, strict Above/Below boundaries, missing/NA exclusion and refresh persistence.');
