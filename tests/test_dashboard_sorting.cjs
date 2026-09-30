@@ -197,3 +197,38 @@ for(const [pin,district] of [['461228','Harda'],['461331','Harda'],['461441','Ha
 }
 assert.equal(context.getDistrictInfo({Pincode:'484224',Location:'Anuppur',Organisation:'Shahdol Division'}).name,'Anuppur');
 console.log('PASS: exact PIN districts and location before organisation names, including Timarni/Harda.');
+
+// Click the real preference handlers; declarations must survive quick-filter edits.
+const prefs = new Map();
+function classList(initial=[]){
+ const values=new Set(initial);
+ return {contains:x=>values.has(x),add:x=>values.add(x),remove:x=>values.delete(x),
+  toggle(x,on){if(on===undefined)on=!values.has(x);if(on)values.add(x);else values.delete(x);return on;}};
+}
+const bodyClasses=classList(['org-display-full']);
+const checkboxes=Array.from({length:24},(_,i)=>({dataset:{col:String(i+1)},checked:i<14}));
+const cells=Array.from({length:24},()=>({classList:classList()}));
+const menu={style:{},classList:classList(),querySelectorAll:()=>checkboxes,contains:()=>false};
+const buttons={columnBtn:{getBoundingClientRect:()=>({left:100,bottom:300})},orgDisplayBtn:{},userPrefMenu:menu,resetColumnsBtn:{},viewToggleBtn:{}};
+let prefRenders=0;
+const prefContext=vm.createContext({console,Map,Set,Number,JSON,Math,
+ $:id=>buttons[id],localStorage:{getItem:k=>prefs.get(k)??null,setItem:(k,v)=>prefs.set(k,v),removeItem:k=>prefs.delete(k)},
+ document:{body:{classList:bodyClasses},addEventListener(){},querySelectorAll:()=>[{children:cells}]},
+ window:{innerWidth:1200,innerHeight:900,addEventListener(){}},escapeHtml:s=>s,
+ tenderViewMode:'table',filteredTenders:[],applyTenderView(){},setTenderView(){},renderTable(){prefRenders++;}});
+const declarationStart=html.indexOf('let orgDisplayMode =');
+assert(declarationStart>=0);
+vm.runInContext(html.slice(declarationStart,html.indexOf('function loadHiddenColumns()',declarationStart)),prefContext);
+for(const name of ['loadHiddenColumns','applyColumnVisibility','openColumnMenu','setupUserFeatures']) vm.runInContext(source(name),prefContext);
+prefContext.setupUserFeatures();
+buttons.columnBtn.onclick();
+assert(menu.classList.contains('open'));
+assert.equal(checkboxes.length,24);
+checkboxes[3].checked=false;checkboxes[3].onchange();
+assert(cells[3].classList.contains('column-hidden'));
+assert.equal(JSON.parse(prefs.get('mp_tender_hidden_columns_v3')).includes(4),true);
+buttons.resetColumnsBtn.onclick();assert(!cells[3].classList.contains('column-hidden'));
+buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-short'));assert.equal(buttons.orgDisplayBtn.textContent,'🏢 Short Org');
+buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-full'));assert.equal(buttons.orgDisplayBtn.textContent,'🏢 Full Org');
+assert.equal(prefRenders,2);
+console.log('PASS: Columns opens, selection persists, Reset restores columns, Full/Short Org toggles twice without errors.');

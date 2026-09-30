@@ -4843,6 +4843,15 @@ function showNextThreeDays(){
   applyFilters();
 }
 
+/* ================= TABLE DISPLAY CONTROLS ================= */
+let orgDisplayMode = document.body.classList.contains("org-display-full") ? "full" : "short";
+const COLUMN_PREF_KEY="mp_tender_hidden_columns_v3";
+const COLUMN_DEFS=[
+  ["S.No.",1],["District",2],["Pincode",3],["Tender ID",4],["Title",5],["Ref.No.",6],
+  ["Last Date",7],["Time Left",8],["PAC Amount",9],["EMD Fee",10],["Tender Fee",11],["Processing Fee",12],["Total Fee",13],["Organisation",14],
+  ["Published Date",15],["Location",16],["Product Category",17],["Contract Type",18],["Bid Validity",19],["Work Description",20],["Corrigendum",21],["Department",22],["Division",23],["Sub Division",24]
+];
+
 function loadHiddenColumns(){
   // Default view: exactly the columns shown in the requested layout.
   const defaultHidden=[15,16,17,18,19,20,21,22,23,24]; // Published, Location + advanced/detail columns hidden; Pincode stays visible
