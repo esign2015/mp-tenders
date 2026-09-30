@@ -12,7 +12,7 @@
   "batch_complete": 0,
   "started_at": "2026-09-30T19:41:48.982846+00:00",
   "success": 2882,
-  "failed": 269,
+  "failed": 284,
   "success_ids": [
     "2023_UAD_255290_15",
     "2023_UAD_295104_9",
@@ -2934,9 +2934,24 @@
     "2026_MPFD_538508_1",
     "2026_MPFD_538512_1",
     "2026_MPFD_538779_1",
+    "2026_MPFD_539071_1",
+    "2026_MPFD_539155_1",
     "2026_MPFD_539473_1",
     "2026_MPPGC_483546_2",
+    "2026_MPPGC_498452_1",
+    "2026_MPPGC_511390_1",
+    "2026_MPPGC_511581_1",
+    "2026_MPPGC_515480_1",
+    "2026_MPPGC_520309_1",
+    "2026_MPPGC_521776_1",
+    "2026_MPPGC_524050_1",
     "2026_MPPGC_527679_1",
+    "2026_MPPGC_533373_1",
+    "2026_MPPGC_533656_1",
+    "2026_MPPGC_534349_1",
+    "2026_MPPGC_536993_1",
+    "2026_MPPGC_537461_1",
+    "2026_MPPGC_538763_1",
     "2026_MPPHC_538041_1",
     "2026_MPPHC_538042_1",
     "2026_MPPHC_538044_1",
@@ -3355,8 +3370,6 @@
     "2026_MPFD_538859_1",
     "2026_MPFD_538908_1",
     "2026_MPFD_538910_1",
-    "2026_MPFD_539071_1",
-    "2026_MPFD_539155_1",
     "2026_MPFD_539203_1",
     "2026_MPFD_539203_2",
     "2026_MPFD_539449_1",
@@ -3377,11 +3390,8 @@
     "2026_MPLUN_539831_1",
     "2026_MPPGC_472475_1",
     "2026_MPPGC_478962_2",
-    "2026_MPPGC_498452_1",
     "2026_MPPGC_506201_1",
     "2026_MPPGC_507421_1",
-    "2026_MPPGC_511390_1",
-    "2026_MPPGC_511581_1",
     "2026_MPPGC_513034_2",
     "2026_MPPGC_515539_1",
     "2026_MPPGC_516436_1",
@@ -3392,14 +3402,11 @@
     "2026_MPPGC_519141_1",
     "2026_MPPGC_519630_1",
     "2026_MPPGC_520028_1",
-    "2026_MPPGC_520309_1",
     "2026_MPPGC_520386_1",
     "2026_MPPGC_520729_1",
-    "2026_MPPGC_521776_1",
     "2026_MPPGC_522251_1",
     "2026_MPPGC_523445_1",
     "2026_MPPGC_523781_1",
-    "2026_MPPGC_524050_1",
     "2026_MPPGC_524097_1",
     "2026_MPPGC_525019_2",
     "2026_MPPGC_525812_1",
@@ -3436,12 +3443,9 @@
     "2026_MPPGC_533209_1",
     "2026_MPPGC_533309_1",
     "2026_MPPGC_533370_1",
-    "2026_MPPGC_533373_1",
     "2026_MPPGC_533379_1",
-    "2026_MPPGC_533656_1",
     "2026_MPPGC_533688_1",
     "2026_MPPGC_533938_1",
-    "2026_MPPGC_534349_1",
     "2026_MPPGC_535061_1",
     "2026_MPPGC_535182_1",
     "2026_MPPGC_535346_1",
@@ -3449,17 +3453,14 @@
     "2026_MPPGC_536240_1",
     "2026_MPPGC_536527_1",
     "2026_MPPGC_536529_1",
-    "2026_MPPGC_536993_1",
     "2026_MPPGC_537171_1",
     "2026_MPPGC_537220_1",
-    "2026_MPPGC_537461_1",
     "2026_MPPGC_537552_1",
     "2026_MPPGC_537650_1",
     "2026_MPPGC_537868_1",
     "2026_MPPGC_537904_1",
     "2026_MPPGC_538125_1",
     "2026_MPPGC_538130_1",
-    "2026_MPPGC_538763_1",
     "2026_MPPGC_538834_1",
     "2026_MPPGC_539074_1",
     "2026_MPPGC_539176_1",
@@ -9247,7 +9248,82 @@
       "Tender ID": "2026_MPFD_538779_1",
       "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPFD_539071_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPFD_539155_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_498452_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_511581_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_511390_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_520309_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_521776_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_533656_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_515480_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_533373_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_534349_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_524050_1",
+      "error": "Error: Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://mptenders.gov.in/nicgep/app\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_536993_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_538763_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_537461_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-09-30T21:28:03.945068+00:00"
+  "updated_at": "2026-09-30T21:30:16.473930+00:00"
 }
