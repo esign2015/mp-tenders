@@ -43,6 +43,7 @@ FIELDS = [
     "Bid Validity", "Pre Qualification Details",
     "Bid Submission Start Date", "Bid Submission End Date",
     "Bid Opening Date", "Document Download Start Date", "Document Download End Date",
+    "Start Date Refreshed Through", "Start Date Refreshed At", "Tested At",
     "Fee Payable To", "Fee Payable At", "Status", "Detail Extracted", "Corrigendum", "Corrigendum Last Checked", "Corrigendum Detected At", "Corrigendum Type", "Corrigendum 15m Checked", "Corrigendum 5m Checked",
 ]
 ORG_FIELDS = ["S.No.", "Organisation Name", "Tender Count", "Portal URL", "Retrieved At"]
@@ -2666,6 +2667,9 @@ def scrape_mp_tenders(csv_file):
             "Bid Opening Date": clean(row.get("Opening Date")) or clean(old.get("Bid Opening Date")),
             "Document Download Start Date": clean(old.get("Document Download Start Date")),
             "Document Download End Date": clean(old.get("Document Download End Date")),
+            "Start Date Refreshed Through": clean(old.get("Start Date Refreshed Through")),
+            "Start Date Refreshed At": clean(old.get("Start Date Refreshed At")),
+            "Tested At": clean(old.get("Tested At")),
             "Fee Payable To": clean(old.get("Fee Payable To")),
             "Fee Payable At": clean(old.get("Fee Payable At")),
             "Status": clean(old.get("Status")) or "Open",

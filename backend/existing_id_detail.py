@@ -36,8 +36,39 @@ DETAIL_FIELDS = [
     "Bid Validity","Pre Qualification Details","Bid Submission Start Date",
     "Bid Submission End Date","Bid Opening Date","Document Download Start Date",
     "Document Download End Date","Fee Payable To","Fee Payable At",
-    "Published Date","Closing Date","Opening Date","Detail Extracted","Search Route"
+    "Published Date","Closing Date","Opening Date","Detail Extracted","Search Route",
+    "Start Date Refreshed Through", "Start Date Refreshed At", "Tested At"
 ]
+
+def start_date_refresh_due(row, now=None):
+    """Latest sale/bid start requiring one fresh extraction, in portal time."""
+    now = now or datetime.now(timezone.utc)
+    published = parse_portal_datetime(row.get("Published Date"))
+    sale = parse_portal_datetime(row.get("Document Download Start Date") or
+                                 row.get("Document Download / Sale Start Date"))
+    closing = parse_portal_datetime(row.get("Closing Date"))
+    if not published or not sale or published == sale or (closing and closing <= now):
+        return None
+    try:
+        refreshed = datetime.fromisoformat(clean(row.get("Start Date Refreshed Through")))
+        if refreshed.tzinfo is None:
+            refreshed = refreshed.replace(tzinfo=timezone.utc)
+    except ValueError:
+        refreshed = datetime.min.replace(tzinfo=timezone.utc)
+    starts = [sale, parse_portal_datetime(row.get("Bid Submission Start Date"))]
+    due = [start for start in starts if start and refreshed < start <= now]
+    return max(due) if due else None
+
+def merge_extracted_detail(base, detail):
+    # A later page may still omit fields; keep previously verified values.
+    merged = dict(base)
+    merged.update({key: value for key, value in detail.items() if clean(value)})
+    merged["Tested At"] = datetime.now(timezone.utc).isoformat()
+    due = start_date_refresh_due(merged)
+    if due:
+        merged["Start Date Refreshed Through"] = due.astimezone(timezone.utc).isoformat()
+        merged["Start Date Refreshed At"] = merged["Tested At"]
+    return merged
 
 def clean(s):
     return re.sub(r"\s+", " ", str(s or "")).strip()
@@ -272,8 +303,7 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
                             "RSP -> Home -> Organisation -> Live Tender Link -> Detail"
                         )
 
-                        merged = dict(by_id.get(tid, {}))
-                        merged.update(detail)
+                        merged = merge_extracted_detail(by_id.get(tid, {}), detail)
                         if money_number(merged.get("Processing Fee")) <= 0:
                             merged["Detail Extracted"] = ""
                             by_id[tid] = merged
@@ -402,13 +432,13 @@ def main():
         ] + [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and not detail_complete(row)
+            and (not detail_complete(row) or start_date_refresh_due(row))
         ]
     else:
         candidate_rows = [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and not detail_complete(row)
+            and (not detail_complete(row) or start_date_refresh_due(row))
         ]
 
     for row in candidate_rows:
@@ -428,6 +458,7 @@ def main():
                       if not parse_portal_datetime(row.get("Closing Date"))
                       or parse_portal_datetime(row.get("Closing Date")) > now]
         incomplete.sort(key=lambda row: (
+            0 if start_date_refresh_due(row) else 1,
             parse_portal_datetime(row.get("Closing Date")) or datetime.max.replace(tzinfo=timezone.utc),
             clean(row.get("Tender ID")),
         ))
@@ -467,6 +498,7 @@ def main():
     success = len(success_ids)
     final_failed_ids = set()
     attempted_ids = set()
+    completed_this_batch = set()
     last_successful_id = ""
     started_at = datetime.now(timezone.utc).isoformat()
 
@@ -501,6 +533,7 @@ def main():
         nonlocal last_successful_id
         if last_id:
             last_successful_id = last_id
+            completed_this_batch.add(last_id)
         STATUS.parent.mkdir(parents=True, exist_ok=True)
         STATUS.write_text(json.dumps({
             "status": status,
@@ -509,8 +542,8 @@ def main():
             "current_portal_ids": len(current_ids),
             "initial_incomplete": len(incomplete),
             "batch_targets": len(targets),
-            "batch_attempted": len((attempted_ids | success_ids | {error["Tender ID"] for error in errors}) & target_set),
-            "batch_complete": len(target_set & success_ids),
+            "batch_attempted": len((attempted_ids | completed_this_batch | {error["Tender ID"] for error in errors}) & target_set),
+            "batch_complete": len(target_set & completed_this_batch),
             "started_at": started_at,
             "success": len(success_ids),
             "failed": len(final_failed_ids),
@@ -544,8 +577,7 @@ def main():
                     if not clean(detail.get(key)):
                         detail[key] = base.get(key, "")
 
-                merged = dict(base)
-                merged.update(detail)
+                merged = merge_extracted_detail(base, detail)
                 merged.pop("URL", None)
                 if money_number(merged.get("Processing Fee")) <= 0:
                     merged["Detail Extracted"] = ""
@@ -556,8 +588,8 @@ def main():
                     by_id[tid] = merged
                     raise RuntimeError("Required detail fields missing after extraction")
                 by_id[tid] = merged
-                success += 1
                 success_ids.add(tid)
+                success = len(success_ids)
 
                 # Save in small checkpoints instead of rewriting the full 5,000+
                 # row CSV after every Tender ID.

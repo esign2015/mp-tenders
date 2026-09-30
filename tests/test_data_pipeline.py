@@ -60,6 +60,47 @@ class CleanupTests(unittest.TestCase):
         self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
+    def test_sale_and_bid_start_refresh_runs_once_per_start_and_respects_expiry(self):
+        from datetime import timezone
+        row = {"Published Date":"29-Sep-2026 09:00 AM", "Document Download Start Date":"30-Sep-2026 10:00 AM",
+               "Bid Submission Start Date":"01-Oct-2026 10:00 AM", "Closing Date":"10-Oct-2026 05:00 PM"}
+        before = datetime(2026,9,30,4,29,tzinfo=timezone.utc)
+        sale = datetime(2026,9,30,4,30,tzinfo=timezone.utc)
+        bid = datetime(2026,10,1,4,30,tzinfo=timezone.utc)
+        self.assertIsNone(worker.start_date_refresh_due(row,before))
+        self.assertEqual(worker.start_date_refresh_due(row,sale),sale)
+        row["Start Date Refreshed Through"] = sale.isoformat()
+        self.assertIsNone(worker.start_date_refresh_due(row,sale))
+        self.assertEqual(worker.start_date_refresh_due(row,bid),bid)
+        row["Start Date Refreshed Through"] = bid.isoformat()
+        self.assertIsNone(worker.start_date_refresh_due(row,bid))
+        self.assertIsNone(worker.start_date_refresh_due({**row,"Start Date Refreshed Through":"", "Published Date":row["Document Download Start Date"]},bid))
+        self.assertIsNone(worker.start_date_refresh_due({**row,"Start Date Refreshed Through":"", "Closing Date":"30-Sep-2026 05:00 PM"},bid))
+
+    def test_complete_tender_is_selected_again_when_start_date_is_due(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            row = {**completed("due"), "Published Date":"01-Jan-2020 09:00 AM",
+                   "Document Download Start Date":"02-Jan-2020 09:00 AM", "Bid Submission Start Date":"03-Jan-2020 09:00 AM",
+                   "Closing Date":"01-Jan-2099 03:00 PM"}
+            write_csv(root/"master.csv",[row])
+            write_csv(root/"listing.csv",[{"Tender ID":"due"}])
+            captured = []
+            def fast(targets,*args):
+                captured.extend(targets)
+                return [],[]
+            with patch.dict(os.environ,{"PRIMARY_ID_SEARCH":"0","PRIORITY_TENDER_IDS":"","EXTRACT_ALL_INVENTORY":"1"}), \
+                 patch.object(worker,"CSV",root/"master.csv"), patch.object(worker,"SNAPSHOT",root/"listing.csv"), \
+                 patch.object(worker,"DETAIL_CSV",root/"details.csv"), patch.object(worker,"STATUS",root/"data/status.json"), \
+                 patch.object(worker,"rsp_style_extract_targets",side_effect=fast):
+                worker.main()
+            self.assertEqual([r["Tender ID"] for r in captured],["due"])
+            merged = worker.merge_extracted_detail(row,{"EMD Fee":"", "Pincode":"462001"})
+            self.assertEqual(merged["EMD Fee"],row["EMD Fee"])
+            self.assertEqual(merged["Pincode"],"462001")
+            self.assertIsNone(worker.start_date_refresh_due(merged))
+            self.assertTrue(merged["Start Date Refreshed At"])
+
     def test_batch_status_keeps_last_success_and_does_not_count_partial_details(self):
         for valid in (True, False):
             with self.subTest(valid=valid), tempfile.TemporaryDirectory() as temporary:

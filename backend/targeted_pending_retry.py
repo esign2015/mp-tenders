@@ -1,4 +1,4 @@
-"""Retry incomplete live tenders, optionally prioritising reported Tender IDs."""
+"""Retry incomplete live tenders and refresh details once sale/bid starts arrive."""
 import os
 
 # Inventory includes copied live rows missing from a partial organisation file.
