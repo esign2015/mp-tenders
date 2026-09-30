@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:39:58.284097+00:00",
+  "updated_at": "2026-09-30T18:40:36.027135+00:00",
   "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2137,
+  "detail_complete": 2168,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3175,
+  "detail_pending": 3144,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -16,10 +16,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Bhopal City Link Limited",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 15,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 17
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 13,
+      "detail_complete": 15,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 13
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 952,
+      "detail_complete": 956,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1933
+      "detail_pending": 1929
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 43,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 56
+      "detail_pending": 52
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -830,10 +830,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 13,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 31
+      "detail_pending": 30
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 42,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 23
+      "detail_pending": 21
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 153,
+      "detail_complete": 166,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 215
+      "detail_pending": 202
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 22,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 55
+      "detail_pending": 52
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,11 +1024,11 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 3170,
+  "legacy_verification_pending": 3139,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
-  "department_count": 452,
+  "department_count": 333,
   "missing_pincode_count": 0,
   "missing_pincode_ids": []
 }
