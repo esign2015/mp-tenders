@@ -74,7 +74,7 @@ def valid_reference(value):
     return "" if re.search(r"\b20\d{2}_[A-Z0-9]+_\d+_\d+\b", text, re.I) else text
 
 
-def load_report_rows(path=CSV_PATH):
+def load_report_rows(path=CSV_PATH, now=None):
     """Join the same detail and current-list fields used by the dashboard."""
     path = Path(path)
     by_id = {}
@@ -117,12 +117,30 @@ def load_report_rows(path=CSV_PATH):
                 for key, value in row.items():
                     if not clean(base.get(key)) and clean(value):
                         base[key] = value
-    return list(by_id.values())
+    active_ids = current_portal_ids(path.parent, now)
+    return [row for tid, row in by_id.items() if active_ids is None or tid in active_ids]
+
+def current_portal_ids(root, now=None):
+    """Match the dashboard's same-day, verified after-19:00 inventory guard."""
+    now = (now or datetime.now(IST)).astimezone(IST)
+    try:
+        snapshot = json.loads((Path(root) / "data/live_snapshot.json").read_text())
+        stamp = datetime.fromisoformat(snapshot.get("snapshot_at", ""))
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=IST)
+        stamp = stamp.astimezone(IST)
+    except (OSError, ValueError, TypeError):
+        return None
+    if snapshot.get("verified") is not True or stamp.date() != now.date() or stamp.hour < 19 or stamp > now:
+        return None
+    return set(snapshot.get("tender_ids") or [])
 
 
-def live_rows(rows, now=None):
+def live_rows(rows, now=None, root=None):
     now = now or datetime.now(IST)
+    active_ids = current_portal_ids(root if root is not None else CSV_PATH.parent, now)
     return [row for row in rows if clean(row.get("Status")).lower() != "cancelled"
+            and (active_ids is None or clean(row.get("Tender ID")) in active_ids)
             and (closing := parse_date(row.get("Closing Date"))) and closing > now]
 
 

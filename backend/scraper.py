@@ -284,40 +284,11 @@ def infer_mp_district(pincode, location="", title="", work_description="", organ
     - exact 6-digit PIN mapping is accepted only when it maps uniquely;
     - ambiguous PIN-prefix matches are left blank rather than guessing.
     """
-    pin = re.sub(r"\D", "", clean(pincode))[:6]
-    master_path = Path(__file__).resolve().parent.parent / "data" / "mp_districts.json"
-    try:
-        with master_path.open("r", encoding="utf-8") as f:
-            master = json.load(f)
-    except Exception:
-        return ""
+    from district_mapping import resolve_district
+    return resolve_district({"Pincode": pincode, "Location": location, "Title": title,
+                             "Work Description": work_description, "Organisation": organisation,
+                             "Department": department, "Division": division, "Sub Division": sub_division})
 
-    text = " ".join(clean(x) for x in [
-        location, title, work_description, organisation, department, division, sub_division
-    ]).casefold()
-
-    candidates = []
-    for district in master if isinstance(master, list) else []:
-        name = clean(district.get("name"))
-        aliases = [clean(x) for x in (district.get("aliases") or [])]
-        prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
-        if any((name and name.casefold() in text) or (a and a.casefold() in text) for a in aliases + [name]):
-            candidates.append(name)
-
-    if len(set(candidates)) == 1:
-        return candidates[0]
-
-    if pin:
-        exact = []
-        for district in master if isinstance(master, list) else []:
-            name = clean(district.get("name"))
-            prefixes = [str(x) for x in (district.get("pinPrefixes") or [])]
-            if pin in prefixes:
-                exact.append(name)
-        exact = list(dict.fromkeys(x for x in exact if x))
-        if len(exact) == 1:
-            return exact[0]
-    return ""
 
 def parse_detail(soup, url):
     """RSP-derived resilient MP Tender detail extraction.
@@ -1927,14 +1898,8 @@ def detail_is_complete(row):
     detail field must still be present, so incomplete current tenders are
     automatically eligible for retry.
     """
-    if clean((row or {}).get("Detail Extracted")).upper() != "YES":
-        return False
-    if not all(clean((row or {}).get(field)) for field in DETAIL_REQUIRED_FIELDS):
-        return False
-    # A published MP Tender must have a real processing/portal charge.
-    # Blank or numeric zero means the fee extraction is incomplete and the
-    # Tender ID must be retried instead of being counted as Success.
-    return money_number((row or {}).get("Processing Fee")) > 0
+    from inventory_summary import detail_complete
+    return detail_complete(row or {})
 
 
 def status_metrics(rows):

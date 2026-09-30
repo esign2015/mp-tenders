@@ -1,0 +1,51 @@
+name: Missing Pincode and District Recheck
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - backend/missing_pincode_retry.py
+      - backend/inventory_summary.py
+      - backend/district_mapping.py
+      - data/pincode_districts.json
+      - data/mp_districts.json
+      - .github/workflows/missing-pincode-retry.yml
+permissions:
+  contents: write
+concurrency:
+  group: mp-missing-pincode-recheck
+  cancel-in-progress: false
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r backend/requirements.txt
+      - run: python -m playwright install --with-deps chromium
+      - name: Reopen official details for missing PINs and unresolved districts
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/missing_pincode_retry.py > missing_pincode_retry.log 2>&1 &
+          PID=$!
+          while kill -0 "$PID" 2>/dev/null; do
+            python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json data/missing_pincode_status.json
+            sleep 120
+          done
+          wait "$PID"
+      - name: Publish final results
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json data/missing_pincode_status.json
+          cat missing_pincode_retry.log || true

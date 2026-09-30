@@ -19,7 +19,9 @@ import home_latest
 import nightly_cleanup as cleanup
 from datetime import datetime
 from bs4 import BeautifulSoup
-from inventory_summary import REQUIRED_FIELDS, build_summary
+from inventory_summary import REQUIRED_FIELDS, build_summary, detail_complete, valid_pincode
+import missing_pincode_retry
+from district_mapping import resolve_district
 from admin_mismatch_alert import resolve_private_admin, send_alert
 
 def write_csv(path, rows):
@@ -31,7 +33,7 @@ def write_csv(path, rows):
 
 def completed(tid):
     return {**{key: "value" for key in REQUIRED_FIELDS}, "Tender ID": tid,
-            "Processing Fee": "295", "Detail Extracted": "YES"}
+            "Processing Fee": "295", "Pincode": "482001", "Detail Extracted": "YES"}
 
 class OrganisationAndParallelTests(unittest.TestCase):
     def test_live_count_uses_exact_cell_not_ancestor_table(self):
@@ -112,6 +114,35 @@ class CleanupTests(unittest.TestCase):
         self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
+    def test_pin_validation_ignores_stale_complete_flag(self):
+        for pin in ('','NA','—','000000','12345','1234567','482001.0'):
+            self.assertFalse(valid_pincode(pin))
+            self.assertFalse(detail_complete({**completed('test'),'Pincode':pin}))
+            self.assertFalse(scraper.detail_is_complete({**completed('test'),'Pincode':pin}))
+        self.assertTrue(detail_complete(completed('test')))
+
+    def test_exact_pin_district_and_location_precede_organisation_mentions(self):
+        for pin,name in [('461228','Harda'),('461331','Harda'),('461441','Harda'),('484552','Umaria')]:
+            self.assertEqual(resolve_district({'Pincode':pin}),name)
+            self.assertEqual(scraper.infer_mp_district(pin),name)
+        self.assertEqual(resolve_district({'Pincode':'484224','Location':'Anooppur','Organisation':'Shahdol Division'}),'Anuppur')
+        self.assertEqual(resolve_district({'Pincode':'743551','Location':'Shivpuri'}),'Shivpuri')
+        self.assertEqual(resolve_district({'Pincode':'450551','Location':'unknown'}),'')
+
+    def test_regular_pin_retry_uses_current_listing_and_never_skips_invalid_complete_rows(self):
+        from datetime import timezone
+        now=datetime(2026,9,30,15,0,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            listings=[{'Tender ID':tid,'Closing Date':date} for tid,date in [('missing','01-Oct-2026 05:00 PM'),('invalid','01-Oct-2026 05:00 PM'),('complete','01-Oct-2026 05:00 PM'),('expired','30-Sep-2026 03:00 PM')]]
+            write_csv(root/'organisation_tenders.csv',listings)
+            write_csv(root/'all_tenders_org_detailed.csv',[{**completed(tid),'Pincode':pin} for tid,pin in [('missing',''),('invalid','NA'),('complete','482001'),('expired',''),('old-only','')]])
+            self.assertEqual(missing_pincode_retry.missing_live_pin_ids(root,now),['invalid','missing'])
+            missing_pincode_retry.repair_districts(root)
+            rows={r['Tender ID']:r for r in missing_pincode_retry.read_csv(root/'all_tenders_org_detailed.csv')}
+            self.assertEqual(rows['complete']['District'],'Jabalpur')
+            self.assertEqual(rows['complete']['Processing Fee'],'295')
+
     def test_next_fourteen_days_and_nearest_bid_deadline_come_before_missing_pincode(self):
         from datetime import timezone
         now = datetime(2026,9,30,8,0,tzinfo=timezone.utc)

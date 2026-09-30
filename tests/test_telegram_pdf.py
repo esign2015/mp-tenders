@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import sys
 import tempfile
@@ -33,6 +34,22 @@ class TelegramPdfTests(unittest.TestCase):
             self.assertEqual(rows[0]['Reference Number'],'CTD/DC-2/STORE/2026/393')
             self.assertEqual(alerts.total_tender_fee(rows[0]),Decimal('3295'))
 
+    def test_evening_verified_portal_membership_matches_dashboard(self):
+        now = datetime(2026,9,30,21,30,tzinfo=alerts.IST)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root/'data').mkdir()
+            rows=[{'Tender ID':tid,'Closing Date':'01-Oct-2026 05:00 PM'} for tid in ('live','old-master')]
+            snapshot={'verified':True,'snapshot_at':'2026-09-30T20:35:00+05:30','tender_ids':['live']}
+            path=root/'data/live_snapshot.json'
+            path.write_text(json.dumps(snapshot))
+            write_csv(root/'all_tenders_org_detailed.csv',rows)
+            self.assertEqual([r['Tender ID'] for r in alerts.load_report_rows(root/'all_tenders_org_detailed.csv',now)],['live'])
+            self.assertEqual([r['Tender ID'] for r in alerts.live_rows(rows,now,root)],['live'])
+            for change in ({'verified':False},{'snapshot_at':'2026-09-29T20:35:00+05:30'}, {'snapshot_at':'2026-09-30T18:35:00+05:30'}):
+                path.write_text(json.dumps({**snapshot,**change}))
+                self.assertEqual(len(alerts.live_rows(rows,now,root)),2)
+
     def test_fee_text_always_retains_two_decimal_places(self):
         for value in ('1000','1000.0','1000.00'):
             self.assertEqual(alerts.fee_text(Decimal(value)), '1,000.00')
@@ -58,7 +75,8 @@ class TelegramPdfTests(unittest.TestCase):
             rows=[{'Tender ID':'2026_TEST_123456_1','Closing Date':'01-Jan-2099 06:00 PM','Title':'Work & materials',
                    'Reference Number':'NIT/42','PAC Amount':'NA','EMD Fee':'35400','Tender Fee':'1000','Processing Fee':'295'},
                   {'Tender ID':'2026_AICTS_531643_1','Closing Date':'28-Sep-2026 06:55 PM'}]
-            path=alerts.make_pdf(rows,str(Path(temporary)/'checked.pdf'),'All Live Tenders')
+            with patch.object(alerts, 'CSV_PATH', Path(temporary)/'all_tenders_org_detailed.csv'):
+                path=alerts.make_pdf(rows,str(Path(temporary)/'checked.pdf'),'All Live Tenders')
             text='\n'.join(page.extract_text() for page in PdfReader(path).pages)
             for value in ('Total Fee','EMD Fee','Form Fee','Processing Fee','36,695','NIT/42','NA'):
                 self.assertIn(value,text)

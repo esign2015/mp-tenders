@@ -1572,7 +1572,18 @@ body.telegram-locked .site-footer{visibility:hidden}
 .org-display-short .org-full{display:none}
 .org-display-short .org-short{display:inline}
 .org-display-full .org-short{display:none}
-.org-display-full .org-full{display:inline}
+.org-display-full #tenderTable .org-full{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  max-height:2.6em;
+  line-height:1.3;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+#tenderTable th:nth-child(14),#tenderTable .org-display-cell{width:280px;min-width:240px;}
+#tenderTable .org-short{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .column-hidden{display:none!important}
 @media(max-width:850px){
  .user-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
@@ -2955,7 +2966,7 @@ function currentPortalAllows(row, now=Date.now()){
   const snapshotHour = ((stamp+istOffset)%day)/3600000;
   // Only a complete, same-day evening inventory can exclude old master IDs.
   // Partial daytime checkpoints continue to enrich the master as before.
-  if(!Number.isFinite(stamp) || snapshotDay !== currentDay || snapshotHour < 19) return true;
+  if(!Number.isFinite(stamp) || snapshotDay !== currentDay || snapshotHour < 19 || stamp > now) return true;
   return portalActiveIds.has(clean(row["Tender ID"]));
 }
 
@@ -3064,15 +3075,10 @@ function getDistrictInfo(row){
   if(districtInfoCache.has(row)) return districtInfoCache.get(row);
 
   const savedDistrict = clean(row["District"]);
-  if(savedDistrict){
-    const result={name:savedDistrict,detail:"Saved tender district",mentioned:[]};
-    districtInfoCache.set(row,result);
-    return result;
-  }
-
   const pin = clean(row["Pincode"]).replace(/\D/g,"");
-  const candidates = [];
-  if(pin && MP_DISTRICT_MASTER.length){
+  const exactNames = PIN_DISTRICTS[pin] || [];
+  const candidates = exactNames.map(name => ({district:MP_DISTRICT_MASTER.find(d=>d.name===name) || {name,aliases:[]},prefix:pin}));
+  if(!candidates.length && pin && MP_DISTRICT_MASTER.length){
     MP_DISTRICT_MASTER.forEach(d => {
       (d.pinPrefixes || []).forEach(prefix => {
         const p = String(prefix);
@@ -3081,18 +3087,24 @@ function getDistrictInfo(row){
     });
   }
   if(!candidates.length){
-    const result={name:"—",detail:"PIN not mapped",mentioned:[]};
+    const result={name:savedDistrict || "—",detail:savedDistrict ? "Saved tender district" : "PIN not mapped",mentioned:[]};
     districtInfoCache.set(row,result); return result;
   }
   const maxPrefix = Math.max(...candidates.map(x => x.prefix.length));
   const best = candidates.filter(x => x.prefix.length === maxPrefix);
   const unique = [...new Map(best.map(x => [x.district.name,x.district])).values()];
   const text = [row["Location"],row["Title"],row["Work Description"],row["Reference Number"],row["Organisation"],row["Department"],row["Division"],row["Sub Division"]].join(" ").toLowerCase();
-  const mentioned = unique.filter(d => [d.name,...(d.aliases || [])].some(n => text.includes(String(n).toLowerCase())));
+  let mentioned = [];
+  for(const value of [row["Location"],row["Title"],row["Work Description"],row["Organisation"],row["Department"],row["Division"],row["Sub Division"]]){
+    const wordText = " " + clean(value).toLowerCase().replace(/[^a-z0-9]+/g," ") + " ";
+    const matches = unique.filter(d => [d.name,...(d.aliases || [])].some(n => wordText.includes(" " + String(n).toLowerCase().replace(/[^a-z0-9]+/g," ") + " ")));
+    if(matches.length===1){ mentioned=matches; break; }
+  }
   let result;
   if(unique.length === 1) result={name:unique[0].name,detail:"PIN "+pin,mentioned:[]};
   else if(mentioned.length === 1) result={name:mentioned[0].name,detail:"PIN "+pin+" + tender text",mentioned:unique.filter(d => d.name !== mentioned[0].name).map(d => d.name)};
-  else result={name:"—",detail:"District not uniquely mapped",mentioned:unique.map(d => d.name)};
+  else if(savedDistrict && unique.some(d=>d.name===savedDistrict)) result={name:savedDistrict,detail:"Saved tender district",mentioned:[]};
+  else result={name:"—",detail:"District awaiting verification",mentioned:unique.map(d => d.name)};
   districtInfoCache.set(row,result);
   return result;
 }
@@ -4076,7 +4088,7 @@ function renderVirtualWindow(){
         <td>${formatMoney(row["Tender Fee"])}</td>
         <td>${formatMoney(row["Processing Fee"])}</td>
         <td><strong>${formatMoney(totalFee(row))}</strong></td>
-        <td class="org-display-cell">
+        <td class="org-display-cell" title="${escapeHtml(displayTenderValue(row,"Organisation"))}">
   <span class="org-full">${escapeHtml(displayTenderValue(row,"Organisation")) || "—"}</span>
   <span class="org-short">${escapeHtml((clean(row["Tender ID"]).split("_")[1] || clean(row["Organisation"]).split(/\s+/)[0] || "—").toUpperCase()) || "—"}</span>
 </td>
@@ -4528,6 +4540,7 @@ const filterControls = [
 
 }
 let MP_DISTRICT_MASTER=[];
+let PIN_DISTRICTS={};
 let MP_DISTRICT_PIN_PREFIXES={};
 const districtInfoCache = new Map();
 async function loadDistrictMaster(){
@@ -4538,6 +4551,11 @@ async function loadDistrictMaster(){
     MP_DISTRICT_MASTER=Array.isArray(payload.districts)?payload.districts:[];
     MP_DISTRICT_PIN_PREFIXES={};
     MP_DISTRICT_MASTER.forEach(d=>{MP_DISTRICT_PIN_PREFIXES[normalizeSearchText(d.name)]=(d.pinPrefixes||[]).map(String);});
+    try{
+      const pinResponse=await fetch("./data/pincode_districts.json?ts="+Date.now(),{cache:"no-store"});
+      if(!pinResponse.ok) throw new Error("PIN mapping HTTP "+pinResponse.status);
+      PIN_DISTRICTS=(await pinResponse.json()).districts_by_pin || {};
+    }catch(error){ console.warn("Exact PIN mapping unavailable:",error); }
     districtInfoCache.clear();
   }catch(error){console.warn("District master unavailable:",error);MP_DISTRICT_MASTER=[];MP_DISTRICT_PIN_PREFIXES={};}
 }

@@ -1,0 +1,2337 @@
+{
+  "updated_at": "2026-09-30",
+  "source": "https://raw.githubusercontent.com/bilal-webdev/india-postal-pincode-dataset/main/csv/india-postal-lgd-mapping.csv",
+  "source_blob": "3ef3a72d7f247f12347d0d3f25ae3e2db85f883f",
+  "license": "MIT",
+  "verified_overrides": {
+    "461228": {
+      "district": "Harda",
+      "source": "https://harda.nic.in/en/std-pin-codes/"
+    },
+    "461331": {
+      "district": "Harda",
+      "source": "https://harda.nic.in/en/std-pin-codes/"
+    },
+    "461441": {
+      "district": "Harda",
+      "source": "https://harda.nic.in/en/std-pin-codes/"
+    },
+    "484551": {
+      "district": "Umaria",
+      "source": "https://umaria.nic.in/en/std-pin-codes/"
+    },
+    "484552": {
+      "district": "Umaria",
+      "source": "https://ampri.res.in/en/wp-content/uploads/2024/08/Annual-Report-English-2022-23.pdf"
+    },
+    "484001": {
+      "district": "Shahdol",
+      "source": "https://shahdol.nic.in/en/std-pin-codes/"
+    },
+    "461001": {
+      "district": "Narmadapuram",
+      "source": "https://narmadapuram.nic.in/en/public-utility/head-post-office/"
+    },
+    "484224": {
+      "district": "Anuppur",
+      "source": "https://anuppur.nic.in/en/contact-us/"
+    }
+  },
+  "districts_by_pin": {
+    "110021": [
+      "New Delhi"
+    ],
+    "441401": [
+      "Nagpur"
+    ],
+    "450001": [
+      "Khandwa"
+    ],
+    "450051": [
+      "Khandwa"
+    ],
+    "450110": [
+      "Khandwa"
+    ],
+    "450112": [
+      "Khandwa"
+    ],
+    "450114": [
+      "Khandwa"
+    ],
+    "450116": [
+      "Khandwa"
+    ],
+    "450117": [
+      "Khandwa"
+    ],
+    "450119": [
+      "Khandwa"
+    ],
+    "450221": [
+      "Burhanpur"
+    ],
+    "450331": [
+      "Burhanpur"
+    ],
+    "450332": [
+      "Burhanpur"
+    ],
+    "450337": [
+      "Khandwa"
+    ],
+    "450445": [
+      "Burhanpur"
+    ],
+    "450551": [
+      "Khandwa",
+      "Khargone"
+    ],
+    "450554": [
+      "Khandwa"
+    ],
+    "450661": [
+      "Khandwa"
+    ],
+    "450771": [
+      "Khandwa"
+    ],
+    "450881": [
+      "Khandwa"
+    ],
+    "450991": [
+      "Khandwa"
+    ],
+    "451001": [
+      "Khargone"
+    ],
+    "451111": [
+      "Khargone"
+    ],
+    "451113": [
+      "Khargone"
+    ],
+    "451115": [
+      "Khargone"
+    ],
+    "451220": [
+      "Khargone"
+    ],
+    "451221": [
+      "Khargone"
+    ],
+    "451224": [
+      "Khargone"
+    ],
+    "451225": [
+      "Khargone"
+    ],
+    "451228": [
+      "Khargone"
+    ],
+    "451331": [
+      "Khargone"
+    ],
+    "451332": [
+      "Khargone"
+    ],
+    "451335": [
+      "Khargone"
+    ],
+    "451440": [
+      "Khargone"
+    ],
+    "451441": [
+      "Khargone"
+    ],
+    "451442": [
+      "Khargone"
+    ],
+    "451447": [
+      "Barwani"
+    ],
+    "451449": [
+      "Barwani",
+      "Khargone"
+    ],
+    "451551": [
+      "Barwani"
+    ],
+    "451556": [
+      "Barwani"
+    ],
+    "451660": [
+      "Khargone",
+      "Barwani"
+    ],
+    "451666": [
+      "Barwani"
+    ],
+    "451770": [
+      "Barwani"
+    ],
+    "451881": [
+      "Barwani"
+    ],
+    "452001": [
+      "Indore"
+    ],
+    "452002": [
+      "Indore"
+    ],
+    "452003": [
+      "Indore"
+    ],
+    "452005": [
+      "Indore"
+    ],
+    "452006": [
+      "Indore"
+    ],
+    "452007": [
+      "Indore"
+    ],
+    "452009": [
+      "Indore"
+    ],
+    "452010": [
+      "Indore"
+    ],
+    "452011": [
+      "Indore"
+    ],
+    "452012": [
+      "Indore"
+    ],
+    "452013": [
+      "Indore"
+    ],
+    "452014": [
+      "Indore"
+    ],
+    "452015": [
+      "Indore"
+    ],
+    "452016": [
+      "Indore"
+    ],
+    "452018": [
+      "Indore"
+    ],
+    "452020": [
+      "Indore"
+    ],
+    "453001": [
+      "Indore"
+    ],
+    "453111": [
+      "Indore"
+    ],
+    "453112": [
+      "Indore"
+    ],
+    "453115": [
+      "Indore"
+    ],
+    "453220": [
+      "Indore"
+    ],
+    "453331": [
+      "Indore"
+    ],
+    "453441": [
+      "Indore"
+    ],
+    "453446": [
+      "Indore"
+    ],
+    "453551": [
+      "Indore"
+    ],
+    "453555": [
+      "Indore"
+    ],
+    "453556": [
+      "Indore"
+    ],
+    "453661": [
+      "Indore"
+    ],
+    "453771": [
+      "Indore"
+    ],
+    "454001": [
+      "Dhar"
+    ],
+    "454010": [
+      "Dhar"
+    ],
+    "454111": [
+      "Dhar"
+    ],
+    "454116": [
+      "Dhar"
+    ],
+    "454221": [
+      "Dhar"
+    ],
+    "454331": [
+      "Dhar"
+    ],
+    "454335": [
+      "Dhar"
+    ],
+    "454441": [
+      "Dhar"
+    ],
+    "454446": [
+      "Dhar"
+    ],
+    "454449": [
+      "Dhar"
+    ],
+    "454552": [
+      "Dhar"
+    ],
+    "454660": [
+      "Dhar"
+    ],
+    "454665": [
+      "Dhar"
+    ],
+    "454773": [
+      "Dhar"
+    ],
+    "454774": [
+      "Dhar"
+    ],
+    "454775": [
+      "Dhar"
+    ],
+    "455001": [
+      "Dewas"
+    ],
+    "455111": [
+      "Dewas"
+    ],
+    "455115": [
+      "Dewas"
+    ],
+    "455116": [
+      "Dewas"
+    ],
+    "455118": [
+      "Dewas"
+    ],
+    "455221": [
+      "Dewas"
+    ],
+    "455223": [
+      "Dewas"
+    ],
+    "455227": [
+      "Dewas"
+    ],
+    "455332": [
+      "Dewas"
+    ],
+    "455336": [
+      "Dewas"
+    ],
+    "455339": [
+      "Dewas"
+    ],
+    "455440": [
+      "Dewas"
+    ],
+    "455459": [
+      "Dewas"
+    ],
+    "456001": [
+      "Ujjain"
+    ],
+    "456003": [
+      "Ujjain"
+    ],
+    "456006": [
+      "Ujjain"
+    ],
+    "456010": [
+      "Ujjain"
+    ],
+    "456221": [
+      "Ujjain"
+    ],
+    "456222": [
+      "Ujjain"
+    ],
+    "456224": [
+      "Ujjain"
+    ],
+    "456313": [
+      "Ujjain"
+    ],
+    "456331": [
+      "Ujjain"
+    ],
+    "456335": [
+      "Ujjain"
+    ],
+    "456337": [
+      "Ujjain"
+    ],
+    "456440": [
+      "Ujjain"
+    ],
+    "456441": [
+      "Ujjain"
+    ],
+    "456443": [
+      "Ujjain"
+    ],
+    "456550": [
+      "Ujjain"
+    ],
+    "456661": [
+      "Ujjain"
+    ],
+    "456664": [
+      "Ujjain"
+    ],
+    "456665": [
+      "Ujjain"
+    ],
+    "456668": [
+      "Ujjain"
+    ],
+    "456770": [
+      "Ujjain"
+    ],
+    "456771": [
+      "Ujjain"
+    ],
+    "456776": [
+      "Ujjain"
+    ],
+    "457001": [
+      "Ratlam"
+    ],
+    "457114": [
+      "Ratlam"
+    ],
+    "457118": [
+      "Ratlam"
+    ],
+    "457119": [
+      "Ratlam"
+    ],
+    "457222": [
+      "Ratlam"
+    ],
+    "457226": [
+      "Ratlam"
+    ],
+    "457331": [
+      "Ratlam"
+    ],
+    "457333": [
+      "Ratlam"
+    ],
+    "457336": [
+      "Ratlam"
+    ],
+    "457339": [
+      "Ratlam"
+    ],
+    "457340": [
+      "Ratlam"
+    ],
+    "457441": [
+      "Ratlam"
+    ],
+    "457550": [
+      "Ratlam"
+    ],
+    "457555": [
+      "Ratlam"
+    ],
+    "457661": [
+      "Jhabua"
+    ],
+    "457770": [
+      "Jhabua"
+    ],
+    "457772": [
+      "Jhabua"
+    ],
+    "457773": [
+      "Jhabua"
+    ],
+    "457775": [
+      "Jhabua"
+    ],
+    "457777": [
+      "Jhabua"
+    ],
+    "457779": [
+      "Jhabua"
+    ],
+    "457882": [
+      "Alirajpur"
+    ],
+    "457885": [
+      "Alirajpur"
+    ],
+    "457887": [
+      "Alirajpur"
+    ],
+    "457888": [
+      "Alirajpur"
+    ],
+    "457990": [
+      "Alirajpur"
+    ],
+    "457993": [
+      "Jhabua",
+      "Alirajpur"
+    ],
+    "458001": [
+      "Mandsaur"
+    ],
+    "458002": [
+      "Mandsaur"
+    ],
+    "458110": [
+      "Neemuch"
+    ],
+    "458113": [
+      "Neemuch"
+    ],
+    "458116": [
+      "Neemuch"
+    ],
+    "458118": [
+      "Neemuch"
+    ],
+    "458220": [
+      "Neemuch"
+    ],
+    "458226": [
+      "Neemuch"
+    ],
+    "458228": [
+      "Neemuch"
+    ],
+    "458330": [
+      "Neemuch"
+    ],
+    "458336": [
+      "Neemuch"
+    ],
+    "458339": [
+      "Neemuch",
+      "Mandsaur"
+    ],
+    "458389": [
+      "Mandsaur"
+    ],
+    "458441": [
+      "Neemuch"
+    ],
+    "458468": [
+      "Neemuch"
+    ],
+    "458470": [
+      "Neemuch"
+    ],
+    "458553": [
+      "Mandsaur",
+      "Neemuch"
+    ],
+    "458556": [
+      "Mandsaur"
+    ],
+    "458558": [
+      "Mandsaur"
+    ],
+    "458664": [
+      "Mandsaur"
+    ],
+    "458667": [
+      "Mandsaur"
+    ],
+    "458669": [
+      "Mandsaur"
+    ],
+    "458771": [
+      "Mandsaur"
+    ],
+    "458775": [
+      "Mandsaur"
+    ],
+    "458778": [
+      "Mandsaur"
+    ],
+    "458880": [
+      "Mandsaur"
+    ],
+    "458883": [
+      "Mandsaur"
+    ],
+    "458888": [
+      "Mandsaur"
+    ],
+    "458895": [
+      "Mandsaur"
+    ],
+    "458990": [
+      "Mandsaur"
+    ],
+    "460001": [
+      "Betul"
+    ],
+    "460004": [
+      "Betul"
+    ],
+    "460110": [
+      "Betul"
+    ],
+    "460220": [
+      "Betul"
+    ],
+    "460225": [
+      "Betul"
+    ],
+    "460330": [
+      "Betul"
+    ],
+    "460440": [
+      "Betul"
+    ],
+    "460443": [
+      "Betul"
+    ],
+    "460447": [
+      "Betul"
+    ],
+    "460449": [
+      "Betul"
+    ],
+    "460551": [
+      "Betul"
+    ],
+    "460553": [
+      "Betul"
+    ],
+    "460554": [
+      "Betul"
+    ],
+    "460557": [
+      "Betul"
+    ],
+    "460661": [
+      "Betul"
+    ],
+    "460663": [
+      "Betul",
+      "Chhindwara"
+    ],
+    "460665": [
+      "Betul"
+    ],
+    "460666": [
+      "Betul"
+    ],
+    "460668": [
+      "Betul"
+    ],
+    "461001": [
+      "Narmadapuram"
+    ],
+    "461005": [
+      "Narmadapuram"
+    ],
+    "461110": [
+      "Narmadapuram"
+    ],
+    "461111": [
+      "Narmadapuram"
+    ],
+    "461114": [
+      "Narmadapuram"
+    ],
+    "461115": [
+      "Narmadapuram"
+    ],
+    "461116": [
+      "Narmadapuram"
+    ],
+    "461122": [
+      "Narmadapuram"
+    ],
+    "461221": [
+      "Narmadapuram"
+    ],
+    "461223": [
+      "Narmadapuram"
+    ],
+    "461228": [
+      "Harda"
+    ],
+    "461331": [
+      "Harda"
+    ],
+    "461441": [
+      "Harda"
+    ],
+    "461446": [
+      "Narmadapuram"
+    ],
+    "461551": [
+      "Narmadapuram"
+    ],
+    "461661": [
+      "Narmadapuram"
+    ],
+    "461668": [
+      "Narmadapuram"
+    ],
+    "461771": [
+      "Narmadapuram"
+    ],
+    "461775": [
+      "Narmadapuram"
+    ],
+    "461881": [
+      "Narmadapuram"
+    ],
+    "461990": [
+      "Narmadapuram"
+    ],
+    "462001": [
+      "Bhopal"
+    ],
+    "462002": [
+      "Bhopal"
+    ],
+    "462003": [
+      "Bhopal"
+    ],
+    "462004": [
+      "Bhopal"
+    ],
+    "462008": [
+      "Bhopal"
+    ],
+    "462010": [
+      "Bhopal"
+    ],
+    "462011": [
+      "Bhopal"
+    ],
+    "462016": [
+      "Bhopal"
+    ],
+    "462020": [
+      "Bhopal"
+    ],
+    "462022": [
+      "Bhopal"
+    ],
+    "462023": [
+      "Bhopal"
+    ],
+    "462024": [
+      "Bhopal"
+    ],
+    "462026": [
+      "Bhopal"
+    ],
+    "462027": [
+      "Bhopal"
+    ],
+    "462030": [
+      "Bhopal"
+    ],
+    "462031": [
+      "Bhopal"
+    ],
+    "462033": [
+      "Bhopal"
+    ],
+    "462036": [
+      "Bhopal"
+    ],
+    "462037": [
+      "Bhopal"
+    ],
+    "462038": [
+      "Bhopal"
+    ],
+    "462039": [
+      "Bhopal"
+    ],
+    "462041": [
+      "Bhopal"
+    ],
+    "462042": [
+      "Bhopal"
+    ],
+    "462043": [
+      "Bhopal"
+    ],
+    "462044": [
+      "Bhopal"
+    ],
+    "462045": [
+      "Bhopal"
+    ],
+    "462046": [
+      "Raisen"
+    ],
+    "462047": [
+      "Bhopal"
+    ],
+    "462066": [
+      "Bhopal"
+    ],
+    "462101": [
+      "Bhopal"
+    ],
+    "462120": [
+      "Bhopal"
+    ],
+    "463106": [
+      "Bhopal"
+    ],
+    "463111": [
+      "Bhopal"
+    ],
+    "464001": [
+      "Vidisha"
+    ],
+    "464111": [
+      "Vidisha"
+    ],
+    "464113": [
+      "Vidisha"
+    ],
+    "464114": [
+      "Vidisha"
+    ],
+    "464220": [
+      "Vidisha"
+    ],
+    "464221": [
+      "Vidisha"
+    ],
+    "464224": [
+      "Vidisha"
+    ],
+    "464226": [
+      "Vidisha"
+    ],
+    "464228": [
+      "Vidisha"
+    ],
+    "464240": [
+      "Vidisha",
+      "Sagar"
+    ],
+    "464258": [
+      "Vidisha"
+    ],
+    "464331": [
+      "Vidisha"
+    ],
+    "464337": [
+      "Vidisha"
+    ],
+    "464551": [
+      "Raisen"
+    ],
+    "464651": [
+      "Raisen"
+    ],
+    "464661": [
+      "Raisen"
+    ],
+    "464665": [
+      "Raisen"
+    ],
+    "464668": [
+      "Raisen"
+    ],
+    "464671": [
+      "Raisen"
+    ],
+    "464672": [
+      "Raisen"
+    ],
+    "464770": [
+      "Raisen"
+    ],
+    "464774": [
+      "Raisen"
+    ],
+    "464881": [
+      "Raisen"
+    ],
+    "464884": [
+      "Raisen"
+    ],
+    "464886": [
+      "Raisen"
+    ],
+    "464986": [
+      "Raisen"
+    ],
+    "464990": [
+      "Raisen"
+    ],
+    "464993": [
+      "Raisen"
+    ],
+    "465001": [
+      "Shajapur"
+    ],
+    "465106": [
+      "Shajapur"
+    ],
+    "465110": [
+      "Shajapur"
+    ],
+    "465113": [
+      "Shajapur"
+    ],
+    "465116": [
+      "Shajapur"
+    ],
+    "465118": [
+      "Shajapur"
+    ],
+    "465220": [
+      "Shajapur"
+    ],
+    "465223": [
+      "Shajapur"
+    ],
+    "465226": [
+      "Shajapur"
+    ],
+    "465227": [
+      "Shajapur"
+    ],
+    "465230": [
+      "Agar Malwa"
+    ],
+    "465333": [
+      "Shajapur"
+    ],
+    "465335": [
+      "Shajapur"
+    ],
+    "465337": [
+      "Shajapur"
+    ],
+    "465339": [
+      "Shajapur"
+    ],
+    "465441": [
+      "Agar Malwa"
+    ],
+    "465445": [
+      "Agar Malwa"
+    ],
+    "465447": [
+      "Agar Malwa"
+    ],
+    "465449": [
+      "Agar Malwa"
+    ],
+    "465550": [
+      "Agar Malwa"
+    ],
+    "465661": [
+      "Rajgarh"
+    ],
+    "465667": [
+      "Rajgarh"
+    ],
+    "465669": [
+      "Rajgarh"
+    ],
+    "465674": [
+      "Rajgarh"
+    ],
+    "465677": [
+      "Rajgarh"
+    ],
+    "465679": [
+      "Rajgarh"
+    ],
+    "465680": [
+      "Rajgarh"
+    ],
+    "465683": [
+      "Rajgarh"
+    ],
+    "465685": [
+      "Rajgarh"
+    ],
+    "465687": [
+      "Rajgarh"
+    ],
+    "465689": [
+      "Rajgarh"
+    ],
+    "465691": [
+      "Rajgarh"
+    ],
+    "465693": [
+      "Rajgarh"
+    ],
+    "465697": [
+      "Rajgarh"
+    ],
+    "466001": [
+      "Sehore"
+    ],
+    "466111": [
+      "Sehore"
+    ],
+    "466113": [
+      "Sehore"
+    ],
+    "466114": [
+      "Sehore"
+    ],
+    "466115": [
+      "Sehore"
+    ],
+    "466116": [
+      "Sehore"
+    ],
+    "466118": [
+      "Sehore"
+    ],
+    "466120": [
+      "Sehore"
+    ],
+    "466125": [
+      "Sehore"
+    ],
+    "466221": [
+      "Sehore"
+    ],
+    "466331": [
+      "Sehore"
+    ],
+    "466445": [
+      "Sehore"
+    ],
+    "466446": [
+      "Sehore"
+    ],
+    "466448": [
+      "Sehore"
+    ],
+    "466554": [
+      "Sehore"
+    ],
+    "466651": [
+      "Sehore"
+    ],
+    "466661": [
+      "Sehore"
+    ],
+    "466665": [
+      "Sehore"
+    ],
+    "470001": [
+      "Sagar"
+    ],
+    "470002": [
+      "Sagar"
+    ],
+    "470003": [
+      "Sagar"
+    ],
+    "470004": [
+      "Sagar"
+    ],
+    "470021": [
+      "Sagar"
+    ],
+    "470051": [
+      "Sagar"
+    ],
+    "470113": [
+      "Sagar"
+    ],
+    "470115": [
+      "Sagar"
+    ],
+    "470117": [
+      "Sagar"
+    ],
+    "470118": [
+      "Sagar"
+    ],
+    "470119": [
+      "Sagar"
+    ],
+    "470120": [
+      "Sagar"
+    ],
+    "470124": [
+      "Sagar"
+    ],
+    "470125": [
+      "Sagar"
+    ],
+    "470221": [
+      "Sagar"
+    ],
+    "470223": [
+      "Sagar"
+    ],
+    "470226": [
+      "Sagar"
+    ],
+    "470227": [
+      "Sagar"
+    ],
+    "470228": [
+      "Sagar"
+    ],
+    "470229": [
+      "Sagar"
+    ],
+    "470232": [
+      "Sagar"
+    ],
+    "470235": [
+      "Sagar"
+    ],
+    "470335": [
+      "Sagar"
+    ],
+    "470337": [
+      "Sagar"
+    ],
+    "470339": [
+      "Sagar"
+    ],
+    "470441": [
+      "Sagar"
+    ],
+    "470442": [
+      "Sagar"
+    ],
+    "470661": [
+      "Damoh"
+    ],
+    "470663": [
+      "Damoh"
+    ],
+    "470664": [
+      "Damoh"
+    ],
+    "470666": [
+      "Damoh"
+    ],
+    "470669": [
+      "Sagar"
+    ],
+    "470672": [
+      "Damoh"
+    ],
+    "470673": [
+      "Damoh"
+    ],
+    "470675": [
+      "Damoh"
+    ],
+    "470771": [
+      "Damoh"
+    ],
+    "470772": [
+      "Damoh"
+    ],
+    "470775": [
+      "Damoh"
+    ],
+    "470880": [
+      "Damoh"
+    ],
+    "470881": [
+      "Damoh"
+    ],
+    "471001": [
+      "Chhatarpur"
+    ],
+    "471101": [
+      "Chhatarpur"
+    ],
+    "471105": [
+      "Chhatarpur"
+    ],
+    "471111": [
+      "Chhatarpur"
+    ],
+    "471201": [
+      "Chhatarpur"
+    ],
+    "471301": [
+      "Chhatarpur"
+    ],
+    "471311": [
+      "Chhatarpur"
+    ],
+    "471313": [
+      "Chhatarpur"
+    ],
+    "471315": [
+      "Chhatarpur"
+    ],
+    "471318": [
+      "Chhatarpur"
+    ],
+    "471405": [
+      "Chhatarpur"
+    ],
+    "471408": [
+      "Chhatarpur"
+    ],
+    "471411": [
+      "Chhatarpur"
+    ],
+    "471501": [
+      "Chhatarpur"
+    ],
+    "471510": [
+      "Chhatarpur"
+    ],
+    "471515": [
+      "Chhatarpur"
+    ],
+    "471516": [
+      "Chhatarpur"
+    ],
+    "471525": [
+      "Chhatarpur"
+    ],
+    "471606": [
+      "Chhatarpur"
+    ],
+    "471625": [
+      "Chhatarpur"
+    ],
+    "472001": [
+      "Tikamgarh"
+    ],
+    "472005": [
+      "Tikamgarh"
+    ],
+    "472010": [
+      "Tikamgarh",
+      "Niwari"
+    ],
+    "472101": [
+      "Tikamgarh"
+    ],
+    "472111": [
+      "Tikamgarh"
+    ],
+    "472115": [
+      "Tikamgarh"
+    ],
+    "472118": [
+      "Tikamgarh"
+    ],
+    "472221": [
+      "Tikamgarh"
+    ],
+    "472246": [
+      "Niwari"
+    ],
+    "472331": [
+      "Tikamgarh"
+    ],
+    "472336": [
+      "Niwari"
+    ],
+    "472337": [
+      "Niwari"
+    ],
+    "472339": [
+      "Tikamgarh"
+    ],
+    "472442": [
+      "Niwari"
+    ],
+    "472445": [
+      "Niwari"
+    ],
+    "472447": [
+      "Niwari",
+      "Tikamgarh"
+    ],
+    "473001": [
+      "Guna"
+    ],
+    "473101": [
+      "Guna",
+      "Ashoknagar"
+    ],
+    "473105": [
+      "Guna"
+    ],
+    "473110": [
+      "Guna"
+    ],
+    "473111": [
+      "Guna"
+    ],
+    "473112": [
+      "Guna"
+    ],
+    "473113": [
+      "Guna"
+    ],
+    "473115": [
+      "Guna"
+    ],
+    "473118": [
+      "Guna"
+    ],
+    "473222": [
+      "Guna"
+    ],
+    "473226": [
+      "Guna"
+    ],
+    "473249": [
+      "Guna"
+    ],
+    "473287": [
+      "Guna"
+    ],
+    "473330": [
+      "Ashoknagar"
+    ],
+    "473331": [
+      "Ashoknagar"
+    ],
+    "473332": [
+      "Ashoknagar"
+    ],
+    "473335": [
+      "Ashoknagar"
+    ],
+    "473440": [
+      "Ashoknagar"
+    ],
+    "473443": [
+      "Ashoknagar"
+    ],
+    "473444": [
+      "Ashoknagar"
+    ],
+    "473446": [
+      "Ashoknagar"
+    ],
+    "473551": [
+      "Shivpuri"
+    ],
+    "473585": [
+      "Shivpuri"
+    ],
+    "473638": [
+      "Shivpuri"
+    ],
+    "473660": [
+      "Shivpuri"
+    ],
+    "473662": [
+      "Shivpuri"
+    ],
+    "473665": [
+      "Shivpuri"
+    ],
+    "473670": [
+      "Shivpuri"
+    ],
+    "473770": [
+      "Shivpuri"
+    ],
+    "473774": [
+      "Shivpuri"
+    ],
+    "473775": [
+      "Shivpuri"
+    ],
+    "473781": [
+      "Shivpuri"
+    ],
+    "473793": [
+      "Shivpuri"
+    ],
+    "473865": [
+      "Shivpuri"
+    ],
+    "473880": [
+      "Shivpuri"
+    ],
+    "473885": [
+      "Shivpuri",
+      "Ashoknagar"
+    ],
+    "473990": [
+      "Shivpuri"
+    ],
+    "473995": [
+      "Shivpuri"
+    ],
+    "474001": [
+      "Gwalior"
+    ],
+    "474002": [
+      "Gwalior"
+    ],
+    "474003": [
+      "Gwalior"
+    ],
+    "474004": [
+      "Gwalior"
+    ],
+    "474005": [
+      "Gwalior"
+    ],
+    "474006": [
+      "Gwalior"
+    ],
+    "474007": [
+      "Gwalior"
+    ],
+    "474008": [
+      "Gwalior"
+    ],
+    "474009": [
+      "Gwalior"
+    ],
+    "474010": [
+      "Gwalior"
+    ],
+    "474011": [
+      "Gwalior"
+    ],
+    "474012": [
+      "Gwalior"
+    ],
+    "474015": [
+      "Gwalior"
+    ],
+    "474020": [
+      "Gwalior"
+    ],
+    "475001": [
+      "Gwalior"
+    ],
+    "475002": [
+      "Gwalior"
+    ],
+    "475005": [
+      "Gwalior"
+    ],
+    "475110": [
+      "Gwalior"
+    ],
+    "475115": [
+      "Gwalior"
+    ],
+    "475220": [
+      "Gwalior"
+    ],
+    "475330": [
+      "Gwalior"
+    ],
+    "475335": [
+      "Datia"
+    ],
+    "475336": [
+      "Datia"
+    ],
+    "475661": [
+      "Datia"
+    ],
+    "475671": [
+      "Datia"
+    ],
+    "475673": [
+      "Datia"
+    ],
+    "475675": [
+      "Datia"
+    ],
+    "475682": [
+      "Datia"
+    ],
+    "475685": [
+      "Datia"
+    ],
+    "475686": [
+      "Datia"
+    ],
+    "476001": [
+      "Morena"
+    ],
+    "476111": [
+      "Morena"
+    ],
+    "476115": [
+      "Morena"
+    ],
+    "476134": [
+      "Morena"
+    ],
+    "476219": [
+      "Morena"
+    ],
+    "476221": [
+      "Morena"
+    ],
+    "476224": [
+      "Morena"
+    ],
+    "476228": [
+      "Morena"
+    ],
+    "476229": [
+      "Morena"
+    ],
+    "476332": [
+      "Sheopur",
+      "Morena"
+    ],
+    "476335": [
+      "Sheopur",
+      "Morena"
+    ],
+    "476337": [
+      "Sheopur"
+    ],
+    "476339": [
+      "Sheopur"
+    ],
+    "476355": [
+      "Sheopur"
+    ],
+    "476444": [
+      "Morena"
+    ],
+    "476554": [
+      "Morena"
+    ],
+    "477001": [
+      "Bhind"
+    ],
+    "477105": [
+      "Bhind"
+    ],
+    "477111": [
+      "Bhind"
+    ],
+    "477116": [
+      "Bhind"
+    ],
+    "477117": [
+      "Bhind"
+    ],
+    "477222": [
+      "Bhind"
+    ],
+    "477227": [
+      "Bhind"
+    ],
+    "477331": [
+      "Bhind"
+    ],
+    "477332": [
+      "Bhind"
+    ],
+    "477333": [
+      "Bhind"
+    ],
+    "477335": [
+      "Bhind"
+    ],
+    "477441": [
+      "Bhind"
+    ],
+    "477445": [
+      "Bhind"
+    ],
+    "477446": [
+      "Bhind"
+    ],
+    "477447": [
+      "Bhind"
+    ],
+    "477449": [
+      "Bhind"
+    ],
+    "477555": [
+      "Bhind"
+    ],
+    "477557": [
+      "Bhind"
+    ],
+    "477566": [
+      "Bhind"
+    ],
+    "477660": [
+      "Bhind"
+    ],
+    "480001": [
+      "Chhindwara"
+    ],
+    "480003": [
+      "Chhindwara"
+    ],
+    "480105": [
+      "Chhindwara"
+    ],
+    "480106": [
+      "Chhindwara"
+    ],
+    "480107": [
+      "Chhindwara"
+    ],
+    "480108": [
+      "Chhindwara"
+    ],
+    "480109": [
+      "Chhindwara"
+    ],
+    "480110": [
+      "Chhindwara"
+    ],
+    "480111": [
+      "Chhindwara"
+    ],
+    "480112": [
+      "Chhindwara"
+    ],
+    "480115": [
+      "Chhindwara"
+    ],
+    "480221": [
+      "Chhindwara"
+    ],
+    "480223": [
+      "Chhindwara"
+    ],
+    "480224": [
+      "Chhindwara"
+    ],
+    "480331": [
+      "Chhindwara"
+    ],
+    "480334": [
+      "Chhindwara"
+    ],
+    "480337": [
+      "Chhindwara"
+    ],
+    "480338": [
+      "Chhindwara"
+    ],
+    "480441": [
+      "Chhindwara"
+    ],
+    "480447": [
+      "Chhindwara"
+    ],
+    "480449": [
+      "Chhindwara"
+    ],
+    "480551": [
+      "Chhindwara"
+    ],
+    "480555": [
+      "Chhindwara"
+    ],
+    "480557": [
+      "Chhindwara"
+    ],
+    "480559": [
+      "Chhindwara"
+    ],
+    "480661": [
+      "Seoni"
+    ],
+    "480667": [
+      "Seoni"
+    ],
+    "480771": [
+      "Seoni"
+    ],
+    "480880": [
+      "Seoni"
+    ],
+    "480881": [
+      "Seoni"
+    ],
+    "480882": [
+      "Seoni"
+    ],
+    "480884": [
+      "Seoni"
+    ],
+    "480886": [
+      "Seoni"
+    ],
+    "480887": [
+      "Seoni"
+    ],
+    "480888": [
+      "Seoni"
+    ],
+    "480990": [
+      "Seoni"
+    ],
+    "480991": [
+      "Seoni"
+    ],
+    "480994": [
+      "Seoni"
+    ],
+    "480996": [
+      "Seoni"
+    ],
+    "480997": [
+      "Seoni"
+    ],
+    "480999": [
+      "Seoni"
+    ],
+    "481001": [
+      "Balaghat"
+    ],
+    "481051": [
+      "Balaghat"
+    ],
+    "481102": [
+      "Balaghat"
+    ],
+    "481105": [
+      "Balaghat"
+    ],
+    "481111": [
+      "Balaghat"
+    ],
+    "481115": [
+      "Balaghat"
+    ],
+    "481116": [
+      "Balaghat"
+    ],
+    "481117": [
+      "Balaghat"
+    ],
+    "481222": [
+      "Balaghat"
+    ],
+    "481224": [
+      "Balaghat"
+    ],
+    "481226": [
+      "Balaghat"
+    ],
+    "481331": [
+      "Balaghat"
+    ],
+    "481332": [
+      "Balaghat"
+    ],
+    "481335": [
+      "Balaghat"
+    ],
+    "481337": [
+      "Balaghat"
+    ],
+    "481441": [
+      "Balaghat"
+    ],
+    "481445": [
+      "Balaghat"
+    ],
+    "481449": [
+      "Balaghat"
+    ],
+    "481551": [
+      "Balaghat"
+    ],
+    "481556": [
+      "Balaghat"
+    ],
+    "481661": [
+      "Mandla"
+    ],
+    "481662": [
+      "Mandla"
+    ],
+    "481663": [
+      "Mandla"
+    ],
+    "481664": [
+      "Mandla"
+    ],
+    "481665": [
+      "Mandla"
+    ],
+    "481666": [
+      "Mandla"
+    ],
+    "481668": [
+      "Mandla"
+    ],
+    "481672": [
+      "Mandla"
+    ],
+    "481768": [
+      "Mandla"
+    ],
+    "481771": [
+      "Mandla"
+    ],
+    "481776": [
+      "Mandla"
+    ],
+    "481778": [
+      "Dindori"
+    ],
+    "481879": [
+      "Dindori"
+    ],
+    "481880": [
+      "Dindori"
+    ],
+    "481882": [
+      "Dindori"
+    ],
+    "481884": [
+      "Dindori"
+    ],
+    "481885": [
+      "Dindori"
+    ],
+    "481990": [
+      "Dindori"
+    ],
+    "481995": [
+      "Mandla"
+    ],
+    "481996": [
+      "Mandla"
+    ],
+    "481998": [
+      "Mandla"
+    ],
+    "482001": [
+      "Jabalpur"
+    ],
+    "482002": [
+      "Jabalpur"
+    ],
+    "482003": [
+      "Jabalpur"
+    ],
+    "482004": [
+      "Jabalpur"
+    ],
+    "482005": [
+      "Jabalpur"
+    ],
+    "482008": [
+      "Jabalpur"
+    ],
+    "482009": [
+      "Jabalpur"
+    ],
+    "482010": [
+      "Jabalpur"
+    ],
+    "482011": [
+      "Jabalpur"
+    ],
+    "482020": [
+      "Jabalpur"
+    ],
+    "482021": [
+      "Jabalpur"
+    ],
+    "482051": [
+      "Jabalpur"
+    ],
+    "482056": [
+      "Jabalpur"
+    ],
+    "483001": [
+      "Jabalpur"
+    ],
+    "483053": [
+      "Jabalpur"
+    ],
+    "483105": [
+      "Jabalpur"
+    ],
+    "483110": [
+      "Jabalpur"
+    ],
+    "483113": [
+      "Jabalpur"
+    ],
+    "483119": [
+      "Jabalpur"
+    ],
+    "483220": [
+      "Jabalpur"
+    ],
+    "483222": [
+      "Jabalpur"
+    ],
+    "483225": [
+      "Katni",
+      "Jabalpur"
+    ],
+    "483330": [
+      "Katni"
+    ],
+    "483331": [
+      "Katni"
+    ],
+    "483332": [
+      "Katni"
+    ],
+    "483334": [
+      "Katni",
+      "Jabalpur"
+    ],
+    "483336": [
+      "Jabalpur"
+    ],
+    "483440": [
+      "Katni"
+    ],
+    "483442": [
+      "Katni"
+    ],
+    "483501": [
+      "Katni"
+    ],
+    "483504": [
+      "Katni"
+    ],
+    "483770": [
+      "Katni"
+    ],
+    "483773": [
+      "Katni"
+    ],
+    "483775": [
+      "Katni"
+    ],
+    "483880": [
+      "Katni"
+    ],
+    "483990": [
+      "Katni"
+    ],
+    "484001": [
+      "Shahdol"
+    ],
+    "484110": [
+      "Shahdol"
+    ],
+    "484113": [
+      "Anuppur"
+    ],
+    "484114": [
+      "Shahdol"
+    ],
+    "484116": [
+      "Anuppur",
+      "Shahdol"
+    ],
+    "484117": [
+      "Shahdol"
+    ],
+    "484120": [
+      "Anuppur"
+    ],
+    "484220": [
+      "Anuppur"
+    ],
+    "484224": [
+      "Anuppur"
+    ],
+    "484330": [
+      "Anuppur"
+    ],
+    "484334": [
+      "Shahdol",
+      "Anuppur"
+    ],
+    "484336": [
+      "Anuppur"
+    ],
+    "484440": [
+      "Anuppur"
+    ],
+    "484444": [
+      "Anuppur"
+    ],
+    "484446": [
+      "Anuppur"
+    ],
+    "484551": [
+      "Umaria"
+    ],
+    "484555": [
+      "Umaria"
+    ],
+    "484660": [
+      "Umaria"
+    ],
+    "484661": [
+      "Umaria"
+    ],
+    "484664": [
+      "Umaria"
+    ],
+    "484665": [
+      "Umaria"
+    ],
+    "484669": [
+      "Shahdol"
+    ],
+    "484770": [
+      "Shahdol"
+    ],
+    "484771": [
+      "Shahdol"
+    ],
+    "484774": [
+      "Shahdol"
+    ],
+    "484776": [
+      "Shahdol"
+    ],
+    "484881": [
+      "Shahdol",
+      "Anuppur"
+    ],
+    "484886": [
+      "Anuppur"
+    ],
+    "484887": [
+      "Anuppur"
+    ],
+    "485001": [
+      "Satna"
+    ],
+    "485005": [
+      "Satna"
+    ],
+    "485111": [
+      "Satna"
+    ],
+    "485112": [
+      "Satna"
+    ],
+    "485113": [
+      "Satna"
+    ],
+    "485114": [
+      "Satna"
+    ],
+    "485115": [
+      "Satna"
+    ],
+    "485221": [
+      "Satna"
+    ],
+    "485226": [
+      "Satna"
+    ],
+    "485331": [
+      "Satna"
+    ],
+    "485334": [
+      "Satna"
+    ],
+    "485441": [
+      "Satna"
+    ],
+    "485446": [
+      "Satna"
+    ],
+    "485447": [
+      "Satna"
+    ],
+    "485551": [
+      "Satna"
+    ],
+    "485661": [
+      "Satna"
+    ],
+    "485666": [
+      "Satna"
+    ],
+    "485771": [
+      "Satna"
+    ],
+    "485772": [
+      "Satna"
+    ],
+    "485773": [
+      "Satna"
+    ],
+    "485774": [
+      "Satna"
+    ],
+    "485775": [
+      "Satna"
+    ],
+    "485778": [
+      "Satna"
+    ],
+    "485881": [
+      "Satna"
+    ],
+    "486001": [
+      "Rewa"
+    ],
+    "486002": [
+      "Rewa"
+    ],
+    "486003": [
+      "Rewa"
+    ],
+    "486005": [
+      "Rewa"
+    ],
+    "486006": [
+      "Rewa"
+    ],
+    "486111": [
+      "Rewa"
+    ],
+    "486114": [
+      "Rewa"
+    ],
+    "486115": [
+      "Rewa"
+    ],
+    "486117": [
+      "Rewa"
+    ],
+    "486123": [
+      "Rewa"
+    ],
+    "486220": [
+      "Rewa"
+    ],
+    "486223": [
+      "Rewa"
+    ],
+    "486226": [
+      "Rewa"
+    ],
+    "486331": [
+      "Rewa"
+    ],
+    "486333": [
+      "Rewa"
+    ],
+    "486335": [
+      "Rewa"
+    ],
+    "486338": [
+      "Rewa"
+    ],
+    "486340": [
+      "Rewa"
+    ],
+    "486341": [
+      "Rewa"
+    ],
+    "486440": [
+      "Rewa"
+    ],
+    "486441": [
+      "Rewa"
+    ],
+    "486445": [
+      "Rewa"
+    ],
+    "486446": [
+      "Rewa"
+    ],
+    "486447": [
+      "Rewa"
+    ],
+    "486448": [
+      "Rewa"
+    ],
+    "486450": [
+      "Rewa"
+    ],
+    "486550": [
+      "Rewa"
+    ],
+    "486553": [
+      "Rewa"
+    ],
+    "486556": [
+      "Rewa"
+    ],
+    "486661": [
+      "Sidhi"
+    ],
+    "486666": [
+      "Sidhi"
+    ],
+    "486669": [
+      "Singrauli",
+      "Sidhi"
+    ],
+    "486670": [
+      "Sidhi"
+    ],
+    "486675": [
+      "Sidhi"
+    ],
+    "486771": [
+      "Sidhi"
+    ],
+    "486775": [
+      "Sidhi"
+    ],
+    "486776": [
+      "Sidhi"
+    ],
+    "486881": [
+      "Singrauli"
+    ],
+    "486882": [
+      "Singrauli",
+      "Sidhi"
+    ],
+    "486884": [
+      "Singrauli"
+    ],
+    "486885": [
+      "Singrauli"
+    ],
+    "486886": [
+      "Singrauli"
+    ],
+    "486887": [
+      "Singrauli"
+    ],
+    "486889": [
+      "Singrauli"
+    ],
+    "486890": [
+      "Singrauli"
+    ],
+    "486892": [
+      "Singrauli"
+    ],
+    "487001": [
+      "Narsimhapur"
+    ],
+    "487110": [
+      "Narsimhapur"
+    ],
+    "487114": [
+      "Narsimhapur"
+    ],
+    "487118": [
+      "Narsimhapur"
+    ],
+    "487221": [
+      "Narsimhapur"
+    ],
+    "487225": [
+      "Narsimhapur"
+    ],
+    "487330": [
+      "Narsimhapur"
+    ],
+    "487334": [
+      "Narsimhapur"
+    ],
+    "487337": [
+      "Narsimhapur"
+    ],
+    "487441": [
+      "Narsimhapur"
+    ],
+    "487551": [
+      "Narsimhapur"
+    ],
+    "487555": [
+      "Narsimhapur"
+    ],
+    "487661": [
+      "Narsimhapur"
+    ],
+    "487770": [
+      "Narsimhapur"
+    ],
+    "487881": [
+      "Narsimhapur"
+    ],
+    "488001": [
+      "Panna"
+    ],
+    "488050": [
+      "Panna"
+    ],
+    "488059": [
+      "Panna"
+    ],
+    "488220": [
+      "Panna"
+    ],
+    "488222": [
+      "Panna"
+    ],
+    "488333": [
+      "Panna"
+    ],
+    "488441": [
+      "Panna"
+    ],
+    "488442": [
+      "Panna"
+    ],
+    "488443": [
+      "Panna"
+    ],
+    "488446": [
+      "Panna"
+    ],
+    "488448": [
+      "Panna"
+    ],
+    "484552": [
+      "Umaria"
+    ]
+  }
+}

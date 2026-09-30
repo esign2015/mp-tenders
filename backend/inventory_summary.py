@@ -14,12 +14,17 @@ REQUIRED_FIELDS = (
 def clean(value):
     return re.sub(r"\s+", " ", str(value if value is not None else "")).strip()
 
+def valid_pincode(value):
+    return bool(re.fullmatch(r"[1-9]\d{5}", clean(value)))
+
 def detail_complete(row):
     if clean(row.get("Search Route")) == "RSP -> live dataset import":
         return False  # Historical imports must be verified on the official portal.
     if clean(row.get("Detail Extracted")).upper() != "YES":
         return False
     if not all(clean(row.get(field)) for field in REQUIRED_FIELDS):
+        return False
+    if not valid_pincode(row.get("Pincode")):
         return False
     fee = re.search(r"-?\d+(?:\.\d+)?", clean(row.get("Processing Fee")).replace(",", ""))
     return bool(fee and float(fee.group()) > 0)
@@ -45,6 +50,7 @@ def build_summary(root):
     failed = (set(status.get("failed_ids") or []) & ids) - success
     skipped = (set(status.get("skipped_ids") or []) & ids) - success - failed
     pending = ids - success - failed - skipped
+    missing_pins = sorted(tid for tid in ids if not valid_pincode(details.get(tid, {}).get("Pincode")))
     portal = sum(int(re.sub(r"\D", "", clean(row.get("Tender Count"))) or 0) for row in orgs)
     return {
         "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -53,6 +59,8 @@ def build_summary(root):
         "copied_tenders": len(ids), "detail_complete": len(success),
         "detail_failed": len(failed), "detail_skipped": len(skipped),
         "detail_pending": len(pending),
+        "missing_pincode_count": len(missing_pins),
+        "missing_pincode_ids": missing_pins,
     }
 
 def write_summary(root):

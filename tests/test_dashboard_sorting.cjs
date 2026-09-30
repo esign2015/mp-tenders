@@ -186,3 +186,14 @@ for(const threshold of [500000,1000000,2000000,5000000,10000000,20000000,5000000
  }
 }
 console.log('PASS: all nine PAC thresholds, strict Above/Below boundaries, missing/NA exclusion and refresh persistence.');
+
+// Exercise the actual renderer lookup with exact PIN mapping and shared prefixes.
+vm.runInContext(source('getDistrictInfo'),context);
+context.districtInfoCache=new Map();
+context.MP_DISTRICT_MASTER=JSON.parse(fs.readFileSync('data/mp_districts.json','utf8')).districts;
+context.PIN_DISTRICTS=JSON.parse(fs.readFileSync('data/pincode_districts.json','utf8')).districts_by_pin;
+for(const [pin,district] of [['461228','Harda'],['461331','Harda'],['461441','Harda'],['484552','Umaria']]){
+ assert.equal(context.getDistrictInfo({Pincode:pin}).name,district);
+}
+assert.equal(context.getDistrictInfo({Pincode:'484224',Location:'Anuppur',Organisation:'Shahdol Division'}).name,'Anuppur');
+console.log('PASS: exact PIN districts and location before organisation names, including Timarni/Harda.');

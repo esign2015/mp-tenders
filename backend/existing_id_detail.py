@@ -33,7 +33,7 @@ DETAIL_CSV = Path("tender_details.csv")
 DETAIL_FIELDS = [
     "Tender ID","Organisation","Department","Division","Sub Division",
     "Tender Reference Number","Reference Number","Title","Tender Fee",
-    "Processing Fee","EMD Fee","PAC Amount","Total Fee","Location","Pincode",
+    "Processing Fee","EMD Fee","PAC Amount","Total Fee","Location","Pincode","District",
     "Work Description","Product Category","Sub Category","Contract Type",
     "Bid Validity","Pre Qualification Details","Bid Submission Start Date",
     "Bid Submission End Date","Bid Opening Date","Document Download Start Date",
