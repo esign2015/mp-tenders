@@ -5,8 +5,8 @@
   "current_portal_ids": 7895,
   "initial_incomplete": 3135,
   "batch_targets": 500,
-  "batch_attempted": 384,
-  "batch_complete": 377,
+  "batch_attempted": 397,
+  "batch_complete": 390,
   "started_at": "2026-09-30T08:34:10.739695+00:00",
   "success": 3364,
   "failed": 0,
@@ -7911,7 +7911,7 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_UAD_536757_1",
+  "last_successful_tender_id": "2026_HED_534959_1",
   "errors": [
     {
       "Tender ID": "2026_PWDRB_535652_1",
@@ -7944,5 +7944,5 @@
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-09-30T09:27:28.484012+00:00"
+  "updated_at": "2026-09-30T09:29:26.170173+00:00"
 }
