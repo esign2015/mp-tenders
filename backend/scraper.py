@@ -64,6 +64,11 @@ def clean(value):
     return re.sub(r"\s+", " ", str(value)).strip()
 
 
+def valid_reference_number(value):
+    text = clean(value).strip("[]").strip()
+    return "" if TENDER_ID_RE.search(text) else text
+
+
 def money_number(value):
     text = clean(value).replace(",", "")
     text = re.sub(r"[^0-9.\-]", "", text)
@@ -656,7 +661,7 @@ def parse_detail(soup, url):
         "Closing Date": clean(closing),
         "Opening Date": clean(opening),
         "Title": clean(title),
-        "Reference Number": clean(reference),
+        "Reference Number": valid_reference_number(reference),
         "Organisation": clean(organisation),
         "Department": clean(department),
         "Division": clean(division),
@@ -924,7 +929,7 @@ def parse_tender_rows(soup, base):
                     reference = clean(ref_match.group(1))
 
             title = clean(title).strip("[]")
-            reference = clean(reference).strip("[]")
+            reference = valid_reference_number(reference)
             tender_id = clean(tender_id).strip("[]")
 
             # The organisation chain is already present in the tender-list row.
@@ -1347,7 +1352,10 @@ def write_csv(csv_file, rows):
     with temp.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(rows or [])
+        writer.writerows(
+            {**row, "Reference Number": valid_reference_number(row.get("Reference Number"))}
+            for row in (rows or [])
+        )
     temp.replace(csv_file)
 
 
@@ -1360,6 +1368,8 @@ def write_list_csv(csv_file, fieldnames, rows):
         safe_rows = []
         for row in rows:
             item = dict(row)
+            if "Reference Number" in item:
+                item["Reference Number"] = valid_reference_number(item["Reference Number"])
             if SESSION_URL_RE.search(clean(item.get("Tender URL"))):
                 item["Tender URL"] = ""
             if SESSION_URL_RE.search(clean(item.get("Portal URL"))):

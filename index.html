@@ -2269,7 +2269,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <table id="tenderTable">
         <thead>
           <tr>
-            <th data-i18n="sno">S.No.</th>
+            <th class="sortable-th" data-sort-key="S.No." data-i18n="sno">S.No. <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="District" data-i18n="thDistrict">District <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Pincode" data-i18n="thPincode">Pincode <span class="sort-arrow"></span></th><th class="sortable-th" data-sort-key="Tender ID" data-i18n="thTenderId">Tender ID <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Title" data-i18n="thTitle">Title <span class="sort-arrow"></span></th>
             <th class="sortable-th" data-sort-key="Reference Number" data-i18n="thRef">Ref.No. <span class="sort-arrow"></span></th>
@@ -2874,7 +2874,7 @@ let portalActiveIds = new Set();
 let portalTenderCountTotal = 0;
 let archivedMode = false;
 let quickFilterMode = "";
-let tableSortKey = "Closing Date";
+let tableSortKey = "";
 let tableSortDesc = false;
 
 const $ = id => document.getElementById(id);
@@ -3216,13 +3216,15 @@ function splitOrganisationChain(row){
   };
 }
 
+function validReferenceNumber(value){
+  const text = clean(value).replace(/^\[|\]$/g, "").trim();
+  // A Tender ID is never a substitute for a missing reference number.
+  return /\b20\d{2}_[A-Z0-9]+_\d+_\d+\b/i.test(text) ? "" : text;
+}
+
 function extractReferenceFromTitle(value){
-  const text = clean(value);
-  const parts = [];
-  const re = new RegExp("\\[([^\\]]+)\\]", "g");
-  let m;
-  while((m = re.exec(text)) !== null) parts.push(clean(m[1]));
-  return parts.length >= 3 ? parts[1] : "";
+  const parts = [...clean(value).matchAll(/\[([^\]]+)\]/g)].map(m => clean(m[1]));
+  return parts.length >= 3 ? validReferenceNumber(parts[1]) : "";
 }
 
 function normaliseCorrigendumValue(value){
@@ -3259,12 +3261,10 @@ function normaliseTender(row){
           row["Work Name"] ||
           row["Tender Title"]);
 
-  item["Reference Number"] =
-    clean(row["Reference Number"] ||
-          row["Reference_Number"] ||
-          row["Ref.No."] ||
-          row["Ref No"]) ||
-    extractReferenceFromTitle(row["Title"]);
+  item["Reference Number"] = [
+    row["Reference Number"], row["Reference_Number"], row["Ref.No."],
+    row["Ref No"], row["Tender Reference Number"], extractReferenceFromTitle(row["Title"])
+  ].map(validReferenceNumber).find(Boolean) || "";
 
   item["Organisation"] =
     clean(row["Organisation"] ||
@@ -3529,12 +3529,12 @@ async function refreshPublishedData(){
 
       // Refresh when tender list OR extracted detail fields change.
       const oldSignature = allTenders.map(x => [
-        x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
+        x["Tender ID"],x["Reference Number"],x["Title"],x["Department"],x["Division"],x["Sub Division"],
         x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
         x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
       ].join("~")).join("|");
       const newSignature = next.map(x => [
-        x["Tender ID"],x["Department"],x["Division"],x["Sub Division"],
+        x["Tender ID"],x["Reference Number"],x["Title"],x["Department"],x["Division"],x["Sub Division"],
         x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
         x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
       ].join("~")).join("|");
@@ -3999,7 +3999,7 @@ function renderVirtualWindow(){
 
     return `
       <tr data-row-index="${filteredTenders.indexOf(row)}">
-        <td>${virtualStart + index + 1}</td>
+        <td>${tableSortKey === "S.No." ? row._sortSerial : virtualStart + index + 1}</td>
         <td class="district-cell">${formatDistrictCell(row)}</td>
         <td>${escapeHtml(row["Pincode"]) || "—"}</td>
         <td>${tenderId || "—"}<br><button class="affidavit-btn" type="button" data-affidavit-id="${tenderId}">📄 Affidavit</button></td>
@@ -4479,10 +4479,6 @@ function applyFilters(refreshHeader=true){
   const pacFilter = clean($("pacFilter").value);
   const pacMode = pacFilter ? pacFilter.split(":")[0] : "";
   const pacLimit = pacFilter ? Number(pacFilter.split(":")[1]) : null;
-  const sortValue = $("sortSelect").value;
-  const sortParts = sortValue.split("-");
-  const sort = sortParts[0] || "closing";
-  const explicitSortDesc = sortParts[1] === "desc";
 
   const today = new Date();
   today.setHours(0,0,0,0);
@@ -4615,14 +4611,10 @@ function applyFilters(refreshHeader=true){
     return true;
   });
 
-  const sortKeyMap = {
-    closing:"Closing Date",
-    published:"Published Date",
-    title:"Title",
-    organisation:"Organisation"
-  };
-  const effectiveSortKey = sortKeyMap[sort] || "Closing Date";
-  filteredTenders.sort((a,b) => compareTableValues(a,b,effectiveSortKey) * (explicitSortDesc ? -1 : 1));
+  // Sort every matching tender before creating the 100-row display window.
+  const effectiveSortKey = tableSortKey || "Closing Date";
+  filteredTenders.sort((a,b) => compareTableValues(a,b,effectiveSortKey) * (tableSortDesc ? -1 : 1));
+  updateTableSortHeaders();
 
   renderTable(filteredTenders);
   /* Header counts do not change during a search; avoid rescanning 5,253+
@@ -4632,12 +4624,14 @@ function applyFilters(refreshHeader=true){
 
 function moneySortValue(value){
   const text = clean(value).replace(/,/g,"").replace(/₹/g,"").replace(/[^0-9.\-]/g,"");
+  if(!text) return null;
   const n = Number(text);
   return Number.isFinite(n) ? n : null;
 }
 
 function compareTableValues(a,b,key){
   let av, bv;
+  if(key === "S.No.") return (a._sortSerial || 0) - (b._sortSerial || 0);
 
   if(key === "District"){
     av = clean(getDistrictInfo(a).name).toLowerCase();
@@ -4645,20 +4639,13 @@ function compareTableValues(a,b,key){
     return av.localeCompare(bv,"en",{numeric:true,sensitivity:"base"});
   }
 
-  if(key === "Closing Date" || key === "Time Left"){
-    av = parseDate(a["Closing Date"]);
-    bv = parseDate(b["Closing Date"]);
+  if(["Closing Date","Time Left","Published Date"].includes(key)){
+    const dateField = key === "Published Date" ? key : "Closing Date";
+    av = parseDate(a[dateField]);
+    bv = parseDate(b[dateField]);
     if(!av && !bv) return 0;
     if(!av) return 1;
     if(!bv) return -1;
-
-    // In ascending/default closing-date order, currently closed tenders
-    // are always placed after still-open tenders. This keeps the nearest
-    // upcoming deadlines at the top of the dashboard.
-    const nowMs = Date.now();
-    const aClosed = av.getTime() <= nowMs;
-    const bClosed = bv.getTime() <= nowMs;
-    if(aClosed !== bClosed) return aClosed ? 1 : -1;
 
     return av - bv;
   }
@@ -4686,10 +4673,20 @@ function updateTableSortHeaders(){
     const active = th.dataset.sortKey === tableSortKey;
     th.classList.toggle("sort-active",active);
     th.classList.toggle("sort-desc",active && tableSortDesc);
+    th.setAttribute("aria-sort",active ? (tableSortDesc ? "descending" : "ascending") : "none");
+    // Language switching rewrites the label; restore the arrow afterwards.
+    if(!th.querySelector(".sort-arrow")){
+      const arrow = document.createElement("span");
+      arrow.className = "sort-arrow";
+      th.appendChild(arrow);
+    }
   });
 }
 
 function sortCurrentTable(key){
+  if(key === "S.No." && tableSortKey !== key){
+    filteredTenders.forEach((row,index) => { row._sortSerial = index + 1; });
+  }
   if(tableSortKey === key){
     tableSortDesc = !tableSortDesc;
   }else{
@@ -4736,6 +4733,8 @@ function clearFilters(){
   });
   const pacLabel = $("pacFilterLabel");
   if(pacLabel) pacLabel.textContent = "All PAC";
+  tableSortKey = "";
+  tableSortDesc = false;
   $("sortSelect").value = "closing-asc";
   $("statusSelect").value = "";
   $("changeFilter").value = "";
@@ -4916,7 +4915,7 @@ function setupUserFeatures(){
   applyTenderView();
 }
 
-let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();renderVirtualWindow();}
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",archived:"Archived Tenders",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",archived:"आर्काइव निविदाएं",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();updateTableSortHeaders();renderVirtualWindow();}
 function updateDynamicHindiText(){
   const hi=currentLanguage==="hi";
   const count=document.getElementById("recordCount");
@@ -5635,7 +5634,12 @@ document.querySelectorAll(".sortable-th").forEach(th => {
   th.addEventListener("click", () => sortCurrentTable(th.dataset.sortKey));
 });
 $("closingExpire").addEventListener("change", applyFilters);
-$("sortSelect").addEventListener("change", applyFilters);
+$("sortSelect").addEventListener("change", () => {
+  const [key,direction] = $("sortSelect").value.split("-");
+  tableSortKey = {closing:"Closing Date",published:"Published Date",title:"Title",organisation:"Organisation"}[key] || "Closing Date";
+  tableSortDesc = direction === "desc";
+  applyFilters();
+});
 updateTableSortHeaders();
 
 $("reloadBtn").addEventListener("click",clearFilters);

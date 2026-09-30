@@ -30,6 +30,18 @@ def completed(tid):
             "Processing Fee": "295", "Detail Extracted": "YES"}
 
 class PipelineTests(unittest.TestCase):
+    def test_tender_id_is_never_a_reference_number(self):
+        tid = "2026_MPTAX_534364_2"
+        self.assertEqual(scraper.valid_reference_number(tid), "")
+        self.assertEqual(scraper.valid_reference_number(f"[{tid}]"), "")
+        self.assertEqual(scraper.valid_reference_number("CTD/DC-2/STORE/2026/393"), "CTD/DC-2/STORE/2026/393")
+        soup = BeautifulSoup(f'<table><tr><td><a href="/nicgep/app?page=FrontEndViewTender">[Record destruction] [{tid}] [{tid}]</a></td><td>01-Oct-2026</td></tr></table>', 'html.parser')
+        row = scraper.parse_tender_rows(soup, scraper.PORTAL)[0]
+        self.assertEqual(row["tender_id"], tid)
+        self.assertEqual(row["reference"], "")
+        detail = scraper.parse_detail(BeautifulSoup(f'<table><tr><td>Tender ID</td><td>{tid}</td></tr><tr><td>Tender Reference Number</td><td>{tid}</td></tr></table>', 'html.parser'), scraper.PORTAL)
+        self.assertEqual(detail["Reference Number"], "")
+
     def test_portal_gst_label_is_processing_amount_not_gst_percentage(self):
         soup = BeautifulSoup('''<table><tr><td>Tender Fee in ₹</td><td>2,000.50</td></tr>
           <tr><td>Processing Fee in ₹ (18.00% GST Incl.)</td><td>295.25</td></tr>
