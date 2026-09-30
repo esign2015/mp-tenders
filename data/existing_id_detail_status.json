@@ -5,10 +5,10 @@
   "current_portal_ids": 7895,
   "initial_incomplete": 2797,
   "batch_targets": 500,
-  "batch_attempted": 272,
-  "batch_complete": 264,
+  "batch_attempted": 276,
+  "batch_complete": 268,
   "started_at": "2026-09-30T07:38:28.399184+00:00",
-  "success": 3230,
+  "success": 3234,
   "failed": 0,
   "success_ids": [
     "2023_UAD_295104_9",
@@ -998,6 +998,10 @@
     "2026_PWDRB_536285_1",
     "2026_PWDRB_536288_1",
     "2026_PWDRB_536289_1",
+    "2026_PWDRB_536290_1",
+    "2026_PWDRB_536292_1",
+    "2026_PWDRB_536293_1",
+    "2026_PWDRB_536296_1",
     "2026_PWDRB_536412_1",
     "2026_PWDRB_536432_1",
     "2026_PWDRB_536437_1",
@@ -5208,10 +5212,6 @@
     "2026_PWDRB_536008_1",
     "2026_PWDRB_536009_1",
     "2026_PWDRB_536010_1",
-    "2026_PWDRB_536290_1",
-    "2026_PWDRB_536292_1",
-    "2026_PWDRB_536293_1",
-    "2026_PWDRB_536296_1",
     "2026_PWDRB_536297_1",
     "2026_PWDRB_536424_1",
     "2026_PWDRB_536425_1",
@@ -7911,7 +7911,7 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_PWDRB_536289_1",
+  "last_successful_tender_id": "2026_PWDRB_536296_1",
   "errors": [
     {
       "Tender ID": "2026_PWDRB_535652_1",
@@ -7949,5 +7949,5 @@
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-09-30T08:16:16.379653+00:00"
+  "updated_at": "2026-09-30T08:16:49.920510+00:00"
 }
