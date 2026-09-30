@@ -3,7 +3,7 @@
 # Retry after bootstrap writer fix
 import csv, json, os, re, time
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import requests
 from urllib.parse import urljoin
 from inventory_summary import detail_complete, write_summary
@@ -69,6 +69,17 @@ def merge_extracted_detail(base, detail):
         merged["Start Date Refreshed Through"] = due.astimezone(timezone.utc).isoformat()
         merged["Start Date Refreshed At"] = merged["Tested At"]
     return merged
+
+def extraction_deadline(row):
+    return (parse_portal_datetime(row.get("Bid Submission End Date")) or
+            parse_portal_datetime(row.get("Closing Date")))
+
+def extraction_priority(row, now):
+    deadline = extraction_deadline(row)
+    near = bool(deadline and now < deadline <= now + timedelta(days=14))
+    return (0 if near else 1,
+            deadline or datetime.max.replace(tzinfo=timezone.utc),
+            clean(row.get("Tender ID")))
 
 def clean(s):
     return re.sub(r"\s+", " ", str(s or "")).strip()
@@ -455,13 +466,8 @@ def main():
         # must not consume the entire scheduled fee/detail batch.
         now = datetime.now(timezone.utc)
         incomplete = [row for row in incomplete
-                      if not parse_portal_datetime(row.get("Closing Date"))
-                      or parse_portal_datetime(row.get("Closing Date")) > now]
-        incomplete.sort(key=lambda row: (
-            0 if start_date_refresh_due(row) else 1,
-            parse_portal_datetime(row.get("Closing Date")) or datetime.max.replace(tzinfo=timezone.utc),
-            clean(row.get("Tender ID")),
-        ))
+                      if not extraction_deadline(row) or extraction_deadline(row) > now]
+        incomplete.sort(key=lambda row: extraction_priority(row, now))
     targets = incomplete[:BATCH_SIZE] if BATCH_SIZE > 0 else incomplete
     target_set = {clean(row.get("Tender ID")) for row in targets}
     # No implicit skips: an already extracted tender is a Success,

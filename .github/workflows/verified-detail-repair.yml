@@ -1,0 +1,28 @@
+name: Apply Verified Tender Details
+on:
+  push:
+    branches: [main]
+    paths: [data/verified_detail_repairs.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mp-verified-detail-repair
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Apply verified portal data and publish with concurrent changes preserved
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/apply_verified_details.py
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv

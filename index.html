@@ -3522,12 +3522,12 @@ async function refreshPublishedData(){
       const oldSignature = allTenders.map(x => [
         x["Tender ID"],x["Reference Number"],x["Title"],x["Department"],x["Division"],x["Sub Division"],
         x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
-        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
+        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"],x["Pincode"],x["Location"],x["District"],x["Work Description"]
       ].join("~")).join("|");
       const newSignature = next.map(x => [
         x["Tender ID"],x["Reference Number"],x["Title"],x["Department"],x["Division"],x["Sub Division"],
         x["PAC Amount"],x["EMD Fee"],x["Tender Fee"],x["Processing Fee"],
-        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"]
+        x["Closing Date"],x["Opening Date"],x["Published Date"],x["Status"],x["Corrigendum"],x["Total Fee"],x["Detail Extracted"],x["Pincode"],x["Location"],x["District"],x["Work Description"]
       ].join("~")).join("|");
 
       if(oldKey !== newKey || oldSignature !== newSignature){

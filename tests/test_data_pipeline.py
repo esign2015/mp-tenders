@@ -14,6 +14,7 @@ import scraper
 import existing_id_detail as worker
 import publish_data_checkpoint as publisher
 import import_rsp_live
+import apply_verified_details
 import home_latest
 import nightly_cleanup as cleanup
 from datetime import datetime
@@ -60,6 +61,40 @@ class CleanupTests(unittest.TestCase):
         self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
+    def test_next_fourteen_days_and_nearest_bid_deadline_come_before_missing_pincode(self):
+        from datetime import timezone
+        now = datetime(2026,9,30,8,0,tzinfo=timezone.utc)
+        rows = [
+            {"Tender ID":"missing-pin", "Pincode":"", "Closing Date":"20-Oct-2026 05:00 PM"},
+            {"Tender ID":"soon", "Pincode":"482001", "Closing Date":"02-Oct-2026 05:00 PM"},
+            {"Tender ID":"bid-soonest", "Pincode":"462001", "Closing Date":"25-Oct-2026 05:00 PM", "Bid Submission End Date":"01-Oct-2026 05:00 PM"},
+            {"Tender ID":"unknown", "Pincode":""},
+            {"Tender ID":"fourteen-day-boundary", "Closing Date":"14-Oct-2026 01:30 PM"},
+        ]
+        ordered = sorted(rows,key=lambda row:worker.extraction_priority(row,now))
+        self.assertEqual([row["Tender ID"] for row in ordered], ["bid-soonest","soon","fourteen-day-boundary","missing-pin","unknown"])
+        self.assertEqual(worker.extraction_priority(ordered[2],now)[0],0)
+
+    def test_verified_pincode_repair_preserves_other_tenders_and_survives_stale_worker(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            old = {**completed("reported"), "Pincode":"", "Tested At":"2026-09-29T00:00:00+00:00"}
+            other = {**completed("other"), "Tested At":"2026-09-29T00:00:00+00:00"}
+            for name in ("all_tenders_org_detailed.csv","tender_details.csv"):
+                write_csv(root/name,[old,other])
+            fix = {**completed("reported"), "Pincode":"482001", "Tested At":"2026-09-30T08:00:00+00:00"}
+            apply_verified_details.apply(root,[fix])
+            for name in ("all_tenders_org_detailed.csv","tender_details.csv"):
+                with (root/name).open(encoding="utf-8-sig") as stream:
+                    rows = list(csv.DictReader(stream))
+                self.assertEqual(rows[0]["Pincode"],"482001")
+                self.assertEqual(rows[1],other)
+            with (root/"all_tenders_org_detailed.csv").open(encoding="utf-8-sig") as stream:
+                corrected = stream.read().encode("utf-8-sig")
+            write_csv(root/"stale.csv",[old,other])
+            merged = publisher.merge_details(corrected,(root/"stale.csv").read_bytes())
+            self.assertEqual(list(csv.DictReader(merged.decode("utf-8-sig").splitlines()))[0]["Pincode"],"482001")
+
     def test_sale_and_bid_start_refresh_runs_once_per_start_and_respects_expiry(self):
         from datetime import timezone
         row = {"Published Date":"29-Sep-2026 09:00 AM", "Document Download Start Date":"30-Sep-2026 10:00 AM",
