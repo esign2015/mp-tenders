@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:26:12.634593+00:00",
+  "updated_at": "2026-09-30T21:28:15.276402+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 220,
+  "detail_failed": 234,
   "detail_skipped": 0,
-  "detail_pending": 2210,
+  "detail_pending": 2196,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -50,9 +50,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Capital Project Administration",
@@ -160,9 +160,9 @@
       "portal_tender_count": 29,
       "copied_tenders": 29,
       "detail_complete": 18,
-      "detail_failed": 2,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -270,9 +270,9 @@
       "portal_tender_count": 46,
       "copied_tenders": 46,
       "detail_complete": 15,
-      "detail_failed": 0,
+      "detail_failed": 5,
       "detail_skipped": 0,
-      "detail_pending": 31
+      "detail_pending": 26
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -391,9 +391,9 @@
       "portal_tender_count": 43,
       "copied_tenders": 43,
       "detail_complete": 31,
-      "detail_failed": 1,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 9
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -435,9 +435,9 @@
       "portal_tender_count": 265,
       "copied_tenders": 265,
       "detail_complete": 171,
-      "detail_failed": 1,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 93
+      "detail_pending": 92
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -589,9 +589,9 @@
       "portal_tender_count": 86,
       "copied_tenders": 86,
       "detail_complete": 48,
-      "detail_failed": 7,
+      "detail_failed": 8,
       "detail_skipped": 0,
-      "detail_pending": 31
+      "detail_pending": 30
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -622,9 +622,9 @@
       "portal_tender_count": 16,
       "copied_tenders": 16,
       "detail_complete": 7,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 6
     },
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2206,
+  "legacy_verification_pending": 2192,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
