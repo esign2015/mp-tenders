@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T23:46:33.917828+00:00",
+  "updated_at": "2026-09-30T23:48:34.470646+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3252,
+  "detail_complete": 3280,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2060,
+  "detail_pending": 2032,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -489,10 +489,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 488,
       "copied_tenders": 488,
-      "detail_complete": 371,
+      "detail_complete": 394,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 117
+      "detail_pending": 94
     },
     {
       "organisation": "Madhya Pradesh State Disaster Management Authority",
@@ -775,10 +775,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 10,
       "copied_tenders": 10,
-      "detail_complete": 5,
+      "detail_complete": 9,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 1
     },
     {
       "organisation": "M.P. Textbook Corporation - Bhopal",
@@ -808,10 +808,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2055,
+  "legacy_verification_pending": 2027,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
