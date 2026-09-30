@@ -793,6 +793,7 @@ jobs:
           SCRAPER_PID=$!
           LAST_PUBLISHED_CHECKPOINT=0
           LAST_PUBLISHED_ORG_PROGRESS=""
+          LAST_PUBLISHED_AT=0
 
           # Publish list progress as soon as each organisation is collected.
           # Detail checkpoints still publish every 10 successful detail pages.
@@ -818,11 +819,13 @@ jobs:
                 SHOULD_PUBLISH="true"
               fi
 
-              if [ "$SHOULD_PUBLISH" = "true" ]; then
+              NOW=$(date +%s)
+              if [ "$SHOULD_PUBLISH" = "true" ] && [ "$((NOW - LAST_PUBLISHED_AT))" -ge 120 ]; then
                 echo "Publishing live checkpoint: org=$ORG_PROGRESS detail=$CHECKPOINT"
                 python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/snapshot_recovery_status.json
                 LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
                 LAST_PUBLISHED_ORG_PROGRESS="$ORG_PROGRESS"
+                LAST_PUBLISHED_AT="$NOW"
               fi
             fi
             sleep 10

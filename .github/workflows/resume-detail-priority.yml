@@ -24,10 +24,10 @@ jobs:
               data = json.dumps(body).encode() if body is not None else None
               with urllib.request.urlopen(urllib.request.Request(base+path, data=data, headers=headers, method=method), timeout=30) as response:
                   return json.loads(response.read() or '{}')
-          # Replace the serial run only; its published checkpoints remain on main.
-          run = request('/actions/runs/36690376398')
-          if run['head_sha'] == '9536213be5b2fe421106b92879a702c2eeec8e6e' and run['status'] != 'completed':
-              request('/actions/runs/36690376398/cancel', 'POST')
-          request('/actions/workflows/targeted-pending-retry.yml/dispatches','POST',{'ref':'main','inputs':{'tender_ids':''}})
-          print('Parallel deadline-priority extraction queued; saved details preserved.')
+          # Stop only the older copy run containing the incorrect row selector.
+          # The fixed copy and parallel detail runs are already queued/running.
+          run = request('/actions/runs/36697590459')
+          if run['head_sha'] == '7101ce710f7ad4a6234ebcea3ae629ba85bf4c36' and run['status'] != 'completed':
+              request('/actions/runs/36697590459/force-cancel', 'POST')
+          print('Legacy copy stopped; fixed copy and parallel detail extraction retained.')
           PY
