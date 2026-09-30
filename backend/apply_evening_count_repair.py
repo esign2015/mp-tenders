@@ -32,5 +32,26 @@ if datetime.fromisoformat(audit['checked_at']).date() == now.date():
     snapshot={'snapshot_at':audit['checked_at'],'portal_tender_count':len(ids),
               'copied_unique_tender_ids':len(ids),'verified':True,'tender_ids':sorted(ids)}
     (root/'data/live_snapshot.json').write_text(json.dumps(snapshot,ensure_ascii=False,indent=2))
+    # List dates are the current portal inventory, while old detail checkpoints
+    # may still carry the deadline from before a corrigendum extension.
+    by_id={r['Tender ID']:r for r in rows}
+    for name in ('all_tenders_org_detailed.csv','tender_details.csv'):
+        path=root/name
+        with path.open(encoding='utf-8-sig',newline='') as stream:
+            reader=csv.DictReader(stream);fields=reader.fieldnames;details=list(reader)
+        present={r['Tender ID'] for r in details}
+        for tid,listed in by_id.items():
+            if tid not in present:
+                recovered={key:listed.get(key,'') for key in fields}
+                recovered['Organisation']=listed.get('Organisation Name','')
+                details.append(recovered)
+        for detail in details:
+            listed=by_id.get(detail['Tender ID'])
+            if listed:
+                detail['Closing Date']=listed['Closing Date']
+                detail['Bid Submission End Date']=listed['Closing Date']
+                detail['Tested At']=now.isoformat()
+        with path.open('w',encoding='utf-8-sig',newline='') as stream:
+            writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader();writer.writerows(details)
     cleanup(root,now=now)
     write_summary(root)

@@ -68,7 +68,15 @@ def cleanup(root=ROOT, now=None):
     snapshot = root / 'data/live_snapshot.json'
     if snapshot.exists():
         value = json.loads(snapshot.read_text())
-        value['tender_ids'] = [tid for tid in value.get('tender_ids', []) if tid not in removed_ids]
+        # An old detail CSV can have a pre-extension deadline. Its removal
+        # must not remove a still-open ID from the current portal inventory.
+        listing=root/'organisation_tenders.csv'
+        if listing.exists():
+            with listing.open(encoding='utf-8-sig',newline='') as stream:
+                retained={row['Tender ID'] for row in csv.DictReader(stream)}
+            value['tender_ids']=[tid for tid in value.get('tender_ids',[]) if tid in retained]
+        else:
+            value['tender_ids'] = [tid for tid in value.get('tender_ids', []) if tid not in removed_ids]
         snapshot.write_text(json.dumps(value, ensure_ascii=False, indent=2))
     report['removed'] = len(removed_ids)
     (root / 'data').mkdir(exist_ok=True)

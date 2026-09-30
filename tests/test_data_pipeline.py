@@ -220,6 +220,16 @@ class PipelineTests(unittest.TestCase):
         fees = import_rsp_live.map_row({"tender_id": "example", "emd": "1000", "tender_fee": "2000", "processing_fee": "295"}, "now")
         self.assertEqual(fees["Total Fee"], "3295")
 
+    def test_cleanup_does_not_remove_extended_live_id_for_stale_detail_deadline(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            (root/'data').mkdir()
+            write_csv(root/'organisation_tenders.csv',[{'Tender ID':'extended','Closing Date':'05-Oct-2026 03:00 PM'}])
+            write_csv(root/'tender_details.csv',[{'Tender ID':'extended','Closing Date':'28-Sep-2026 03:00 PM'}])
+            (root/'data/live_snapshot.json').write_text(json.dumps({'tender_ids':['extended']}))
+            cleanup.cleanup(root,datetime(2026,9,30,20,25,tzinfo=cleanup.IST))
+            self.assertEqual(json.loads((root/'data/live_snapshot.json').read_text())['tender_ids'],['extended'])
+
     def test_import_uses_portal_deadline_even_when_summary_keeps_later_time(self):
         record = {"tender_id": "2026_MPPGC_519250_1", "bid_end": "30-Sep-2026 10:19 PM",
                   "portal_fields": {"Bid Submission End Date": "30-Sep-2026 03:00 PM"}}
