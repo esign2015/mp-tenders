@@ -220,6 +220,17 @@ class PipelineTests(unittest.TestCase):
         fees = import_rsp_live.map_row({"tender_id": "example", "emd": "1000", "tender_fee": "2000", "processing_fee": "295"}, "now")
         self.assertEqual(fees["Total Fee"], "3295")
 
+    def test_import_uses_portal_deadline_even_when_summary_keeps_later_time(self):
+        record = {"tender_id": "2026_MPPGC_519250_1", "bid_end": "30-Sep-2026 10:19 PM",
+                  "portal_fields": {"Bid Submission End Date": "30-Sep-2026 03:00 PM"}}
+        row = import_rsp_live.map_row(record, "now")
+        self.assertEqual(row["Closing Date"], "30-Sep-2026 03:00 PM")
+        self.assertEqual(row["Bid Submission End Date"], row["Closing Date"])
+        record["portal_fields"] = {}
+        self.assertEqual(import_rsp_live.imported_bid_end(record), "30-Sep-2026 10:19 PM")
+        record["bid_end"] = "not a date"
+        self.assertEqual(import_rsp_live.imported_bid_end(record), "")
+
     def test_reported_live_tender_missing_from_partial_snapshot_gets_retry(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -2868,6 +2868,7 @@ let organisationOptions = [];
 // Current Tenders by Organisation snapshot is the authoritative list of tenders
 // currently visible on the MP portal. Detailed CSV enriches these rows; expired records are deleted each evening.
 let portalActiveIds = new Set();
+let portalSnapshot = null;
 let portalTenderCountTotal = 0;
 let quickFilterMode = "";
 let tableSortKey = "";
@@ -2945,6 +2946,19 @@ function mergeCurrentPortalRows(detailedRows, portalRows){
   });
 
   return dedupeTenderRows(merged);
+}
+
+function currentPortalAllows(row, now=Date.now()){
+  const stamp = portalSnapshot && portalSnapshot.verified === true
+    ? Date.parse(portalSnapshot.snapshot_at) : NaN;
+  const istOffset = 5.5*60*60*1000, day = 24*60*60*1000;
+  const snapshotDay = Math.floor((stamp+istOffset)/day);
+  const currentDay = Math.floor((now+istOffset)/day);
+  const snapshotHour = ((stamp+istOffset)%day)/3600000;
+  // Only a complete, same-day evening inventory can exclude old master IDs.
+  // Partial daytime checkpoints continue to enrich the master as before.
+  if(!Number.isFinite(stamp) || snapshotDay !== currentDay || snapshotHour < 19) return true;
+  return portalActiveIds.has(clean(row["Tender ID"]));
 }
 
 function escapeHtml(value){
@@ -3526,6 +3540,7 @@ async function refreshPublishedData(){
     try{
       const portalRows = await loadOrganisationTenderCsv();
       const liveSnapshot = await loadLiveSnapshot();
+      portalSnapshot = liveSnapshot;
       try{
         portalTenderCountTotal = Number(liveSnapshot?.portal_tender_count||0) || await loadPortalTenderCountTotal();
       }catch(_countError){
@@ -3576,6 +3591,7 @@ async function refreshPublishedData(){
       }
       // Deadlines can pass even when the downloaded CSV has not changed.
       updateCounts(allTenders);
+      applyFilters(false, true);
     }
   }catch(error){
     console.warn("Live dashboard refresh skipped:",error);
@@ -3643,6 +3659,7 @@ async function loadData(){
     const liveSnapshot = snapshotResult.status === "fulfilled"
       ? snapshotResult.value
       : null;
+    portalSnapshot = liveSnapshot;
 
     portalTenderCountTotal =
       Number(liveSnapshot?.portal_tender_count||0) ||
@@ -4463,7 +4480,7 @@ function updateCounts(rows, refreshHeader=true){
   */
   // A partial or old copied-ID snapshot must not hide known live records.
   // Live is determined by the real closing instant, independently of details.
-  const currentRows = rows.filter(row => clean(row["Status"]).toLowerCase() !== "cancelled");
+  const currentRows = rows.filter(row => currentPortalAllows(row) && clean(row["Status"]).toLowerCase() !== "cancelled");
 
   const live = currentRows.filter(row => {
     const closing = parseDate(row["Closing Date"]);
@@ -4552,7 +4569,7 @@ function applyFilters(refreshHeader=true, preservePage=false){
     const opening = parseDate(row["Opening Date"]);
 
     // Only tenders with a future closing instant belong on this dashboard.
-    if(isCancelled || !closing || closing.getTime() <= Date.now()) return false;
+    if(!currentPortalAllows(row) || isCancelled || !closing || closing.getTime() <= Date.now()) return false;
     const districtInfo = getDistrictInfo(row);
     const combined = [
       row["Tender ID"],row["Title"],row["Reference Number"],row["Organisation"],

@@ -93,9 +93,19 @@ jobs:
               return a if a is not None and str(a) != "" else b
 
           merged = {}
+          import sys
+          sys.path.insert(0, "backend")
+          from import_rsp_live import imported_bid_end
+          from nightly_cleanup import IST, parse_dt
+          from datetime import datetime
+          import_time = datetime.now(IST)
           for r in rsp_rows:
               tid = str(r.get("tender_id","")).strip()
               if not tid:
+                  continue
+              deadline = parse_dt(imported_bid_end(r))
+              if import_time.hour >= 19 and deadline and deadline <= import_time:
+                  old.pop(tid, None)
                   continue
               prev = old.get(tid, {})
               chain = [x.strip() for x in str(pf(r, "Organisation Chain")).split("||") if x.strip()]
@@ -103,7 +113,7 @@ jobs:
               out.update({
                 "Tender ID": tid,
                 "Published Date": choose(r.get("published_date"), prev.get("Published Date","")),
-                "Closing Date": choose(r.get("bid_end"), prev.get("Closing Date","")),
+                "Closing Date": choose(imported_bid_end(r), prev.get("Closing Date","")),
                 "Opening Date": choose(pf(r,"Bid Opening Date"), prev.get("Opening Date","")),
                 "Title": choose(pf(r,"Title"), choose(r.get("work_en"), prev.get("Title",""))),
                 "Reference Number": choose(r.get("nit_ref"), choose(pf(r,"Tender Reference Number"), prev.get("Reference Number",""))),
@@ -125,7 +135,7 @@ jobs:
                 "Bid Validity": choose(pf(r,"Bid Validity(Days)"), prev.get("Bid Validity","")),
                 "Pre Qualification Details": choose(pf(r,"NDA/Pre Qualification"), prev.get("Pre Qualification Details","")),
                 "Bid Submission Start Date": choose(pf(r,"Bid Submission Start Date"), prev.get("Bid Submission Start Date","")),
-                "Bid Submission End Date": choose(pf(r,"Bid Submission End Date"), choose(r.get("bid_end"), prev.get("Bid Submission End Date",""))),
+                "Bid Submission End Date": choose(imported_bid_end(r), prev.get("Bid Submission End Date", prev.get("Closing Date",""))),
                 "Bid Opening Date": choose(pf(r,"Bid Opening Date"), prev.get("Bid Opening Date","")),
                 "Document Download Start Date": choose(pf(r,"Document Download / Sale Start Date"), prev.get("Document Download Start Date","")),
                 "Document Download End Date": choose(pf(r,"Document Download / Sale End Date"), prev.get("Document Download End Date","")),

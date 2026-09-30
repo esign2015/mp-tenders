@@ -25,4 +25,5 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           python backend/apply_verified_details.py
-          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv
+          python backend/apply_evening_count_repair.py
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv organisation_tenders.csv organisations.csv data/live_snapshot.json data/cleanup_status.json data/inventory_summary.json

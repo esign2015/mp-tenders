@@ -15,8 +15,8 @@ const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=
   $:id=>controls[id], getDistrictInfo:r=>({name:r.District||''}),
   renderCurrentView(){},applyColumnVisibility(){},updateVirtualPager(){},updateCounts(){},
   normalizeSearchText:s=>s, archivedMode:false, quickFilterMode:'',tableSortKey:'',tableSortDesc:false,
-  VIRTUAL_CHUNK_SIZE:100, ESTIMATED_ROW_HEIGHT:40});
-const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','parseDate','istParts','todayKey',
+  portalSnapshot:null,portalActiveIds:new Set(),VIRTUAL_CHUNK_SIZE:100, ESTIMATED_ROW_HEIGHT:40});
+const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','currentPortalAllows','parseDate','istParts','todayKey',
   'isDeadlineAlertActive',
   'formatTimeLeft','getTimeLeftClass','updateVisibleTimeLeft','nextDashboardRefreshAt',
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
@@ -115,3 +115,14 @@ for(const view of ['table','card']){
  context.allTenders[0]['Closing Date']='01-Jan-2099 06:00 PM';
 }
 console.log('PASS: both views preserve pages on repeated refresh/expiry; Next 100 final partial page and expired row removal.');
+const eveningNow=Date.parse('2026-09-30T20:25:00+05:30');
+context.portalSnapshot={verified:true,snapshot_at:'2026-09-30T19:51:00+05:30'};
+context.portalActiveIds=new Set(['present']);
+assert.equal(context.currentPortalAllows({'Tender ID':'present'},eveningNow),true);
+assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),false);
+context.portalSnapshot.verified=false;
+assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
+context.portalSnapshot={verified:true,snapshot_at:'2026-09-29T19:51:00+05:30'};
+assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
+context.portalSnapshot=null;
+console.log('PASS: complete same-day evening inventory excludes stale imported IDs; partial and old snapshots do not.');

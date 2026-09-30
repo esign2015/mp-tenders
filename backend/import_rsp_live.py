@@ -4,6 +4,7 @@ import csv, json, os, re, urllib.request
 from datetime import datetime, timezone
 from decimal import Decimal
 from inventory_summary import detail_complete
+from nightly_cleanup import IST, parse_dt
 
 RSP_URL = "https://raw.githubusercontent.com/rsparvat/RSPTender/main/data/tenders.json"
 CSV_PATH = "all_tenders_org_detailed.csv"
@@ -26,14 +27,27 @@ def pf(r,*names):
             return clean(v)
     return ""
 
+def imported_bid_end(r):
+    # RSP may retain a later summary time when the portal corrects it backwards.
+    # The current labelled portal value is authoritative for both CSV columns.
+    raw = pf(r, "Bid Submission End Date", "Bid Submission Closing Date", "Submission End Date")
+    for candidate in (raw, clean(r.get("bid_end"))):
+        try:
+            datetime.strptime(candidate, "%d-%b-%Y %I:%M %p")
+            return candidate
+        except ValueError:
+            continue
+    return ""
+
 def map_row(r, now):
     fee=money(r.get("tender_fee")); proc=money(r.get("processing_fee")); total=money(r.get("total_fee"))
     emd=money(r.get("emd"))
     total=str(sum(Decimal(value) for value in (emd,fee,proc))) if all(value != "" for value in (emd,fee,proc)) else ""
     work=clean(r.get("work_en"))
+    closing = imported_bid_end(r)
     row = {
       "Tender ID":clean(r.get("tender_id")),"Published Date":clean(r.get("published_date")),
-      "Closing Date":clean(r.get("bid_end")),"Opening Date":pf(r,"Bid Opening Date","Opening Date"),
+      "Closing Date":closing,"Opening Date":pf(r,"Bid Opening Date","Opening Date"),
       "Title":pf(r,"Title","Tender Title") or work,"Reference Number":clean(r.get("nit_ref")),
       "Organisation":clean(r.get("organisation")),"Department":clean(r.get("org_unit")),
       "Division":"","Sub Division":"","PAC Amount":money(r.get("pac")),"EMD Fee":money(r.get("emd")),
@@ -43,7 +57,7 @@ def map_row(r, now):
       "Contract Type":pf(r,"Contract Type"),"Bid Validity":pf(r,"Bid Validity"),
       "Pre Qualification Details":pf(r,"Pre Qualification Details","NDA/Pre Qualification"),
       "Bid Submission Start Date":pf(r,"Bid Submission Start Date"),
-      "Bid Submission End Date":clean(r.get("bid_end")),"Bid Opening Date":pf(r,"Bid Opening Date"),
+      "Bid Submission End Date":closing,"Bid Opening Date":pf(r,"Bid Opening Date"),
       "Document Download Start Date":pf(r,"Document Download Start Date"),
       "Document Download End Date":pf(r,"Document Download End Date"),
       "Fee Payable To":pf(r,"Fee Payable To"),"Fee Payable At":pf(r,"Fee Payable At"),
@@ -69,8 +83,13 @@ def main():
                 tid=clean(row.get("Tender ID"))
                 if tid: existing[tid]={k:clean(row.get(k)) for k in FIELDS}
     now=datetime.now(timezone.utc).isoformat()
+    import_time = datetime.now(IST)
     for r in mp:
         tid=clean(r.get("tender_id")); mapped=map_row(r,now)
+        deadline = parse_dt(mapped.get("Closing Date"))
+        if import_time.hour >= 19 and deadline and deadline <= import_time:
+            existing.pop(tid, None)
+            continue
         base=existing.get(tid,{k:"" for k in FIELDS})
         for k,v in mapped.items():
             if v!="": base[k]=v
