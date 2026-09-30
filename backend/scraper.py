@@ -1729,10 +1729,6 @@ def monitor_tender_changes(csv_file):
 
     org_csv = csv_file.parent / "organisations.csv"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
-    working_dir = Path(os.getenv("RUNNER_TEMP", "/tmp")) / "mp-tenders-working"
-    working_dir.mkdir(parents=True, exist_ok=True)
-    working_org_csv = working_dir / "organisations.csv"
-    working_tender_list_csv = working_dir / "organisation_tenders.csv"
     existing_rows = read_existing(csv_file)
     existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
     old_org_rows = read_existing(org_csv)
@@ -1881,6 +1877,16 @@ def monitor_tender_changes(csv_file):
     return {"ok": True, **stats}
 
 def write_extraction_status(csv_file, status):
+    from inventory_summary import write_summary
+    inventory = write_summary(csv_file.parent)
+    status.update({
+        "detail_complete": inventory["detail_complete"],
+        "detail_remaining": inventory["detail_pending"],
+        "detail_failed": inventory["detail_failed"],
+        "detail_skipped": inventory["detail_skipped"],
+        "detail_inventory_total": inventory["copied_tenders"],
+        "detail_snapshot_at": inventory["snapshot_at"],
+    })
     status_file = csv_file.parent / "data" / "status.json"
     status_file.parent.mkdir(parents=True, exist_ok=True)
     status_file.write_text(
@@ -2187,6 +2193,12 @@ def scrape_mp_tenders(csv_file):
 
     org_csv = csv_file.parent / "organisations.csv"
     tender_list_csv = csv_file.parent / "organisation_tenders.csv"
+
+    # These paths belong to the full-copy function, not the monitor function.
+    working_dir = Path(os.getenv("RUNNER_TEMP", "/tmp")) / "mp-tenders-working"
+    working_dir.mkdir(parents=True, exist_ok=True)
+    working_org_csv = working_dir / "organisations.csv"
+    working_tender_list_csv = working_dir / "organisation_tenders.csv"
 
     # One-time clean bootstrap: discard every previous tender/detail record and
     # rebuild from the live Tenders by Organisation page. Daily runs do NOT use

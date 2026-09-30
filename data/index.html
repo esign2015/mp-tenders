@@ -84,7 +84,7 @@ function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++
 function row(k,v,c=''){return '<div class="row"><span>'+k+'</span><b class="'+c+'">'+v+'</b></div>'}
 function esc(x){return String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function load(){const stamp=Date.now();document.getElementById('refreshTime').textContent='Refreshing…';try{
-const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRetry,manualTelegram]=await Promise.all([
+const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRetry,manualTelegram,inventory]=await Promise.all([
   fetch(statusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.json()),
   fetch(manualTestUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(detailStatusUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -93,13 +93,15 @@ const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRet
   fetch(telegramUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(telegramHealthUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(mismatchRetryUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
-  fetch(manualTelegramUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
+  fetch(manualTelegramUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
+  fetch('./inventory_summary.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
 ]);
-const total=+(st.portal_total_tenders||st.total_tenders)||0;
-const scraperDone=+st.detail_complete||0;
+const total=+(inventory.portal_tender_count??st.portal_total_tenders??st.total_tenders)||0;
+const copied=+(inventory.copied_tenders??st.detail_inventory_total)||0;
+const scraperDone=+(inventory.detail_complete??st.detail_complete)||0;
 const manualDone=+manual.success||0;
-const done=Math.max(scraperDone,manualDone);
-const rem=Math.max(0,total-done),pct=total?Math.min(100,done/total*100):0;
+const done=scraperDone;
+const rem=+(inventory.detail_pending??st.detail_remaining)||0,pct=copied?Math.min(100,done/copied*100):0;
 const asOn=st.updated_at?new Date(st.updated_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true}):'—';
 const deptCount=+(st.department_count||0),orgCount=+(st.organisation_count||0),pinCount=+(st.pincode_count||0),otherPinCount=+(st.pincode_others_count||0);
 const rawStatus=String(st.status||'unknown').toLowerCase();
@@ -112,14 +114,15 @@ const displayStatus=isStalled?'STALLED / NOT UPDATING':(st.status||'UNKNOWN');
 document.getElementById('status').innerHTML='<div class="card"><div class="k">Status</div><div class="n"><span class="badge '+cls+'">'+esc(displayStatus)+'</span></div></div><div class="card"><div class="k">Total Tenders</div><div class="n">'+total.toLocaleString()+'</div></div><div class="card"><div class="k">Detail Complete</div><div class="n ok">'+done.toLocaleString()+'</div></div><div class="card"><div class="k">Errors</div><div class="n '+(+st.errors?'bad':'ok')+'">'+(+st.errors||0).toLocaleString()+'</div></div>';
 const run=st.github_run_number||st.run_number||st.workflow_run||'Not reported';const rid=st.github_run_id||st.run_id||'Not reported';const sha=st.github_commit_sha||st.commit_sha||'Not reported';
 document.getElementById('run').innerHTML=row('GitHub Actions Run',esc(run),run==='Not reported'?'warn':'info')+row('Run ID',esc(rid),'mono')+row('Commit SHA',esc(sha),'mono')+row('Process Started',esc(st.process_started_at||'—'))+row('Last Data Update',esc(st.updated_at||'—'))+row('Deployment Page',location.origin+'/data/','mono');
-document.getElementById('process').innerHTML=row('Organisation Progress',esc(st.organisation_progress||'—'))+row('Current Organisation',esc(st.current_organisation||'—'))+(isStalled?row('Run Health','No status update for '+Math.floor(staleMinutes)+' minutes','bad'):'')+row('Detail Batch Completed',(+st.detail_batch_completed||0).toLocaleString())+row('Detail Remaining',rem.toLocaleString(),'warn')+row('Last Successful Checkpoint',esc(st.last_successful_checkpoint||st.detail_last_checkpoint||'—'))+'<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="k">'+pct.toFixed(2)+'% detail processed</div>';
+document.getElementById('process').innerHTML=row('Organisation Progress',esc(st.organisation_progress||'—'))+row('Current Organisation',esc(st.current_organisation||'—'))+(isStalled?row('Run Health','No status update for '+Math.floor(staleMinutes)+' minutes','bad'):'')+row('Detail Batch Completed',(+st.detail_batch_completed||0).toLocaleString())+row('Copied Tender IDs',copied.toLocaleString())+row('Detail Failed',(+inventory.detail_failed||0).toLocaleString(),'bad')+row('Detail Skipped',(+inventory.detail_skipped||0).toLocaleString())+row('Detail Remaining',rem.toLocaleString(),'warn')+row('Count Snapshot',esc(inventory.snapshot_at||st.detail_snapshot_at||'—'))+row('Last Successful Checkpoint',esc(st.last_successful_checkpoint||st.detail_last_checkpoint||'—'))+'<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="k">'+pct.toFixed(2)+'% detail processed</div>';
 const latest=st.latest_error||st.error||'';document.getElementById('errBox').style.display=latest?'block':'none';document.getElementById('error').textContent=latest?latest:'';
 const productionDetails=Math.max(0,scraperDone), testedDetails=Math.max(0,manualDone);
 const detailLabel=testedDetails && productionDetails===0 ? '0 production + '+testedDetails+' verified test' : productionDetails.toLocaleString();
-const finalFailed=Array.isArray(detailStatus.errors)?detailStatus.errors:[];
+const finalFailedIds=new Set(detailStatus.failed_ids||[]);
+const finalFailed=Array.isArray(detailStatus.errors)?detailStatus.errors.filter(x=>finalFailedIds.has(x['Tender ID'])):[];
 const failedText=finalFailed.length ? finalFailed.map(x=>((x['Tender ID']||'')+' — '+(x.error||'')).trim()).join('\n') : 'कोई final failed Tender ID नहीं';
 document.getElementById('quality').innerHTML=row('Final failed Tender IDs',finalFailed.length.toLocaleString(),'bad')+'<div class="error" style="margin-top:8px">'+esc(failedText)+'</div>'+row('Detailed CSV rows','Live CSV — browser monitor does not download the large CSV','info')+row('Detail Extracted = YES',detailLabel,testedDetails||productionDetails?'ok':'warn')+row('Pincode Missing',pinCount? 'See scraper quality counters':'—')+row('Pincode Out',otherPinCount?'See scraper quality counters':'—')+row('District Missing','See scraper quality counters','info')+row('District Out','See scraper quality counters','info');
-document.getElementById('org').innerHTML=row('Organisation records',orgCount.toLocaleString())+row('Unique Organisations',orgCount.toLocaleString())+row('Departments',deptCount.toLocaleString())+row('Known 6-digit Pincodes',pinCount.toLocaleString())+row('Pincodes in Others',otherPinCount.toLocaleString())+row('Tender rows in organisation CSV',total.toLocaleString());
+document.getElementById('org').innerHTML=row('Organisation records',orgCount.toLocaleString())+row('Unique Organisations',orgCount.toLocaleString())+row('Departments',deptCount.toLocaleString())+row('Known 6-digit Pincodes',pinCount.toLocaleString())+row('Pincodes in Others',otherPinCount.toLocaleString())+row('Tender rows in organisation CSV',copied.toLocaleString());
 const retryItems=Array.isArray(mismatchRetry.mismatches)?mismatchRetry.mismatches:[];
 const retryStatus=String(mismatchRetry.status||'').toLowerCase();
 const mrList=retryItems;

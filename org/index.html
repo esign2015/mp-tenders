@@ -90,13 +90,14 @@ function render(){
     details
       .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
       .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
+      .filter(d=>Number(clean(d['Processing Fee']).replace(/[^0-9.-]/g,''))>0)
       .map(d=>clean(d['Tender ID']))
       .filter(id=>ids.has(id))
   );
   // Success must come from the same current verified Tender-ID snapshot.
   // Do not union historical/targeted-retry status files into this count.
   const successSet=detailSuccessIds;
-  const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id)));
+  const failedSet=new Set((statusData.failed_ids||[]).filter(id=>ids.has(id) && !successSet.has(id)));
   // A Tender ID with Detail Extracted=YES is successful, not skipped.
   // Older status files could list the same ID in skipped_ids, causing
   // misleading "132 Success / 132 Skip" double counting.
@@ -138,6 +139,7 @@ async function load(){
     details
       .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
       .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
+      .filter(d=>Number(clean(d['Processing Fee']).replace(/[^0-9.-]/g,''))>0)
       .map(d=>clean(d['Tender ID']))
       .filter(id=>currentIds.has(id))
   );

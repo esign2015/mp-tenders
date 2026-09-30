@@ -101,6 +101,8 @@ def main():
     )
     with (ROOT/"data"/"run_history.jsonl").open("a",encoding="utf-8") as f: f.write(json.dumps(report,ensure_ascii=False)+"\n")
     print(json.dumps(report,ensure_ascii=False,indent=2))
+    from inventory_summary import write_summary
+    write_summary(ROOT)
     if mismatches: raise SystemExit("FINAL SNAPSHOT MISMATCH")
 
 if __name__=="__main__": main()

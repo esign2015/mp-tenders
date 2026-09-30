@@ -5,6 +5,8 @@ import csv, json, os, re, time
 from pathlib import Path
 from datetime import datetime, timezone
 import requests
+from urllib.parse import urljoin
+from inventory_summary import detail_complete, write_summary
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
@@ -17,6 +19,7 @@ from scraper import (
     PORTAL,
     ORG_URL,
     HEADERS,
+    TENDER_ID_RE,
 )
 
 CSV = Path("all_tenders_org_detailed.csv")
@@ -45,13 +48,6 @@ def money_number(value):
         return float(m.group(0)) if m else 0.0
     except Exception:
         return 0.0
-
-def detail_complete(row):
-    if clean(row.get("Detail Extracted")).upper() != "YES":
-        return False
-    if money_number(row.get("Processing Fee")) <= 0:
-        return False
-    return True
 
 def visible_text_inputs(scope):
     return [x for x in scope.locator("input").all()
@@ -185,7 +181,6 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
     extracted = []
     failed = []
     max_fast = int(os.environ.get("RSP_FAST_MAX_DETAILS", "900"))
-    save_every = 10
     local_success = 0
 
     try:
@@ -288,10 +283,9 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
                         extracted.append(merged)
                         local_success += 1
 
-                        if local_success % save_every == 0:
-                            save_csv()
-                            save_detail_csv()
-                            save_status("running", tid)
+                        save_csv()
+                        save_detail_csv()
+                        save_status("running", tid)
                         print(
                             f"RSP-FAST OK {tid} "
                             f"({local_success}/{max_fast})",
@@ -310,6 +304,9 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
                     f"{type(exc).__name__}: {exc}",
                     flush=True,
                 )
+    except Exception as exc:
+        # A transient discovery failure must still reach the ID-search fallback.
+        print(f"RSP-FAST discovery failed: {type(exc).__name__}: {exc}", flush=True)
     finally:
         session.close()
 
@@ -355,9 +352,11 @@ def main():
     # the organisation snapshot's Pending count is fully processed.
     extract_all_inventory = os.environ.get("EXTRACT_ALL_INVENTORY", "0") == "1"
     current_ids = []
+    snapshot_rows = []
     if SNAPSHOT.exists():
         with SNAPSHOT.open(encoding="utf-8-sig", newline="") as sf:
-            for sr in csv.DictReader(sf):
+            snapshot_rows = list(csv.DictReader(sf))
+            for sr in snapshot_rows:
                 tid = clean(sr.get("Tender ID"))
                 if tid and tid not in current_ids:
                     current_ids.append(tid)
@@ -366,6 +365,18 @@ def main():
             clean(r.get("Tender ID")) for r in rows if clean(r.get("Tender ID"))
         ))
     current_set = set(current_ids)
+    # Reconciliation may recover IDs that have no master row yet. Seed them
+    # from the current listing so they cannot be silently excluded from retry.
+    known_ids = {clean(row.get("Tender ID")) for row in rows}
+    for listing in snapshot_rows:
+        tid = clean(listing.get("Tender ID"))
+        if tid and tid not in known_ids:
+            base = {field: "" for field in fields}
+            base.update({field: listing.get(field, "") for field in
+                         ("Tender ID", "Title", "Reference Number", "Published Date", "Closing Date", "Opening Date")})
+            base["Organisation"] = listing.get("Organisation Name", "")
+            rows.append(base)
+            known_ids.add(tid)
 
     # Deduplicate by Tender ID before extraction. The organisation snapshot
     # can contain repeated rows for the same ID, but a detail page must be
@@ -483,10 +494,10 @@ def main():
             "errors": errors,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }, indent=2), encoding="utf-8")
+        write_summary(CSV.parent)
 
     def process_targets(page, target_rows, is_retry=False):
         nonlocal success
-        save_every = 10
         for base in target_rows:
             tid = clean(base.get("Tender ID"))
             try:
@@ -516,11 +527,10 @@ def main():
 
                 # Save in small checkpoints instead of rewriting the full 5,000+
                 # row CSV after every Tender ID.
-                if success % save_every == 0:
-                    save_csv()
-                    save_detail_csv()
+                save_csv()
+                save_detail_csv()
                 save_status("running", tid)
-                print(f"DETAIL OK {tid} — {'CHECKPOINT SAVED' if success % save_every == 0 else 'MEMORY SAVED'} — NEXT ID", flush=True)
+                print(f"DETAIL OK {tid} — CHECKPOINT SAVED — NEXT ID", flush=True)
 
             except Exception as e:
                 failure = {

@@ -234,7 +234,7 @@ jobs:
     # Discovery finishes first; this second job immediately processes only
     # current portal Tender IDs that do not yet have details.
     needs: scrape_full
-    if: needs.scrape_full.result == 'success' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
+    if: always() && !cancelled() && needs.scrape_full.outputs.copy_completed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
@@ -259,7 +259,7 @@ jobs:
           # Each scheduled snapshot gets a bounded detail batch. This keeps
           # the next organisation snapshot independent of slow detail pages.
           EXISTING_ID_BATCH_SIZE: "500"
-          RSP_FAST: "1"
+          RSP_FAST: "0" # Unresolved fast-route IDs must reach the ID-search fallback.
           RSP_FAST_MAX_DETAILS: "500"
           # Normal scheduled mode: do not reopen completed detail pages.
           REPAIR_COMPLETED_DETAILS: "0"
@@ -274,11 +274,7 @@ jobs:
             if [ -s data/existing_id_detail_status.json ]; then
               COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
               if [ "$COUNT" -gt "$LAST" ]; then
-                git add all_tenders_org_detailed.csv data/existing_id_detail_status.json
-                if ! git diff --cached --quiet; then
-                  git commit -m "Save new Tender detail checkpoint $COUNT [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
                 LAST="$COUNT"
               fi
             fi
@@ -290,11 +286,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete new Tender detail extraction [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
       - name: Show detail worker log
         if: always()
         run: cat new_tender_detail_live.log || true
@@ -645,8 +637,10 @@ jobs:
     # This job only refreshes the live organisation/tender-list copy.
     concurrency:
       group: mp-tender-list-refresh
-      cancel-in-progress: true
+      cancel-in-progress: false
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '35 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+    outputs:
+      copy_completed: ${{ steps.copy_inventory.outputs.ready }}
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
@@ -751,6 +745,7 @@ jobs:
           set -o pipefail
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
+          date +%s > "${RUNNER_TEMP}/mp-copy-started"
           python backend/scraper.py > scraper_live.log 2>&1 &
           SCRAPER_PID=$!
           LAST_PUBLISHED_CHECKPOINT=0
@@ -782,16 +777,7 @@ jobs:
 
               if [ "$SHOULD_PUBLISH" = "true" ]; then
                 echo "Publishing live checkpoint: org=$ORG_PROGRESS detail=$CHECKPOINT"
-                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/snapshot_recovery_status.json; do
-                  if [ -s "$f" ]; then git add "$f"; fi
-                done
-
-                if ! git diff --cached --quiet; then
-                  git commit -m "Live tender data checkpoint org $ORG_PROGRESS detail $CHECKPOINT [skip ci]"
-                  git fetch origin "${GITHUB_REF_NAME}"
-                  git rebase "origin/${GITHUB_REF_NAME}" || true
-                  git push origin "HEAD:${GITHUB_REF_NAME}" || true
-                fi
+                python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/snapshot_recovery_status.json
                 LAST_PUBLISHED_CHECKPOINT="$CHECKPOINT"
                 LAST_PUBLISHED_ORG_PROGRESS="$ORG_PROGRESS"
               fi
@@ -807,6 +793,28 @@ jobs:
           cat scraper_live.log || true
           echo "===== data/status.json ====="
           cat data/status.json || true
+
+      - name: Check this run completed organisation copying
+        id: copy_inventory
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime
+          from pathlib import Path
+          ready = False
+          try:
+              status = json.loads(Path("data/status.json").read_text())
+              started = float((Path(os.environ["RUNNER_TEMP"]) / "mp-copy-started").read_text())
+              ready = (status.get("status") == "copy_completed"
+                       and status.get("snapshot_published") is True
+                       and datetime.fromisoformat(status["process_started_at"]).timestamp() >= started
+                       and int(status.get("copied_tenders", 0)) > 0)
+          except (OSError, ValueError, KeyError, TypeError):
+              pass
+          with open(os.environ["GITHUB_OUTPUT"], "a") as stream:
+              stream.write("ready=" + str(ready).lower() + "\n")
+          PY
 
       # Detail extraction is intentionally NOT run in this job.
       # new_tender_detail_worker starts only after this copy job succeeds.
@@ -864,81 +872,19 @@ jobs:
       - name: Detail phase handled by separate worker
         run: echo "Detail phase delegated to new_tender_detail_worker."
 
-      - name: Alert admin if final portal count still mismatches
+      - name: Alert admin privately if final portal count still mismatches
         if: always()
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
-        run: |
-          python - <<'PY'
-          import json, os, urllib.parse, urllib.request
-          from pathlib import Path
-
-          path = Path("data/run_snapshot.json")
-          if not path.exists():
-              print("No run_snapshot.json; no mismatch alert sent.")
-              raise SystemExit(0)
-
-          report = json.loads(path.read_text(encoding="utf-8"))
-          if report.get("status") == "verified":
-              print("Final portal snapshot verified; no mismatch alert.")
-              raise SystemExit(0)
-
-          mismatches = report.get("organisation_mismatches") or []
-          lines = [
-              "⚠️ MP Tenders DATA MISMATCH",
-              "",
-              "3 attempts + recovery were completed, but the final portal snapshot still does not match.",
-              f"Portal total: {report.get('portal_tender_count', '—')}",
-              f"Copied total: {report.get('copied_unique_tender_ids', '—')}",
-              f"Mismatch organisations: {len(mismatches)}",
-              "",
-          ]
-          for item in mismatches[:30]:
-              lines.append(
-                  f"• {item.get('Organisation Name','—')}: "
-                  f"portal {item.get('Portal Count','—')} / "
-                  f"copied {item.get('Copied Count','—')} / "
-                  f"diff {item.get('Difference','—')}"
-              )
-          if len(mismatches) > 30:
-              lines.append(f"…and {len(mismatches)-30} more.")
-          lines += ["", "👤 Admin: https://t.me/rdgyan"]
-
-          token = os.environ.get("TELEGRAM_BOT_TOKEN","").strip()
-          chat_id = os.environ.get("TELEGRAM_ADMIN_CHAT_ID","").strip() or os.environ.get("TELEGRAM_CHAT_ID","").strip()
-          if not token or not chat_id:
-              print("Telegram admin alert skipped: bot token/chat ID secret missing.")
-              raise SystemExit(0)
-
-          data = urllib.parse.urlencode({
-              "chat_id": chat_id,
-              "text": "\n".join(lines),
-              "disable_web_page_preview": "true",
-          }).encode()
-          url = f"https://api.telegram.org/bot{token}/sendMessage"
-          with urllib.request.urlopen(urllib.request.Request(url, data=data), timeout=30) as r:
-              body = r.read().decode()
-          if '"ok":true' not in body:
-              raise RuntimeError(body)
-          print("Admin mismatch alert sent.")
-          PY
+        run: python backend/admin_mismatch_alert.py
 
       - name: Commit whatever tender data was collected
         if: always()
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json; do
-            if [ -s "$f" ]; then git add "$f"; fi
-          done
-          if git diff --cached --quiet; then
-            echo "No tender data checkpoint to commit."
-          else
-            git commit -m "Checkpoint collected tender data"
-            git push || echo "Checkpoint commit push failed; retained in workspace/logs."
-          fi
+          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json data/admin_mismatch_alert_status.json
   corrigendum_watch:
     if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *' || github.event.schedule == '15 15 * * *' || github.event.schedule == '15 21 * * *')
     runs-on: ubuntu-latest
