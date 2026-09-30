@@ -5,10 +5,10 @@
   "current_portal_ids": 7895,
   "initial_incomplete": 2797,
   "batch_targets": 500,
-  "batch_attempted": 16,
-  "batch_complete": 15,
+  "batch_attempted": 20,
+  "batch_complete": 17,
   "started_at": "2026-09-30T07:38:28.399184+00:00",
-  "success": 2981,
+  "success": 2983,
   "failed": 0,
   "success_ids": [
     "2023_UAD_298906_16",
@@ -188,6 +188,7 @@
     "2026_HEKTT_535194_1",
     "2026_KSGAC_535472_1",
     "2026_KSGAC_535492_1",
+    "2026_KSGAC_535499_1",
     "2026_KSGAC_535506_1",
     "2026_KSGAC_537613_1",
     "2026_MADHY_537834_1",
@@ -679,6 +680,7 @@
     "2026_MPSAM_537512_1",
     "2026_MPSAM_537543_1",
     "2026_MPSCU_537500_1",
+    "2026_MPSFD_537702_1",
     "2026_MPTAX_534364_2",
     "2026_MPTBC_514718_1",
     "2026_MPTBC_534451_1",
@@ -3466,7 +3468,6 @@
     "2026_JIWAJ_534384_1",
     "2026_JNKVV_535875_1",
     "2026_KSGAC_535411_1",
-    "2026_KSGAC_535499_1",
     "2026_KSGAC_535509_1",
     "2026_MFPCF_538717_1",
     "2026_MFPPR_533608_1",
@@ -4632,7 +4633,6 @@
     "2026_MPSCS_538483_9",
     "2026_MPSCU_536474_1",
     "2026_MPSCU_536899_1",
-    "2026_MPSFD_537702_1",
     "2026_MPSMC_537002_1",
     "2026_MPSMC_537021_1",
     "2026_MPTAX_534364_1",
@@ -7911,7 +7911,18 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_KSGAC_535492_1",
-  "errors": [],
-  "updated_at": "2026-09-30T07:40:33.089883+00:00"
+  "last_successful_tender_id": "2026_MPSFD_537702_1",
+  "errors": [
+    {
+      "Tender ID": "2026_PWDRB_535652_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_535652_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535588_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535588_1",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-09-30T07:41:08.373813+00:00"
 }
