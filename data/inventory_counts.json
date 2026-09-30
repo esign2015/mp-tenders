@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:03:40.962513+00:00",
+  "updated_at": "2026-09-30T21:05:43.681728+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 50,
+  "detail_failed": 62,
   "detail_skipped": 0,
-  "detail_pending": 2380,
+  "detail_pending": 2368,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -72,9 +72,9 @@
       "portal_tender_count": 33,
       "copied_tenders": 33,
       "detail_complete": 16,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 16
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -138,9 +138,9 @@
       "portal_tender_count": 51,
       "copied_tenders": 51,
       "detail_complete": 33,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 17
     },
     {
       "organisation": "Directorate of Industries",
@@ -215,9 +215,9 @@
       "portal_tender_count": 28,
       "copied_tenders": 28,
       "detail_complete": 16,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 49,
+      "detail_failed": 54,
       "detail_skipped": 0,
-      "detail_pending": 1407
+      "detail_pending": 1402
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -303,9 +303,9 @@
       "portal_tender_count": 19,
       "copied_tenders": 19,
       "detail_complete": 11,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "Excise Department",
@@ -589,9 +589,9 @@
       "portal_tender_count": 86,
       "copied_tenders": 86,
       "detail_complete": 48,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 38
+      "detail_pending": 35
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2376,
+  "legacy_verification_pending": 2364,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
