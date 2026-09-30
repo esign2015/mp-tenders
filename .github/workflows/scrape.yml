@@ -319,7 +319,7 @@ jobs:
                 LAST="$COUNT"
               fi
             fi
-            sleep 5
+            sleep 120
           done
           wait "$PID"
       - name: Commit final detail data

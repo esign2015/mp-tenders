@@ -52,7 +52,7 @@ jobs:
           PID=$!
           while kill -0 "$PID" 2>/dev/null; do
             python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
-            sleep 30
+            sleep 120
           done
           wait "$PID"
       - name: Publish final detail results without overwriting other workers
