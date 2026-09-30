@@ -52,6 +52,9 @@ jobs:
           python - <<'PY'
           import csv, json, urllib.request
           from pathlib import Path
+          import sys
+          sys.path.insert(0, "backend")
+          from inventory_summary import detail_complete
 
           RSP_URL = "https://raw.githubusercontent.com/rsparvat/RSPTender/main/data/tenders.json"
           dst = Path("all_tenders_org_detailed.csv")
@@ -138,6 +141,8 @@ jobs:
               })
               if not out["Status"]:
                   out["Status"] = "Open"
+              if not detail_complete(out):
+                  out["Detail Extracted"] = ""
               merged[tid] = out
 
           # Preserve any currently known MP rows not in this RSP snapshot so

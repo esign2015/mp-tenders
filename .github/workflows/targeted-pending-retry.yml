@@ -2,6 +2,11 @@ name: Targeted Pending Detail Retry
 
 on:
   workflow_dispatch:
+    inputs:
+      tender_ids:
+        description: "Optional comma-separated Tender IDs to prioritise"
+        type: string
+        default: ""
   push:
     branches: ["main"]
     paths:
@@ -13,43 +18,46 @@ permissions:
 
 jobs:
   retry_pending:
-    if: contains(github.event.head_commit.message, '[retry-pending]')
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[retry-pending]')
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 350
     concurrency:
       group: mp-targeted-pending-retry
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 1
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
-
-      - name: Run targeted Pending retry
+      - name: Install Chromium for Home Tender ID search
+        run: python -m playwright install --with-deps chromium
+      - name: Retry incomplete live details, prioritising the reported tender
+        env:
+          PRIORITY_TENDER_IDS: ${{ github.event_name == 'push' && '2026_MIDCL_529130_2' || inputs.tender_ids }}
         run: |
           set -o pipefail
-          python backend/targeted_pending_retry.py | tee targeted_pending_retry.log
-
-      - name: Commit targeted detail results
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/targeted_pending_retry.py > targeted_pending_retry.log 2>&1 &
+          PID=$!
+          while kill -0 "$PID" 2>/dev/null; do
+            python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
+            sleep 30
+          done
+          wait "$PID"
+      - name: Publish final detail results without overwriting other workers
         if: always()
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete targeted Pending detail retry [skip ci]"
-            git push || true
-          fi
-
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
       - name: Show retry log
         if: always()
         run: cat targeted_pending_retry.log || true

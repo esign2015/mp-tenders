@@ -2,6 +2,8 @@
 from __future__ import annotations
 import csv, json, os, re, urllib.request
 from datetime import datetime, timezone
+from decimal import Decimal
+from inventory_summary import detail_complete
 
 RSP_URL = "https://raw.githubusercontent.com/rsparvat/RSPTender/main/data/tenders.json"
 CSV_PATH = "all_tenders_org_detailed.csv"
@@ -26,10 +28,10 @@ def pf(r,*names):
 
 def map_row(r, now):
     fee=money(r.get("tender_fee")); proc=money(r.get("processing_fee")); total=money(r.get("total_fee"))
-    if not total and (fee or proc):
-        total=str(int(float(fee or 0)+float(proc or 0)))
+    emd=money(r.get("emd"))
+    total=str(sum(Decimal(value) for value in (emd,fee,proc))) if all(value != "" for value in (emd,fee,proc)) else ""
     work=clean(r.get("work_en"))
-    return {
+    row = {
       "Tender ID":clean(r.get("tender_id")),"Published Date":clean(r.get("published_date")),
       "Closing Date":clean(r.get("bid_end")),"Opening Date":pf(r,"Bid Opening Date","Opening Date"),
       "Title":pf(r,"Title","Tender Title") or work,"Reference Number":clean(r.get("nit_ref")),
@@ -50,6 +52,9 @@ def map_row(r, now):
       "Corrigendum Detected At":"","Corrigendum Type":"","Corrigendum 15m Checked":"",
       "Corrigendum 5m Checked":"","URL":clean(r.get("detail_url")),
       "Search Route":"RSP -> live dataset import","Search Result Title":"","Tested At":now}
+    if not detail_complete(row):
+        row["Detail Extracted"]=""
+    return row
 
 def main():
     req=urllib.request.Request(RSP_URL,headers={"User-Agent":"mp-tenders-rsp-import/1.0"})
@@ -69,8 +74,13 @@ def main():
         base=existing.get(tid,{k:"" for k in FIELDS})
         for k,v in mapped.items():
             if v!="": base[k]=v
-        # RSP's exact fee fields are authoritative for this imported record.
-        base["Tender Fee"]=mapped["Tender Fee"]; base["Processing Fee"]=mapped["Processing Fee"]; base["Total Fee"]=mapped["Total Fee"]; base["Detail Extracted"]="YES"
+        # Missing imported fields never erase confirmed portal detail values.
+        amounts=[money(base.get(key)) for key in ("EMD Fee","Tender Fee","Processing Fee")]
+        if all(value != "" for value in amounts):
+            base["Total Fee"]=str(sum(Decimal(value) for value in amounts))
+        base["Detail Extracted"]="YES"
+        if not detail_complete(base):
+            base["Detail Extracted"]=""
         existing[tid]=base
     with open(CSV_PATH,"w",encoding="utf-8-sig",newline="") as f:
         w=csv.DictWriter(f,fieldnames=FIELDS,extrasaction="ignore"); w.writeheader(); w.writerows(existing.values())

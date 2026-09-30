@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 import scraper
 import existing_id_detail as worker
 import publish_data_checkpoint as publisher
+import import_rsp_live
 import home_latest
 import nightly_cleanup as cleanup
 from datetime import datetime
@@ -59,6 +60,32 @@ class CleanupTests(unittest.TestCase):
         self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
+    def test_imported_listing_cannot_claim_complete_details(self):
+        row = import_rsp_live.map_row({"tender_id": "2026_MIDCL_529130_2", "nit_ref": "24 Bhopal of 2026-27"}, "now")
+        self.assertEqual(row["Detail Extracted"], "")
+        self.assertEqual(row["Total Fee"], "")
+        fees = import_rsp_live.map_row({"tender_id": "example", "emd": "1000", "tender_fee": "2000", "processing_fee": "295"}, "now")
+        self.assertEqual(fees["Total Fee"], "3295")
+
+    def test_reported_live_tender_missing_from_partial_snapshot_gets_retry(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            tid = "2026_MIDCL_529130_2"
+            write_csv(root/"master.csv", [{"Tender ID": tid, "Closing Date": "01-Jan-2099 03:00 PM", "Detail Extracted": "YES"}])
+            write_csv(root/"listing.csv", [{"Tender ID": "other", "Closing Date": "01-Jan-2099 03:00 PM"}])
+            captured=[]
+            def fast(targets,*args):
+                captured.extend(targets)
+                return [],[]
+            with patch.dict(os.environ, {"EXTRACT_ALL_INVENTORY": "1", "PRIORITY_TENDER_IDS": tid, "PRIMARY_ID_SEARCH": "0"}), \
+                 patch.object(worker,"CSV",root/"master.csv"), \
+                 patch.object(worker,"SNAPSHOT",root/"listing.csv"), \
+                 patch.object(worker,"DETAIL_CSV",root/"details.csv"), \
+                 patch.object(worker,"STATUS",root/"data/status.json"), \
+                 patch.object(worker,"rsp_style_extract_targets",side_effect=fast):
+                worker.main()
+            self.assertEqual([r["Tender ID"] for r in captured],[tid])
+
     def test_tender_id_is_never_a_reference_number(self):
         tid = "2026_MPTAX_534364_2"
         self.assertEqual(scraper.valid_reference_number(tid), "")
