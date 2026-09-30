@@ -43,7 +43,7 @@ missing=sorted(portal_ids-master_ids)
 
 now=datetime.now(IST)
 reopened=[]
-archive_candidates=[]
+expired_candidates=[]
 for tid,row in master_by_id.items():
     closing=parse_dt(row.get("Closing Date"))
     if tid in portal_ids and closing and closing <= now:
@@ -51,7 +51,7 @@ for tid,row in master_by_id.items():
     elif tid not in portal_ids and closing:
         age=(now-closing).total_seconds()/86400
         if 0 <= age <= 10:
-            archive_candidates.append(tid)
+            expired_candidates.append(tid)
 
 success={tid for tid in portal_ids if clean(master_by_id.get(tid,{}).get("Detail Extracted")).upper()=="YES"}
 failed=set(clean(x) for x in detail_status.get("failed_ids",[]) if clean(x)) & portal_ids
@@ -77,9 +77,9 @@ report={
     "portal_ids_missing_in_master":len(missing),
     "missing_tender_ids":missing[:500],
     "live_dashboard_equivalent_count":len(present),
-    "portal_listed_with_past_closing_reactivated":len(reopened),
-    "reactivated_tender_ids":sorted(reopened)[:500],
-    "archive_candidates_not_in_portal":len(archive_candidates),
+    "portal_listed_with_past_closing":len(reopened),
+    "past_closing_tender_ids":sorted(reopened)[:500],
+    "expired_candidates_not_in_portal":len(expired_candidates),
     "detail_success":len(success),
     "detail_failed":len(failed),
     "detail_skipped":len(skipped),

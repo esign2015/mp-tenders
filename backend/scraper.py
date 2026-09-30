@@ -2243,32 +2243,11 @@ def scrape_mp_tenders(csv_file):
 
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
 
-    # Retention policy: keep a tender for 48 hours after its closing date.
-    # After that, remove the complete record from the local dataset so the
-    # dashboard/API does not carry stale detail indefinitely. If a later
-    # corrigendum extends the closing date, the tender will be discovered
-    # again by the next Tenders-by-Organisation snapshot and re-extracted.
-    retention_cutoff = now - timedelta(days=2)
-    pruned_ids = set()
-    for tid, row in list(existing_by_id.items()):
-        closing = parse_portal_datetime(row.get("Closing Date"))
-        if closing and closing < retention_cutoff:
-            pruned_ids.add(tid)
-            del existing_by_id[tid]
-
-    if pruned_ids:
-        tender_list_by_id = {
-            tid: row for tid, row in tender_list_by_id.items()
-            if tid not in pruned_ids
-        }
-        tender_list_rows = list(tender_list_by_id.values())
-        write_csv(csv_file, list(existing_by_id.values()))
-        print(f"RETENTION CLEANUP: deleted {len(pruned_ids)} tender detail records older than 48 hours after closing")
-
+    # Expired data is purged by the daily 7 PM IST cleanup, without an archive.
     # IMPORTANT: this file is a CURRENT portal snapshot, not a history table.
     # [run-scrape-details] force an immediate verification run after this fix.
     # Rebuild it from the live 93-organisation run below. Historical detail
-    # records stay in all_tenders_org_detailed.csv / Archive.
+    # records are purged at the daily 7 PM cleanup.
     tender_list_rows = []
     # Repair records marked successful by the previous broken detail navigation.
     # Those pages were actually the portal home/menu, so fields such as Work Description

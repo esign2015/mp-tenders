@@ -13,6 +13,7 @@ import sys
 import tempfile
 from pathlib import Path
 from inventory_summary import detail_complete, write_summary
+from nightly_cleanup import DATA_FILES, parse_dt, purge_csv
 
 DETAIL_FILES = {"all_tenders_org_detailed.csv", "tender_details.csv"}
 
@@ -83,6 +84,37 @@ def publish(paths):
         updates = dict(changed)
         for path in DETAIL_FILES & updates.keys():
             updates[path] = merge_details(blob(parent, path), updates[path])
+        # The cleanup cutoff survives concurrent writers, so an older worker
+        # cannot restore a purged row. A future extended deadline remains valid.
+        cleanup_mode = os.getenv("EXPIRED_CLEANUP") == "1"
+        cleanup_bytes = updates.get("data/cleanup_status.json", blob(parent, "data/cleanup_status.json"))
+        try:
+            cleanup_report = json.loads(cleanup_bytes)
+            cutoff = parse_dt(cleanup_report.get("cleaned_at")) if cleanup_report.get("policy") == "expired-at-evening" else None
+        except (ValueError, TypeError):
+            cutoff = None
+        if cutoff:
+            removed_ids = set()
+            for path in DATA_FILES:
+                if path not in updates and not cleanup_mode:
+                    continue
+                # Cleanup uses the latest remote bytes, not its earlier checkout.
+                data = blob(parent, path) if cleanup_mode else updates[path]
+                if not data:
+                    continue
+                purged, removed = purge_csv(data, cutoff)
+                updates[path] = purged
+                removed_ids.update(removed)
+                if cleanup_mode:
+                    cleanup_report.setdefault("files", {})[path] = {"removed": len(removed)}
+            if cleanup_mode:
+                cleanup_report["removed"] = len(removed_ids)
+                updates["data/cleanup_status.json"] = json.dumps(cleanup_report, ensure_ascii=False, indent=2).encode()
+            snapshot_bytes = blob(parent, "data/live_snapshot.json") if cleanup_mode else updates.get("data/live_snapshot.json")
+            if snapshot_bytes:
+                snapshot = json.loads(snapshot_bytes)
+                snapshot["tender_ids"] = [tid for tid in snapshot.get("tender_ids", []) if tid not in removed_ids]
+                updates["data/live_snapshot.json"] = json.dumps(snapshot, ensure_ascii=False, indent=2).encode()
         # Derive progress from the exact CSV bytes being published together.
         with tempfile.TemporaryDirectory() as summary_dir:
             root = Path(summary_dir)

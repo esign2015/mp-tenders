@@ -11,7 +11,7 @@ function source(name){
   return html.slice(start,end);
 }
 const controls = new Proxy({}, {get:(o,k)=>o[k] ||= {value:''}});
-const context = vm.createContext({console,Date,Set,Map,document:{querySelectorAll:()=>[]},
+const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=>fn(),document:{querySelectorAll:()=>[]},
   $:id=>controls[id], getDistrictInfo:r=>({name:r.District||''}),
   renderCurrentView(){},applyColumnVisibility(){},updateVirtualPager(){},updateCounts(){},
   normalizeSearchText:s=>s, archivedMode:false, quickFilterMode:'',tableSortKey:'',tableSortDesc:false,
@@ -19,7 +19,7 @@ const context = vm.createContext({console,Date,Set,Map,document:{querySelectorAl
 const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','parseDate','istParts','todayKey',
   'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
-  'normaliseCorrigendumValue','normaliseTender','parseCsv','moneySortValue','compareTableValues',
+  'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
   'updateTableSortHeaders','sortCurrentTable','applyFilters','renderTable'];
 // Some functions have declarations between them; only include their exact body
 // by taking the shortest prefix that compiles as a complete function.
@@ -66,3 +66,25 @@ for(const key of keys){
 assert.equal(context.moneySortValue('NA'),null);
 assert(context.compareTableValues({'Published Date':'01-Jan-2027'},{'Published Date':'30-Dec-2026'},'Published Date')>0);
 console.log('PASS: script syntax, both references, CSV merge, complete 250-row ascending/descending sort before 100-row window, sort persistence, chronological dates.');
+
+assert(!html.includes('id="archivedBtn"'));
+for(const view of ['table','card']){
+ context.tenderViewMode=view;
+ context.tableSortKey='Title';context.tableSortDesc=false;
+ context.applyFilters();
+ context.goVirtualPage(1);
+ assert.equal(context.virtualStart,100);
+ for(let i=0;i<5;i++) context.applyFilters(false,true);
+ assert.equal(context.virtualStart,100,view+' periodic expiry/refresh preserves second page');
+ context.goVirtualPage(1);
+ assert.equal(context.virtualStart,200);
+ assert.equal(context.virtualEnd,250);
+ context.goVirtualPage(-1);
+ assert.equal(context.virtualStart,100);
+ context.allTenders[0]['Closing Date']='01-Jan-2000 06:00 PM';
+ context.applyFilters(false,true);
+ assert.equal(context.virtualStart,100);
+ assert(!context.virtualRows.some(r=>r['Tender ID']==='2026_TEST_0_1'));
+ context.allTenders[0]['Closing Date']='01-Jan-2099 06:00 PM';
+}
+console.log('PASS: both views preserve pages on repeated refresh/expiry; Next 100 final partial page and expired row removal.');

@@ -7,3 +7,5 @@
 - सरल हिंदी; तकनीकी शब्दों और implementation के विवरण से बचना है।
 - SAR Digital Services, Kannod की branding और विज्ञापन शामिल करना है।
 - Sorting समझानी है: पहली click ascending, दूसरी click descending; पूरे चुने हुए live परिणामों पर sorting, केवल दिखाई दे रहे 100 tenders पर नहीं।
+
+- Archived विकल्प/page नहीं है। अंतिम समय बीतते ही tender दिखाई नहीं देगा; रोज़ शाम 7 बजे expired saved records मिटेंगे।

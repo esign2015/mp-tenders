@@ -14,6 +14,8 @@ import scraper
 import existing_id_detail as worker
 import publish_data_checkpoint as publisher
 import home_latest
+import nightly_cleanup as cleanup
+from datetime import datetime
 from bs4 import BeautifulSoup
 from inventory_summary import REQUIRED_FIELDS, build_summary
 from admin_mismatch_alert import resolve_private_admin, send_alert
@@ -28,6 +30,33 @@ def write_csv(path, rows):
 def completed(tid):
     return {**{key: "value" for key in REQUIRED_FIELDS}, "Tender ID": tid,
             "Processing Fee": "295", "Detail Extracted": "YES"}
+
+class CleanupTests(unittest.TestCase):
+    def test_cleanup_expires_even_portal_listed_rows_but_keeps_extensions_and_unknown_dates(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            now = datetime(2026, 9, 30, 19, 0, tzinfo=cleanup.IST)
+            rows = [{"Tender ID": tid, "Closing Date": closing} for tid, closing in (
+                ("expired", "30-Sep-2026 06:55 PM"), ("exact", "30-Sep-2026 07:00 PM"),
+                ("extended", "01-Oct-2026 06:00 PM"), ("unknown", "unavailable"))]
+            for name in cleanup.DATA_FILES:
+                write_csv(root / name, rows)
+            (root / "data").mkdir()
+            (root / "data/live_snapshot.json").write_text(json.dumps({"tender_ids": [r["Tender ID"] for r in rows]}))
+            cleanup.cleanup(root, now)
+            for name in cleanup.DATA_FILES:
+                with (root / name).open(encoding="utf-8-sig") as stream:
+                    remaining = list(csv.DictReader(stream))
+                self.assertEqual([r["Tender ID"] for r in remaining], ["extended", "unknown"])
+            self.assertEqual(json.loads((root / "data/live_snapshot.json").read_text())["tender_ids"], ["extended", "unknown"])
+            report = json.loads((root / "data/cleanup_status.json").read_text())
+            self.assertEqual(report["retention_hours"], 0)
+
+    def test_all_expired_is_valid_header_only_csv(self):
+        data = b'Tender ID,Closing Date\nexpired,30-Sep-2026 06:00 PM\n'
+        result, removed = cleanup.purge_csv(data, datetime(2026,9,30,19,tzinfo=cleanup.IST))
+        self.assertEqual(removed, ["expired"])
+        self.assertEqual(list(csv.DictReader(result.decode("utf-8-sig").splitlines())), [])
 
 class PipelineTests(unittest.TestCase):
     def test_tender_id_is_never_a_reference_number(self):
@@ -171,6 +200,39 @@ class PrivateAlertTests(unittest.TestCase):
         self.assertEqual(send_alert({"status": "verified"}, lambda *a, **k: self.fail("no calls expected")), {"status": "not_needed"})
 
 class PublisherTests(unittest.TestCase):
+    def test_publisher_does_not_restore_expired_record_after_cleanup(self):
+        import subprocess
+        def run(directory, *args):
+            return subprocess.run(["git", *args], cwd=directory, check=True, capture_output=True).stdout.decode().strip()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            remote, local = root / "remote.git", root / "local"
+            run(root, "init", "--bare", "--initial-branch=main", str(remote))
+            run(root, "clone", str(remote), str(local))
+            run(local, "config", "user.name", "test")
+            run(local, "config", "user.email", "test@example.invalid")
+            future = {**completed("extended"), "Closing Date": "01-Oct-2026 06:00 PM"}
+            write_csv(local / "all_tenders_org_detailed.csv", [future])
+            (local / "data").mkdir()
+            (local / "data/cleanup_status.json").write_text(json.dumps({
+                "policy": "expired-at-evening", "cleaned_at": "2026-09-30T19:00:00+05:30"}))
+            run(local, "add", ".")
+            run(local, "commit", "-m", "7 PM cleanup")
+            run(local, "push", "origin", "main")
+            expired = {**completed("expired"), "Closing Date": "30-Sep-2026 06:00 PM"}
+            write_csv(local / "all_tenders_org_detailed.csv", [future, expired])
+            before = Path.cwd()
+            try:
+                os.chdir(local)
+                with patch.dict(os.environ, {"RUNNER_TEMP": temporary, "GITHUB_REF_NAME": "main"}):
+                    publisher.publish(["all_tenders_org_detailed.csv"])
+                run(local, "fetch", "origin", "main")
+                data = run(local, "show", "origin/main:all_tenders_org_detailed.csv")
+                self.assertIn("extended", data)
+                self.assertNotIn("expired", data)
+            finally:
+                os.chdir(before)
+
     def test_concurrent_remote_record_and_code_change_survive_publication(self):
         import subprocess
         def run(directory, *args):

@@ -1,8 +1,8 @@
-name: MP Tender Nightly Cleanup
+name: MP Tender 7 PM Expired Cleanup
 
 on:
   schedule:
-    - cron: "30 20 * * *"   # 2:00 AM IST
+    - cron: "30 13 * * *"   # 7:00 PM IST
   workflow_dispatch:
 
 permissions:
@@ -21,12 +21,12 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
-      - name: Run safe 48-hour cleanup
+      - name: Purge records whose closing time has passed
         run: python backend/nightly_cleanup.py
-      - name: Commit cleanup results
+      - name: Publish cleanup without overwriting concurrent updates
+        env:
+          EXPIRED_CLEANUP: "1"
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv tender_details.csv data/cleanup_status.json
-          git diff --cached --quiet || git commit -m "Nightly cleanup of tenders older than 48 hours [skip ci]"
-          git push
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv organisation_tenders.csv data/live_snapshot.json data/cleanup_status.json
