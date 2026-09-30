@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:53:12.321623+00:00",
+  "updated_at": "2026-09-30T18:55:17.079571+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2354,
-  "detail_failed": 0,
+  "detail_complete": 2392,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 2958,
+  "detail_pending": 2919,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -170,10 +170,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1131,
+      "detail_complete": 1149,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1754
+      "detail_pending": 1736
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 3,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 43
+      "detail_pending": 40
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -281,9 +281,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 21,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 22
+      "detail_pending": 13
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 32,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 23
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 20,
+      "detail_complete": 21,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 17
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 41,
+      "detail_complete": 42,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 45
+      "detail_pending": 44
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 7,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 29
+      "detail_pending": 28
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2953,
+  "legacy_verification_pending": 2915,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
