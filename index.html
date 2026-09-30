@@ -5857,6 +5857,7 @@ enforceTelegramAccess().then(async () => {
 (function(){
   let selectedAffidavitTender=null;
   const byId=id=>document.getElementById(id);
+  const AFFIDAVIT_FORMAT_NOTICE="General (universal) format: Before notarisation or attaching this affidavit to a bid, verify it against the prescribed format and requirements in the tender documents and make all necessary changes. SAR Digital Services, Kannod and this website are not responsible for required changes, discrepancies, or use of this format.";
   const profileKey=()=>{
     const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "local";
     return "mp_tender_affidavit_profile_v1_"+telegramId;
@@ -6151,7 +6152,7 @@ enforceTelegramAccess().then(async () => {
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
-        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720,header:720,footer:720}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:1440,left:720,header:720,footer:360}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]}),new Paragraph({alignment:AlignmentType.JUSTIFIED,spacing:{before:80,after:0},children:[new TextRun({text:AFFIDAVIT_FORMAT_NOTICE,size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx",mobileWindow);
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
@@ -6164,7 +6165,7 @@ enforceTelegramAccess().then(async () => {
     try{
       const jsPDF=window.jspdf?.jsPDF;if(!jsPDF) throw new Error("PDF library load नहीं हुई");
       const doc=new jsPDF({unit:"mm",format:"a4"});
-      const left=18,right=192,width=174,bottomLimit=274;let y=18;
+      const left=18,right=192,width=174,bottomLimit=264;let y=18;
       const addPageIf=(need)=>{if(y+need>bottomLimit){doc.addPage();y=18;}};
       const textBlock=(text,opts={})=>{
         const size=opts.size||10; const leading=opts.leading||5.2; const indent=opts.indent||0;
@@ -6344,12 +6345,12 @@ enforceTelegramAccess().then(async () => {
 
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
-        doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,285,192,285);
+        doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,271,192,271);
         doc.setTextColor(0);
         const footerPrefix="This Affidavit is generated from ";
         const footerUrl="https://tenders.codinglms.xyz";
         const footerSuffix=" • SAR Digital Services, Kannod • MP Tender Live Dashboard";
-        const footerY=290;
+        const footerY=276;
         doc.setFont("helvetica","normal");doc.setFontSize(8.5);
         const prefixW=doc.getTextWidth(footerPrefix);
         doc.setFont("helvetica","bold");doc.setFontSize(9.2);
@@ -6366,6 +6367,9 @@ enforceTelegramAccess().then(async () => {
         doc.link(urlX,footerY-3.5,urlW,4.8,{url:footerUrl});
         doc.setFont("helvetica","normal");doc.setFontSize(8.5);
         doc.text(footerSuffix,urlX+urlW,footerY);
+        doc.setFont("helvetica","normal");doc.setFontSize(7.5);
+        const noticeLines=doc.splitTextToSize(AFFIDAVIT_FORMAT_NOTICE,174);
+        noticeLines.forEach((line,index)=>doc.text(line,18,282+index*3.2));
         doc.setTextColor(0);
       }
       const pdfName=fileBase(d)+".pdf";
