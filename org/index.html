@@ -76,6 +76,16 @@ function snapshotTime(value){
  if(!clean(value)||Number.isNaN(date.getTime())) return 'समय उपलब्ध नहीं';
  return date.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})+' IST';
 }
+function detailComplete(row){
+ const required=['Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
+  'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'];
+ if(clean(row['Search Route'])==='RSP -> live dataset import') return false;
+ if(clean(row['Detail Extracted']).toUpperCase()!=='YES') return false;
+ if(!required.every(k=>clean(row[k]))) return false;
+ if(!/^[1-9]\d{5}$/.test(clean(row['Pincode']))) return false;
+ const fee=clean(row['Processing Fee']).replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+ return !!fee && Number(fee[0])>0;
+}
 function render(){
  const q=$('search').value.toLowerCase();
  const rows=orgs.filter(x=>clean(x['Organisation Name']).toLowerCase().includes(q));
@@ -87,15 +97,9 @@ function render(){
   // Count successful detail extraction from the actual detail CSV first.
   // This avoids showing 0 while the worker has already checkpointed detail rows
   // but the status file was created by an older worker revision.
-  const requiredDetailFields=[
-    'Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
-    'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'
-  ];
   const detailSuccessIds=new Set(
     details
-      .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
-      .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
-      .filter(d=>Number(clean(d['Processing Fee']).replace(/[^0-9.-]/g,''))>0)
+      .filter(detailComplete)
       .map(d=>clean(d['Tender ID']))
       .filter(id=>ids.has(id))
   );
@@ -139,20 +143,14 @@ async function load(){
   $('portalCount').textContent=orgs.reduce((a,x)=>a+Number(x['Tender Count']||0),0).toLocaleString('en-IN');
   const copied=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean)).size;
   const currentIds=new Set(tenders.map(t=>clean(t['Tender ID'])).filter(Boolean));
-  const requiredDetailFields=[
-    'Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee',
-    'Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'
-  ];
   const actualDetailSuccess=new Set(
     details
-      .filter(d=>clean(d['Detail Extracted']).toUpperCase()==='YES')
-      .filter(d=>requiredDetailFields.every(k=>clean(d[k])))
-      .filter(d=>Number(clean(d['Processing Fee']).replace(/[^0-9.-]/g,''))>0)
+      .filter(detailComplete)
       .map(d=>clean(d['Tender ID']))
       .filter(id=>currentIds.has(id))
   );
   $('copiedCount').textContent=copied.toLocaleString('en-IN')+' / '+actualDetailSuccess.size.toLocaleString('en-IN');
-  $('msg').textContent='Status = current Portal Tender Count और current copied Tender IDs का मिलान। Closing Date recovery file को सीधे count में नहीं जोड़ा जाता; recovered ID तभी गिनी जाएगी जब वह current organisation snapshot में शामिल हो। Success / Fail / Skip / Pending केवल Detail Extraction की स्थिति है।';
+  $('msg').textContent='Status = current Portal Tender Count और current copied Tender IDs का मिलान। Closing Date recovery file को सीधे count में नहीं जोड़ा जाता; recovered ID तभी गिनी जाएगी जब वह current organisation snapshot में शामिल हो। Success = official MP portal से verified complete details। Pending = अधूरी details या पुराने RSP import की official verification बाकी। Organisation की Pending संख्या केवल उसी organisation की है; कुल Pending सभी organisations का योग है।';
   render();
  }catch(e){
   console.error(e);

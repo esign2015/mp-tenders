@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const html=fs.readFileSync('org/index.html','utf8');
+for(const script of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
+const start=html.indexOf('function detailComplete('),end=html.indexOf('\nfunction render',start);
+const ctx=vm.createContext({clean:v=>String(v??'').replace(/\s+/g,' ').trim()});
+vm.runInContext(html.slice(start,end),ctx);
+const complete=Object.fromEntries(['Tender ID','Tender Fee','Processing Fee','EMD Fee','Total Fee','Location','Pincode','Work Description','Product Category','Contract Type','Bid Validity'].map(k=>[k,'value']));
+Object.assign(complete,{'Detail Extracted':'YES','Processing Fee':'295','Pincode':'482001','Search Route':'Home Search -> Tender ID -> GO -> Tender Title'});
+assert(ctx.detailComplete(complete));
+for(const changes of [{'Search Route':'RSP -> live dataset import'},{'Pincode':'NA'},{'Pincode':'000000'},{'Processing Fee':'0'},{'Detail Extracted':''},{'Work Description':''}])assert(!ctx.detailComplete({...complete,...changes}));
+assert(ctx.detailComplete({...complete,'Processing Fee':'₹1,295.00'}));
+assert.equal((html.match(/\.filter\(detailComplete\)/g)||[]).length,2);
+console.log('PASS: both organisation totals use official provenance, valid PIN, required fields and real processing fee.');
