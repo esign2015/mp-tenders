@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T18:37:54.131750+00:00",
+  "updated_at": "2026-09-30T18:38:30.323538+00:00",
   "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 2106,
+  "detail_complete": 2137,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3206,
+  "detail_pending": 3175,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 949,
+      "detail_complete": 952,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1936
+      "detail_pending": 1933
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -698,10 +698,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 21,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 25
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Cooperative Dairy Federation",
@@ -775,10 +775,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 10,
       "copied_tenders": 10,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "M.P. Textbook Corporation - Bhopal",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 41,
+      "detail_complete": 42,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 24
+      "detail_pending": 23
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:04:25.669789+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 152,
+      "detail_complete": 153,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 216
+      "detail_pending": 215
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,11 +1024,11 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 3201,
+  "legacy_verification_pending": 3170,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
-  "department_count": 463,
+  "department_count": 333,
   "missing_pincode_count": 0,
   "missing_pincode_ids": []
 }
