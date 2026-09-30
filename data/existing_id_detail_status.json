@@ -1,15 +1,15 @@
 {
-  "status": "running",
+  "status": "completed",
   "batch_size": 500,
   "total_csv_ids": 7895,
   "current_portal_ids": 7895,
   "initial_incomplete": 2652,
   "batch_targets": 500,
-  "batch_attempted": 493,
-  "batch_complete": 483,
+  "batch_attempted": 500,
+  "batch_complete": 490,
   "started_at": "2026-09-30T09:44:16.548335+00:00",
-  "success": 3672,
-  "failed": 0,
+  "success": 3679,
+  "failed": 10,
   "success_ids": [
     "2023_UAD_295104_9",
     "2023_UAD_298906_16",
@@ -3644,8 +3644,15 @@
     "2026_UAD_537909_1",
     "2026_UAD_537953_1",
     "2026_UAD_537954_1",
+    "2026_UAD_537958_1",
+    "2026_UAD_537962_1",
+    "2026_UAD_538028_2",
     "2026_UAD_538031_1",
     "2026_UAD_538032_1",
+    "2026_UAD_538056_1",
+    "2026_UAD_538057_1",
+    "2026_UAD_538058_1",
+    "2026_UAD_538059_1",
     "2026_UAD_538090_1",
     "2026_UAD_538091_1",
     "2026_UAD_538092_1",
@@ -3684,7 +3691,18 @@
     "2026_WRD_528866_1",
     "2026_WRD_528873_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_DEON_535871_1",
+    "2026_DHS_535349_1",
+    "2026_DHS_535394_1",
+    "2026_DHS_535965_1",
+    "2026_MPPGC_527679_1",
+    "2026_PKVVC_538252_1",
+    "2026_PKVVC_538323_1",
+    "2026_PWDRB_535652_1",
+    "2026_UAD_526293_1",
+    "2026_UAD_535588_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2023_UAD_255290_15",
@@ -3822,7 +3840,6 @@
     "2026_DC_536186_1",
     "2026_DC_536226_1",
     "2026_DC_538040_1",
-    "2026_DEON_535871_1",
     "2026_DES_534503_1",
     "2026_DES_534526_1",
     "2026_DFWAD_533409_1",
@@ -3904,11 +3921,8 @@
     "2026_DHS_534540_1",
     "2026_DHS_534708_1",
     "2026_DHS_535264_1",
-    "2026_DHS_535349_1",
-    "2026_DHS_535394_1",
     "2026_DHS_535680_1",
     "2026_DHS_535711_1",
-    "2026_DHS_535965_1",
     "2026_DHS_535997_1",
     "2026_DHS_536294_1",
     "2026_DHS_536861_1",
@@ -4332,7 +4346,6 @@
     "2026_MPPGC_527642_1",
     "2026_MPPGC_527644_1",
     "2026_MPPGC_527649_1",
-    "2026_MPPGC_527679_1",
     "2026_MPPGC_527679_2",
     "2026_MPPGC_527695_1",
     "2026_MPPGC_527743_1",
@@ -5161,8 +5174,6 @@
     "2026_PKVVC_537254_1",
     "2026_PKVVC_537276_1",
     "2026_PKVVC_538098_1",
-    "2026_PKVVC_538252_1",
-    "2026_PKVVC_538323_1",
     "2026_PKVVC_538582_1",
     "2026_PKVVC_538702_1",
     "2026_PKVVC_538772_1",
@@ -5382,7 +5393,6 @@
     "2026_PWDRB_535610_1",
     "2026_PWDRB_535627_1",
     "2026_PWDRB_535650_1",
-    "2026_PWDRB_535652_1",
     "2026_PWDRB_535655_1",
     "2026_PWDRB_535656_1",
     "2026_PWDRB_535657_1",
@@ -6022,7 +6032,6 @@
     "2026_UAD_526290_1",
     "2026_UAD_526291_1",
     "2026_UAD_526292_1",
-    "2026_UAD_526293_1",
     "2026_UAD_526294_1",
     "2026_UAD_526295_1",
     "2026_UAD_526296_1",
@@ -7070,7 +7079,6 @@
     "2026_UAD_535585_1",
     "2026_UAD_535586_1",
     "2026_UAD_535587_1",
-    "2026_UAD_535588_1",
     "2026_UAD_535589_1",
     "2026_UAD_535590_1",
     "2026_UAD_535611_1",
@@ -7253,9 +7261,7 @@
     "2026_UAD_537944_1",
     "2026_UAD_537944_2",
     "2026_UAD_537956_1",
-    "2026_UAD_537958_1",
     "2026_UAD_537960_1",
-    "2026_UAD_537962_1",
     "2026_UAD_537963_1",
     "2026_UAD_537964_1",
     "2026_UAD_537965_1",
@@ -7269,7 +7275,6 @@
     "2026_UAD_537995_1",
     "2026_UAD_537997_1",
     "2026_UAD_538028_1",
-    "2026_UAD_538028_2",
     "2026_UAD_538029_1",
     "2026_UAD_538030_1",
     "2026_UAD_538033_1",
@@ -7277,10 +7282,6 @@
     "2026_UAD_538036_1",
     "2026_UAD_538037_1",
     "2026_UAD_538038_1",
-    "2026_UAD_538056_1",
-    "2026_UAD_538057_1",
-    "2026_UAD_538058_1",
-    "2026_UAD_538059_1",
     "2026_UAD_538060_1",
     "2026_UAD_538061_1",
     "2026_UAD_538062_1",
@@ -7911,58 +7912,58 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_UAD_537901_1",
+  "last_successful_tender_id": "2026_UAD_538059_1",
   "errors": [
     {
       "Tender ID": "2026_DHS_535349_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_535588_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535588_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PWDRB_535652_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_535652_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DHS_535965_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535965_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DHS_535394_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535394_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_526293_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_526293_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_MPPGC_527679_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_MPPGC_527679_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DEON_535871_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_538252_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538252_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_538323_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538323_1",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-09-30T10:07:16.332727+00:00"
+  "updated_at": "2026-09-30T10:08:19.771946+00:00"
 }
