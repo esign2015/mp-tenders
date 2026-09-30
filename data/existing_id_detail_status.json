@@ -3,11 +3,11 @@
   "batch_size": 500,
   "total_csv_ids": 7895,
   "current_portal_ids": 7895,
-  "initial_incomplete": 3135,
+  "initial_incomplete": 2652,
   "batch_targets": 500,
-  "batch_attempted": 491,
-  "batch_complete": 483,
-  "started_at": "2026-09-30T08:34:10.739695+00:00",
+  "batch_attempted": 39,
+  "batch_complete": 32,
+  "started_at": "2026-09-30T09:44:16.548335+00:00",
   "success": 3367,
   "failed": 0,
   "success_ids": [
@@ -7911,11 +7911,11 @@
     "2026_WRD_535052_1",
     "2026_WRD_537376_1"
   ],
-  "last_successful_tender_id": "2026_UAD_533762_1",
+  "last_successful_tender_id": "2026_UAD_537155_1",
   "errors": [
     {
-      "Tender ID": "2026_PWDRB_535652_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_535652_1",
+      "Tender ID": "2026_DHS_535349_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
       "retry_pass": false
     },
     {
@@ -7924,8 +7924,8 @@
       "retry_pass": false
     },
     {
-      "Tender ID": "2026_DHS_535349_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
+      "Tender ID": "2026_PWDRB_535652_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_535652_1",
       "retry_pass": false
     },
     {
@@ -7949,5 +7949,5 @@
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-09-30T09:43:22.992615+00:00"
+  "updated_at": "2026-09-30T09:46:11.820462+00:00"
 }
