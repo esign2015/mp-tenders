@@ -1,0 +1,34 @@
+name: Resume Detail Extraction With Current Priority
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/resume-detail-priority.yml]
+permissions:
+  actions: write
+  contents: read
+jobs:
+  resume:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Replace legacy checkpoint frequency with current deadline priority
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request
+          base = 'https://api.github.com/repos/' + os.environ['GH_REPO']
+          headers = {'Authorization':'Bearer '+os.environ['GH_TOKEN'], 'Accept':'application/vnd.github+json'}
+          def request(path, method='GET', body=None):
+              data = json.dumps(body).encode() if body is not None else None
+              with urllib.request.urlopen(urllib.request.Request(base+path, data=data, headers=headers, method=method), timeout=30) as response:
+                  return json.loads(response.read() or '{}')
+          # This legacy run publishes every 30 seconds and prevents Pages
+          # deployment from finishing. Its saved checkpoints remain on main.
+          run = request('/actions/runs/36684805430')
+          if run['head_sha'] == 'e16e96b33f596eed080276f8b2607db7c0265714' and run['status'] != 'completed':
+              request('/actions/runs/36684805430/cancel', 'POST')
+          request('/actions/workflows/targeted-pending-retry.yml/dispatches','POST',{'ref':'main','inputs':{'tender_ids':''}})
+          print('Current deadline priority queued; previously saved tender details preserved.')
+          PY
