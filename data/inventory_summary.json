@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-09-30T21:00:02.685343+00:00",
+  "updated_at": "2026-09-30T21:01:38.156273+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
   "detail_complete": 2882,
-  "detail_failed": 0,
+  "detail_failed": 32,
   "detail_skipped": 0,
-  "detail_pending": 2430,
+  "detail_pending": 2398,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
       "detail_complete": 1429,
-      "detail_failed": 0,
+      "detail_failed": 31,
       "detail_skipped": 0,
-      "detail_pending": 1456
+      "detail_pending": 1425
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -281,9 +281,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 2425,
+  "legacy_verification_pending": 2394,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
