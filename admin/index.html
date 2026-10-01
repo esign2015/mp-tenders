@@ -26,11 +26,20 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
 @media(max-width:650px){header{padding:14px 86px 14px 14px}h1{font-size:21px}main{padding:0 9px;margin-top:10px}.controls-card{width:100%}.telegram-grid,.data-grid{grid-template-columns:1fr}.card{padding:12px}.action{min-height:auto}.user{padding-right:0}.user button.danger{top:10px;right:10px;padding:9px 11px}.card h2{font-size:19px}}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;max-width:min(92vw,650px);padding:14px 18px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 10px 35px #0004;opacity:0;pointer-events:none;transition:.22s ease}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.error{background:#b42318}.toast.success{background:#087443}.toast.info{background:#203b91}
 .small{font-size:11px;color:#637083}.ok{color:#087443}.bad{color:#b42318}
+
+/* Consistent admin spacing and compact account controls. */
+body{background:#eef2f7}header{background:linear-gradient(110deg,#172b54,#244da0);padding:22px 28px}h1{font-size:25px;letter-spacing:-.4px}
+main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-bottom:16px;border-color:#e0e6ef;box-shadow:0 4px 18px #17203306}.card h2{font-size:17px;margin-bottom:14px}
+.quick-links{width:100%;gap:8px}.controls-layout{width:100%;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px;margin-bottom:16px}.controls-card{width:100%}.telegram-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.data-grid{grid-template-columns:1fr;gap:12px}
+.action{background:#f9fbfe;border-color:#e3e9f2;padding:16px;min-height:155px}.action p{font-size:13px;line-height:1.6}.report-actions{display:flex;gap:6px;flex-wrap:wrap}button{padding:10px 13px;font-size:12px}button:hover,.shortcut:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:wait}
+.reset-form{display:grid;gap:14px;max-width:620px}.reset-form>label:first-child{display:grid;gap:7px;font-weight:600;font-size:13px}.mobile-input{width:240px;max-width:100%;height:40px;padding:9px 12px;border:1px solid #cad4e2;border-radius:7px;font-size:15px}.reset-form>button{justify-self:start}.reset-form>label:nth-child(2){font-size:13px;line-height:1.6}#passwordResetLink{border:1px solid #cad4e2;border-radius:7px}.reset-form [hidden]{display:none!important}
+@media(max-width:900px){.controls-layout{grid-template-columns:1fr}.controls-layout>.card{width:100%}}
+@media(max-width:650px){main{padding:0 12px;margin-top:14px}header{padding:20px 90px 20px 18px}h1{font-size:21px}.card{padding:16px}.telegram-grid{grid-template-columns:1fr}.action{min-height:130px}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
-<header><h1>🔐 MP Tenders — Admin Control Panel</h1><p>Google verified Admin access • Data / Telegram controls</p></header>
+<header><h1>MP Tenders · Admin</h1><p>SAR Digital Services, Kannod · Users, reports &amp; data management</p></header>
 
 <main>
 <section id="login" class="card">
@@ -51,8 +60,8 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
   <div class="card">
     <h2>User Password Reset</h2>
     <p class="small">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
-    <form id="passwordResetAdminForm" style="display:grid;gap:10px;max-width:650px">
-      <label>Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required style="padding:10px;width:100%;box-sizing:border-box"></label>
+    <form id="passwordResetAdminForm" class="reset-form">
+      <label>Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
       <label><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
       <button id="passwordResetCreate" type="submit">Create 15-minute Reset Link</button>
       <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link" style="padding:10px;width:100%;box-sizing:border-box">
@@ -64,9 +73,9 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
     <div class="grid telegram-grid">
-      <div class="action"><h3>Closing Today PDF</h3><p>Latest current data से आज closing वाले tenders की नई PDF भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'closing_today'})">Send Telegram PDF</button></div>
-      <div class="action"><h3>New Today PDF</h3><p>आज published tenders की latest PDF भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'new_today'})">Send Telegram PDF</button></div>
-      <div class="action"><h3>All Latest Data PDF</h3><p>Latest available tender data की complete PDF बनाकर भेजें।</p><button class="secondary" onclick="run('telegram_pdf',{report:'all'})">Send Telegram PDF</button></div>
+      <div class="action"><h3>Closing Today PDF</h3><p>Latest current data से आज closing वाले tenders की नई PDF भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'closing_today',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'closing_today',view:'card'})">Send Card PDF</button></div></div>
+      <div class="action"><h3>New Today PDF</h3><p>आज published tenders की latest PDF भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'new_today',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'new_today',view:'card'})">Send Card PDF</button></div></div>
+      <div class="action"><h3>All Latest Data PDF</h3><p>Latest available tender data की complete PDF बनाकर भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'all',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'all',view:'card'})">Send Card PDF</button></div></div>
       <div class="action"><h3>Telegram Test</h3><p>Telegram delivery ठीक है या नहीं जाँचने के लिए test message/PDF।</p><button class="warn" onclick="run('telegram_test')">Send Test</button></div>
     </div>
   </div>

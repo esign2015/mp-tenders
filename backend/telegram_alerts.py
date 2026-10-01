@@ -401,6 +401,9 @@ def main():
 
     if mode == "manual":
         report = clean(os.getenv("MANUAL_REPORT", "closing_today")).lower()
+        view = clean(os.getenv("MANUAL_VIEW", "table")).lower()
+        if view not in {"table", "card"}:
+            raise RuntimeError(f"Unknown MANUAL_VIEW: {view}")
         today = datetime.now(IST).date()
         display = today.strftime("%d/%m/%Y")
         stamp = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
@@ -442,7 +445,12 @@ def main():
         )
         telegram_message(token, chat_id, message)
         if selected:
-            pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
+            if view == "card":
+                from telegram_card_pdf import make_card_pdf
+                filename = filename.replace(".pdf", " Card View.pdf")
+                pdf = make_card_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
+            else:
+                pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
             telegram_document(token, chat_id, pdf, f"📎 {title}")
         else:
             telegram_message(token, chat_id, "ℹ️ चुने गए filter में अभी कोई tender नहीं मिला, इसलिए PDF नहीं भेजी गई।")

@@ -13,6 +13,15 @@ on:
           - new_today
           - all
 
+      view:
+        description: "PDF layout"
+        required: true
+        default: "table"
+        type: choice
+        options:
+          - table
+          - card
+
 permissions:
   contents: write
 
@@ -38,12 +47,14 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_MODE: manual
           MANUAL_REPORT: ${{ inputs.report }}
+          MANUAL_VIEW: ${{ inputs.view }}
         run: python backend/telegram_alerts.py
 
       - name: Record manual Telegram delivery
         if: always()
         env:
           REPORT: ${{ inputs.report }}
+          VIEW: ${{ inputs.view }}
           JOB_STATUS: ${{ job.status }}
         run: |
           python - <<'PY'
@@ -54,6 +65,7 @@ jobs:
           path.write_text(json.dumps({
             "sent_at": datetime.now(timezone.utc).isoformat(),
             "report": os.environ.get("REPORT","—"),
+            "view": os.environ.get("VIEW","table"),
             "status": os.environ.get("JOB_STATUS","unknown"),
             "type": "admin_manual"
           }, ensure_ascii=False, indent=2), encoding="utf-8")

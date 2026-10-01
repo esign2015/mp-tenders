@@ -1150,7 +1150,7 @@ def admin_logout():
     # sufficient; this endpoint exists for a clean client-side logout flow.
     return jsonify({"ok": True})
 
-def run_manual_telegram_pdf(report):
+def run_manual_telegram_pdf(report, view="table"):
     """Send an admin PDF directly from Render using the latest committed live snapshot.
 
     This intentionally does not depend on GitHub workflow dispatch/PAT. The admin
@@ -1175,7 +1175,7 @@ def run_manual_telegram_pdf(report):
         csv_path = Path(tmp) / "organisation_tenders.csv"
         csv_path.write_bytes(csv_bytes)
         env = os.environ.copy()
-        env.update({"NOTIFY_MODE":"manual", "MANUAL_REPORT":report, "TENDER_CSV_PATH":str(csv_path)})
+        env.update({"NOTIFY_MODE":"manual", "MANUAL_REPORT":report, "MANUAL_VIEW":view, "TENDER_CSV_PATH":str(csv_path)})
         proc = subprocess.run(
             [os.getenv("PYTHON", "python"), str(ROOT / "backend" / "telegram_alerts.py")],
             cwd=str(ROOT), env=env, capture_output=True, text=True, timeout=240,
@@ -1285,8 +1285,11 @@ def admin_action():
             report = clean(payload.get("report", "closing_today"))
             if report not in {"closing_today", "new_today", "all"}:
                 return jsonify({"ok": False, "message": "Invalid PDF report."}), 400
-            github_dispatch("telegram_manual_pdf.yml", {"report": report})
-            message = f"Telegram PDF workflow started: {report}"
+            view = clean(payload.get("view", "table")).lower()
+            if view not in {"table", "card"}:
+                return jsonify({"ok": False, "message": "Invalid PDF view."}), 400
+            github_dispatch("telegram_manual_pdf.yml", {"report": report, "view": view})
+            message = f"Telegram {view.title()} PDF workflow started: {report}"
         elif action == "data_refresh":
             github_dispatch("scrape.yml")
             message = "Full data refresh workflow started."

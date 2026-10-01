@@ -24,6 +24,7 @@ jobs:
       - run: python -m unittest discover -s tests -p 'test_user_export.py'
       - run: python -m unittest discover -s tests -p 'test_google_sheet_store.py'
       - run: python -m unittest discover -s tests -p 'test_accounts.py'
+      - run: python -m unittest discover -s tests -p 'test_admin_manual_pdf.py'
       - run: node tests/test_account_access.cjs
       - run: node tests/test_google_sheet_script.cjs
       - run: node tests/test_visitor_access.cjs
