@@ -1451,11 +1451,13 @@ td.title-cell{
 .telegram-profile-menu{
   display:none;position:fixed;
   min-width:250px;max-width:min(320px,calc(100vw - 16px));
+  white-space:normal;text-align:left;
   background:#fff;color:#172033;
   border:1px solid #cbd5e1;border-radius:10px;
   box-shadow:0 18px 45px rgba(0,0,0,.30);padding:12px;z-index:2147483647 !important;
 }
 .telegram-profile-menu.open{display:block !important;z-index:2147483647 !important}
+.telegram-profile-menu button{display:block;width:100%;white-space:normal;text-align:center}
 .telegram-profile-name{font-weight:800;font-size:14px}
 .telegram-profile-username{font-size:11px;color:#64748b;margin-top:2px}
 .telegram-profile-status{font-size:11px;color:#166534;margin-top:8px}
@@ -2863,8 +2865,9 @@ function positionTelegramProfileMenu(){
   const rect=button.getBoundingClientRect();
   const width=Math.min(280,window.innerWidth-16);
   menu.style.width=width+"px";
-  menu.style.maxHeight="none";
-  menu.style.overflowY="visible";
+  menu.style.maxHeight=Math.max(0,window.innerHeight-16)+"px";
+  menu.style.overflowY="auto";
+  menu.style.overflowX="hidden";
   const menuHeight=menu.getBoundingClientRect().height;
   const below=rect.bottom+6;
   const above=rect.top-menuHeight-6;
