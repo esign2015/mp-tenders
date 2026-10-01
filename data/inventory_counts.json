@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T12:22:04.195853+00:00",
+  "updated_at": "2026-10-01T12:22:27.595307+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 5116,
+  "detail_complete": 5172,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 413,
+  "detail_pending": 357,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2703,
+      "detail_complete": 2758,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 318
+      "detail_pending": 263
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -907,10 +907,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Principal Revenue Commissioner",
@@ -1079,8 +1079,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 343,
-  "missing_district_count": 65,
+  "legacy_verification_pending": 291,
+  "missing_district_count": 61,
   "missing_district_ids": [
     "2026_FDAMP_540266_1",
     "2026_TAD_537679_1",
@@ -1102,10 +1102,6 @@
     "2026_TAD_538468_1",
     "2026_TAD_538469_1",
     "2026_TAD_538471_1",
-    "2026_UAD_537069_1",
-    "2026_UAD_537069_2",
-    "2026_UAD_537069_3",
-    "2026_UAD_537069_4",
     "2026_UAD_538303_1",
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
@@ -1150,7 +1146,7 @@
   ],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 65,
+  "missing_pincode_count": 61,
   "missing_pincode_ids": [
     "2026_FDAMP_540266_1",
     "2026_TAD_537679_1",
@@ -1172,10 +1168,6 @@
     "2026_TAD_538468_1",
     "2026_TAD_538469_1",
     "2026_TAD_538471_1",
-    "2026_UAD_537069_1",
-    "2026_UAD_537069_2",
-    "2026_UAD_537069_3",
-    "2026_UAD_537069_4",
     "2026_UAD_538303_1",
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
