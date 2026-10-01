@@ -1900,56 +1900,31 @@ body.telegram-locked .site-footer{visibility:hidden}
 <body class="telegram-locked org-display-full">
 <div id="telegramGate">
   <div class="telegram-gate-card">
-    <div class="telegram-gate-brand">
-      <div class="telegram-gate-icon">🔐</div>
-      <div>
-        <div class="telegram-gate-title">MP Tender Live Dashboard</div>
-        <div class="telegram-gate-subtitle">SAR Digital Services, Kannod</div>
-      </div>
-    </div>
-
-    <div class="telegram-gate-heading">🔐 Telegram से Login करें</div>
-    <p class="telegram-gate-intro">
-      Dashboard का उपयोग करने के लिए पहले अपने Telegram account से login करें।
-      Login के बाद <strong>@mptendersalert</strong> channel membership अपने-आप verify होगी।
-    </p>
-
-    <div class="telegram-login-steps">
-      <div class="telegram-step active">
-        <span class="telegram-step-no">1</span>
-        <span><strong>Login</strong><small>Telegram account verify करें</small></span>
-      </div>
-      <div class="telegram-step">
-        <span class="telegram-step-no">2</span>
-        <span><strong>Channel Join</strong><small>@mptendersalert join करें</small></span>
-      </div>
-      <div class="telegram-step">
-        <span class="telegram-step-no">3</span>
-        <span><strong>Dashboard</strong><small>Tenders देखना शुरू करें</small></span>
-      </div>
-    </div>
-
-    <button class="telegram-login-start" id="telegramLoginStart" type="button" onclick="setupTelegramLogin()">🔵 Login with Telegram</button>
-    <div class="telegram-login-wrap" id="telegramLoginWrap"></div>
-
-    <div class="telegram-gate-actions">
-      <a class="telegram-join-btn" id="telegramJoinBtn" href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">📢 Join @mptendersalert Channel</a>
-      <button class="telegram-verify-btn" id="telegramCheckBtn" type="button">✅ मैंने Join कर लिया — Check Again</button>
-    </div>
-
-    <div id="telegramGateStatus">ऊपर दिए गए Telegram Login button पर क्लिक करें।</div>
-
-    <div class="telegram-gate-note">
-      <span>🔒</span>
-      <span>आपका Telegram password या OTP इस website पर नहीं लिया जाता। Login Telegram के माध्यम से होता है।</span>
-    </div>
-
-    <div class="telegram-admin">
-      Login या channel verification में समस्या हो तो
-      <a href="https://t.me/rdgyan" target="_blank" rel="noopener noreferrer">Contact Admin — t.me/rdgyan</a>
-    </div>
+    <div class="telegram-gate-title">MP Tender Live Dashboard</div>
+    <div class="telegram-gate-subtitle">SAR Digital Services, Kannod</div>
+    <h2>अपनी जानकारी भरें</h2>
+    <p>Dashboard देखने के लिए Name, Mobile Number और District save करें।</p>
+    <form id="visitorRegistrationForm">
+      <label for="visitorName">Name / नाम</label>
+      <input id="visitorName" name="name" autocomplete="name" minlength="2" maxlength="120" required>
+      <label for="visitorMobile">Mobile Number / मोबाइल नंबर</label>
+      <input id="visitorMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number" required>
+      <label for="visitorDistrict">District / जिला</label>
+      <input id="visitorDistrict" name="district" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
+      <datalist id="visitorDistrictList"></datalist>
+      <button class="telegram-login-start" id="visitorSave" type="submit">Save &amp; Open Dashboard</button>
+    </form>
+    <div id="visitorStatus" role="status" aria-live="polite"></div>
   </div>
 </div>
+<style>
+#visitorRegistrationForm{display:grid;gap:8px;text-align:left;margin-top:20px}
+#visitorRegistrationForm label{font-weight:700;font-size:14px;margin-top:5px}
+#visitorRegistrationForm input{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
+#visitorSave{width:100%;margin-top:12px;justify-content:center}
+#visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
+</style>
+<script src="assets/visitor_access.js?v=1"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -5722,7 +5697,7 @@ updateVirtualPager();
    First make Telegram login responsive; only after successful access load
    the dashboard data.
 */
-enforceTelegramAccess().then(async () => {
+enforceVisitorAccess().then(async () => {
   const backgroundDataLoad = loadData();
   await loadDistrictMaster();
   if(Array.isArray(allTenders) && allTenders.length) applyFilters(false);
@@ -5930,7 +5905,8 @@ enforceTelegramAccess().then(async () => {
   const AFFIDAVIT_FORMAT_NOTICE="General (universal) format: Before notarisation or attaching this affidavit to a bid, verify it against the prescribed format and requirements in the tender documents and make all necessary changes. SAR Digital Services, Kannod and this website are not responsible for required changes, discrepancies, or use of this format.";
   const profileKey=()=>{
     const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "local";
-    return "mp_tender_affidavit_profile_v1_"+telegramId;
+    const visitorId=window.dashboardVisitorProfile?.visitor_id;
+    return "mp_tender_affidavit_profile_v1_"+(visitorId?"visitor_"+visitorId:telegramId);
   };
   const safe=v=>String(v??"").trim();
   const todayIst=()=>{
@@ -5945,6 +5921,7 @@ enforceTelegramAccess().then(async () => {
     return telegramId ? "mp_tender_user_profile_v1_"+telegramId : "";
   }
   function getSavedGeneralProfile(){
+    if(window.dashboardVisitorProfile) return window.dashboardVisitorProfile;
     const key=telegramGeneralProfileKey();
     if(!key) return {};
     try{return JSON.parse(localStorage.getItem(key)||"{}")||{};}catch(e){return {};}

@@ -344,7 +344,7 @@ def build_user_excel():
     from openpyxl import Workbook
     from openpyxl.utils import get_column_letter
 
-    conn = user_db()
+    conn = visitor_db()
     try:
         users = conn.execute("""
             SELECT telegram_id, name, mobile, email, state, district, username, first_name, last_name,
@@ -352,6 +352,7 @@ def build_user_excel():
             FROM users
             ORDER BY signup_at DESC
         """).fetchall()
+        visitors = conn.execute("SELECT * FROM visitor_registrations ORDER BY signup_at DESC").fetchall()
         daily = conn.execute("""
             SELECT substr(signup_at,1,10) AS day,
                    COUNT(*) AS new_users,
@@ -396,7 +397,18 @@ def build_user_excel():
         cell.font = cell.font.copy(bold=True)
     ds.freeze_panes = "A2"
 
-    for sheet in (ws, ds):
+    vs = wb.create_sheet("Visitor Registrations")
+    vs.append(["S.No.", "Name", "Mobile", "District", "First Saved (IST)", "Last Visit (IST)", "Visit Count", "Mobile Verified"])
+    for i, row in enumerate(visitors, 1):
+        vs.append([i,row["name"],row["mobile"],row["district"],row["signup_at"],row["last_visit_at"],row["visit_count"],"No"])
+    for row in vs.iter_rows(min_row=2):
+        for cell in row[1:4]:
+            cell.data_type = "s"
+    for cell in vs[1]:
+        cell.font = cell.font.copy(bold=True)
+    vs.freeze_panes = "A2"
+    vs.auto_filter.ref = vs.dimensions
+    for sheet in (ws, ds, vs):
         for col in range(1, sheet.max_column + 1):
             max_len = max(
                 len(str(sheet.cell(row=r, column=col).value or ""))
@@ -408,6 +420,134 @@ def build_user_excel():
     wb.save(output)
     output.seek(0)
     return output.read()
+
+# Temporary public access: collect a profile without Telegram authentication.
+def visitor_db():
+    conn = user_db()
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS visitor_registrations (
+            visitor_id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            mobile TEXT NOT NULL,
+            district TEXT NOT NULL,
+            signup_at TEXT NOT NULL,
+            last_visit_at TEXT NOT NULL,
+            visit_count INTEGER NOT NULL DEFAULT 1
+        );
+        CREATE TABLE IF NOT EXISTS visitor_events (
+            event_id TEXT PRIMARY KEY,
+            visitor_id TEXT NOT NULL,
+            visited_at TEXT NOT NULL
+        );
+    """)
+    conn.commit()
+    return conn
+
+
+def make_visitor_session(visitor_id):
+    import base64
+    secret = clean(os.getenv("VISITOR_SESSION_SECRET")) or admin_session_secret()
+    if not secret:
+        raise RuntimeError("Visitor session signing unavailable")
+    payload = {"visitor_id": visitor_id, "exp": int((now_ist()+timedelta(days=365)).timestamp())}
+    body = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip("=")
+    signature = hmac.new(secret.encode(), ("visitor:"+body).encode(), hashlib.sha256).hexdigest()
+    return body+"."+signature
+
+
+def read_visitor_session(token):
+    import base64
+    try:
+        body, signature = clean(token).split(".", 1)
+        secret = clean(os.getenv("VISITOR_SESSION_SECRET")) or admin_session_secret()
+        if not secret or len(body)>1024:
+            return None
+        expected = hmac.new(secret.encode(), ("visitor:"+body).encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(signature, expected):
+            return None
+        payload = json.loads(base64.urlsafe_b64decode(body+"="*((-len(body))%4)))
+        if int(payload["exp"])<=int(now_ist().timestamp()):
+            return None
+        return str(payload["visitor_id"])
+    except (ValueError, KeyError, TypeError):
+        return None
+
+
+def visitor_response(row):
+    response = jsonify({"ok": True, "registered": True, "visitor_id": row["visitor_id"],
+                        "session_token": make_visitor_session(row["visitor_id"]),
+                        "profile": {key:row[key] for key in ("name", "mobile", "district")}})
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
+
+@app.post("/api/visitors/register")
+def visitors_register():
+    import uuid
+    payload = request.get_json(silent=True) or {}
+    name, district = clean(payload.get("name")), clean(payload.get("district"))
+    mobile = normalise_mobile(payload.get("mobile"))
+    if not 2<=len(name)<=120 or not mobile or not 2<=len(district)<=100:
+        return jsonify({"ok":False,"message":"सही Name, 10-digit Mobile Number और District भरें।"}),400
+    try:
+        visitor_id = str(uuid.UUID(clean(payload.get("registration_id"))))
+    except (ValueError, AttributeError):
+        return jsonify({"ok":False,"message":"Registration request invalid. Reload and retry."}),400
+    # A visitor token grants public profile access only; never admin privileges.
+    make_visitor_session(visitor_id)
+    conn = visitor_db()
+    try:
+        now = now_ist().isoformat()
+        inserted = conn.execute("""INSERT INTO visitor_registrations
+            (visitor_id,name,mobile,district,signup_at,last_visit_at,visit_count)
+            VALUES (?,?,?,?,?,?,1) ON CONFLICT (visitor_id) DO NOTHING""",
+            (visitor_id,name,mobile,district,now,now))
+        if inserted.cursor.rowcount == 1:
+            conn.execute("INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)",(str(uuid.uuid4()),visitor_id,now))
+        row = dict(conn.execute("SELECT * FROM visitor_registrations WHERE visitor_id=?",(visitor_id,)).fetchone())
+        if (row["name"],row["mobile"],row["district"])!=(name,mobile,district):
+            return jsonify({"ok":False,"message":"Registration request already used. Reload and retry."}),409
+        conn.commit()
+        return visitor_response(row)
+    finally:
+        conn.close()
+
+
+@app.post("/api/visitors/session")
+def visitors_session():
+    import uuid
+    payload = request.get_json(silent=True) or {}
+    visitor_id = read_visitor_session(payload.get("session_token"))
+    if not visitor_id:
+        return jsonify({"ok":False,"message":"Please save your profile again."}),401
+    conn = visitor_db()
+    try:
+        row = conn.execute("SELECT * FROM visitor_registrations WHERE visitor_id=?",(visitor_id,)).fetchone()
+        if not row:
+            return jsonify({"ok":False,"message":"Profile not found. Please save again."}),401
+        now = now_ist().isoformat()
+        conn.execute("UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?",(now,visitor_id))
+        conn.execute("INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)",(str(uuid.uuid4()),visitor_id,now))
+        conn.commit()
+        return visitor_response(dict(row))
+    finally:
+        conn.close()
+
+
+@app.get("/api/admin/visitor-registrations")
+def admin_visitor_registrations():
+    email, _ = require_admin()
+    if not email:
+        return jsonify({"ok":False,"message":"Admin access required."}),401
+    conn = visitor_db()
+    try:
+        rows = conn.execute("SELECT * FROM visitor_registrations ORDER BY signup_at DESC").fetchall()
+        response = jsonify({"ok":True,"visitors":[dict(row) for row in rows]})
+        response.headers["Cache-Control"] = "no-store"
+        return response
+    finally:
+        conn.close()
+
 
 def telegram_user_from_session(payload):
     token = clean((payload or {}).get("session_token"))

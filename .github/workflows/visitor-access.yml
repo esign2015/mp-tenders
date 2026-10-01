@@ -1,0 +1,26 @@
+name: Visitor Profile Checks
+on:
+  push:
+    branches: [main]
+    paths: ["backend/server.py", "assets/visitor_access.js", "index.html", "tests/test_visitors.py", "tests/test_visitor_access.cjs", ".github/workflows/visitor-access.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Kolkata
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install -r backend/requirements.txt
+      - run: python -m unittest discover -s tests -p 'test_visitors.py'
+      - run: python -m unittest discover -s tests -p 'test_user_export.py'
+      - run: node tests/test_visitor_access.cjs
+      - run: node tests/test_dashboard_sorting.cjs
