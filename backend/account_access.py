@@ -8,6 +8,7 @@ import google_sheet_store as sheets
 PASSWORD_METHOD='scrypt:32768:8:3'
 _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PASSWORD_METHOD)
 SESSION_SECONDS=30*24*3600
+IDLE_SECONDS=15*60
 
 class AccountError(RuntimeError):
     def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
@@ -65,7 +66,7 @@ class Accounts:
     def issue(self,record):
         raw='acct_'+record['user_id']+'.'+secrets.token_urlsafe(32)
         now=int(time.time());sessions=[s for s in record.get('sessions',[]) if s['expires']>now][-9:]
-        sessions.append({'hash':self.digest(raw),'expires':now+SESSION_SECONDS})
+        sessions.append({'hash':self.digest(raw),'expires':now+SESSION_SECONDS,'last_active':now})
         record['sessions']=sessions;return raw
     def authenticate(self,token):
         if not isinstance(token,str) or not token.startswith('acct_') or len(token)>160:raise AccountError('Session समाप्त है। Sign in करें।',401)
@@ -73,7 +74,7 @@ class Accounts:
         except ValueError:raise AccountError('Session invalid.',401) from None
         record=self.get(user_id=user_id)
         digest=self.digest(token);now=int(time.time())
-        if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now for s in record.get('sessions',[])):raise AccountError('Session समाप्त है। Sign in करें।',401)
+        if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now and now-s.get('last_active',s['expires']-SESSION_SECONDS)<IDLE_SECONDS for s in record.get('sessions',[])):raise AccountError('15 मिनट inactivity के बाद session समाप्त है। Sign in करें।',401)
         return record
     def response(self,record,token):
         if sheets.enabled():aff=sheets.call('session',visitor_id=record['user_id'])['affidavit_profile']
@@ -129,6 +130,41 @@ def install(server):
     def session():
         token=(request.get_json(silent=True) or {}).get('session_token');record=accounts.authenticate(token)
         return accounts.response(record,token)
+    @app.post('/api/accounts/activity')
+    def activity():
+        token=(request.get_json(silent=True) or {}).get('session_token')
+        for _ in range(3):
+            record=accounts.authenticate(token);revision=record['revision']
+            for session in record['sessions']:
+                if hmac.compare_digest(session['hash'],accounts.digest(token)):session['last_active']=int(time.time())
+            if accounts.update(record,revision):return jsonify({'ok':True})
+        raise AccountError('Session update फिर प्रयास करें।',409)
+    @app.post('/api/accounts/profile')
+    def edit_profile():
+        p=request.get_json(silent=True) or {};name=server.clean(p.get('name'));district=server.clean(p.get('district'))
+        if not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name और District भरें।')
+        for _ in range(3):
+            record=accounts.authenticate(p.get('session_token'));revision=record['revision'];record.update(name=name,district=district)
+            if accounts.update(record,revision):
+                if not sheets.enabled():
+                    conn=server.visitor_db()
+                    try:conn.execute('UPDATE visitor_registrations SET name=?,district=? WHERE visitor_id=?',(name,district,record['user_id']));conn.commit()
+                    finally:conn.close()
+                return jsonify({'ok':True,'profile':{key:record[key] for key in ('name','mobile','district')}})
+        raise AccountError('Profile save फिर प्रयास करें।',409)
+    @app.post('/api/accounts/change-password')
+    def change_password():
+        p=request.get_json(silent=True) or {};token=p.get('session_token');record=accounts.authenticate(token);accounts.limit(record['mobile'])
+        current=p.get('current_password')
+        if not isinstance(current,str) or len(current)>128 or not check_password_hash(record['password_hash'],current):raise AccountError('Current password सही नहीं है।',401,'wrong_password')
+        if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
+        new_hash=accounts.password(p.get('password'));original_hash=record['password_hash']
+        for _ in range(3):
+            record=accounts.authenticate(token)
+            if record['password_hash']!=original_hash:raise AccountError('Password बदल चुका है। फिर Sign in करें।',401)
+            revision=record['revision'];record.update(password_hash=new_hash,sessions=[],reset=None)
+            if accounts.update(record,revision):return jsonify({'ok':True,'message':'Password बदल गया। नए password से Sign in करें।'})
+        raise AccountError('Password save फिर प्रयास करें।',409)
     @app.post('/api/accounts/logout')
     def logout():
         token=(request.get_json(silent=True) or {}).get('session_token');record=accounts.authenticate(token)

@@ -1956,7 +1956,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=3"></script>
+<script src="assets/account_access.js?v=4"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -1984,6 +1984,25 @@ body.telegram-locked .site-footer{visibility:hidden}
   </div>
 </div>
 
+<div class="user-profile-modal" id="accountSettingsModal" aria-hidden="true">
+  <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle" style="max-height:90vh;overflow:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="user-profile-title" id="accountSettingsTitle">My Profile</div><button type="button" id="accountSettingsClose" aria-label="Close account settings">✕</button></div>
+    <form id="accountEditProfileForm">
+      <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="120" autocomplete="name" required>
+      <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
+      <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
+      <datalist id="accountDistrictList"></datalist><button class="user-profile-save" type="submit">Save Profile</button>
+    </form>
+    <form id="accountChangePasswordForm" hidden>
+      <label class="user-profile-label" for="accountCurrentPassword">Current Password</label><input class="user-profile-input" id="accountCurrentPassword" type="password" autocomplete="current-password" maxlength="128" required>
+      <label class="user-profile-label" for="accountChangeNew">New Password</label><input class="user-profile-input" id="accountChangeNew" type="password" autocomplete="new-password" minlength="8" maxlength="128" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" required>
+      <div class="user-profile-sub">कम से कम 8 characters: एक capital, एक small, एक number और एक special character।</div>
+      <label class="user-profile-label" for="accountChangeConfirm">Confirm New Password</label><input class="user-profile-input" id="accountChangeConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+      <button class="user-profile-save" type="submit">Change Password</button>
+    </form>
+    <div class="user-profile-status" id="accountSettingsStatus" role="status" aria-live="polite"></div>
+  </div>
+</div>
 <div class="user-profile-modal" id="userProfileModal" aria-hidden="true">
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="userProfileTitle">
     <div class="user-profile-title" id="userProfileTitle">👤 अपना प्रोफाइल पूरा करें</div>
@@ -2102,6 +2121,8 @@ body.telegram-locked .site-footer{visibility:hidden}
         <button class="user-report-btn" id="userReportBtn" type="button" style="display:none">📊 User Report / Excel</button>
         <button class="user-report-btn" id="adminUserPanelBtn" type="button" style="display:none">👥 User Panel</button>
         <div class="user-report-box" id="userReportBox"></div>
+        <button class="user-report-btn" id="accountProfileBtn" type="button">👤 My Profile</button>
+        <button class="user-report-btn" id="accountPasswordBtn" type="button">🔑 Change Password</button>
         <button class="telegram-logout-btn" id="telegramLogoutBtn" type="button" data-i18n="logout">🚪 Logout</button>
       </div>
     </div>
@@ -2641,6 +2662,7 @@ async function downloadUserReport(){
 }
 
 function logoutTelegram(){
+  if(localStorage.getItem(VISITOR_SESSION_KEY)){accountLogout();return;}
   localStorage.removeItem("telegram_auth");
   localStorage.removeItem("telegram_session");
   sessionStorage.removeItem("telegram_verified");
@@ -2836,7 +2858,7 @@ function setupTelegramFlow(){
     const open=profileMenu?.classList.toggle("open");
     if(open) requestAnimationFrame(positionTelegramProfileMenu);
   };
-  if(logoutBtn) logoutBtn.onclick=logoutTelegram;
+  if(logoutBtn) logoutBtn.onclick=()=>localStorage.getItem(VISITOR_SESSION_KEY)?accountLogout():logoutTelegram();
   const saveBtn=document.getElementById("userProfileSave");
   if(saveBtn) saveBtn.onclick=saveUserProfile;
   const reportBtn=document.getElementById("userReportBtn");

@@ -1,9 +1,9 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
-const html=fs.readFileSync('index.html','utf8');assert(html.includes('enforceAccountAccess().then'));assert(!html.includes('enforceTelegramAccess().then'));
+const html=fs.readFileSync('index.html','utf8');assert(html.includes('enforceAccountAccess().then'));assert(!html.includes('enforceTelegramAccess().then'));assert(html.includes('logoutBtn.onclick=()=>localStorage.getItem(VISITOR_SESSION_KEY)?accountLogout():logoutTelegram()'));
 for(const source of [html,fs.readFileSync('admin/index.html','utf8')])for(const script of source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
-const nodes={},local=new Map();const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false}},appendChild(){},removeAttribute(name){delete this[name]}};
+const nodes={},local=new Map(),session=new Map();let now=1000000;const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false}},appendChild(){},removeAttribute(name){delete this[name]},setAttribute(){}};
 let fail=true,unlocked=false,opened='',reply=null;
-const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR_PROFILE_KEY:'profile',localStorage:{getItem:k=>local.get(k)||null,removeItem:k=>local.delete(k)},visitorUnlock:data=>{unlocked=true;local.set('token',data.session_token)},location:{hash:'',pathname:'/',search:'',reload(){}},history:{replaceState(){}},window:{open:url=>opened=url},document:{createElement:()=>({})},alert(){},fetch:async(url,options)=>{
+const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR_PROFILE_KEY:'profile',Date:{now:()=>now},setInterval(){return 1},clearInterval(){},sessionStorage:{getItem:k=>session.get(k)||null,setItem:(k,v)=>session.set(k,v),removeItem:k=>session.delete(k)},localStorage:{getItem:k=>local.get(k)||null,setItem:(k,v)=>local.set(k,v),removeItem:k=>local.delete(k)},visitorUnlock:data=>{unlocked=true;local.set('token',data.session_token)},location:{hash:'',pathname:'/',search:'',reload(){}},history:{replaceState(){}},window:{open:url=>opened=url,addEventListener(){}},document:{body:{classList:{add(){}}},addEventListener(){},createElement:()=>({})},alert(){},fetch:async(url,options)=>{
  assert(!url.includes('/telegram/'));if(url.includes('mp_districts'))return{json:async()=>({districts:[]})};
  const body=JSON.parse(options.body);
  if(reply)return reply;
@@ -33,5 +33,8 @@ vm.runInContext(fs.readFileSync('assets/account_access.js','utf8'),ctx);
  assert(!node('accountSignUpForm').hidden);assert.equal(node('visitorMobile').value,'9123456789');assert(node('accountForgotWhatsApp').hidden);assert.equal(opened,'');
  node('accountSignInTab').onclick();node('accountLoginPassword').value='Private1!';
  reply=null;fail=false;await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});await pending;assert(unlocked);assert.equal(node('accountLoginPassword').value,'');
- console.log('PASS: signup routing preserves mobile/password, duplicate signup returns to signin with mobile only, unknown forgot cannot open WhatsApp, registered forgot link, failed login stays locked and successful login clears passwords.');
+ node('accountProfileBtn').onclick();assert.equal(node('accountEditName').value,'Test');assert.equal(node('accountEditMobile').value,'+919876543210');
+ now+=14*60*1000;assert.equal(ctx.accountExpired(),false);now+=60*1000;assert.equal(ctx.accountExpired(),true);assert(!local.has('token'));assert(session.get('mp_account_notice').includes('15'));
+ local.set('token','another-token');ctx.accountLogout();assert(!local.has('token'));
+ console.log('PASS: logout handler, profile controls, 15 minute idle expiry and signup routing preserves mobile/password, duplicate signup returns to signin with mobile only, unknown forgot cannot open WhatsApp, registered forgot link, failed login stays locked and successful login clears passwords.');
 })().catch(e=>{console.error(e);process.exitCode=1});

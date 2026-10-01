@@ -70,6 +70,26 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/reset-password',json={'reset_token':token,'password':self.password,'confirm_password':self.password}).status_code,400)
         for _ in range(15):response=self.login('wrong password')
         self.assertEqual(response.status_code,429)
+    def test_idle_expiry_and_activity_cannot_revive_expired_session(self):
+        account=self.signup();token=account['session_token'];record=server.account_service.get(user_id=account['visitor_id'])
+        initial=record['sessions'][0]['last_active']
+        with patch('account_access.time.time',return_value=initial+800):
+            self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,200)
+        with patch('account_access.time.time',return_value=initial+1700):
+            self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,401)
+            self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,401)
+    def test_self_profile_and_password_change_require_authenticated_owner(self):
+        first=self.signup();second=self.login().json;token=first['session_token']
+        self.assertEqual(self.client.post('/api/accounts/profile',json={'name':'Changed','district':'Harda'}).status_code,401)
+        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'name':'Changed','district':'Harda','mobile':'9123456789'})
+        self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['mobile'],'+919876543210')
+        self.assertEqual(self.login().json['profile']['district'],'Harda')
+        body={'session_token':token,'current_password':'wrong','password':'Newpass2!','confirm_password':'Newpass2!'}
+        self.assertEqual(self.client.post('/api/accounts/change-password',json=body).json['code'],'wrong_password')
+        body['current_password']=self.password
+        self.assertEqual(self.client.post('/api/accounts/change-password',json=body).status_code,200)
+        for old in (token,second['session_token']):self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':old}).status_code,401)
+        self.assertEqual(self.login().status_code,401);self.assertEqual(self.login('Newpass2!').status_code,200)
     def test_sheet_failure_does_not_create_local_password_account(self):
         with patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48}),patch.object(sheets,'call',side_effect=sheets.SheetStoreError('Unavailable')):
             self.assertEqual(self.client.post('/api/accounts/signup',json=self.data).status_code,503)
