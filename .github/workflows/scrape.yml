@@ -547,7 +547,7 @@ jobs:
     concurrency:
       group: mp-tender-list-refresh
       cancel-in-progress: false
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '35 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && (github.event.schedule == '25 3 * * *' || github.event.schedule == '5 5 * * *' || github.event.schedule == '30 7 * * *' || github.event.schedule == '30 9 * * *' || github.event.schedule == '30 11 * * *' || github.event.schedule == '30 12 * * *' || github.event.schedule == '35 13 * * *')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-scrape-details]'))
     outputs:
       copy_completed: ${{ steps.copy_inventory.outputs.ready }}
     runs-on: ubuntu-latest
@@ -797,6 +797,35 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json data/admin_mismatch_alert_status.json
+  morning_telegram_after_extraction:
+    needs: scrape_full
+    if: always() && github.event_name == 'schedule' && (github.event.schedule == '25 3 * * *' || github.event.schedule == '5 5 * * *')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: mp-telegram-sender
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install reportlab
+      - name: Send Closing Today after morning extraction, including failure
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MORNING_EXTRACTION_RESULT: ${{ needs.scrape_full.result }}
+        run: python backend/scheduled_telegram_delivery.py
+      - name: Publish confirmed delivery or retry state
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py data/telegram_schedule.json data/telegram_last_attempt.json data/telegram_delivery/*.json
+
   corrigendum_watch:
     if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *' || github.event.schedule == '15 15 * * *' || github.event.schedule == '15 21 * * *')
     runs-on: ubuntu-latest

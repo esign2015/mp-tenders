@@ -120,6 +120,21 @@ def load_report_rows(path=CSV_PATH, now=None):
     active_ids = current_portal_ids(path.parent, now)
     return [row for tid, row in by_id.items() if active_ids is None or tid in active_ids]
 
+def morning_inventory_rows(rows, root):
+    """Use the latest official organisation list, also on extraction failure.
+
+    Old master-only tenders must not reappear when yesterday's evening guard
+    expires at midnight. Missing details do not exclude a copied Tender ID.
+    """
+    path = Path(root) / "organisation_tenders.csv"
+    try:
+        with path.open(encoding="utf-8-sig", newline="") as stream:
+            ids = {clean(row.get("Tender ID")) for row in csv.DictReader(stream)} - {""}
+    except OSError:
+        ids = set()
+    return [row for row in rows if clean(row.get("Tender ID")) in ids] if ids else rows
+
+
 def current_portal_ids(root, now=None):
     """Match the dashboard's same-day, verified after-19:00 inventory guard."""
     now = (now or datetime.now(IST)).astimezone(IST)
@@ -190,8 +205,10 @@ def telegram_message(token, chat_id, text):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     with request.urlopen(request.Request(url, data=data), timeout=30) as r:
         body = r.read().decode()
-        if '"ok":true' not in body:
-            raise RuntimeError(body)
+        result = json.loads(body)
+        if not result.get("ok"):
+            raise RuntimeError(result.get("description", "Telegram message failed"))
+        return result
 
 
 def telegram_document(token, chat_id, path, caption):
@@ -214,8 +231,10 @@ def telegram_document(token, chat_id, path, caption):
     )
     with request.urlopen(req, timeout=120) as r:
         result = r.read().decode()
-        if '"ok":true' not in result:
-            raise RuntimeError(result)
+        payload = json.loads(result)
+        if not payload.get("ok"):
+            raise RuntimeError(payload.get("description", "Telegram document failed"))
+        return payload
 
 
 def make_pdf(rows, filename, report_title, total_available=None, filter_detail="All Tenders"):
@@ -365,8 +384,8 @@ def main():
 
     if not token or not chat_id:
         raise RuntimeError("TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID secrets are missing.")
-    if not CSV_PATH.exists():
-        raise FileNotFoundError(CSV_PATH)
+    if not CSV_PATH.exists() and not (CSV_PATH.parent / "organisation_tenders.csv").exists():
+        raise FileNotFoundError("No available tender list or detail CSV")
 
     rows = live_rows(load_report_rows())
 
@@ -429,6 +448,10 @@ def main():
         return 0
 
     if mode == "morning":
+        rows = morning_inventory_rows(rows, CSV_PATH.parent)
+        extraction_result = os.getenv("MORNING_EXTRACTION_RESULT", "")
+        fallback_note = ("⚠️ आज सुबह data extraction पूरा नहीं हो सका; उपलब्ध पिछले data से आज Closing वाली सूची भेजी जा रही है।\n\n"
+                         if extraction_result and extraction_result != "success" else "")
         closing = sorted(
             [r for r in rows if is_on_date(r.get("Closing Date"), today)],
             key=closing_sort_key
@@ -438,6 +461,7 @@ def main():
             f"📅 दिनांक: {display}\n\n"
             f"⏰ आज बंद होने वाले टेंडर: {len(closing)}\n"
             f"📋 PDF में: {len(closing)} out of {len(rows)} total records • Filter: आज Closing\n\n"
+            + fallback_note
             + ("📎 आज कोई भी टेंडर Closing Today में नहीं है, इसलिए इसकी PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
             + f"🌐 वेबसाइट: {SITE_URL}\n"
             f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
@@ -453,6 +477,7 @@ def main():
                     closing,
                     f"Closing Date {d} Tenders List on MPTenders.pdf",
                     f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
+                    total_available=len(rows), filter_detail="Closing Today",
                 )
                 telegram_document(
                     token, chat_id, pdf,
@@ -461,8 +486,9 @@ def main():
             except Exception as exc:
                 telegram_message(
                     token, chat_id,
-                    f"⚠️ Closing-date PDF delivery failed: {type(exc).__name__}: {exc}"
+                    f"⚠️ Closing-date PDF delivery failed: {type(exc).__name__}. Automatic retry जारी है।"
                 )
+                raise
         return 0
     new = sorted(
         [r for r in rows if is_on_date(r.get("Published Date"), today)],
