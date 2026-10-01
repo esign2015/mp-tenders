@@ -13,9 +13,14 @@ from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 
 from scraper import scrape_mp_tenders
+import google_sheet_store as sheet_store
 
 app = Flask(__name__)
 CORS(app)
+
+@app.errorhandler(sheet_store.SheetStoreError)
+def sheet_store_error(error):
+    return jsonify({"ok":False,"message":str(error)}),error.status
 
 ROOT = Path(__file__).resolve().parent.parent
 CSV_FILE = ROOT / "all_tenders_org_detailed.csv"
@@ -352,7 +357,8 @@ def build_user_excel():
             FROM users
             ORDER BY signup_at DESC
         """).fetchall()
-        visitors = conn.execute("SELECT * FROM visitor_registrations ORDER BY signup_at DESC").fetchall()
+        visitors = (sheet_store.call('list_visitors')['visitors'] if sheet_store.enabled()
+                    else conn.execute("SELECT * FROM visitor_registrations ORDER BY signup_at DESC").fetchall())
         daily = conn.execute("""
             SELECT substr(signup_at,1,10) AS day,
                    COUNT(*) AS new_users,
@@ -439,6 +445,11 @@ def visitor_db():
             visitor_id TEXT NOT NULL,
             visited_at TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS visitor_affidavit_profiles (
+            visitor_id TEXT PRIMARY KEY,
+            profile_json TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        );
     """)
     conn.commit()
     return conn
@@ -473,9 +484,11 @@ def read_visitor_session(token):
         return None
 
 
-def visitor_response(row):
+def visitor_response(row, affidavit_profile=None):
     response = jsonify({"ok": True, "registered": True, "visitor_id": row["visitor_id"],
                         "session_token": make_visitor_session(row["visitor_id"]),
+                        "storage": "google_sheets" if sheet_store.enabled() else user_db_backend(),
+                        "affidavit_profile": affidavit_profile or {},
                         "profile": {key:row[key] for key in ("name", "mobile", "district")}})
     response.headers["Cache-Control"] = "no-store"
     return response
@@ -495,6 +508,9 @@ def visitors_register():
         return jsonify({"ok":False,"message":"Registration request invalid. Reload and retry."}),400
     # A visitor token grants public profile access only; never admin privileges.
     make_visitor_session(visitor_id)
+    if sheet_store.enabled():
+        result=sheet_store.call('register',visitor_id=visitor_id,name=name,mobile=mobile,district=district)
+        return visitor_response(result['visitor'],result.get('affidavit_profile'))
     conn = visitor_db()
     try:
         now = now_ist().isoformat()
@@ -520,6 +536,9 @@ def visitors_session():
     visitor_id = read_visitor_session(payload.get("session_token"))
     if not visitor_id:
         return jsonify({"ok":False,"message":"Please save your profile again."}),401
+    if sheet_store.enabled():
+        result=sheet_store.call('session',visitor_id=visitor_id)
+        return visitor_response(result['visitor'],result.get('affidavit_profile'))
     conn = visitor_db()
     try:
         row = conn.execute("SELECT * FROM visitor_registrations WHERE visitor_id=?",(visitor_id,)).fetchone()
@@ -529,7 +548,8 @@ def visitors_session():
         conn.execute("UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?",(now,visitor_id))
         conn.execute("INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)",(str(uuid.uuid4()),visitor_id,now))
         conn.commit()
-        return visitor_response(dict(row))
+        profile=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
+        return visitor_response(dict(row),json.loads(profile['profile_json']) if profile else {})
     finally:
         conn.close()
 
@@ -539,6 +559,10 @@ def admin_visitor_registrations():
     email, _ = require_admin()
     if not email:
         return jsonify({"ok":False,"message":"Admin access required."}),401
+    if sheet_store.enabled():
+        response=jsonify({"ok":True,"visitors":sheet_store.call('list_visitors')['visitors']})
+        response.headers['Cache-Control']='no-store'
+        return response
     conn = visitor_db()
     try:
         rows = conn.execute("SELECT * FROM visitor_registrations ORDER BY signup_at DESC").fetchall()
@@ -547,6 +571,57 @@ def admin_visitor_registrations():
         return response
     finally:
         conn.close()
+
+
+@app.post('/api/visitors/affidavit')
+def visitor_affidavit():
+    payload=request.get_json(silent=True) or {}
+    visitor_id=read_visitor_session(payload.get('session_token'))
+    if not visitor_id:
+        return jsonify({'ok':False,'message':'Saved profile session required.'}),401
+    profile=payload.get('profile')
+    if profile is not None:
+        keys=('bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting')
+        if not isinstance(profile,dict):
+            return jsonify({'ok':False,'message':'Invalid affidavit profile.'}),400
+        profile={key:clean(profile.get(key)) for key in keys}
+        if (any(len(value)>240 for value in profile.values())
+            or not all(profile[key] for key in ('bidderName','firmName','status','place'))
+            or profile['relative'] not in ('yes','no')
+            or (profile['relative']=='yes' and not all(profile[key] for key in ('relativeName','relativePost','relativePosting')))):
+            return jsonify({'ok':False,'message':'Required affidavit basic details are missing or invalid.'}),400
+    if sheet_store.enabled():
+        result=sheet_store.call('read_affidavit' if profile is None else 'save_affidavit',visitor_id=visitor_id,**({} if profile is None else {'profile':profile}))
+        response=jsonify({'ok':True,'profile':result['profile'],'storage':'google_sheets'})
+        response.headers['Cache-Control']='no-store'
+        return response
+    conn=visitor_db()
+    try:
+        if not conn.execute('SELECT visitor_id FROM visitor_registrations WHERE visitor_id=?',(visitor_id,)).fetchone():
+            return jsonify({'ok':False,'message':'Profile not found. Please save again.'}),401
+        if profile is not None:
+            conn.execute('''INSERT INTO visitor_affidavit_profiles (visitor_id,profile_json,updated_at)
+                VALUES (?,?,?) ON CONFLICT(visitor_id) DO UPDATE SET
+                profile_json=excluded.profile_json,updated_at=excluded.updated_at''',
+                (visitor_id,json.dumps(profile,ensure_ascii=False),now_ist().isoformat()))
+            conn.commit()
+        row=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
+        response=jsonify({'ok':True,'profile':json.loads(row['profile_json']) if row else {},'storage':user_db_backend()})
+        response.headers['Cache-Control']='no-store'
+        return response
+    finally:
+        conn.close()
+
+
+@app.get('/api/admin/profile-storage')
+def admin_profile_storage():
+    email,_=require_admin()
+    if not email:
+        return jsonify({'ok':False,'message':'Admin access required.'}),401
+    result=sheet_store.call('status') if sheet_store.enabled() else {}
+    response=jsonify({'ok':True,'storage':'google_sheets' if sheet_store.enabled() else user_db_backend(),**result})
+    response.headers['Cache-Control']='no-store'
+    return response
 
 
 def telegram_user_from_session(payload):

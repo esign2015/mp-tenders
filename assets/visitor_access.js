@@ -20,6 +20,8 @@ async function visitorPost(path,body){
 function visitorUnlock(data){
   localStorage.setItem(VISITOR_SESSION_KEY,data.session_token);
   window.dashboardVisitorProfile={...data.profile,visitor_id:data.visitor_id};
+  window.dashboardAffidavitProfile=data.affidavit_profile||{};
+  window.dashboardProfileStorage=data.storage||'';
   localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));
   document.body.classList.remove('telegram-locked');
   visitorNode('telegramGate')?.remove();
@@ -36,6 +38,13 @@ function visitorUnlock(data){
   const logout=visitorNode('telegramLogoutBtn');
   if(logout)logout.onclick=()=>{localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);sessionStorage.removeItem('mp_visitor_request_id');location.reload()};
 }
+window.saveDashboardAffidavitProfile=async function(profile){
+  const token=localStorage.getItem(VISITOR_SESSION_KEY);
+  if(!token)throw new Error('पहले Name, Mobile और District save करें।');
+  const result=await visitorPost('/affidavit',{session_token:token,profile});
+  window.dashboardAffidavitProfile=result.profile;
+  return result;
+};
 async function enforceVisitorAccess(){
   const form=visitorNode('visitorRegistrationForm'),status=visitorNode('visitorStatus');
   try{

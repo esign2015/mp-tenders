@@ -2022,6 +2022,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="affidavit-preview" id="affidavitPreview"></div>
     <div class="affidavit-actions">
       <button class="affidavit-save" id="affidavitSaveProfile" type="button">💾 Save Bidder Profile</button>
+      <span id="affidavitProfileSaveStatus" role="status" style="font-size:12px;line-height:1.4;"></span>
       <button class="affidavit-word" id="affidavitWord" type="button">⬇ Word (.docx)</button>
       <button class="affidavit-pdf" id="affidavitPdf" type="button">⬇ PDF</button>
     </div>
@@ -5914,6 +5915,7 @@ enforceVisitorAccess().then(async () => {
     return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0");
   };
   function getSavedProfile(){
+    if(window.dashboardAffidavitProfile && Object.keys(window.dashboardAffidavitProfile).length) return window.dashboardAffidavitProfile;
     try{return JSON.parse(localStorage.getItem(profileKey())||"{}")||{};}catch(e){return {};}
   }
   function telegramGeneralProfileKey(){
@@ -5970,6 +5972,15 @@ enforceVisitorAccess().then(async () => {
     }
     localStorage.setItem(profileKey(),JSON.stringify(p));
     byId("affidavitStatus").textContent="✓ Bidder profile इस browser में save हो गया।";
+    const syncStatus=byId('affidavitProfileSaveStatus');
+    if(typeof window.saveDashboardAffidavitProfile==='function'){
+      if(syncStatus)syncStatus.textContent='Basic details save हो रही हैं…';
+      window.saveDashboardAffidavitProfile(p).then(result=>{
+        if(syncStatus)syncStatus.textContent=result.storage==='google_sheets'?'✓ Basic details Google Sheet में save हैं।':'✓ Basic details server पर save हैं।';
+      }).catch(error=>{
+        if(syncStatus)syncStatus.textContent='Browser में save हैं; server save failed: '+error.message+' Save Bidder Profile से retry करें।';
+      });
+    }
     return true;
   }
   function formatVerifyDate(v){

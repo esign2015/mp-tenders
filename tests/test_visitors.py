@@ -50,5 +50,16 @@ class VisitorTests(unittest.TestCase):
         workbook=load_workbook(BytesIO(server.build_user_excel()))
         self.assertEqual(workbook['Visitor Registrations']['B2'].value,'=1+1')
         self.assertEqual(workbook['Visitor Registrations']['B2'].data_type,'s')
+    def test_affidavit_profile_restores_only_in_its_signed_session(self):
+        first=self.client.post('/api/visitors/register',json=self.payload()).json
+        second=self.client.post('/api/visitors/register',json=self.payload()).json
+        profile={'bidderName':'Bidder','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}
+        saved=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':profile})
+        self.assertEqual(saved.status_code,200)
+        restored=self.client.post('/api/visitors/session',json={'session_token':first['session_token']})
+        self.assertEqual(restored.json['affidavit_profile']['firmName'],'Firm')
+        isolated=self.client.post('/api/visitors/affidavit',json={'session_token':second['session_token']})
+        self.assertEqual(isolated.json['profile'],{})
+        self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token']+'x'}).status_code,401)
 
 if __name__=='__main__':unittest.main()

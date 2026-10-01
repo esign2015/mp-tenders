@@ -15,7 +15,8 @@ const ctx=vm.createContext({window:{},document,localStorage:storage(local),sessi
  if(url.includes('mp_districts'))return{json:async()=>({districts:[{name:'Dewas'}]})};
  if(fail)return{ok:false,status:503,json:async()=>({message:'retry'})};
  const body=JSON.parse(options.body);assert(body.name||body.session_token);
- return{ok:true,json:async()=>({ok:true,visitor_id:'visitor-test',session_token:'saved-token',profile:{name:'Visitor',mobile:'+919876543210',district:'Dewas'}})};
+ if(url.endsWith('/affidavit'))return{ok:true,json:async()=>({ok:true,storage:'google_sheets',profile:body.profile})};
+ return{ok:true,json:async()=>({ok:true,visitor_id:'visitor-test',session_token:'saved-token',affidavit_profile:{firmName:'Restored firm'},profile:{name:'Visitor',mobile:'+919876543210',district:'Dewas'}})};
 }});
 vm.runInContext(source,ctx);
 (async()=>{
@@ -24,5 +25,8 @@ vm.runInContext(source,ctx);
  fail=true;await node('visitorRegistrationForm').submit({preventDefault(){}});assert(locked);assert.equal(local.size,0);
  fail=false;await node('visitorRegistrationForm').submit({preventDefault(){}});await pending;assert(!locked);assert.equal(local.get('mp_visitor_session_v1'),'saved-token');assert.equal(ctx.window.dashboardVisitorProfile.visitor_id,'visitor-test');
  locked=true;await ctx.enforceVisitorAccess();assert(!locked);assert.equal(node('visitorMobile').value,'9876543210');
+ assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Restored firm');
+ fail=true;await assert.rejects(ctx.window.saveDashboardAffidavitProfile({firmName:'Failed firm'}));assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Restored firm');
+ fail=false;const saved=await ctx.window.saveDashboardAffidavitProfile({firmName:'Saved firm'});assert.equal(saved.storage,'google_sheets');assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Saved firm');
  console.log('PASS: no Telegram calls, save failure stays locked, save success and session refresh open dashboard.');
 })().catch(e=>{console.error(e);process.exitCode=1});
