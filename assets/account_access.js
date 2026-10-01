@@ -114,15 +114,38 @@ function accountUnlock(data){
   }
   for(const id of ['accountLoginPassword','accountNewPassword','accountConfirmPassword','accountResetPassword','accountResetConfirm'])if(visitorNode(id))visitorNode(id).value='';
 }
+const accountBusyForms=new Set();
+function accountFormReady(name){
+  const value=id=>visitorNode(id)?.value||'';
+  const mobile=id=>/^[6-9][0-9]{9}$/.test(value(id));
+  const password=id=>{const p=value(id);return p.length>=8&&p.length<=128&&[/[A-Z]/,/[a-z]/,/[0-9]/,/[^A-Za-z0-9\s]/].every(test=>test.test(p))};
+  if(name==='SignIn')return mobile('accountLoginMobile')&&value('accountLoginPassword').length>0&&value('accountLoginPassword').length<=128;
+  if(name==='Forgot')return mobile('accountForgotMobile');
+  if(name==='Reset')return password('accountResetPassword')&&value('accountResetPassword')===value('accountResetConfirm');
+  const first=value('visitorName').trim(),middle=value('visitorMiddleName').trim(),last=value('visitorLastName').trim();
+  return mobile('visitorMobile')&&first.length>=2&&first.length<=15&&middle.length<=10&&middle===accountMiddleNameValue(middle)&&last.length<=15&&
+    (accountTehsilDirectory[value('visitorDistrict').trim()]||[]).includes(value('visitorTehsil'))&&password('accountNewPassword')&&value('accountNewPassword')===value('accountConfirmPassword');
+}
+function accountUpdateSubmit(name){
+  const button=visitorNode('account'+name+'Form')?.querySelector('button[type="submit"]');if(!button)return;
+  button.disabled=accountBusyForms.has(name)||!accountFormReady(name);
+  button.setAttribute('aria-busy',String(accountBusyForms.has(name)));
+}
+function accountSetBusy(name,busy){
+  if(busy)accountBusyForms.add(name);else accountBusyForms.delete(name);
+  accountUpdateSubmit(name);
+}
+function accountUpdateAllSubmits(){for(const name of ['SignIn','SignUp','Forgot','Reset'])accountUpdateSubmit(name)}
 async function enforceAccountAccess(){
   // Begin backend startup while the user fills the login form.
   fetch('https://mp-tenders-api.onrender.com/api/accounts/ready',{cache:'no-store'}).catch(()=>{});
   const status=visitorNode('visitorStatus'),forms=['SignIn','SignUp','Forgot','Reset'];
   function mode(name){
     visitorNode('telegramGate').classList.toggle('account-signup',name==='SignUp');
-    visitorNode('accountGateHeading').textContent=name==='SignUp'?'Create your account / नया अकाउंट बनाएं':'Welcome / स्वागत है';
+    visitorNode('accountGateHeading').textContent={SignIn:'Welcome back / स्वागत है',SignUp:'Create your account / नया अकाउंट बनाएं',Forgot:'Password भूल गए?',Reset:'Set new password / नया Password'}[name];
+    for(const pane of ['SignIn','Forgot'])visitorNode('account'+pane+'Pane').hidden=pane!==name;
     for(const current of forms){visitorNode('account'+current+'Form').hidden=current!==name;visitorNode('account'+current+'Tab')?.classList.toggle('active',current===name)}
-    status.textContent='';
+    status.textContent='';accountUpdateAllSubmits();
   }
   const mobileValue=value=>String(value||'').trim().replace(/^\+91/,'');
   function signupRequired(mobile,password,message){
@@ -138,15 +161,19 @@ async function enforceAccountAccess(){
   if(localStorage.getItem(VISITOR_SESSION_KEY)&&accountExpired())return new Promise(()=>{});status.textContent=message;
   }
   for(const name of forms.slice(0,3))visitorNode('account'+name+'Tab').onclick=()=>mode(name);
+  for(const name of forms){
+    const form=visitorNode('account'+name+'Form');
+    for(const event of ['input','change'])form.addEventListener(event,()=>accountUpdateSubmit(name));
+  }
   mode('SignIn');
   for(const id of ['accountLoginMobile','visitorMobile','accountForgotMobile'])accountBindMobile(id);
   for(const id of ['visitorMiddleName','accountEditMiddleName'])accountBindMiddleName(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
-  for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>accountTehsilOptions(district,tehsil));
+  for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>{accountTehsilOptions(district,tehsil);accountUpdateAllSubmits()});
   fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
     accountTehsilDirectory=data.districts||{};
     for(const district of Object.keys(accountTehsilDirectory))for(const id of ['visitorDistrictList','accountDistrictList']){const option=document.createElement('option');option.value=district;visitorNode(id)?.appendChild(option)}
-    accountTehsilOptions('visitorDistrict','visitorTehsil');accountTehsilOptions('accountEditDistrict','accountEditTehsil',window.dashboardVisitorProfile?.tehsil);
+    accountTehsilOptions('visitorDistrict','visitorTehsil');accountTehsilOptions('accountEditDistrict','accountEditTehsil',window.dashboardVisitorProfile?.tehsil);accountUpdateAllSubmits();
   }).catch(()=>{status.textContent='जिला/तहसील सूची नहीं मिली। Page reload करें।'});
   let resetToken='';
   if(location.hash.startsWith('#reset=')){resetToken=location.hash.slice(7);history.replaceState(null,'',location.pathname+location.search);mode('Reset')}
@@ -154,8 +181,8 @@ async function enforceAccountAccess(){
   function clearForgotLink(){forgotLink.hidden=true;forgotLink.removeAttribute('href')}
   visitorNode('accountForgotMobile').addEventListener('input',clearForgotLink);
   visitorNode('accountForgotForm').addEventListener('submit',async event=>{
-    event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
-    clearForgotLink();const mobile=visitorNode('accountForgotMobile').value.trim(),button=form.querySelector('button');button.disabled=true;
+    event.preventDefault();const form=event.currentTarget;if(accountBusyForms.has('Forgot')||!accountFormReady('Forgot')||!form.reportValidity())return;
+    clearForgotLink();const mobile=visitorNode('accountForgotMobile').value.trim(),button=form.querySelector('button');accountSetBusy('Forgot',true);
     status.textContent='Registered account check हो रहा है…';
     try{
       await accountPost('/forgot-check',{mobile});
@@ -164,24 +191,24 @@ async function enforceAccountAccess(){
       forgotLink.href='https://wa.me/919893610244?text='+encodeURIComponent(text);forgotLink.hidden=false;
       status.textContent='Account registered है। नीचे WhatsApp link से message भेजें; पहचान verify होने पर reset link मिलेगा।';
     }catch(error){if(error.code==='signup_required')signupRequired(mobile,'',error.message);else status.textContent=error.message}
-    finally{button.disabled=false}
+    finally{accountSetBusy('Forgot',false)}
   });
   visitorNode('accountResetForm').addEventListener('submit',async event=>{
-    event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
-    const button=form.querySelector('button');button.disabled=true;
+    event.preventDefault();const form=event.currentTarget;if(accountBusyForms.has('Reset')||!accountFormReady('Reset')||!form.reportValidity())return;
+    accountSetBusy('Reset',true);
     try{const result=await accountPost('/reset-password',{reset_token:resetToken,password:visitorNode('accountResetPassword').value,confirm_password:visitorNode('accountResetConfirm').value});resetToken='';mode('SignIn');status.textContent=result.message;visitorNode('accountResetPassword').value='';visitorNode('accountResetConfirm').value=''}
-    catch(error){status.textContent=error.message}finally{button.disabled=false}
+    catch(error){status.textContent=error.message}finally{accountSetBusy('Reset',false)}
   });
   return new Promise(resolve=>{
     for(const [name,path] of [['SignIn','/signin'],['SignUp','/signup']])visitorNode('account'+name+'Form').addEventListener('submit',async event=>{
-      event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
-      const button=form.querySelector('button');button.disabled=true;status.textContent='Account check हो रहा है…';
+      event.preventDefault();const form=event.currentTarget;if(accountBusyForms.has(name)||!accountFormReady(name)||!form.reportValidity())return;
+      accountSetBusy(name,true);status.textContent='Account check हो रहा है…';
       const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{first_name:visitorNode('visitorName').value.trim(),middle_name:visitorNode('visitorMiddleName').value.trim(),last_name:visitorNode('visitorLastName').value.trim(),tehsil:visitorNode('visitorTehsil').value,mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
       try{accountUnlock(await accountPost(path,payload));resolve(true)}catch(error){
         if(name==='SignIn'&&error.code==='signup_required')signupRequired(payload.mobile,payload.password,error.message);
         else if(name==='SignUp'&&(error.code==='account_exists'||error.status===409))existingAccount(payload.mobile,'आप पहले से Sign up हैं। अब केवल password डालकर Sign in करें।');
-        else status.textContent=error.message;button.disabled=false;
-      }
+        else status.textContent=error.message;
+      }finally{accountSetBusy(name,false);accountUpdateAllSubmits()}
     });
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
     if(token&&!resetToken){status.textContent='Saved login check हो रहा है…';accountPost('/session',{session_token:token}).then(data=>{accountUnlock(data);resolve(true)}).catch(error=>{if(error.status===401)localStorage.removeItem(VISITOR_SESSION_KEY);status.textContent=error.message})}

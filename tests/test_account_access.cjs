@@ -1,12 +1,12 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const html=fs.readFileSync('index.html','utf8');assert(html.includes('enforceAccountAccess().then'));assert(!html.includes('enforceTelegramAccess().then'));assert(html.includes('logoutBtn.onclick=()=>localStorage.getItem(VISITOR_SESSION_KEY)?accountLogout():logoutTelegram()'));
 for(const source of [html,fs.readFileSync('admin/index.html','utf8')])for(const script of source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
-const nodes={},local=new Map(),session=new Map();let now=1000000;const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false}},appendChild(){},replaceChildren(){},removeAttribute(name){delete this[name]},setAttribute(){}};
-let fail=true,unlocked=false,opened='',reply=null;
+const nodes={},local=new Map(),session=new Map();let now=1000000;const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false,setAttribute(){}}},appendChild(){},replaceChildren(){},removeAttribute(name){delete this[name]},setAttribute(){}};
+let fail=true,unlocked=false,opened='',reply=null,postCount=0;
 const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR_PROFILE_KEY:'profile',Date:{now:()=>now},setInterval(){return 1},clearInterval(){},sessionStorage:{getItem:k=>session.get(k)||null,setItem:(k,v)=>session.set(k,v),removeItem:k=>session.delete(k)},localStorage:{getItem:k=>local.get(k)||null,setItem:(k,v)=>local.set(k,v),removeItem:k=>local.delete(k)},visitorUnlock:data=>{unlocked=true;local.set('token',data.session_token)},location:{hash:'',pathname:'/',search:'',reload(){}},history:{replaceState(){}},window:{open:url=>opened=url,addEventListener(){}},document:{body:{classList:{add(){}}},addEventListener(){},createElement:()=>({})},alert(){},fetch:async(url,options)=>{
  if(url.endsWith('/ready'))return{ok:true,json:async()=>({ok:true})};
  assert(!url.includes('/telegram/'));if(url.includes('mp_tehsils'))return{json:async()=>({districts:{Dewas:['Kannod','Bagli']}})};
- const body=JSON.parse(options.body);
+ postCount++;const body=JSON.parse(options.body);
  if(reply)return reply;
  if(url.endsWith('/forgot-check'))return{ok:true,json:async()=>({ok:true})};
  if(fail)return{ok:false,status:401,json:async()=>({message:'wrong password'})};
@@ -19,16 +19,28 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
 (async()=>{
  const pending=ctx.enforceAccountAccess();await new Promise(r=>setImmediate(r));
  assert(!node('accountSignInForm').hidden);assert(node('accountSignUpForm').hidden);
+ for(const name of ['SignIn','SignUp','Forgot'])assert.equal(node('account'+name+'Form').querySelector().disabled,true);
+ node('accountLoginMobile').value='9876543210';node('accountSignInForm').input();assert.equal(node('accountSignInForm').querySelector().disabled,true);
+ node('accountLoginPassword').value='Private1!';node('accountSignInForm').input();assert.equal(node('accountSignInForm').querySelector().disabled,false);
+ ctx.accountSetBusy('SignIn',true);node('accountSignInForm').input();assert.equal(node('accountSignInForm').querySelector().disabled,true);
+ const before=postCount;await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});assert.equal(postCount,before);
+ ctx.accountSetBusy('SignIn',false);node('accountLoginPassword').value='';node('accountSignInForm').input();assert.equal(node('accountSignInForm').querySelector().disabled,true);
+ node('accountForgotMobile').value='98765';node('accountForgotForm').input();assert.equal(node('accountForgotForm').querySelector().disabled,true);
+ node('accountForgotMobile').value='9876543210';node('accountForgotForm').input();assert.equal(node('accountForgotForm').querySelector().disabled,false);node('accountForgotMobile').value='';node('accountForgotForm').input();
+
  for(const id of ['visitorMiddleName','accountEditMiddleName']){node(id).value='Kumar123';node(id).input();assert.equal(node(id).value,'Kumar')}
  node('accountSignUpTab').onclick();assert(!node('accountSignUpForm').hidden);assert(node('accountSignInForm').hidden);
  node('accountForgotTab').onclick();node('accountForgotMobile').value='9876543210';await node('accountForgotForm').submit({preventDefault(){},currentTarget:node('accountForgotForm')});assert.equal(opened,'');assert(node('accountForgotWhatsApp').href.startsWith('https://wa.me/919893610244?text='));assert.equal(node('accountForgotWhatsApp').hidden,false);
  node('accountForgotMobile').input();assert(node('accountForgotWhatsApp').hidden);assert(!node('accountForgotWhatsApp').href);
- node('accountSignInTab').onclick();node('accountLoginMobile').value='9876543210';node('accountLoginPassword').value='test password long';
+ node('accountSignInTab').onclick();node('accountLoginMobile').value='9876543210';node('accountLoginPassword').value='Private1!';
  await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});assert(!unlocked);assert(!local.has('token'));
  reply={ok:false,status:404,json:async()=>({ok:false,code:'signup_required',message:'Sign up required'})};
  await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});
- assert(!node('accountSignUpForm').hidden);assert.equal(node('visitorMobile').value,'9876543210');assert.equal(node('accountNewPassword').value,'test password long');assert(!unlocked);
- node('visitorName').value='Test';node('visitorDistrict').value='Dewas';node('accountConfirmPassword').value='test password long';
+ assert(!node('accountSignUpForm').hidden);assert.equal(node('visitorMobile').value,'9876543210');assert.equal(node('accountNewPassword').value,'Private1!');assert(!unlocked);
+ node('visitorName').value='Test';node('visitorDistrict').value='Dewas';node('visitorTehsil').value='Kannod';node('accountConfirmPassword').value='Private1!';
+ node('accountConfirmPassword').value='Different1!';node('accountSignUpForm').input();assert.equal(node('accountSignUpForm').querySelector().disabled,true);
+ node('accountConfirmPassword').value='Private1!';node('accountSignUpForm').input();assert.equal(node('accountSignUpForm').querySelector().disabled,false);
+ node('visitorTehsil').value='Indore';node('accountSignUpForm').change();assert.equal(node('accountSignUpForm').querySelector().disabled,true);node('visitorTehsil').value='Kannod';node('accountSignUpForm').change();assert.equal(node('accountSignUpForm').querySelector().disabled,false);
  reply={ok:false,status:409,json:async()=>({ok:false,code:'account_exists',message:'Already registered'})};
  await node('accountSignUpForm').submit({preventDefault(){},currentTarget:node('accountSignUpForm')});
  assert(!node('accountSignInForm').hidden);assert.equal(node('accountLoginMobile').value,'9876543210');assert.equal(node('accountLoginPassword').value,'');assert.equal(node('accountNewPassword').value,'');
