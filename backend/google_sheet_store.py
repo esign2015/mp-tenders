@@ -6,6 +6,7 @@ Never silently fall back to local storage after a configured remote save fails.
 import hashlib
 import hmac
 import json
+import logging
 import os
 import re
 import time
@@ -14,6 +15,7 @@ import uuid
 import requests
 
 SHEET_ID = '1VHILTCBB-CR0srqOTmaxf0b17wWJCpaOuMpVp_KphKw'
+logger = logging.getLogger(__name__)
 
 
 class SheetStoreError(RuntimeError):
@@ -38,8 +40,10 @@ def call(action, **fields):
     signature = hmac.new(secret.encode(), (timestamp+'\n'+payload).encode(), hashlib.sha256).hexdigest()
     envelope = {'timestamp': timestamp, 'payload': payload, 'signature': signature}
     for attempt in range(2):
+        started = time.monotonic()
         try:
-            response = requests.post(url, json=envelope, timeout=(5, 20))
+            # Apps Script cold starts can exceed 20 seconds before replying.
+            response = requests.post(url, json=envelope, timeout=(10, 60))
             if not response.ok:
                 raise SheetStoreError('Google Sheet service is unavailable. Please retry.')
             result = response.json()
@@ -49,10 +53,21 @@ def call(action, **fields):
                 status = result.get('status', 503)
                 raise SheetStoreError(result.get('message', 'Google Sheet save failed.'), status if status in (400, 401, 404, 409, 503) else 503)
             return result
-        except (requests.Timeout, requests.ConnectionError):
+        except (requests.Timeout, requests.ConnectionError) as error:
+            logger.warning('Sheet transport action=%s attempt=%s elapsed=%.1fs error=%s',
+                           action, attempt + 1, time.monotonic() - started, type(error).__name__)
+            if action == 'account_create':
+                # A lost reply is not proof that the write failed. Recover only
+                # this exact signup, including its original hashed session.
+                record = fields.get('record', {})
+                try:
+                    saved = call('account_get', user_id=record.get('user_id')).get('record')
+                except SheetStoreError:
+                    saved = None
+                if saved and all(saved.get(key) == value for key, value in record.items() if key != 'revision'):
+                    return {'ok': True, 'record': saved}
             if attempt == 0:
                 continue  # same request_id: remote visit/save is idempotent
             raise SheetStoreError('Google Sheet did not confirm the save. Please retry.') from None
         except (ValueError, requests.RequestException):
             raise SheetStoreError('Google Sheet returned an invalid response. Please retry.') from None
-

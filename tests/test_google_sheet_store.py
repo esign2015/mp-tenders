@@ -27,6 +27,22 @@ class SheetStoreTests(unittest.TestCase):
         expected=hmac.new(b's'*48,(first['timestamp']+'\n'+first['payload']).encode(),hashlib.sha256).hexdigest()
         self.assertEqual(first['signature'],expected)
         self.assertNotIn('s'*48,json.dumps(first))
+        self.assertEqual(post.call_args_list[0].kwargs['timeout'],(10,60))
+    def test_signup_lost_reply_recovers_only_the_same_saved_account(self):
+        import requests
+        record={'user_id':str(uuid.uuid4()),'mobile':'+919876543210','password_hash':'scrypt:test','sessions':[{'hash':'original','expires':123}]}
+        response=Mock(ok=True);response.json.return_value={'ok':True,'record':{**record,'revision':1}}
+        with patch.object(store.requests,'post',side_effect=[requests.Timeout(),response]) as post:
+            result=store.call('account_create',record=record)
+        self.assertEqual(result['record']['sessions'],record['sessions'])
+        self.assertEqual([json.loads(c.kwargs['json']['payload'])['action'] for c in post.call_args_list],['account_create','account_get'])
+    def test_signup_recovery_cannot_accept_a_different_session(self):
+        import requests
+        record={'user_id':str(uuid.uuid4()),'sessions':[{'hash':'original'}]}
+        read=Mock(ok=True);read.json.return_value={'ok':True,'record':{**record,'sessions':[{'hash':'different'}]}}
+        retry=Mock(ok=True);retry.json.return_value={'ok':False,'status':409,'message':'Already registered'}
+        with patch.object(store.requests,'post',side_effect=[requests.Timeout(),read,retry]):
+            with self.assertRaises(store.SheetStoreError):store.call('account_create',record=record)
     def test_registration_session_and_affidavit_use_sheet_and_never_local_db(self):
         data=self.data();visitor={'visitor_id':data['registration_id'],**{k:data[k] for k in ('name','mobile','district')}}
         visitor['mobile']='+919876543210'
