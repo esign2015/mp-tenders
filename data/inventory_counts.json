@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:37:56.840651+00:00",
+  "updated_at": "2026-10-01T09:40:01.202778+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 4226,
-  "detail_failed": 0,
+  "detail_complete": 4233,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1086,
+  "detail_pending": 1078,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 29,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -281,9 +281,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -907,10 +907,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 18,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 22
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1081,
+  "legacy_verification_pending": 1074,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
