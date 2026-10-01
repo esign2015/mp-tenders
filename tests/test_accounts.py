@@ -45,6 +45,36 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(response.status_code,400)
         self.assertEqual(server.account_service.get(user_id=result['visitor_id'])['middle_name'],'कुमार')
 
+    def test_legacy_names_prompt_and_save_without_changing_other_profile_fields(self):
+        result=self.signup();record=server.account_service.get(user_id=result['visitor_id'])
+        record.update(last_name='',middle_name='9876543210',name='Bidder 9876543210')
+        self.assertTrue(server.account_service.update(record,record['revision']))
+        login=self.login().json
+        self.assertEqual(login['profile_corrections'],['last_name','middle_name'])
+        self.assertEqual(login['profile']['middle_name'],'9876543210')
+        self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':login['session_token']}).json['profile_corrections'],['last_name','middle_name'])
+        body={'session_token':login['session_token'],'first_name':'Bidder','middle_name':'9876543210','last_name':'Test'}
+        self.assertEqual(self.client.post('/api/accounts/profile-names',json=body).status_code,400)
+        self.assertEqual(self.client.post('/api/accounts/profile-names',json={**body,'session_token':'invalid'}).status_code,401)
+        repaired=self.client.post('/api/accounts/profile-names',json={**body,'middle_name':''})
+        self.assertEqual(repaired.status_code,200);self.assertEqual(repaired.json['profile_corrections'],[])
+        updated=server.account_service.get(user_id=result['visitor_id'])
+        for key in ('mobile','district','tehsil','password_hash'):self.assertEqual(updated[key],record[key])
+        self.assertEqual(updated['name'],'Bidder Test')
+        self.assertEqual(self.login().json['profile_corrections'],[])
+
+    def test_forgot_uses_one_remote_lookup_and_local_throttling(self):
+        import account_access
+        with patch.dict(account_access._forgot_limits,{},clear=True),patch.object(sheets,'enabled',return_value=True),patch.object(sheets,'call',return_value={'record':{'user_id':'example'}}) as call:
+            response=self.client.post('/api/accounts/forgot-check',json={'mobile':'9123456789'})
+            self.assertEqual(response.status_code,200)
+            call.assert_called_once_with('account_lookup',mobile='+919123456789')
+            for _ in range(12):response=self.client.post('/api/accounts/forgot-check',json={'mobile':'9123456789'})
+            self.assertEqual(response.status_code,429)
+        with patch.dict(account_access._forgot_limits,{},clear=True),patch.object(sheets,'enabled',return_value=True),patch.object(sheets,'call',return_value={'record':None}):
+            response=self.client.post('/api/accounts/forgot-check',json={'mobile':'9123456789'})
+            self.assertEqual(response.status_code,404);self.assertEqual(response.json['code'],'signup_required')
+
     def test_surname_required_and_middle_name_optional(self):
         for value in ('','   '):
             self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'last_name':value}).status_code,400)

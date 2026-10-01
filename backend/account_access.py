@@ -13,6 +13,8 @@ _detail_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='account-detail
 _detail_slots=threading.BoundedSemaphore(16)
 _detail_lock=threading.Lock()
 _detail_jobs={}
+_forgot_lock=threading.Lock()
+_forgot_limits={}
 
 def account_mobile(server,value):
     text=str(value or '').strip()
@@ -38,20 +40,30 @@ _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PA
 SESSION_SECONDS=30*24*3600
 IDLE_SECONDS=15*60
 
-def profile_fields(server,p):
+def name_fields(server,p):
     first=server.clean(p.get('first_name',p.get('name')))
     middle=server.clean(p.get('middle_name'));last=server.clean(p.get('last_name'))
     if not last:raise AccountError('Surname / उपनाम भरना जरूरी है।')
     if any(unicodedata.category(char)[0] not in ('L','M') and char not in " .'’-" for char in middle):
         raise AccountError('Middle Name में केवल नाम लिखें, अंक या Mobile Number नहीं।')
-    district=server.clean(p.get('district'));tehsil=server.clean(p.get('tehsil'))
     if not 2<=len(first)<=15 or len(middle)>10 or len(last)>15:
         raise AccountError('Name अधिकतम 15, Middle Name 10 और Surname 15 characters का रखें।')
+    return dict(first_name=first,middle_name=middle,last_name=last,name=' '.join(x for x in (first,middle,last) if x))
+
+def profile_fields(server,p):
+    names=name_fields(server,p)
+    district=server.clean(p.get('district'));tehsil=server.clean(p.get('tehsil'))
     directory=json.loads((server.ROOT/'data/mp_tehsils.json').read_text())['districts']
     if district not in directory or tehsil not in directory[district]:
         raise AccountError('अपने District की सूची से Tehsil चुनें।')
-    return dict(first_name=first,middle_name=middle,last_name=last,
-                name=' '.join(x for x in (first,middle,last) if x),district=district,tehsil=tehsil)
+    return {**names,'district':district,'tehsil':tehsil}
+
+def profile_corrections(record):
+    corrections=[]
+    if not str(record.get('last_name') or '').strip():corrections.append('last_name')
+    middle=str(record.get('middle_name') or '').strip()
+    if any(unicodedata.category(char)[0] not in ('L','M') and char not in " .'’-" for char in middle):corrections.append('middle_name')
+    return corrections
 
 def public_profile(record):
     return {key:record.get(key,'') for key in ('name','first_name','middle_name','last_name','mobile','district','tehsil')}
@@ -110,6 +122,20 @@ class Accounts:
             raise AccountError('कई प्रयास हुए हैं। 15 मिनट बाद फिर प्रयास करें।',429)
     def limit(self,mobile=''):
         self.check_rate_results([self.operation('rate',**data) for data in self.rate_checks(mobile)])
+    def limit_forgot(self,mobile):
+        # This read-only existence check needs one Sheet lookup, not remote
+        # rate-limit writes. Keep phone/IP throttling locally on the API worker.
+        checks=self.rate_checks(mobile);window=int(time.time())//900
+        with _forgot_lock:
+            for key,item in list(_forgot_limits.items()):
+                if item[0]!=window:del _forgot_limits[key]
+            if len(_forgot_limits)+len(checks)>10000:raise AccountError('कई प्रयास हुए हैं। थोड़ी देर बाद प्रयास करें।',429)
+            results=[]
+            for data in checks:
+                count=_forgot_limits.get(data['key'],(window,0))[1]+1
+                _forgot_limits[data['key']]=(window,count)
+                results.append({'allowed':count<=data['limit']})
+        self.check_rate_results(results)
     def lookup_limited(self,mobile):
         if not sheets.enabled() or not mobile:
             self.limit(mobile)
@@ -155,7 +181,7 @@ class Accounts:
                 conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
                 conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
-        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
@@ -196,8 +222,9 @@ def install(server):
     @app.post('/api/accounts/forgot-check')
     def forgot_check():
         mobile=account_mobile(server,(request.get_json(silent=True) or {}).get('mobile'))
-        record=accounts.lookup_limited(mobile)
+        accounts.limit_forgot(mobile)
         if not mobile:raise AccountError('सही Mobile Number भरें।')
+        record=accounts.get(mobile=mobile)
         if not record:raise AccountError('पहले Sign up करें। इसके बाद password reset request भेज सकेंगे।',404,'signup_required')
         response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/session')
@@ -237,6 +264,19 @@ def install(server):
                     try:conn.execute('UPDATE visitor_registrations SET name=?,district=? WHERE visitor_id=?',(name,district,record['user_id']));conn.commit()
                     finally:conn.close()
                 return jsonify({'ok':True,'profile':public_profile(record)})
+        raise AccountError('Profile save फिर प्रयास करें।',409)
+    @app.post('/api/accounts/profile-names')
+    def edit_profile_names():
+        p=request.get_json(silent=True) or {};token=p.get('session_token')
+        accounts.authenticate(token);names=name_fields(server,p)
+        for _ in range(3):
+            record=accounts.authenticate(token);revision=record['revision'];record.update(names)
+            if accounts.update(record,revision):
+                if not sheets.enabled():
+                    conn=server.visitor_db()
+                    try:conn.execute('UPDATE visitor_registrations SET name=? WHERE visitor_id=?',(record['name'],record['user_id']));conn.commit()
+                    finally:conn.close()
+                return jsonify({'ok':True,'profile':public_profile(record),'profile_corrections':profile_corrections(record)})
         raise AccountError('Profile save फिर प्रयास करें।',409)
     @app.post('/api/accounts/change-password')
     def change_password():

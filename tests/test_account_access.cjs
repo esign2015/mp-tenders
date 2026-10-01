@@ -52,6 +52,15 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  node('accountSignInTab').onclick();node('accountLoginPassword').value='Private1!';
  reply=null;fail=false;await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});await pending;assert(unlocked);assert.equal(node('accountLoginPassword').value,'');
  node('accountProfileBtn').onclick();assert.equal(node('accountEditName').value,'Test');assert.equal(node('accountEditMobile').value,'+919876543210');
+ // Historical names must be confirmed and saved before unlock.
+ unlocked=false;local.delete('token');
+ const correction=ctx.accountUnlock({session_token:'repair-token',visitor_id:'user-id',profile:{first_name:'Test',middle_name:'9876543210',last_name:'',name:'Test 9876543210',mobile:'+919876543210',district:'Dewas'},profile_corrections:['last_name','middle_name']});
+ await new Promise(r=>setImmediate(r));assert(!unlocked);assert(!node('accountRepairForm').hidden);assert(node('accountTabs').hidden);assert.equal(node('accountRepairName').value,'Test');assert.equal(node('accountRepairMiddleName').value,'9876543210');
+ reply={ok:false,status:400,json:async()=>({ok:false,message:'Correct middle name'})};
+ await node('accountRepairForm').onsubmit({preventDefault(){}});assert(!unlocked);assert(!local.has('token'));
+ node('accountRepairMiddleName').value='';node('accountRepairLastName').value='Surname';
+ reply={ok:true,json:async()=>({ok:true,profile:{name:'Test Surname',first_name:'Test',middle_name:'',last_name:'Surname',district:'Dewas',mobile:'+919876543210'},profile_corrections:[]})};
+ await node('accountRepairForm').onsubmit({preventDefault(){}});await correction;assert(unlocked);assert.equal(local.get('token'),'repair-token');reply=null;
  now+=14*60*1000;assert.equal(ctx.accountExpired(),false);now+=60*1000;assert.equal(ctx.accountExpired(),true);assert(!local.has('token'));assert(session.get('mp_account_notice').includes('15'));
  local.set('token','another-token');ctx.accountLogout();assert(!local.has('token'));
  console.log('PASS: logout handler, profile controls, 15 minute idle expiry and signup routing preserves mobile/password, duplicate signup returns to signin with mobile only, unknown forgot cannot open WhatsApp, registered forgot link, failed login stays locked and successful login clears passwords.');

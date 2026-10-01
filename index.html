@@ -1926,7 +1926,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="telegram-gate-title">MP Tender Live Dashboard</div>
     <div class="telegram-gate-subtitle">SAR Digital Services, Kannod</div>
     <h2 id="accountGateHeading">Welcome / स्वागत है</h2>
-    <div class="account-tabs" role="group" aria-label="Account options">
+    <div id="accountTabs" class="account-tabs" role="group" aria-label="Account options">
       <button id="accountSignInTab" type="button">Sign in</button>
       <button id="accountSignUpTab" type="button">Sign up</button>
       <button id="accountForgotTab" type="button">Forgot password</button>
@@ -1943,7 +1943,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <input id="accountLoginMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="Mobile Number / मोबाइल नंबर">
       <label for="accountLoginPassword">Password</label>
       <input id="accountLoginPassword" type="password" autocomplete="current-password" maxlength="128" required placeholder="Password">
-      <small>वही mobile number और password भरें जो Sign up में इस्तेमाल किया था।</small>
+      <small>वही mobile number और password भरें जो आपने सेट किया था।</small>
       <button type="submit" disabled>Sign in</button>
     </form>
     </div>
@@ -1989,6 +1989,14 @@ body.telegram-locked .site-footer{visibility:hidden}
       <input id="accountResetConfirm" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required placeholder="Confirm New Password">
       <button type="submit">Save New Password</button>
     </form>
+    <form id="accountRepairForm" class="account-form" hidden>
+      <p id="accountRepairNotice" class="account-form-intro">Dashboard खोलने से पहले अपना नाम सही करें।</p>
+      <label for="accountRepairName">Name / नाम</label><input id="accountRepairName" placeholder="Name / नाम" autocomplete="given-name" minlength="2" maxlength="15" required>
+      <label for="accountRepairMiddleName">Middle Name / मध्य नाम</label><input id="accountRepairMiddleName" placeholder="Middle Name (वैकल्पिक)" autocomplete="additional-name" maxlength="10">
+      <label for="accountRepairLastName">Surname / उपनाम</label><input id="accountRepairLastName" placeholder="Surname / उपनाम — जरूरी" autocomplete="family-name" maxlength="15" required>
+      <button type="submit">Save &amp; Open Dashboard</button>
+      <button id="accountRepairLogout" type="button">Logout / वापस जाएं</button>
+    </form>
     <div id="visitorStatus" role="status" aria-live="polite"></div>
   </div>
 </div>
@@ -2016,7 +2024,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 .account-form small{font-size:13px;line-height:1.6;color:#475569}
 #accountSignUpForm small,#accountSignUpForm button{grid-column:1/-1}
 @media(min-width:640px){#accountSignUpForm{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;row-gap:16px}}
-.account-form[hidden],#accountForgotWhatsApp[hidden]{display:none!important}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
+#accountTabs[hidden],.account-form[hidden],#accountForgotWhatsApp[hidden]{display:none!important}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
 .account-form button[type="submit"]{background:#2563eb;color:#fff;border:0;border-radius:8px;min-height:46px;padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer}
 .account-form button[type="submit"]:hover{background:#1d4ed8}
 .account-form button[type="submit"]:disabled{background:#e2e8f0;color:#64748b;opacity:1;cursor:not-allowed}
@@ -2024,7 +2032,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=8"></script>
+<script src="assets/account_access.js?v=9"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">

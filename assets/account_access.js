@@ -96,7 +96,43 @@ async function accountPost(path,body){
   if(!response.ok||!data.ok){const error=new Error(data.message||'Server से जवाब नहीं आया। फिर प्रयास करें।');error.status=response.status;error.code=data.code;throw error}
   return data;
 }
-function accountUnlock(data){
+function accountEnsureProfile(data){
+  if(!data.profile_corrections?.length)return Promise.resolve(data);
+  const profile=data.profile,form=visitorNode('accountRepairForm'),status=visitorNode('visitorStatus');
+  visitorNode('accountTabs').hidden=true;
+  for(const name of ['SignIn','SignUp','Forgot','Reset'])visitorNode('account'+name+'Form').hidden=true;
+  for(const name of ['SignIn','Forgot'])visitorNode('account'+name+'Pane').hidden=true;
+  visitorNode('accountGateHeading').textContent='अपना नाम सही करें';
+  visitorNode('accountRepairName').value=profile.first_name||String(profile.name||'').split(' ')[0];
+  // Show the saved value so the bidder can replace a mobile number with the correct name.
+  visitorNode('accountRepairMiddleName').value=profile.middle_name||'';
+  visitorNode('accountRepairLastName').value=profile.last_name||'';
+  const messages=[];
+  if(data.profile_corrections.includes('last_name'))messages.push('Surname / उपनाम भरना जरूरी है।');
+  if(data.profile_corrections.includes('middle_name'))messages.push('Middle Name में अंक या Mobile Number है। सही Middle Name लिखें, या न हो तो खाली छोड़ें।');
+  visitorNode('accountRepairNotice').textContent=messages.join(' ');
+  form.hidden=false;status.textContent='';
+  accountBindMiddleName('accountRepairMiddleName');
+  visitorNode('accountRepairLogout').onclick=()=>{
+    accountPost('/logout',{session_token:data.session_token}).catch(()=>{});
+    localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);location.reload();
+  };
+  return new Promise(resolve=>{
+    form.onsubmit=async event=>{
+      event.preventDefault();const button=form.querySelector('button[type="submit"]');
+      if(button.disabled||!form.reportValidity())return;
+      button.disabled=true;status.textContent='सही जानकारी save हो रही है…';
+      try{
+        const result=await accountPost('/profile-names',{session_token:data.session_token,first_name:visitorNode('accountRepairName').value.trim(),middle_name:visitorNode('accountRepairMiddleName').value.trim(),last_name:visitorNode('accountRepairLastName').value.trim()});
+        if(result.profile_corrections?.length)throw new Error('कृपया नाम की जानकारी पूरी करें।');
+        form.hidden=true;resolve({...data,profile:result.profile,profile_corrections:[]});
+      }catch(error){status.textContent=error.message;if(error.status===401)accountLogout(error.message)}
+      finally{button.disabled=false}
+    };
+  });
+}
+async function accountUnlock(data){
+  data=await accountEnsureProfile(data);
   visitorUnlock(data);
   visitorNode('telegramLogoutBtn').onclick=()=>accountLogout();
   accountSetupControls(data);
@@ -204,13 +240,13 @@ async function enforceAccountAccess(){
       event.preventDefault();const form=event.currentTarget;if(accountBusyForms.has(name)||!accountFormReady(name)||!form.reportValidity())return;
       accountSetBusy(name,true);status.textContent='Account check हो रहा है…';
       const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{first_name:visitorNode('visitorName').value.trim(),middle_name:visitorNode('visitorMiddleName').value.trim(),last_name:visitorNode('visitorLastName').value.trim(),tehsil:visitorNode('visitorTehsil').value,mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
-      try{accountUnlock(await accountPost(path,payload));resolve(true)}catch(error){
+      try{await accountUnlock(await accountPost(path,payload));resolve(true)}catch(error){
         if(name==='SignIn'&&error.code==='signup_required')signupRequired(payload.mobile,payload.password,error.message);
         else if(name==='SignUp'&&(error.code==='account_exists'||error.status===409))existingAccount(payload.mobile,'आप पहले से Sign up हैं। अब केवल password डालकर Sign in करें।');
         else status.textContent=error.message;
       }finally{accountSetBusy(name,false);accountUpdateAllSubmits()}
     });
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
-    if(token&&!resetToken){status.textContent='Saved login check हो रहा है…';accountPost('/session',{session_token:token}).then(data=>{accountUnlock(data);resolve(true)}).catch(error=>{if(error.status===401)localStorage.removeItem(VISITOR_SESSION_KEY);status.textContent=error.message})}
+    if(token&&!resetToken){status.textContent='Saved login check हो रहा है…';accountPost('/session',{session_token:token}).then(async data=>{await accountUnlock(data);resolve(true)}).catch(error=>{if(error.status===401)localStorage.removeItem(VISITOR_SESSION_KEY);status.textContent=error.message})}
   });
 }
