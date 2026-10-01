@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T13:57:33.414614+00:00",
+  "updated_at": "2026-10-01T13:59:16.880705+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 5269,
+  "detail_complete": 5280,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 260,
+  "detail_pending": 249,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2841,
+      "detail_complete": 2843,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 180
+      "detail_pending": 178
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -346,10 +346,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -1072,32 +1072,18 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 33,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 0
     }
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 244,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2026_FDAMP_540266_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 11,
-  "missing_pincode_ids": [
-    "2026_FDAMP_540266_1",
-    "2026_TAD_538361_1",
-    "2026_TAD_538363_1",
-    "2026_TAD_538364_1",
-    "2026_TAD_538463_1",
-    "2026_TAD_538464_1",
-    "2026_TAD_538465_1",
-    "2026_TAD_538469_1",
-    "2026_TAD_538471_1",
-    "2026_UAD_540044_1",
-    "2026_UAD_540128_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
