@@ -15,7 +15,7 @@ on:
         default: false
   schedule:
     # Daily Tenders-by-Organisation snapshots: 10:35 AM, 1:00 PM, 3:00 PM,
-    # 5:00 PM, 6:00 PM and 7:15 PM IST. UTC is used because GitHub schedules are UTC.
+    # 5:00 PM, 6:00 PM and 7:05 PM IST. UTC is used because GitHub schedules are UTC.
     - cron: "5 5 * * *"      # 10:35 AM IST
     - cron: "30 7 * * *"     # 1:00 PM IST
     - cron: "30 9 * * *"     # 3:00 PM IST
