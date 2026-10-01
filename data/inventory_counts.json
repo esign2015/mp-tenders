@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T12:01:30.578250+00:00",
+  "updated_at": "2026-10-01T12:03:36.338555+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 4891,
+  "detail_complete": 4920,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 638,
+  "detail_pending": 609,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -93,10 +93,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Farmer Welfare And Agriculture Development",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2507,
+      "detail_complete": 2534,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 514
+      "detail_pending": 487
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 380,
       "copied_tenders": 380,
-      "detail_complete": 379,
+      "detail_complete": 380,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1079,18 +1079,16 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 559,
-  "missing_district_count": 74,
+  "legacy_verification_pending": 533,
+  "missing_district_count": 71,
   "missing_district_ids": [
     "2026_AGRO_540308_1",
-    "2026_AYUSH_539984_1",
     "2026_FDAMP_540266_1",
     "2026_MPKGB_539832_1",
     "2026_MPPGC_539118_1",
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
     "2026_MPUDC_539819_1",
-    "2026_PWDRB_539534_1",
     "2026_TAD_537679_1",
     "2026_TAD_537680_1",
     "2026_TAD_537686_1",
@@ -1121,7 +1119,6 @@
     "2026_UAD_539880_1",
     "2026_UAD_539885_1",
     "2026_UAD_539903_1",
-    "2026_UAD_539916_1",
     "2026_UAD_539928_1",
     "2026_UAD_539928_10",
     "2026_UAD_539928_11",
@@ -1159,17 +1156,15 @@
   ],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 74,
+  "missing_pincode_count": 71,
   "missing_pincode_ids": [
     "2026_AGRO_540308_1",
-    "2026_AYUSH_539984_1",
     "2026_FDAMP_540266_1",
     "2026_MPKGB_539832_1",
     "2026_MPPGC_539118_1",
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
     "2026_MPUDC_539819_1",
-    "2026_PWDRB_539534_1",
     "2026_TAD_537679_1",
     "2026_TAD_537680_1",
     "2026_TAD_537686_1",
@@ -1200,7 +1195,6 @@
     "2026_UAD_539880_1",
     "2026_UAD_539885_1",
     "2026_UAD_539903_1",
-    "2026_UAD_539916_1",
     "2026_UAD_539928_1",
     "2026_UAD_539928_10",
     "2026_UAD_539928_11",
