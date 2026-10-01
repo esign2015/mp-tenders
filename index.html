@@ -1989,6 +1989,9 @@ body.telegram-locked .site-footer{visibility:hidden}
 #accountSignUpForm small,#accountSignUpForm button{grid-column:1/-1}
 @media(min-width:640px){#accountSignUpForm{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;row-gap:16px}}
 .account-form[hidden],#accountForgotWhatsApp[hidden]{display:none!important}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
+.account-form button[type="submit"]{background:#2563eb;color:#fff;border:0;border-radius:8px;min-height:46px;padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer}
+.account-form button[type="submit"]:hover{background:#1d4ed8}
+.account-form button[type="submit"]:disabled{opacity:.65;cursor:wait}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
