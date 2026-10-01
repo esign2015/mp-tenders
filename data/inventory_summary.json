@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T10:57:58.857854+00:00",
+  "updated_at": "2026-10-01T11:00:03.463857+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4530,
+  "detail_complete": 4564,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 979,
+  "detail_pending": 945,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -148,10 +148,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 47,
+      "detail_complete": 49,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "Directorate of Industries",
@@ -170,10 +170,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 25,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2295,
+      "detail_complete": 2304,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 721
+      "detail_pending": 712
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
-      "detail_complete": 44,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 4
     },
     {
       "organisation": "District Collectorate",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 44,
+      "detail_complete": 45,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -456,10 +456,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 256,
       "copied_tenders": 256,
-      "detail_complete": 214,
+      "detail_complete": 224,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 42
+      "detail_pending": 32
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -533,10 +533,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh State Mining Corporation Ltd",
@@ -566,10 +566,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 4,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Yatri Parivahan and Infrastructure Ltd.",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Lokayukt Organisation",
@@ -698,10 +698,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 23,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 5
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -830,10 +830,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
@@ -1046,7 +1046,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 880,
+  "legacy_verification_pending": 846,
   "missing_district_count": 94,
   "missing_district_ids": [
     "2025_UAD_447651_3",
