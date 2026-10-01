@@ -1,3 +1,4 @@
+from portal_fee_exceptions import verified_fee_omission
 """A separate six-card A4 report with the dashboard's SAR advertisement."""
 from datetime import datetime
 from pathlib import Path
@@ -92,13 +93,13 @@ def tender_card(canvas, row, number, x, y, width, height):
     place=' | '.join(clean(row.get(k)) for k in ('District','Location','Pincode') if clean(row.get(k)))
     paragraph(canvas,place or 'Location: -',x+12,top-138,width-24,18,7,False,MUTED)
     pac = 'NA' if clean(row.get('PAC Amount')).upper() in {'NA','N/A'} else fee_text(fee_amount(row.get('PAC Amount')))
-    values=(('PAC',pac),('EMD',fee_text(fee_amount(row.get('EMD Fee')))),('Form Fee',fee_text(fee_amount(row.get('Tender Fee')))),('Processing',fee_text(fee_amount(row.get('Processing Fee')))))
+    values=(('PAC',pac),('EMD',fee_text(fee_amount(row.get('EMD Fee')))),('Form Fee',fee_text(fee_amount(row.get('Tender Fee')))),('Processing',('Not provided' if verified_fee_omission(row) else fee_text(fee_amount(row.get('Processing Fee'))))))
     for i,(label,value) in enumerate(values):
         cx=x+12+(i%2)*(width-24)/2
         cy=top-160-(i//2)*23
         paragraph(canvas,label,cx,cy,(width-30)/2,9,6.3,False,MUTED)
         paragraph(canvas,value,cx,cy-8,(width-30)/2,11,7.8,True)
-    paragraph(canvas,'Total Fee: '+fee_text(total_tender_fee(row)),x+12,y+17,width-24,11,8,True)
+    paragraph(canvas,'Total Fee: '+('Not available' if verified_fee_omission(row) else fee_text(total_tender_fee(row))),x+12,y+17,width-24,11,8,True)
 
 
 def make_card_pdf(rows, filename, report_title, total_available=None, filter_detail='All Tenders', filter_live=True):

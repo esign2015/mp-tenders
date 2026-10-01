@@ -3194,7 +3194,10 @@ function moneyNumber(value){
   return Number.isFinite(number) ? number : 0;
 }
 
+function portalFeeMissing(row){return clean(row["Processing Fee"])==="Not provided on portal";}
 function formatMoney(value){
+  if(/^Not provided on portal$/i.test(clean(value))) return "Not provided on portal";
+  if(/^Not available \(processing fee not published\)$/i.test(clean(value))) return "Not available";
   if(/^(NA|N\/A|Not Available)$/i.test(clean(value))) return "NA";
   if(/^Checking/i.test(clean(value))) return clean(value);
   const number = moneyNumber(value);
@@ -3212,6 +3215,7 @@ function formatPdfAmount(value){
 }
 
 function effectiveProcessingFee(row){
+  if(portalFeeMissing(row)) return 0;
   const explicit=moneyNumber(row["Processing Fee"]);
   if(explicit>0) return explicit;
 
@@ -3237,11 +3241,11 @@ function feeDataVerified(row){
 }
 
 function verifiedTenderFeeText(row){
-  return feeDataVerified(row) ? formatMoney(tenderFeeWithPortal(row)) : "Checking…";
+  return portalFeeMissing(row) ? formatMoney(row["Tender Fee"]) : feeDataVerified(row) ? formatMoney(tenderFeeWithPortal(row)) : "Checking…";
 }
 
 function verifiedTotalFeeText(row){
-  return feeDataVerified(row) ? formatMoney(totalFee(row)) : "Checking…";
+  return portalFeeMissing(row) ? "Not available" : feeDataVerified(row) ? formatMoney(totalFee(row)) : "Checking…";
 }
 
 function cleanDisplayTitle(value){
@@ -3990,7 +3994,7 @@ function whatsappShareUrl(row){
     "*PAC / Estimated Cost:* "+formatMoney(row["PAC Amount"]),
     "*EMD:* "+formatMoney(row["EMD Fee"]),
     "*Tender Fee + Portal:* "+verifiedTenderFeeText(row),
-    "*Processing Fee:* "+(feeDataVerified(row)?formatMoney(effectiveProcessingFee(row)):"Checking…"),
+    "*Processing Fee:* "+(portalFeeMissing(row)?"Not provided on portal":feeDataVerified(row)?formatMoney(effectiveProcessingFee(row)):"Checking…"),
     "*EMD + Tender Fee:* "+verifiedTotalFeeText(row),
     "*Submission End Date:* "+formatClosingDateTime(row["Closing Date"]),
     "",

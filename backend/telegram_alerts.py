@@ -1,3 +1,4 @@
+from portal_fee_exceptions import verified_fee_omission
 import csv
 import json
 import os
@@ -300,8 +301,8 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
             Paragraph(fee_text(fee_amount(row.get("PAC Amount"))) if clean(row.get("PAC Amount")).upper() not in {"NA", "N/A"} else "NA", center),
             Paragraph(fee_text(fee_amount(row.get("EMD Fee"))), center),
             Paragraph(fee_text(fee_amount(row.get("Tender Fee"))), center),
-            Paragraph(fee_text(fee_amount(row.get("Processing Fee"))), center),
-            Paragraph(fee_text(total_tender_fee(row)), center),
+            Paragraph("Not provided" if verified_fee_omission(row) else fee_text(fee_amount(row.get("Processing Fee"))), center),
+            Paragraph("Not available" if verified_fee_omission(row) else fee_text(total_tender_fee(row)), center),
         ])
 
     table = LongTable(
