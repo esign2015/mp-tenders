@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T12:11:59.491740+00:00",
+  "updated_at": "2026-10-01T12:14:04.824245+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 5032,
+  "detail_complete": 5060,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 497,
+  "detail_pending": 469,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -148,10 +148,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 53,
+      "detail_complete": 54,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Industries",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2634,
+      "detail_complete": 2647,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 387
+      "detail_pending": 374
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -357,10 +357,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Gwalior Vyapar Mela Pradhikaran - GVMP",
@@ -478,10 +478,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 257,
       "copied_tenders": 257,
-      "detail_complete": 230,
+      "detail_complete": 232,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 25
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -555,10 +555,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 4,
+      "detail_complete": 5,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh State Mining Corporation Ltd",
@@ -731,10 +731,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 97,
+      "detail_complete": 99,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -1028,10 +1028,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 83,
       "copied_tenders": 83,
-      "detail_complete": 82,
+      "detail_complete": 83,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1072,19 +1072,17 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 15,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 26
+      "detail_pending": 19
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 425,
-  "missing_district_count": 67,
+  "legacy_verification_pending": 399,
+  "missing_district_count": 65,
   "missing_district_ids": [
     "2026_FDAMP_540266_1",
-    "2026_MPSAM_539220_1",
-    "2026_MPSAM_539224_1",
     "2026_TAD_537679_1",
     "2026_TAD_537680_1",
     "2026_TAD_537686_1",
@@ -1152,11 +1150,9 @@
   ],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 67,
+  "missing_pincode_count": 65,
   "missing_pincode_ids": [
     "2026_FDAMP_540266_1",
-    "2026_MPSAM_539220_1",
-    "2026_MPSAM_539224_1",
     "2026_TAD_537679_1",
     "2026_TAD_537680_1",
     "2026_TAD_537686_1",
