@@ -1,3 +1,4 @@
+# Verified missing portal fees are tracked separately from extraction errors.
 from portal_fee_exceptions import verified_fee_omission
 """Count progress against the published organisation snapshot only."""
 import csv

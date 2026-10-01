@@ -60,7 +60,8 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/reset-password',json=reset).status_code,400)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':account['session_token']}).status_code,401)
         self.assertEqual(self.login().status_code,401);self.assertEqual(self.login(new).status_code,200)
-    def test_expired_reset_and_rate_limits_and_cas(self):
+    @patch('account_access.time.time', return_value=1800000000)
+    def test_expired_reset_and_rate_limits_and_cas(self, _clock):
         account=self.signup()
         with patch.object(server,'require_admin',return_value=('admin@example.com','')):
             r=self.client.post('/api/admin/accounts/reset-link',json={'mobile':'9876543210','identity_verified':True})
