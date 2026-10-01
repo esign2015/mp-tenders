@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T10:45:29.149656+00:00",
+  "updated_at": "2026-10-01T10:47:34.278710+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4333,
+  "detail_complete": 4364,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1176,
+  "detail_pending": 1145,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -104,10 +104,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Animal Husbandry",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2150,
+      "detail_complete": 2158,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 866
+      "detail_pending": 858
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -280,10 +280,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 37,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -456,10 +456,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 256,
       "copied_tenders": 256,
-      "detail_complete": 211,
+      "detail_complete": 214,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 45
+      "detail_pending": 42
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -698,10 +698,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 22,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 6
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -753,10 +753,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
-      "detail_complete": 30,
+      "detail_complete": 31,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
@@ -929,10 +929,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 47,
       "copied_tenders": 47,
-      "detail_complete": 38,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 1
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1046,8 +1046,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1058,
-  "missing_district_count": 113,
+  "legacy_verification_pending": 1030,
+  "missing_district_count": 110,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1070,7 +1070,6 @@
     "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
     "2026_PWDRB_539617_1",
-    "2026_PWPIU_540185_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
     "2026_RSK_539820_1",
@@ -1145,8 +1144,6 @@
     "2026_UAD_539928_9",
     "2026_UAD_539958_1",
     "2026_UAD_539961_1",
-    "2026_UAD_539973_1",
-    "2026_UAD_539975_1",
     "2026_UAD_540006_1",
     "2026_UAD_540007_1",
     "2026_UAD_540008_1",
@@ -1165,7 +1162,7 @@
   ],
   "known_pincode_count": 377,
   "department_count": 334,
-  "missing_pincode_count": 113,
+  "missing_pincode_count": 110,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1188,7 +1185,6 @@
     "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
     "2026_PWDRB_539617_1",
-    "2026_PWPIU_540185_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
     "2026_RSK_539820_1",
@@ -1263,8 +1259,6 @@
     "2026_UAD_539928_9",
     "2026_UAD_539958_1",
     "2026_UAD_539961_1",
-    "2026_UAD_539973_1",
-    "2026_UAD_539975_1",
     "2026_UAD_540006_1",
     "2026_UAD_540007_1",
     "2026_UAD_540008_1",
