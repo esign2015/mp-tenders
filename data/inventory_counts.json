@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T15:28:52.478052+00:00",
+  "updated_at": "2026-10-01T15:29:13.727700+00:00",
   "snapshot_at": "2026-10-01T13:51:21.164030+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5421,
   "copied_tenders": 5421,
-  "detail_complete": 5369,
+  "detail_complete": 5370,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 52,
+  "detail_pending": 51,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -302,10 +302,10 @@
       "snapshot_at": "2026-10-01T13:51:21.164030+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
