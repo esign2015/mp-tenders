@@ -1934,7 +1934,8 @@ body.telegram-locked .site-footer{visibility:hidden}
       <p>अपने registered mobile के WhatsApp से हमें request भेजें। पहचान verify होने के बाद password reset link मिलेगा।</p>
       <label for="accountForgotMobile">Registered Mobile Number</label>
       <input id="accountForgotMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required>
-      <button type="submit">Request reset on WhatsApp</button>
+      <button type="submit">Check registered account</button>
+      <a id="accountForgotWhatsApp" class="btn" target="_blank" rel="noopener" hidden>WhatsApp पर reset request भेजें</a>
     </form>
     <form id="accountResetForm" class="account-form" hidden>
       <h3>Set New Password</h3>
@@ -1951,11 +1952,11 @@ body.telegram-locked .site-footer{visibility:hidden}
 .account-form{display:grid;gap:8px;text-align:left;margin-top:20px}
 .account-form label{font-weight:700;font-size:14px;margin-top:5px}
 .account-form input{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
-.account-form[hidden]{display:none}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
+.account-form[hidden],#accountForgotWhatsApp[hidden]{display:none!important}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=2"></script>
+<script src="assets/account_access.js?v=3"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">

@@ -84,3 +84,5 @@ PostgreSQL database. They fail with an explicit error on the existing ephemeral
 SQLite backend. `ALLOW_EPHEMERAL_ACCOUNTS=1` is for isolated development/tests;
 do not enable it on the free Render service. Existing anonymous profiles are not
 silently claimed merely by entering the same unverified mobile number.
+
+Unknown mobiles entered in Sign in are redirected to Sign up with the typed mobile and password. Duplicate signup returns to Sign in with the mobile filled and password cleared. Forgot password checks registration on the server before exposing the WhatsApp request link; unknown mobiles are redirected to Sign up. All account lookups use the existing persistent attempt limits.

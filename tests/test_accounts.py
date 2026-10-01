@@ -25,12 +25,19 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.login('incorrect password').status_code,401)
         self.assertEqual(self.login().json['visitor_id'],result['visitor_id'])
         self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'mobile':'9123456789','password':'short','confirm_password':'short'}).status_code,400)
-    def test_password_requires_all_components_and_eight_characters(self):
+    def test_password_policy_and_signup_routing(self):
         from account_access import AccountError
         for password in ('Abcde1!', 'abcdef1!', 'ABCDEF1!', 'Abcdefg!', 'Abcdef12', 'Abcdef1 '):
-            with self.subTest(password=password),self.assertRaises(AccountError):
-                server.account_service.password(password)
+            with self.subTest(password=password),self.assertRaises(AccountError):server.account_service.password(password)
         self.assertTrue(server.account_service.password('Abcdef1!').startswith('scrypt:'))
+        unknown=self.client.post('/api/accounts/signin',json={'mobile':self.data['mobile'],'password':self.password})
+        self.assertEqual(unknown.status_code,404);self.assertEqual(unknown.json['code'],'signup_required')
+        unknown=self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']})
+        self.assertEqual(unknown.status_code,404);self.assertEqual(unknown.json['code'],'signup_required')
+        self.signup()
+        duplicate=self.client.post('/api/accounts/signup',json={**self.data,'mobile':'+919876543210'})
+        self.assertEqual(duplicate.status_code,409);self.assertEqual(duplicate.json['code'],'account_exists')
+        self.assertEqual(self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']}).status_code,200)
     def test_cross_device_affidavit_and_logout_only_this_session(self):
         first=self.signup();second=self.login().json
         profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}

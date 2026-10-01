@@ -10,7 +10,7 @@ _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PA
 SESSION_SECONDS=30*24*3600
 
 class AccountError(RuntimeError):
-    def __init__(self,message,status=400):super().__init__(message);self.status=status
+    def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
 
 class Accounts:
     def __init__(self,server):self.server=server
@@ -92,13 +92,14 @@ class Accounts:
 def install(server):
     accounts=Accounts(server);app=server.app
     @app.errorhandler(AccountError)
-    def account_error(error):return jsonify({'ok':False,'message':str(error)}),error.status
+    def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code}),error.status
     @app.post('/api/accounts/signup')
     def signup():
         p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
         accounts.limit(mobile)
         name=server.clean(p.get('name'));district=server.clean(p.get('district'))
         if not mobile or not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name, Mobile और District भरें।')
+        if accounts.get(mobile=mobile):raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
         record={'user_id':str(uuid.uuid4()),'mobile':mobile,'name':name,'district':district,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
@@ -108,7 +109,9 @@ def install(server):
         p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'));accounts.limit(mobile)
         password=p.get('password');record=accounts.get(mobile=mobile) if mobile else None
         valid= isinstance(password,str) and len(password)<=128 and check_password_hash(record['password_hash'] if record else _DUMMY_HASH,password)
-        if not valid or not record:raise AccountError('Mobile या password सही नहीं है।',401)
+        if not mobile:raise AccountError('सही Mobile Number भरें।')
+        if not record:raise AccountError('इस mobile से Sign up नहीं हुआ है। कृपया Sign up form पूरा करें।',404,'signup_required')
+        if not valid:raise AccountError('Mobile या password सही नहीं है।',401)
         original_hash=record['password_hash']
         for _ in range(3):
             revision=record['revision'];token=accounts.issue(record)
@@ -116,6 +119,12 @@ def install(server):
             record=accounts.get(user_id=record['user_id'])
             if record['password_hash']!=original_hash:raise AccountError('Password बदल गया है। फिर Sign in करें।',401)
         raise AccountError('फिर प्रयास करें।',409)
+    @app.post('/api/accounts/forgot-check')
+    def forgot_check():
+        mobile=server.normalise_mobile((request.get_json(silent=True) or {}).get('mobile'));accounts.limit(mobile)
+        if not mobile:raise AccountError('सही Mobile Number भरें।')
+        if not accounts.get(mobile=mobile):raise AccountError('पहले Sign up करें। इसके बाद password reset request भेज सकेंगे।',404,'signup_required')
+        response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/session')
     def session():
         token=(request.get_json(silent=True) or {}).get('session_token');record=accounts.authenticate(token)
