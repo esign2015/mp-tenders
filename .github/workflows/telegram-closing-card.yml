@@ -1,0 +1,37 @@
+name: Send Closing Today Card PDF
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - backend/send_closing_card.py
+      - .github/workflows/telegram-closing-card.yml
+permissions:
+  contents: write
+jobs:
+  send:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[send-closing-card]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: mp-telegram-sender
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install reportlab
+      - name: Send only requested card PDF
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python backend/send_closing_card.py
+      - name: Publish Telegram confirmation
+        if: always()
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py data/telegram_card_manual_last_send.json
