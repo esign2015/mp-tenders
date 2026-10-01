@@ -1,5 +1,5 @@
 """Password accounts: scrypt hashes, revocable sessions and manual reset links."""
-import hashlib,hmac,json,os,secrets,time,uuid
+import hashlib,hmac,json,os,re,secrets,time,uuid
 from datetime import timedelta
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -58,7 +58,9 @@ class Accounts:
             key=hmac.new(secret.encode(),value.encode(),hashlib.sha256).hexdigest()
             if not self.operation('rate',key=key,limit=limit)['allowed']:raise AccountError('कई प्रयास हुए हैं। 15 मिनट बाद फिर प्रयास करें।',429)
     def password(self,value):
-        if not isinstance(value,str) or not 15<=len(value)<=128:raise AccountError('Password 15 से 128 characters का रखें।')
+        if (not isinstance(value,str) or not 8<=len(value)<=128 or
+                not all(re.search(pattern,value) for pattern in (r'[A-Z]',r'[a-z]',r'[0-9]',r'[^A-Za-z0-9\s]'))):
+            raise AccountError('Password 8 से 128 characters का रखें: एक capital, एक small letter, एक number और एक special character ज़रूरी है।')
         return generate_password_hash(value,method=PASSWORD_METHOD)
     def issue(self,record):
         raw='acct_'+record['user_id']+'.'+secrets.token_urlsafe(32)

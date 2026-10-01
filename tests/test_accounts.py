@@ -11,7 +11,7 @@ class AccountsTests(unittest.TestCase):
         self.env=patch.dict(os.environ,{'ADMIN_SESSION_SECRET':'account-tests','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','VISITOR_PROFILE_LEGACY_ALLOWED':'0','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.env.start()
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start();self.client=server.app.test_client()
-        self.password='my long private password'
+        self.password='Private1!'
         self.data={'name':'Bidder Test','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
     def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup()
     def signup(self):
@@ -25,6 +25,12 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.login('incorrect password').status_code,401)
         self.assertEqual(self.login().json['visitor_id'],result['visitor_id'])
         self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'mobile':'9123456789','password':'short','confirm_password':'short'}).status_code,400)
+    def test_password_requires_all_components_and_eight_characters(self):
+        from account_access import AccountError
+        for password in ('Abcde1!', 'abcdef1!', 'ABCDEF1!', 'Abcdefg!', 'Abcdef12', 'Abcdef1 '):
+            with self.subTest(password=password),self.assertRaises(AccountError):
+                server.account_service.password(password)
+        self.assertTrue(server.account_service.password('Abcdef1!').startswith('scrypt:'))
     def test_cross_device_affidavit_and_logout_only_this_session(self):
         first=self.signup();second=self.login().json
         profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}
@@ -42,7 +48,7 @@ class AccountsTests(unittest.TestCase):
             result=self.client.post('/api/admin/accounts/reset-link',json=body);self.assertEqual(result.status_code,200)
         token=result.json['reset_url'].split('#reset=')[1]
         self.assertNotIn(token,json.dumps(server.account_service.get(user_id=account['visitor_id'])))
-        new='my different long password';reset={'reset_token':token,'password':new,'confirm_password':new}
+        new='Different2!';reset={'reset_token':token,'password':new,'confirm_password':new}
         self.assertEqual(self.client.post('/api/accounts/reset-password',json=reset).status_code,200)
         self.assertEqual(self.client.post('/api/accounts/reset-password',json=reset).status_code,400)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':account['session_token']}).status_code,401)

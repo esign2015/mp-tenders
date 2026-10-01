@@ -1924,10 +1924,10 @@ body.telegram-locked .site-footer{visibility:hidden}
       <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
       <datalist id="visitorDistrictList"></datalist>
       <label for="accountNewPassword">Password</label>
-      <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
-      <small>कम से कम 15 characters का password रखें; कई शब्दों का वाक्य भी रख सकते हैं।</small>
+      <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
+      <small>कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है।</small>
       <label for="accountConfirmPassword">Confirm Password</label>
-      <input id="accountConfirmPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <input id="accountConfirmPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <button type="submit">Sign up &amp; Open Dashboard</button>
     </form>
     <form id="accountForgotForm" class="account-form" hidden>
@@ -1939,9 +1939,9 @@ body.telegram-locked .site-footer{visibility:hidden}
     <form id="accountResetForm" class="account-form" hidden>
       <h3>Set New Password</h3>
       <label for="accountResetPassword">New Password</label>
-      <input id="accountResetPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <input id="accountResetPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <label for="accountResetConfirm">Confirm New Password</label>
-      <input id="accountResetConfirm" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <input id="accountResetConfirm" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <button type="submit">Save New Password</button>
     </form>
     <div id="visitorStatus" role="status" aria-live="polite"></div>
@@ -1955,7 +1955,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=1"></script>
+<script src="assets/account_access.js?v=2"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">

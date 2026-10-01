@@ -57,7 +57,7 @@ app deployment so the configured URL remains valid.
 ## Password accounts and manual WhatsApp reset
 
 The dashboard now uses Sign in / Sign up / Forgot password. Signup collects name,
-mobile, district and a 15–128-character password plus confirmation. The backend
+mobile, district and an 8–128-character password with uppercase, lowercase, digit and special character, plus confirmation. The backend
 stores a salted scrypt hash (N=32768, r=8, p=3); it never stores/export plaintext
 passwords. `Accounts` holds private account JSON and revision numbers;
 `AccountRateLimits` holds hashed phone/IP keys and 15-minute attempt windows.
