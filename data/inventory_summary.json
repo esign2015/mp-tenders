@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T10:51:43.794446+00:00",
+  "updated_at": "2026-10-01T10:53:48.745889+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4431,
+  "detail_complete": 4464,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1078,
+  "detail_pending": 1045,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2201,
+      "detail_complete": 2234,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 815
+      "detail_pending": 782
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1046,8 +1046,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 965,
-  "missing_district_count": 108,
+  "legacy_verification_pending": 934,
+  "missing_district_count": 106,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1115,8 +1115,6 @@
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
     "2026_UAD_539367_1",
-    "2026_UAD_539373_1",
-    "2026_UAD_539374_1",
     "2026_UAD_539525_1",
     "2026_UAD_539728_1",
     "2026_UAD_539728_2",
@@ -1160,7 +1158,7 @@
   ],
   "known_pincode_count": 378,
   "department_count": 334,
-  "missing_pincode_count": 108,
+  "missing_pincode_count": 106,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1228,8 +1226,6 @@
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
     "2026_UAD_539367_1",
-    "2026_UAD_539373_1",
-    "2026_UAD_539374_1",
     "2026_UAD_539525_1",
     "2026_UAD_539728_1",
     "2026_UAD_539728_2",
