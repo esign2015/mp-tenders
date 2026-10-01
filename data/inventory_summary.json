@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:59:24.534843+00:00",
+  "updated_at": "2026-10-01T12:01:30.578250+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 4863,
+  "detail_complete": 4891,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 666,
+  "detail_pending": 638,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -170,10 +170,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 32,
       "copied_tenders": 32,
-      "detail_complete": 29,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2484,
+      "detail_complete": 2507,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 537
+      "detail_pending": 514
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -731,10 +731,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 96,
+      "detail_complete": 97,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -1079,14 +1079,11 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 584,
-  "missing_district_count": 77,
+  "legacy_verification_pending": 559,
+  "missing_district_count": 74,
   "missing_district_ids": [
     "2026_AGRO_540308_1",
     "2026_AYUSH_539984_1",
-    "2026_DME_538586_1",
-    "2026_DME_538587_1",
-    "2026_DME_538588_1",
     "2026_FDAMP_540266_1",
     "2026_MPKGB_539832_1",
     "2026_MPPGC_539118_1",
@@ -1162,13 +1159,10 @@
   ],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 77,
+  "missing_pincode_count": 74,
   "missing_pincode_ids": [
     "2026_AGRO_540308_1",
     "2026_AYUSH_539984_1",
-    "2026_DME_538586_1",
-    "2026_DME_538587_1",
-    "2026_DME_538588_1",
     "2026_FDAMP_540266_1",
     "2026_MPKGB_539832_1",
     "2026_MPPGC_539118_1",
