@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:31:42.219575+00:00",
+  "updated_at": "2026-10-01T09:33:47.111226+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 4116,
+  "detail_complete": 4152,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1196,
+  "detail_pending": 1160,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -192,10 +192,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 0,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Technical Education",
@@ -225,10 +225,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Sports and Youth Welfare",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 2006,
+      "detail_complete": 2013,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 879
+      "detail_pending": 872
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 29,
+      "detail_complete": 37,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 9
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -335,10 +335,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 1,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -346,10 +346,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 6,
+      "detail_complete": 7,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Jiwaji University - Gwalior",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 39,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -412,10 +412,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 55,
+      "detail_complete": 56,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 29,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -434,10 +434,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 265,
       "copied_tenders": 265,
-      "detail_complete": 216,
+      "detail_complete": 220,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 49
+      "detail_pending": 45
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -478,10 +478,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 40,
       "copied_tenders": 40,
-      "detail_complete": 25,
+      "detail_complete": 26,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 14
     },
     {
       "organisation": "Madhya Pradesh Rural Road Development Authority",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 76,
+      "detail_complete": 78,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 8
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 28,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -753,10 +753,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. State Open School Education Board",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 63,
+      "detail_complete": 64,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "PWD-PIU",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1191,
+  "legacy_verification_pending": 1155,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
