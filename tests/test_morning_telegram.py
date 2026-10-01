@@ -58,6 +58,27 @@ class MorningTelegramTests(unittest.TestCase):
             self.assertEqual(json.loads((root/'data/telegram_schedule.json').read_text())['morning'],'2026-10-01:morning')
             self.assertEqual(json.loads((root/'data/telegram_last_attempt.json').read_text())['message_ids'],[101,102])
 
+    def test_card_retry_keeps_already_confirmed_table_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            calls={'text':0,'table':0,'card':0}
+            def text(*args):
+                calls['text']+=1
+                return {'ok':True,'result':{'message_id':101}}
+            def document(kind):
+                calls[kind]+=1
+                if kind=='card' and calls[kind]==1:raise RuntimeError('card failed')
+                return {'ok':True,'result':{'message_id':102 if kind=='table' else 103}}
+            module=SimpleNamespace(telegram_message=text,telegram_document=document)
+            def main():
+                module.telegram_message('message')
+                module.telegram_document('table')
+                module.telegram_document('card')
+                return 0
+            module.main=main
+            with self.assertRaises(RuntimeError):deliver(Path(tmp),'evening_new','2026-10-01:evening_new','',module)
+            deliver(Path(tmp),'evening_new','2026-10-01:evening_new','',module)
+            self.assertEqual(calls,{'text':1,'table':1,'card':2})
+
     def test_unconfirmed_response_does_not_mark_sent(self):
         with tempfile.TemporaryDirectory() as tmp:
             module=SimpleNamespace(telegram_message=lambda *a:{'ok':True},telegram_document=lambda *a:{'ok':True})
@@ -73,11 +94,12 @@ class MorningTelegramTests(unittest.TestCase):
             path=Path(tmp)/'all_tenders_org_detailed.csv';path.write_text('Tender ID\n')
             (Path(tmp)/'organisation_tenders.csv').write_text('Tender ID\ntoday\ntomorrow\n')
             rows=[{'Tender ID':'today','Closing Date':'01-Oct-2026 05:00 PM'},{'Tender ID':'tomorrow','Closing Date':'02-Oct-2026 05:00 PM'},{'Tender ID':'old-master-only','Closing Date':'01-Oct-2026 05:00 PM'}]
-            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'morning','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')) as pdf:
+            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'morning','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')) as pdf,patch('telegram_card_pdf.make_card_pdf',return_value=Path('cardpdf')) as card_pdf:
                 self.assertEqual(alerts.main(),0)
                 self.assertIn('उपलब्ध पिछले data',message.call_args.args[2])
                 self.assertEqual([r['Tender ID'] for r in pdf.call_args.args[0]],['today'])
-                document.assert_called_once()
+                self.assertEqual(document.call_count,2)
+                self.assertEqual([r['Tender ID'] for r in card_pdf.call_args.args[0]],['today'])
 
     def test_snapshot_and_failed_extraction_alert_are_wired(self):
         root=Path(__file__).resolve().parents[1]

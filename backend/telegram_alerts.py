@@ -17,6 +17,7 @@ from reportlab.platypus import SimpleDocTemplate, LongTable, TableStyle, Paragra
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
 TELEGRAM_URL = "https://t.me/mptendersalert"
+ROOT = Path(__file__).resolve().parents[1]
 CSV_PATH = Path(os.getenv("TENDER_CSV_PATH", "all_tenders_org_detailed.csv"))
 
 
@@ -237,8 +238,8 @@ def telegram_document(token, chat_id, path, caption):
         return payload
 
 
-def make_pdf(rows, filename, report_title, total_available=None, filter_detail="All Tenders"):
-    rows = live_rows(rows)
+def make_pdf(rows, filename, report_title, total_available=None, filter_detail="All Tenders", filter_live=True):
+    rows = live_rows(rows) if filter_live else list(rows)
     path = Path(filename)
     if total_available is None:
         total_available = len(rows)
@@ -477,12 +478,16 @@ def main():
                     closing,
                     f"Closing Date {d} Tenders List on MPTenders.pdf",
                     f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
-                    total_available=len(rows), filter_detail="Closing Today",
+                    total_available=len(rows), filter_detail="Closing Today", filter_live=False,
                 )
                 telegram_document(
                     token, chat_id, pdf,
-                    f"📎 Closing Date {d} Tenders List on MPTenders"
+                    f"📎 Closing Today {d} - Table View"
                 )
+                from telegram_card_pdf import make_card_pdf
+                card_pdf = make_card_pdf(closing, f"Closing Today {d} Card View.pdf", f"Closing Today {d}",
+                                         total_available=len(rows), filter_detail="Closing Today", filter_live=False)
+                telegram_document(token, chat_id, card_pdf, f"📎 Closing Today {d} - Card View with SAR Services")
             except Exception as exc:
                 telegram_message(
                     token, chat_id,
@@ -544,16 +549,22 @@ def main():
                     new,
                     f"New Publish Tender List on Date {d} on MPTenders.pdf",
                     f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
+                    total_available=len(rows), filter_detail="New Published Today", filter_live=False,
                 )
                 telegram_document(
                     token, chat_id, new_pdf,
-                    f"📎 New Publish Tender List on Date {d} on MPTenders"
+                    f"📎 New Published {d} - Table View"
                 )
+                from telegram_card_pdf import make_card_pdf
+                card_pdf = make_card_pdf(new, f"New Published {d} Card View.pdf", f"New Published Today {d}",
+                                         total_available=len(rows), filter_detail="New Published Today", filter_live=False)
+                telegram_document(token, chat_id, card_pdf, f"📎 New Published {d} - Card View with SAR Services")
             except Exception as exc:
                 telegram_message(
                     token, chat_id,
-                    f"⚠️ New-published PDF delivery failed: {type(exc).__name__}: {exc}"
+                    f"⚠️ New-published PDF delivery failed: {type(exc).__name__}. Automatic retry जारी है।"
                 )
+                raise
         return 0
 
     if mode == "evening_total":

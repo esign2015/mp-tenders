@@ -26,9 +26,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install reportlab
+      - run: pip install reportlab pypdf
       - name: Check daily notification rules
-        run: python -m unittest discover -s tests -p test_morning_telegram.py -q
+        run: |
+          python -m unittest discover -s tests -p test_morning_telegram.py -q
+          python -m unittest discover -s tests -p test_card_pdf.py -q
       - name: Deliver unsent daily Telegram alert
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
