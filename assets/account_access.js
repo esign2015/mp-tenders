@@ -62,7 +62,15 @@ function accountTehsilOptions(districtId,tehsilId,selected=''){
   field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
 }
 const ACCOUNT_IDLE_MS=15*60*1000,ACCOUNT_ACTIVITY_KEY='mp_account_activity_v1';
-let accountIdleTimer=null,accountActivityBusy=false,accountLastHeartbeat=Date.now();
+let accountIdleTimer=null,accountActivityBusy=false,accountLastHeartbeat=Date.now(),accountSessionTimer=null,accountSessionBusy=false;
+async function accountCheckSession(){
+  const token=localStorage.getItem(VISITOR_SESSION_KEY);
+  if(!token||document.hidden||accountSessionBusy||accountExpired())return;
+  accountSessionBusy=true;
+  try{await accountPost('/session-check',{session_token:token})}
+  catch(error){if(error.status===401&&localStorage.getItem(VISITOR_SESSION_KEY)===token)accountLogout(error.message)}
+  finally{accountSessionBusy=false}
+}
 function accountLogout(message=''){
   const token=localStorage.getItem(VISITOR_SESSION_KEY);
   localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);localStorage.removeItem(ACCOUNT_ACTIVITY_KEY);
@@ -89,8 +97,10 @@ function accountSetupControls(data){
   localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(Date.now()));accountLastHeartbeat=0;
   if(accountIdleTimer)clearInterval(accountIdleTimer);
   accountIdleTimer=setInterval(()=>{if(localStorage.getItem(VISITOR_SESSION_KEY))accountExpired()},1000);
+  if(accountSessionTimer)clearInterval(accountSessionTimer);
+  accountSessionTimer=setInterval(accountCheckSession,60000);
   for(const event of ['pointerdown','pointermove','keydown','scroll','touchstart'])document.addEventListener(event,accountActivity,{passive:true});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)accountExpired()});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)accountCheckSession()});
   window.addEventListener('storage',event=>{if(event.key===VISITOR_SESSION_KEY&&!event.newValue)location.reload()});
   const modal=visitorNode('accountSettingsModal'),status=visitorNode('accountSettingsStatus');
   function open(view){

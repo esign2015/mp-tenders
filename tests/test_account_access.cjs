@@ -70,6 +70,7 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  reply={ok:true,json:async()=>({ok:true,profile:{name:'Test Surname',first_name:'Test',middle_name:'',last_name:'Surname',district:'Dewas',mobile:'+919876543210'},profile_corrections:[]})};
  await node('accountRepairForm').onsubmit({preventDefault(){}});await correction;assert(unlocked);assert.equal(local.get('token'),'repair-token');reply=null;
  now+=14*60*1000;assert.equal(ctx.accountExpired(),false);now+=60*1000;assert.equal(ctx.accountExpired(),true);assert(!local.has('token'));assert(session.get('mp_account_notice').includes('15'));
- local.set('token','another-token');ctx.accountLogout();assert(!local.has('token'));
+ local.set('token','another-token');reply={ok:false,status:401,json:async()=>({message:'Logged in on another device'})};await ctx.accountCheckSession();assert(!local.has('token'));assert.equal(session.get('mp_account_notice'),'Logged in on another device');
+ local.set('token','retry-token');reply={ok:false,status:503,json:async()=>({message:'Temporary unavailable'})};await ctx.accountCheckSession();assert.equal(local.get('token'),'retry-token');ctx.accountLogout();assert(!local.has('token'));
  console.log('PASS: logout handler, profile controls, 15 minute idle expiry and signup routing preserves mobile/password, duplicate signup returns to signin with mobile only, unknown forgot cannot open WhatsApp, registered forgot link, failed login stays locked and successful login clears passwords.');
 })().catch(e=>{console.error(e);process.exitCode=1});

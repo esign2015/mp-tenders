@@ -155,7 +155,7 @@ class Accounts:
         return generate_password_hash(value,method=PASSWORD_METHOD)
     def issue(self,record):
         raw='acct_'+record['user_id']+'.'+secrets.token_urlsafe(32)
-        now=int(time.time());sessions=[s for s in record.get('sessions',[]) if s['expires']>now][-9:]
+        now=int(time.time());sessions=[]
         sessions.append({'hash':self.digest(raw),'expires':now+SESSION_SECONDS,'last_active':now})
         record['sessions']=sessions;return raw
     def authenticate(self,token):
@@ -165,6 +165,8 @@ class Accounts:
         record=self.get(user_id=user_id)
         if record and record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')
         digest=self.digest(token);now=int(time.time())
+        if record and not any(hmac.compare_digest(s['hash'],digest) for s in record.get('sessions',[])):
+            raise AccountError('यह login समाप्त हो गया है। दूसरे device पर login होने पर पुराना session बंद हो जाता है। फिर Sign in करें।',401,'session_replaced')
         if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now and now-s.get('last_active',s['expires']-SESSION_SECONDS)<IDLE_SECONDS for s in record.get('sessions',[])):raise AccountError('15 मिनट inactivity के बाद session समाप्त है। Sign in करें।',401)
         return record
     def response(self,record,token):
@@ -231,6 +233,10 @@ def install(server):
     def session():
         token=(request.get_json(silent=True) or {}).get('session_token');record=accounts.authenticate(token)
         return accounts.response(record,token)
+    @app.post('/api/accounts/session-check')
+    def session_check():
+        accounts.authenticate((request.get_json(silent=True) or {}).get('session_token'))
+        response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/details')
     def details():
         p=request.get_json(silent=True) or {};token=p.get('session_token')

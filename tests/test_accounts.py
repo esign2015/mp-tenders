@@ -102,7 +102,7 @@ class AccountsTests(unittest.TestCase):
         key=response['details_id'];self.assertTrue(key);self.assertFalse(pending.done())
         body={'session_token':token,'details_id':key}
         self.assertTrue(self.client.post('/api/accounts/details',json=body).json['pending'])
-        other=self.login().json['session_token']
+        other=self.client.post('/api/accounts/signup',json={**self.data,'mobile':'9123456789'}).json['session_token']
         self.assertEqual(self.client.post('/api/accounts/details',json={**body,'session_token':other}).status_code,404)
         pending.set_result({'firmName':'Saved Firm'})
         self.assertEqual(self.client.post('/api/accounts/details',json=body).json['affidavit_profile']['firmName'],'Saved Firm')
@@ -132,14 +132,18 @@ class AccountsTests(unittest.TestCase):
         duplicate=self.client.post('/api/accounts/signup',json={**self.data,'mobile':'+919876543210'})
         self.assertEqual(duplicate.status_code,409);self.assertEqual(duplicate.json['code'],'account_exists')
         self.assertEqual(self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']}).status_code,200)
-    def test_cross_device_affidavit_and_logout_only_this_session(self):
-        first=self.signup();second=self.login().json
+    def test_new_login_revokes_old_session_and_preserves_affidavit(self):
+        first=self.signup()
         profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','parentRelation':'W/o','parentName':'Spouse Test','address':'Ward 2, Dewas'}
         saved=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':profile});self.assertEqual(saved.status_code,200)
+        second=self.login().json
+        self.assertEqual(self.client.post('/api/accounts/session-check',json={'session_token':first['session_token']}).status_code,401)
+        self.assertEqual(self.client.post('/api/accounts/session-check',json={'session_token':second['session_token']}).status_code,200)
+        record=server.account_service.get(user_id=first['visitor_id']);self.assertEqual(len(record['sessions']),1)
         restored=self.client.post('/api/accounts/session',json={'session_token':second['session_token']})
         self.assertEqual(restored.json['affidavit_profile']['firmName'],'Firm')
         for key in ('parentRelation','parentName','address'):self.assertEqual(restored.json['affidavit_profile'][key],profile[key])
-        self.assertEqual(self.client.post('/api/accounts/logout',json={'session_token':first['session_token']}).status_code,200)
+        self.assertEqual(self.client.post('/api/accounts/logout',json={'session_token':first['session_token']}).status_code,401)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':first['session_token']}).status_code,401)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':second['session_token']}).status_code,200)
     def test_reset_admin_only_once_and_invalidates_existing_logins(self):
@@ -175,11 +179,11 @@ class AccountsTests(unittest.TestCase):
             self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,401)
             self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,401)
     def test_self_profile_and_password_change_require_authenticated_owner(self):
-        first=self.signup();second=self.login().json;token=first['session_token']
+        first=self.signup();second=self.login().json;token=second['session_token']
         self.assertEqual(self.client.post('/api/accounts/profile',json={'first_name':'Changed','tehsil':'Harda','district':'Harda'}).status_code,401)
         changed=self.client.post('/api/accounts/profile',json={'session_token':token,'first_name':'Changed','last_name':'Test','tehsil':'Harda','district':'Harda','mobile':'9123456789'})
         self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['mobile'],'+919876543210')
-        self.assertEqual(self.login().json['profile']['district'],'Harda')
+        self.assertEqual(changed.json['profile']['district'],'Harda')
         body={'session_token':token,'current_password':'wrong','password':'Newpass2!','confirm_password':'Newpass2!'}
         self.assertEqual(self.client.post('/api/accounts/change-password',json=body).json['code'],'wrong_password')
         body['current_password']=self.password
