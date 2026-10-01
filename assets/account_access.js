@@ -46,7 +46,7 @@ async function enforceAccountAccess(){
     try{
       await accountPost('/forgot-check',{mobile});
       if(visitorNode('accountForgotMobile').value.trim()!==mobile)return;
-      const text='MP Tender Dashboard: मेरा password भूल गया हूँ। Registered mobile: '+mobile+'. कृपया account verify करके password reset link दें।';
+      const text='MP Tender Dashboard: मेरा tenders.codinglms.xyz ka password भूल गया हूँ। Registered mobile: '+mobile+' . कृपया account verify करके password reset link दें।';
       forgotLink.href='https://wa.me/919893610244?text='+encodeURIComponent(text);forgotLink.hidden=false;
       status.textContent='Account registered है। नीचे WhatsApp link से message भेजें; पहचान verify होने पर reset link मिलेगा।';
     }catch(error){if(error.code==='signup_required')signupRequired(mobile,'',error.message);else status.textContent=error.message}
