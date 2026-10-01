@@ -8,8 +8,8 @@
   "current_portal_ids": 5410,
   "initial_incomplete": 1564,
   "batch_targets": 500,
-  "batch_attempted": 27,
-  "batch_complete": 0,
+  "batch_attempted": 60,
+  "batch_complete": 23,
   "started_at": "2026-10-01T09:08:51.685616+00:00",
   "success": 3832,
   "failed": 0,
@@ -5429,7 +5429,7 @@
     "2026_WRD_525965_1",
     "2026_WRD_525967_1"
   ],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_UAD_535682_1",
   "errors": [
     {
       "Tender ID": "2026_DHS_535349_1",
@@ -5565,7 +5565,52 @@
       "Tender ID": "2026_UAD_536918_4",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_4",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536918_6",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_6",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536918_5",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_5",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536918_7",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_7",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536918_8",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_8",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536918_9",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_9",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_538252_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538252_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_538323_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538323_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535057_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535057_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_538731_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_538731_1",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-01T09:10:49.900714+00:00"
+  "updated_at": "2026-10-01T09:12:52.158865+00:00"
 }
