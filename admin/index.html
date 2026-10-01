@@ -105,7 +105,7 @@ document.getElementById('passwordResetAdminForm').addEventListener('submit',asyn
     const response=await fetch(API+'/api/admin/accounts/reset-link',{method:'POST',headers:{Authorization:'Bearer '+localStorage.getItem(KEY),'Content-Type':'application/json'},body:JSON.stringify({mobile:$('passwordResetMobile').value.trim(),identity_verified:$('passwordResetVerified').checked}),cache:'no-store'});
     const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Reset link नहीं बनी।');
     $('passwordResetLink').value=result.reset_url;$('passwordResetLink').hidden=false;$('passwordResetCopy').hidden=false;
-    $('passwordResetStatus').textContent='यह link 15 मिनट में expire होगी और एक बार चलेगी। Verified user को WhatsApp पर भेजें।';$('passwordResetVerified').checked=false;
+    $('passwordResetStatus').textContent='Mobile Verified = Yes save हो गया। यह link 15 मिनट में expire होगी और एक बार चलेगी। User को WhatsApp पर भेजें।';$('passwordResetVerified').checked=false;
   }catch(error){$('passwordResetStatus').textContent=error.message}finally{button.disabled=false}
 });
 $('passwordResetCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('passwordResetLink').value);$('passwordResetStatus').textContent='Link copied. Verified user को WhatsApp पर भेजें।'}catch(_){$('passwordResetLink').select();$('passwordResetStatus').textContent='Link select है; copy करें।'}};

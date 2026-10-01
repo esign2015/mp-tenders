@@ -34,7 +34,7 @@ function accountSetupControls(data){
     visitorNode('accountEditProfileForm').hidden=view!=='profile';visitorNode('accountChangePasswordForm').hidden=view!=='password';
     visitorNode('accountSettingsTitle').textContent=view==='profile'?'My Profile / मेरा प्रोफाइल':'Change Password / पासवर्ड बदलें';
     const profile=window.dashboardVisitorProfile||data.profile;
-    visitorNode('accountEditName').value=profile.name;visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;
+    for(const [key,id] of [['first_name','accountEditName'],['middle_name','accountEditMiddle'],['last_name','accountEditLast'],['gender','accountEditGender']])visitorNode(id).value=profile[key]||'';visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;
     status.textContent='';modal.classList.add('open');modal.setAttribute('aria-hidden','false');visitorNode('telegramProfileMenu').classList.remove('open');
   }
   visitorNode('accountProfileBtn').onclick=()=>open('profile');visitorNode('accountPasswordBtn').onclick=()=>open('password');
@@ -42,7 +42,7 @@ function accountSetupControls(data){
   visitorNode('accountEditProfileForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const button=form.querySelector('button');button.disabled=true;status.textContent='Profile save हो रहा है…';
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
-    try{const result=await accountPost('/profile',{session_token:token,name:visitorNode('accountEditName').value.trim(),district:visitorNode('accountEditDistrict').value.trim()});
+    try{const result=await accountPost('/profile',{session_token:token,first_name:visitorNode('accountEditName').value.trim(),middle_name:visitorNode('accountEditMiddle').value.trim(),last_name:visitorNode('accountEditLast').value.trim(),gender:visitorNode('accountEditGender').value,district:visitorNode('accountEditDistrict').value.trim()});
       if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)return;
       window.dashboardVisitorProfile={...window.dashboardVisitorProfile,...result.profile};localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));
       for(const id of ['telegramProfileName','telegramMenuName'])visitorNode(id).textContent=result.profile.name;visitorNode('telegramMenuUsername').textContent=result.profile.district;status.textContent='✓ Profile save हो गया।';
@@ -118,7 +118,7 @@ async function enforceAccountAccess(){
     for(const [name,path] of [['SignIn','/signin'],['SignUp','/signup']])visitorNode('account'+name+'Form').addEventListener('submit',async event=>{
       event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
       const button=form.querySelector('button');button.disabled=true;status.textContent='Account check हो रहा है…';
-      const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{name:visitorNode('visitorName').value.trim(),mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
+      const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{first_name:visitorNode('visitorName').value.trim(),middle_name:visitorNode('visitorMiddleName').value.trim(),last_name:visitorNode('visitorLastName').value.trim(),gender:visitorNode('visitorGender').value,mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
       try{accountUnlock(await accountPost(path,payload));resolve(true)}catch(error){
         if(name==='SignIn'&&error.code==='signup_required')signupRequired(payload.mobile,payload.password,error.message);
         else if(name==='SignUp'&&(error.code==='account_exists'||error.status===409))existingAccount(payload.mobile,'आप पहले से Sign up हैं। अब केवल password डालकर Sign in करें।');

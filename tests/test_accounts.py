@@ -12,7 +12,7 @@ class AccountsTests(unittest.TestCase):
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start();self.client=server.app.test_client()
         self.password='Private1!'
-        self.data={'name':'Bidder Test','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
+        self.data={'name':'Bidder Test','first_name':'Bidder','middle_name':'','last_name':'Test','gender':'Male','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
     def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup()
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
@@ -38,6 +38,15 @@ class AccountsTests(unittest.TestCase):
         duplicate=self.client.post('/api/accounts/signup',json={**self.data,'mobile':'+919876543210'})
         self.assertEqual(duplicate.status_code,409);self.assertEqual(duplicate.json['code'],'account_exists')
         self.assertEqual(self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']}).status_code,200)
+    def test_separate_names_and_gender_are_required_middle_is_optional(self):
+        for key in ('first_name','last_name','gender'):
+            invalid={**self.data,key:''}
+            self.assertEqual(self.client.post('/api/accounts/signup',json=invalid).status_code,400)
+        self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'gender':'Unknown'}).status_code,400)
+        created=self.client.post('/api/accounts/signup',json={**self.data,'middle_name':'Kumar'})
+        self.assertEqual(created.status_code,200)
+        profile=created.json['profile'];self.assertEqual(profile['name'],'Bidder Kumar Test')
+        self.assertEqual(profile['first_name'],'Bidder');self.assertEqual(profile['middle_name'],'Kumar');self.assertEqual(profile['last_name'],'Test');self.assertEqual(profile['gender'],'Male')
     def test_cross_device_affidavit_and_logout_only_this_session(self):
         first=self.signup();second=self.login().json
         profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}
@@ -52,7 +61,11 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/admin/accounts/reset-link',json=body).status_code,401)
         with patch.object(server,'require_admin',return_value=('admin@example.com','')):
             self.assertEqual(self.client.post('/api/admin/accounts/reset-link',json={'mobile':'9876543210'}).status_code,400)
+            self.assertNotEqual(server.account_service.get(user_id=account['visitor_id']).get('mobile_verified'),'Yes')
             result=self.client.post('/api/admin/accounts/reset-link',json=body);self.assertEqual(result.status_code,200)
+        verified=server.account_service.get(user_id=account['visitor_id'])
+        self.assertEqual(verified['mobile_verified'],'Yes');self.assertEqual(verified['mobile_verified_by'],'admin@example.com')
+        self.assertEqual(result.json['mobile_verified'],'Yes')
         token=result.json['reset_url'].split('#reset=')[1]
         self.assertNotIn(token,json.dumps(server.account_service.get(user_id=account['visitor_id'])))
         new='Different2!';reset={'reset_token':token,'password':new,'confirm_password':new}
@@ -80,8 +93,8 @@ class AccountsTests(unittest.TestCase):
             self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,401)
     def test_self_profile_and_password_change_require_authenticated_owner(self):
         first=self.signup();second=self.login().json;token=first['session_token']
-        self.assertEqual(self.client.post('/api/accounts/profile',json={'name':'Changed','district':'Harda'}).status_code,401)
-        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'name':'Changed','district':'Harda','mobile':'9123456789'})
+        self.assertEqual(self.client.post('/api/accounts/profile',json={'first_name':'Changed','last_name':'User','gender':'Female','district':'Harda'}).status_code,401)
+        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'first_name':'Changed','middle_name':'','last_name':'User','gender':'Female','district':'Harda','mobile':'9123456789'})
         self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['mobile'],'+919876543210')
         self.assertEqual(self.login().json['profile']['district'],'Harda')
         body={'session_token':token,'current_password':'wrong','password':'Newpass2!','confirm_password':'Newpass2!'}

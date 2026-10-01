@@ -13,6 +13,17 @@ IDLE_SECONDS=15*60
 class AccountError(RuntimeError):
     def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
 
+def name_fields(server,p):
+    values={key:server.clean(p.get(key)) for key in ('first_name','middle_name','last_name','gender')}
+    if not 1<=len(values['first_name'])<=60 or not 1<=len(values['last_name'])<=60 or len(values['middle_name'])>60 or values['gender'] not in ('Male','Female'):
+        raise AccountError('First Name, Last Name और Male/Female भरें। Middle Name optional है।')
+    values['name']=' '.join(values[key] for key in ('first_name','middle_name','last_name') if values[key])
+    if len(values['name'])>120:raise AccountError('पूरा नाम अधिकतम 120 characters का रखें।')
+    return values
+
+def public_profile(record):
+    return {key:record.get(key,'') for key in ('name','first_name','middle_name','last_name','gender','mobile','district')}
+
 class Accounts:
     def __init__(self,server):self.server=server
     def operation(self,action,**data):
@@ -87,7 +98,7 @@ class Accounts:
                 conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
                 conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
-        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':{key:record[key] for key in ('name','mobile','district')},'affidavit_profile':aff,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'affidavit_profile':aff,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
@@ -98,11 +109,11 @@ def install(server):
     def signup():
         p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
         accounts.limit(mobile)
-        name=server.clean(p.get('name'));district=server.clean(p.get('district'))
-        if not mobile or not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name, Mobile और District भरें।')
+        names=name_fields(server,p);district=server.clean(p.get('district'))
+        if not mobile or not 2<=len(district)<=100:raise AccountError('सही Name, Mobile और District भरें।')
         if accounts.get(mobile=mobile):raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
-        record={'user_id':str(uuid.uuid4()),'mobile':mobile,'name':name,'district':district,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
+        record={'user_id':str(uuid.uuid4()),'mobile':mobile,**names,'district':district,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
         return accounts.response(record,token)
     @app.post('/api/accounts/signin')
@@ -141,16 +152,16 @@ def install(server):
         raise AccountError('Session update फिर प्रयास करें।',409)
     @app.post('/api/accounts/profile')
     def edit_profile():
-        p=request.get_json(silent=True) or {};name=server.clean(p.get('name'));district=server.clean(p.get('district'))
-        if not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name और District भरें।')
+        p=request.get_json(silent=True) or {};names=name_fields(server,p);district=server.clean(p.get('district'))
+        if not 2<=len(district)<=100:raise AccountError('सही Name और District भरें।')
         for _ in range(3):
-            record=accounts.authenticate(p.get('session_token'));revision=record['revision'];record.update(name=name,district=district)
+            record=accounts.authenticate(p.get('session_token'));revision=record['revision'];record.update(**names,district=district)
             if accounts.update(record,revision):
                 if not sheets.enabled():
                     conn=server.visitor_db()
-                    try:conn.execute('UPDATE visitor_registrations SET name=?,district=? WHERE visitor_id=?',(name,district,record['user_id']));conn.commit()
+                    try:conn.execute('UPDATE visitor_registrations SET name=?,district=? WHERE visitor_id=?',(names['name'],district,record['user_id']));conn.commit()
                     finally:conn.close()
-                return jsonify({'ok':True,'profile':{key:record[key] for key in ('name','mobile','district')}})
+                return jsonify({'ok':True,'profile':public_profile(record)})
         raise AccountError('Profile save फिर प्रयास करें।',409)
     @app.post('/api/accounts/change-password')
     def change_password():
@@ -184,8 +195,9 @@ def install(server):
         raw=record['user_id']+'.'+secrets.token_urlsafe(32)
         for _ in range(3):
             revision=record['revision'];record['reset']={'hash':accounts.digest(raw),'expires':int(time.time())+900,'issued_by':email}
+            record.update(mobile_verified='Yes',mobile_verified_at=server.now_ist().isoformat(),mobile_verified_by=email,mobile_verification_method='manual_reset_link')
             if accounts.update(record,revision):
-                response=jsonify({'ok':True,'reset_url':'https://tenders.codinglms.xyz/#reset='+raw,'expires_minutes':15});response.headers['Cache-Control']='no-store';return response
+                response=jsonify({'ok':True,'reset_url':'https://tenders.codinglms.xyz/#reset='+raw,'expires_minutes':15,'mobile_verified':'Yes'});response.headers['Cache-Control']='no-store';return response
             record=accounts.get(user_id=record['user_id'])
         raise AccountError('फिर प्रयास करें।',409)
     @app.post('/api/accounts/reset-password')

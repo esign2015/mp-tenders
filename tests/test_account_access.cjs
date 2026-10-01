@@ -9,7 +9,7 @@ const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR
  if(reply)return reply;
  if(url.endsWith('/forgot-check'))return{ok:true,json:async()=>({ok:true})};
  if(fail)return{ok:false,status:401,json:async()=>({message:'wrong password'})};
- return{ok:true,json:async()=>({ok:true,session_token:'account-token',visitor_id:'user-id',profile:{name:'Test',mobile:'+919876543210',district:'Dewas'}})};
+ return{ok:true,json:async()=>({ok:true,session_token:'account-token',visitor_id:'user-id',profile:{name:'Test User',first_name:'Test',middle_name:'',last_name:'User',gender:'Male',mobile:'+919876543210',district:'Dewas'}})};
 }});
 vm.runInContext(fs.readFileSync('assets/account_access.js','utf8'),ctx);
 (async()=>{

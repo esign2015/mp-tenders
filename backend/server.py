@@ -404,9 +404,9 @@ def build_user_excel():
     ds.freeze_panes = "A2"
 
     vs = wb.create_sheet("Visitor Registrations")
-    vs.append(["S.No.", "Name", "Mobile", "District", "First Saved (IST)", "Last Visit (IST)", "Visit Count", "Mobile Verified"])
+    vs.append(["S.No.", "Name", "Mobile", "District", "First Saved (IST)", "Last Visit (IST)", "Visit Count", "Mobile Verified", "First Name", "Middle Name", "Last Name", "Gender"])
     for i, row in enumerate(visitors, 1):
-        vs.append([i,row["name"],row["mobile"],row["district"],row["signup_at"],row["last_visit_at"],row["visit_count"],"No"])
+        vs.append([i,row["name"],row["mobile"],row["district"],row["signup_at"],row["last_visit_at"],row["visit_count"],dict(row).get("mobile_verified") or "No",*[dict(row).get(key,"") for key in ("first_name","middle_name","last_name","gender")]])
     for row in vs.iter_rows(min_row=2):
         for cell in row[1:4]:
             cell.data_type = "s"

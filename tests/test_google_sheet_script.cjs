@@ -53,3 +53,16 @@ assert(!call('account_update',{record:{...update,password_hash:'should-not-overw
 assert.equal(call('account_get',{user_id:accountId}).record.password_hash,record.password_hash);
 const key='a'.repeat(64);for(let i=1;i<=13;i++)assert.equal(call('account_rate',{key,limit:12}).allowed,i<=12);
 console.log('PASS: one password account per phone, compare-and-swap guards concurrent changes and persistent login rate limit.');
+
+const current=call('account_get',{user_id:accountId}).record;
+const verified={...current,mobile_verified:'Yes',first_name:'Account',middle_name:'',last_name:'User',gender:'Male',name:'Account User',district:'Harda'};
+assert(call('account_update',{record:verified,expected_revision:current.revision}).updated);
+let contact=tabs.get('Users').rows.find(row=>row[2]===record.mobile);
+assert.equal(contact[7],'Yes');assert.equal(contact[8],'Account');assert.equal(contact[10],'User');assert.equal(contact[11],'Male');assert.equal(contact[3],'Harda');
+assert.equal(call('list_visitors').visitors.find(row=>row.visitor_id===accountId).mobile_verified,'Yes');
+const restored=call('account_get',{user_id:accountId}).record;
+assert(call('account_update',{record:{...restored,mobile_verified:'No'},expected_revision:restored.revision}).updated);
+assert.equal(tabs.get('Users').rows.find(row=>row[2]===record.mobile)[7],'Yes','normal session updates cannot downgrade manual verification');
+const savedHeaders=[...tabs.get('Users').rows[0]],savedUser=[...tabs.get('Users').rows[1]];
+tabs.get('Users').rows[0]=savedHeaders.slice(0,8);assert(call('status').ok);assert.deepEqual(tabs.get('Users').rows[0],savedHeaders);assert.deepEqual(tabs.get('Users').rows[1],savedUser);
+console.log('PASS: manual verification and separate name/gender fields sync to contacts/export; old headers migrate without losing users.');

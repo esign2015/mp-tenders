@@ -1916,8 +1916,11 @@ body.telegram-locked .site-footer{visibility:hidden}
       <button type="submit">Sign in</button>
     </form>
     <form id="accountSignUpForm" class="account-form" hidden>
-      <label for="visitorName">Name / नाम</label>
-      <input id="visitorName" autocomplete="name" minlength="2" maxlength="120" required>
+      <label for="visitorName">First Name / पहला नाम *</label>
+      <input id="visitorName" autocomplete="given-name" minlength="1" maxlength="60" required>
+      <label for="visitorMiddleName">Middle Name / मध्य नाम (optional)</label><input id="visitorMiddleName" autocomplete="additional-name" maxlength="60">
+      <label for="visitorLastName">Last Name / उपनाम *</label><input id="visitorLastName" autocomplete="family-name" minlength="1" maxlength="60" required>
+      <label for="visitorGender">Male / Female *</label><select id="visitorGender" required><option value="">Select</option><option value="Male">Male / पुरुष</option><option value="Female">Female / महिला</option></select>
       <label for="visitorMobile">Mobile Number</label>
       <input id="visitorMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
       <label for="visitorDistrict">District / जिला</label>
@@ -1951,12 +1954,12 @@ body.telegram-locked .site-footer{visibility:hidden}
 <style>
 .account-form{display:grid;gap:8px;text-align:left;margin-top:20px}
 .account-form label{font-weight:700;font-size:14px;margin-top:5px}
-.account-form input{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
+.account-form input,.account-form select{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
 .account-form[hidden],#accountForgotWhatsApp[hidden]{display:none!important}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=4"></script>
+<script src="assets/account_access.js?v=5"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -1988,7 +1991,10 @@ body.telegram-locked .site-footer{visibility:hidden}
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle" style="max-height:90vh;overflow:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="user-profile-title" id="accountSettingsTitle">My Profile</div><button type="button" id="accountSettingsClose" aria-label="Close account settings">✕</button></div>
     <form id="accountEditProfileForm">
-      <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="120" autocomplete="name" required>
+      <label class="user-profile-label" for="accountEditName">First Name *</label><input class="user-profile-input" id="accountEditName" minlength="1" maxlength="60" autocomplete="given-name" required>
+      <label class="user-profile-label" for="accountEditMiddle">Middle Name (optional)</label><input class="user-profile-input" id="accountEditMiddle" maxlength="60" autocomplete="additional-name">
+      <label class="user-profile-label" for="accountEditLast">Last Name *</label><input class="user-profile-input" id="accountEditLast" minlength="1" maxlength="60" autocomplete="family-name" required>
+      <label class="user-profile-label" for="accountEditGender">Male / Female *</label><select class="user-profile-input" id="accountEditGender" required><option value="">Select</option><option value="Male">Male / पुरुष</option><option value="Female">Female / महिला</option></select>
       <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
       <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
       <datalist id="accountDistrictList"></datalist><button class="user-profile-save" type="submit">Save Profile</button>

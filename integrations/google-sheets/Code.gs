@@ -2,7 +2,7 @@
 // Set MP_TENDERS_SHARED_SECRET in Script Properties; never put it in this file.
 const MP_TENDER_SHEET_ID = '1VHILTCBB-CR0srqOTmaxf0b17wWJCpaOuMpVp_KphKw';
 const MP_SCHEMA = {
-  Users: ['user_id','name','mobile','district','signup_at','last_visit_at','visit_count','mobile_verified'],
+  Users: ['user_id','name','mobile','district','signup_at','last_visit_at','visit_count','mobile_verified','first_name','middle_name','last_name','gender'],
   VisitorSessions: ['visitor_id','user_id','name','mobile','district','signup_at','last_visit_at','visit_count'],
   AffidavitProfiles: ['visitor_id','user_id','bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','updated_at','last_request_id'],
   VisitEvents: ['request_id','visitor_id','user_id','visited_at','event'],
@@ -23,7 +23,11 @@ function mpTables_(book){
       sheet.getRange(1,1,1,headers.length).setFontWeight('bold').setBackground('#e8effa');
       sheet.autoResizeColumns(1,headers.length);
     }else{
-      const found=sheet.getRange(1,1,1,headers.length).getDisplayValues()[0];
+      let found=sheet.getRange(1,1,1,headers.length).getDisplayValues()[0];
+      if(name==='Users'&&found.slice(0,8).join('|')===headers.slice(0,8).join('|')&&found.slice(8).every(value=>value==='')){
+        sheet.getRange(1,9,1,4).setValues([headers.slice(8)]).setFontWeight('bold').setBackground('#e8effa');
+        found=sheet.getRange(1,1,1,headers.length).getDisplayValues()[0];
+      }
       if(found.join('|')!==headers.join('|'))throw Error('Unexpected headers in '+name+'. Existing data was preserved.');
     }
     tables[name]=sheet;
@@ -74,7 +78,10 @@ function mpAffidavit_(tables,visitorId){
 }
 function mpHandle_(tables,p){
   if(String(p.action||'').startsWith('account_'))return mpAccountHandle_(tables,p);
-  if(p.action==='list_visitors')return {visitors:mpRows_(tables.VisitorSessions).map(mpPublic_)};
+  if(p.action==='list_visitors'){
+    const contacts=new Map(mpRows_(tables.Users).map(row=>[row.user_id,row]));
+    return {visitors:mpRows_(tables.VisitorSessions).map(row=>{const contact=contacts.get(row.user_id)||{};return {...mpPublic_(row),...Object.fromEntries(['first_name','middle_name','last_name','gender','mobile_verified'].map(key=>[key,contact[key]||'']))};})};
+  }
   if(p.action==='list_affidavits')return {affidavits:mpRows_(tables.AffidavitProfiles).map(mpPublic_)};
   if(p.action==='status')return {spreadsheet_id:MP_TENDER_SHEET_ID,unique_users:mpRows_(tables.Users).length,visitor_sessions:mpRows_(tables.VisitorSessions).length};
   if(!mpUuid_(p.visitor_id))mpError_(400,'Invalid visitor ID.');
@@ -89,6 +96,7 @@ function mpHandle_(tables,p){
     const now=mpNow_();
     let contact=mpRows_(tables.Users).find(row=>row.mobile===mobile);
     if(!contact)contact={user_id:Utilities.getUuid(),name,mobile,district,signup_at:now,last_visit_at:now,visit_count:0,mobile_verified:'No'};
+    for(const key of ['first_name','middle_name','last_name','gender'])if(p[key]!==undefined)contact[key]=p[key];
     visitor={visitor_id:p.visitor_id,user_id:contact.user_id,name,mobile,district,signup_at:now,last_visit_at:now,visit_count:1};
     mpWrite_(tables.Users,contact);
     mpWrite_(tables.VisitorSessions,visitor);
@@ -130,7 +138,7 @@ function mpAccountHandle_(tables,p){
     const record=p.record||{};
     if(!mpUuid_(record.user_id)||!/^\+91[6-9][0-9]{9}$/.test(record.mobile)||!String(record.password_hash||'').startsWith('scrypt:'))mpError_(400,'Invalid account.');
     if(rows.some(row=>row.mobile===record.mobile))mpError_(409,'यह mobile registered है। Sign in या Forgot password चुनें।');
-    mpHandle_(tables,{...p,action:'register',visitor_id:record.user_id,name:record.name,mobile:record.mobile,district:record.district});
+    mpHandle_(tables,{...p,action:'register',visitor_id:record.user_id,name:record.name,mobile:record.mobile,district:record.district,first_name:record.first_name,middle_name:record.middle_name,last_name:record.last_name,gender:record.gender});
     record.revision=1;mpWrite_(tables.Accounts,{user_id:record.user_id,mobile:record.mobile,revision:1,record_json:JSON.stringify(record)});
     return {record};
   }
@@ -139,7 +147,17 @@ function mpAccountHandle_(tables,p){
     if(!row||Number(row.revision)!==Number(p.expected_revision))return {updated:false};
     if(row.mobile!==record.mobile)mpError_(400,'Account mobile cannot be changed through this operation.');
     record.revision=Number(p.expected_revision)+1;
-    mpWrite_(tables.Accounts,{...row,revision:record.revision,record_json:JSON.stringify(record)});return {updated:true};
+    mpWrite_(tables.Accounts,{...row,revision:record.revision,record_json:JSON.stringify(record)});
+    const visitor=mpRows_(tables.VisitorSessions).find(item=>item.visitor_id===record.user_id);
+    const contact=mpRows_(tables.Users).find(item=>visitor?item.user_id===visitor.user_id:item.mobile===record.mobile);
+    if(contact){
+      let changed=false;
+      for(const key of ['name','district','first_name','middle_name','last_name','gender'])if(record[key]!==undefined&&contact[key]!==record[key]){contact[key]=record[key];changed=true;}
+      if(record.mobile_verified==='Yes'&&contact.mobile_verified!=='Yes'){contact.mobile_verified='Yes';changed=true;}
+      if(changed)mpWrite_(tables.Users,contact);
+    }
+    if(visitor&&(visitor.name!==record.name||visitor.district!==record.district)){visitor.name=record.name;visitor.district=record.district;mpWrite_(tables.VisitorSessions,visitor);}
+    return {updated:true};
   }
   if(action==='rate'){
     if(!/^[a-f0-9]{64}$/.test(String(p.key||''))||![12,120].includes(p.limit))mpError_(400,'Invalid limit.');
