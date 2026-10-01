@@ -17,6 +17,23 @@ class AccountsTests(unittest.TestCase):
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
     def login(self,password=None):return self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':password or self.password})
+    def test_remote_login_checks_overlap_and_still_enforce_rates(self):
+        import threading
+        barrier=threading.Barrier(3)
+        def operation(action,**fields):
+            barrier.wait(timeout=3)
+            return {'allowed':True} if action=='rate' else {'record':{'user_id':'example'}}
+        with patch.object(sheets,'enabled',return_value=True),patch.object(server.account_service,'operation',side_effect=operation),server.app.test_request_context():
+            self.assertEqual(server.account_service.lookup_limited('+919876543210')['user_id'],'example')
+        from account_access import AccountError
+        def denied(action,**fields):
+            return {'allowed':fields['limit']!=12} if action=='rate' else {'record':{'user_id':'example'}}
+        with patch.object(sheets,'enabled',return_value=True),patch.object(server.account_service,'operation',side_effect=denied),server.app.test_request_context(),self.assertRaises(AccountError) as error:
+            server.account_service.lookup_limited('+919876543210')
+        self.assertEqual(error.exception.status,429)
+        with patch.object(sheets,'call',side_effect=AssertionError('Readiness must not access Sheet')):
+            self.assertEqual(self.client.get('/api/accounts/ready').status_code,200)
+
     def test_mobile_range_and_numeric_validation(self):
         from account_access import account_mobile
         for value in ('6000000000','9999999999'):

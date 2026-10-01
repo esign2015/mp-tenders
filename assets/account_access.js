@@ -102,6 +102,8 @@ function accountUnlock(data){
   for(const id of ['accountLoginPassword','accountNewPassword','accountConfirmPassword','accountResetPassword','accountResetConfirm'])if(visitorNode(id))visitorNode(id).value='';
 }
 async function enforceAccountAccess(){
+  // Begin backend startup while the user fills the login form.
+  fetch('https://mp-tenders-api.onrender.com/api/accounts/ready',{cache:'no-store'}).catch(()=>{});
   const status=visitorNode('visitorStatus'),forms=['SignIn','SignUp','Forgot','Reset'];
   function mode(name){
     for(const current of forms){visitorNode('account'+current+'Form').hidden=current!==name;visitorNode('account'+current+'Tab')?.classList.toggle('active',current===name)}

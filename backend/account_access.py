@@ -1,10 +1,13 @@
 """Password accounts: scrypt hashes, revocable sessions and manual reset links."""
-import hashlib,hmac,json,os,re,secrets,time,uuid,threading
+import hashlib,hmac,json,os,re,secrets,time,uuid,threading,logging
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
 import google_sheet_store as sheets
+
+logger=logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 _detail_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='account-details')
 _detail_slots=threading.BoundedSemaphore(16)
@@ -56,7 +59,10 @@ class AccountError(RuntimeError):
 class Accounts:
     def __init__(self,server):self.server=server
     def operation(self,action,**data):
-        if sheets.enabled():return sheets.call('account_'+action,**data)
+        if sheets.enabled():
+            started=time.monotonic()
+            try:return sheets.call('account_'+action,**data)
+            finally:logger.info('Account storage action=%s elapsed=%.2fs',action,time.monotonic()-started)
         if not self.server.DATABASE_URL and os.getenv('ALLOW_EPHEMERAL_ACCOUNTS','0')!='1':
             raise AccountError('Account storage अभी connect नहीं है। कृपया थोड़ी देर बाद प्रयास करें।',503)
         conn=self.server.visitor_db()
@@ -89,15 +95,30 @@ class Accounts:
     def get(self,**kwargs):return self.operation('lookup' if 'mobile' in kwargs else 'get',**kwargs)['record']
     def update(self,record,revision):return self.operation('update',record=record,expected_revision=revision)['updated']
     def digest(self,value):return hashlib.sha256(value.encode()).hexdigest()
-    def limit(self,mobile=''):
-        # Render's immediate peer is used as a conservative IP limit; untrusted forwarding headers cannot bypass it.
+    def rate_checks(self,mobile=''):
+        # Capture Flask request information before starting remote requests.
         keys=[('ip:'+str(request.remote_addr),120)]
         if mobile:keys.append(('mobile:'+mobile,12))
         secret=self.server.admin_session_secret()
         if not secret:raise AccountError('Account service is not configured.',503)
-        for value,limit in keys:
-            key=hmac.new(secret.encode(),value.encode(),hashlib.sha256).hexdigest()
-            if not self.operation('rate',key=key,limit=limit)['allowed']:raise AccountError('कई प्रयास हुए हैं। 15 मिनट बाद फिर प्रयास करें।',429)
+        return [{'key':hmac.new(secret.encode(),value.encode(),hashlib.sha256).hexdigest(),'limit':limit} for value,limit in keys]
+    def check_rate_results(self,results):
+        if any(not result['allowed'] for result in results):
+            raise AccountError('कई प्रयास हुए हैं। 15 मिनट बाद फिर प्रयास करें।',429)
+    def limit(self,mobile=''):
+        self.check_rate_results([self.operation('rate',**data) for data in self.rate_checks(mobile)])
+    def lookup_limited(self,mobile):
+        if not sheets.enabled() or not mobile:
+            self.limit(mobile)
+            return self.get(mobile=mobile) if mobile else None
+        # Independent remote calls overlap their network/startup time. The Sheet
+        # still serializes mutations; every rate check must pass before login.
+        checks=self.rate_checks(mobile)
+        with ThreadPoolExecutor(max_workers=3,thread_name_prefix='account-check') as pool:
+            limits=[pool.submit(self.operation,'rate',**data) for data in checks]
+            lookup=pool.submit(self.get,mobile=mobile)
+            self.check_rate_results([future.result() for future in limits])
+            return lookup.result()
     def password(self,value):
         if (not isinstance(value,str) or not 8<=len(value)<=128 or
                 not all(re.search(pattern,value) for pattern in (r'[A-Z]',r'[a-z]',r'[0-9]',r'[^A-Za-z0-9\s]'))):
@@ -138,21 +159,24 @@ def install(server):
     accounts=Accounts(server);app=server.app
     @app.errorhandler(AccountError)
     def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code}),error.status
+    @app.get('/api/accounts/ready')
+    def ready():
+        response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/signup')
     def signup():
         p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
-        accounts.limit(mobile)
+        record=accounts.lookup_limited(mobile)
         profile=profile_fields(server,p)
         if not mobile:raise AccountError('सही Mobile भरें।')
-        if accounts.get(mobile=mobile):raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
+        if record:raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
         record={'user_id':str(uuid.uuid4()),'mobile':mobile,**profile,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
         return accounts.response(record,token)
     @app.post('/api/accounts/signin')
     def signin():
-        p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'));accounts.limit(mobile)
-        password=p.get('password');record=accounts.get(mobile=mobile) if mobile else None
+        p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
+        record=accounts.lookup_limited(mobile);password=p.get('password')
         valid= isinstance(password,str) and len(password)<=128 and check_password_hash(record['password_hash'] if record else _DUMMY_HASH,password)
         if not mobile:raise AccountError('सही Mobile Number भरें।')
         if not record:raise AccountError('इस mobile से Sign up नहीं हुआ है। कृपया Sign up form पूरा करें।',404,'signup_required')
@@ -168,9 +192,10 @@ def install(server):
         raise AccountError('फिर प्रयास करें।',409)
     @app.post('/api/accounts/forgot-check')
     def forgot_check():
-        mobile=account_mobile(server,(request.get_json(silent=True) or {}).get('mobile'));accounts.limit(mobile)
+        mobile=account_mobile(server,(request.get_json(silent=True) or {}).get('mobile'))
+        record=accounts.lookup_limited(mobile)
         if not mobile:raise AccountError('सही Mobile Number भरें।')
-        if not accounts.get(mobile=mobile):raise AccountError('पहले Sign up करें। इसके बाद password reset request भेज सकेंगे।',404,'signup_required')
+        if not record:raise AccountError('पहले Sign up करें। इसके बाद password reset request भेज सकेंगे।',404,'signup_required')
         response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/session')
     def session():
