@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T02:29:22.645246+00:00",
+  "updated_at": "2026-10-01T02:31:26.631378+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3558,
+  "detail_complete": 3598,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1754,
+  "detail_pending": 1714,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1783,
+      "detail_complete": 1816,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1102
+      "detail_pending": 1069
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 36,
+      "detail_complete": 43,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 41
+      "detail_pending": 34
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1749,
+  "legacy_verification_pending": 1709,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
