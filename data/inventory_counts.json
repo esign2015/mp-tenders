@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:00:03.463857+00:00",
+  "updated_at": "2026-10-01T11:02:08.267885+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4564,
+  "detail_complete": 4598,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 945,
+  "detail_pending": 911,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 30,
+      "detail_complete": 31,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -225,10 +225,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 27,
+      "detail_complete": 28,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -401,10 +401,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
@@ -764,10 +764,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P.State Minor Forest Produce Cooperative Federation Limited",
@@ -852,10 +852,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 35,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -940,10 +940,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 379,
       "copied_tenders": 379,
-      "detail_complete": 347,
+      "detail_complete": 368,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 32
+      "detail_pending": 11
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1046,7 +1046,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 846,
+  "legacy_verification_pending": 812,
   "missing_district_count": 94,
   "missing_district_ids": [
     "2025_UAD_447651_3",
