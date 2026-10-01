@@ -1894,6 +1894,27 @@ body.telegram-locked .site-footer{visibility:hidden}
 @media(max-width:700px){.affidavit-card{padding:12px}.affidavit-head{margin:-12px -12px 10px;padding:10px 12px;top:-12px}.affidavit-actions{margin:10px -12px -12px;padding:9px 12px;bottom:-12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
 </style>
 
+<style>
+/* Keep controls usable on desktop, tablets and phones. */
+#telegramGate{overflow-y:auto;padding:20px 12px;align-items:safe center}
+.account-form select{width:100%;min-height:40px;padding:8px;border:1px solid #cad4e2;border-radius:7px;background:white;font-size:16px}
+.telegram-gate-card{max-width:460px;width:100%;flex-shrink:0}
+.main-area,.header-left,.header-right,.search-panel,.table-panel{min-width:0}
+@media(min-width:851px) and (max-width:1200px){
+.site-header{height:auto;flex-basis:auto;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.counts{grid-column:1/-1;grid-row:2;flex-wrap:wrap}.header-contact-row{flex-wrap:wrap}
+.search-bottom{grid-template-columns:repeat(3,minmax(0,1fr))}
+.site-footer{height:auto;flex-basis:auto;gap:12px}.footer-center{flex:1;min-width:0}
+}
+@media(max-width:850px){
+.search-heading-row,.table-heading-row{height:auto;flex-wrap:wrap}.action-buttons,.table-tools{flex-wrap:wrap}
+.search-fields,.search-bottom{grid-template-columns:repeat(2,minmax(0,1fr))}
+.search-bottom>*{width:100%!important;min-width:0}.site-footer{height:auto;gap:8px;flex-wrap:wrap}
+.header-contact-row{flex-wrap:wrap;justify-content:center}.affidavit-card{max-height:90dvh}
+.account-form input,.account-form select,.user-profile-input,.search-fields input,.search-fields select,.search-bottom input,.search-bottom select{font-size:16px}
+}
+@media(max-width:480px){.search-fields,.search-bottom{grid-template-columns:1fr}.counts{gap:3px}.count-box{min-width:0!important;width:100%!important}.main-area{padding:8px}.telegram-gate-card{padding:18px}}
+</style>
 </head>
 
 <!-- Account access with mobile/password; Telegram alerts are independent. -->
@@ -1917,12 +1938,15 @@ body.telegram-locked .site-footer{visibility:hidden}
     </form>
     <form id="accountSignUpForm" class="account-form" hidden>
       <label for="visitorName">Name / नाम</label>
-      <input id="visitorName" autocomplete="name" minlength="2" maxlength="120" required>
+      <input id="visitorName" autocomplete="given-name" minlength="2" maxlength="15" required>
+      <label for="visitorMiddleName">Middle Name / मध्य नाम</label><input id="visitorMiddleName" autocomplete="additional-name" maxlength="10">
+      <label for="visitorLastName">Surname / उपनाम</label><input id="visitorLastName" autocomplete="family-name" maxlength="15">
       <label for="visitorMobile">Mobile Number</label>
       <input id="visitorMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
       <label for="visitorDistrict">District / जिला</label>
       <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
       <datalist id="visitorDistrictList"></datalist>
+      <label for="visitorTehsil">Tehsil / तहसील</label><select id="visitorTehsil" required disabled><option value="">पहले जिला चुनें</option></select>
       <label for="accountNewPassword">Password</label>
       <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <small>कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है।</small>
@@ -1956,7 +1980,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=4"></script>
+<script src="assets/account_access.js?v=5"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -1988,10 +2012,12 @@ body.telegram-locked .site-footer{visibility:hidden}
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle" style="max-height:90vh;overflow:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="user-profile-title" id="accountSettingsTitle">My Profile</div><button type="button" id="accountSettingsClose" aria-label="Close account settings">✕</button></div>
     <form id="accountEditProfileForm">
-      <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="120" autocomplete="name" required>
+      <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="15" autocomplete="given-name" required>
       <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
+      <label class="user-profile-label" for="accountEditMiddleName">Middle Name</label><input class="user-profile-input" id="accountEditMiddleName" maxlength="10" autocomplete="additional-name">
+      <label class="user-profile-label" for="accountEditLastName">Surname</label><input class="user-profile-input" id="accountEditLastName" maxlength="15" autocomplete="family-name">
       <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
-      <datalist id="accountDistrictList"></datalist><button class="user-profile-save" type="submit">Save Profile</button>
+      <datalist id="accountDistrictList"></datalist><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select><button class="user-profile-save" type="submit">Save Profile</button>
     </form>
     <form id="accountChangePasswordForm" hidden>
       <label class="user-profile-label" for="accountCurrentPassword">Current Password</label><input class="user-profile-input" id="accountCurrentPassword" type="password" autocomplete="current-password" maxlength="128" required>
@@ -2051,6 +2077,8 @@ body.telegram-locked .site-footer{visibility:hidden}
     </div>
     <div class="affidavit-grid">
       <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="Bidder / Deponent का पूरा नाम"></div>
+      <div class="affidavit-field"><label for="affParentName">Parent / Spouse Name (Page 2)</label><input id="affParentName" maxlength="120" placeholder="Optional; otherwise left blank"></div>
+      <div class="affidavit-field full"><label for="affAddress">Residential Address (Page 2)</label><input id="affAddress" maxlength="240" placeholder="Optional; otherwise left blank"></div>
       <div class="affidavit-field"><label for="affFirmName">Firm / Company Name</label><input id="affFirmName" type="text" maxlength="160" placeholder="Firm / Company का नाम"></div>
       <div class="affidavit-field"><label for="affStatus">Status in Firm / Company</label><select id="affStatus"><option value="Proprietor">Proprietor</option><option value="Partner">Partner</option><option value="Director">Director</option><option value="Authorized Signatory">Authorized Signatory</option><option value="Other">Other</option></select></div>
       <div class="affidavit-field"><label for="affPlace">Verification Place</label><input id="affPlace" type="text" maxlength="100" placeholder="Verification place"></div>
@@ -6133,6 +6161,8 @@ enforceAccountAccess().then(async () => {
   function documentData(){
     return {
       ...readProfile(),
+      parentName:safe(byId("affParentName")?.value),
+      address:safe(byId("affAddress")?.value),
       tenderId:safe(byId("affTenderId")?.value),
       tenderRef:safe(byId("affTenderRef")?.value),
       noticeDate:safe(byId("affNoticeDate")?.value),
@@ -6182,6 +6212,16 @@ enforceAccountAccess().then(async () => {
       "Signature with Seal of the Deponent (bidder)"
     ];
   }
+  function noRelationParagraphs(d){
+    const identity="I, "+d.bidderName+", son/daughter/spouse of "+(d.parentName||"____________________________")+", resident of "+(d.address||"____________________________")+", acting as "+d.status+" of "+d.firmName+", do hereby solemnly declare that:";
+    const bid="I am submitting a bid on behalf of my firm to "+d.department+" for Tender No. "+d.tenderRef+", for the work entitled "+d.workName+".";
+    if(d.relative==="yes")return [identity,bid,"A close relative is employed in the department: "+d.relativeName+", Post: "+d.relativePost+", Present Posting: "+d.relativePosting+". A declaration of no relationship is therefore not made."];
+    return [identity,bid,
+      "I certify that I have no close family relationship with any officer or employee working in the department / office to which the bid is being submitted, including father, mother, husband, wife, son, daughter, brother, sister, or any other close relative.",
+      "If the information provided by me is found to be false or incorrect during the tender process or at any time after award of the tender, the department shall be entitled to cancel my tender or contract, forfeit my Earnest Money Deposit / Security Deposit, and take action against me / my firm in accordance with the applicable rules."];
+  }
+  const relationTitle=d=>d.relative==="yes"?"Declaration of Close Relationship":"No Relation Certificate";
+  function noRelationPreview(d){return '<hr><p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationParagraphs(d).map(text=>'<p class="aff-prev-justify">'+escapeHtml(text)+'</p>').join('')+'<p>Date: '+escapeHtml(d.verifyDate)+' · Place: '+escapeHtml(d.place)+'</p><div class="aff-sign-space"></div><p class="aff-prev-right">Declarant Signature ____________________</p><p class="aff-prev-right">Name: '+escapeHtml(d.bidderName)+'</p>';}
   function updatePreview(){
     const d=documentData();
     const point3=d.relative==="yes"
@@ -6211,7 +6251,7 @@ enforceAccountAccess().then(async () => {
       '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+
       '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
       '<p class="aff-prev-left">Verified today <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> (dated) at <strong><u>'+escapeHtml(d.place)+'</u></strong> (place).</p>'+
-      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>';
+      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+noRelationPreview(d);
   }
   function fillFromTender(row){
     selectedAffidavitTender=row;
@@ -6219,6 +6259,7 @@ enforceAccountAccess().then(async () => {
     const general=getSavedGeneralProfile();
     const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
     byId("affBidderName").value=saved.bidderName||general.name||safe(byId("userProfileName")?.value)||telegramName;
+    byId("affParentName").value="";byId("affAddress").value="";
     byId("affFirmName").value=saved.firmName||general.firmName||"";
     byId("affStatus").value=saved.status||general.bidderStatus||"Proprietor";
     byId("affPlace").value=saved.place||general.place||general.district||"";
@@ -6292,6 +6333,7 @@ enforceAccountAccess().then(async () => {
       const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
+        pageBreakBefore:opts.pageBreakBefore,
         indent:opts.indent,
         spacing:opts.spacing,
         children
@@ -6350,6 +6392,13 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([run("Verified today "),run(d.verifyDate,true,false,20,true),run(" (dated) at "),run(d.place,true,false,20,true),run(" (place).")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+
+      paragraphs.push(para([run(relationTitle(d),true,false,28)],{pageBreakBefore:true,alignment:AlignmentType.CENTER,spacing:normal}));
+      for(const text of noRelationParagraphs(d))paragraphs.push(para([run(text)],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("Date: "+d.verifyDate+"     Place: "+d.place)],{spacing:normal}));
+      paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
+      paragraphs.push(para([run("Declarant Signature ____________________",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([run("Name: "+d.bidderName,true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
@@ -6544,6 +6593,13 @@ enforceAccountAccess().then(async () => {
       ],{firstIndent:12.7,after:5});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
+      doc.addPage();y=18;
+      center(relationTitle(d),true,false,14,5);
+      for(const text of noRelationParagraphs(d))textBlock(text,{align:"justify",leading:5.7,after:4});
+      textBlock("Date: "+d.verifyDate+"     Place: "+d.place,{after:5});
+      y+=18;rightText("Declarant Signature ____________________",true);
+      rightText("Name: "+d.bidderName,true);
+
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,271,192,271);
@@ -6588,7 +6644,7 @@ enforceAccountAccess().then(async () => {
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
     byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
-    ["affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
+    ["affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
     byId("affidavitPdf")?.addEventListener("click",downloadPdf);

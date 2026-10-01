@@ -12,7 +12,7 @@ class AccountsTests(unittest.TestCase):
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start();self.client=server.app.test_client()
         self.password='Private1!'
-        self.data={'name':'Bidder Test','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
+        self.data={'first_name':'Bidder','middle_name':'','last_name':'Test','tehsil':'Kannod','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
     def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup()
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
@@ -81,8 +81,8 @@ class AccountsTests(unittest.TestCase):
             self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,401)
     def test_self_profile_and_password_change_require_authenticated_owner(self):
         first=self.signup();second=self.login().json;token=first['session_token']
-        self.assertEqual(self.client.post('/api/accounts/profile',json={'name':'Changed','district':'Harda'}).status_code,401)
-        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'name':'Changed','district':'Harda','mobile':'9123456789'})
+        self.assertEqual(self.client.post('/api/accounts/profile',json={'first_name':'Changed','tehsil':'Harda','district':'Harda'}).status_code,401)
+        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'first_name':'Changed','tehsil':'Harda','district':'Harda','mobile':'9123456789'})
         self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['mobile'],'+919876543210')
         self.assertEqual(self.login().json['profile']['district'],'Harda')
         body={'session_token':token,'current_password':'wrong','password':'Newpass2!','confirm_password':'Newpass2!'}
@@ -91,13 +91,30 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/change-password',json=body).status_code,200)
         for old in (token,second['session_token']):self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':old}).status_code,401)
         self.assertEqual(self.login().status_code,401);self.assertEqual(self.login('Newpass2!').status_code,200)
+    def test_name_limits_and_district_tehsil_validation(self):
+        for fields in ({'first_name':'A'*16},{'middle_name':'B'*11},{'last_name':'C'*16},{'tehsil':'Indore'}):
+            self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,**fields}).status_code,400)
+        result=self.signup();self.assertEqual(result['profile']['tehsil'],'Kannod');self.assertEqual(result['profile']['last_name'],'Test')
+
+    def test_admin_block_revokes_existing_sessions_and_unblock_requires_new_login(self):
+        result=self.signup();body={'mobile':self.data['mobile'],'blocked':True}
+        self.assertEqual(self.client.post('/api/admin/accounts/access',json=body).status_code,401)
+        with patch.object(server,'require_admin',return_value=('admin@example.com','')):
+            r=self.client.post('/api/admin/accounts/access',json=body);self.assertTrue(r.json['blocked']);self.assertNotIn('password_hash',str(r.json))
+            self.assertEqual(self.login().json['code'],'account_blocked')
+            self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':result['session_token']}).status_code,401)
+            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':result['session_token']}).status_code,401)
+            self.client.post('/api/admin/accounts/access',json={**body,'blocked':False})
+        self.assertEqual(self.login().status_code,200)
+        self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':result['session_token']}).status_code,401)
+
     def test_sheet_failure_does_not_create_local_password_account(self):
         with patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48}),patch.object(sheets,'call',side_effect=sheets.SheetStoreError('Unavailable')):
             self.assertEqual(self.client.post('/api/accounts/signup',json=self.data).status_code,503)
         self.assertFalse(server.USER_DB_PATH.exists())
     def test_anonymous_profile_cannot_bypass_password_account(self):
         account=self.signup()
-        self.assertEqual(self.client.post('/api/visitors/register',json={'registration_id':account['visitor_id'],'name':self.data['name'],'mobile':self.data['mobile'],'district':self.data['district']}).status_code,410)
+        self.assertEqual(self.client.post('/api/visitors/register',json={'registration_id':account['visitor_id'],'name':'Bidder Test','mobile':self.data['mobile'],'district':self.data['district']}).status_code,410)
         legacy=server.make_visitor_session(account['visitor_id'])
         self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':legacy}).status_code,401)
     def test_unconnected_ephemeral_storage_cannot_accept_password_accounts(self):

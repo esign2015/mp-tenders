@@ -3,7 +3,7 @@ const html=fs.readFileSync('admin/index.html','utf8');
 const source=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n').replace(/\bboot\(\);\s*$/,'');
 const elements={};const timers=[];const calls=[];let replies=[];
 const context=vm.createContext({Date,AbortController,console,
- document:{getElementById:id=>elements[id]||={textContent:'',appendChild(){},classList:{add(){},remove(){}}},
+ document:{getElementById:id=>elements[id]||={textContent:'',appendChild(){},addEventListener(){},classList:{add(){},remove(){}}},
  createElement:()=>({}),createTextNode:text=>({textContent:text})},
  localStorage:{getItem:()=> 'test-session'},
  setTimeout:(fn,delay)=>{timers.push(delay);return timers.length;},clearTimeout(){},

@@ -10,6 +10,21 @@ _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PA
 SESSION_SECONDS=30*24*3600
 IDLE_SECONDS=15*60
 
+def profile_fields(server,p):
+    first=server.clean(p.get('first_name',p.get('name')))
+    middle=server.clean(p.get('middle_name'));last=server.clean(p.get('last_name'))
+    district=server.clean(p.get('district'));tehsil=server.clean(p.get('tehsil'))
+    if not 2<=len(first)<=15 or len(middle)>10 or len(last)>15:
+        raise AccountError('Name अधिकतम 15, Middle Name 10 और Surname 15 characters का रखें।')
+    directory=json.loads((server.ROOT/'data/mp_tehsils.json').read_text())['districts']
+    if district not in directory or tehsil not in directory[district]:
+        raise AccountError('अपने District की सूची से Tehsil चुनें।')
+    return dict(first_name=first,middle_name=middle,last_name=last,
+                name=' '.join(x for x in (first,middle,last) if x),district=district,tehsil=tehsil)
+
+def public_profile(record):
+    return {key:record.get(key,'') for key in ('name','first_name','middle_name','last_name','mobile','district','tehsil')}
+
 class AccountError(RuntimeError):
     def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
 
@@ -73,6 +88,7 @@ class Accounts:
         try:user_id=str(uuid.UUID(token[5:].split('.',1)[0]))
         except ValueError:raise AccountError('Session invalid.',401) from None
         record=self.get(user_id=user_id)
+        if record and record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')
         digest=self.digest(token);now=int(time.time())
         if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now and now-s.get('last_active',s['expires']-SESSION_SECONDS)<IDLE_SECONDS for s in record.get('sessions',[])):raise AccountError('15 मिनट inactivity के बाद session समाप्त है। Sign in करें।',401)
         return record
@@ -87,7 +103,7 @@ class Accounts:
                 conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
                 conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
-        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':{key:record[key] for key in ('name','mobile','district')},'affidavit_profile':aff,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'affidavit_profile':aff,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
@@ -98,11 +114,11 @@ def install(server):
     def signup():
         p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
         accounts.limit(mobile)
-        name=server.clean(p.get('name'));district=server.clean(p.get('district'))
-        if not mobile or not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name, Mobile और District भरें।')
+        profile=profile_fields(server,p)
+        if not mobile:raise AccountError('सही Mobile भरें।')
         if accounts.get(mobile=mobile):raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
-        record={'user_id':str(uuid.uuid4()),'mobile':mobile,'name':name,'district':district,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
+        record={'user_id':str(uuid.uuid4()),'mobile':mobile,**profile,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
         return accounts.response(record,token)
     @app.post('/api/accounts/signin')
@@ -113,11 +129,13 @@ def install(server):
         if not mobile:raise AccountError('सही Mobile Number भरें।')
         if not record:raise AccountError('इस mobile से Sign up नहीं हुआ है। कृपया Sign up form पूरा करें।',404,'signup_required')
         if not valid:raise AccountError('Mobile या password सही नहीं है।',401)
+        if record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')
         original_hash=record['password_hash']
         for _ in range(3):
             revision=record['revision'];token=accounts.issue(record)
             if accounts.update(record,revision):return accounts.response(record,token)
             record=accounts.get(user_id=record['user_id'])
+            if record.get('blocked'):raise AccountError('Account blocked.',401,'account_blocked')
             if record['password_hash']!=original_hash:raise AccountError('Password बदल गया है। फिर Sign in करें।',401)
         raise AccountError('फिर प्रयास करें।',409)
     @app.post('/api/accounts/forgot-check')
@@ -141,16 +159,17 @@ def install(server):
         raise AccountError('Session update फिर प्रयास करें।',409)
     @app.post('/api/accounts/profile')
     def edit_profile():
-        p=request.get_json(silent=True) or {};name=server.clean(p.get('name'));district=server.clean(p.get('district'))
-        if not 2<=len(name)<=120 or not 2<=len(district)<=100:raise AccountError('सही Name और District भरें।')
+        p=request.get_json(silent=True) or {}
+        accounts.authenticate(p.get('session_token'))
+        profile=profile_fields(server,p);name=profile['name'];district=profile['district']
         for _ in range(3):
-            record=accounts.authenticate(p.get('session_token'));revision=record['revision'];record.update(name=name,district=district)
+            record=accounts.authenticate(p.get('session_token'));revision=record['revision'];record.update(profile)
             if accounts.update(record,revision):
                 if not sheets.enabled():
                     conn=server.visitor_db()
                     try:conn.execute('UPDATE visitor_registrations SET name=?,district=? WHERE visitor_id=?',(name,district,record['user_id']));conn.commit()
                     finally:conn.close()
-                return jsonify({'ok':True,'profile':{key:record[key] for key in ('name','mobile','district')}})
+                return jsonify({'ok':True,'profile':public_profile(record)})
         raise AccountError('Profile save फिर प्रयास करें।',409)
     @app.post('/api/accounts/change-password')
     def change_password():
@@ -173,6 +192,24 @@ def install(server):
             if accounts.update(record,revision):return jsonify({'ok':True})
             record=accounts.get(user_id=record['user_id'])
         raise AccountError('Logout save नहीं हुआ। फिर प्रयास करें।',409)
+    @app.post('/api/admin/accounts/access')
+    def admin_account_access():
+        email,_=server.require_admin()
+        if not email:raise AccountError('Google Admin login required.',401)
+        p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
+        record=accounts.get(mobile=mobile) if mobile else None
+        if not record:raise AccountError('Registered account नहीं मिला।',404)
+        if 'blocked' in p:
+            if type(p['blocked']) is not bool:raise AccountError('Invalid block status.')
+            for _ in range(3):
+                revision=record['revision'];record.update(blocked=p['blocked'],access_updated_by=email,access_updated_at=server.now_ist().isoformat())
+                if p['blocked']:record.update(sessions=[],reset=None)
+                if accounts.update(record,revision):break
+                record=accounts.get(user_id=record['user_id'])
+            else:raise AccountError('Status save फिर प्रयास करें।',409)
+        response=jsonify({'ok':True,'profile':public_profile(record),'blocked':bool(record.get('blocked'))})
+        response.headers['Cache-Control']='no-store';return response
+
     @app.post('/api/admin/accounts/reset-link')
     def reset_link():
         email,_=server.require_admin()

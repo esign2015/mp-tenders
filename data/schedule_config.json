@@ -1,6 +1,6 @@
 {
-  "morning_telegram_ist": "10:20",
-  "evening_new_telegram_ist": "20:45",
+  "morning_telegram_ist": "09:00",
+  "evening_new_telegram_ist": null,
   "evening_total_telegram_ist": null,
   "telegram_max_delay_minutes": 45,
   "organisation_monitor": {
@@ -9,6 +9,10 @@
     "random_interval_min_minutes": 35,
     "random_interval_max_minutes": 80,
     "scheduler_tick_minutes": 5,
-    "max_lateness_minutes": 20
-  }
+    "max_lateness_minutes": 20,
+    "start_ist": "09:50"
+  },
+  "morning_send_after_extraction": false,
+  "evening_new_after_detail_minutes": 15,
+  "evening_total_after_detail_minutes": 30
 }

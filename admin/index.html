@@ -69,6 +69,14 @@ main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-
       <div id="passwordResetStatus" role="status" class="small"></div>
     </form>
   </div>
+  <div class="card">
+    <h2>User Block / Unblock</h2>
+    <form id="userAccessForm" class="reset-form">
+      <label>Registered Mobile <input id="userAccessMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required class="mobile-input"></label>
+      <div><button type="submit">Check User</button><button id="userBlock" type="button" class="danger" disabled>Block</button><button id="userUnblock" type="button" disabled>Unblock</button></div>
+      <div id="userAccessStatus" role="status" class="small"></div>
+    </form>
+  </div>
   <div class="controls-layout">
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
@@ -98,6 +106,24 @@ main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-
 const API="https://mp-tenders-api.onrender.com";
 const KEY="mp_admin_session";
 const $=id=>document.getElementById(id);
+let checkedAccessMobile='';
+function clearAccess(){checkedAccessMobile='';$('userBlock').disabled=true;$('userUnblock').disabled=true;$('userAccessStatus').textContent=''}
+$('userAccessMobile').addEventListener('input',clearAccess);
+async function userAccess(blocked){
+  const mobile=$('userAccessMobile').value.trim();
+  if(!$('userAccessForm').reportValidity() || (typeof blocked==='boolean' && mobile!==checkedAccessMobile))return;
+  $('userBlock').disabled=true;$('userUnblock').disabled=true;
+  try{
+    const body={mobile};if(typeof blocked==='boolean')body.blocked=blocked;
+    const response=await fetch(API+'/api/admin/accounts/access',{method:'POST',headers:{Authorization:'Bearer '+localStorage.getItem(KEY),'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+    const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'Status नहीं मिला।');
+    if($('userAccessMobile').value.trim()!==mobile)return;
+    checkedAccessMobile=mobile;$('userAccessStatus').textContent=data.profile.name+' · '+data.profile.mobile+' · '+data.profile.district+' / '+data.profile.tehsil+' · '+(data.blocked?'Blocked':'Active');
+    $('userBlock').disabled=data.blocked;$('userUnblock').disabled=!data.blocked;
+  }catch(error){clearAccess();$('userAccessStatus').textContent=error.message}
+}
+$('userAccessForm').onsubmit=event=>{event.preventDefault();userAccess()};
+$('userBlock').onclick=()=>userAccess(true);$('userUnblock').onclick=()=>userAccess(false);
 document.getElementById('passwordResetAdminForm').addEventListener('submit',async event=>{
   event.preventDefault();if(!event.currentTarget.reportValidity())return;
   const button=$('passwordResetCreate');button.disabled=true;$('passwordResetLink').hidden=true;$('passwordResetCopy').hidden=true;$('passwordResetStatus').textContent='Reset link बन रही है…';

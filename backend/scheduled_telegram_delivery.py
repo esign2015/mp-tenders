@@ -70,7 +70,7 @@ def deliver(root, mode, key, extraction_result='', alert_module=None):
 def main():
     root = ROOT
     extraction_result = os.getenv('MORNING_EXTRACTION_RESULT', '')
-    due = due_alert(read_json(root / 'data/schedule_config.json'), read_json(root / 'data/telegram_schedule.json'), datetime.now(IST), extraction_result)
+    due = due_alert(read_json(root / 'data/schedule_config.json'), read_json(root / 'data/telegram_schedule.json'), datetime.now(IST), extraction_result,read_json(root/'data/evening_detail_completion.json'))
     if not due:
         print('No unsent daily Telegram alert is due.')
         return 0

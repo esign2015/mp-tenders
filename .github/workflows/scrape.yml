@@ -196,6 +196,11 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
+      - name: Record final evening detail completion
+        if: success() && github.event_name == 'schedule' && github.event.schedule == '35 13 * * *'
+        run: |
+          python backend/record_evening_completion.py
+          python backend/publish_data_checkpoint.py data/evening_detail_completion.json
       - name: Show detail worker log
         if: always()
         run: cat new_tender_detail_live.log || true
@@ -812,7 +817,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install reportlab
+      - run: pip install reportlab pypdf
       - name: Send Closing Today after morning extraction, including failure
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

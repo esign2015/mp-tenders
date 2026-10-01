@@ -33,7 +33,7 @@ def main():
     now = datetime.now(IST)
     today = now.date()
     monitor = cfg["organisation_monitor"]
-    start = hm(cfg["morning_telegram_ist"]) - int(monitor["start_before_morning_minutes"])
+    start = hm(monitor['start_ist']) if monitor.get('start_ist') else hm(cfg["morning_telegram_ist"]) - int(monitor["start_before_morning_minutes"])
     end = hm(monitor["end_ist"])
     lo = int(monitor["random_interval_min_minutes"])
     hi = int(monitor["random_interval_max_minutes"])

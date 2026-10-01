@@ -21,6 +21,21 @@ class MorningTelegramTests(unittest.TestCase):
         for result in ('success','failure','cancelled'):
             self.assertEqual(due_alert(CFG, {}, now, result)[1:], ('morning','2026-10-01:morning'))
 
+    def test_completion_delay_and_fixed_nine_am_morning(self):
+        cfg={'morning_telegram_ist':'09:00','morning_send_after_extraction':False,'evening_new_after_detail_minutes':15,'evening_total_after_detail_minutes':30}
+        sent={'morning':'2026-10-01:morning'}
+        complete={'completed_at':'2026-10-01T14:00:00+00:00','run_id':'123'}
+        self.assertIsNone(due_alert(cfg,{},datetime(2026,10,1,8,59,tzinfo=IST),'success'))
+        self.assertEqual(due_alert(cfg,{},datetime(2026,10,1,9,0,tzinfo=IST))[1],'morning')
+        self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,20,0,tzinfo=IST)))
+        self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,19,44,tzinfo=IST),completion=complete))
+        self.assertEqual(due_alert(cfg,sent,datetime(2026,10,1,19,45,tzinfo=IST),completion=complete)[1],'evening_new')
+        sent['evening_new']='2026-10-01:evening_new'
+        self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,19,59,tzinfo=IST),completion=complete))
+        self.assertEqual(due_alert(cfg,sent,datetime(2026,10,1,20,0,tzinfo=IST),completion=complete)[1],'evening_total')
+        sent['morning']='2026-10-02:morning'
+        self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,2,20,0,tzinfo=IST),completion=complete))
+
     def test_delayed_run_still_sends_and_sent_date_is_not_repeated(self):
         now = datetime(2026,10,1,11,19,tzinfo=IST)
         self.assertEqual(due_alert(CFG, {'morning':'2026-09-29:morning'}, now)[1], 'morning')

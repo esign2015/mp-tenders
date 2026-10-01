@@ -1,3 +1,11 @@
+let accountTehsilDirectory={};
+function accountTehsilOptions(districtId,tehsilId,selected=''){
+  const field=visitorNode(tehsilId);if(!field)return;
+  const values=accountTehsilDirectory[visitorNode(districtId).value.trim()]||[];
+  field.replaceChildren();const empty=document.createElement('option');empty.value='';empty.textContent=values.length?'तहसील चुनें':'पहले सूची से जिला चुनें';field.appendChild(empty);
+  for(const value of values){const option=document.createElement('option');option.value=value;option.textContent=value;field.appendChild(option)}
+  field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
+}
 const ACCOUNT_IDLE_MS=15*60*1000,ACCOUNT_ACTIVITY_KEY='mp_account_activity_v1';
 let accountIdleTimer=null,accountActivityBusy=false,accountLastHeartbeat=Date.now();
 function accountLogout(message=''){
@@ -34,7 +42,7 @@ function accountSetupControls(data){
     visitorNode('accountEditProfileForm').hidden=view!=='profile';visitorNode('accountChangePasswordForm').hidden=view!=='password';
     visitorNode('accountSettingsTitle').textContent=view==='profile'?'My Profile / मेरा प्रोफाइल':'Change Password / पासवर्ड बदलें';
     const profile=window.dashboardVisitorProfile||data.profile;
-    visitorNode('accountEditName').value=profile.name;visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;
+    visitorNode('accountEditName').value=profile.first_name||profile.name.split(' ')[0];visitorNode('accountEditMiddleName').value=profile.middle_name||(profile.first_name?'':profile.name.split(' ').slice(1,-1).join(' '));visitorNode('accountEditLastName').value=profile.last_name||(profile.first_name||!profile.name.includes(' ')?'':profile.name.split(' ').at(-1)); visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;accountTehsilOptions('accountEditDistrict','accountEditTehsil',profile.tehsil);
     status.textContent='';modal.classList.add('open');modal.setAttribute('aria-hidden','false');visitorNode('telegramProfileMenu').classList.remove('open');
   }
   visitorNode('accountProfileBtn').onclick=()=>open('profile');visitorNode('accountPasswordBtn').onclick=()=>open('password');
@@ -42,7 +50,7 @@ function accountSetupControls(data){
   visitorNode('accountEditProfileForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const button=form.querySelector('button');button.disabled=true;status.textContent='Profile save हो रहा है…';
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
-    try{const result=await accountPost('/profile',{session_token:token,name:visitorNode('accountEditName').value.trim(),district:visitorNode('accountEditDistrict').value.trim()});
+    try{const result=await accountPost('/profile',{session_token:token,first_name:visitorNode('accountEditName').value.trim(),middle_name:visitorNode('accountEditMiddleName').value.trim(),last_name:visitorNode('accountEditLastName').value.trim(),tehsil:visitorNode('accountEditTehsil').value,district:visitorNode('accountEditDistrict').value.trim()});
       if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)return;
       window.dashboardVisitorProfile={...window.dashboardVisitorProfile,...result.profile};localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));
       for(const id of ['telegramProfileName','telegramMenuName'])visitorNode(id).textContent=result.profile.name;visitorNode('telegramMenuUsername').textContent=result.profile.district;status.textContent='✓ Profile save हो गया।';
@@ -89,7 +97,12 @@ async function enforceAccountAccess(){
   for(const name of forms.slice(0,3))visitorNode('account'+name+'Tab').onclick=()=>mode(name);
   mode('SignIn');
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
-  fetch('data/mp_districts.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{for(const district of data.districts||[])for(const id of ['visitorDistrictList','accountDistrictList']){const option=document.createElement('option');option.value=district.name;visitorNode(id)?.appendChild(option)}}).catch(()=>{});
+  for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>accountTehsilOptions(district,tehsil));
+  fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
+    accountTehsilDirectory=data.districts||{};
+    for(const district of Object.keys(accountTehsilDirectory))for(const id of ['visitorDistrictList','accountDistrictList']){const option=document.createElement('option');option.value=district;visitorNode(id)?.appendChild(option)}
+    accountTehsilOptions('visitorDistrict','visitorTehsil');accountTehsilOptions('accountEditDistrict','accountEditTehsil',window.dashboardVisitorProfile?.tehsil);
+  }).catch(()=>{status.textContent='जिला/तहसील सूची नहीं मिली। Page reload करें।'});
   let resetToken='';
   if(location.hash.startsWith('#reset=')){resetToken=location.hash.slice(7);history.replaceState(null,'',location.pathname+location.search);mode('Reset')}
   const forgotLink=visitorNode('accountForgotWhatsApp');
@@ -118,7 +131,7 @@ async function enforceAccountAccess(){
     for(const [name,path] of [['SignIn','/signin'],['SignUp','/signup']])visitorNode('account'+name+'Form').addEventListener('submit',async event=>{
       event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
       const button=form.querySelector('button');button.disabled=true;status.textContent='Account check हो रहा है…';
-      const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{name:visitorNode('visitorName').value.trim(),mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
+      const payload=name==='SignIn'?{mobile:visitorNode('accountLoginMobile').value.trim(),password:visitorNode('accountLoginPassword').value}:{first_name:visitorNode('visitorName').value.trim(),middle_name:visitorNode('visitorMiddleName').value.trim(),last_name:visitorNode('visitorLastName').value.trim(),tehsil:visitorNode('visitorTehsil').value,mobile:visitorNode('visitorMobile').value.trim(),district:visitorNode('visitorDistrict').value.trim(),password:visitorNode('accountNewPassword').value,confirm_password:visitorNode('accountConfirmPassword').value};
       try{accountUnlock(await accountPost(path,payload));resolve(true)}catch(error){
         if(name==='SignIn'&&error.code==='signup_required')signupRequired(payload.mobile,payload.password,error.message);
         else if(name==='SignUp'&&(error.code==='account_exists'||error.status===409))existingAccount(payload.mobile,'आप पहले से Sign up हैं। अब केवल password डालकर Sign in करें।');
