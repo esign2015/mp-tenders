@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:29:37.269968+00:00",
+  "updated_at": "2026-10-01T09:31:42.219575+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 4078,
+  "detail_complete": 4116,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1234,
+  "detail_pending": 1196,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 23,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 5
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1979,
+      "detail_complete": 2006,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 906
+      "detail_pending": 879
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 28,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 17
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -390,10 +390,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 36,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 4
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -643,10 +643,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police",
@@ -907,10 +907,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 13,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 28
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1229,
+  "legacy_verification_pending": 1191,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
