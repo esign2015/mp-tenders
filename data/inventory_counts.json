@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T10:55:53.853523+00:00",
+  "updated_at": "2026-10-01T10:57:58.857854+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4497,
+  "detail_complete": 4530,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1012,
+  "detail_pending": 979,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -148,10 +148,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 46,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 8
     },
     {
       "organisation": "Directorate of Industries",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2263,
+      "detail_complete": 2295,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 753
+      "detail_pending": 721
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1046,8 +1046,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 906,
-  "missing_district_count": 101,
+  "legacy_verification_pending": 880,
+  "missing_district_count": 94,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1099,12 +1099,6 @@
     "2026_TAD_538468_1",
     "2026_TAD_538469_1",
     "2026_TAD_538471_1",
-    "2026_UAD_520205_2",
-    "2026_UAD_520208_2",
-    "2026_UAD_520209_2",
-    "2026_UAD_520776_2",
-    "2026_UAD_520779_2",
-    "2026_UAD_520780_2",
     "2026_UAD_537069_1",
     "2026_UAD_537069_2",
     "2026_UAD_537069_3",
@@ -1113,7 +1107,6 @@
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
     "2026_UAD_539367_1",
-    "2026_UAD_539525_1",
     "2026_UAD_539880_1",
     "2026_UAD_539885_1",
     "2026_UAD_539903_1",
@@ -1153,7 +1146,7 @@
   ],
   "known_pincode_count": 378,
   "department_count": 334,
-  "missing_pincode_count": 101,
+  "missing_pincode_count": 94,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1205,12 +1198,6 @@
     "2026_TAD_538468_1",
     "2026_TAD_538469_1",
     "2026_TAD_538471_1",
-    "2026_UAD_520205_2",
-    "2026_UAD_520208_2",
-    "2026_UAD_520209_2",
-    "2026_UAD_520776_2",
-    "2026_UAD_520779_2",
-    "2026_UAD_520780_2",
     "2026_UAD_537069_1",
     "2026_UAD_537069_2",
     "2026_UAD_537069_3",
@@ -1219,7 +1206,6 @@
     "2026_UAD_538303_2",
     "2026_UAD_538673_2",
     "2026_UAD_539367_1",
-    "2026_UAD_539525_1",
     "2026_UAD_539880_1",
     "2026_UAD_539885_1",
     "2026_UAD_539903_1",
