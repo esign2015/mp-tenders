@@ -5,7 +5,9 @@ const MP_SCHEMA = {
   Users: ['user_id','name','mobile','district','signup_at','last_visit_at','visit_count','mobile_verified'],
   VisitorSessions: ['visitor_id','user_id','name','mobile','district','signup_at','last_visit_at','visit_count'],
   AffidavitProfiles: ['visitor_id','user_id','bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','updated_at','last_request_id'],
-  VisitEvents: ['request_id','visitor_id','user_id','visited_at','event']
+  VisitEvents: ['request_id','visitor_id','user_id','visited_at','event'],
+  Accounts: ['user_id','mobile','revision','record_json'],
+  AccountRateLimits: ['rate_key','window_start','attempts']
 };
 
 function mpBook_(){return SpreadsheetApp.openById(MP_TENDER_SHEET_ID);}
@@ -71,6 +73,7 @@ function mpAffidavit_(tables,visitorId){
   return Object.fromEntries(['bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting'].map(key=>[key,row[key]||'']));
 }
 function mpHandle_(tables,p){
+  if(String(p.action||'').startsWith('account_'))return mpAccountHandle_(tables,p);
   if(p.action==='list_visitors')return {visitors:mpRows_(tables.VisitorSessions).map(mpPublic_)};
   if(p.action==='list_affidavits')return {affidavits:mpRows_(tables.AffidavitProfiles).map(mpPublic_)};
   if(p.action==='status')return {spreadsheet_id:MP_TENDER_SHEET_ID,unique_users:mpRows_(tables.Users).length,visitor_sessions:mpRows_(tables.VisitorSessions).length};
@@ -113,6 +116,40 @@ function mpHandle_(tables,p){
     return {profile:mpAffidavit_(tables,p.visitor_id)};
   }
   mpError_(400,'Unknown operation.');
+}
+
+// Private account JSON contains password hashes, hashed session/reset tokens.
+// Never expose this operation or these tabs through public spreadsheet sharing.
+function mpAccountHandle_(tables,p){
+  const action=p.action.slice(8),rows=mpRows_(tables.Accounts);
+  if(action==='lookup'||action==='get'){
+    const row=rows.find(row=>action==='lookup'?row.mobile===p.mobile:row.user_id===p.user_id);
+    return {record:row?JSON.parse(row.record_json):null};
+  }
+  if(action==='create'){
+    const record=p.record||{};
+    if(!mpUuid_(record.user_id)||!/^\+91[6-9][0-9]{9}$/.test(record.mobile)||!String(record.password_hash||'').startsWith('scrypt:'))mpError_(400,'Invalid account.');
+    if(rows.some(row=>row.mobile===record.mobile))mpError_(409,'यह mobile registered है। Sign in या Forgot password चुनें।');
+    mpHandle_(tables,{...p,action:'register',visitor_id:record.user_id,name:record.name,mobile:record.mobile,district:record.district});
+    record.revision=1;mpWrite_(tables.Accounts,{user_id:record.user_id,mobile:record.mobile,revision:1,record_json:JSON.stringify(record)});
+    return {record};
+  }
+  if(action==='update'){
+    const record=p.record||{},row=rows.find(row=>row.user_id===record.user_id);
+    if(!row||Number(row.revision)!==Number(p.expected_revision))return {updated:false};
+    if(row.mobile!==record.mobile)mpError_(400,'Account mobile cannot be changed through this operation.');
+    record.revision=Number(p.expected_revision)+1;
+    mpWrite_(tables.Accounts,{...row,revision:record.revision,record_json:JSON.stringify(record)});return {updated:true};
+  }
+  if(action==='rate'){
+    if(!/^[a-f0-9]{64}$/.test(String(p.key||''))||![12,120].includes(p.limit))mpError_(400,'Invalid limit.');
+    const start=Math.floor(Date.now()/900000)*900;
+    let row=mpRows_(tables.AccountRateLimits).find(row=>row.rate_key===p.key);
+    if(!row)row={rate_key:p.key,window_start:start,attempts:0};
+    row.attempts=Number(row.window_start)===start?Number(row.attempts)+1:1;row.window_start=start;
+    mpWrite_(tables.AccountRateLimits,row);return {allowed:row.attempts<=p.limit};
+  }
+  mpError_(400,'Unknown account operation.');
 }
 function doPost(event){
   let lock;

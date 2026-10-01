@@ -43,3 +43,13 @@ const expired=envelope('status');expired.timestamp=String(Number(expired.timesta
 assert.equal(call('read_affidavit',{visitor_id:crypto.randomUUID()}).status,401);
 const original=[...tabs.get('Users').rows[0]];tabs.get('Users').rows[0][0]='Existing custom data';assert.equal(call('status').status,503);assert.equal(tabs.get('Users').rows[0][0],'Existing custom data');tabs.get('Users').rows[0]=original;
 console.log('PASS: authenticated requests, unique mobile contacts, isolated affidavit profiles, idempotent retries and existing header protection.');
+const accountId=crypto.randomUUID(),record={user_id:accountId,mobile:'+919123456789',name:'Account user',district:'Dewas',password_hash:'scrypt:example$test$hash',sessions:[],reset:null};
+const created=call('account_create',{record});assert(created.ok);assert.equal(created.record.revision,1);
+assert.equal(call('account_create',{record:{...record,user_id:crypto.randomUUID()}}).status,409);
+assert.equal(call('account_lookup',{mobile:record.mobile}).record.user_id,accountId);
+const update={...created.record,sessions:[{hash:'hashed-token',expires:Date.now()/1000+900}]};
+assert(call('account_update',{record:update,expected_revision:1}).updated);
+assert(!call('account_update',{record:{...update,password_hash:'should-not-overwrite'},expected_revision:1}).updated);
+assert.equal(call('account_get',{user_id:accountId}).record.password_hash,record.password_hash);
+const key='a'.repeat(64);for(let i=1;i<=13;i++)assert.equal(call('account_rate',{key,limit:12}).allowed,i<=12);
+console.log('PASS: one password account per phone, compare-and-swap guards concurrent changes and persistent login rate limit.');

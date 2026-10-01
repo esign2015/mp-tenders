@@ -8,7 +8,7 @@ import google_sheet_store as store
 class SheetStoreTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
-        self.env=patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48,'VISITOR_SESSION_SECRET':'session-secret'})
+        self.env=patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48,'VISITOR_SESSION_SECRET':'session-secret','VISITOR_PROFILE_LEGACY_ALLOWED':'1'})
         self.env.start()
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start()

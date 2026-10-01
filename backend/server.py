@@ -496,6 +496,8 @@ def visitor_response(row, affidavit_profile=None):
 
 @app.post("/api/visitors/register")
 def visitors_register():
+    if os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
+        return jsonify({'ok':False,'message':'Please use Sign up with a password.'}),410
     import uuid
     payload = request.get_json(silent=True) or {}
     name, district = clean(payload.get("name")), clean(payload.get("district"))
@@ -531,6 +533,8 @@ def visitors_register():
 
 @app.post("/api/visitors/session")
 def visitors_session():
+    if os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
+        return jsonify({'ok':False,'message':'Please use mobile/password Sign in.'}),401
     import uuid
     payload = request.get_json(silent=True) or {}
     visitor_id = read_visitor_session(payload.get("session_token"))
@@ -576,7 +580,10 @@ def admin_visitor_registrations():
 @app.post('/api/visitors/affidavit')
 def visitor_affidavit():
     payload=request.get_json(silent=True) or {}
-    visitor_id=read_visitor_session(payload.get('session_token'))
+    token=payload.get('session_token')
+    if not (isinstance(token,str) and token.startswith('acct_')) and os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
+        return jsonify({'ok':False,'message':'Mobile/password account session required.'}),401
+    visitor_id=(account_service.authenticate(token)['user_id'] if isinstance(token,str) and token.startswith('acct_') else read_visitor_session(token))
     if not visitor_id:
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
@@ -1320,6 +1327,10 @@ def tenders():
 def fetch():
     return jsonify(scrape_mp_tenders(CSV_FILE))
 
+
+import sys
+from account_access import install as install_account_access
+account_service=install_account_access(sys.modules[__name__])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "10000")))

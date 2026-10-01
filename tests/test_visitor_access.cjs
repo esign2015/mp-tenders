@@ -1,7 +1,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const source=fs.readFileSync('assets/visitor_access.js','utf8');
 const html=fs.readFileSync('index.html','utf8');
-assert(html.includes('enforceVisitorAccess().then'));
+assert(html.includes('enforceAccountAccess().then'));
 assert(!html.includes('enforceTelegramAccess().then'));
 assert(!html.includes('id="telegramLoginStart"'));
 for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);

@@ -11,7 +11,7 @@ class VisitorTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory()
         self.database=patch.object(server,'DATABASE_URL','');self.database.start()
         self.path=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.path.start()
-        self.secret=patch.dict('os.environ',{'VISITOR_SESSION_SECRET':'visitor-test-secret'});self.secret.start()
+        self.secret=patch.dict('os.environ',{'VISITOR_SESSION_SECRET':'visitor-test-secret','VISITOR_PROFILE_LEGACY_ALLOWED':'1'});self.secret.start()
         self.client=server.app.test_client()
     def tearDown(self):
         self.secret.stop();self.path.stop();self.database.stop();self.tmp.cleanup()

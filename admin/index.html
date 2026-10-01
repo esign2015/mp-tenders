@@ -48,6 +48,18 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
 
   <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a> <button id="usersDownload" onclick="downloadUsers()" title="Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें">👥 Download Users Excel</button></div>
 
+  <div class="card">
+    <h2>User Password Reset</h2>
+    <p class="small">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
+    <form id="passwordResetAdminForm" style="display:grid;gap:10px;max-width:650px">
+      <label>Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required style="padding:10px;width:100%;box-sizing:border-box"></label>
+      <label><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
+      <button id="passwordResetCreate" type="submit">Create 15-minute Reset Link</button>
+      <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link" style="padding:10px;width:100%;box-sizing:border-box">
+      <button id="passwordResetCopy" type="button" hidden>Copy Reset Link</button>
+      <div id="passwordResetStatus" role="status" class="small"></div>
+    </form>
+  </div>
   <div class="controls-layout">
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
@@ -77,6 +89,17 @@ button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;fon
 const API="https://mp-tenders-api.onrender.com";
 const KEY="mp_admin_session";
 const $=id=>document.getElementById(id);
+document.getElementById('passwordResetAdminForm').addEventListener('submit',async event=>{
+  event.preventDefault();if(!event.currentTarget.reportValidity())return;
+  const button=$('passwordResetCreate');button.disabled=true;$('passwordResetLink').hidden=true;$('passwordResetCopy').hidden=true;$('passwordResetStatus').textContent='Reset link बन रही है…';
+  try{
+    const response=await fetch(API+'/api/admin/accounts/reset-link',{method:'POST',headers:{Authorization:'Bearer '+localStorage.getItem(KEY),'Content-Type':'application/json'},body:JSON.stringify({mobile:$('passwordResetMobile').value.trim(),identity_verified:$('passwordResetVerified').checked}),cache:'no-store'});
+    const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Reset link नहीं बनी।');
+    $('passwordResetLink').value=result.reset_url;$('passwordResetLink').hidden=false;$('passwordResetCopy').hidden=false;
+    $('passwordResetStatus').textContent='यह link 15 मिनट में expire होगी और एक बार चलेगी। Verified user को WhatsApp पर भेजें।';$('passwordResetVerified').checked=false;
+  }catch(error){$('passwordResetStatus').textContent=error.message}finally{button.disabled=false}
+});
+$('passwordResetCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('passwordResetLink').value);$('passwordResetStatus').textContent='Link copied. Verified user को WhatsApp पर भेजें।'}catch(_){$('passwordResetLink').select();$('passwordResetStatus').textContent='Link select है; copy करें।'}};
 
 async function boot(){
   try{
@@ -103,7 +126,7 @@ async function restore(token){
   const d=await r.json(); if(d.ok) showPanel(d.email);
 }
 function showPanel(email){$("login").classList.add("hidden");$("panel").classList.remove("hidden");$("adminEmail").textContent=email}
-function logout(){localStorage.removeItem(KEY);$("panel").classList.add("hidden");$("login").classList.remove("hidden");}
+function logout(){$("passwordResetLink").value="";$("passwordResetLink").hidden=true;$("passwordResetCopy").hidden=true;$("passwordResetStatus").textContent="";localStorage.removeItem(KEY);$("panel").classList.add("hidden");$("login").classList.remove("hidden");}
 async function downloadUsers(){
   const button=$("usersDownload");
   button.disabled=true;

@@ -1896,35 +1896,66 @@ body.telegram-locked .site-footer{visibility:hidden}
 
 </head>
 
-<!-- Telegram Login: keep the known-working 10:30-11:30 flow unchanged. -->
+<!-- Account access with mobile/password; Telegram alerts are independent. -->
 <body class="telegram-locked org-display-full">
 <div id="telegramGate">
   <div class="telegram-gate-card">
     <div class="telegram-gate-title">MP Tender Live Dashboard</div>
     <div class="telegram-gate-subtitle">SAR Digital Services, Kannod</div>
-    <h2>अपनी जानकारी भरें</h2>
-    <p>Dashboard देखने के लिए Name, Mobile Number और District save करें।</p>
-    <form id="visitorRegistrationForm">
+    <h2>Welcome / स्वागत है</h2>
+    <div class="account-tabs" role="group" aria-label="Account options">
+      <button id="accountSignInTab" type="button">Sign in</button>
+      <button id="accountSignUpTab" type="button">Sign up</button>
+      <button id="accountForgotTab" type="button">Forgot password</button>
+    </div>
+    <form id="accountSignInForm" class="account-form">
+      <label for="accountLoginMobile">Mobile Number</label>
+      <input id="accountLoginMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
+      <label for="accountLoginPassword">Password</label>
+      <input id="accountLoginPassword" type="password" autocomplete="current-password" maxlength="128" required>
+      <button type="submit">Sign in</button>
+    </form>
+    <form id="accountSignUpForm" class="account-form" hidden>
       <label for="visitorName">Name / नाम</label>
-      <input id="visitorName" name="name" autocomplete="name" minlength="2" maxlength="120" required>
-      <label for="visitorMobile">Mobile Number / मोबाइल नंबर</label>
-      <input id="visitorMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number" required>
+      <input id="visitorName" autocomplete="name" minlength="2" maxlength="120" required>
+      <label for="visitorMobile">Mobile Number</label>
+      <input id="visitorMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
       <label for="visitorDistrict">District / जिला</label>
-      <input id="visitorDistrict" name="district" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
+      <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
       <datalist id="visitorDistrictList"></datalist>
-      <button class="telegram-login-start" id="visitorSave" type="submit">Save &amp; Open Dashboard</button>
+      <label for="accountNewPassword">Password</label>
+      <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <small>कम से कम 15 characters का password रखें; कई शब्दों का वाक्य भी रख सकते हैं।</small>
+      <label for="accountConfirmPassword">Confirm Password</label>
+      <input id="accountConfirmPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <button type="submit">Sign up &amp; Open Dashboard</button>
+    </form>
+    <form id="accountForgotForm" class="account-form" hidden>
+      <p>अपने registered mobile के WhatsApp से हमें request भेजें। पहचान verify होने के बाद password reset link मिलेगा।</p>
+      <label for="accountForgotMobile">Registered Mobile Number</label>
+      <input id="accountForgotMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required>
+      <button type="submit">Request reset on WhatsApp</button>
+    </form>
+    <form id="accountResetForm" class="account-form" hidden>
+      <h3>Set New Password</h3>
+      <label for="accountResetPassword">New Password</label>
+      <input id="accountResetPassword" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <label for="accountResetConfirm">Confirm New Password</label>
+      <input id="accountResetConfirm" type="password" autocomplete="new-password" minlength="15" maxlength="128" required>
+      <button type="submit">Save New Password</button>
     </form>
     <div id="visitorStatus" role="status" aria-live="polite"></div>
   </div>
 </div>
 <style>
-#visitorRegistrationForm{display:grid;gap:8px;text-align:left;margin-top:20px}
-#visitorRegistrationForm label{font-weight:700;font-size:14px;margin-top:5px}
-#visitorRegistrationForm input{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
-#visitorSave{width:100%;margin-top:12px;justify-content:center}
+.account-form{display:grid;gap:8px;text-align:left;margin-top:20px}
+.account-form label{font-weight:700;font-size:14px;margin-top:5px}
+.account-form input{box-sizing:border-box;width:100%;height:42px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px}
+.account-form[hidden]{display:none}.account-tabs{display:flex;gap:6px;margin:14px 0}.account-tabs button{flex:1;padding:8px;font-size:12px;background:#e2e8f0;color:#1e293b}.account-tabs button.active{background:#1d4ed8;color:#fff}.account-form button{width:100%;margin-top:12px;justify-content:center}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
-<script src="assets/visitor_access.js?v=1"></script>
+<script src="assets/visitor_access.js?v=3"></script>
+<script src="assets/account_access.js?v=1"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -5698,7 +5729,7 @@ updateVirtualPager();
    First make Telegram login responsive; only after successful access load
    the dashboard data.
 */
-enforceVisitorAccess().then(async () => {
+enforceAccountAccess().then(async () => {
   const backgroundDataLoad = loadData();
   await loadDistrictMaster();
   if(Array.isArray(allTenders) && allTenders.length) applyFilters(false);
