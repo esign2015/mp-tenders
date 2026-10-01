@@ -1956,9 +1956,9 @@ body.telegram-locked .site-footer{visibility:hidden}
       <label for="visitorMiddleName">Middle Name / मध्य नाम</label><input id="visitorMiddleName" autocomplete="additional-name" maxlength="10" placeholder="Middle Name (वैकल्पिक)">
       <label for="visitorLastName">Surname / उपनाम</label><input id="visitorLastName" autocomplete="family-name" maxlength="15" required placeholder="Surname / उपनाम">
       <label for="visitorDistrict">District / जिला</label>
-      <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required placeholder="District / जिला">
+      <input id="visitorDistrict" autocomplete="off" list="visitorDistrictList" minlength="2" maxlength="100" required disabled placeholder="District / जिला">
       <datalist id="visitorDistrictList"></datalist>
-      <label for="visitorTehsil">Tehsil / तहसील</label><select id="visitorTehsil" required disabled><option value="">Tehsil / तहसील — पहले जिला चुनें</option></select>
+      <label for="visitorTehsil">Tehsil / तहसील</label><input id="visitorTehsil" autocomplete="off" list="visitorTehsilList" maxlength="100" required disabled placeholder="Tehsil / तहसील — पहले जिला चुनें"><datalist id="visitorTehsilList"></datalist>
       <label for="accountNewPassword">Password</label>
       <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required placeholder="Password">
       <label for="accountConfirmPassword">Confirm Password</label>
@@ -2032,7 +2032,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=9"></script>
+<script src="assets/account_access.js?v=10"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">

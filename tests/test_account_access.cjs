@@ -1,11 +1,11 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const html=fs.readFileSync('index.html','utf8');assert(html.includes('enforceAccountAccess().then'));assert(!html.includes('enforceTelegramAccess().then'));assert(html.includes('logoutBtn.onclick=()=>localStorage.getItem(VISITOR_SESSION_KEY)?accountLogout():logoutTelegram()'));
 for(const source of [html,fs.readFileSync('admin/index.html','utf8')])for(const script of source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
-const nodes={},local=new Map(),session=new Map();let now=1000000;const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false,setAttribute(){}}},appendChild(){},replaceChildren(){},removeAttribute(name){delete this[name]},setAttribute(){}};
+const nodes={},local=new Map(),session=new Map();let now=1000000;const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false,setAttribute(){}}},appendChild(child){(this.children??=[]).push(child)},replaceChildren(){this.children=[]},removeAttribute(name){delete this[name]},setAttribute(){}};
 let fail=true,unlocked=false,opened='',reply=null,postCount=0;
 const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR_PROFILE_KEY:'profile',Date:{now:()=>now},setInterval(){return 1},clearInterval(){},sessionStorage:{getItem:k=>session.get(k)||null,setItem:(k,v)=>session.set(k,v),removeItem:k=>session.delete(k)},localStorage:{getItem:k=>local.get(k)||null,setItem:(k,v)=>local.set(k,v),removeItem:k=>local.delete(k)},visitorUnlock:data=>{unlocked=true;local.set('token',data.session_token)},location:{hash:'',pathname:'/',search:'',reload(){}},history:{replaceState(){}},window:{open:url=>opened=url,addEventListener(){}},document:{body:{classList:{add(){}}},addEventListener(){},createElement:()=>({})},alert(){},fetch:async(url,options)=>{
  if(url.endsWith('/ready'))return{ok:true,json:async()=>({ok:true})};
- assert(!url.includes('/telegram/'));if(url.includes('mp_tehsils'))return{json:async()=>({districts:{Dewas:['Kannod','Bagli']}})};
+ assert(!url.includes('/telegram/'));if(url.includes('mp_tehsils'))return{json:async()=>({districts:{Dewas:['Kannod','Bagli'],Datia:['Datia'],Indore:['Indore']}})};
  postCount++;const body=JSON.parse(options.body);
  if(reply)return reply;
  if(url.endsWith('/forgot-check'))return{ok:true,json:async()=>({ok:true})};
@@ -28,6 +28,14 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  node('accountForgotMobile').value='98765';node('accountForgotForm').input();assert.equal(node('accountForgotForm').querySelector().disabled,true);
  node('accountForgotMobile').value='9876543210';node('accountForgotForm').input();assert.equal(node('accountForgotForm').querySelector().disabled,false);node('accountForgotMobile').value='';node('accountForgotForm').input();
 
+ node('visitorDistrict').value='d';node('visitorDistrict').input();assert.deepEqual(node('visitorDistrictList').children.map(option=>option.value),['Dewas','Datia']);
+ node('visitorDistrict').value='de';node('visitorDistrict').input();assert.deepEqual(node('visitorDistrictList').children.map(option=>option.value),['Dewas']);
+ node('visitorDistrict').value='dez';node('visitorDistrict').input();assert.equal(node('visitorDistrict').value,'de');
+ node('visitorDistrict').value='Dewas';node('visitorDistrict').input();assert.equal(node('visitorTehsil').disabled,false);
+ node('visitorTehsil').value='k';node('visitorTehsil').input();assert.deepEqual(node('visitorTehsilList').children.map(option=>option.value),['Kannod']);
+ node('visitorTehsil').value='kez';node('visitorTehsil').input();assert.equal(node('visitorTehsil').value,'k');node('visitorTehsil').blur();assert.equal(node('visitorTehsil').value,'');
+ node('visitorDistrict').value='Datia';node('visitorDistrict').input();assert.deepEqual(node('visitorTehsilList').children.map(option=>option.value),['Datia']);
+ node('visitorDistrict').value='d';node('visitorDistrict').input();node('visitorDistrict').blur();assert.equal(node('visitorDistrict').value,'');assert.equal(node('visitorTehsil').disabled,true);
  for(const id of ['visitorMiddleName','accountEditMiddleName']){node(id).value='Kumar123';node(id).input();assert.equal(node(id).value,'Kumar')}
  node('accountSignUpTab').onclick();assert(!node('accountSignUpForm').hidden);assert(node('accountSignInForm').hidden);
  node('accountForgotTab').onclick();node('accountForgotMobile').value='9876543210';await node('accountForgotForm').submit({preventDefault(){},currentTarget:node('accountForgotForm')});assert.equal(opened,'');assert(node('accountForgotWhatsApp').href.startsWith('https://wa.me/919893610244?text='));assert.equal(node('accountForgotWhatsApp').hidden,false);

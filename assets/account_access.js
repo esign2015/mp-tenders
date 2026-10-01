@@ -25,10 +25,38 @@ function accountBindMobile(id){
     field.dispatchEvent(new Event('input',{bubbles:true}));
   });
 }
+const accountPlacePickers=new Map();
+function accountBindPlacePicker(fieldId,listId,choices,onUpdate){
+  const field=visitorNode(fieldId),list=visitorNode(listId);let accepted='';
+  function render(){
+    const prefix=field.value.trim().toLowerCase();list.replaceChildren();
+    for(const value of choices().filter(value=>value.toLowerCase().startsWith(prefix))){const option=document.createElement('option');option.value=value;list.appendChild(option)}
+  }
+  function update(){
+    const options=choices(),draft=field.value.trim();
+    if(draft&&!options.some(value=>value.toLowerCase().startsWith(draft.toLowerCase())))field.value=accepted;
+    const exact=options.find(value=>value.toLowerCase()===field.value.trim().toLowerCase());
+    if(exact)field.value=exact;
+    accepted=field.value;render();onUpdate();
+  }
+  function commit(){
+    const exact=choices().find(value=>value.toLowerCase()===field.value.trim().toLowerCase());
+    field.value=exact||'';accepted=field.value;render();onUpdate();
+  }
+  field.addEventListener('input',update);
+  field.addEventListener('change',commit);field.addEventListener('blur',commit);
+  field.addEventListener('focus',render);
+  accountPlacePickers.set(fieldId,()=>{accepted=field.value;render()});render();
+}
 let accountTehsilDirectory={};
 function accountTehsilOptions(districtId,tehsilId,selected=''){
   const field=visitorNode(tehsilId);if(!field)return;
   const values=accountTehsilDirectory[visitorNode(districtId).value.trim()]||[];
+  if(tehsilId==='visitorTehsil'){
+    field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
+    field.placeholder=values.length?'Tehsil / तहसील':'Tehsil / तहसील — पहले जिला चुनें';
+    accountPlacePickers.get(tehsilId)?.();return;
+  }
   field.replaceChildren();const empty=document.createElement('option');empty.value='';empty.textContent=values.length?'Tehsil / तहसील चुनें':'Tehsil / तहसील — पहले जिला चुनें';field.appendChild(empty);
   for(const value of values){const option=document.createElement('option');option.value=value;option.textContent=value;field.appendChild(option)}
   field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
@@ -205,10 +233,19 @@ async function enforceAccountAccess(){
   for(const id of ['accountLoginMobile','visitorMobile','accountForgotMobile'])accountBindMobile(id);
   for(const id of ['visitorMiddleName','accountEditMiddleName'])accountBindMiddleName(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
-  for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>{accountTehsilOptions(district,tehsil);accountUpdateAllSubmits()});
+  for(const [district,tehsil] of [['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>{accountTehsilOptions(district,tehsil);accountUpdateAllSubmits()});
   fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
     accountTehsilDirectory=data.districts||{};
-    for(const district of Object.keys(accountTehsilDirectory))for(const id of ['visitorDistrictList','accountDistrictList']){const option=document.createElement('option');option.value=district;visitorNode(id)?.appendChild(option)}
+    for(const district of Object.keys(accountTehsilDirectory))for(const id of ['accountDistrictList']){const option=document.createElement('option');option.value=district;visitorNode(id)?.appendChild(option)}
+    visitorNode('visitorDistrict').disabled=false;
+    let selectedDistrict='';
+    accountBindPlacePicker('visitorDistrict','visitorDistrictList',()=>Object.keys(accountTehsilDirectory),()=>{
+      const district=visitorNode('visitorDistrict').value;
+      const selected=Object.hasOwn(accountTehsilDirectory,district)?district:'';
+      if(selected!==selectedDistrict){selectedDistrict=selected;accountTehsilOptions('visitorDistrict','visitorTehsil')}
+      accountUpdateAllSubmits();
+    });
+    accountBindPlacePicker('visitorTehsil','visitorTehsilList',()=>accountTehsilDirectory[visitorNode('visitorDistrict').value]||[],()=>accountUpdateAllSubmits());
     accountTehsilOptions('visitorDistrict','visitorTehsil');accountTehsilOptions('accountEditDistrict','accountEditTehsil',window.dashboardVisitorProfile?.tehsil);accountUpdateAllSubmits();
   }).catch(()=>{status.textContent='जिला/तहसील सूची नहीं मिली। Page reload करें।'});
   let resetToken='';
