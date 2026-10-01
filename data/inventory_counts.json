@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T15:00:34.608139+00:00",
+  "updated_at": "2026-10-01T15:00:49.074198+00:00",
   "snapshot_at": "2026-10-01T13:51:21.164030+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5421,
   "copied_tenders": 5421,
   "detail_complete": 5369,
-  "detail_failed": 6,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 46,
+  "detail_pending": 52,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -303,9 +303,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Economic Offences Wing",
@@ -809,9 +809,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 3,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 3
     },
     {
       "organisation": "MP State Tourism Development Corporation Ltd.",
@@ -1040,9 +1040,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "THE CHIEF ELECTORAL OFFICER",
