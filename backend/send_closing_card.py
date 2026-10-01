@@ -28,14 +28,14 @@ def main():
         pdf = make_card_pdf(selected, f'Closing Today {date} Card View.pdf', f'Closing Today {date}',
                             total_available=len(rows), filter_detail='Closing Today', filter_live=False)
         response = alerts.telegram_document(token, chat, pdf,
-                    f'📎 आज Closing वाले {len(selected)} टेंडर | Card View + SAR Services | {date}')
+                    f'📎 आज Closing वाले {len(selected)} टेंडर | Card View: 6 cards/page + SAR Services | {date}')
     else:
         response = alerts.telegram_message(token, chat, 'ℹ️ आज Closing Today में कोई live tender नहीं है, इसलिए card-view PDF नहीं भेजी गई।')
     message_id = response.get('result', {}).get('message_id')
     if not message_id:
         raise RuntimeError('Telegram delivery confirmation missing')
     write_json(receipt_path, {'sent_at':alerts.datetime.now(alerts.IST).isoformat(), 'date':now.date().isoformat(),
-               'report':'closing_today_card', 'count':len(selected), 'total_available':len(rows),
+               'report':'closing_today_card', 'cards_per_page':6, 'count':len(selected), 'total_available':len(rows),
                'message_id':message_id, 'run_id':run_id, 'status':'success'})
     print(f'Telegram confirmed card-view PDF: {len(selected)} tenders, message_id={message_id}')
     return 0

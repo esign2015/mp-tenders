@@ -15,7 +15,9 @@ class CardPdfTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p=make_card_pdf(rows,Path(tmp)/'cards.pdf','New Published Today',total_available=99,filter_detail='New Published Today',filter_live=False)
             reader=PdfReader(p);text='\n'.join(p.extract_text() for p in reader.pages)
-            self.assertEqual(len(reader.pages),4)
+            self.assertEqual(len(reader.pages),3)
+            self.assertEqual(reader.pages[0].extract_text().count("2026_UAD_")+reader.pages[0].extract_text().count("ADVERTISEMENT"),6)
+            self.assertEqual(reader.pages[1].extract_text().count("2026_UAD_"),6)
             self.assertIn('Total Records: 13 out of 99',text)
             for row in rows:self.assertEqual(text.count(row['Tender ID']),1)
             self.assertEqual(text.count('ADVERTISEMENT'),2)
