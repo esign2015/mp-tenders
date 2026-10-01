@@ -8,7 +8,7 @@
   "current_portal_ids": 5735,
   "initial_incomplete": 20,
   "batch_targets": 20,
-  "batch_attempted": 15,
+  "batch_attempted": 20,
   "batch_complete": 0,
   "started_at": "2026-10-01T14:58:51.516893+00:00",
   "success": 5611,
@@ -5825,7 +5825,37 @@
       "Tender ID": "2026_UAD_534550_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536145_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536146_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPGC_536969_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_539507_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSAM_539121_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_AVOMT_539493_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-01T15:04:53.667129+00:00"
+  "updated_at": "2026-10-01T15:06:27.904295+00:00"
 }
