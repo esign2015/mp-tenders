@@ -2146,7 +2146,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="search-heading" data-i18n="searchHeading">Search &amp; Smart Filters</div>
 
       <div class="action-buttons">
-        <button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportPdf">▤ Export PDF</button>
+        <button class="btn-dark" id="reloadBtn" data-i18n="reload">↻ Reload</button><button class="btn-blue" id="pdfBtn" data-i18n="exportCardPdf">▤ Card View PDF</button>
         <div id="pdfDeliveryStatus" style="display:none;"></div>
         <button class="user-tool-btn" id="columnBtn" type="button">☷ Columns</button>
         <button class="user-tool-btn" id="orgDisplayBtn" type="button">🏢 Full Org</button>
@@ -2290,7 +2290,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 
       <div class="table-tools">
         <button class="btn-dark view-toggle-btn" id="viewToggleBtn" type="button">▤ Table View</button>
-        <button class="btn-blue" id="pdfBtn2">▤ Export PDF</button>
+        <button class="btn-blue" id="pdfBtn2" data-i18n="exportTablePdf">▤ Table View PDF</button>
       </div>
     </div>
 
@@ -4956,7 +4956,7 @@ function setupUserFeatures(){
   applyTenderView();
 }
 
-let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",reload:"↻ Reload",exportPdf:"▤ Export PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();updateTableSortHeaders();renderVirtualWindow();}
+let currentLanguage=localStorage.getItem("mpTenderLanguage")||"en";let lastDataRefreshAt=null;let deferredInstallPrompt=null;const I18N={en:{brand:"SAR Digital Services, Kannod",subtitle:"MP Tender Live Dashboard",dsc:"For DSC & E-Tendering Services",orgCount:"🏢 Organisation Summary",latestAlert:"🔔 Latest Alert",logout:"🚪 Logout",telegramVerified:"✓ Telegram Verified",reload:"↻ Reload",exportPdf:"▤ Export PDF",exportCardPdf:"▤ Card View PDF",exportTablePdf:"▤ Table View PDF",searchHeading:"Search & Smart Filters",tableHeading:"Live Tender Records",live:"Live Tenders",today:"Closing Today",tomorrow:"Closing Tomorrow",sno:"S.No.",thDistrict:"District",thPincode:"Pincode",thTenderId:"Tender ID",thTitle:"Title",thRef:"Ref.No.",thLastDate:"Last Date",thTimeLeft:"Time Left",thPac:"PAC Amount",thEmd:"EMD Fee",thTenderFee:"Tender Fee",thProcessing:"Processing Fee",thTotalFee:"Total Fee",thOrganisation:"Organisation",searchPlaceholder:"Search Tender ID, title, authority, department, location, PIN...",orgPlaceholder:"Organisation — type to find...",districtPlaceholder:"District / PIN search...",districtHelp:"District name / spelling correction / 1–6 digit PIN prefix"},hi:{brand:"SAR Digital Services, कन्नौद",subtitle:"एमपी टेंडर लाइव डैशबोर्ड",dsc:"DSC एवं ई-टेंडरिंग सेवाओं के लिए",orgCount:"🏢 संगठन सारांश",latestAlert:"🔔 नवीनतम अलर्ट",logout:"🚪 लॉग आउट",telegramVerified:"✓ Telegram सत्यापित",reload:"↻ रीलोड",exportPdf:"▤ PDF निर्यात",exportCardPdf:"▤ कार्ड PDF",exportTablePdf:"▤ टेबल PDF",searchHeading:"खोज एवं स्मार्ट फ़िल्टर",tableHeading:"लाइव निविदा रिकॉर्ड",live:"सक्रिय निविदाएं",today:"आज अंतिम तिथि",tomorrow:"कल अंतिम तिथि",sno:"क्र.",thDistrict:"जिला",thPincode:"पिनकोड",thTenderId:"निविदा ID",thTitle:"कार्य / शीर्षक",thRef:"संदर्भ क्र.",thLastDate:"अंतिम तिथि",thTimeLeft:"समय शेष",thPac:"PAC राशि",thEmd:"EMD शुल्क",thTenderFee:"निविदा शुल्क",thProcessing:"प्रोसेसिंग शुल्क",thTotalFee:"कुल शुल्क",thOrganisation:"संगठन",searchPlaceholder:"Tender ID, शीर्षक, प्राधिकरण, विभाग, स्थान, PIN खोजें...",orgPlaceholder:"संगठन — खोजने के लिए लिखें...",districtPlaceholder:"जिला / PIN खोजें...",districtHelp:"जिले का नाम / spelling correction / 1–6 अंकों का PIN prefix",recordShown:"रिकॉर्ड दिखाए गए",matched:"परिणाम",page:"पेज",translating:"डेटा का हिंदी अनुवाद हो रहा है…",sourceData:"मूल पोर्टल डेटा",translatedData:"हिंदी प्रदर्शन"}};function applyLanguage(lang){currentLanguage=lang==="hi"?"hi":"en";localStorage.setItem("mpTenderLanguage",currentLanguage);const d=I18N[currentLanguage];document.documentElement.lang=currentLanguage==="hi"?"hi":"en";document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k]!==undefined)e.textContent=d[k]});document.querySelectorAll("[data-i18n-placeholder]").forEach(e=>{const k=e.getAttribute("data-i18n-placeholder");if(d[k]!==undefined)e.placeholder=d[k]});document.querySelectorAll("[data-i18n-option]").forEach(e=>{const k=e.getAttribute("data-i18n-option");if(d[k]!==undefined)e.textContent=d[k]});$("langEnglish")?.classList.toggle("active",currentLanguage==="en");$("langHindi")?.classList.toggle("active",currentLanguage==="hi");updateRefreshBadge();updateDynamicHindiText();updateTableSortHeaders();renderVirtualWindow();}
 function updateDynamicHindiText(){
   const hi=currentLanguage==="hi";
   const count=document.getElementById("recordCount");
@@ -5035,13 +5035,98 @@ async function sendDashboardPdfToTelegram(doc, filename){
   }
 }
 
+/* Separate six-slot card report for the dashboard's current filtered list. */
+function createDashboardCardPdf(rows, totalAvailable, scope, now = new Date()){
+  const doc = new window.jspdf.jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  const width=doc.internal.pageSize.getWidth(), height=doc.internal.pageSize.getHeight();
+  const navy=[23,61,112], muted=[100,116,139], gold=[212,165,20];
+  const margin=8, gap=4, cardWidth=(width-margin*2-gap)/2, cardHeight=80;
+  const slots=[null,...rows], pages=Math.ceil(slots.length/6);
+  const stamp=now.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",hour12:true});
+  function text(value,x,y,w,size=8,maxLines=1,bold=false,color=navy){
+    doc.setFont("helvetica",bold?"bold":"normal");
+    doc.setFontSize(size);doc.setTextColor(...color);
+    let lines=doc.splitTextToSize(clean(value)||"-",w);
+    if(lines.length>maxLines){
+      lines=lines.slice(0,maxLines);
+      let last=lines[maxLines-1];
+      while(last.length && doc.getTextWidth(last+"...")>w) last=last.slice(0,-1);
+      lines[maxLines-1]=last+"...";
+    }
+    doc.text(lines,x,y,{lineHeightFactor:1.15});
+  }
+  function ad(x,y){
+    doc.setFillColor(...navy);doc.setDrawColor(...gold);
+    doc.roundedRect(x,y,cardWidth,cardHeight,3,3,"FD");
+    text("ADVERTISEMENT",x+5,y+8,cardWidth-10,7,1,true,gold);
+    text("SAR",x+5,y+21,cardWidth-10,18,1,true,[255,255,255]);
+    text("SAR Digital Services, Kannod",x+5,y+30,cardWidth-10,10,1,true,[255,255,255]);
+    text("DSC Sale | PWD Registration | Tender Submission",x+5,y+39,cardWidth-10,10,3,true,[255,255,255]);
+    text("Tender Submission only Rs 1,000.00 per tender",x+5,y+54,cardWidth-10,10,2,true,gold);
+    const links=[["WhatsApp","https://wa.me/919893610244"],["Telegram","https://t.me/rdgyan"],
+      ["Email","mailto:imriteshdhoot@gmail.com"],["Buy DSC","https://secure.certificate.digital/web/dsc/referral/?bp=fVNSQNJt@@@@@@L0="]];
+    links.forEach(([label,url],i)=>{
+      const bx=x+5+(i%2)*((cardWidth-14)/2+4), by=y+64+Math.floor(i/2)*8, bw=(cardWidth-14)/2;
+      doc.setFillColor(37,99,235);doc.roundedRect(bx,by,bw,6,1.5,1.5,"F");
+      text(label,bx+3,by+4,bw-6,7,1,true,[255,255,255]);doc.link(bx,by,bw,6,{url});
+    });
+  }
+  function card(row,index,x,y){
+    doc.setFillColor(255,255,255);doc.setDrawColor(203,213,225);
+    doc.roundedRect(x,y,cardWidth,cardHeight,3,3,"FD");
+    doc.setFillColor(...navy);doc.roundedRect(x,y,cardWidth,10,3,3,"F");
+    doc.rect(x,y+5,cardWidth,5,"F");
+    text(index+". "+clean(row["Tender ID"]),x+4,y+7,cardWidth-8,8,1,true,[255,255,255]);
+    text(cleanDisplayTitle(row["Title"]),x+4,y+15,cardWidth-8,8.5,3,true);
+    text("Ref: "+clean(row["Reference Number"]),x+4,y+28,cardWidth-8,7,2,false,muted);
+    doc.setFillColor(255,241,242);doc.roundedRect(x+3,y+33,cardWidth-6,8,1,1,"F");
+    text("Closing: "+formatClosingDateTime(row["Closing Date"]),x+5,y+38,cardWidth-10,8,1,true,[185,28,28]);
+    text(row["Organisation"]||[row["Department"],row["Division"],row["Sub Division"]].filter(Boolean).join(" | "),
+      x+4,y+46,cardWidth-8,7,2,false,muted);
+    text([row["District"],row["Location"],row["Pincode"]].filter(Boolean).join(" | "),x+4,y+55,cardWidth-8,7,1,false,muted);
+    [["PAC",row["PAC Amount"]],["EMD",row["EMD Fee"]],["Form Fee",row["Tender Fee"]],["Processing",row["Processing Fee"]]].forEach(([label,value],i)=>{
+      text(label+": "+(label==="Processing"&&clean(value)==="Not provided on portal"?"Not provided":formatPdfAmount(value)),x+4+(i%2)*(cardWidth/2),y+63+Math.floor(i/2)*7,cardWidth/2-7,7,1,true);
+    });
+    text("Total Fee: "+formatPdfAmount(row["Total Fee"]),x+4,y+77,cardWidth-8,8,1,true);
+  }
+  for(let page=0;page<pages;page++){
+    if(page)doc.addPage();
+    doc.setFillColor(...navy);doc.rect(0,0,width,27,"F");
+    text("SAR Digital Services, Kannod",margin,8,width-16,12,1,true,[255,255,255]);
+    text("Card View | "+rows.length+" records out of "+totalAvailable+" | "+stamp+" IST",margin,15,width-16,8,1,false,[255,255,255]);
+    text(scope,margin,22,width-16,7,1,false,[255,255,255]);
+    for(let pos=0;pos<6;pos++){
+      const index=page*6+pos;if(index>=slots.length)break;
+      const x=margin+(pos%2)*(cardWidth+gap),y=32+Math.floor(pos/2)*(cardHeight+gap);
+      if(slots[index]===null)ad(x,y);else card(slots[index],index,x,y);
+    }
+    text("tenders.codinglms.xyz | Contact: t.me/rdgyan",margin,height-6,width-36,7,1,false,muted);
+    text("Page "+(page+1)+"/"+pages,width-28,height-6,22,7,1,false,muted);
+  }
+  return doc;
+}
+async function exportCardPdf(){
+  if(!window.jspdf?.jsPDF){alert("PDF library अभी load नहीं हुई है। कृपया फिर प्रयास करें।");return;}
+  const rows=filteredTenders.slice();
+  if(!rows.length){alert("Current filters में कोई tender नहीं है।");return;}
+  const scopeParts=[["Search","generalSearch"],["Organisation","organisationSearch"],["District/PIN","districtSearch"],
+    ["Date","dateFilter"],["Changes","changeFilter"],["Status","statusSelect"]]
+    .map(([label,id])=>[label,$(id)?.value]).filter(([,value])=>value && value!=="all")
+    .map(([label,value])=>label+": "+value);
+  if(quickFilterMode)scopeParts.unshift("List: "+quickFilterMode);
+  const pac=$("pacFilterBtn")?.textContent?.trim();if(pac&&pac!=="All PAC")scopeParts.push("PAC: "+pac);
+  const now=new Date(),doc=createDashboardCardPdf(rows,allTenders.length,scopeParts.join(" | ")||"All Tenders",now);
+  doc.save("MP_Tender_Card_View_"+now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})+".pdf");
+}
+
 async function exportPdf(){
   if(!window.jspdf || !window.jspdf.jsPDF){
     alert("PDF library अभी load नहीं हुई है। कृपया 2 सेकंड बाद फिर Export PDF दबाएँ।");
     return;
   }
 
-  const rows = filteredTenders.length ? filteredTenders : allTenders;
+  const rows = filteredTenders.slice();
+  if(!rows.length){alert("Current filters में कोई tender नहीं है।");return;}
   const { jsPDF } = window.jspdf;
 
   const doc = new jsPDF({
@@ -5451,7 +5536,7 @@ async function exportPdf(){
   });
 
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
-  const filename="MP_Tender_Dashboard_" + stamp + ".pdf";
+  const filename="MP_Tender_Table_View_" + stamp + ".pdf";
   doc.save(filename);
 }
 
@@ -5702,7 +5787,7 @@ $("closingTodayBox").addEventListener("click",showClosingToday);
 $("closingTomorrowBox").addEventListener("click",showClosingTomorrow);
 
 
-$("pdfBtn").addEventListener("click",exportPdf);
+$("pdfBtn").addEventListener("click",exportCardPdf);
 $("pdfBtn2").addEventListener("click",exportPdf);
 const pdfTelegramStartBtn=document.getElementById("pdfTelegramStartBtn");
 if(pdfTelegramStartBtn) pdfTelegramStartBtn.onclick=openTelegramBotForPdf;

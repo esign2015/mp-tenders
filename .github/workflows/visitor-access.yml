@@ -29,3 +29,4 @@ jobs:
       - run: node tests/test_google_sheet_script.cjs
       - run: node tests/test_visitor_access.cjs
       - run: node tests/test_dashboard_sorting.cjs
+      - run: node tests/test_dashboard_pdf.cjs

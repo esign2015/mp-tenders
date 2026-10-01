@@ -19,7 +19,7 @@ const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=
 const names=['clean','dedupeTenderRows','mergeCurrentPortalRows','currentPortalAllows','parseDate','istParts','todayKey',
   'isDeadlineAlertActive',
   'formatMoney','formatPdfAmount','formatTimeLeft','getTimeLeftClass','updateVisibleTimeLeft','nextDashboardRefreshAt',
-  'dateKey','moneyNumber','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
+  'dateKey','moneyNumber','portalFeeMissing','effectiveProcessingFee','tenderFeeWithPortal','totalFee',
   'cleanDisplayTitle','splitOrganisationChain','validReferenceNumber','extractReferenceFromTitle',
   'normaliseCorrigendumValue','normaliseTender','parseCsv','goVirtualPage','moneySortValue','compareTableValues',
   'updateTableSortHeaders','sortCurrentTable','applyFilters','renderTable',
@@ -232,3 +232,7 @@ buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-short')
 buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-full'));assert.equal(buttons.orgDisplayBtn.textContent,'🏢 Full Org');
 assert.equal(prefRenders,2);
 console.log('PASS: Columns opens, selection persists, Reset restores columns, Full/Short Org toggles twice without errors.');
+
+assert.equal(context.formatMoney('Not provided on portal'),'Not provided on portal');
+assert.equal(context.formatMoney('Not available (processing fee not published)'),'Not available');
+assert.equal(context.effectiveProcessingFee({'Processing Fee':'Not provided on portal','Total Fee':'1295','Tender Fee':'1000','EMD Fee':'0'}),0);
