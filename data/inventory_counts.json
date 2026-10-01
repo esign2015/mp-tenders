@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:12:56.614813+00:00",
+  "updated_at": "2026-10-01T09:15:01.758092+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3803,
+  "detail_complete": 3830,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1509,
+  "detail_pending": 1482,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -170,10 +170,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
-      "detail_complete": 3,
+      "detail_complete": 9,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 20,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1868,
+      "detail_complete": 1874,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1017
+      "detail_pending": 1011
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -357,10 +357,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
-      "detail_complete": 0,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Bhawan",
@@ -423,10 +423,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 28,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 9
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -665,10 +665,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 30,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 7
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -1024,15 +1024,11 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1503,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2026_PKVVC_539794_1"
-  ],
+  "legacy_verification_pending": 1477,
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 370,
   "department_count": 333,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_PKVVC_539794_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
