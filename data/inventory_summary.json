@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:08:22.710373+00:00",
+  "updated_at": "2026-10-01T11:10:27.411848+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4701,
-  "detail_failed": 0,
+  "detail_complete": 4731,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 808,
+  "detail_pending": 777,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Health Services",
@@ -170,10 +170,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 27,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Town And Country Planning",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2400,
+      "detail_complete": 2407,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 616
+      "detail_pending": 609
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -313,10 +313,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 19,
       "copied_tenders": 19,
-      "detail_complete": 15,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Excise Department",
@@ -610,10 +610,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 88,
       "copied_tenders": 88,
-      "detail_complete": 79,
+      "detail_complete": 82,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 6
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 31,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -787,9 +787,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "MP State Tourism Development Corporation Ltd.",
@@ -940,10 +940,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 379,
       "copied_tenders": 379,
-      "detail_complete": 374,
+      "detail_complete": 378,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 1
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -962,10 +962,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 22,
       "copied_tenders": 22,
-      "detail_complete": 0,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 22
+      "detail_pending": 16
     },
     {
       "organisation": "Rani Durgavati Vishwavidyalaya - Jabalpur",
@@ -1046,8 +1046,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 709,
-  "missing_district_count": 94,
+  "legacy_verification_pending": 683,
+  "missing_district_count": 90,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1063,10 +1063,6 @@
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
     "2026_MPUDC_539819_1",
-    "2026_PWDRB_538810_1",
-    "2026_PWDRB_538811_1",
-    "2026_PWDRB_538812_1",
-    "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
@@ -1146,7 +1142,7 @@
   ],
   "known_pincode_count": 378,
   "department_count": 334,
-  "missing_pincode_count": 94,
+  "missing_pincode_count": 90,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1162,10 +1158,6 @@
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
     "2026_MPUDC_539819_1",
-    "2026_PWDRB_538810_1",
-    "2026_PWDRB_538811_1",
-    "2026_PWDRB_538812_1",
-    "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
