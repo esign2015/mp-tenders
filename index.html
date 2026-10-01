@@ -2833,16 +2833,16 @@ function positionTelegramProfileMenu(){
   if(!button || !menu || !menu.classList.contains("open")) return;
   const rect=button.getBoundingClientRect();
   const width=Math.min(280,window.innerWidth-16);
-  let left=rect.right-width;
-  if(left<8) left=8;
-  let top=rect.bottom+6;
-  const menuHeight=Math.min(260,window.innerHeight-16);
-  if(top+menuHeight>window.innerHeight-8) top=Math.max(8,rect.top-menuHeight-6);
   menu.style.width=width+"px";
-  menu.style.left=left+"px";
+  menu.style.maxHeight="none";
+  menu.style.overflowY="visible";
+  const menuHeight=menu.getBoundingClientRect().height;
+  const below=rect.bottom+6;
+  const above=rect.top-menuHeight-6;
+  const top=below+menuHeight<=window.innerHeight-8 ? below :
+    above>=8 ? above : Math.max(8,window.innerHeight-menuHeight-8);
+  menu.style.left=Math.max(8,Math.min(rect.right-width,window.innerWidth-width-8))+"px";
   menu.style.top=top+"px";
-  menu.style.maxHeight=menuHeight+"px";
-  menu.style.overflowY="auto";
 }
 
 function setupTelegramFlow(){
