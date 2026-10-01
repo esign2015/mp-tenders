@@ -34,6 +34,17 @@ class AccountsTests(unittest.TestCase):
         with patch.object(sheets,'call',side_effect=AssertionError('Readiness must not access Sheet')):
             self.assertEqual(self.client.get('/api/accounts/ready').status_code,200)
 
+    def test_middle_name_rejects_numbers_in_signup_and_profile(self):
+        for value in ('9876543210','Kumar123','कुमार१२३','Ram@example'):
+            response=self.client.post('/api/accounts/signup',json={**self.data,'middle_name':value})
+            self.assertEqual(response.status_code,400)
+            self.assertIn('Middle Name',response.json['message'])
+        result=self.client.post('/api/accounts/signup',json={**self.data,'middle_name':'कुमार'}).json
+        self.assertEqual(result['profile']['middle_name'],'कुमार')
+        response=self.client.post('/api/accounts/profile',json={**self.data,'session_token':result['session_token'],'middle_name':'9876543210'})
+        self.assertEqual(response.status_code,400)
+        self.assertEqual(server.account_service.get(user_id=result['visitor_id'])['middle_name'],'कुमार')
+
     def test_mobile_range_and_numeric_validation(self):
         from account_access import account_mobile
         for value in ('6000000000','9999999999'):

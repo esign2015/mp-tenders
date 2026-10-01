@@ -1,5 +1,5 @@
 """Password accounts: scrypt hashes, revocable sessions and manual reset links."""
-import hashlib,hmac,json,os,re,secrets,time,uuid,threading,logging
+import hashlib,hmac,json,os,re,secrets,time,uuid,threading,logging,unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from flask import jsonify,request
@@ -41,6 +41,8 @@ IDLE_SECONDS=15*60
 def profile_fields(server,p):
     first=server.clean(p.get('first_name',p.get('name')))
     middle=server.clean(p.get('middle_name'));last=server.clean(p.get('last_name'))
+    if any(unicodedata.category(char)[0] not in ('L','M') and char not in " .'’-" for char in middle):
+        raise AccountError('Middle Name में केवल नाम लिखें, अंक या Mobile Number नहीं।')
     district=server.clean(p.get('district'));tehsil=server.clean(p.get('tehsil'))
     if not 2<=len(first)<=15 or len(middle)>10 or len(last)>15:
         raise AccountError('Name अधिकतम 15, Middle Name 10 और Surname 15 characters का रखें।')

@@ -3,6 +3,19 @@ function accountMobileValue(value){
   if(digits.length===12&&digits.startsWith('91'))digits=digits.slice(2);
   return /^[6-9]/.test(digits)?digits.slice(0,10):'';
 }
+function accountMiddleNameValue(value){
+  return String(value||'').replace(/[^\p{L}\p{M} .'’\-]/gu,'').slice(0,10);
+}
+function accountBindMiddleName(id){
+  const field=visitorNode(id);if(!field)return;
+  field.addEventListener('input',()=>{field.value=accountMiddleNameValue(field.value)});
+  field.addEventListener('paste',event=>{
+    event.preventDefault();
+    const value=field.value,start=field.selectionStart??value.length,end=field.selectionEnd??start;
+    field.value=accountMiddleNameValue(value.slice(0,start)+event.clipboardData.getData('text')+value.slice(end));
+    field.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+}
 function accountBindMobile(id){
   const field=visitorNode(id);if(!field)return;
   const clean=()=>{field.value=accountMobileValue(field.value)};
@@ -125,6 +138,7 @@ async function enforceAccountAccess(){
   for(const name of forms.slice(0,3))visitorNode('account'+name+'Tab').onclick=()=>mode(name);
   mode('SignIn');
   for(const id of ['accountLoginMobile','visitorMobile','accountForgotMobile'])accountBindMobile(id);
+  for(const id of ['visitorMiddleName','accountEditMiddleName'])accountBindMiddleName(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
   for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>accountTehsilOptions(district,tehsil));
   fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{

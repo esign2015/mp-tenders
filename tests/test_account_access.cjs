@@ -14,10 +14,12 @@ const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR
 }});
 vm.runInContext(fs.readFileSync('assets/account_access.js','utf8'),ctx);
 for(const [input,expected] of [['6000000000','6000000000'],['9999999999','9999999999'],['5999999999',''],['abc98765-x43210','9876543210'],['+91 9876543210','9876543210'],['987654321012','9876543210']])assert.equal(ctx.accountMobileValue(input),expected);
+for(const [input,expected] of [['9876543210',''],['कुमार१२३','कुमार'],['Kumar123','Kumar'],['O’Neil','O’Neil'],['कुमार','कुमार'],['Ram@12','Ram']])assert.equal(ctx.accountMiddleNameValue(input),expected);
 assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
 (async()=>{
  const pending=ctx.enforceAccountAccess();await new Promise(r=>setImmediate(r));
  assert(!node('accountSignInForm').hidden);assert(node('accountSignUpForm').hidden);
+ for(const id of ['visitorMiddleName','accountEditMiddleName']){node(id).value='Kumar123';node(id).input();assert.equal(node(id).value,'Kumar')}
  node('accountSignUpTab').onclick();assert(!node('accountSignUpForm').hidden);assert(node('accountSignInForm').hidden);
  node('accountForgotTab').onclick();node('accountForgotMobile').value='9876543210';await node('accountForgotForm').submit({preventDefault(){},currentTarget:node('accountForgotForm')});assert.equal(opened,'');assert(node('accountForgotWhatsApp').href.startsWith('https://wa.me/919893610244?text='));assert.equal(node('accountForgotWhatsApp').hidden,false);
  node('accountForgotMobile').input();assert(node('accountForgotWhatsApp').hidden);assert(!node('accountForgotWhatsApp').href);
