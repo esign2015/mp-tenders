@@ -40,10 +40,11 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']}).status_code,200)
     def test_cross_device_affidavit_and_logout_only_this_session(self):
         first=self.signup();second=self.login().json
-        profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}
+        profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','parentRelation':'W/o','parentName':'Spouse Test','address':'Ward 2, Dewas'}
         saved=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':profile});self.assertEqual(saved.status_code,200)
         restored=self.client.post('/api/accounts/session',json={'session_token':second['session_token']})
         self.assertEqual(restored.json['affidavit_profile']['firmName'],'Firm')
+        for key in ('parentRelation','parentName','address'):self.assertEqual(restored.json['affidavit_profile'][key],profile[key])
         self.assertEqual(self.client.post('/api/accounts/logout',json={'session_token':first['session_token']}).status_code,200)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':first['session_token']}).status_code,401)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':second['session_token']}).status_code,200)

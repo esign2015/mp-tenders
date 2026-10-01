@@ -28,7 +28,8 @@ const registration={visitor_id:first,name:'Test user',mobile:'+919876543210',dis
 assert(call('register',registration).ok);assert(call('register',registration).ok);
 assert.equal(tabs.get('Users').rows.length,2);assert.equal(tabs.get('VisitorSessions').rows.length,2);assert.equal(tabs.get('VisitEvents').rows.length,2);
 assert.equal(call('register',{...registration,name:'Changed'}).status,409);
-const profile={bidderName:'Test user',firmName:'=SUM(A1)',status:'Proprietor',place:'Dewas',relative:'no',relativeName:'',relativePost:'',relativePosting:''};
+tabs.get('AffidavitProfiles').rows[0]=tabs.get('AffidavitProfiles').rows[0].slice(0,12); // Existing schema upgrades without replacing saved rows.
+const profile={bidderName:'Test user',firmName:'=SUM(A1)',status:'Proprietor',place:'Dewas',relative:'no',relativeName:'',relativePost:'',relativePosting:'',parentName:'Parent Test',parentRelation:'D/o',address:'Kannod, Dewas'};
 assert.deepEqual(call('save_affidavit',{visitor_id:first,profile}).profile,profile);
 assert.deepEqual(call('session',{visitor_id:first}).affidavit_profile,profile);
 assert(call('register',{...registration,visitor_id:second,name:'New browser'}).ok);

@@ -588,12 +588,14 @@ def visitor_affidavit():
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
     if profile is not None:
-        keys=('bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting')
+        keys=('bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','parentName','parentRelation','address')
         if not isinstance(profile,dict):
             return jsonify({'ok':False,'message':'Invalid affidavit profile.'}),400
         profile={key:clean(profile.get(key)) for key in keys}
+        profile['parentRelation']=profile['parentRelation'] or 'S/o'
         if (any(len(value)>240 for value in profile.values())
             or not all(profile[key] for key in ('bidderName','firmName','status','place'))
+            or profile['parentRelation'] not in ('S/o','D/o','W/o')
             or profile['relative'] not in ('yes','no')
             or (profile['relative']=='yes' and not all(profile[key] for key in ('relativeName','relativePost','relativePosting')))):
             return jsonify({'ok':False,'message':'Required affidavit basic details are missing or invalid.'}),400

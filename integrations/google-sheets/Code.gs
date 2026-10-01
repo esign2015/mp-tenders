@@ -4,7 +4,7 @@ const MP_TENDER_SHEET_ID = '1VHILTCBB-CR0srqOTmaxf0b17wWJCpaOuMpVp_KphKw';
 const MP_SCHEMA = {
   Users: ['user_id','name','mobile','district','signup_at','last_visit_at','visit_count','mobile_verified'],
   VisitorSessions: ['visitor_id','user_id','name','mobile','district','signup_at','last_visit_at','visit_count'],
-  AffidavitProfiles: ['visitor_id','user_id','bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','updated_at','last_request_id'],
+  AffidavitProfiles: ['visitor_id','user_id','bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','updated_at','last_request_id','parentName','parentRelation','address'],
   VisitEvents: ['request_id','visitor_id','user_id','visited_at','event'],
   Accounts: ['user_id','mobile','revision','record_json'],
   AccountRateLimits: ['rate_key','window_start','attempts']
@@ -24,7 +24,8 @@ function mpTables_(book){
       sheet.autoResizeColumns(1,headers.length);
     }else{
       const found=sheet.getRange(1,1,1,headers.length).getDisplayValues()[0];
-      if(found.join('|')!==headers.join('|'))throw Error('Unexpected headers in '+name+'. Existing data was preserved.');
+      if(name==='AffidavitProfiles' && found.slice(0,12).join('|')===headers.slice(0,12).join('|') && found.slice(12).every(value=>!value)){sheet.getRange(1,13,1,3).setValues([headers.slice(12)]);}
+      else if(found.join('|')!==headers.join('|'))throw Error('Unexpected headers in '+name+'. Existing data was preserved.');
     }
     tables[name]=sheet;
   });
@@ -70,7 +71,7 @@ function mpEvent_(tables,visitor,request,event){
 function mpAffidavit_(tables,visitorId){
   const row=mpRows_(tables.AffidavitProfiles).find(row=>row.visitor_id===visitorId);
   if(!row)return {};
-  return Object.fromEntries(['bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting'].map(key=>[key,row[key]||'']));
+  return Object.fromEntries(['bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','parentName','parentRelation','address'].map(key=>[key,row[key]||'']));
 }
 function mpHandle_(tables,p){
   if(String(p.action||'').startsWith('account_'))return mpAccountHandle_(tables,p);
@@ -106,10 +107,12 @@ function mpHandle_(tables,p){
   }
   if(p.action==='read_affidavit')return {profile:mpAffidavit_(tables,p.visitor_id)};
   if(p.action==='save_affidavit'){
-    const profile=p.profile||{},keys=['bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting'];
+    const profile=p.profile||{},keys=['bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','parentName','parentRelation','address'];
     const old=mpRows_(tables.AffidavitProfiles).find(row=>row.visitor_id===p.visitor_id);
     const row={...(old||{}),visitor_id:p.visitor_id,user_id:visitor.user_id,updated_at:mpNow_(),last_request_id:p.request_id};
     keys.forEach(key=>row[key]=mpText_(profile[key],240));
+    row.parentRelation=row.parentRelation||'S/o';
+    if(!['S/o','D/o','W/o'].includes(row.parentRelation))mpError_(400,'Invalid parent relationship.');
     if(!row.bidderName||!row.firmName||!row.place||!['yes','no'].includes(row.relative))mpError_(400,'Invalid affidavit profile.');
     if(row.relative==='yes'&&(!row.relativeName||!row.relativePost||!row.relativePosting))mpError_(400,'Relative details are required.');
     if(!old||old.last_request_id!==p.request_id)mpWrite_(tables.AffidavitProfiles,row);

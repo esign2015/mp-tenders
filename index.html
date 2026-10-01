@@ -2084,7 +2084,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="affidavit-field"><label for="affStatus">Status in Firm / Company</label><select id="affStatus"><option value="Proprietor">Proprietor</option><option value="Partner">Partner</option><option value="Director">Director</option><option value="Authorized Signatory">Authorized Signatory</option><option value="Other">Other</option></select></div>
       <div class="affidavit-field"><label for="affPlace">Verification Place</label><input id="affPlace" type="text" maxlength="100" placeholder="Verification place"></div>
       <div class="affidavit-field"><label for="affTenderRef">Notice Inviting e-Tender No. (Tender ID)</label><input id="affTenderRef" type="text" maxlength="180"></div>
-      <div class="affidavit-field"><label for="affNoticeDate">Notice / NIT Date (Bidder to fill)</label><input id="affNoticeDate" type="text" maxlength="80" placeholder="NIT की वास्तविक date लिखें (Published Date auto-fill नहीं होगी)"></div>
+      <div class="affidavit-field"><label for="affNoticeDate">Notice / NIT Date (Bidder to fill)</label><input id="affNoticeDate" type="date"></div>
       <div class="affidavit-field full"><label for="affWorkName">Name of Work</label><textarea id="affWorkName"></textarea></div>
       <div class="affidavit-field full"><label for="affDepartment">Name of Department / Organisation</label><input id="affDepartment" type="text" maxlength="220"></div>
       <div class="affidavit-field"><label for="affVerifyDate">Verification Date</label><input id="affVerifyDate" type="date"></div>
@@ -6122,6 +6122,9 @@ enforceAccountAccess().then(async () => {
   }
   function readProfile(){
     return {
+      parentName:safe(byId("affParentName")?.value),
+      parentRelation:["S/o","D/o","W/o"].includes(byId("affParentRelation")?.value)?byId("affParentRelation").value:"S/o",
+      address:safe(byId("affAddress")?.value),
       bidderName:safe(byId("affBidderName")?.value),
       firmName:safe(byId("affFirmName")?.value),
       status:safe(byId("affStatus")?.value)||"Proprietor",
@@ -6143,6 +6146,12 @@ enforceAccountAccess().then(async () => {
       return false;
     }
     localStorage.setItem(profileKey(),JSON.stringify(p));
+    window.dashboardAffidavitProfile=p;
+    try{
+      const dates=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}");
+      const id=safe(byId("affTenderId")?.value);
+      if(id){dates[id]=safe(byId("affNoticeDate")?.value);localStorage.setItem(profileKey()+"_notice_dates",JSON.stringify(dates));}
+    }catch(_e){}
     byId("affidavitStatus").textContent="✓ Bidder profile इस browser में save हो गया।";
     const syncStatus=byId('affidavitProfileSaveStatus');
     if(typeof window.saveDashboardAffidavitProfile==='function'){
@@ -6167,7 +6176,7 @@ enforceAccountAccess().then(async () => {
       address:safe(byId("affAddress")?.value),
       tenderId:safe(byId("affTenderId")?.value),
       tenderRef:safe(byId("affTenderRef")?.value),
-      noticeDate:safe(byId("affNoticeDate")?.value),
+      noticeDate:formatVerifyDate(byId("affNoticeDate")?.value),
       workName:safe(byId("affWorkName")?.value),
       department:safe(byId("affDepartment")?.value),
       verifyDate:formatVerifyDate(byId("affVerifyDate")?.value)
@@ -6268,7 +6277,9 @@ enforceAccountAccess().then(async () => {
     const general=getSavedGeneralProfile();
     const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
     byId("affBidderName").value=saved.bidderName||general.name||safe(byId("userProfileName")?.value)||telegramName;
-    byId("affParentName").value="";byId("affAddress").value="";byId("affParentRelation").value="S/o";
+    byId("affParentName").value=saved.parentName||"";
+    byId("affAddress").value=saved.address||"";
+    byId("affParentRelation").value=["S/o","D/o","W/o"].includes(saved.parentRelation)?saved.parentRelation:"S/o";
     byId("affFirmName").value=saved.firmName||general.firmName||"";
     byId("affStatus").value=saved.status||general.bidderStatus||"Proprietor";
     byId("affPlace").value=saved.place||general.place||general.district||"";
@@ -6281,7 +6292,8 @@ enforceAccountAccess().then(async () => {
     byId("affTenderRef").value=safe(row["Tender ID"]);
     byId("affWorkName").value=safe(row["Title"])||safe(row["Work Description"]);
     byId("affDepartment").value=fullOrganisationChain(row)||safe(row["Organisation"])||safe(row["Department"]);
-    // NIT / notice date can differ from portal Published Date, so never auto-fill it.\n    byId("affNoticeDate").value="";
+    // Restore only a date explicitly entered for the same tender.
+    try{byId("affNoticeDate").value=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}")[safe(row["Tender ID"])]||"";}catch(_e){byId("affNoticeDate").value="";}
     byId("affVerifyDate").value=todayIst();
     byId("affidavitTenderSummary").textContent=(safe(row["Tender ID"])||"Selected tender")+" • "+(safe(row["Title"])||"");
     byId("affidavitStatus").textContent="";
@@ -6670,11 +6682,20 @@ enforceAccountAccess().then(async () => {
       byId("affidavitStatus").textContent="✓ PDF affidavit तैयार है। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
+  let profileSaveTimer;
+  function scheduleProfileSave(){
+    clearTimeout(profileSaveTimer);
+    profileSaveTimer=setTimeout(()=>{
+      const p=readProfile();
+      if(p.bidderName&&p.firmName&&p.place&&(p.relative!=="yes"||(p.relativeName&&p.relativePost&&p.relativePosting)))saveProfile();
+    },800);
+  }
   function init(){
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
     byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
     ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
+    ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affRelative","affRelativeName","affRelativePost","affRelativePosting","affNoticeDate"].forEach(id=>byId(id)?.addEventListener("change",scheduleProfileSave));
     byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
     byId("affidavitPdf")?.addEventListener("click",downloadPdf);
