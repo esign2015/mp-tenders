@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T02:33:30.824806+00:00",
+  "updated_at": "2026-10-01T02:35:35.099488+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3636,
+  "detail_complete": 3675,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1676,
+  "detail_pending": 1637,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 22,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 10
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 41,
+      "detail_complete": 45,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 6
     },
     {
       "organisation": "Directorate of Industries",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 21,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1820,
+      "detail_complete": 1821,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1065
+      "detail_pending": 1064
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 36,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 12
     },
     {
       "organisation": "District Collectorate",
@@ -500,10 +500,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh State Electronics Development Corporation Ltd.",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 71,
+      "detail_complete": 75,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 11
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -665,10 +665,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 29,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 13
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 76,
+      "detail_complete": 78,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 23
+      "detail_pending": 21
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -830,10 +830,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 30,
+      "detail_complete": 35,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 9
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 294,
+      "detail_complete": 310,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 74
+      "detail_pending": 58
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,11 +1024,15 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1671,
-  "missing_district_count": 0,
-  "missing_district_ids": [],
+  "legacy_verification_pending": 1631,
+  "missing_district_count": 1,
+  "missing_district_ids": [
+    "2026_PKVVC_539794_1"
+  ],
   "known_pincode_count": 370,
   "department_count": 333,
-  "missing_pincode_count": 0,
-  "missing_pincode_ids": []
+  "missing_pincode_count": 1,
+  "missing_pincode_ids": [
+    "2026_PKVVC_539794_1"
+  ]
 }
