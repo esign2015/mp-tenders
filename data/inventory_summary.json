@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:21:17.261783+00:00",
+  "updated_at": "2026-10-01T09:23:22.222328+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3938,
+  "detail_complete": 3971,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1374,
+  "detail_pending": 1341,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 25,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -82,10 +82,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Farmer Welfare And Agriculture Development",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 22,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 4
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1874,
+      "detail_complete": 1879,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1011
+      "detail_pending": 1006
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 39,
+      "detail_complete": 40,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 11
     },
     {
       "organisation": "District Collectorate",
@@ -621,10 +621,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
-      "detail_complete": 11,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 3
     },
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 85,
+      "detail_complete": 98,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -896,10 +896,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 65,
       "copied_tenders": 65,
-      "detail_complete": 61,
+      "detail_complete": 63,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "PWD-PIU",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 318,
+      "detail_complete": 323,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 50
+      "detail_pending": 45
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1369,
+  "legacy_verification_pending": 1336,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
