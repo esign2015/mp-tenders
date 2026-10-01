@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "36848245164",
   "github_run_number": "767",
   "github_commit_sha": "9a557639302ef2d38bf7cca5dbabd404f85de65f",
@@ -12,7 +12,7 @@
   "batch_complete": 495,
   "started_at": "2026-10-01T10:39:17.675156+00:00",
   "success": 4731,
-  "failed": 1,
+  "failed": 5,
   "success_ids": [
     "2023_UAD_255290_15",
     "2023_UAD_295104_9",
@@ -4747,6 +4747,10 @@
     "2026_WRD_537377_1"
   ],
   "failed_ids": [
+    "2026_DEON_535871_1",
+    "2026_SETC_536588_1",
+    "2026_SETC_536604_1",
+    "2026_SOSEB_537381_1",
     "2026_SOSEB_537383_1"
   ],
   "skipped_ids": [],
@@ -4758,7 +4762,6 @@
     "2026_AYUSH_539984_1",
     "2026_CEO_535797_1",
     "2026_COSK_535977_1",
-    "2026_DEON_535871_1",
     "2026_DGPCS_534150_1",
     "2026_DGPCS_534157_1",
     "2026_DGPCS_534165_1",
@@ -4880,9 +4883,6 @@
     "2026_RUMSL_528528_1",
     "2026_SEDC_534591_1",
     "2026_SEDC_539567_1",
-    "2026_SETC_536588_1",
-    "2026_SETC_536604_1",
-    "2026_SOSEB_537381_1",
     "2026_SOSEB_539052_1",
     "2026_STDC_531278_1",
     "2026_TAD_537665_1",
@@ -5534,33 +5534,28 @@
     {
       "Tender ID": "2026_DEON_535871_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_SOSEB_537381_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_SOSEB_537383_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_SETC_536588_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_SETC_536604_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_SOSEB_537383_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_SETC_536588_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_SETC_536604_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-01T11:10:23.479733+00:00"
+  "updated_at": "2026-10-01T11:10:36.305989+00:00"
 }
