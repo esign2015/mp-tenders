@@ -1,3 +1,4 @@
+from portal_fee_exceptions import verified_fee_omission
 # DAILY_DETAIL_WORKER_VERSION = 2
 # Fresh bootstrap trigger: [fresh-bootstrap]
 # Retry after bootstrap writer fix
@@ -365,7 +366,7 @@ def rsp_style_extract_targets(target_rows, by_id, save_status, save_csv, save_de
                         )
 
                         merged = merge_extracted_detail(by_id.get(tid, {}), detail)
-                        if money_number(merged.get("Processing Fee")) <= 0:
+                        if money_number(merged.get("Processing Fee")) <= 0 and not verified_fee_omission(merged):
                             merged["Detail Extracted"] = ""
                             by_id[tid] = merged
                             raise RuntimeError("Processing Fee missing/zero after detail extraction")
@@ -530,6 +531,7 @@ def main():
         if clean(row.get("Tender ID")) in current_set
         and clean(row.get("Detail Extracted")).upper() == "YES"
         and money_number(row.get("Processing Fee")) <= 0
+        and not verified_fee_omission(row)
     )
     print(
         f"CSV IDs: {len(rows)} | current portal IDs: {len(current_ids)} | "
@@ -640,7 +642,7 @@ def main():
 
                 merged = merge_extracted_detail(base, detail)
                 merged.pop("URL", None)
-                if money_number(merged.get("Processing Fee")) <= 0:
+                if money_number(merged.get("Processing Fee")) <= 0 and not verified_fee_omission(merged):
                     merged["Detail Extracted"] = ""
                     by_id[tid] = merged
                     raise RuntimeError("Processing Fee missing/zero after detail extraction")

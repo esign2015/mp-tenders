@@ -1,3 +1,4 @@
+from portal_fee_exceptions import verified_fee_omission
 """Count progress against the published organisation snapshot only."""
 import csv
 import json
@@ -27,7 +28,7 @@ def detail_complete(row):
     if not valid_pincode(row.get("Pincode")):
         return False
     fee = re.search(r"-?\d+(?:\.\d+)?", clean(row.get("Processing Fee")).replace(",", ""))
-    return bool(fee and float(fee.group()) > 0)
+    return verified_fee_omission(row) or bool(fee and float(fee.group()) > 0)
 
 def read_csv(path):
     if not path.exists():

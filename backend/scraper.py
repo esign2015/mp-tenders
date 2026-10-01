@@ -1,3 +1,5 @@
+from portal_fee_exceptions import VERIFIED_MISSING_PROCESSING_FEE, NOT_PROVIDED
+from checks_cutoff import ChecksClosed, ensure_open, seconds_left
 # [run-scrape-details] force retry after stale pagination worker
 # [run-scrape-details] safe stop for portal last-page controls
 # [run-scrape-details] pagination recovery for double-arrow next links
@@ -529,8 +531,8 @@ def parse_detail(soup, url):
 
     processing_fee = labeled_amount(["Processing Fee in ₹", "Processing Fee", "Portal Fee"]) or exact_value("Processing Fee in ₹", "Processing Fee", "Portal Fee")
 
-    # MP Tender always has a portal/processing component when a tender is
-    # published. Some templates do not expose it as a clean adjacent row, but
+    # Some portal templates omit processing fees. When an authoritative
+    # positive subtotal is present, it can still expose the missing amount:
     # the Tender Fee section heading still exposes a subtotal such as:
     # "Total Fee in ₹ - 1295". Use that authoritative subtotal to recover
     # Processing Fee = portal subtotal - Tender Fee.
@@ -626,6 +628,8 @@ def parse_detail(soup, url):
     )
 
     latest_corrigendum = parse_latest_corrigendum(soup)
+    verified_missing_fee = (clean(tender_id) in VERIFIED_MISSING_PROCESSING_FEE
+                            and money_number(processing_fee) <= 0)
 
     return {
         "Tender ID": clean(tender_id),
@@ -641,8 +645,9 @@ def parse_detail(soup, url):
         "PAC Amount": money_text(pac),
         "EMD Fee": money_text(emd),
         "Tender Fee": money_text(tender_fee),
-        "Processing Fee": money_text(processing_fee),
-        "Total Fee": str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}",
+        "Processing Fee": NOT_PROVIDED if verified_missing_fee else money_text(processing_fee),
+        "Total Fee": ("Not available (processing fee not published)" if verified_missing_fee
+                      else str(int(total_fee)) if total_fee.is_integer() else f"{total_fee:.2f}"),
         "Location": clean(location),
         "Pincode": re.sub(r"\D", "", clean(pincode))[:6],
         "District": clean(district),
@@ -1573,6 +1578,7 @@ def is_watchable_tender(row, now):
 def _corrigendum_detail_with_retry(page, tender, attempts=3):
     last = None
     for attempt in range(1, attempts + 1):
+        ensure_open()
         try:
             soup = open_tender_detail_by_search(page, tender)
             text = clean(soup.get_text(" ", strip=True))
@@ -1607,6 +1613,9 @@ def _urgent_corrigendum_stage(opening, now):
 
 def monitor_corrigendum_changes(csv_file, urgent_only=False):
     """6-hour watch plus reliable 15/5-minute pre-opening checks."""
+    if seconds_left() <= 0:
+        print("CORRIGENDUM: after 18:30 IST; skipped.")
+        return {"ok": True, "skipped": True, "reason": "18:30 IST cutoff"}
     now = datetime.now(timezone(timedelta(hours=5, minutes=30)))
     existing_rows = read_existing(csv_file)
     existing_by_id = {clean(r.get("Tender ID")): dict(r) for r in existing_rows if clean(r.get("Tender ID"))}
@@ -1634,10 +1643,13 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
         page = browser.new_page(user_agent=HEADERS["User-Agent"], locale="en-IN", viewport={"width":1920,"height":1080})
         try:
             for row in watch_rows:
+                if seconds_left() <= 0:
+                    break
                 tender_id = clean(row.get("Tender ID"))
                 tender = {"tender_id": tender_id, "title": clean(row.get("Title")), "reference": clean(row.get("Reference Number"))}
                 try:
                     fresh = _corrigendum_detail_with_retry(page, tender, attempts=3 if urgent_only else 2)
+                    ensure_open()
                     checked += 1
                     old_close = clean(row.get("Closing Date"))
                     new_close = clean(fresh.get("Closing Date")) or old_close
@@ -1701,6 +1713,8 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
                         elif stage == "5m" and opening_key:
                             updated["Corrigendum 5m Checked"] = opening_key.isoformat()
                     existing_by_id[tender_id] = updated
+                except ChecksClosed:
+                    break
                 except Exception as exc:
                     errors += 1
                     print(f"CORRIGENDUM WATCH ERROR {tender_id}: {type(exc).__name__}: {exc}")

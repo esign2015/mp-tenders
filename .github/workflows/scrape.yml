@@ -827,7 +827,7 @@ jobs:
           python backend/publish_data_checkpoint.py data/telegram_schedule.json data/telegram_last_attempt.json data/telegram_delivery/*.json
 
   corrigendum_watch:
-    if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *' || github.event.schedule == '15 15 * * *' || github.event.schedule == '15 21 * * *')
+    if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
@@ -848,7 +848,7 @@ jobs:
       - name: Check active + pre-opening corrigendums
         env:
           MONITOR_CORRIGENDUM_ONLY: "1"
-        run: python backend/scraper.py
+        run: python backend/checks_cutoff.py backend/scraper.py
       - name: Commit corrigendum/date/cancellation changes
         if: always()
         run: |
@@ -886,7 +886,7 @@ jobs:
         env:
           MONITOR_CORRIGENDUM_ONLY: "1"
           CORRIGENDUM_URGENT_ONLY: "1"
-        run: python backend/scraper.py
+        run: python backend/checks_cutoff.py backend/scraper.py
       - name: Commit urgent corrigendum changes
         if: always()
         run: |

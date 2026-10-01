@@ -1,0 +1,26 @@
+name: Stop standalone checks after 18:30 IST
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - backend/checks_cutoff.py
+      - backend/stop_after_hours_checks.py
+      - .github/workflows/stop-after-hours-checks.yml
+  schedule:
+    - cron: '0 13 * * *'
+permissions:
+  contents: read
+jobs:
+  stop_checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stop only standalone Home/corrigendum runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python backend/stop_after_hours_checks.py

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
 
+from checks_cutoff import ChecksClosed, ensure_open, seconds_left
 import requests
 from bs4 import BeautifulSoup
 from scraper import PORTAL, HEADERS, clean, parse_detail, parse_tender_rows, write_csv, TENDER_ID_RE
@@ -59,6 +60,9 @@ def matching_row(entry, rows):
     return None  # Ambiguous references must be resolved by opening the live link.
 
 def main():
+    if seconds_left() <= 0:
+        print('HOME: after 18:30 IST; skipped without changing data.')
+        return
     deadline = time.monotonic() + min(720, int(os.getenv("HOME_LATEST_BUDGET_SECONDS", "720")))
     status = {"status": "running", "started_at": now_iso(), "budget_seconds": 720,
               "success_ids": [], "unchanged_ids": [], "errors": [], "pending": []}
@@ -67,10 +71,12 @@ def main():
     session = requests.Session()
     session.headers.update(HEADERS)
     def get(url, referer=PORTAL):
-        remaining = deadline - time.monotonic()
+        ensure_open()
+        remaining = min(deadline - time.monotonic(), seconds_left())
         if remaining <= 1:
             raise TimeoutError("12-minute extraction budget reached")
         response = session.get(url, headers={"Referer": referer}, timeout=min(30, remaining))
+        ensure_open()
         response.raise_for_status()
         return BeautifulSoup(response.text, "html.parser"), response.url
     def checkpoint():
@@ -86,11 +92,13 @@ def main():
         payload = {i["name"]: i.get("value", "")
                    for i in form.find_all("input", attrs={"name": True})}
         payload["SearchDescription"] = tid
-        remaining = deadline - time.monotonic()
+        remaining = min(deadline - time.monotonic(), seconds_left())
         if remaining <= 1:
             raise TimeoutError("12-minute extraction budget reached")
+        ensure_open()
         response = session.post(urljoin(url, form.get("action", PORTAL)), data=payload,
                                 headers={"Referer": url}, timeout=min(30, remaining))
+        ensure_open()
         response.raise_for_status()
         result = BeautifulSoup(response.text, "html.parser")
         listing = next((r for r in parse_tender_rows(result, response.url)
@@ -122,6 +130,7 @@ def main():
                 status["pending"].extend(entries[position:])
                 break
             try:
+                ensure_open()
                 prior = matching_row(entry, list(by_id.values()))
                 if (entry["kind"] == "tender" and prior and detail_complete(prior)
                         and clean(prior.get("Closing Date")) == entry["closing"]
@@ -152,6 +161,7 @@ def main():
                     # CorrViewDetails omits fees; its View More link opens
                     # history, so use the permanent ID to open the full tender.
                     soup = search_detail(tid)
+                ensure_open()
                 detail = parse_detail(soup, PORTAL)
                 if clean(detail.get("Tender ID")) != tid:
                     raise RuntimeError("Full detail Tender ID differs from live entry")
@@ -177,11 +187,16 @@ def main():
                     status["pending"].append(entry)
                 checkpoint()
                 print(f"HOME DETAIL {tid}: complete={detail_complete(base)}", flush=True)
+            except ChecksClosed:
+                status['pending'].extend(entries[position:])
+                break
             except Exception as exc:
                 status["errors"].append({"reference": entry["reference"], "kind": entry["kind"], "error": str(exc)})
                 status["pending"].append(entry)
                 checkpoint()
         status["status"] = "completed" if not status["pending"] else "partial"
+    except ChecksClosed:
+        status['status'] = 'stopped_at_cutoff'
     except Exception as exc:
         status["status"] = "failed"
         status["errors"].append({"error": str(exc)})
