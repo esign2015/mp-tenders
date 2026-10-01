@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T02:27:18.993444+00:00",
+  "updated_at": "2026-10-01T02:29:22.645246+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3520,
+  "detail_complete": 3558,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1792,
+  "detail_pending": 1754,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -71,10 +71,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 20,
+      "detail_complete": 21,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -214,10 +214,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 17,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 8
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1766,
+      "detail_complete": 1783,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1119
+      "detail_pending": 1102
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -302,10 +302,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 19,
       "copied_tenders": 19,
-      "detail_complete": 12,
+      "detail_complete": 15,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 4
     },
     {
       "organisation": "Excise Department",
@@ -346,10 +346,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 5,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Jiwaji University - Gwalior",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 60,
+      "detail_complete": 65,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 26
+      "detail_pending": 21
     },
     {
       "organisation": "M.P. Hindi Granth Academy - MPHGA",
@@ -610,10 +610,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Industrial Development Corporation Limited",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 26,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 9
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -687,10 +687,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 74,
+      "detail_complete": 75,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 25
+      "detail_pending": 24
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 290,
+      "detail_complete": 293,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 78
+      "detail_pending": 75
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 34,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 43
+      "detail_pending": 41
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1787,
+  "legacy_verification_pending": 1749,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
