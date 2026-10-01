@@ -2077,6 +2077,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     </div>
     <div class="affidavit-grid">
       <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="Bidder / Deponent का पूरा नाम"></div>
+      <div class="affidavit-field"><label for="affParentRelation">Relationship (Page 2)</label><select id="affParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select></div>
       <div class="affidavit-field"><label for="affParentName">Parent / Spouse Name (Page 2)</label><input id="affParentName" maxlength="120" placeholder="Optional; otherwise left blank"></div>
       <div class="affidavit-field full"><label for="affAddress">Residential Address (Page 2)</label><input id="affAddress" maxlength="240" placeholder="Optional; otherwise left blank"></div>
       <div class="affidavit-field"><label for="affFirmName">Firm / Company Name</label><input id="affFirmName" type="text" maxlength="160" placeholder="Firm / Company का नाम"></div>
@@ -2087,7 +2088,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="affidavit-field full"><label for="affWorkName">Name of Work</label><textarea id="affWorkName"></textarea></div>
       <div class="affidavit-field full"><label for="affDepartment">Name of Department / Organisation</label><input id="affDepartment" type="text" maxlength="220"></div>
       <div class="affidavit-field"><label for="affVerifyDate">Verification Date</label><input id="affVerifyDate" type="date"></div>
-      <div class="affidavit-field"><label for="affTenderId">Tender ID</label><input id="affTenderId" type="text" readonly></div>
+      <input id="affTenderId" type="hidden">
       <div class="affidavit-relative-box">
         <div class="affidavit-field"><label for="affRelative">Close relative working in department?</label><select id="affRelative"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
         <div class="affidavit-relative-fields" id="affRelativeFields" hidden>
@@ -6162,6 +6163,7 @@ enforceAccountAccess().then(async () => {
     return {
       ...readProfile(),
       parentName:safe(byId("affParentName")?.value),
+      parentRelation:["S/o","D/o","W/o"].includes(byId("affParentRelation")?.value)?byId("affParentRelation").value:"S/o",
       address:safe(byId("affAddress")?.value),
       tenderId:safe(byId("affTenderId")?.value),
       tenderRef:safe(byId("affTenderRef")?.value),
@@ -6212,16 +6214,23 @@ enforceAccountAccess().then(async () => {
       "Signature with Seal of the Deponent (bidder)"
     ];
   }
-  function noRelationParagraphs(d){
-    const identity="I, "+d.bidderName+", son/daughter/spouse of "+(d.parentName||"____________________________")+", resident of "+(d.address||"____________________________")+", acting as "+d.status+" of "+d.firmName+", do hereby solemnly declare that:";
-    const bid="I am submitting a bid on behalf of my firm to "+d.department+" for Tender No. "+d.tenderRef+", for the work entitled "+d.workName+".";
-    if(d.relative==="yes")return [identity,bid,"A close relative is employed in the department: "+d.relativeName+", Post: "+d.relativePost+", Present Posting: "+d.relativePosting+". A declaration of no relationship is therefore not made."];
-    return [identity,bid,
-      "I certify that I have no close family relationship with any officer or employee working in the department / office to which the bid is being submitted, including father, mother, husband, wife, son, daughter, brother, sister, or any other close relative.",
-      "If the information provided by me is found to be false or incorrect during the tender process or at any time after award of the tender, the department shall be entitled to cancel my tender or contract, forfeit my Earnest Money Deposit / Security Deposit, and take action against me / my firm in accordance with the applicable rules."];
+  function noRelationSegments(d){
+    const text=value=>({text:value});
+    const field=value=>({text:value||"____________________________",bold:true,underline:true});
+    const paragraphs=[
+      [text("I, "),field(d.bidderName),text(", "),field(d.parentRelation),text(" "),field(d.parentName),text(", resident of "),field(d.address),text(", acting as "),field(d.status),text(" of "),field(d.firmName),text(", do hereby solemnly declare that:")],
+      [text("I am submitting a bid on behalf of my firm to "),field(d.department),text(" for Tender No. "),field(d.tenderRef),text(", for the work entitled "),field(d.workName),text(".")]
+    ];
+    if(d.relative==="yes")return [...paragraphs,[text("A close relative is employed in the department: "),field(d.relativeName),text(", Post: "),field(d.relativePost),text(", Present Posting: "),field(d.relativePosting),text(". A declaration of no relationship is therefore not made.")]];
+    return [...paragraphs,
+      [text("I certify that I have no close family relationship with any officer or employee working in the department / office to which the bid is being submitted, including father, mother, husband, wife, son, daughter, brother, sister, or any other close relative.")],
+      [text("If the information provided by me is found to be false or incorrect during the tender process or at any time after award of the tender, the department shall be entitled to cancel my tender or contract, forfeit my Earnest Money Deposit / Security Deposit, and take action against me / my firm in accordance with the applicable rules.")]];
   }
   const relationTitle=d=>d.relative==="yes"?"Declaration of Close Relationship":"No Relation Certificate";
-  function noRelationPreview(d){return '<hr><p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationParagraphs(d).map(text=>'<p class="aff-prev-justify">'+escapeHtml(text)+'</p>').join('')+'<p>Date: '+escapeHtml(d.verifyDate)+' · Place: '+escapeHtml(d.place)+'</p><div class="aff-sign-space"></div><p class="aff-prev-right">Declarant Signature ____________________</p><p class="aff-prev-right">Name: '+escapeHtml(d.bidderName)+'</p>';}
+  function noRelationPreview(d){
+    const field=value=>'<strong><u>'+escapeHtml(value)+'</u></strong>';
+    return '<hr><div style="height:32mm"></div><p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationSegments(d).map(segments=>'<p class="aff-prev-justify">'+segments.map(s=>s.bold?field(s.text):escapeHtml(s.text)).join('')+'</p>').join('')+'<div class="aff-sign-space"></div><p style="display:flex;justify-content:space-between;gap:20px"><span>Date: '+field(d.verifyDate)+'</span><span>Signature ____________________</span></p><p style="display:flex;justify-content:space-between;gap:20px"><span>Place: '+field(d.place)+'</span><span>'+field(d.bidderName)+'</span></p>';
+  }
   function updatePreview(){
     const d=documentData();
     const point3=d.relative==="yes"
@@ -6259,7 +6268,7 @@ enforceAccountAccess().then(async () => {
     const general=getSavedGeneralProfile();
     const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
     byId("affBidderName").value=saved.bidderName||general.name||safe(byId("userProfileName")?.value)||telegramName;
-    byId("affParentName").value="";byId("affAddress").value="";
+    byId("affParentName").value="";byId("affAddress").value="";byId("affParentRelation").value="S/o";
     byId("affFirmName").value=saved.firmName||general.firmName||"";
     byId("affStatus").value=saved.status||general.bidderStatus||"Proprietor";
     byId("affPlace").value=saved.place||general.place||general.district||"";
@@ -6329,11 +6338,12 @@ enforceAccountAccess().then(async () => {
     byId("affidavitStatus").textContent="⏳ Word affidavit तैयार हो रही है…";
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
-      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink}=window.docx;
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink,TabStopType}=window.docx;
       const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
         pageBreakBefore:opts.pageBreakBefore,
+        tabStops:opts.tabStops,
         indent:opts.indent,
         spacing:opts.spacing,
         children
@@ -6393,12 +6403,14 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
-      paragraphs.push(para([run(relationTitle(d),true,false,28)],{pageBreakBefore:true,alignment:AlignmentType.CENTER,spacing:normal}));
-      for(const text of noRelationParagraphs(d))paragraphs.push(para([run(text)],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run("Date: "+d.verifyDate+"     Place: "+d.place)],{spacing:normal}));
+      // Keep page settings unchanged; reserve the top 50 mm for printed letterhead.
+      paragraphs.push(para([run(" ")],{pageBreakBefore:true,spacing:{before:0,after:0,line:2200,lineRule:LineRuleType.EXACT}}));
+      paragraphs.push(para([run(relationTitle(d),true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
+      for(const segments of noRelationSegments(d))paragraphs.push(para(segments.map(s=>run(s.text,!!s.bold,false,20,!!s.underline)),{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
-      paragraphs.push(para([run("Declarant Signature ____________________",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
-      paragraphs.push(para([run("Name: "+d.bidderName,true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      const relationRow={tabStops:[{type:TabStopType.RIGHT,position:10466}],spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}};
+      paragraphs.push(para([run("Date: "),run(d.verifyDate,true,false,20,true),run("\tSignature ____________________")],relationRow));
+      paragraphs.push(para([run("Place: "),run(d.place,true,false,20,true),run("\t"),run(d.bidderName,true,false,20,true)],relationRow));
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
@@ -6593,12 +6605,30 @@ enforceAccountAccess().then(async () => {
       ],{firstIndent:12.7,after:5});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
-      doc.addPage();y=18;
+      doc.addPage();y=50;
       center(relationTitle(d),true,false,14,5);
-      for(const text of noRelationParagraphs(d))textBlock(text,{align:"justify",leading:5.7,after:4});
-      textBlock("Date: "+d.verifyDate+"     Place: "+d.place,{after:5});
-      y+=18;rightText("Declarant Signature ____________________",true);
-      rightText("Name: "+d.bidderName,true);
+      for(const segments of noRelationSegments(d))richParagraph(segments,{leading:5.7,after:4});
+      y+=18;
+      const relationRows=[{label:"Date: ",value:d.verifyDate,right:"Signature ____________________",field:false},{label:"Place: ",value:d.place,right:d.bidderName,field:true}];
+      addPageIf(20);
+      for(const row of relationRows){
+        doc.setFont("times","normal");doc.setFontSize(10);
+        const labelWidth=doc.getTextWidth(row.label);
+        doc.setFont("times","bold");
+        const leftLines=doc.splitTextToSize(row.value,74-labelWidth);
+        doc.setFont("times",row.field?"bold":"normal");
+        const rightLines=doc.splitTextToSize(row.right,90);
+        const rowHeight=Math.max(leftLines.length,rightLines.length)*5.7+3;
+        addPageIf(rowHeight);
+        doc.setFont("times","normal");doc.text(row.label,left,y);
+        leftLines.forEach((line,i)=>fieldText(line,left+labelWidth,y+i*5.7));
+        rightLines.forEach((line,i)=>{
+          doc.setFont("times",row.field?"bold":"normal");doc.setFontSize(10);
+          doc.text(line,right,y+i*5.7,{align:"right"});
+          if(row.field){const w=doc.getTextWidth(line);doc.setLineWidth(0.22);doc.line(right-w,y+i*5.7+0.8,right,y+i*5.7+0.8);}
+        });
+        y+=rowHeight;
+      }
 
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
@@ -6644,7 +6674,7 @@ enforceAccountAccess().then(async () => {
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
     byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
-    ["affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
+    ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
     byId("affidavitPdf")?.addEventListener("click",downloadPdf);
