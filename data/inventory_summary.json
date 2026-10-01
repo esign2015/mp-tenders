@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T02:35:35.099488+00:00",
+  "updated_at": "2026-10-01T02:37:39.976226+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3675,
+  "detail_complete": 3712,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1637,
+  "detail_pending": 1600,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 2885,
       "copied_tenders": 2885,
-      "detail_complete": 1821,
+      "detail_complete": 1825,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1064
+      "detail_pending": 1060
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -918,10 +918,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 368,
       "copied_tenders": 368,
-      "detail_complete": 310,
+      "detail_complete": 313,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 58
+      "detail_pending": 55
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -973,10 +973,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 44,
+      "detail_complete": 74,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 3
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1631,
+  "legacy_verification_pending": 1594,
   "missing_district_count": 1,
   "missing_district_ids": [
     "2026_PKVVC_539794_1"
