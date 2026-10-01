@@ -1,18 +1,18 @@
 {
   "status": "completed",
   "policy": "expired-at-evening",
-  "cleaned_at": "2026-10-01T00:01:12.363351+05:30",
+  "cleaned_at": "2026-10-02T00:28:40.128066+05:30",
   "retention_hours": 0,
   "files": {
     "all_tenders_org_detailed.csv": {
-      "removed": 1
+      "removed": 240
     },
     "tender_details.csv": {
-      "removed": 1
+      "removed": 239
     },
     "organisation_tenders.csv": {
       "removed": 0
     }
   },
-  "removed": 1
+  "removed": 240
 }
