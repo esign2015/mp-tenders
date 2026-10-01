@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T14:33:39.718465+00:00",
+  "updated_at": "2026-10-01T14:35:45.091567+00:00",
   "snapshot_at": "2026-10-01T13:51:21.164030+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5421,
   "copied_tenders": 5421,
-  "detail_complete": 5356,
-  "detail_failed": 0,
+  "detail_complete": 5369,
+  "detail_failed": 6,
   "detail_skipped": 0,
-  "detail_pending": 65,
+  "detail_pending": 46,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T13:51:21.164030+00:00",
       "portal_tender_count": 2945,
       "copied_tenders": 2945,
-      "detail_complete": 2932,
+      "detail_complete": 2945,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -303,9 +303,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -809,9 +809,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Tourism Development Corporation Ltd.",
@@ -1040,9 +1040,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "THE CHIEF ELECTORAL OFFICER",
@@ -1068,7 +1068,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 60,
+  "legacy_verification_pending": 46,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 373,
