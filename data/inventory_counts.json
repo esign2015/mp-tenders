@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:02:08.267885+00:00",
+  "updated_at": "2026-10-01T11:04:13.006937+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4598,
+  "detail_complete": 4633,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 911,
+  "detail_pending": 876,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2304,
+      "detail_complete": 2332,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 712
+      "detail_pending": 684
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -929,10 +929,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 47,
       "copied_tenders": 47,
-      "detail_complete": 46,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -940,10 +940,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 379,
       "copied_tenders": 379,
-      "detail_complete": 368,
+      "detail_complete": 374,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 5
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1046,7 +1046,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 812,
+  "legacy_verification_pending": 777,
   "missing_district_count": 94,
   "missing_district_ids": [
     "2025_UAD_447651_3",
