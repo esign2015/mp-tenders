@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T10:47:34.278710+00:00",
+  "updated_at": "2026-10-01T10:49:38.908448+00:00",
   "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5509,
   "copied_tenders": 5509,
-  "detail_complete": 4364,
+  "detail_complete": 4397,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1145,
+  "detail_pending": 1112,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -225,10 +225,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 24,
+      "detail_complete": 26,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -258,10 +258,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3016,
       "copied_tenders": 3016,
-      "detail_complete": 2158,
+      "detail_complete": 2167,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 858
+      "detail_pending": 849
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -445,10 +445,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 39,
       "copied_tenders": 39,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP Lokayukt Organisation",
@@ -709,10 +709,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 103,
       "copied_tenders": 103,
-      "detail_complete": 99,
+      "detail_complete": 100,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
@@ -885,10 +885,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 1,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Professional Examination Board",
@@ -940,10 +940,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 379,
       "copied_tenders": 379,
-      "detail_complete": 335,
+      "detail_complete": 347,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 44
+      "detail_pending": 32
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -951,10 +951,10 @@
       "snapshot_at": "2026-10-01T10:18:53.687962+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
-      "detail_complete": 1,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "Rajya Shiksha Kendra M.P",
@@ -1046,8 +1046,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1030,
-  "missing_district_count": 110,
+  "legacy_verification_pending": 999,
+  "missing_district_count": 108,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1062,14 +1062,12 @@
     "2026_MPKGB_539832_1",
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
-    "2026_MPSAM_539711_1",
     "2026_MPUDC_539819_1",
     "2026_PWDRB_538810_1",
     "2026_PWDRB_538811_1",
     "2026_PWDRB_538812_1",
     "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
-    "2026_PWDRB_539617_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
     "2026_RSK_539820_1",
@@ -1160,9 +1158,9 @@
     "2026_UAD_540053_1",
     "2026_UAD_540107_1"
   ],
-  "known_pincode_count": 377,
+  "known_pincode_count": 378,
   "department_count": 334,
-  "missing_pincode_count": 110,
+  "missing_pincode_count": 108,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AYUSH_539984_1",
@@ -1177,14 +1175,12 @@
     "2026_MPKGB_539832_1",
     "2026_MPSAM_539220_1",
     "2026_MPSAM_539224_1",
-    "2026_MPSAM_539711_1",
     "2026_MPUDC_539819_1",
     "2026_PWDRB_538810_1",
     "2026_PWDRB_538811_1",
     "2026_PWDRB_538812_1",
     "2026_PWDRB_538813_1",
     "2026_PWDRB_539534_1",
-    "2026_PWDRB_539617_1",
     "2026_RSK_539795_1",
     "2026_RSK_539806_1",
     "2026_RSK_539820_1",
