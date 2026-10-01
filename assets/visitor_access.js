@@ -30,7 +30,8 @@ function visitorUnlock(data){
   const status=document.querySelector('.telegram-profile-status');
   if(status){status.removeAttribute('data-i18n');status.textContent='Profile saved'}
   const button=visitorNode('telegramProfileBtn'),menu=visitorNode('telegramProfileMenu');
-  if(button){button.setAttribute('aria-label','Profile menu');button.onclick=event=>{event.stopPropagation();menu?.classList.toggle('open')}}
+  if(button){button.setAttribute('aria-label','Profile menu');button.onclick=event=>{event.stopPropagation();menu?.classList.toggle('open');if(typeof positionTelegramProfileMenu==='function')positionTelegramProfileMenu()}}
+  if(typeof positionTelegramProfileMenu==='function'){window.addEventListener('resize',positionTelegramProfileMenu);window.addEventListener('scroll',positionTelegramProfileMenu,true)}
   document.addEventListener('click',event=>{if(menu&&!menu.contains(event.target)&&!button?.contains(event.target))menu.classList.remove('open')});
   const logout=visitorNode('telegramLogoutBtn');
   if(logout)logout.onclick=()=>{localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);sessionStorage.removeItem('mp_visitor_request_id');location.reload()};
