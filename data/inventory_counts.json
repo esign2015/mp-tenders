@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:51:00.174005+00:00",
+  "updated_at": "2026-10-01T11:53:06.755267+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 4751,
+  "detail_complete": 4780,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 778,
+  "detail_pending": 749,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2414,
+      "detail_complete": 2439,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 607
+      "detail_pending": 582
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -368,10 +368,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -478,10 +478,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 257,
       "copied_tenders": 257,
-      "detail_complete": 224,
+      "detail_complete": 225,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 33
+      "detail_pending": 32
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -610,10 +610,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Fisheries Federation - Bhopal",
@@ -632,10 +632,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 93,
       "copied_tenders": 93,
-      "detail_complete": 87,
+      "detail_complete": 88,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 5
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1079,7 +1079,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 675,
+  "legacy_verification_pending": 646,
   "missing_district_count": 98,
   "missing_district_ids": [
     "2025_UAD_447651_3",
