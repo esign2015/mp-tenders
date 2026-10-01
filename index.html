@@ -1952,7 +1952,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <label for="visitorTehsil">Tehsil / तहसील</label><select id="visitorTehsil" required disabled><option value="">पहले जिला चुनें</option></select>
       <label for="accountNewPassword">Password</label>
       <input id="accountNewPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
-      <small>कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है।</small>
+      <small>कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है। उदाहरण: <strong>Pass@123</strong></small>
       <label for="accountConfirmPassword">Confirm Password</label>
       <input id="accountConfirmPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <button type="submit">Sign up &amp; Open Dashboard</button>
@@ -1968,6 +1968,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <h3>Set New Password</h3>
       <label for="accountResetPassword">New Password</label>
       <input id="accountResetPassword" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
+      <small>कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है। उदाहरण: <strong>Pass@123</strong></small>
       <label for="accountResetConfirm">Confirm New Password</label>
       <input id="accountResetConfirm" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" maxlength="128" required>
       <button type="submit">Save New Password</button>
@@ -2025,7 +2026,7 @@ body.telegram-locked .site-footer{visibility:hidden}
     <form id="accountChangePasswordForm" hidden>
       <label class="user-profile-label" for="accountCurrentPassword">Current Password</label><input class="user-profile-input" id="accountCurrentPassword" type="password" autocomplete="current-password" maxlength="128" required>
       <label class="user-profile-label" for="accountChangeNew">New Password</label><input class="user-profile-input" id="accountChangeNew" type="password" autocomplete="new-password" minlength="8" maxlength="128" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" required>
-      <div class="user-profile-sub">कम से कम 8 characters: एक capital, एक small, एक number और एक special character।</div>
+      <div class="user-profile-sub">कम से कम 8 characters: एक capital letter, एक small letter, एक number और एक special character ज़रूरी है। उदाहरण: <strong>Pass@123</strong></div>
       <label class="user-profile-label" for="accountChangeConfirm">Confirm New Password</label><input class="user-profile-input" id="accountChangeConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
       <button class="user-profile-save" type="submit">Change Password</button>
     </form>
