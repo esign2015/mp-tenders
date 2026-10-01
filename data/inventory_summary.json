@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T11:55:12.216291+00:00",
+  "updated_at": "2026-10-01T11:57:18.763723+00:00",
   "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5529,
   "copied_tenders": 5529,
-  "detail_complete": 4809,
+  "detail_complete": 4836,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 720,
+  "detail_pending": 693,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -148,10 +148,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 49,
+      "detail_complete": 50,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 5
     },
     {
       "organisation": "Directorate of Industries",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 3021,
       "copied_tenders": 3021,
-      "detail_complete": 2468,
+      "detail_complete": 2480,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 553
+      "detail_pending": 541
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -368,10 +368,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 4,
+      "detail_complete": 5,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -467,10 +467,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 37,
+      "detail_complete": 38,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 6
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -478,10 +478,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 257,
       "copied_tenders": 257,
-      "detail_complete": 225,
+      "detail_complete": 229,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 32
+      "detail_pending": 28
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -522,10 +522,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 40,
       "copied_tenders": 40,
-      "detail_complete": 26,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 13
     },
     {
       "organisation": "Madhya Pradesh Rural Road Development Authority",
@@ -555,10 +555,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh State Mining Corporation Ltd",
@@ -632,10 +632,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 93,
       "copied_tenders": 93,
-      "detail_complete": 88,
+      "detail_complete": 89,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -654,10 +654,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 17,
       "copied_tenders": 17,
-      "detail_complete": 15,
+      "detail_complete": 16,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP Khadi Tatha Gramodyog Board - Bhopal",
@@ -720,10 +720,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 24,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 2
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -764,10 +764,10 @@
       "snapshot_at": "2026-10-01T11:31:39.457605+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M. P. State Cooperative Union Ltd.- Bhopal",
@@ -1079,8 +1079,8 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 617,
-  "missing_district_count": 98,
+  "legacy_verification_pending": 592,
+  "missing_district_count": 96,
   "missing_district_ids": [
     "2025_UAD_447651_3",
     "2026_AGRO_540308_1",
@@ -1093,8 +1093,6 @@
     "2026_DME_538587_1",
     "2026_DME_538588_1",
     "2026_FDAMP_540266_1",
-    "2026_MIDCL_539861_1",
-    "2026_MPCDF_539987_1",
     "2026_MPFD_539587_1",
     "2026_MPFD_540040_1",
     "2026_MPKGB_539832_1",
@@ -1183,7 +1181,7 @@
   ],
   "known_pincode_count": 377,
   "department_count": 336,
-  "missing_pincode_count": 98,
+  "missing_pincode_count": 96,
   "missing_pincode_ids": [
     "2025_UAD_447651_3",
     "2026_AGRO_540308_1",
@@ -1196,8 +1194,6 @@
     "2026_DME_538587_1",
     "2026_DME_538588_1",
     "2026_FDAMP_540266_1",
-    "2026_MIDCL_539861_1",
-    "2026_MPCDF_539987_1",
     "2026_MPFD_539587_1",
     "2026_MPFD_540040_1",
     "2026_MPKGB_539832_1",
