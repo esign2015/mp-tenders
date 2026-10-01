@@ -1,14 +1,14 @@
 {
   "policy_version": "official-portal-v1",
-  "updated_at": "2026-10-01T09:15:01.758092+00:00",
+  "updated_at": "2026-10-01T09:17:06.554038+00:00",
   "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 3830,
+  "detail_complete": 3865,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1482,
+  "detail_pending": 1447,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -489,10 +489,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 488,
       "copied_tenders": 488,
-      "detail_complete": 394,
+      "detail_complete": 422,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 94
+      "detail_pending": 66
     },
     {
       "organisation": "Madhya Pradesh State Disaster Management Authority",
@@ -665,10 +665,10 @@
       "snapshot_at": "2026-09-30T18:33:47.838050+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 36,
+      "detail_complete": 43,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -1024,7 +1024,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 1477,
+  "legacy_verification_pending": 1442,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 370,
