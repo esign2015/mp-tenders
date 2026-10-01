@@ -45,6 +45,15 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(response.status_code,400)
         self.assertEqual(server.account_service.get(user_id=result['visitor_id'])['middle_name'],'कुमार')
 
+    def test_surname_required_and_middle_name_optional(self):
+        for value in ('','   '):
+            self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'last_name':value}).status_code,400)
+        result=self.signup()
+        self.assertEqual(result['profile']['middle_name'],'')
+        response=self.client.post('/api/accounts/profile',json={**self.data,'session_token':result['session_token'],'last_name':''})
+        self.assertEqual(response.status_code,400)
+        self.assertEqual(server.account_service.get(user_id=result['visitor_id'])['last_name'],'Test')
+
     def test_mobile_range_and_numeric_validation(self):
         from account_access import account_mobile
         for value in ('6000000000','9999999999'):
@@ -138,7 +147,7 @@ class AccountsTests(unittest.TestCase):
     def test_self_profile_and_password_change_require_authenticated_owner(self):
         first=self.signup();second=self.login().json;token=first['session_token']
         self.assertEqual(self.client.post('/api/accounts/profile',json={'first_name':'Changed','tehsil':'Harda','district':'Harda'}).status_code,401)
-        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'first_name':'Changed','tehsil':'Harda','district':'Harda','mobile':'9123456789'})
+        changed=self.client.post('/api/accounts/profile',json={'session_token':token,'first_name':'Changed','last_name':'Test','tehsil':'Harda','district':'Harda','mobile':'9123456789'})
         self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['mobile'],'+919876543210')
         self.assertEqual(self.login().json['profile']['district'],'Harda')
         body={'session_token':token,'current_password':'wrong','password':'Newpass2!','confirm_password':'Newpass2!'}

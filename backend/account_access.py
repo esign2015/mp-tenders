@@ -41,6 +41,7 @@ IDLE_SECONDS=15*60
 def profile_fields(server,p):
     first=server.clean(p.get('first_name',p.get('name')))
     middle=server.clean(p.get('middle_name'));last=server.clean(p.get('last_name'))
+    if not last:raise AccountError('Surname / उपनाम भरना जरूरी है।')
     if any(unicodedata.category(char)[0] not in ('L','M') and char not in " .'’-" for char in middle):
         raise AccountError('Middle Name में केवल नाम लिखें, अंक या Mobile Number नहीं।')
     district=server.clean(p.get('district'));tehsil=server.clean(p.get('tehsil'))

@@ -123,7 +123,7 @@ function accountFormReady(name){
   if(name==='Forgot')return mobile('accountForgotMobile');
   if(name==='Reset')return password('accountResetPassword')&&value('accountResetPassword')===value('accountResetConfirm');
   const first=value('visitorName').trim(),middle=value('visitorMiddleName').trim(),last=value('visitorLastName').trim();
-  return mobile('visitorMobile')&&first.length>=2&&first.length<=15&&middle.length<=10&&middle===accountMiddleNameValue(middle)&&last.length<=15&&
+  return mobile('visitorMobile')&&first.length>=2&&first.length<=15&&middle.length<=10&&middle===accountMiddleNameValue(middle)&&last.length>=1&&last.length<=15&&
     (accountTehsilDirectory[value('visitorDistrict').trim()]||[]).includes(value('visitorTehsil'))&&password('accountNewPassword')&&value('accountNewPassword')===value('accountConfirmPassword');
 }
 function accountUpdateSubmit(name){

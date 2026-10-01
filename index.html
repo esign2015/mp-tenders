@@ -1954,7 +1954,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <label for="visitorName">Name / नाम</label>
       <input id="visitorName" autocomplete="given-name" minlength="2" maxlength="15" required placeholder="Name / नाम">
       <label for="visitorMiddleName">Middle Name / मध्य नाम</label><input id="visitorMiddleName" autocomplete="additional-name" maxlength="10" placeholder="Middle Name (वैकल्पिक)">
-      <label for="visitorLastName">Surname / उपनाम</label><input id="visitorLastName" autocomplete="family-name" maxlength="15" placeholder="Surname / उपनाम">
+      <label for="visitorLastName">Surname / उपनाम</label><input id="visitorLastName" autocomplete="family-name" maxlength="15" required placeholder="Surname / उपनाम">
       <label for="visitorDistrict">District / जिला</label>
       <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required placeholder="District / जिला">
       <datalist id="visitorDistrictList"></datalist>
@@ -2024,7 +2024,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=7"></script>
+<script src="assets/account_access.js?v=8"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -2059,7 +2059,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="15" autocomplete="given-name" required>
       <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
       <label class="user-profile-label" for="accountEditMiddleName">Middle Name</label><input class="user-profile-input" id="accountEditMiddleName" placeholder="Middle Name (वैकल्पिक)" maxlength="10" autocomplete="additional-name">
-      <label class="user-profile-label" for="accountEditLastName">Surname</label><input class="user-profile-input" id="accountEditLastName" maxlength="15" autocomplete="family-name">
+      <label class="user-profile-label" for="accountEditLastName">Surname</label><input class="user-profile-input" id="accountEditLastName" maxlength="15" autocomplete="family-name" required>
       <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
       <datalist id="accountDistrictList"></datalist><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select><button class="user-profile-save" type="submit">Save Profile</button>
     </form>
