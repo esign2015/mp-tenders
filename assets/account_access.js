@@ -29,7 +29,7 @@ let accountTehsilDirectory={};
 function accountTehsilOptions(districtId,tehsilId,selected=''){
   const field=visitorNode(tehsilId);if(!field)return;
   const values=accountTehsilDirectory[visitorNode(districtId).value.trim()]||[];
-  field.replaceChildren();const empty=document.createElement('option');empty.value='';empty.textContent=values.length?'तहसील चुनें':'पहले सूची से जिला चुनें';field.appendChild(empty);
+  field.replaceChildren();const empty=document.createElement('option');empty.value='';empty.textContent=values.length?'Tehsil / तहसील चुनें':'Tehsil / तहसील — पहले जिला चुनें';field.appendChild(empty);
   for(const value of values){const option=document.createElement('option');option.value=value;option.textContent=value;field.appendChild(option)}
   field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
 }
@@ -119,6 +119,8 @@ async function enforceAccountAccess(){
   fetch('https://mp-tenders-api.onrender.com/api/accounts/ready',{cache:'no-store'}).catch(()=>{});
   const status=visitorNode('visitorStatus'),forms=['SignIn','SignUp','Forgot','Reset'];
   function mode(name){
+    visitorNode('telegramGate').classList.toggle('account-signup',name==='SignUp');
+    visitorNode('accountGateHeading').textContent=name==='SignUp'?'Create your account / नया अकाउंट बनाएं':'Welcome / स्वागत है';
     for(const current of forms){visitorNode('account'+current+'Form').hidden=current!==name;visitorNode('account'+current+'Tab')?.classList.toggle('active',current===name)}
     status.textContent='';
   }
