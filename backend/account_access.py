@@ -1,9 +1,34 @@
 """Password accounts: scrypt hashes, revocable sessions and manual reset links."""
-import hashlib,hmac,json,os,re,secrets,time,uuid
+import hashlib,hmac,json,os,re,secrets,time,uuid,threading
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
 import google_sheet_store as sheets
+
+_detail_pool=ThreadPoolExecutor(max_workers=4,thread_name_prefix='account-details')
+_detail_slots=threading.BoundedSemaphore(16)
+_detail_lock=threading.Lock()
+_detail_jobs={}
+
+def account_mobile(server,value):
+    text=str(value or '').strip()
+    return server.normalise_mobile(text) if re.fullmatch(r'(?:\+91)?[6-9][0-9]{9}',text) else ''
+
+def queue_details(visitor_id,token):
+    if not _detail_slots.acquire(blocking=False):return None
+    def load():
+        try:return sheets.call('session',visitor_id=visitor_id).get('affidavit_profile',{})
+        finally:_detail_slots.release()
+    try:future=_detail_pool.submit(load)
+    except Exception:
+        _detail_slots.release();raise
+    key=secrets.token_urlsafe(24)
+    with _detail_lock:
+        for old,item in list(_detail_jobs.items()):
+            if time.monotonic()-item[2]>300:del _detail_jobs[old]
+        _detail_jobs[key]=(hashlib.sha256(token.encode()).hexdigest(),future,time.monotonic())
+    return key
 
 PASSWORD_METHOD='scrypt:32768:8:3'
 _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PASSWORD_METHOD)
@@ -93,7 +118,10 @@ class Accounts:
         if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now and now-s.get('last_active',s['expires']-SESSION_SECONDS)<IDLE_SECONDS for s in record.get('sessions',[])):raise AccountError('15 मिनट inactivity के बाद session समाप्त है। Sign in करें।',401)
         return record
     def response(self,record,token):
-        if sheets.enabled():aff=sheets.call('session',visitor_id=record['user_id'])['affidavit_profile']
+        details_id=None
+        if sheets.enabled():
+            aff={}
+            details_id=queue_details(record['user_id'],token)
         else:
             conn=self.server.visitor_db()
             try:
@@ -103,7 +131,7 @@ class Accounts:
                 conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
                 conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
-        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'affidavit_profile':aff,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
@@ -112,7 +140,7 @@ def install(server):
     def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code}),error.status
     @app.post('/api/accounts/signup')
     def signup():
-        p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
+        p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
         accounts.limit(mobile)
         profile=profile_fields(server,p)
         if not mobile:raise AccountError('सही Mobile भरें।')
@@ -123,7 +151,7 @@ def install(server):
         return accounts.response(record,token)
     @app.post('/api/accounts/signin')
     def signin():
-        p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'));accounts.limit(mobile)
+        p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'));accounts.limit(mobile)
         password=p.get('password');record=accounts.get(mobile=mobile) if mobile else None
         valid= isinstance(password,str) and len(password)<=128 and check_password_hash(record['password_hash'] if record else _DUMMY_HASH,password)
         if not mobile:raise AccountError('सही Mobile Number भरें।')
@@ -140,7 +168,7 @@ def install(server):
         raise AccountError('फिर प्रयास करें।',409)
     @app.post('/api/accounts/forgot-check')
     def forgot_check():
-        mobile=server.normalise_mobile((request.get_json(silent=True) or {}).get('mobile'));accounts.limit(mobile)
+        mobile=account_mobile(server,(request.get_json(silent=True) or {}).get('mobile'));accounts.limit(mobile)
         if not mobile:raise AccountError('सही Mobile Number भरें।')
         if not accounts.get(mobile=mobile):raise AccountError('पहले Sign up करें। इसके बाद password reset request भेज सकेंगे।',404,'signup_required')
         response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
@@ -148,6 +176,17 @@ def install(server):
     def session():
         token=(request.get_json(silent=True) or {}).get('session_token');record=accounts.authenticate(token)
         return accounts.response(record,token)
+    @app.post('/api/accounts/details')
+    def details():
+        p=request.get_json(silent=True) or {};token=p.get('session_token')
+        accounts.authenticate(token)
+        with _detail_lock:item=_detail_jobs.get(p.get('details_id'))
+        if not item or time.monotonic()-item[2]>300 or not hmac.compare_digest(item[0],accounts.digest(token)):
+            raise AccountError('Profile details request expired.',404)
+        if not item[1].done():
+            response=jsonify({'ok':True,'pending':True});response.headers['Cache-Control']='no-store';return response
+        aff=item[1].result()
+        response=jsonify({'ok':True,'affidavit_profile':aff});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/activity')
     def activity():
         token=(request.get_json(silent=True) or {}).get('session_token')
@@ -196,7 +235,7 @@ def install(server):
     def admin_account_access():
         email,_=server.require_admin()
         if not email:raise AccountError('Google Admin login required.',401)
-        p=request.get_json(silent=True) or {};mobile=server.normalise_mobile(p.get('mobile'))
+        p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
         record=accounts.get(mobile=mobile) if mobile else None
         if not record:raise AccountError('Registered account नहीं मिला।',404)
         if 'blocked' in p:
@@ -216,7 +255,7 @@ def install(server):
         if not email:raise AccountError('Google Admin login required.',401)
         p=request.get_json(silent=True) or {}
         if p.get('identity_verified') is not True:raise AccountError('Registered WhatsApp number और account ownership verify करें।')
-        mobile=server.normalise_mobile(p.get('mobile'));record=accounts.get(mobile=mobile) if mobile else None
+        mobile=account_mobile(server,p.get('mobile'));record=accounts.get(mobile=mobile) if mobile else None
         if not record:raise AccountError('Registered account नहीं मिला।',404)
         raw=record['user_id']+'.'+secrets.token_urlsafe(32)
         for _ in range(3):

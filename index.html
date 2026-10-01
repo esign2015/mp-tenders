@@ -1939,12 +1939,13 @@ body.telegram-locked .site-footer{visibility:hidden}
       <button type="submit">Sign in</button>
     </form>
     <form id="accountSignUpForm" class="account-form" hidden>
+      <label for="visitorMobile">Mobile Number</label>
+      <input id="visitorMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
+
       <label for="visitorName">Name / नाम</label>
       <input id="visitorName" autocomplete="given-name" minlength="2" maxlength="15" required>
       <label for="visitorMiddleName">Middle Name / मध्य नाम</label><input id="visitorMiddleName" autocomplete="additional-name" maxlength="10">
       <label for="visitorLastName">Surname / उपनाम</label><input id="visitorLastName" autocomplete="family-name" maxlength="15">
-      <label for="visitorMobile">Mobile Number</label>
-      <input id="visitorMobile" type="tel" inputmode="numeric" autocomplete="username" pattern="[6-9][0-9]{9}" maxlength="10" required>
       <label for="visitorDistrict">District / जिला</label>
       <input id="visitorDistrict" autocomplete="address-level2" list="visitorDistrictList" minlength="2" maxlength="100" required>
       <datalist id="visitorDistrictList"></datalist>
@@ -6150,6 +6151,7 @@ enforceAccountAccess().then(async () => {
     }
     localStorage.setItem(profileKey(),JSON.stringify(p));
     window.dashboardAffidavitProfile=p;
+    window.dashboardAffidavitProfileEdited=true;
     try{
       const dates=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}");
       const id=safe(byId("affTenderId")?.value);

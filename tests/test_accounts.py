@@ -17,6 +17,33 @@ class AccountsTests(unittest.TestCase):
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
     def login(self,password=None):return self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':password or self.password})
+    def test_mobile_range_and_numeric_validation(self):
+        from account_access import account_mobile
+        for value in ('6000000000','9999999999'):
+            self.assertEqual(account_mobile(server,value),'+91'+value)
+        for value in ('5999999999','10000000000','987654321','abc9876543210','98765-43210','९८७६५४३२१०'):
+            self.assertEqual(account_mobile(server,value),'')
+            self.assertEqual(self.client.post('/api/accounts/signup',json={**self.data,'mobile':value}).status_code,400)
+
+    def test_remote_details_do_not_hold_login_and_are_session_bound(self):
+        import account_access
+        from concurrent.futures import Future
+        result=self.signup();token=result['session_token'];record=server.account_service.get(user_id=result['visitor_id'])
+        pending=Future()
+        with patch.object(sheets,'enabled',return_value=True),patch.object(account_access._detail_pool,'submit',return_value=pending),server.app.test_request_context():
+            response=server.account_service.response(record,token).json
+        key=response['details_id'];self.assertTrue(key);self.assertFalse(pending.done())
+        body={'session_token':token,'details_id':key}
+        self.assertTrue(self.client.post('/api/accounts/details',json=body).json['pending'])
+        other=self.login().json['session_token']
+        self.assertEqual(self.client.post('/api/accounts/details',json={**body,'session_token':other}).status_code,404)
+        pending.set_result({'firmName':'Saved Firm'})
+        self.assertEqual(self.client.post('/api/accounts/details',json=body).json['affidavit_profile']['firmName'],'Saved Firm')
+        self.client.post('/api/accounts/logout',json={'session_token':token})
+        self.assertEqual(self.client.post('/api/accounts/details',json=body).status_code,401)
+        account_access._detail_slots.release()
+        with account_access._detail_lock:account_access._detail_jobs.pop(key,None)
+
     def test_signup_hash_and_duplicate_phone_and_failed_login(self):
         result=self.signup();record=server.account_service.get(user_id=result['visitor_id'])
         self.assertNotIn(self.password,json.dumps(record));self.assertTrue(record['password_hash'].startswith('scrypt:32768:8:3$'))

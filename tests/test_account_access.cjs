@@ -12,6 +12,8 @@ const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR
  return{ok:true,json:async()=>({ok:true,session_token:'account-token',visitor_id:'user-id',profile:{name:'Test',mobile:'+919876543210',district:'Dewas'}})};
 }});
 vm.runInContext(fs.readFileSync('assets/account_access.js','utf8'),ctx);
+for(const [input,expected] of [['6000000000','6000000000'],['9999999999','9999999999'],['5999999999',''],['abc98765-x43210','9876543210'],['+91 9876543210','9876543210'],['987654321012','9876543210']])assert.equal(ctx.accountMobileValue(input),expected);
+assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
 (async()=>{
  const pending=ctx.enforceAccountAccess();await new Promise(r=>setImmediate(r));
  assert(!node('accountSignInForm').hidden);assert(node('accountSignUpForm').hidden);

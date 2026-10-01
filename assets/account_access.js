@@ -1,3 +1,17 @@
+function accountMobileValue(value){
+  let digits=String(value||'').replace(/[^0-9]/g,'');
+  if(digits.length===12&&digits.startsWith('91'))digits=digits.slice(2);
+  return /^[6-9]/.test(digits)?digits.slice(0,10):'';
+}
+function accountBindMobile(id){
+  const field=visitorNode(id);if(!field)return;
+  const clean=()=>{field.value=accountMobileValue(field.value)};
+  field.addEventListener('input',clean);
+  field.addEventListener('paste',event=>{
+    event.preventDefault();field.value=accountMobileValue(event.clipboardData.getData('text'));
+    field.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+}
 let accountTehsilDirectory={};
 function accountTehsilOptions(districtId,tehsilId,selected=''){
   const field=visitorNode(tehsilId);if(!field)return;
@@ -73,6 +87,18 @@ function accountUnlock(data){
   visitorUnlock(data);
   visitorNode('telegramLogoutBtn').onclick=()=>accountLogout();
   accountSetupControls(data);
+  if(data.details_id){
+    const token=data.session_token;
+    (async()=>{
+      const deadline=Date.now()+300000;
+      while(localStorage.getItem(VISITOR_SESSION_KEY)===token && Date.now()<deadline){
+        const result=await accountPost('/details',{session_token:token,details_id:data.details_id});
+        if(result.pending){await new Promise(resolve=>setTimeout(resolve,2000));continue}
+        if(localStorage.getItem(VISITOR_SESSION_KEY)===token && !window.dashboardAffidavitProfileEdited)window.dashboardAffidavitProfile=result.affidavit_profile||{};
+        return;
+      }
+    })().catch(()=>{ /* Saved local affidavit details remain available if enrichment is delayed. */ });
+  }
   for(const id of ['accountLoginPassword','accountNewPassword','accountConfirmPassword','accountResetPassword','accountResetConfirm'])if(visitorNode(id))visitorNode(id).value='';
 }
 async function enforceAccountAccess(){
@@ -96,6 +122,7 @@ async function enforceAccountAccess(){
   }
   for(const name of forms.slice(0,3))visitorNode('account'+name+'Tab').onclick=()=>mode(name);
   mode('SignIn');
+  for(const id of ['accountLoginMobile','visitorMobile','accountForgotMobile'])accountBindMobile(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
   for(const [district,tehsil] of [['visitorDistrict','visitorTehsil'],['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>accountTehsilOptions(district,tehsil));
   fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
