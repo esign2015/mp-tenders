@@ -190,8 +190,17 @@ async function loadAdminStats(){
   const timeout=setTimeout(()=>controller.abort(),90000);
   $('statsRefresh').disabled=true;$('statsStatus').className='small';$('statsStatus').textContent='User counts अपडेट हो रहे हैं…';
   try{
-    const response=await fetch(API+'/api/admin/stats',{headers:{Authorization:'Bearer '+token},cache:'no-store',signal:controller.signal});
-    const data=await response.json();
+    let response,data,first=true;
+    do{
+      if(!first)await new Promise((resolve,reject)=>{
+        if(controller.signal.aborted){reject(Object.assign(new Error('Aborted'),{name:'AbortError'}));return;}
+        const abort=()=>{clearTimeout(delay);reject(Object.assign(new Error('Aborted'),{name:'AbortError'}))};
+        const delay=setTimeout(()=>{controller.signal.removeEventListener('abort',abort);resolve()},2000);
+        controller.signal.addEventListener('abort',abort,{once:true});
+      });
+      response=await fetch(API+'/api/admin/stats'+(first?'?refresh=1':''),{headers:{Authorization:'Bearer '+token},cache:'no-store',signal:controller.signal});
+      data=await response.json();first=false;
+    }while(response.ok&&data.ok&&data.pending);
     if(statsController!==controller||localStorage.getItem(KEY)!==token)return;
     if(!response.ok||!data.ok)throw new Error(data.message||'User counts नहीं मिले। फिर Refresh Counts दबाएँ।');
     const stats=data.stats||{};

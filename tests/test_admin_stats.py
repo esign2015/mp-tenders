@@ -4,9 +4,25 @@ from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 import server
+from concurrent.futures import Future
 
 
 class AdminStatsTests(unittest.TestCase):
+    def setUp(self):
+        self.patches = [patch.object(server, '_admin_stats_future', None), patch.object(server, '_admin_stats_cache', None), patch.object(server._admin_stats_pool, 'submit', side_effect=self.inline_job)]
+        for item in self.patches: item.start()
+    def tearDown(self):
+        for item in reversed(self.patches): item.stop()
+    def inline_job(self, fn):
+        result = Future()
+        try: result.set_result(fn())
+        except Exception as error: result.set_exception(error)
+        return result
+    def response(self):
+        client = server.app.test_client()
+        first = client.get('/api/admin/stats?refresh=1', headers={'Authorization':'Bearer test'})
+        self.assertEqual(first.status_code, 202)
+        return client.get('/api/admin/stats', headers={'Authorization':'Bearer test'})
     def test_unique_mobile_users_and_ist_day_boundaries(self):
         rows = [
             {'visitor_id': 'old-device', 'mobile': '+919876543210', 'signup_at': '2026-09-30T09:00:00+05:30', 'last_visit_at': '2026-10-02T10:00:00+05:30'},
@@ -32,7 +48,7 @@ class AdminStatsTests(unittest.TestCase):
 
     def test_current_sheet_operation_supported_and_no_private_records_exposed(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(server, 'DATABASE_URL', ''), patch.object(server, 'USER_DB_PATH', Path(tmp)/'users.db'), patch.object(server, 'read_admin_session', return_value='admin@example.test'), patch.object(server.sheet_store, 'enabled', return_value=True), patch.object(server.sheet_store, 'call', return_value={'visitors': [{'visitor_id': 'test', 'mobile': '+919876543210', 'name': 'Private name', 'signup_at': '2026-10-02T10:00:00+05:30', 'last_visit_at': '2026-10-02T10:00:00+05:30', 'visit_count': 99}]}) as remote, patch.object(server, 'now_ist', return_value=datetime.fromisoformat('2026-10-02T17:00:00+05:30')):
-            response = server.app.test_client().get('/api/admin/stats', headers={'Authorization': 'Bearer test'})
+            response = self.response()
             self.assertEqual(response.status_code, 200)
             remote.assert_called_once_with('list_visitors')
             self.assertEqual(response.json['stats']['total_users'], 1)
@@ -49,7 +65,7 @@ class AdminStatsTests(unittest.TestCase):
             conn.execute('UPDATE users SET mobile=? WHERE telegram_id=?', ('+919876543210',100))
             conn.execute('INSERT INTO visitor_registrations (visitor_id,name,mobile,district,signup_at,last_visit_at,visit_count) VALUES (?,?,?,?,?,?,?)', ('one','Test','9876543210','Dewas',now.isoformat(),now.isoformat(),80))
             conn.commit(); conn.close()
-            response = server.app.test_client().get('/api/admin/stats', headers={'Authorization':'Bearer test'})
+            response = self.response()
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json['stats']['total_users'], 1)
             self.assertEqual(response.json['stats']['today_signups'], 1)
@@ -57,9 +73,22 @@ class AdminStatsTests(unittest.TestCase):
 
     def test_storage_error_is_not_reported_as_zero_users(self):
         with patch.object(server, 'read_admin_session', return_value='admin@example.test'), patch.object(server.sheet_store, 'enabled', return_value=True), patch.object(server.sheet_store, 'call', side_effect=server.sheet_store.SheetStoreError('Unavailable')):
-            response = server.app.test_client().get('/api/admin/stats', headers={'Authorization':'Bearer test'})
+            response = self.response()
             self.assertEqual(response.status_code, 503)
             self.assertNotIn('stats', response.json)
+
+    def test_slow_sheet_never_holds_api_response_or_queues_duplicate_reads(self):
+        pending = Future()
+        with patch.object(server, 'read_admin_session', return_value='admin@example.test'), patch.object(server._admin_stats_pool, 'submit', return_value=pending) as submit:
+            client = server.app.test_client()
+            for _ in range(3):
+                response = client.get('/api/admin/stats', headers={'Authorization':'Bearer test'})
+                self.assertEqual(response.status_code, 202)
+                self.assertTrue(response.json['pending'])
+            submit.assert_called_once()
+            pending.set_result({'total_users':8})
+            self.assertEqual(client.get('/api/admin/stats', headers={'Authorization':'Bearer test'}).json['stats']['total_users'], 8)
+            submit.assert_called_once()
 
 
 if __name__ == '__main__':

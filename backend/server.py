@@ -8,6 +8,9 @@ from pathlib import Path
 from urllib import request as urllib_request, parse as urllib_parse
 import subprocess
 import tempfile
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
@@ -1177,11 +1180,14 @@ def dashboard_user_counts(rows, now=None):
         'updated_at': now.isoformat(),
     }
 
-@app.get('/api/admin/stats')
-def admin_dashboard_stats():
-    email, error = require_admin()
-    if error:
-        return error
+_admin_stats_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix='admin-stats')
+_admin_stats_lock = threading.Lock()
+_admin_stats_future = None
+_admin_stats_cache = None
+_admin_stats_cache_at = 0
+
+def load_dashboard_user_stats():
+    """Read storage on a background thread, never the API request worker."""
     remote = sheet_store.enabled()
     rows = sheet_store.call('list_visitors')['visitors'] if remote else []
     conn = user_db() if remote else visitor_db()
@@ -1193,7 +1199,27 @@ def admin_dashboard_stats():
             rows.append({**dict(row), 'visitor_id': 'telegram:' + str(row['telegram_id'])})
     finally:
         conn.close()
-    response = jsonify({'ok': True, 'stats': dashboard_user_counts(rows)})
+    return dashboard_user_counts(rows)
+
+@app.get('/api/admin/stats')
+def admin_dashboard_stats():
+    global _admin_stats_future, _admin_stats_cache, _admin_stats_cache_at
+    email, error = require_admin()
+    if error:
+        return error
+    with _admin_stats_lock:
+        if _admin_stats_future is not None and _admin_stats_future.done():
+            future = _admin_stats_future
+            _admin_stats_future = None
+            _admin_stats_cache = future.result()
+            _admin_stats_cache_at = time.monotonic()
+        if _admin_stats_future is None and _admin_stats_cache is not None and request.args.get('refresh') != '1' and time.monotonic() - _admin_stats_cache_at < 60:
+            response = jsonify({'ok': True, 'stats': _admin_stats_cache})
+        else:
+            if _admin_stats_future is None:
+                _admin_stats_future = _admin_stats_pool.submit(load_dashboard_user_stats)
+            response = jsonify({'ok': True, 'pending': True})
+            response.status_code = 202
     response.headers['Cache-Control'] = 'no-store'
     return response
 

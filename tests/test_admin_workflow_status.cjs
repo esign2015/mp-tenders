@@ -8,7 +8,7 @@ const context=vm.createContext({Date,AbortController,console,
  createElement:()=>({}),createTextNode:text=>({textContent:text})},
  localStorage:{getItem:()=> 'test-session',removeItem:key=>removed.push(key)},
  setTimeout:(fn,delay)=>{timers.push(delay);return timers.length;},clearTimeout(){},
- fetch:async(url,options)=>{calls.push({url,options});const next=replies.shift();if(next instanceof Error)throw next;return {ok:next.status===200,status:next.status,json:async()=>next.data};}});
+ fetch:async(url,options)=>{calls.push({url,options});const next=replies.shift();if(next instanceof Error)throw next;return {ok:next.status>=200&&next.status<300,status:next.status,json:async()=>next.data};}});
 vm.runInContext(source,context);
 (async()=>{
  const started=Date.now();
@@ -66,6 +66,15 @@ vm.runInContext(source,context);
  await context.loadAdminStats();
  assert.equal(elements.statTotalUsers.textContent,'1,250','Storage errors keep the last known numbers');
  assert.equal(elements.statsStatus.textContent,'Storage unavailable');
+ const schedule=context.setTimeout;
+ context.setTimeout=(fn,delay)=>{if(delay===2000)Promise.resolve().then(fn);return schedule(fn,delay)};
+ replies=[{status:202,data:{ok:true,pending:true}},{status:200,data:{ok:true,stats:{total_users:1251,today_signups:6,today_active_users:13,today_returning_users:7,updated_at:'2026-10-02T17:01:00+05:30'}}}];
+ const pendingBefore=calls.length;await context.loadAdminStats();
+ assert.equal(calls.length,pendingBefore+2);
+ assert(calls[pendingBefore].url.endsWith('?refresh=1'));
+ assert(calls[pendingBefore+1].url.endsWith('/api/admin/stats'));
+ assert.equal(elements.statTotalUsers.textContent,'1,251');
+ context.setTimeout=schedule;
  let complete;context.fetch=(url,options)=>{calls.push({url,options});return new Promise(resolve=>complete=resolve)};
  const before=calls.length,pending=context.loadAdminStats();await context.loadAdminStats();
  assert.equal(calls.length,before+1,'Repeated refresh cannot create overlapping requests');
