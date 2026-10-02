@@ -210,13 +210,14 @@ function classList(initial=[]){
 }
 const bodyClasses=classList(['org-display-full']);
 const checkboxes=Array.from({length:24},(_,i)=>({dataset:{col:String(i+1)},checked:i<14}));
-const cells=Array.from({length:24},()=>({classList:classList()}));
+const cells=Array.from({length:24},()=>({classList:classList(),style:{},colSpan:1}));
+const placeholder={classList:classList(),style:{},colSpan:24};
 const menu={style:{},classList:classList(),querySelectorAll:()=>checkboxes,contains:()=>false};
-const buttons={columnBtn:{getBoundingClientRect:()=>({left:100,bottom:300})},orgDisplayBtn:{},userPrefMenu:menu,resetColumnsBtn:{},viewToggleBtn:{}};
+const buttons={columnBtn:{getBoundingClientRect:()=>({left:100,bottom:300})},orgDisplayBtn:{},userPrefMenu:menu,resetColumnsBtn:{},viewToggleBtn:{},tenderTable:{style:{}},tableWrap:{clientWidth:1100,scrollWidth:0},tableScrollTopInner:{style:{}}};
 let prefRenders=0;
 const prefContext=vm.createContext({console,Map,Set,Number,JSON,Math,
  $:id=>buttons[id],localStorage:{getItem:k=>prefs.get(k)??null,setItem:(k,v)=>prefs.set(k,v),removeItem:k=>prefs.delete(k)},
- document:{body:{classList:bodyClasses},addEventListener(){},querySelectorAll:()=>[{children:cells}]},
+ document:{body:{classList:bodyClasses},addEventListener(){},querySelectorAll:()=>[{children:cells},{children:[placeholder]}]},
  window:{innerWidth:1200,innerHeight:900,addEventListener(){}},escapeHtml:s=>s,
  tenderViewMode:'table',filteredTenders:[],applyTenderView(){},setTenderView(){},renderTable(){prefRenders++;}});
 const declarationStart=html.indexOf('let orgDisplayMode =');
@@ -235,6 +236,21 @@ buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-short')
 buttons.orgDisplayBtn.onclick();assert(bodyClasses.contains('org-display-full'));assert.equal(buttons.orgDisplayBtn.textContent,'🏢 Full Org');
 assert.equal(prefRenders,2);
 console.log('PASS: Columns opens, selection persists, Reset restores columns, Full/Short Org toggles twice without errors.');
+
+// Showing optional detail columns reserves their width instead of crushing them.
+const defaultWidth=parseInt(buttons.tenderTable.style.minWidth);
+prefs.set('mp_tender_hidden_columns_v3','[]');prefContext.applyColumnVisibility();
+assert(parseInt(buttons.tenderTable.style.minWidth)>defaultWidth+1500);
+assert.equal(parseInt(buttons.tenderTable.style.width),cells.reduce((sum,cell)=>sum+parseInt(cell.style.width),0));
+assert(cells.slice(16).every(cell=>parseInt(cell.style.minWidth)>=130));
+assert.equal(buttons.tableScrollTopInner.style.width,buttons.tenderTable.style.width);
+const allWidth=parseInt(buttons.tenderTable.style.width);
+prefs.set('mp_tender_hidden_columns_v3','[17]');prefContext.applyColumnVisibility();
+assert.equal(parseInt(buttons.tenderTable.style.width),allWidth-parseInt(cells[16].style.width));
+assert.equal(placeholder.style.width,undefined);
+assert.match(html,/#tenderTable \.table-detail-text\{[^}]*-webkit-line-clamp:3;[^}]*overflow:hidden/);
+assert(html.includes('title="${value}"><span class="table-detail-text">${value}</span>'));
+console.log('PASS: advanced column widths survive selection changes, scrollbars stay aligned, long text clamps to three lines with full hover text.');
 
 assert.equal(context.formatMoney('Not provided on portal'),'Not provided on portal');
 assert.equal(context.formatMoney('Not available (processing fee not published)'),'Not available');
