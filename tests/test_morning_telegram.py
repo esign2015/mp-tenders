@@ -15,6 +15,43 @@ import telegram_alerts as alerts
 CFG = {'morning_telegram_ist':'10:20', 'evening_new_telegram_ist':'20:45', 'telegram_max_delay_minutes':45}
 
 class MorningTelegramTests(unittest.TestCase):
+    def test_collection_time_converts_utc_and_rejects_placeholders(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'data').mkdir()
+            summary = root/'data/inventory_counts.json'
+            summary.write_text(json.dumps({'snapshot_at':'DD/MM/YYYY hh:mm:ss'}))
+            self.assertEqual(alerts.data_collection_time(root), 'उपलब्ध नहीं')
+            summary.write_text(json.dumps({'snapshot_at':'2026-10-02T17:58:57.502150Z'}))
+            self.assertEqual(alerts.data_collection_time(root), '02/10/2026 23:28:57 IST')
+            (root/'organisations.csv').write_text('Retrieved At\n2026-10-02T19:00:01+05:30\n')
+            self.assertEqual(alerts.data_collection_time(root), '02/10/2026 19:00:01 IST')
+            (root/'organisations.csv').write_text('Retrieved At\nDD/MM/YYYY hh:mm:ss\n')
+            self.assertEqual(alerts.data_collection_time(root), '02/10/2026 23:28:57 IST')
+            summary.write_text(json.dumps({'snapshot_at':'2026-10-02'}))
+            self.assertEqual(alerts.data_collection_time(root), 'उपलब्ध नहीं')
+
+    def test_automatic_and_manual_message_follow_requested_format(self):
+        class Clock(datetime):
+            @classmethod
+            def now(cls,tz=None):return cls(2026,10,2,23,32,tzinfo=IST)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            path=root/'all_tenders_org_detailed.csv';path.write_text('Tender ID\n')
+            (root/'organisation_tenders.csv').write_text('Tender ID\nsample\n')
+            (root/'organisations.csv').write_text('Tender Count,Retrieved At\n1,2026-10-02T17:58:57+00:00\n')
+            rows=[{'Tender ID':'sample','Closing Date':'03-Oct-2026 05:00 PM'}]
+            for mode in ('evening_total', 'manual'):
+                with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'all','MANUAL_VIEW':'table','MORNING_EXTRACTION_RESULT':''}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')):
+                    self.assertEqual(alerts.main(),0)
+                    text=message.call_args.args[2]
+                    self.assertIn('📅 दिनांक: 02/10/2026\n🕒 रिपोर्ट समय: 02/10/2026 11:32 PM IST\n📥 डेटा संग्रह समय: 02/10/2026 23:28:57 IST\n📋 सभी एक्टिव टेंडर: 1\n📊 PDF में 1 रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: 1, Mptender पोर्टल सूची का कुल टेंडर count: 1\n🌐 वेबसाइट:',text)
+                    self.assertIn('https://tenders.codinglms.xyz/\n\n📢 टेलीग्राम चैनल:',text)
+                    self.assertIn('https://t.me/mptendersalert\n\n👤 व्यवस्थापक:',text)
+                    self.assertIn('https://t.me/rdgyan\n\n'+alerts.HINDI_DISCLAIMER,text)
+                    self.assertNotIn('DD/MM/YYYY',text)
+                    self.assertEqual(document.call_count,1)
+
     def test_first_morning_extraction_success_and_failure_send_before_clock_alert(self):
         now = datetime(2026,10,1,9,10,tzinfo=IST)
         self.assertIsNone(due_alert(CFG, {}, now))

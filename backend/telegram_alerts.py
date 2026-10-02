@@ -28,6 +28,39 @@ def clean(value):
     return str(value or "").strip()
 
 
+def data_collection_time(root):
+    """Show the source capture time in IST, never a template or report time."""
+    root = Path(root)
+    candidates = []
+    try:
+        with (root / 'organisations.csv').open(encoding='utf-8-sig', newline='') as stream:
+            candidates.extend(row.get('Retrieved At', '') for row in csv.DictReader(stream))
+    except OSError:
+        pass
+    candidates.append(read_json_report(root / 'data/inventory_counts.json').get('snapshot_at', ''))
+    for value in candidates:
+        text = clean(value)
+        if not text or not re.search(r'\d:\d{2}', text):
+            continue
+        try:
+            stamp = datetime.fromisoformat(text.replace('Z', '+00:00'))
+        except ValueError:
+            stamp = None
+            for fmt in ('%d/%m/%Y %H:%M:%S', '%d/%m/%Y %I:%M:%S %p',
+                        '%d-%b-%Y %I:%M %p'):
+                try:
+                    stamp = datetime.strptime(text, fmt)
+                    break
+                except ValueError:
+                    pass
+            if stamp is None:
+                continue
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=IST)
+        return stamp.astimezone(IST).strftime('%d/%m/%Y %H:%M:%S IST')
+    return 'उपलब्ध नहीं'
+
+
 def strip_brackets(value):
     return re.sub(r"^\[|\]$", "", clean(value))
 
@@ -429,7 +462,7 @@ def main():
     d = today.strftime("%d-%m-%Y")
     rows = live_rows(load_report_rows())
     warning = HINDI_DISCLAIMER
-    footer = f"🌐 वेबसाइट: {SITE_URL}\n📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n👤 व्यवस्थापक: https://t.me/rdgyan\n\n{warning}"
+    footer = f"🌐 वेबसाइट: {SITE_URL}\n\n📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n👤 व्यवस्थापक: https://t.me/rdgyan\n\n{warning}"
     if mode == "morning":
         rows = morning_inventory_rows(rows, CSV_PATH.parent)
     if mode == "manual":
@@ -451,7 +484,7 @@ def main():
         label, english = "आज प्रकाशित नए टेंडर", "New Published Today"
     else:
         selected = rows
-        label, english = "सभी चालू टेंडर", "All Tenders"
+        label, english = "सभी एक्टिव टेंडर", "All Tenders"
     selected = sorted(selected, key=closing_sort_key)
     result = os.getenv("MORNING_EXTRACTION_RESULT", "")
     fallback_note = ""
@@ -463,18 +496,18 @@ def main():
             summary['portal_tender_count'] = sum(int(re.sub(r'\D','',clean(r.get('Tender Count'))) or 0) for r in csv.DictReader(stream))
     except OSError:
         pass
-    source_time = read_json_report(CSV_PATH.parent / 'data/inventory_counts.json').get('snapshot_at', '')
+    source_time = data_collection_time(CSV_PATH.parent)
+    portal_count = summary.get('portal_tender_count', 'उपलब्ध नहीं')
     message = (
         ("👤 व्यवस्थापक द्वारा भेजी गई टेंडर रिपोर्ट\n\n" if mode == 'manual' else "🔔 एमपी टेंडर्स अलर्ट\n\n")
         + f"📅 दिनांक: {today.strftime('%d/%m/%Y')}\n"
         + f"🕒 रिपोर्ट समय: {now.strftime('%d/%m/%Y %I:%M %p')} IST\n"
-        + (f"📥 डेटा संग्रह समय: {source_time}\n" if source_time else "")
+        + f"📥 डेटा संग्रह समय: {source_time}\n"
         + f"📋 {label}: {len(selected)}\n"
-        + f"📊 PDF में {len(selected)} रिकॉर्ड; कुल उपलब्ध चालू टेंडर: {len(rows)}\n"
-        + (f"🌐 पोर्टल सूची का कुल टेंडर count: {summary['portal_tender_count']}\n" if summary else "")
+        + f"📊 PDF में {len(selected)} रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: {len(rows)}, Mptender पोर्टल सूची का कुल टेंडर count: {portal_count}\n"
         + fallback_note
         + ("ℹ️ इस सूची में शून्य टेंडर हैं; शून्य रिकॉर्ड वाली PDF संलग्न है।\n" if not selected else "")
-        + "\n" + footer
+        + footer
     )
     telegram_message(token, chat_id, message)
     title = f"{english} {d} • {len(selected)} tenders"
