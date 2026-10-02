@@ -583,7 +583,8 @@ def visitor_affidavit():
     token=payload.get('session_token')
     if not (isinstance(token,str) and token.startswith('acct_')) and os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
         return jsonify({'ok':False,'message':'Mobile/password account session required.'}),401
-    visitor_id=(account_service.authenticate(token)['user_id'] if isinstance(token,str) and token.startswith('acct_') else read_visitor_session(token))
+    account=account_service.authenticate(token) if isinstance(token,str) and token.startswith('acct_') else None
+    visitor_id=account['user_id'] if account else read_visitor_session(token)
     if not visitor_id:
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
@@ -600,6 +601,23 @@ def visitor_affidavit():
             or (profile['relative']=='yes' and not all(profile[key] for key in ('relativeName','relativePost','relativePosting')))):
             return jsonify({'ok':False,'message':'Required affidavit basic details are missing or invalid.'}),400
     if sheet_store.enabled():
+        # The account JSON preserves every field even with an older deployed
+        # Apps Script that only recognises the original affidavit columns.
+        if account and profile is not None:
+            for attempt in range(3):
+                if attempt:account=account_service.authenticate(token)
+                revision=account['revision']
+                account['affidavit_profile']=profile
+                account['affidavit_profile_updated_at']=now_ist().isoformat()
+                if account_service.update(account,revision):break
+            else:return jsonify({'ok':False,'message':'Profile changed during save. Please retry.'}),409
+            from account_access import queue_affidavit_mirror
+            mirrored=queue_affidavit_mirror(visitor_id,profile)
+            response=jsonify({'ok':True,'profile':profile,'canonical':True,'storage':'google_sheets','affidavit_sheet_sync_pending':mirrored})
+            response.headers['Cache-Control']='no-store';return response
+        if account and isinstance(account.get('affidavit_profile'),dict):
+            response=jsonify({'ok':True,'profile':account['affidavit_profile'],'canonical':True,'storage':'google_sheets'})
+            response.headers['Cache-Control']='no-store';return response
         result=sheet_store.call('read_affidavit' if profile is None else 'save_affidavit',visitor_id=visitor_id,**({} if profile is None else {'profile':profile}))
         response=jsonify({'ok':True,'profile':result['profile'],'storage':'google_sheets'})
         response.headers['Cache-Control']='no-store'

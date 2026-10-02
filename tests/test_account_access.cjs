@@ -73,6 +73,14 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  node('accountSignInTab').onclick();node('accountLoginPassword').value='Private1!';
  reply=null;fail=false;await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});await pending;assert(unlocked);assert.equal(node('accountLoginPassword').value,'');assert(node('accountLoginLoading').hidden);assert.equal(node('telegramGate').inert,false);
  node('accountProfileBtn').onclick();assert.equal(node('accountEditName').value,'Test');assert.equal(node('accountEditMobile').value,'+919876543210');
+ ctx.window.dashboardAffidavitProfile={bidderName:'Test User',parentRelation:'W/o',parentName:'Parent User',address:'Ward 2, Kannod',firmName:'Saved Firm',status:'Partner',place:'Kannod',relative:'no'};
+ node('accountProfileBtn').onclick();assert.equal(node('accountAffParentName').value,'Parent User');assert.equal(node('accountAffAddress').value,'Ward 2, Kannod');assert.equal(node('accountAffParentRelation').value,'W/o');
+ assert(node('accountAffRelativeFields').hidden);node('accountAffRelative').value='yes';node('accountAffRelative').onchange();assert(!node('accountAffRelativeFields').hidden);assert.equal(node('accountAffRelativeName').required,true);
+ node('accountAffRelative').value='no';node('accountAffRelative').onchange();
+ let savedAff=null,resumedTender='';ctx.window.saveDashboardAffidavitProfile=async p=>{savedAff=p;return {profile:p}};ctx.window.openAffidavitForTender=id=>resumedTender=id;
+ ctx.window.pendingAffidavitTenderId='TENDER-1';node('accountAffAddress').value='Updated Address';
+ await node('accountEditAffidavitForm').onsubmit({preventDefault(){},currentTarget:node('accountEditAffidavitForm')});
+ assert.equal(savedAff.address,'Updated Address');assert.equal(savedAff.parentName,'Parent User');assert.equal(savedAff.parentRelation,'W/o');assert.equal(resumedTender,'TENDER-1');assert.equal(ctx.window.pendingAffidavitTenderId,null);
  // Restoring a session keeps its view; a real login starts in card view.
  local.set('mpTenderViewMode','table');
  const viewProfile={name:'Test',mobile:'9876543210',district:'Dewas'};

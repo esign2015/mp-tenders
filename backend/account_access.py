@@ -20,12 +20,12 @@ def account_mobile(server,value):
     text=str(value or '').strip()
     return server.normalise_mobile(text) if re.fullmatch(r'(?:\+91)?[6-9][0-9]{9}',text) else ''
 
-def queue_details(visitor_id,token,record_visit=False):
+def queue_details(visitor_id,token,record_visit=False,profile=None):
     if not _detail_slots.acquire(blocking=False):return None
     def load():
         try:
             result=sheets.call('session' if record_visit else 'read_affidavit',visitor_id=visitor_id)
-            return result.get('affidavit_profile',result.get('profile',{}))
+            return profile if profile is not None else result.get('affidavit_profile',result.get('profile',{}))
         finally:_detail_slots.release()
     try:future=_detail_pool.submit(load)
     except Exception:
@@ -36,6 +36,19 @@ def queue_details(visitor_id,token,record_visit=False):
             if time.monotonic()-item[2]>300:del _detail_jobs[old]
         _detail_jobs[key]=(hashlib.sha256(token.encode()).hexdigest(),future,time.monotonic())
     return key
+
+def queue_affidavit_mirror(visitor_id,profile):
+    """Mirror legacy Sheet columns without delaying a confirmed account save."""
+    if not _detail_slots.acquire(blocking=False):return False
+    snapshot=dict(profile)
+    def write():
+        try:sheets.call('save_affidavit',visitor_id=visitor_id,profile=snapshot)
+        except sheets.SheetStoreError:logger.warning('Legacy affidavit Sheet mirror failed; complete account profile remains saved.')
+        finally:_detail_slots.release()
+    try:_detail_pool.submit(write)
+    except Exception:
+        _detail_slots.release();return False
+    return True
 
 PASSWORD_METHOD='scrypt:32768:8:3'
 _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PASSWORD_METHOD)
@@ -195,8 +208,10 @@ class Accounts:
         if maintenance_active():raise AccountError(MAINTENANCE_MESSAGE,503,'maintenance')
         details_id=None
         if sheets.enabled():
-            aff={}
-            details_id=queue_details(record['user_id'],token,record_visit=record_visit)
+            saved=record.get('affidavit_profile')
+            aff=saved if isinstance(saved,dict) else {}
+            if record_visit or not isinstance(saved,dict):
+                details_id=queue_details(record['user_id'],token,record_visit=record_visit,profile=aff if isinstance(saved,dict) else None)
         else:
             conn=self.server.visitor_db()
             try:
@@ -208,7 +223,7 @@ class Accounts:
                     conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
         session=next(s for s in record['sessions'] if hmac.compare_digest(s['hash'],self.digest(token)))
-        response=jsonify({'ok':True,'session_token':token,'session_expires_at':min(session['expires'],next_daily_logout()),'server_time':time.time(),'new_login':new_login,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'session_expires_at':min(session['expires'],next_daily_logout()),'server_time':time.time(),'new_login':new_login,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'affidavit_profile_canonical':isinstance(record.get('affidavit_profile'),dict),'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
@@ -269,14 +284,15 @@ def install(server):
     @app.post('/api/accounts/details')
     def details():
         p=request.get_json(silent=True) or {};token=p.get('session_token')
-        accounts.authenticate(token)
+        record=accounts.authenticate(token)
         with _detail_lock:item=_detail_jobs.get(p.get('details_id'))
         if not item or time.monotonic()-item[2]>300 or not hmac.compare_digest(item[0],accounts.digest(token)):
             raise AccountError('Profile details request expired.',404)
         if not item[1].done():
             response=jsonify({'ok':True,'pending':True});response.headers['Cache-Control']='no-store';return response
-        aff=item[1].result()
-        response=jsonify({'ok':True,'affidavit_profile':aff});response.headers['Cache-Control']='no-store';return response
+        saved=record.get('affidavit_profile')
+        aff=saved if isinstance(saved,dict) else item[1].result()
+        response=jsonify({'ok':True,'affidavit_profile':aff,'affidavit_profile_canonical':isinstance(saved,dict)});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/activity')
     def activity():
         token=(request.get_json(silent=True) or {}).get('session_token')

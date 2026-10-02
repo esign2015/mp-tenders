@@ -21,6 +21,8 @@ function visitorUnlock(data){
   localStorage.setItem(VISITOR_SESSION_KEY,data.session_token);
   window.dashboardVisitorProfile={...data.profile,visitor_id:data.visitor_id};
   window.dashboardAffidavitProfile=data.affidavit_profile||{};
+  window.dashboardAffidavitProfileCanonical=!!data.affidavit_profile_canonical;
+  window.dashboardAffidavitProfileEdited=false;
   window.dashboardProfileStorage=data.storage||'';
   localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));
   document.body.classList.remove('telegram-locked');
@@ -42,7 +44,10 @@ window.saveDashboardAffidavitProfile=async function(profile){
   const token=localStorage.getItem(VISITOR_SESSION_KEY);
   if(!token)throw new Error('पहले Name, Mobile और District save करें।');
   const result=await visitorPost('/affidavit',{session_token:token,profile});
+  if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)throw new Error('Session changed. Please Sign in again.');
   window.dashboardAffidavitProfile=result.profile;
+  window.dashboardAffidavitProfileCanonical=!!result.canonical;
+  window.cacheDashboardAffidavitProfile?.(result.profile);
   return result;
 };
 async function enforceVisitorAccess(){

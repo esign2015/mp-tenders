@@ -124,13 +124,39 @@ function accountSetupControls(data){
   const modal=visitorNode('accountSettingsModal'),status=visitorNode('accountSettingsStatus');
   function open(view){
     visitorNode('accountEditProfileForm').hidden=view!=='profile';visitorNode('accountChangePasswordForm').hidden=view!=='password';
+    if(visitorNode('accountEditAffidavitForm'))visitorNode('accountEditAffidavitForm').hidden=view!=='profile';
     visitorNode('accountSettingsTitle').textContent=view==='profile'?'My Profile / मेरा प्रोफाइल':'Change Password / पासवर्ड बदलें';
     const profile=window.dashboardVisitorProfile||data.profile;
     visitorNode('accountEditName').value=profile.first_name||profile.name.split(' ')[0];visitorNode('accountEditMiddleName').value=profile.middle_name||(profile.first_name?'':profile.name.split(' ').slice(1,-1).join(' '));visitorNode('accountEditLastName').value=profile.last_name||(profile.first_name||!profile.name.includes(' ')?'':profile.name.split(' ').at(-1)); visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;accountTehsilOptions('accountEditDistrict','accountEditTehsil',profile.tehsil);
+    const aff=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
+    for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting']){
+      let value=aff[key]||({bidderName:profile.name,parentRelation:'S/o',status:'Proprietor',place:profile.tehsil||profile.district,relative:'no'}[key]||'');
+      if(key==='bidderName'&&value===profile.first_name)value=profile.name;
+      const field=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1));if(field)field.value=value;
+    }
+    accountAffRelativeFields();
     status.textContent='';modal.classList.add('open');modal.setAttribute('aria-hidden','false');visitorNode('telegramProfileMenu').classList.remove('open');
   }
   visitorNode('accountProfileBtn').onclick=()=>open('profile');visitorNode('accountPasswordBtn').onclick=()=>open('password');
-  visitorNode('accountSettingsClose').onclick=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');for(const id of ['accountCurrentPassword','accountChangeNew','accountChangeConfirm'])visitorNode(id).value=''};
+  visitorNode('accountSettingsClose').onclick=()=>{window.pendingAffidavitTenderId=null;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');for(const id of ['accountCurrentPassword','accountChangeNew','accountChangeConfirm'])visitorNode(id).value=''};
+  function accountAffRelativeFields(){
+    const yes=visitorNode('accountAffRelative')?.value==='yes';
+    if(visitorNode('accountAffRelativeFields'))visitorNode('accountAffRelativeFields').hidden=!yes;
+    for(const id of ['accountAffRelativeName','accountAffRelativePost','accountAffRelativePosting']){const field=visitorNode(id);if(field){field.required=yes;field.disabled=!yes;}}
+  }
+  if(visitorNode('accountAffRelative'))visitorNode('accountAffRelative').onchange=accountAffRelativeFields;
+  if(visitorNode('accountEditAffidavitForm'))visitorNode('accountEditAffidavitForm').onsubmit=async event=>{
+    event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
+    const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Affidavit की basic details save हो रही हैं…';
+    const aff={};for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
+    try{
+      window.dashboardAffidavitProfileEdited=true;
+      await window.saveDashboardAffidavitProfile(aff);
+      status.textContent='✓ Affidavit Profile save हो गई।';
+      const id=window.pendingAffidavitTenderId;
+      if(id){window.pendingAffidavitTenderId=null;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');window.openAffidavitForTender(id);}
+    }catch(error){status.textContent=error.message;if(error.status===401)accountLogout(error.message)}finally{button.disabled=false}
+  };
   visitorNode('accountEditProfileForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const button=form.querySelector('button');button.disabled=true;status.textContent='Profile save हो रहा है…';
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
@@ -207,7 +233,7 @@ async function accountUnlock(data){
       while(localStorage.getItem(VISITOR_SESSION_KEY)===token && Date.now()<deadline){
         const result=await accountPost('/details',{session_token:token,details_id:data.details_id});
         if(result.pending){await new Promise(resolve=>setTimeout(resolve,2000));continue}
-        if(localStorage.getItem(VISITOR_SESSION_KEY)===token && !window.dashboardAffidavitProfileEdited)window.dashboardAffidavitProfile=result.affidavit_profile||{};
+        if(localStorage.getItem(VISITOR_SESSION_KEY)===token && !window.dashboardAffidavitProfileEdited){window.dashboardAffidavitProfile=result.affidavit_profile||{};window.dashboardAffidavitProfileCanonical=!!result.affidavit_profile_canonical;}
         return;
       }
     })().catch(()=>{ /* Saved local affidavit details remain available if enrichment is delayed. */ });

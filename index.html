@@ -1474,6 +1474,9 @@ td.title-cell{
   width:min(440px,100%);background:#fff;border-radius:18px;padding:22px;
   box-shadow:0 24px 70px rgba(0,0,0,.40);
 }
+#accountSettingsModal .user-profile-card{width:min(880px,100%)}
+.account-profile-sections{display:grid;grid-template-columns:1fr 1fr;gap:24px}.account-profile-sections form{min-width:0}.account-profile-section-title{font-size:16px;font-weight:800;margin:18px 0 8px;color:#173d70}#accountChangePasswordForm{max-width:440px;margin:auto}
+@media(max-width:700px){.account-profile-sections{grid-template-columns:1fr}}
 .user-profile-title{font-size:22px;font-weight:900;color:#14376e}
 .user-profile-sub{margin:6px 0 16px;color:#64748b;font-size:13px;line-height:1.5}
 .user-profile-label{display:block;margin:12px 0 5px;font-size:12px;font-weight:800;color:#334155}
@@ -1897,6 +1900,9 @@ body.telegram-locked .site-footer{visibility:hidden}
 .affidavit-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin:12px -18px -18px;padding:10px 18px;position:sticky;bottom:-18px;z-index:6;background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -4px 12px rgba(15,23,42,.08)}
 .affidavit-actions button{padding:9px 12px}.affidavit-save{background:#0f766e;color:#fff}.affidavit-word{background:#1d4ed8;color:#fff}.affidavit-pdf{background:#b91c1c;color:#fff}
 .affidavit-status{font-size:11px;font-weight:700;color:#475569;margin-top:8px}
+.affidavit-modal.download-mode .affidavit-card{width:min(620px,96vw)}
+.affidavit-modal.download-mode .affidavit-grid>.affidavit-field:not(.affidavit-date-field),.affidavit-modal.download-mode .affidavit-relative-box,.affidavit-modal.download-mode .affidavit-preview,.affidavit-modal.download-mode #affidavitSaveProfile,.affidavit-modal.download-mode #affidavitProfileSaveStatus{display:none!important}
+.affidavit-download-summary{padding:14px;margin-bottom:14px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;font-size:13px;line-height:1.6;color:#173d70}.affidavit-download-summary button{margin-top:8px;padding:7px 12px;background:#173d70;color:white}
 @media(max-width:700px){.affidavit-card{padding:12px}.affidavit-head{margin:-12px -12px 10px;padding:10px 12px;top:-12px}.affidavit-actions{margin:10px -12px -12px;padding:9px 12px;bottom:-12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
 </style>
 
@@ -2065,8 +2071,8 @@ body.telegram-locked .site-footer{visibility:hidden}
 .account-form button[type="submit"][aria-busy="true"]{background:#dbeafe;color:#1d4ed8;cursor:wait}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
-<script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=16"></script>
+<script src="assets/visitor_access.js?v=4"></script>
+<script src="assets/account_access.js?v=17"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -2097,7 +2103,9 @@ body.telegram-locked .site-footer{visibility:hidden}
 <div class="user-profile-modal" id="accountSettingsModal" aria-hidden="true">
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle" style="max-height:90vh;overflow:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="user-profile-title" id="accountSettingsTitle">My Profile</div><button type="button" id="accountSettingsClose" aria-label="Close account settings">✕</button></div>
+    <div class="account-profile-sections">
     <form id="accountEditProfileForm">
+      <div class="account-profile-section-title">Account details</div>
       <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="15" autocomplete="given-name" required>
       <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
       <label class="user-profile-label" for="accountEditMiddleName">Middle Name</label><input class="user-profile-input" id="accountEditMiddleName" placeholder="Middle Name (वैकल्पिक)" maxlength="10" autocomplete="additional-name">
@@ -2105,6 +2113,25 @@ body.telegram-locked .site-footer{visibility:hidden}
       <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
       <datalist id="accountDistrictList"></datalist><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select><button class="user-profile-save" type="submit">Save Profile</button>
     </form>
+    <form id="accountEditAffidavitForm">
+      <div class="account-profile-section-title">Affidavit / No Relation Profile</div>
+      <div class="user-profile-sub">यह basic जानकारी एक बार save करें। अगले tender पर फिर भरने की जरूरत नहीं होगी।</div>
+      <label class="user-profile-label" for="accountAffBidderName">Bidder / Deponent का पूरा नाम</label><input class="user-profile-input" id="accountAffBidderName" maxlength="120" required>
+      <label class="user-profile-label" for="accountAffParentRelation">Relationship</label><select class="user-profile-input" id="accountAffParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select>
+      <label class="user-profile-label" for="accountAffParentName">Father / Parent / Spouse Name</label><input class="user-profile-input" id="accountAffParentName" maxlength="120" required>
+      <label class="user-profile-label" for="accountAffAddress">Residential Address / पता</label><textarea class="user-profile-input" id="accountAffAddress" maxlength="240" rows="3" required></textarea>
+      <label class="user-profile-label" for="accountAffFirmName">Firm / Company Name</label><input class="user-profile-input" id="accountAffFirmName" maxlength="160" required>
+      <label class="user-profile-label" for="accountAffStatus">Status in Firm / Company</label><select class="user-profile-input" id="accountAffStatus"><option>Proprietor</option><option>Partner</option><option>Director</option><option>Authorized Signatory</option><option>Other</option></select>
+      <label class="user-profile-label" for="accountAffPlace">Verification Place</label><input class="user-profile-input" id="accountAffPlace" maxlength="100" required>
+      <label class="user-profile-label" for="accountAffRelative">Close relative working in department?</label><select class="user-profile-input" id="accountAffRelative"><option value="no">No</option><option value="yes">Yes</option></select>
+      <div id="accountAffRelativeFields" hidden>
+        <label class="user-profile-label" for="accountAffRelativeName">Relative Name</label><input class="user-profile-input" id="accountAffRelativeName" maxlength="120">
+        <label class="user-profile-label" for="accountAffRelativePost">Post</label><input class="user-profile-input" id="accountAffRelativePost" maxlength="120">
+        <label class="user-profile-label" for="accountAffRelativePosting">Present Posting</label><input class="user-profile-input" id="accountAffRelativePosting" maxlength="160">
+      </div>
+      <button class="user-profile-save" type="submit">Save Affidavit Profile</button>
+    </form>
+    </div>
     <form id="accountChangePasswordForm" hidden>
       <label class="user-profile-label" for="accountCurrentPassword">Current Password</label><input class="user-profile-input" id="accountCurrentPassword" type="password" autocomplete="current-password" maxlength="128" required>
       <label class="user-profile-label" for="accountChangeNew">New Password</label><input class="user-profile-input" id="accountChangeNew" type="password" autocomplete="new-password" minlength="8" maxlength="128" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" required>
@@ -2161,6 +2188,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       </div>
       <button class="affidavit-close" id="affidavitClose" type="button" aria-label="Close">×</button>
     </div>
+    <div class="affidavit-download-summary" id="affidavitDownloadSummary" hidden><div id="affidavitSavedDetails"></div><button type="button" id="affidavitEditProfile">👤 Profile में details बदलें</button></div>
     <div class="affidavit-grid">
       <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="Bidder / Deponent का पूरा नाम"></div>
       <div class="affidavit-field"><label for="affParentRelation">Relationship (Page 2)</label><select id="affParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select></div>
@@ -2170,10 +2198,10 @@ body.telegram-locked .site-footer{visibility:hidden}
       <div class="affidavit-field"><label for="affStatus">Status in Firm / Company</label><select id="affStatus"><option value="Proprietor">Proprietor</option><option value="Partner">Partner</option><option value="Director">Director</option><option value="Authorized Signatory">Authorized Signatory</option><option value="Other">Other</option></select></div>
       <div class="affidavit-field"><label for="affPlace">Verification Place</label><input id="affPlace" type="text" maxlength="100" placeholder="Verification place"></div>
       <div class="affidavit-field"><label for="affTenderRef">Notice Inviting e-Tender No. (Tender ID)</label><input id="affTenderRef" type="text" maxlength="180"></div>
-      <div class="affidavit-field"><label for="affNoticeDate">Notice / NIT Date (Bidder to fill)</label><input id="affNoticeDate" type="date"></div>
+      <div class="affidavit-field affidavit-date-field"><label for="affNoticeDate">Notice / NIT Date (Bidder to fill)</label><input id="affNoticeDate" type="date"></div>
       <div class="affidavit-field full"><label for="affWorkName">Name of Work</label><textarea id="affWorkName"></textarea></div>
       <div class="affidavit-field full"><label for="affDepartment">Name of Department / Organisation</label><input id="affDepartment" type="text" maxlength="220"></div>
-      <div class="affidavit-field"><label for="affVerifyDate">Verification Date</label><input id="affVerifyDate" type="date"></div>
+      <div class="affidavit-field affidavit-date-field"><label for="affVerifyDate">Verification Date</label><input id="affVerifyDate" type="date"></div>
       <input id="affTenderId" type="hidden">
       <div class="affidavit-relative-box">
         <div class="affidavit-field"><label for="affRelative">Close relative working in department?</label><select id="affRelative"><option value="no" selected>No</option><option value="yes">Yes</option></select></div>
@@ -2187,7 +2215,6 @@ body.telegram-locked .site-footer{visibility:hidden}
     <div class="affidavit-note">यह draft आपके चुने हुए tender और profile की जानकारी से बनता है। NIT/Notice Date जानबूझकर auto-fill नहीं की जाती क्योंकि वह Published Date से अलग हो सकती है; bidder सही NIT date स्वयं लिख/भर सकता है। Notary/submit करने से पहले सभी details verify करें।</div>
     <div class="affidavit-preview" id="affidavitPreview"></div>
     <div class="affidavit-actions">
-      <button class="affidavit-save" id="affidavitSaveProfile" type="button">💾 Save Bidder Profile</button>
       <span id="affidavitProfileSaveStatus" role="status" style="font-size:12px;line-height:1.4;"></span>
       <button class="affidavit-word" id="affidavitWord" type="button">⬇ Word (.docx)</button>
       <button class="affidavit-pdf" id="affidavitPdf" type="button">⬇ PDF</button>
@@ -6246,8 +6273,21 @@ enforceAccountAccess().then(async () => {
     return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0");
   };
   function getSavedProfile(){
-    if(window.dashboardAffidavitProfile && Object.keys(window.dashboardAffidavitProfile).length) return window.dashboardAffidavitProfile;
-    try{return JSON.parse(localStorage.getItem(profileKey())||"{}")||{};}catch(e){return {};}
+    let local={};try{local=JSON.parse(localStorage.getItem(profileKey())||"{}")||{};}catch(e){}
+    const remote=window.dashboardAffidavitProfile||{};
+    if(window.dashboardAffidavitProfileCanonical)return remote;
+    const merged={...local,...remote};
+    for(const key of ['parentName','parentRelation','address'])if(!remote[key]&&local[key])merged[key]=local[key];
+    return merged;
+  }
+  window.getDashboardAffidavitProfile=getSavedProfile;
+  window.cacheDashboardAffidavitProfile=function(profile){localStorage.setItem(profileKey(),JSON.stringify(profile));window.dashboardAffidavitProfile=profile;window.dashboardAffidavitProfileEdited=true;};
+  function profileComplete(profile){
+    return ['bidderName','parentName','address','firmName','status','place'].every(key=>safe(profile[key]))&&['S/o','D/o','W/o'].includes(profile.parentRelation)&&['yes','no'].includes(profile.relative)&&
+      (profile.relative!=='yes'||['relativeName','relativePost','relativePosting'].every(key=>safe(profile[key])));
+  }
+  function saveNoticeDate(){
+    try{const dates=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}");const id=safe(byId("affTenderId")?.value);if(id){dates[id]=safe(byId("affNoticeDate")?.value);localStorage.setItem(profileKey()+"_notice_dates",JSON.stringify(dates));}}catch(_e){}
   }
   function telegramGeneralProfileKey(){
     const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "";
@@ -6293,36 +6333,6 @@ enforceAccountAccess().then(async () => {
       relativePost:safe(byId("affRelativePost")?.value),
       relativePosting:safe(byId("affRelativePosting")?.value)
     };
-  }
-  function saveProfile(){
-    const p=readProfile();
-    if(!p.bidderName || !p.firmName || !p.place){
-      byId("affidavitStatus").textContent="Bidder name, firm name और verification place भरना जरूरी है।";
-      return false;
-    }
-    if(p.relative==="yes" && (!p.relativeName || !p.relativePost || !p.relativePosting)){
-      byId("affidavitStatus").textContent="Close relative Yes होने पर Name, Post और Present Posting भरें।";
-      return false;
-    }
-    localStorage.setItem(profileKey(),JSON.stringify(p));
-    window.dashboardAffidavitProfile=p;
-    window.dashboardAffidavitProfileEdited=true;
-    try{
-      const dates=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}");
-      const id=safe(byId("affTenderId")?.value);
-      if(id){dates[id]=safe(byId("affNoticeDate")?.value);localStorage.setItem(profileKey()+"_notice_dates",JSON.stringify(dates));}
-    }catch(_e){}
-    byId("affidavitStatus").textContent="✓ Bidder profile इस browser में save हो गया।";
-    const syncStatus=byId('affidavitProfileSaveStatus');
-    if(typeof window.saveDashboardAffidavitProfile==='function'){
-      if(syncStatus)syncStatus.textContent='Basic details save हो रही हैं…';
-      window.saveDashboardAffidavitProfile(p).then(result=>{
-        if(syncStatus)syncStatus.textContent=result.storage==='google_sheets'?'✓ Basic details Google Sheet में save हैं।':'✓ Basic details server पर save हैं।';
-      }).catch(error=>{
-        if(syncStatus)syncStatus.textContent='Browser में save हैं; server save failed: '+error.message+' Save Bidder Profile से retry करें।';
-      });
-    }
-    return true;
   }
   function formatVerifyDate(v){
     const m=safe(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -6463,8 +6473,19 @@ enforceAccountAccess().then(async () => {
     const id=safe(tenderId);
     const source=(typeof allTenders!=="undefined"?allTenders:[]).find(r=>safe(r["Tender ID"])===id) || (typeof filteredTenders!=="undefined"?filteredTenders:[]).find(r=>safe(r["Tender ID"])===id);
     if(!source){alert("Tender record नहीं मिला।");return;}
+    const saved=getSavedProfile();
+    if(!profileComplete(saved)){
+      window.pendingAffidavitTenderId=id;
+      byId('accountProfileBtn')?.onclick?.();
+      byId('accountSettingsStatus').textContent='पहले Affidavit Profile में नाम, पिता/संबंधित व्यक्ति का नाम, address और firm की basic details save करें।';
+      byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});
+      return;
+    }
     fillFromTender(source);
-    const modal=byId("affidavitModal");modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+    const modal=byId("affidavitModal");modal.classList.add('download-mode');modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+    byId('affidavitTitle').textContent='📄 Download Affidavit / No Relation';
+    byId('affidavitDownloadSummary').hidden=false;
+    byId('affidavitSavedDetails').textContent=saved.bidderName+' • '+saved.firmName+' • '+saved.place+' — Saved Profile';
   };
   function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
   function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
@@ -6505,7 +6526,7 @@ enforceAccountAccess().then(async () => {
     },60000);
   }
   async function downloadWord(){
-    const d=documentData();if(!validateDoc(d))return;saveProfile();
+    const d=documentData();if(!validateDoc(d))return;saveNoticeDate();
     const mobileWindow=reserveMobileDownloadWindow();
     byId("affidavitStatus").textContent="⏳ Word affidavit तैयार हो रही है…";
     try{
@@ -6593,7 +6614,7 @@ enforceAccountAccess().then(async () => {
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
   }
   function downloadPdf(){
-    const d=documentData();if(!validateDoc(d))return;saveProfile();
+    const d=documentData();if(!validateDoc(d))return;saveNoticeDate();
     const mobileWindow=reserveMobileDownloadWindow();
     byId("affidavitStatus").textContent="⏳ PDF affidavit तैयार हो रही है…";
     try{
@@ -6843,21 +6864,13 @@ enforceAccountAccess().then(async () => {
       byId("affidavitStatus").textContent="✓ PDF affidavit तैयार है। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
-  let profileSaveTimer;
-  function scheduleProfileSave(){
-    clearTimeout(profileSaveTimer);
-    profileSaveTimer=setTimeout(()=>{
-      const p=readProfile();
-      if(p.bidderName&&p.firmName&&p.place&&(p.relative!=="yes"||(p.relativeName&&p.relativePost&&p.relativePosting)))saveProfile();
-    },800);
-  }
   function init(){
     byId("affidavitClose")?.addEventListener("click",closeModal);
     byId("affidavitModal")?.addEventListener("click",e=>{if(e.target===byId("affidavitModal"))closeModal();});
     byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
     ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
-    ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affRelative","affRelativeName","affRelativePost","affRelativePosting","affNoticeDate"].forEach(id=>byId(id)?.addEventListener("change",scheduleProfileSave));
-    byId("affidavitSaveProfile")?.addEventListener("click",()=>{saveProfile();updatePreview();});
+    byId('affNoticeDate')?.addEventListener('change',saveNoticeDate);
+    byId('affidavitEditProfile')?.addEventListener('click',()=>{const id=safe(byId('affTenderId')?.value);closeModal();window.pendingAffidavitTenderId=id;byId('accountProfileBtn')?.onclick?.();byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});});
     byId("affidavitWord")?.addEventListener("click",downloadWord);
     byId("affidavitPdf")?.addEventListener("click",downloadPdf);
     document.addEventListener("click",e=>{const b=e.target.closest("[data-affidavit-id]");if(!b)return;e.preventDefault();e.stopPropagation();window.openAffidavitForTender(b.getAttribute("data-affidavit-id"));});

@@ -6,6 +6,36 @@ import server
 import google_sheet_store as sheets
 
 class AccountsTests(unittest.TestCase):
+    def test_full_affidavit_survives_older_sheet_schema_and_remote_restore(self):
+        from copy import deepcopy
+        signup=self.signup();token=signup['session_token']
+        records={signup['visitor_id']:server.account_service.get(user_id=signup['visitor_id'])}
+        def operation(action,**fields):
+            if action=='get':return {'record':deepcopy(records[fields['user_id']])}
+            self.assertEqual(action,'update')
+            record=fields['record'];old=records[record['user_id']]
+            if old['revision']!=fields['expected_revision']:return {'updated':False}
+            record['revision']=old['revision']+1;records[record['user_id']]=deepcopy(record)
+            return {'updated':True}
+        profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','parentRelation':'D/o','parentName':'Parent Test','address':'Ward 2, Kannod'}
+        legacy={k:v for k,v in profile.items() if k not in ('parentRelation','parentName','address')}
+        with patch.object(sheets,'enabled',return_value=True),patch.object(server.account_service,'operation',side_effect=operation),patch.object(sheets,'call',return_value={'profile':legacy}) as call,patch('account_access._detail_pool.submit',side_effect=lambda fn:fn()):
+            saved=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile})
+            self.assertEqual(saved.status_code,200);self.assertTrue(saved.json['canonical']);self.assertTrue(saved.json['affidavit_sheet_sync_pending'])
+            for key in profile:self.assertEqual(saved.json['profile'][key],profile[key])
+            restored=self.client.post('/api/visitors/affidavit',json={'session_token':token})
+            for key in profile:self.assertEqual(restored.json['profile'][key],profile[key])
+            with patch('account_access.queue_details',side_effect=AssertionError('Canonical profile must not wait for old Sheet columns')):
+                session=self.client.post('/api/accounts/session',json={'session_token':token})
+            self.assertEqual(session.status_code,200);self.assertTrue(session.json['affidavit_profile_canonical']);self.assertIsNone(session.json['details_id'])
+            for key in profile:self.assertEqual(session.json['affidavit_profile'][key],profile[key])
+            call.assert_called_once()
+            with patch.object(sheets,'call',side_effect=sheets.SheetStoreError('Mirror unavailable')):
+                changed={**profile,'address':'Updated address'}
+                result=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':changed})
+                self.assertEqual(result.status_code,200);self.assertEqual(result.json['profile']['address'],'Updated address')
+            self.assertEqual(records[signup['visitor_id']]['affidavit_profile']['address'],'Updated address')
+
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
         self.env=patch.dict(os.environ,{'ADMIN_SESSION_SECRET':'account-tests','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','VISITOR_PROFILE_LEGACY_ALLOWED':'0','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.env.start()
