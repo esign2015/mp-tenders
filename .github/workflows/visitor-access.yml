@@ -2,7 +2,7 @@ name: Visitor Profile Checks
 on:
   push:
     branches: [main]
-    paths: ["backend/server.py", "backend/account_access.py", "backend/google_sheet_store.py", "integrations/google-sheets/**", "assets/visitor_access.js", "assets/account_access.js", "index.html", "admin/index.html", "tests/test_accounts.py", "tests/test_account_access.cjs", "tests/test_affidavit_profile.cjs", "tests/test_visitors.py", "tests/test_visitor_access.cjs", "tests/test_google_sheet*", ".github/workflows/visitor-access.yml"]
+    paths: ["backend/server.py", "backend/account_access.py", "backend/google_sheet_store.py", "integrations/google-sheets/**", "assets/visitor_access.js", "assets/account_access.js", "index.html", "admin/index.html", "tests/test_accounts.py", "tests/test_account_access.cjs", "tests/test_affidavit_profile.cjs", "tests/test_admin_stats.py", "tests/test_admin_workflow_status.cjs", "tests/test_visitors.py", "tests/test_visitor_access.cjs", "tests/test_google_sheet*", ".github/workflows/visitor-access.yml"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,6 +25,8 @@ jobs:
       - run: python -m unittest discover -s tests -p 'test_google_sheet_store.py'
       - run: python -m unittest discover -s tests -p 'test_accounts.py'
       - run: python -m unittest discover -s tests -p 'test_admin_manual_pdf.py'
+      - run: python -m unittest discover -s tests -p 'test_admin_stats.py'
+      - run: node tests/test_admin_workflow_status.cjs
       - run: node tests/test_account_access.cjs
       - run: node tests/test_google_sheet_script.cjs
       - run: node tests/test_visitor_access.cjs

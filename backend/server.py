@@ -1144,6 +1144,59 @@ def admin_session():
         return error
     return jsonify({"ok": True, "email": email})
 
+def dashboard_user_counts(rows, now=None):
+    """Count people once across devices and older Telegram/mobile records."""
+    now = (now or now_ist()).astimezone(IST)
+    start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    end = start + timedelta(days=1)
+    people = {}
+    def date(value):
+        try:
+            parsed = datetime.fromisoformat(str(value or '').replace('Z', '+00:00'))
+            return (parsed.replace(tzinfo=IST) if parsed.tzinfo is None else parsed).astimezone(IST)
+        except (ValueError, TypeError):
+            return None
+    for row in rows:
+        key = normalise_mobile(row.get('mobile')) or clean(row.get('user_id')) or clean(row.get('visitor_id'))
+        if not key:
+            continue
+        person = people.setdefault(key, {'signup': None, 'active_today': False})
+        signup = date(row.get('signup_at'))
+        if signup and (person['signup'] is None or signup < person['signup']):
+            person['signup'] = signup
+        # Signup opens the dashboard too. Refreshes do not add another person.
+        visited = date(row.get('last_visit_at') or row.get('last_login_at'))
+        if any(value and start <= value < end for value in (signup, visited)):
+            person['active_today'] = True
+    return {
+        'total_users': len(people),
+        'today_signups': sum(bool(p['signup'] and start <= p['signup'] < end) for p in people.values()),
+        'today_active_users': sum(p['active_today'] for p in people.values()),
+        'today_returning_users': sum(bool(p['active_today'] and p['signup'] and p['signup'] < start) for p in people.values()),
+        'date_ist': now.date().isoformat(),
+        'updated_at': now.isoformat(),
+    }
+
+@app.get('/api/admin/stats')
+def admin_dashboard_stats():
+    email, error = require_admin()
+    if error:
+        return error
+    remote = sheet_store.enabled()
+    rows = sheet_store.call('list_visitors')['visitors'] if remote else []
+    conn = user_db() if remote else visitor_db()
+    try:
+        rows = list(rows)
+        if not remote:
+            rows.extend(dict(row) for row in conn.execute('SELECT * FROM visitor_registrations').fetchall())
+        for row in conn.execute('SELECT telegram_id,mobile,signup_at,last_login_at FROM users').fetchall():
+            rows.append({**dict(row), 'visitor_id': 'telegram:' + str(row['telegram_id'])})
+    finally:
+        conn.close()
+    response = jsonify({'ok': True, 'stats': dashboard_user_counts(rows)})
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
 @app.get("/api/admin/users-migration")
 def users_migration_snapshot():
     """Private, consistent export for moving users and their login history."""

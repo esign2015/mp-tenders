@@ -6,40 +6,45 @@
 <title>MP Tenders — Admin Control Panel</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#172033}
-header{position:relative;background:#203b91;color:#fff;padding:10px 18px}h1{margin:0;font-size:22px}header p{margin:3px 0 0;opacity:.9;font-size:13px}
-main{max-width:1380px;margin:9px auto;padding:0 10px}.card{background:#fff;border:1px solid #d7deeb;border-radius:11px;padding:11px;margin-bottom:8px;box-shadow:0 3px 10px #1720330a}
-#login{max-width:520px;margin:55px auto;text-align:center}.google-box{display:flex;justify-content:center;margin:24px 0}
-.hidden{display:none!important}.user{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;padding-right:120px}
-button{border:0;border-radius:7px;padding:7px 10px;margin:2px;cursor:pointer;font-weight:700;font-size:12px;background:#203b91;color:#fff}
-.shortcut{display:inline-block;background:#203b91;color:#fff;border-radius:7px;padding:9px 12px;text-decoration:none;font-size:13px;font-weight:700;margin:3px}button.secondary{background:#0088cc}button.warn{background:#c97800}button.danger{background:#b42318}
-.user button.danger{position:fixed;top:9px;right:12px;z-index:1000;margin:0;box-shadow:0 5px 14px #0003}
-.card h2{margin:0 0 9px;font-size:18px}
-.grid{display:grid;gap:7px}.controls-card{width:fit-content;max-width:100%}.controls-layout{display:grid;grid-template-columns:minmax(0,509px) minmax(0,362px);gap:8px;width:fit-content;max-width:100%;align-items:start}.controls-layout>.card{width:100%;margin-bottom:0}.quick-links{display:flex;align-items:center;flex-wrap:wrap;gap:5px;width:fit-content;max-width:100%}.quick-links h2{margin:0 8px 0 0}
-.telegram-grid{grid-template-columns:repeat(2,minmax(0,240px))}
-.data-grid{grid-template-columns:minmax(0,340px)}
-.action{border:1px solid #d7deeb;border-radius:9px;padding:10px;display:flex;flex-direction:column;min-height:108px}
-.action h3{margin:0 0 5px;font-size:15px}.action p{color:#637083;font-size:12px;line-height:1.35;margin:0 0 8px;min-height:0;flex:1}.action button{align-self:flex-start;margin-left:0}
-#result{white-space:pre-wrap;background:#111827;color:#d1fae5;border-radius:10px;padding:13px;min-height:52px}
-@media(max-width:900px){.controls-layout{grid-template-columns:1fr;width:100%}.controls-layout>.card{width:fit-content;max-width:100%}}
-@media(max-width:1050px){.telegram-grid{grid-template-columns:repeat(2,minmax(0,240px))}}
-@media(max-width:650px){header{padding:14px 86px 14px 14px}h1{font-size:21px}main{padding:0 9px;margin-top:10px}.controls-card{width:100%}.telegram-grid,.data-grid{grid-template-columns:1fr}.card{padding:12px}.action{min-height:auto}.user{padding-right:0}.user button.danger{top:10px;right:10px;padding:9px 11px}.card h2{font-size:19px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#18263b;font-size:14px}
+.hidden,[hidden]{display:none!important}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(110deg,#172b54,#244da0);color:#fff;padding:17px 22px;border-bottom:1px solid #ffffff1a}
+h1{margin:0;font-size:23px;letter-spacing:-.4px}header p{margin:5px 0 0;opacity:.8;font-size:12px}
+.admin-session{display:flex;align-items:center;gap:12px;min-width:0}.admin-profile{display:flex;align-items:center;gap:10px;min-width:0;padding:7px 12px;border:1px solid #ffffff26;border-radius:10px;background:#ffffff0c}
+.admin-avatar{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:50%;background:#dbeafe;color:#173d70;font-size:13px;font-weight:800}.admin-profile-copy{min-width:0}.admin-profile-label{display:block;font-size:10px;color:#c8d8ef;letter-spacing:.4px;text-transform:uppercase}#adminEmail{display:block;max-width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;margin-top:3px}
+main{width:100%;margin:14px auto;padding:0 20px 20px}.card{min-width:0;background:#fff;border:1px solid #dee5ef;border-radius:12px;padding:16px;box-shadow:0 2px 5px #17203304}.card h2{margin:0 0 10px;font-size:15px;line-height:1.4}.card-intro{margin:0 0 12px;line-height:1.55}
+#login{max-width:480px;margin:55px auto;text-align:center;padding:28px}.google-box{display:flex;justify-content:center;margin:24px 0}
+button,.shortcut{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border:1px solid transparent;border-radius:7px;padding:7px 11px;margin:0;cursor:pointer;font-weight:700;font-size:12px;font-family:inherit;background:#244da0;color:#fff;text-decoration:none;line-height:1.3;transition:background .15s,box-shadow .15s}
+button:hover,.shortcut:hover{background:#1b3a7d}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+button.secondary{background:#e8f3fa;color:#03638c;border-color:#cce6f3}button.secondary:hover{background:#d7ecf7}button.warn{background:#fff4dc;color:#995b00;border-color:#f3dfb0}button.danger{background:#fff0ee;color:#b42318;border-color:#f7cfca}button.danger:hover{background:#ffe1dc}button.logout-button{background:#ffffff0a;border-color:#ffffff45;color:#fff;padding:9px 14px}button.logout-button:hover{background:#ffffff20}
+.quick-links{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;margin-bottom:12px}.quick-links h2{margin:0 12px 0 0;font-size:13px;color:#52627a}.quick-links .shortcut{background:#f0f4fa;color:#244778;border-color:#e1e7f1}.quick-links .shortcut:hover{background:#e5edf8}#usersDownload{margin-left:auto}
+.management-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr) minmax(0,1.45fr);gap:12px;margin-bottom:12px;align-items:start}.controls-card{margin-bottom:12px}
+.grid{display:grid;gap:10px}.telegram-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.action{min-width:0;border:1px solid #e3e9f2;background:#f8fafd;border-radius:9px;padding:12px;display:flex;flex-direction:column}.action h3{margin:0 0 6px;font-size:13px;line-height:1.4}.action p{color:#607087;font-size:12px;line-height:1.6;margin:0 0 12px;flex:1}.action>button{align-self:flex-start}.report-actions,.form-actions{display:flex;gap:6px;flex-wrap:wrap}
+.reset-form{display:grid;gap:10px}.mobile-label{display:grid;gap:6px;font-weight:600;font-size:12px}.mobile-input{width:100%;max-width:270px;height:36px;padding:8px 10px;border:1px solid #cad4e2;border-radius:7px;font-size:14px;font-family:inherit;background:#fff;color:#18263b}.verification-label{display:flex;align-items:flex-start;gap:7px;font-size:12px;line-height:1.55;color:#52627a}.verification-label input{margin:3px 0 0;accent-color:#244da0;flex-shrink:0}.reset-form>button{justify-self:start}#passwordResetLink{width:100%;min-width:0;padding:9px;border:1px solid #cad4e2;border-radius:7px;font:12px Arial,sans-serif}.reset-form [role=status]{line-height:1.6;overflow-wrap:anywhere}.reset-form [role=status]:empty{display:none}
+.result-card h2{margin-bottom:8px}#result{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f7fb;color:#334760;border:1px solid #e3e9f2;border-radius:8px;padding:11px;font-size:12px;line-height:1.5;min-height:40px}#workflowState{margin-top:8px;line-height:1.5}#workflowState:empty{display:none}
+.small{font-size:12px;color:#63738a}.ok{color:#087443}.bad{color:#b42318}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:8px}.stat-card{padding:14px 16px;border-top:3px solid #bfdbfe}.stat-card:first-child{border-top-color:#244da0}.stat-label{display:block;color:#52627a;font-size:12px;font-weight:600}.stat-number{display:block;font-size:28px;line-height:1.2;font-weight:800;color:#173d70;margin:8px 0 5px;font-variant-numeric:tabular-nums}.stat-note{font-size:11px;color:#63738a;line-height:1.5}.stats-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}.stats-toolbar p{margin:0;line-height:1.5}.stats-toolbar button{flex-shrink:0;background:#e8eef7;color:#244778;min-height:29px;padding:5px 9px;font-size:11px}.stats-toolbar .bad{color:#b42318}
+@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat-card{padding:12px}.stat-number{font-size:25px}.stats-toolbar{align-items:flex-start}}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:99999;max-width:min(92vw,650px);padding:14px 18px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 10px 35px #0004;opacity:0;pointer-events:none;transition:.22s ease}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.error{background:#b42318}.toast.success{background:#087443}.toast.info{background:#203b91}
-.small{font-size:11px;color:#637083}.ok{color:#087443}.bad{color:#b42318}
-
-/* Consistent admin spacing and compact account controls. */
-body{background:#eef2f7}header{background:linear-gradient(110deg,#172b54,#244da0);padding:22px 28px}h1{font-size:25px;letter-spacing:-.4px}
-main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-bottom:16px;border-color:#e0e6ef;box-shadow:0 4px 18px #17203306}.card h2{font-size:17px;margin-bottom:14px}
-.quick-links{width:100%;gap:8px}.controls-layout{width:100%;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px;margin-bottom:16px}.controls-card{width:100%}.telegram-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.data-grid{grid-template-columns:1fr;gap:12px}
-.action{background:#f9fbfe;border-color:#e3e9f2;padding:16px;min-height:155px}.action p{font-size:13px;line-height:1.6}.report-actions{display:flex;gap:6px;flex-wrap:wrap}button{padding:10px 13px;font-size:12px}button:hover,.shortcut:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:wait}
-.reset-form{display:grid;gap:14px;max-width:620px}.reset-form>label:first-child{display:grid;gap:7px;font-weight:600;font-size:13px}.mobile-input{width:240px;max-width:100%;height:40px;padding:9px 12px;border:1px solid #cad4e2;border-radius:7px;font-size:15px}.reset-form>button{justify-self:start}.reset-form>label:nth-child(2){font-size:13px;line-height:1.6}#passwordResetLink{border:1px solid #cad4e2;border-radius:7px}.reset-form [hidden]{display:none!important}
-@media(max-width:900px){.controls-layout{grid-template-columns:1fr}.controls-layout>.card{width:100%}}
-@media(max-width:650px){main{padding:0 12px;margin-top:14px}header{padding:20px 90px 20px 18px}h1{font-size:21px}.card{padding:16px}.telegram-grid{grid-template-columns:1fr}.action{min-height:130px}}
+@media(max-width:1180px){.management-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.data-controls{grid-column:1/-1}}
+@media(max-width:1050px){.telegram-grid{grid-template-columns:repeat(2,minmax(0,1fr))}header{gap:12px}#adminEmail{max-width:210px}}
+@media(max-width:760px){header{flex-wrap:wrap;padding:14px 16px}h1{font-size:21px}.admin-session{width:100%;justify-content:space-between}.admin-profile{flex:1;max-width:400px}#adminEmail{max-width:none}.admin-profile-copy{flex:1}main{padding:0 12px 16px;margin-top:12px}.management-grid{grid-template-columns:1fr}.data-controls{grid-column:auto}.card{padding:14px}.quick-links{padding:10px}.quick-links h2{width:100%;margin:0}.quick-links .shortcut{flex:1}#usersDownload{margin-left:0}.mobile-input{max-width:100%}}
+@media(max-width:480px){.telegram-grid,.data-grid{grid-template-columns:1fr}.quick-links .shortcut,#usersDownload{width:100%;flex:auto}.admin-session{gap:8px}.admin-profile{padding:6px 8px;gap:8px}.admin-avatar{flex-basis:30px;height:30px}#adminEmail{font-size:11px}button.logout-button{padding:9px 10px}}
+@media(prefers-reduced-motion:reduce){button,.shortcut,.toast{transition:none}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
-<header><h1>MP Tenders · Admin</h1><p>SAR Digital Services, Kannod · Users, reports &amp; data management</p></header>
+<header>
+  <div><h1>MP Tenders · Admin</h1><p>SAR Digital Services, Kannod · Users, reports &amp; data management</p></div>
+  <div id="adminSession" class="admin-session hidden">
+    <div class="admin-profile" aria-label="Signed-in admin profile">
+      <span id="adminAvatar" class="admin-avatar" aria-hidden="true">A</span>
+      <div class="admin-profile-copy"><span class="admin-profile-label">Admin account</span><span id="adminEmail">—</span></div>
+    </div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </div>
+</header>
 
 <main>
 <section id="login" class="card">
@@ -50,34 +55,45 @@ main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-
 </section>
 
 <section id="panel" class="hidden">
-  <div class="card user">
-    <div><strong>👤 Admin:</strong> <span id="adminEmail">—</span><br><span class="small">Session automatically expires after a limited period.</span></div>
-    <button class="danger" onclick="logout()">Logout</button>
+  <div class="stats-grid" aria-label="User summary">
+    <div class="card stat-card"><span class="stat-label">Total Users</span><strong id="statTotalUsers" class="stat-number">—</strong><span class="stat-note">कुल registered users</span></div>
+    <div class="card stat-card"><span class="stat-label">Today's Sign Ups</span><strong id="statTodaySignups" class="stat-number">—</strong><span class="stat-note">आज जुड़ने वाले नए users</span></div>
+    <div class="card stat-card"><span class="stat-label">Today's Active Users</span><strong id="statTodayActive" class="stat-number">—</strong><span class="stat-note">आज dashboard खोलने वाले users</span></div>
+    <div class="card stat-card"><span class="stat-label">Returning Today</span><strong id="statTodayReturning" class="stat-number">—</strong><span class="stat-note">पुराने users जो आज वापस आए</span></div>
   </div>
-
+  <div class="stats-toolbar"><p id="statsStatus" class="small" role="status">आँकड़े लोड होने पर यहाँ समय दिखेगा।</p><button id="statsRefresh" type="button" onclick="loadAdminStats()">↻ Refresh Counts</button></div>
   <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a> <button id="usersDownload" onclick="downloadUsers()" title="Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें">👥 Download Users Excel</button></div>
 
-  <div class="card">
+  <div class="management-grid">
+  <div class="card account-control">
     <h2>User Password Reset</h2>
-    <p class="small">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
+    <p class="small card-intro">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
     <form id="passwordResetAdminForm" class="reset-form">
-      <label>Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
-      <label><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
+      <label class="mobile-label">Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
+      <label class="verification-label"><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
       <button id="passwordResetCreate" type="submit">Create 15-minute Reset Link</button>
-      <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link" style="padding:10px;width:100%;box-sizing:border-box">
+      <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link">
       <button id="passwordResetCopy" type="button" hidden>Copy Reset Link</button>
       <div id="passwordResetStatus" role="status" class="small"></div>
     </form>
   </div>
-  <div class="card">
+  <div class="card account-control">
     <h2>User Block / Unblock</h2>
+    <p class="small card-intro">Registered user की access जाँचें और यहीं से Block / Unblock करें।</p>
     <form id="userAccessForm" class="reset-form">
-      <label>Registered Mobile <input id="userAccessMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required class="mobile-input"></label>
-      <div><button type="submit">Check User</button><button id="userBlock" type="button" class="danger" disabled>Block</button><button id="userUnblock" type="button" disabled>Unblock</button></div>
+      <label class="mobile-label">Registered Mobile <input id="userAccessMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
+      <div class="form-actions"><button type="submit">Check User</button><button id="userBlock" type="button" class="danger" disabled>Block</button><button id="userUnblock" type="button" disabled>Unblock</button></div>
       <div id="userAccessStatus" role="status" class="small"></div>
     </form>
   </div>
-  <div class="controls-layout">
+  <div class="card data-controls">
+    <h2>⚙️ Data Controls</h2>
+    <div class="grid data-grid">
+      <div class="action"><h3>🔄 Full Data Refresh</h3><p>सभी संगठनों की tender सूची और dates दोबारा मिलाएँ। नए और अधूरे tenders की EMD, fee, PIN आदि निकाले जाएँगे। पूरी details वाले tenders दोबारा नहीं खोले जाएँगे।</p><button onclick="confirmRun('data_refresh','Full data refresh शुरू करें?')">Start Refresh</button></div>
+      <div class="action"><h3>🔁 Pending Detail Retry</h3><p>केवल अधूरे या असफल tenders की details दोबारा निकालें। सही और पूरी details वाले tenders नहीं दोहराए जाएँगे।</p><button onclick="confirmRun('retry_pending','Pending detail retry शुरू करें?')">Retry Pending</button></div>
+    </div>
+  </div>
+  </div>
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
     <div class="grid telegram-grid">
@@ -88,17 +104,8 @@ main{max-width:1180px;margin:22px auto;padding:0 18px}.card{padding:20px;margin-
     </div>
   </div>
 
-  <div class="card controls-card">
-    <h2>⚙️ Data Controls</h2>
-    <div class="grid data-grid">
-      <div class="action"><h3>🔄 Full Data Refresh</h3><p>सभी संगठनों की tender सूची और dates दोबारा मिलाएँ। नए और अधूरे tenders की EMD, fee, PIN आदि निकाले जाएँगे। पूरी details वाले tenders दोबारा नहीं खोले जाएँगे।</p><button onclick="confirmRun('data_refresh','Full data refresh शुरू करें?')">Start Refresh</button></div>
-      <div class="action"><h3>🔁 Pending Detail Retry</h3><p>केवल अधूरे या असफल tenders की details दोबारा निकालें। सही और पूरी details वाले tenders नहीं दोहराए जाएँगे।</p><button onclick="confirmRun('retry_pending','Pending detail retry शुरू करें?')">Retry Pending</button></div>
-    </div>
-  </div>
 
-  </div>
-
-  <div class="card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div><div id="workflowState" class="small" style="margin-top:8px"></div></div>
+  <div class="card result-card"><h2>📊 Command Result</h2><div id="result">अभी कोई command नहीं चली है।</div><div id="workflowState" class="small"></div></div>
 </section>
 </main>
 
@@ -160,8 +167,49 @@ async function restore(token){
   if(!r.ok){localStorage.removeItem(KEY);return}
   const d=await r.json(); if(d.ok) showPanel(d.email);
 }
-function showPanel(email){$("login").classList.add("hidden");$("panel").classList.remove("hidden");$("adminEmail").textContent=email}
-function logout(){$("passwordResetLink").value="";$("passwordResetLink").hidden=true;$("passwordResetCopy").hidden=true;$("passwordResetStatus").textContent="";localStorage.removeItem(KEY);$("panel").classList.add("hidden");$("login").classList.remove("hidden");}
+function showPanel(email){
+  $("login").classList.add("hidden");$("panel").classList.remove("hidden");$("adminSession").classList.remove("hidden");
+  const name=String(email||"Admin");$("adminEmail").textContent=name;$("adminEmail").title=name;
+  const parts=name.split('@')[0].split(/[._\s-]+/).filter(Boolean);
+  $("adminAvatar").textContent=(parts.length>1?parts[0][0]+parts[parts.length-1][0]:name.slice(0,2)).toUpperCase();
+  loadAdminStats();
+}
+function logout(){$("passwordResetLink").value="";$("passwordResetLink").hidden=true;$("passwordResetCopy").hidden=true;$("passwordResetStatus").textContent="";localStorage.removeItem(KEY);clearAdminStats();$("panel").classList.add("hidden");$("adminSession").classList.add("hidden");$("adminEmail").textContent="";$("adminEmail").title="";$("adminAvatar").textContent="A";$("login").classList.remove("hidden");}
+const STAT_FIELDS={total_users:'statTotalUsers',today_signups:'statTodaySignups',today_active_users:'statTodayActive',today_returning_users:'statTodayReturning'};
+let statsController=null,statsTimer=null;
+function clearAdminStats(){
+  clearTimeout(statsTimer);statsTimer=null;if(statsController)statsController.abort();statsController=null;
+  for(const id of Object.values(STAT_FIELDS))$(id).textContent='—';
+  $('statsStatus').textContent='आँकड़े लोड होने पर यहाँ समय दिखेगा।';$('statsStatus').className='small';$('statsRefresh').disabled=false;
+}
+async function loadAdminStats(){
+  if(statsController||$('panel').classList.contains('hidden'))return;
+  const token=localStorage.getItem(KEY);if(!token)return;
+  clearTimeout(statsTimer);statsTimer=null;
+  const controller=new AbortController();statsController=controller;
+  const timeout=setTimeout(()=>controller.abort(),90000);
+  $('statsRefresh').disabled=true;$('statsStatus').className='small';$('statsStatus').textContent='User counts अपडेट हो रहे हैं…';
+  try{
+    const response=await fetch(API+'/api/admin/stats',{headers:{Authorization:'Bearer '+token},cache:'no-store',signal:controller.signal});
+    const data=await response.json();
+    if(statsController!==controller||localStorage.getItem(KEY)!==token)return;
+    if(!response.ok||!data.ok)throw new Error(data.message||'User counts नहीं मिले। फिर Refresh Counts दबाएँ।');
+    const stats=data.stats||{};
+    if(!Object.keys(STAT_FIELDS).every(key=>Number.isInteger(stats[key])&&stats[key]>=0))throw new Error('User counts की पुष्टि नहीं हुई। Refresh Counts दोबारा दबाएँ।');
+    for(const [key,id] of Object.entries(STAT_FIELDS))$(id).textContent=stats[key].toLocaleString('en-IN');
+    const stamp=new Date(stats.updated_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true});
+    $('statsStatus').textContent='Updated: '+stamp+' IST · एक user एक बार गिना जाता है · हर 5 मिनट में refresh';
+  }catch(error){
+    if(statsController!==controller)return;
+    $('statsStatus').className='small bad';$('statsStatus').textContent=error.name==='AbortError'?'Counts का जवाब नहीं मिला। Refresh Counts दोबारा दबाएँ।':error.message;
+  }finally{
+    clearTimeout(timeout);
+    if(statsController===controller){statsController=null;$('statsRefresh').disabled=false;
+      statsTimer=setTimeout(()=>{if(!document.hidden)loadAdminStats();else statsTimer=null},300000);
+    }
+  }
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!statsTimer)loadAdminStats()});
 async function downloadUsers(){
   const button=$("usersDownload");
   button.disabled=true;

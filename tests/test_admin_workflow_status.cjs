@@ -1,11 +1,12 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync('admin/index.html','utf8');
 const source=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n').replace(/\bboot\(\);\s*$/,'');
-const elements={};const timers=[];const calls=[];let replies=[];
+const elements={};const timers=[];const calls=[];const removed=[];let replies=[];
+function element(){const classes=new Set(['hidden']);return {textContent:'',appendChild(){},addEventListener(){},classList:{add:v=>classes.add(v),remove:v=>classes.delete(v),contains:v=>classes.has(v)}}}
 const context=vm.createContext({Date,AbortController,console,
- document:{getElementById:id=>elements[id]||={textContent:'',appendChild(){},addEventListener(){},classList:{add(){},remove(){}}},
+ document:{addEventListener(){},getElementById:id=>elements[id]||=element(),
  createElement:()=>({}),createTextNode:text=>({textContent:text})},
- localStorage:{getItem:()=> 'test-session'},
+ localStorage:{getItem:()=> 'test-session',removeItem:key=>removed.push(key)},
  setTimeout:(fn,delay)=>{timers.push(delay);return timers.length;},clearTimeout(){},
  fetch:async(url,options)=>{calls.push({url,options});const next=replies.shift();if(next instanceof Error)throw next;return {ok:next.status===200,status:next.status,json:async()=>next.data};}});
 vm.runInContext(source,context);
@@ -35,5 +36,44 @@ vm.runInContext(source,context);
  replies=[{status:200,data:{workflow_runs:[{id:99,created_at:new Date(started-60000).toISOString()}]}}];
  const old=await context.workflowStatus('data_refresh',started);
  assert.equal(old.id,undefined,'Previous run cannot be reported as the requested run');
+ const loadStats=context.loadAdminStats;context.loadAdminStats=()=>{};
+ context.showPanel('admin.name@example.com');
+ assert.equal(elements.adminEmail.textContent,'admin.name@example.com');
+ assert.equal(elements.adminEmail.title,'admin.name@example.com');
+ assert.equal(elements.adminAvatar.textContent,'AN');
+ assert(!elements.adminSession.classList.contains('hidden'));
+ assert(elements.login.classList.contains('hidden'));
+ assert(!elements.panel.classList.contains('hidden'));
+ context.logout();
+ assert(elements.adminSession.classList.contains('hidden'));
+ assert(elements.panel.classList.contains('hidden'));
+ assert(!elements.login.classList.contains('hidden'));
+ assert.equal(elements.adminEmail.textContent,'');
+ assert.equal(elements.adminEmail.title,'');
+ assert.equal(removed.at(-1),'mp_admin_session');
+ assert.equal((html.match(/id="adminEmail"/g)||[]).length,1);
+ assert(html.indexOf('id="adminSession"')<html.indexOf('</header>'));
+ context.loadAdminStats=loadStats;elements.panel.classList.remove('hidden');
+ replies=[{status:200,data:{ok:true,stats:{total_users:1250,today_signups:5,today_active_users:12,today_returning_users:7,updated_at:'2026-10-02T17:00:00+05:30'}}}];
+ await context.loadAdminStats();
+ assert.equal(elements.statTotalUsers.textContent,'1,250');
+ assert.equal(elements.statTodaySignups.textContent,'5');
+ assert.equal(elements.statTodayActive.textContent,'12');
+ assert.equal(elements.statTodayReturning.textContent,'7');
+ assert(elements.statsStatus.textContent.includes('IST'));
+ assert(timers.includes(300000));
+ replies=[{status:503,data:{ok:false,message:'Storage unavailable'}}];
+ await context.loadAdminStats();
+ assert.equal(elements.statTotalUsers.textContent,'1,250','Storage errors keep the last known numbers');
+ assert.equal(elements.statsStatus.textContent,'Storage unavailable');
+ let complete;context.fetch=(url,options)=>{calls.push({url,options});return new Promise(resolve=>complete=resolve)};
+ const before=calls.length,pending=context.loadAdminStats();await context.loadAdminStats();
+ assert.equal(calls.length,before+1,'Repeated refresh cannot create overlapping requests');
+ context.logout();assert(calls.at(-1).options.signal.aborted);
+ complete({ok:true,json:async()=>({ok:true,stats:{total_users:9,today_signups:9,today_active_users:9,today_returning_users:0,updated_at:'2026-10-02T17:01:00+05:30'}})});
+ await pending;
+ assert.equal(elements.statTotalUsers.textContent,'—','Delayed responses cannot restore counters after logout');
  console.log('PASS: missing Render endpoint falls back to real GitHub status; no-run/network retry, failed-run display, stale-run exclusion, no token leakage.');
+ console.log('PASS: header admin profile appears on login/restore and hides with email cleared on logout.');
+ console.log('PASS: real stats are formatted, refreshes cannot overlap, storage failure preserves old data and logout cancels and ignores late responses.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
