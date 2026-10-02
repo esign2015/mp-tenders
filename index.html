@@ -1923,6 +1923,35 @@ body.telegram-locked .site-footer{visibility:hidden}
 
 <!-- Account access with mobile/password; Telegram alerts are independent. -->
 <body class="telegram-locked org-display-full">
+<div id="accountLoginLoading" hidden role="dialog" aria-modal="true" aria-labelledby="accountLoadingTitle" aria-describedby="accountLoadingDescription">
+  <div class="account-loading-card">
+    <div class="account-loading-brand">SAR Digital Services, Kannod</div>
+    <div class="account-loading-spinner" aria-hidden="true"></div>
+    <h2 id="accountLoadingTitle" tabindex="-1">Sign in हो रहा है…</h2>
+    <p id="accountLoadingDescription" role="status" aria-live="polite">आपका account जाँच रहे हैं। कृपया प्रतीक्षा करें।</p>
+    <div class="account-loading-alerts">
+      <strong>MP Tender Alerts सीधे पाएं</strong>
+      <p>आज Closing वाले टेंडर की सूची रोज़ सुबह 8 बजे और नए टेंडर के updates।</p>
+      <div class="account-loading-links">
+        <a href="https://t.me/mptendersalert" target="_blank" rel="noopener noreferrer">✈ Telegram Channel से जुड़ें</a>
+        <a id="accountLoadingWhatsApp" hidden target="_blank" rel="noopener noreferrer">💬 WhatsApp Channel से जुड़ें</a>
+      </div>
+      <small>Channel से जुड़ना आपकी इच्छा पर है। Login अपने आप पूरा होगा।</small>
+    </div>
+  </div>
+</div>
+<style>
+#accountLoginLoading[hidden],#accountLoadingWhatsApp[hidden]{display:none!important}
+#accountLoginLoading{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;background:radial-gradient(circle at 20% 20%,#245b8f,#122449 75%);color:#173d70}
+.account-loading-card{width:min(560px,100%);padding:32px 28px;border-radius:22px;background:#fff;text-align:center;box-shadow:0 24px 70px #0005}
+.account-loading-brand{font-size:14px;font-weight:800;color:#64748b}.account-loading-spinner{width:64px;height:64px;margin:26px auto 20px;border:6px solid #dbeafe;border-top-color:#2563eb;border-radius:50%;animation:account-loading-spin 1s linear infinite}
+@keyframes account-loading-spin{to{transform:rotate(360deg)}}
+.account-loading-card h2{margin:0 0 10px;font-size:25px;outline:none}.account-loading-card p{font-size:15px;line-height:1.6;margin:0}
+.account-loading-alerts{margin-top:26px;padding:20px;border:1px solid #bfdbfe;border-radius:14px;background:#eff6ff}.account-loading-alerts strong{font-size:18px}.account-loading-alerts p{margin-top:8px;font-size:13px;color:#475569}
+.account-loading-links{display:grid;gap:10px;margin:16px 0 12px}.account-loading-links a{padding:12px;border-radius:9px;background:#0284c7;color:#fff;text-decoration:none;font-size:14px;font-weight:800}.account-loading-links a:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}.account-loading-links #accountLoadingWhatsApp{background:#16a34a}.account-loading-alerts small{font-size:11px;line-height:1.5;color:#64748b}
+@media(max-width:520px){.account-loading-card{padding:24px 18px}.account-loading-card h2{font-size:21px}.account-loading-alerts{padding:16px}}
+@media(prefers-reduced-motion:reduce){.account-loading-spinner{animation:none}}
+</style>
 <div id="telegramGate">
   <div class="telegram-gate-card">
     <div class="telegram-gate-title">MP Tender Live Dashboard</div>
@@ -2035,7 +2064,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
 <script src="assets/visitor_access.js?v=3"></script>
-<script src="assets/account_access.js?v=13"></script>
+<script src="assets/account_access.js?v=14"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">

@@ -156,6 +156,7 @@ async function accountPost(path,body){
 }
 function accountEnsureProfile(data){
   if(!data.profile_corrections?.length)return Promise.resolve(data);
+  accountShowLoginLoading(false);
   const profile=data.profile,form=visitorNode('accountRepairForm'),status=visitorNode('visitorStatus');
   visitorNode('accountTabs').hidden=true;
   for(const name of ['SignIn','SignUp','Forgot','Reset'])visitorNode('account'+name+'Form').hidden=true;
@@ -209,6 +210,25 @@ async function accountUnlock(data){
   for(const id of ['accountLoginPassword','accountNewPassword','accountConfirmPassword','accountResetPassword','accountResetConfirm'])if(visitorNode(id))visitorNode(id).value='';
 }
 const accountBusyForms=new Set();
+let accountLoadingFocus=null;
+function accountShowLoginLoading(show){
+  const overlay=visitorNode('accountLoginLoading'),gate=visitorNode('telegramGate');
+  if(!overlay)return;
+  overlay.hidden=!show;
+  overlay.setAttribute('aria-busy',String(show));
+  if(gate)gate.inert=show;
+  if(show){
+    accountLoadingFocus=document.activeElement;visitorNode('accountLoadingTitle')?.focus?.();
+    overlay.onkeydown=event=>{
+      if(event.key!=='Tab')return;
+      const links=[...overlay.querySelectorAll('a[href]:not([hidden])')];
+      if(!links.length){event.preventDefault();return;}
+      if(event.shiftKey&&(document.activeElement===links[0]||document.activeElement===visitorNode('accountLoadingTitle'))){event.preventDefault();links.at(-1).focus();}
+      else if(!event.shiftKey&&document.activeElement===links.at(-1)){event.preventDefault();links[0].focus();}
+    };
+  }
+  else{const previous=accountLoadingFocus;accountLoadingFocus=null;if(previous?.isConnected!==false)previous?.focus?.();}
+}
 function accountFormReady(name){
   if(accountMaintenanceActive())return false;
   const value=id=>visitorNode(id)?.value||'';
@@ -228,6 +248,7 @@ function accountUpdateSubmit(name){
 }
 function accountSetBusy(name,busy){
   if(busy)accountBusyForms.add(name);else accountBusyForms.delete(name);
+  if(name==='SignIn')accountShowLoginLoading(busy);
   accountUpdateSubmit(name);
 }
 function accountUpdateAllSubmits(){for(const name of ['SignIn','SignUp','Forgot','Reset'])accountUpdateSubmit(name)}
