@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "36948709821",
   "github_run_number": "30",
   "github_commit_sha": "4f914891a07d18ddc1ac6d0ba59f43a3e674a93a",
@@ -12,7 +12,7 @@
   "batch_complete": 0,
   "started_at": "2026-10-02T00:59:47.741130+00:00",
   "success": 5379,
-  "failed": 49,
+  "failed": 70,
   "success_ids": [
     "2023_UAD_255290_15",
     "2023_UAD_295104_9",
@@ -5400,13 +5400,17 @@
     "2026_DHS_535965_1",
     "2026_DTCP_535283_1",
     "2026_MPFD_539203_1",
+    "2026_MPPGC_507421_1",
+    "2026_MPPGC_524097_1",
     "2026_MPPGC_527679_1",
     "2026_PKVVC_538252_1",
     "2026_PKVVC_538323_1",
     "2026_PWDRB_534911_1",
+    "2026_UAD_518525_2",
     "2026_UAD_526293_1",
     "2026_UAD_531027_1",
     "2026_UAD_535057_1",
+    "2026_UAD_535060_1",
     "2026_UAD_536060_1",
     "2026_UAD_536060_2",
     "2026_UAD_536380_1",
@@ -5416,6 +5420,17 @@
     "2026_UAD_536380_13",
     "2026_UAD_536380_14",
     "2026_UAD_536380_15",
+    "2026_UAD_536380_16",
+    "2026_UAD_536380_17",
+    "2026_UAD_536380_18",
+    "2026_UAD_536380_2",
+    "2026_UAD_536380_3",
+    "2026_UAD_536380_4",
+    "2026_UAD_536380_5",
+    "2026_UAD_536380_6",
+    "2026_UAD_536380_7",
+    "2026_UAD_536380_8",
+    "2026_UAD_536380_9",
     "2026_UAD_536567_1",
     "2026_UAD_536703_10",
     "2026_UAD_536703_11",
@@ -5442,8 +5457,14 @@
     "2026_UAD_536970_1",
     "2026_UAD_537227_1",
     "2026_UAD_537283_1",
+    "2026_UAD_537540_1",
     "2026_UAD_537587_1",
-    "2026_UAD_538731_1"
+    "2026_UAD_537971_1",
+    "2026_UAD_538489_1",
+    "2026_UAD_538673_1",
+    "2026_UAD_538731_1",
+    "2026_UAD_539632_1",
+    "2026_UAD_539980_1"
   ],
   "skipped_ids": [],
   "pending_ids": [
@@ -5461,7 +5482,6 @@
     "2026_MPB_523044_2",
     "2026_MPJNM_533547_1",
     "2026_MPPGC_506201_1",
-    "2026_MPPGC_507421_1",
     "2026_MPPGC_513034_2",
     "2026_MPPGC_516436_1",
     "2026_MPPGC_517362_1",
@@ -5472,7 +5492,6 @@
     "2026_MPPGC_522251_1",
     "2026_MPPGC_523445_1",
     "2026_MPPGC_523781_1",
-    "2026_MPPGC_524097_1",
     "2026_MPPGC_526112_1",
     "2026_MPPGC_526128_1",
     "2026_MPPGC_529001_1",
@@ -5494,25 +5513,6 @@
     "2026_PKVVC_536189_1",
     "2026_RUMSL_528528_1",
     "2026_STDC_531278_1",
-    "2026_UAD_518525_2",
-    "2026_UAD_535060_1",
-    "2026_UAD_536380_16",
-    "2026_UAD_536380_17",
-    "2026_UAD_536380_18",
-    "2026_UAD_536380_2",
-    "2026_UAD_536380_3",
-    "2026_UAD_536380_4",
-    "2026_UAD_536380_5",
-    "2026_UAD_536380_6",
-    "2026_UAD_536380_7",
-    "2026_UAD_536380_8",
-    "2026_UAD_536380_9",
-    "2026_UAD_537540_1",
-    "2026_UAD_537971_1",
-    "2026_UAD_538489_1",
-    "2026_UAD_538673_1",
-    "2026_UAD_539632_1",
-    "2026_UAD_539980_1",
     "2026_WRD_508900_2"
   ],
   "last_successful_tender_id": "",
@@ -5520,598 +5520,353 @@
     {
       "Tender ID": "2026_DHS_535965_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535965_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DHS_535394_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535394_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DHS_535349_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_526293_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_526293_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_MPPGC_527679_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_MPPGC_527679_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_531027_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_531027_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536703_10",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_10",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536703_11",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_11",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536703_12",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_12",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536703_13",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_13",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DTCP_535283_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_DTCP_535283_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_537227_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537227_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_11",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_11",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_10",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_10",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_12",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_12",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_13",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_13",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_14",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_14",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_15",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_15",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_17",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_17",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_16",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_16",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_2",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_2",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_3",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_3",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_4",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_4",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_5",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_5",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_6",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_6",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_7",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_7",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_8",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_8",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536918_9",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_9",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_538252_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538252_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_538323_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538323_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_535057_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535057_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_538731_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_538731_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536060_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536060_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536060_2",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536060_2",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536935_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536935_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PWDRB_534911_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_534911_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536567_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536567_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536970_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536970_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_MPFD_539203_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_MPFD_539203_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_537283_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537283_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_537587_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537587_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_10",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_10",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_11",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_11",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_12",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_12",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_13",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_13",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_14",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_14",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_15",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_15",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_16",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_16",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_18",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_18",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_17",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_17",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_2",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_2",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_3",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_3",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_4",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_4",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_5",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_5",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_6",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_6",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_7",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_7",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_8",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_8",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_536380_9",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_9",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_MPPGC_507421_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_MPPGC_507421_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_537540_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537540_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_537971_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537971_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_538489_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_538489_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_MPPGC_524097_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_MPPGC_524097_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_535060_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535060_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_538673_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_538673_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_518525_2",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_518525_2",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_539632_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_539632_1",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_539980_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_539980_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_DHS_535965_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535965_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_DHS_535394_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535394_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_DHS_535349_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_535349_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_526293_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_526293_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_531027_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_531027_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_MPPGC_527679_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_MPPGC_527679_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536703_10",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_10",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536703_11",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_11",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536703_12",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_12",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536703_13",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536703_13",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_DTCP_535283_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DTCP_535283_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_537227_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537227_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_11",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_11",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_10",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_10",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_13",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_13",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_12",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_12",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_14",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_14",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_15",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_15",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_17",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_17",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_16",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_16",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_2",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_2",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_3",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_3",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_4",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_4",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_5",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_5",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_7",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_7",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_6",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_6",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_8",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_8",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_538252_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538252_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536918_9",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536918_9",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_538323_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_538323_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_535057_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_535057_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_538731_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_538731_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536060_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536060_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536935_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536935_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536060_2",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536060_2",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PWDRB_534911_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_534911_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536970_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536970_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536567_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536567_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_MPFD_539203_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_MPFD_539203_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_537283_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537283_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_537587_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_537587_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_10",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_10",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_11",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_11",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_12",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_12",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_13",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_13",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_14",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_14",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_UAD_536380_15",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_UAD_536380_15",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-02T01:07:53.569527+00:00"
+  "updated_at": "2026-10-02T01:09:12.924189+00:00"
 }
