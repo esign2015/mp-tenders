@@ -1,12 +1,12 @@
 {
-  "attempted_at": "2026-10-01T15:42:07.900206+00:00",
-  "mode": "evening_new",
-  "key": "2026-10-01:evening_new",
-  "extraction_result": "scheduled-catch-up",
+  "attempted_at": "2026-10-02T04:59:56.082669+00:00",
+  "mode": "morning",
+  "key": "2026-10-02:morning",
+  "extraction_result": "success",
   "send_outcome": "success",
   "message_ids": [
-    69,
-    70,
-    71
+    72,
+    73,
+    74
   ]
 }
