@@ -804,7 +804,8 @@ jobs:
           python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json data/admin_mismatch_alert_status.json
   morning_telegram_after_extraction:
     needs: scrape_full
-    if: always() && github.event_name == 'schedule' && (github.event.schedule == '25 3 * * *' || github.event.schedule == '5 5 * * *')
+    # Closing Today is sent independently at 08:00 IST by telegram_scheduled_v2.
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:

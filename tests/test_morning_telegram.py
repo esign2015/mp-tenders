@@ -21,12 +21,12 @@ class MorningTelegramTests(unittest.TestCase):
         for result in ('success','failure','cancelled'):
             self.assertEqual(due_alert(CFG, {}, now, result)[1:], ('morning','2026-10-01:morning'))
 
-    def test_completion_delay_and_fixed_nine_am_morning(self):
-        cfg={'morning_telegram_ist':'09:00','morning_send_after_extraction':False,'evening_new_after_detail_minutes':15,'evening_total_after_detail_minutes':30}
+    def test_completion_delay_and_fixed_eight_am_morning(self):
+        cfg={'morning_telegram_ist':'08:00','morning_send_after_extraction':False,'evening_new_after_detail_minutes':15,'evening_total_after_detail_minutes':30}
         sent={'morning':'2026-10-01:morning'}
         complete={'completed_at':'2026-10-01T14:00:00+00:00','run_id':'123'}
-        self.assertIsNone(due_alert(cfg,{},datetime(2026,10,1,8,59,tzinfo=IST),'success'))
-        self.assertEqual(due_alert(cfg,{},datetime(2026,10,1,9,0,tzinfo=IST))[1],'morning')
+        self.assertIsNone(due_alert(cfg,{},datetime(2026,10,1,7,59,tzinfo=IST),'success'))
+        self.assertEqual(due_alert(cfg,{},datetime(2026,10,1,8,0,tzinfo=IST))[1],'morning')
         self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,20,0,tzinfo=IST)))
         self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,19,44,tzinfo=IST),completion=complete))
         self.assertEqual(due_alert(cfg,sent,datetime(2026,10,1,19,45,tzinfo=IST),completion=complete)[1],'evening_new')
@@ -116,15 +116,19 @@ class MorningTelegramTests(unittest.TestCase):
                 self.assertEqual(document.call_count,2)
                 self.assertEqual([r['Tender ID'] for r in card_pdf.call_args.args[0]],['today'])
 
-    def test_snapshot_and_failed_extraction_alert_are_wired(self):
+    def test_morning_alert_is_independent_of_extraction(self):
         root=Path(__file__).resolve().parents[1]
         workflow=(root/'.github/workflows/scrape.yml').read_text()
         scrape=workflow.split('  scrape_full:',1)[1].split('  morning_telegram_after_extraction:',1)[0]
         self.assertIn("github.event.schedule == '25 3 * * *'",scrape)
         after=workflow.split('  morning_telegram_after_extraction:',1)[1].split('  corrigendum_watch:',1)[0]
-        self.assertIn('if: always()',after)
-        self.assertIn('needs: scrape_full',after)
-        self.assertIn('needs.scrape_full.result',after)
-        self.assertIn('ref: main',after)
+        self.assertIn('if: false',after)
+        config=json.loads((root/'data/schedule_config.json').read_text())
+        self.assertEqual(config['morning_telegram_ist'],'08:00')
+        self.assertFalse(config['morning_send_after_extraction'])
+        independent=(root/'.github/workflows/telegram_scheduled_v2.yml').read_text()
+        self.assertIn('cron: "30 2 * * *"',independent)
+        self.assertIn('data/telegram_daily.trigger',independent)
+        self.assertNotIn('needs: scrape_full',independent)
 
 if __name__ == '__main__': unittest.main()
