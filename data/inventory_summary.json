@@ -2,12 +2,12 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-10-02T15:59:32.544613+05:30",
+    "checked_at": "2026-10-02T16:01:32.986977+05:30",
     "snapshot_at": "2026-10-02T00:32:52.800344+05:30",
     "portal_tender_count": 5527,
     "verified_unique_ids": 5421,
-    "dashboard_live_count": 5417,
-    "closed_or_cancelled_count": 4,
+    "dashboard_live_count": 5414,
+    "closed_or_cancelled_count": 7,
     "excluded_master_only_live_count": 186,
     "excluded_master_only_live_ids": [
       "2026_DGPCS_540364_1",
@@ -206,15 +206,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-02T10:29:33.575275+00:00",
+  "updated_at": "2026-10-02T10:31:34.061397+00:00",
   "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5527,
   "copied_tenders": 5527,
-  "detail_complete": 5480,
+  "detail_complete": 5481,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 47,
+  "detail_pending": 46,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -475,10 +475,10 @@
       "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
       "portal_tender_count": 3022,
       "copied_tenders": 3022,
-      "detail_complete": 3021,
+      "detail_complete": 3022,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1286,14 +1286,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 46,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2026_UAD_540300_1"
-  ],
-  "known_pincode_count": 378,
+  "missing_district_count": 0,
+  "missing_district_ids": [],
+  "known_pincode_count": 379,
   "department_count": 340,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_UAD_540300_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
