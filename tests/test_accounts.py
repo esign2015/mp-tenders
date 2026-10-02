@@ -17,6 +17,16 @@ class AccountsTests(unittest.TestCase):
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
     def login(self,password=None):return self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':password or self.password})
+    def test_batched_sheet_login_keeps_both_limits_in_one_lookup(self):
+        with patch.dict(os.environ,{'GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP':'1'}),patch.object(sheets,'enabled',return_value=True),server.app.test_request_context():
+            with patch.object(server.account_service,'operation',return_value={'record':{'user_id':'example'},'rate_results':[{'allowed':True},{'allowed':True}]}) as operation:
+                self.assertEqual(server.account_service.lookup_limited('+919876543210')['user_id'],'example')
+                self.assertEqual(operation.call_count,1)
+                self.assertEqual([item['limit'] for item in operation.call_args.kwargs['rate_checks']],[120,12])
+            from account_access import AccountError
+            for result in ({'record':None},{'record':None,'rate_results':[{'allowed':True},{'allowed':False}]}):
+                with patch.object(server.account_service,'operation',return_value=result),self.assertRaises(AccountError):
+                    server.account_service.lookup_limited('+919876543210')
     def test_remote_login_checks_overlap_and_still_enforce_rates(self):
         import threading
         barrier=threading.Barrier(3)

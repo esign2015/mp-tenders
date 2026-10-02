@@ -86,3 +86,5 @@ do not enable it on the free Render service. Existing anonymous profiles are not
 silently claimed merely by entering the same unverified mobile number.
 
 Unknown mobiles entered in Sign in are redirected to Sign up with the typed mobile and password. Duplicate signup returns to Sign in with the mobile filled and password cleared. Forgot password checks registration on the server before exposing the WhatsApp request link; unknown mobiles are redirected to Sign up. All account lookups use the existing persistent attempt limits.
+
+Login performance update: deploy the current Code.gs as a new version of the existing Apps Script web app first. Then set GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP=1 on the API and redeploy it. Mobile lookup and both persistent attempt limits now share one Sheet request; password validation and session replacement still finish before dashboard unlock. Optional affidavit/profile enrichment stays in the background. Do not enable the flag on an older Script deployment: missing rate results fail closed.

@@ -143,6 +143,13 @@ class Accounts:
         # Independent remote calls overlap their network/startup time. The Sheet
         # still serializes mutations; every rate check must pass before login.
         checks=self.rate_checks(mobile)
+        if os.getenv('GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP') == '1':
+            result=self.operation('lookup',mobile=mobile,rate_checks=checks)
+            limits=result.get('rate_results')
+            if not isinstance(limits,list) or len(limits)!=len(checks):
+                raise AccountError('Google Sheet account script update बाकी है।',503)
+            self.check_rate_results(limits)
+            return result['record']
         with ThreadPoolExecutor(max_workers=3,thread_name_prefix='account-check') as pool:
             limits=[pool.submit(self.operation,'rate',**data) for data in checks]
             lookup=pool.submit(self.get,mobile=mobile)

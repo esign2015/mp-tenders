@@ -11,9 +11,9 @@ const MP_SCHEMA = {
 };
 
 function mpBook_(){return SpreadsheetApp.openById(MP_TENDER_SHEET_ID);}
-function mpTables_(book){
+function mpTables_(book,names){
   const tables={};
-  Object.keys(MP_SCHEMA).forEach(name=>{
+  (names||Object.keys(MP_SCHEMA)).forEach(name=>{
     const headers=MP_SCHEMA[name];
     let sheet=book.getSheetByName(name);
     if(!sheet)sheet=book.insertSheet(name);
@@ -126,8 +126,13 @@ function mpHandle_(tables,p){
 function mpAccountHandle_(tables,p){
   const action=p.action.slice(8),rows=mpRows_(tables.Accounts);
   if(action==='lookup'||action==='get'){
+    let rate_results;
+    if(p.rate_checks!==undefined){
+      if(action!=='lookup'||!Array.isArray(p.rate_checks)||p.rate_checks.length!==2||p.rate_checks[0].limit!==120||p.rate_checks[1].limit!==12)mpError_(400,'Invalid lookup limits.');
+      rate_results=p.rate_checks.map(check=>mpAccountHandle_(tables,{action:'account_rate',...check}));
+    }
     const row=rows.find(row=>action==='lookup'?row.mobile===p.mobile:row.user_id===p.user_id);
-    return {record:row?JSON.parse(row.record_json):null};
+    return {record:row?JSON.parse(row.record_json):null,...(rate_results?{rate_results}:{})};
   }
   if(action==='create'){
     const record=p.record||{};
@@ -164,7 +169,10 @@ function doPost(event){
     const request=JSON.parse(payload);
     if(request.spreadsheet_id!==MP_TENDER_SHEET_ID||!mpUuid_(request.request_id))mpError_(400,'Invalid Sheet request.');
     lock=LockService.getScriptLock();lock.waitLock(20000);
-    const result=mpHandle_(mpTables_(mpBook_()),request);SpreadsheetApp.flush();
+    const account=String(request.action||'').slice(8);
+    const names=String(request.action||'').startsWith('account_')&&['lookup','get','update','rate'].includes(account)
+      ? (account==='rate'?['Accounts','AccountRateLimits']:['Accounts',...(request.rate_checks?['AccountRateLimits']:[])]) : undefined;
+    const result=mpHandle_(mpTables_(mpBook_(),names),request);SpreadsheetApp.flush();
     return ContentService.createTextOutput(JSON.stringify({ok:true,...result})).setMimeType(ContentService.MimeType.JSON);
   }catch(error){return ContentService.createTextOutput(JSON.stringify({ok:false,status:error.status||503,message:error.status?error.message:'Sheet operation failed. Please retry.'})).setMimeType(ContentService.MimeType.JSON);}
   finally{if(lock&&lock.hasLock())lock.releaseLock();}

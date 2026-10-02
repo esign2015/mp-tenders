@@ -54,3 +54,8 @@ assert(!call('account_update',{record:{...update,password_hash:'should-not-overw
 assert.equal(call('account_get',{user_id:accountId}).record.password_hash,record.password_hash);
 const key='a'.repeat(64);for(let i=1;i<=13;i++)assert.equal(call('account_rate',{key,limit:12}).allowed,i<=12);
 console.log('PASS: one password account per phone, compare-and-swap guards concurrent changes and persistent login rate limit.');
+
+const batchMobile='+919876543211';const limits=[{key:'b'.repeat(64),limit:120},{key:'c'.repeat(64),limit:12}];
+for(let i=0;i<13;i++){const result=call('account_lookup',{mobile:batchMobile,rate_checks:limits});assert(result.ok);assert.equal(result.rate_results[0].allowed,true);assert.equal(result.rate_results[1].allowed,i<12)}
+assert.equal(call('account_lookup',{mobile:batchMobile,rate_checks:[]}).status,400);
+console.log('PASS: batched lookup enforces phone and IP limits in one locked request.');
