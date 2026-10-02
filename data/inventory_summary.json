@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-10-02T19:58:05.190346+05:30",
+    "checked_at": "2026-10-02T20:00:46.027068+05:30",
     "snapshot_at": "2026-10-02T00:32:52.800344+05:30",
     "portal_tender_count": 5518,
     "verified_unique_ids": 5421,
@@ -244,15 +244,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-02T14:28:06.616635+00:00",
+  "updated_at": "2026-10-02T14:30:46.884038+00:00",
   "snapshot_at": "2026-10-02T14:02:47.055582+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5518,
   "copied_tenders": 5518,
-  "detail_complete": 5457,
+  "detail_complete": 5472,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 61,
+  "detail_pending": 46,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -513,10 +513,10 @@
       "snapshot_at": "2026-10-02T14:02:47.055582+00:00",
       "portal_tender_count": 3017,
       "copied_tenders": 3017,
-      "detail_complete": 3009,
+      "detail_complete": 3017,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1019,10 +1019,10 @@
       "snapshot_at": "2026-10-02T14:02:47.055582+00:00",
       "portal_tender_count": 32,
       "copied_tenders": 32,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
@@ -1206,10 +1206,10 @@
       "snapshot_at": "2026-10-02T14:02:47.055582+00:00",
       "portal_tender_count": 375,
       "copied_tenders": 375,
-      "detail_complete": 369,
+      "detail_complete": 375,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1313,42 +1313,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 46,
-  "missing_district_count": 15,
-  "missing_district_ids": [
-    "2026_PWDRB_537856_1",
-    "2026_PWDRB_539556_1",
-    "2026_PWDRB_539558_1",
-    "2026_PWDRB_539559_1",
-    "2026_PWDRB_539561_1",
-    "2026_PWDRB_539603_1",
-    "2026_SCMFL_540402_1",
-    "2026_UAD_540322_1",
-    "2026_UAD_540366_1",
-    "2026_UAD_540371_1",
-    "2026_UAD_540382_1",
-    "2026_UAD_540386_1",
-    "2026_UAD_540390_1",
-    "2026_UAD_540421_1",
-    "2026_UAD_540450_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 378,
   "department_count": 337,
-  "missing_pincode_count": 15,
-  "missing_pincode_ids": [
-    "2026_PWDRB_537856_1",
-    "2026_PWDRB_539556_1",
-    "2026_PWDRB_539558_1",
-    "2026_PWDRB_539559_1",
-    "2026_PWDRB_539561_1",
-    "2026_PWDRB_539603_1",
-    "2026_SCMFL_540402_1",
-    "2026_UAD_540322_1",
-    "2026_UAD_540366_1",
-    "2026_UAD_540371_1",
-    "2026_UAD_540382_1",
-    "2026_UAD_540386_1",
-    "2026_UAD_540390_1",
-    "2026_UAD_540421_1",
-    "2026_UAD_540450_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
