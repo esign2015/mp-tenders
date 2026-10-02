@@ -1,8 +1,8 @@
 {
-  "status": "verified",
-  "checked_at": "2026-10-02T15:48:34.806500+05:30",
+  "status": "mismatch",
+  "checked_at": "2026-10-02T15:50:27.270128+05:30",
   "snapshot_at": "2026-10-02T00:32:52.800344+05:30",
-  "portal_tender_count": 5421,
+  "portal_tender_count": 5527,
   "verified_unique_ids": 5421,
   "dashboard_live_count": 5417,
   "closed_or_cancelled_count": 4,
@@ -196,7 +196,10 @@
   ],
   "missing_ids": [],
   "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "errors": [
+    "Verified inventory and copied Tender IDs differ",
+    "Portal total and unique Tender IDs differ"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
