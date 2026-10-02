@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-10-02T15:57:21.498756+05:30",
+    "checked_at": "2026-10-02T15:59:27.132315+05:30",
     "snapshot_at": "2026-10-02T00:32:52.800344+05:30",
     "portal_tender_count": 5527,
     "verified_unique_ids": 5421,
@@ -205,15 +205,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-02T10:27:22.591382+00:00",
+  "updated_at": "2026-10-02T10:29:28.175188+00:00",
   "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5527,
   "copied_tenders": 5527,
-  "detail_complete": 5455,
+  "detail_complete": 5480,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 72,
+  "detail_pending": 47,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -474,10 +474,10 @@
       "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
       "portal_tender_count": 3022,
       "copied_tenders": 3022,
-      "detail_complete": 3001,
+      "detail_complete": 3021,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 21
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -694,10 +694,10 @@
       "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
       "portal_tender_count": 268,
       "copied_tenders": 268,
-      "detail_complete": 245,
+      "detail_complete": 246,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 23
+      "detail_pending": 22
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -837,10 +837,10 @@
       "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
       "portal_tender_count": 96,
       "copied_tenders": 96,
-      "detail_complete": 94,
+      "detail_complete": 96,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1167,10 +1167,10 @@
       "snapshot_at": "2026-10-02T09:55:38.654553+00:00",
       "portal_tender_count": 49,
       "copied_tenders": 49,
-      "detail_complete": 47,
+      "detail_complete": 49,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1285,64 +1285,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 46,
-  "missing_district_count": 26,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MPFD_540340_1",
-    "2026_MPFD_540345_1",
-    "2026_MPPGC_539372_1",
-    "2026_PWPIU_540228_1",
-    "2026_PWPIU_540254_1",
-    "2026_UAD_536200_1",
-    "2026_UAD_539612_1",
-    "2026_UAD_539868_1",
-    "2026_UAD_539869_1",
-    "2026_UAD_539870_1",
-    "2026_UAD_539872_1",
-    "2026_UAD_539977_1",
-    "2026_UAD_539978_1",
-    "2026_UAD_539979_1",
-    "2026_UAD_540246_1",
-    "2026_UAD_540247_1",
-    "2026_UAD_540248_1",
-    "2026_UAD_540271_1",
-    "2026_UAD_540272_1",
-    "2026_UAD_540274_1",
-    "2026_UAD_540278_1",
-    "2026_UAD_540280_1",
-    "2026_UAD_540282_1",
-    "2026_UAD_540283_1",
-    "2026_UAD_540300_1",
-    "2026_UAD_540365_1"
+    "2026_UAD_540300_1"
   ],
   "known_pincode_count": 378,
   "department_count": 340,
-  "missing_pincode_count": 26,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_MPFD_540340_1",
-    "2026_MPFD_540345_1",
-    "2026_MPPGC_539372_1",
-    "2026_PWPIU_540228_1",
-    "2026_PWPIU_540254_1",
-    "2026_UAD_536200_1",
-    "2026_UAD_539612_1",
-    "2026_UAD_539868_1",
-    "2026_UAD_539869_1",
-    "2026_UAD_539870_1",
-    "2026_UAD_539872_1",
-    "2026_UAD_539977_1",
-    "2026_UAD_539978_1",
-    "2026_UAD_539979_1",
-    "2026_UAD_540246_1",
-    "2026_UAD_540247_1",
-    "2026_UAD_540248_1",
-    "2026_UAD_540271_1",
-    "2026_UAD_540272_1",
-    "2026_UAD_540274_1",
-    "2026_UAD_540278_1",
-    "2026_UAD_540280_1",
-    "2026_UAD_540282_1",
-    "2026_UAD_540283_1",
-    "2026_UAD_540300_1",
-    "2026_UAD_540365_1"
+    "2026_UAD_540300_1"
   ]
 }
