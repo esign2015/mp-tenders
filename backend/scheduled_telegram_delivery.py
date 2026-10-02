@@ -74,6 +74,16 @@ def main():
     state = read_json(root / 'data/telegram_schedule.json')
     due = due_alert(read_json(root / 'data/schedule_config.json'), state, datetime.now(IST), extraction_result,read_json(root/'data/evening_detail_completion.json'),state.get('evening_new_sent_at'))
     if not due:
+        # Keep the monitor consistent with the current copied IDs even on a
+        # notification tick with nothing left to send. Rebuild only if counts
+        # or the inventory source changed, avoiding timestamp-only commits.
+        from inventory_summary import build_summary, write_summary
+        current = build_summary(root)['live_verification']
+        old = read_json(root/'data/live_count_verification.json')
+        fields = ('status','counts_match','portal_tender_count','verified_unique_ids',
+                  'dashboard_live_count','closed_or_cancelled_count','inventory_source')
+        if any(current.get(field) != old.get(field) for field in fields):
+            write_summary(root)
         print('No unsent daily Telegram alert is due.')
         return 0
     _, mode, key = due

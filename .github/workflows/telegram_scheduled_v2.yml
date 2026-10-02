@@ -42,4 +42,4 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          python backend/publish_data_checkpoint.py data/telegram_schedule.json data/telegram_last_attempt.json data/telegram_delivery/*.json
+          python backend/publish_data_checkpoint.py data/telegram_schedule.json data/telegram_last_attempt.json data/telegram_delivery/*.json data/live_count_verification.json

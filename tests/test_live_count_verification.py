@@ -6,6 +6,18 @@ from inventory_summary import verify_live_counts
 from nightly_cleanup import IST
 
 class LiveCounts(unittest.TestCase):
+    def test_complete_current_copy_replaces_stale_cached_inventory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'data').mkdir()
+            (root/'data/live_snapshot.json').write_text(json.dumps({'verified':True,'tender_ids':['old']}))
+            orgs=[{'Organisation Name':'Test','Tender Count':'2'}]
+            listed=[{'Tender ID':tid,'Organisation Name':'Test','Closing Date':'10-Oct-2026 03:00 PM'} for tid in ('a','b')]
+            result=verify_live_counts(root,orgs,listed,{},datetime(2026,10,2,22,0,tzinfo=IST))
+            self.assertTrue(result['counts_match']);self.assertEqual(result['inventory_source'],'copied-list')
+            self.assertEqual(result['dashboard_live_count'],2);self.assertEqual(result['verified_unique_ids'],2)
+            result=verify_live_counts(root,orgs,listed[:1],{},datetime(2026,10,2,22,0,tzinfo=IST))
+            self.assertFalse(result['counts_match'])
+
     def test_overnight_master_only_ids_remain_excluded_and_expiry_is_counted(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);(root/'data').mkdir()

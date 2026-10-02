@@ -21,25 +21,34 @@ def verify_live_counts(root, orgs, listed, details, now=None):
         tid = clean(row.get('Tender ID'))
         if tid:
             merged[tid] = {**details.get(tid, {}), **{key: value for key, value in row.items() if clean(value)}}
-    future = {tid for tid, row in merged.items() if clean(row.get('Status')).lower() != 'cancelled'
-              and (closing := parse_dt(row.get('Closing Date'))) and closing > now}
-    missing = ids - set(merged)
-    unknown_dates = {tid for tid in ids if not parse_dt(merged.get(tid, {}).get('Closing Date'))}
     portal = sum(int(re.sub(r'\D', '', clean(row.get('Tender Count'))) or 0) for row in orgs)
-    errors = []
-    if snapshot.get('verified') is not True: errors.append('Awaiting a verified portal inventory')
-    if ids != copied: errors.append('Verified inventory and copied Tender IDs differ')
-    if len(ids) != portal: errors.append('Portal total and unique Tender IDs differ')
-    if missing: errors.append('Verified Tender IDs are missing from dashboard data')
-    if unknown_dates: errors.append('Verified Tender IDs have missing or invalid closing dates')
+    organisation_errors = []
     for org in orgs:
         name = clean(org.get('Organisation Name')).casefold()
         org_ids = {clean(row.get('Tender ID')) for row in listed if clean(row.get('Organisation Name')).casefold() == name} - {''}
         expected = int(re.sub(r'\D', '', clean(org.get('Tender Count'))) or 0)
         if len(org_ids) != expected:
-            errors.append('Organisation count mismatch: ' + clean(org.get('Organisation Name')))
+            organisation_errors.append('Organisation count mismatch: ' + clean(org.get('Organisation Name')))
+    # A finished copy whose every organisation and unique total match is the
+    # same inventory proof used by the finalizer. A stale cached JSON must not
+    # make /data disagree with the current CSV used by the dashboard/PDF.
+    trusted_copy = bool(orgs) and not organisation_errors and len(copied) == portal
+    source = 'copied-list' if trusted_copy else 'cached-snapshot'
+    if trusted_copy:
+        ids = copied
+    future = {tid for tid, row in merged.items() if clean(row.get('Status')).lower() != 'cancelled'
+              and (closing := parse_dt(row.get('Closing Date'))) and closing > now}
+    missing = ids - set(merged)
+    unknown_dates = {tid for tid in ids if not parse_dt(merged.get(tid, {}).get('Closing Date'))}
+    errors = list(organisation_errors)
+    if not trusted_copy and snapshot.get('verified') is not True: errors.append('Awaiting a verified portal inventory')
+    if ids != copied: errors.append('Verified inventory and copied Tender IDs differ')
+    if len(ids) != portal: errors.append('Portal total and unique Tender IDs differ')
+    if missing: errors.append('Verified Tender IDs are missing from dashboard data')
+    if unknown_dates: errors.append('Verified Tender IDs have missing or invalid closing dates')
     return {'status': 'mismatch' if errors else 'verified', 'checked_at': now.isoformat(),
-            'snapshot_at': snapshot.get('snapshot_at', ''), 'portal_tender_count': portal,
+            'snapshot_at': orgs[0].get('Retrieved At', '') if trusted_copy else snapshot.get('snapshot_at', ''),
+            'inventory_source': source, 'portal_tender_count': portal,
             'verified_unique_ids': len(ids), 'dashboard_live_count': len(future & ids),
             'closed_or_cancelled_count': len(ids - future - unknown_dates),
             'excluded_master_only_live_count': len(future - ids),
