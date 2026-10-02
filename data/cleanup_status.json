@@ -1,11 +1,11 @@
 {
   "status": "completed",
   "policy": "expired-at-evening",
-  "cleaned_at": "2026-10-03T00:06:18.151668+05:30",
+  "cleaned_at": "2026-10-03T00:38:45.333604+05:30",
   "retention_hours": 0,
   "files": {
     "all_tenders_org_detailed.csv": {
-      "removed": 0
+      "removed": 127
     },
     "tender_details.csv": {
       "removed": 0
@@ -14,7 +14,7 @@
       "removed": 0
     }
   },
-  "removed": 0,
+  "removed": 127,
   "retired_tender_ids": [
     "2026_DHS_520748_1",
     "2026_DHS_535349_1",
