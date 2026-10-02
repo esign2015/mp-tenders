@@ -20,10 +20,12 @@ def account_mobile(server,value):
     text=str(value or '').strip()
     return server.normalise_mobile(text) if re.fullmatch(r'(?:\+91)?[6-9][0-9]{9}',text) else ''
 
-def queue_details(visitor_id,token):
+def queue_details(visitor_id,token,record_visit=False):
     if not _detail_slots.acquire(blocking=False):return None
     def load():
-        try:return sheets.call('session',visitor_id=visitor_id).get('affidavit_profile',{})
+        try:
+            result=sheets.call('session' if record_visit else 'read_affidavit',visitor_id=visitor_id)
+            return result.get('affidavit_profile',result.get('profile',{}))
         finally:_detail_slots.release()
     try:future=_detail_pool.submit(load)
     except Exception:
@@ -38,7 +40,17 @@ def queue_details(visitor_id,token):
 PASSWORD_METHOD='scrypt:32768:8:3'
 _DUMMY_HASH=generate_password_hash('no-account-'+secrets.token_hex(24),method=PASSWORD_METHOD)
 SESSION_SECONDS=30*24*3600
-IDLE_SECONDS=15*60
+MAINTENANCE_MESSAGE='Website under maintenance. Please login after 12:30 AM IST.'
+
+def maintenance_active(now=None):
+    now=time.time() if now is None else now
+    minute=int((now+19800)%86400//60)
+    return minute>=23*60+30 or minute<30
+
+def next_daily_logout(now=None):
+    now=time.time() if now is None else now
+    cutoff=(int((now+19800)//86400)*86400-19800)+23*3600+30*60
+    return cutoff if now<cutoff else cutoff+86400
 
 def name_fields(server,p):
     first=server.clean(p.get('first_name',p.get('name')))
@@ -161,9 +173,10 @@ class Accounts:
             raise AccountError('Password 8 से 128 characters का रखें: एक capital, एक small letter, एक number और एक special character ज़रूरी है।')
         return generate_password_hash(value,method=PASSWORD_METHOD)
     def issue(self,record):
+        if maintenance_active():raise AccountError(MAINTENANCE_MESSAGE,503,'maintenance')
         raw='acct_'+record['user_id']+'.'+secrets.token_urlsafe(32)
         now=int(time.time());sessions=[]
-        sessions.append({'hash':self.digest(raw),'expires':now+SESSION_SECONDS,'last_active':now})
+        sessions.append({'hash':self.digest(raw),'expires':int(next_daily_logout(now)),'issued_at':now,'last_active':now})
         record['sessions']=sessions;return raw
     def authenticate(self,token):
         if not isinstance(token,str) or not token.startswith('acct_') or len(token)>160:raise AccountError('Session समाप्त है। Sign in करें।',401)
@@ -172,34 +185,43 @@ class Accounts:
         record=self.get(user_id=user_id)
         if record and record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')
         digest=self.digest(token);now=int(time.time())
+        session=next((s for s in (record or {}).get('sessions',[]) if hmac.compare_digest(s['hash'],digest)),None)
         if record and not any(hmac.compare_digest(s['hash'],digest) for s in record.get('sessions',[])):
             raise AccountError('यह login समाप्त हो गया है। दूसरे device पर login होने पर पुराना session बंद हो जाता है। फिर Sign in करें।',401,'session_replaced')
-        if not record or not any(hmac.compare_digest(s['hash'],digest) and s['expires']>now and now-s.get('last_active',s['expires']-SESSION_SECONDS)<IDLE_SECONDS for s in record.get('sessions',[])):raise AccountError('15 मिनट inactivity के बाद session समाप्त है। Sign in करें।',401)
+        if not session or session['expires']<=now or session.get('issued_at',session['expires']-SESSION_SECONDS)<next_daily_logout(now)-86400:
+            raise AccountError('रोज़ रात 11:30 PM IST पर सभी sessions बंद होते हैं। फिर Sign in करें।',401,'daily_logout')
         return record
-    def response(self,record,token):
+    def response(self,record,token,new_login=False,record_visit=False):
+        if maintenance_active():raise AccountError(MAINTENANCE_MESSAGE,503,'maintenance')
         details_id=None
         if sheets.enabled():
             aff={}
-            details_id=queue_details(record['user_id'],token)
+            details_id=queue_details(record['user_id'],token,record_visit=record_visit)
         else:
             conn=self.server.visitor_db()
             try:
                 row=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(record['user_id'],)).fetchone()
                 aff=json.loads(row['profile_json']) if row else {}
-                now=self.server.now_ist().isoformat()
-                conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
-                conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
+                if record_visit:
+                    now=self.server.now_ist().isoformat()
+                    conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
+                    conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
-        response=jsonify({'ok':True,'session_token':token,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        session=next(s for s in record['sessions'] if hmac.compare_digest(s['hash'],self.digest(token)))
+        response=jsonify({'ok':True,'session_token':token,'session_expires_at':min(session['expires'],next_daily_logout()),'server_time':time.time(),'new_login':new_login,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
     accounts=Accounts(server);app=server.app
     @app.errorhandler(AccountError)
-    def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code}),error.status
+    def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code,'server_time':time.time()}),error.status
+    @app.before_request
+    def maintenance_gate():
+        if request.path.startswith('/api/accounts/') and request.path not in ('/api/accounts/ready','/api/accounts/logout') and maintenance_active():
+            raise AccountError(MAINTENANCE_MESSAGE,503,'maintenance')
     @app.get('/api/accounts/ready')
     def ready():
-        response=jsonify({'ok':True});response.headers['Cache-Control']='no-store';return response
+        response=jsonify({'ok':True,'maintenance':maintenance_active(),'server_time':time.time(),'message':MAINTENANCE_MESSAGE if maintenance_active() else ''});response.headers['Cache-Control']='no-store';return response
     @app.post('/api/accounts/signup')
     def signup():
         p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
@@ -210,7 +232,7 @@ def install(server):
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
         record={'user_id':str(uuid.uuid4()),'mobile':mobile,**profile,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
-        return accounts.response(record,token)
+        return accounts.response(record,token,new_login=True)
     @app.post('/api/accounts/signin')
     def signin():
         p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
@@ -223,7 +245,7 @@ def install(server):
         original_hash=record['password_hash']
         for _ in range(3):
             revision=record['revision'];token=accounts.issue(record)
-            if accounts.update(record,revision):return accounts.response(record,token)
+            if accounts.update(record,revision):return accounts.response(record,token,new_login=True,record_visit=True)
             record=accounts.get(user_id=record['user_id'])
             if record.get('blocked'):raise AccountError('Account blocked.',401,'account_blocked')
             if record['password_hash']!=original_hash:raise AccountError('Password बदल गया है। फिर Sign in करें।',401)

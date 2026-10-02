@@ -61,8 +61,30 @@ function accountTehsilOptions(districtId,tehsilId,selected=''){
   for(const value of values){const option=document.createElement('option');option.value=value;option.textContent=value;field.appendChild(option)}
   field.disabled=!values.length;field.value=values.includes(selected)?selected:'';
 }
-const ACCOUNT_IDLE_MS=15*60*1000,ACCOUNT_ACTIVITY_KEY='mp_account_activity_v1';
-let accountIdleTimer=null,accountActivityBusy=false,accountLastHeartbeat=Date.now(),accountSessionTimer=null,accountSessionBusy=false;
+const ACCOUNT_ACTIVITY_KEY='mp_account_activity_v1',ACCOUNT_EXPIRY_KEY='mp_account_daily_expiry_v1';
+const ACCOUNT_MAINTENANCE_MESSAGE='Website under maintenance. Please login after 12:30 AM IST.';
+let accountClockOffset=0,accountMaintenanceTimer=null,accountWasInMaintenance=false;
+function accountNow(){return Date.now()+accountClockOffset}
+function accountMaintenanceActive(now=accountNow()){const minute=Math.floor(((now+19800000)%86400000)/60000);return minute>=1410||minute<30}
+function accountDailyExpiry(now=accountNow()){const cutoff=Math.floor((now+19800000)/86400000)*86400000-19800000+84600000;return cutoff>now?cutoff:cutoff+86400000}
+function accountApplyMaintenance(){
+  const blocked=accountMaintenanceActive(),notice=visitorNode('accountMaintenanceNotice');
+  if(notice)notice.hidden=!blocked;
+  if(blocked&&localStorage.getItem(VISITOR_SESSION_KEY)){accountLogout(ACCOUNT_MAINTENANCE_MESSAGE);return}
+  if(blocked){
+    if(visitorNode('accountGateHeading'))visitorNode('accountGateHeading').textContent='Website under maintenance';
+    if(visitorNode('visitorStatus'))visitorNode('visitorStatus').textContent=ACCOUNT_MAINTENANCE_MESSAGE;
+    if(visitorNode('accountTabs'))visitorNode('accountTabs').hidden=true;
+    for(const name of ['SignIn','SignUp','Forgot','Reset','Repair'])if(visitorNode('account'+name+'Form'))visitorNode('account'+name+'Form').hidden=true;
+    for(const name of ['SignIn','Forgot'])if(visitorNode('account'+name+'Pane'))visitorNode('account'+name+'Pane').hidden=true;
+  }else if(accountWasInMaintenance){
+    visitorNode('accountTabs').hidden=false;visitorNode('accountSignInPane').hidden=false;visitorNode('accountSignInForm').hidden=false;
+    visitorNode('accountGateHeading').textContent='Welcome back / स्वागत है';visitorNode('visitorStatus').textContent='';
+  }
+  accountWasInMaintenance=blocked;
+  if(visitorNode('accountSignInForm'))accountUpdateAllSubmits();
+}
+let accountLogoutTimer=null,accountSessionTimer=null,accountSessionBusy=false;
 async function accountCheckSession(){
   const token=localStorage.getItem(VISITOR_SESSION_KEY);
   if(!token||document.hidden||accountSessionBusy||accountExpired())return;
@@ -73,7 +95,7 @@ async function accountCheckSession(){
 }
 function accountLogout(message=''){
   const token=localStorage.getItem(VISITOR_SESSION_KEY);
-  localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);localStorage.removeItem(ACCOUNT_ACTIVITY_KEY);
+  localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);localStorage.removeItem(ACCOUNT_ACTIVITY_KEY);localStorage.removeItem(ACCOUNT_EXPIRY_KEY);
   sessionStorage.removeItem('mp_visitor_request_id');
   if(message)sessionStorage.setItem('mp_account_notice',message);
   document.body.classList.add('telegram-locked');
@@ -81,22 +103,18 @@ function accountLogout(message=''){
   location.reload();
 }
 function accountExpired(){
-  const stamp=Number(localStorage.getItem(ACCOUNT_ACTIVITY_KEY));
-  if(stamp&&Date.now()-stamp>=ACCOUNT_IDLE_MS){accountLogout('15 मिनट inactivity के कारण logout हो गया। फिर Sign in करें।');return true}
+  const expiry=Number(localStorage.getItem(ACCOUNT_EXPIRY_KEY));
+  if(accountMaintenanceActive()||(expiry&&accountNow()>=expiry)){accountLogout(accountMaintenanceActive()?ACCOUNT_MAINTENANCE_MESSAGE:'रात 11:30 PM IST पर session बंद हो गया। फिर Sign in करें।');return true}
   return false;
 }
 function accountActivity(){
-  const token=localStorage.getItem(VISITOR_SESSION_KEY);if(!token||accountExpired()||document.hidden)return;
-  if(Date.now()-Number(localStorage.getItem(ACCOUNT_ACTIVITY_KEY))>=1000)localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(Date.now()));
-  if(Date.now()-accountLastHeartbeat>=120000&&!accountActivityBusy){
-    accountActivityBusy=true;accountLastHeartbeat=Date.now();
-    accountPost('/activity',{session_token:token}).catch(error=>{if(error.status===401&&localStorage.getItem(VISITOR_SESSION_KEY)===token)accountLogout(error.message)}).finally(()=>accountActivityBusy=false);
-  }
+  if(localStorage.getItem(VISITOR_SESSION_KEY)&&!accountExpired()&&!document.hidden)localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(accountNow()));
 }
 function accountSetupControls(data){
-  localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(Date.now()));accountLastHeartbeat=0;
-  if(accountIdleTimer)clearInterval(accountIdleTimer);
-  accountIdleTimer=setInterval(()=>{if(localStorage.getItem(VISITOR_SESSION_KEY))accountExpired()},1000);
+  if(data.new_login||!localStorage.getItem(ACCOUNT_ACTIVITY_KEY))localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(Date.now()));
+  localStorage.setItem(ACCOUNT_EXPIRY_KEY,String(data.session_expires_at?Math.min(data.session_expires_at*1000,accountDailyExpiry()):accountDailyExpiry()));
+  if(accountLogoutTimer)clearInterval(accountLogoutTimer);
+  accountLogoutTimer=setInterval(()=>{if(localStorage.getItem(VISITOR_SESSION_KEY))accountExpired()},1000);
   if(accountSessionTimer)clearInterval(accountSessionTimer);
   accountSessionTimer=setInterval(accountCheckSession,60000);
   for(const event of ['pointerdown','pointermove','keydown','scroll','touchstart'])document.addEventListener(event,accountActivity,{passive:true});
@@ -131,6 +149,8 @@ function accountSetupControls(data){
 async function accountPost(path,body){
   const response=await fetch('https://mp-tenders-api.onrender.com/api/accounts'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',keepalive:path==='/logout'});
   const data=await response.json().catch(()=>({}));
+  if(Number.isFinite(data.server_time))accountClockOffset=data.server_time*1000-Date.now();
+  if(data.code==='maintenance')accountApplyMaintenance();
   if(!response.ok||!data.ok){const error=new Error(data.message||'Server से जवाब नहीं आया। फिर प्रयास करें।');error.status=response.status;error.code=data.code;throw error}
   return data;
 }
@@ -190,6 +210,7 @@ async function accountUnlock(data){
 }
 const accountBusyForms=new Set();
 function accountFormReady(name){
+  if(accountMaintenanceActive())return false;
   const value=id=>visitorNode(id)?.value||'';
   const mobile=id=>/^[6-9][0-9]{9}$/.test(value(id));
   const password=id=>{const p=value(id);return p.length>=8&&p.length<=128&&[/[A-Z]/,/[a-z]/,/[0-9]/,/[^A-Za-z0-9\s]/].every(test=>test.test(p))};
@@ -212,7 +233,7 @@ function accountSetBusy(name,busy){
 function accountUpdateAllSubmits(){for(const name of ['SignIn','SignUp','Forgot','Reset'])accountUpdateSubmit(name)}
 async function enforceAccountAccess(){
   // Begin backend startup while the user fills the login form.
-  fetch('https://mp-tenders-api.onrender.com/api/accounts/ready',{cache:'no-store'}).catch(()=>{});
+  fetch('https://mp-tenders-api.onrender.com/api/accounts/ready',{cache:'no-store'}).then(r=>r.json()).then(data=>{if(Number.isFinite(data.server_time))accountClockOffset=data.server_time*1000-Date.now();accountApplyMaintenance()}).catch(()=>{});
   const status=visitorNode('visitorStatus'),forms=['SignIn','SignUp','Forgot','Reset'];
   function mode(name){
     visitorNode('telegramGate').classList.toggle('account-signup',name==='SignUp');
@@ -240,6 +261,9 @@ async function enforceAccountAccess(){
     for(const event of ['input','change'])form.addEventListener(event,()=>accountUpdateSubmit(name));
   }
   mode('SignIn');
+  accountApplyMaintenance();
+  if(accountMaintenanceTimer)clearInterval(accountMaintenanceTimer);
+  accountMaintenanceTimer=setInterval(accountApplyMaintenance,1000);
   for(const id of ['accountLoginMobile','visitorMobile','accountForgotMobile'])accountBindMobile(id);
   for(const id of ['visitorMiddleName','accountEditMiddleName'])accountBindMiddleName(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
@@ -294,6 +318,6 @@ async function enforceAccountAccess(){
       }finally{accountSetBusy(name,false);accountUpdateAllSubmits()}
     });
     const token=localStorage.getItem(VISITOR_SESSION_KEY);
-    if(token&&!resetToken){status.textContent='Saved login check हो रहा है…';accountPost('/session',{session_token:token}).then(async data=>{await accountUnlock(data);resolve(true)}).catch(error=>{if(error.status===401)localStorage.removeItem(VISITOR_SESSION_KEY);status.textContent=error.message})}
+    if(token&&!resetToken&&!accountMaintenanceActive()){status.textContent='Saved login check हो रहा है…';accountPost('/session',{session_token:token}).then(async data=>{await accountUnlock(data);resolve(true)}).catch(error=>{if(error.status===401)localStorage.removeItem(VISITOR_SESSION_KEY);status.textContent=error.message})}
   });
 }

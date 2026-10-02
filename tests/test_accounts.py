@@ -180,14 +180,71 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/reset-password',json={'reset_token':token,'password':self.password,'confirm_password':self.password}).status_code,400)
         for _ in range(15):response=self.login('wrong password')
         self.assertEqual(response.status_code,429)
-    def test_idle_expiry_and_activity_cannot_revive_expired_session(self):
-        account=self.signup();token=account['session_token'];record=server.account_service.get(user_id=account['visitor_id'])
-        initial=record['sessions'][0]['last_active']
-        with patch('account_access.time.time',return_value=initial+800):
-            self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,200)
-        with patch('account_access.time.time',return_value=initial+1700):
-            self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,401)
+    def test_daily_logout_and_maintenance_boundaries_in_ist(self):
+        from datetime import datetime
+        def stamp(value):return datetime.fromisoformat(value).timestamp()
+        morning=stamp('2026-10-02T09:00:00+05:30')
+        with patch('account_access.time.time',return_value=morning):
+            account=self.signup();token=account['session_token']
+            self.assertEqual(account['session_expires_at'],stamp('2026-10-02T23:30:00+05:30'))
+        with patch('account_access.time.time',return_value=stamp('2026-10-02T23:29:59+05:30')):
+            self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,200)
+        for value in ('2026-10-02T23:30:00+05:30','2026-10-03T00:00:00+05:30','2026-10-03T00:29:59+05:30'):
+            with patch('account_access.time.time',return_value=stamp(value)):
+                for route,body in (('/signin',{'mobile':self.data['mobile'],'password':self.password}),('/signup',self.data),('/session',{'session_token':token})):
+                    response=self.client.post('/api/accounts'+route,json=body)
+                    self.assertEqual(response.status_code,503);self.assertEqual(response.json['code'],'maintenance')
+                self.assertTrue(self.client.get('/api/accounts/ready').json['maintenance'])
+        with patch('account_access.time.time',return_value=stamp('2026-10-03T00:30:00+05:30')):
+            self.assertFalse(self.client.get('/api/accounts/ready').json['maintenance'])
             self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':token}).status_code,401)
+            self.assertEqual(self.client.post('/api/accounts/activity',json={'session_token':token}).status_code,401)
+            self.assertEqual(self.login().status_code,200)
+
+    def test_signin_that_crosses_maintenance_start_cannot_issue_a_session(self):
+        from datetime import datetime
+        from account_access import AccountError
+        at=datetime.fromisoformat('2026-10-02T23:30:00+05:30').timestamp()
+        with patch('account_access.time.time',return_value=at),self.assertRaises(AccountError) as error:
+            server.account_service.issue({'user_id':'example','sessions':[]})
+        self.assertEqual(error.exception.code,'maintenance')
+
+    def test_old_long_lived_session_cannot_return_after_daily_cutoff(self):
+        from datetime import datetime
+        old=datetime.fromisoformat('2026-10-01T09:00:00+05:30').timestamp()
+        with patch('account_access.time.time',return_value=old):account=self.signup()
+        record=server.account_service.get(user_id=account['visitor_id']);revision=record['revision']
+        record['sessions'][0].pop('issued_at');record['sessions'][0]['expires']=old+30*86400
+        server.account_service.update(record,revision)
+        with patch('account_access.time.time',return_value=datetime.fromisoformat('2026-10-02T00:30:00+05:30').timestamp()):
+            self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':account['session_token']}).status_code,401)
+
+    def test_refresh_preserves_session_and_never_counts_as_new_login(self):
+        account=self.signup();token=account['session_token']
+        record=server.account_service.get(user_id=account['visitor_id']);initial=record['sessions'][0]['last_active']
+        def counts():
+            conn=server.visitor_db()
+            try:return (conn.execute('SELECT visit_count FROM visitor_registrations WHERE visitor_id=?',(account['visitor_id'],)).fetchone()['visit_count'],conn.execute('SELECT COUNT(*) AS total FROM visitor_events').fetchone()['total'])
+            finally:conn.close()
+        before=counts()
+        with patch('account_access.time.time',return_value=initial+3600):
+            for _ in range(3):
+                response=self.client.post('/api/accounts/session',json={'session_token':token})
+                self.assertEqual(response.status_code,200);self.assertEqual(response.json['session_token'],token);self.assertFalse(response.json['new_login'])
+        self.assertEqual(counts(),before)
+        self.assertEqual(server.account_service.get(user_id=account['visitor_id'])['sessions'],record['sessions'])
+        self.assertTrue(self.login().json['new_login']);self.assertEqual(counts()[0],before[0]+1)
+
+    def test_refresh_sheet_enrichment_is_read_only(self):
+        import account_access
+        class ImmediatePool:
+            def submit(self,callback):
+                from concurrent.futures import Future
+                result=Future();result.set_result(callback());return result
+        with patch.object(account_access,'_detail_pool',ImmediatePool()),patch.object(sheets,'call',return_value={'profile':{'firmName':'Firm'}}) as call:
+            key=account_access.queue_details('visitor','token',record_visit=False)
+            call.assert_called_once_with('read_affidavit',visitor_id='visitor')
+            with account_access._detail_lock:account_access._detail_jobs.pop(key,None)
     def test_self_profile_and_password_change_require_authenticated_owner(self):
         first=self.signup();second=self.login().json;token=second['session_token']
         self.assertEqual(self.client.post('/api/accounts/profile',json={'first_name':'Changed','tehsil':'Harda','district':'Harda'}).status_code,401)
