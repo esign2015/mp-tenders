@@ -1,0 +1,37 @@
+name: Admin User Counts
+on:
+  schedule:
+    - cron: "30 1 * * *" # 07:00 AM IST
+    - cron: "0 12 * * *" # 05:30 PM IST
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["data/admin_stats.trigger"]
+permissions:
+  contents: write
+concurrency:
+  group: admin-user-counts
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-admin-stats]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Refresh private counts
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          STATS_EVENT: ${{ github.event_name }}
+          STATS_CRON: ${{ github.event.schedule }}
+        run: python backend/scheduled_admin_stats.py
+      - name: Save completion time without user counts
+        run: |
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_admin_stats_receipt.py

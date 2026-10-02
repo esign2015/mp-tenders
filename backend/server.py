@@ -1185,6 +1185,7 @@ _admin_stats_lock = threading.Lock()
 _admin_stats_future = None
 _admin_stats_cache = None
 _admin_stats_cache_at = 0
+_admin_stats_scheduled = {}
 
 def load_dashboard_user_stats():
     """Read storage on a background thread, never the API request worker."""
@@ -1220,6 +1221,55 @@ def admin_dashboard_stats():
                 _admin_stats_future = _admin_stats_pool.submit(load_dashboard_user_stats)
             response = jsonify({'ok': True, 'pending': True})
             response.status_code = 202
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.post('/api/internal/admin-stats-refresh')
+def scheduled_admin_stats_refresh():
+    """A scoped signed job can refresh counts, never access admin/user data."""
+    global _admin_stats_future, _admin_stats_cache, _admin_stats_cache_at
+    timestamp = request.headers.get('X-Stats-Timestamp', '')
+    signature = request.headers.get('X-Stats-Signature', '')
+    secret = clean(os.getenv('TELEGRAM_BOT_TOKEN'))
+    raw = request.get_data()
+    if not secret or not timestamp.isdigit() or abs(time.time() - int(timestamp)) > 300 or len(raw) > 256:
+        return jsonify({'ok': False, 'message': 'Scheduled job authentication required.'}), 401
+    expected = hmac.new(secret.encode(), b'mp-admin-stats-refresh\n' + timestamp.encode() + b'\n' + raw, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature, expected):
+        return jsonify({'ok': False, 'message': 'Scheduled job authentication required.'}), 401
+    payload = request.get_json(silent=True) or {}
+    today = now_ist()
+    day, slot = payload.get('date_ist'), payload.get('slot')
+    if day != today.date().isoformat() or slot not in ('07:00', '17:30') or slot > today.strftime('%H:%M'):
+        return jsonify({'ok': False, 'message': 'Invalid or future update slot.'}), 400
+    key = day + '@' + slot
+    with _admin_stats_lock:
+        for old in list(_admin_stats_scheduled):
+            if not old.startswith(day + '@'):
+                del _admin_stats_scheduled[old]
+        future = _admin_stats_scheduled.get(key)
+        if future is None:
+            if _admin_stats_future is None or _admin_stats_future.done():
+                _admin_stats_future = _admin_stats_pool.submit(load_dashboard_user_stats)
+            future = _admin_stats_future
+            _admin_stats_scheduled[key] = future
+        if not future.done():
+            response = jsonify({'ok': True, 'pending': True})
+            response.status_code = 202
+        else:
+            try:
+                stats = future.result()
+            except Exception:
+                del _admin_stats_scheduled[key]
+                if _admin_stats_future is future:
+                    _admin_stats_future = None
+                raise
+            if _admin_stats_cache is None or stats['updated_at'] >= _admin_stats_cache['updated_at']:
+                _admin_stats_cache = stats
+                _admin_stats_cache_at = time.monotonic()
+            if _admin_stats_future is future:
+                _admin_stats_future = None
+            response = jsonify({'ok': True, 'completed': True, 'date_ist': day, 'slot': slot, 'updated_at': stats['updated_at']})
     response.headers['Cache-Control'] = 'no-store'
     return response
 

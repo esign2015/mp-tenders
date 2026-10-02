@@ -9,7 +9,7 @@ from concurrent.futures import Future
 
 class AdminStatsTests(unittest.TestCase):
     def setUp(self):
-        self.patches = [patch.object(server, '_admin_stats_future', None), patch.object(server, '_admin_stats_cache', None), patch.object(server._admin_stats_pool, 'submit', side_effect=self.inline_job)]
+        self.patches = [patch.object(server, '_admin_stats_future', None), patch.object(server, '_admin_stats_cache', None), patch.object(server, '_admin_stats_scheduled', {}), patch.object(server._admin_stats_pool, 'submit', side_effect=self.inline_job)]
         for item in self.patches: item.start()
     def tearDown(self):
         for item in reversed(self.patches): item.stop()
@@ -89,6 +89,30 @@ class AdminStatsTests(unittest.TestCase):
             pending.set_result({'total_users':8})
             self.assertEqual(client.get('/api/admin/stats', headers={'Authorization':'Bearer test'}).json['stats']['total_users'], 8)
             submit.assert_called_once()
+
+    def test_scheduled_refresh_is_scoped_signed_idempotent_and_private(self):
+        import scheduled_admin_stats as job, os, time
+        now = datetime.fromisoformat('2026-10-02T18:30:00+05:30')
+        counts = {'total_users':12, 'today_signups':3, 'today_active_users':8, 'today_returning_users':5, 'updated_at':now.isoformat()}
+        client = server.app.test_client()
+        with patch.dict(os.environ, {'TELEGRAM_BOT_TOKEN':'test-stats-secret'}), patch.object(server, 'now_ist', return_value=now), patch.object(server, 'load_dashboard_user_stats', return_value=counts) as load:
+            def post(payload, secret='test-stats-secret', timestamp=None):
+                req = job.signed_request(secret, payload, int(time.time()) if timestamp is None else timestamp)
+                return client.post('/api/internal/admin-stats-refresh', data=req.data, headers=dict(req.headers))
+            self.assertEqual(client.post('/api/internal/admin-stats-refresh').status_code,401)
+            self.assertEqual(post({'date_ist':'2026-10-02','slot':'17:30'},secret='wrong').status_code,401)
+            self.assertEqual(post({'date_ist':'2026-10-02','slot':'17:30'},timestamp=int(time.time())-301).status_code,401)
+            self.assertEqual(post({'date_ist':'2026-10-03','slot':'07:00'}).status_code,400)
+            payload={'date_ist':'2026-10-02','slot':'17:30'}
+            self.assertEqual(post(payload).status_code,200)
+            result=post(payload)
+            self.assertTrue(result.json['completed']);self.assertEqual(result.json['slot'],'17:30')
+            self.assertNotIn('total_users',result.json);load.assert_called_once()
+            signed=job.signed_request('test-stats-secret',payload,int(time.time()))
+            self.assertEqual(client.get('/api/admin/stats',headers=dict(signed.headers)).status_code,401)
+            self.assertEqual(server._admin_stats_cache['total_users'],12)
+        self.assertEqual(job.selected_slot(now,'schedule','30 1 * * *'),'07:00')
+        self.assertEqual(job.selected_slot(now,'schedule','0 12 * * *'),'17:30')
 
 
 if __name__ == '__main__':

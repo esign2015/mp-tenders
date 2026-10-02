@@ -202,19 +202,20 @@ async function loadAdminStats(){
       data=await response.json();first=false;
     }while(response.ok&&data.ok&&data.pending);
     if(statsController!==controller||localStorage.getItem(KEY)!==token)return;
+    if(response.status===401||response.status===403){logout();return;}
     if(!response.ok||!data.ok)throw new Error(data.message||'User counts नहीं मिले। फिर Refresh Counts दबाएँ।');
     const stats=data.stats||{};
     if(!Object.keys(STAT_FIELDS).every(key=>Number.isInteger(stats[key])&&stats[key]>=0))throw new Error('User counts की पुष्टि नहीं हुई। Refresh Counts दोबारा दबाएँ।');
     for(const [key,id] of Object.entries(STAT_FIELDS))$(id).textContent=stats[key].toLocaleString('en-IN');
     const stamp=new Date(stats.updated_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true});
-    $('statsStatus').textContent='Updated: '+stamp+' IST · एक user एक बार गिना जाता है · हर 5 मिनट में refresh';
+    $('statsStatus').textContent='Updated: '+stamp+' IST · एक user एक बार गिना जाता है · Login रहने तक हर 30 मिनट में refresh';
   }catch(error){
     if(statsController!==controller)return;
     $('statsStatus').className='small bad';$('statsStatus').textContent=error.name==='AbortError'?'Counts का जवाब नहीं मिला। Refresh Counts दोबारा दबाएँ।':error.message;
   }finally{
     clearTimeout(timeout);
     if(statsController===controller){statsController=null;$('statsRefresh').disabled=false;
-      statsTimer=setTimeout(()=>{if(!document.hidden)loadAdminStats();else statsTimer=null},300000);
+      statsTimer=setTimeout(()=>{if(!document.hidden)loadAdminStats();else statsTimer=null},1800000);
     }
   }
 }
