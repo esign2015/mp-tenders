@@ -347,6 +347,17 @@ def user_stats():
     finally:
         conn.close()
 
+def visitor_verification_flags(visitors):
+    # Password-account verification is canonical; legacy visitor rows may not
+    # have this field. Query once per mobile only during the admin export.
+    mobiles = {row['mobile'] for row in visitors}
+    def read(mobile):
+        record = account_service.get(mobile=mobile)
+        legacy_verified = any(row['mobile'] == mobile and str(dict(row).get('mobile_verified', '')).lower() in {'true','yes','1'} for row in visitors)
+        return mobile, legacy_verified or bool(record and record.get('mobile_verified') is True)
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        return dict(pool.map(read, mobiles))
+
 def build_user_excel():
     from io import BytesIO
     from openpyxl import Workbook
@@ -378,6 +389,7 @@ def build_user_excel():
     finally:
         conn.close()
 
+    verified_visitors = visitor_verification_flags(visitors)
     wb = Workbook()
     ws = wb.active
     ws.title = "Users"
@@ -409,7 +421,7 @@ def build_user_excel():
     vs = wb.create_sheet("Visitor Registrations")
     vs.append(["S.No.", "Name", "Mobile", "District", "First Saved (IST)", "Last Visit (IST)", "Visit Count", "Mobile Verified"])
     for i, row in enumerate(visitors, 1):
-        vs.append([i,row["name"],row["mobile"],row["district"],row["signup_at"],row["last_visit_at"],row["visit_count"],"No"])
+        vs.append([i,row["name"],row["mobile"],row["district"],row["signup_at"],row["last_visit_at"],row["visit_count"],"Yes" if verified_visitors.get(row["mobile"]) else "No"])
     for row in vs.iter_rows(min_row=2):
         for cell in row[1:4]:
             cell.data_type = "s"

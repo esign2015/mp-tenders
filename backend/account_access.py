@@ -93,6 +93,11 @@ def profile_corrections(record):
 def public_profile(record):
     return {key:record.get(key,'') for key in ('name','first_name','middle_name','last_name','mobile','district','tehsil')}
 
+def mark_mobile_verified(record, server, verified_by):
+    # Admin confirmed ownership of the registered WhatsApp number.
+    record.update(mobile_verified=True, mobile_verified_method='admin_whatsapp',
+                  mobile_verified_at=server.now_ist().isoformat(), mobile_verified_by=verified_by)
+
 class AccountError(RuntimeError):
     def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
 
@@ -379,6 +384,7 @@ def install(server):
         raw=record['user_id']+'.'+secrets.token_urlsafe(32)
         for _ in range(3):
             revision=record['revision'];record['reset']={'hash':accounts.digest(raw),'expires':int(time.time())+900,'issued_by':email}
+            mark_mobile_verified(record, server, email)
             if accounts.update(record,revision):
                 response=jsonify({'ok':True,'reset_url':'https://tenders.codinglms.xyz/#reset='+raw,'expires_minutes':15});response.headers['Cache-Control']='no-store';return response
             record=accounts.get(user_id=record['user_id'])
@@ -397,6 +403,8 @@ def install(server):
             if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
             new_hash=new_hash or accounts.password(p.get('password'));revision=record['revision']
             record.update(password_hash=new_hash,sessions=[],reset=None)
+            if reset.get('issued_by'):
+                mark_mobile_verified(record, server, reset['issued_by'])
             if accounts.update(record,revision):return jsonify({'ok':True,'message':'Password बदल गया। नए password से Sign in करें।'})
         raise AccountError('फिर प्रयास करें।',409)
     return accounts

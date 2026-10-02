@@ -52,6 +52,12 @@ const update={...created.record,sessions:[{hash:'hashed-token',expires:Date.now(
 assert(call('account_update',{record:update,expected_revision:1}).updated);
 assert(!call('account_update',{record:{...update,password_hash:'should-not-overwrite'},expected_revision:1}).updated);
 assert.equal(call('account_get',{user_id:accountId}).record.password_hash,record.password_hash);
+const verified={...call('account_get',{user_id:accountId}).record,mobile_verified:true};
+assert(call('account_update',{record:verified,expected_revision:verified.revision}).updated);
+const contacts=tabs.get('Users').rows;
+assert.equal(contacts.find(row=>row[2]===record.mobile)[7],'Yes');
+assert.equal(call('list_visitors').visitors.find(row=>row.mobile===record.mobile).mobile_verified,'Yes');
+console.log('PASS: admin mobile verification mirrors to Users and visitor export data.');
 const key='a'.repeat(64);for(let i=1;i<=13;i++)assert.equal(call('account_rate',{key,limit:12}).allowed,i<=12);
 console.log('PASS: one password account per phone, compare-and-swap guards concurrent changes and persistent login rate limit.');
 

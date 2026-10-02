@@ -75,7 +75,10 @@ function mpAffidavit_(tables,visitorId){
 }
 function mpHandle_(tables,p){
   if(String(p.action||'').startsWith('account_'))return mpAccountHandle_(tables,p);
-  if(p.action==='list_visitors')return {visitors:mpRows_(tables.VisitorSessions).map(mpPublic_)};
+  if(p.action==='list_visitors'){
+    const contacts=new Map(mpRows_(tables.Users).map(row=>[row.user_id,row]));
+    return {visitors:mpRows_(tables.VisitorSessions).map(row=>({...mpPublic_(row),mobile_verified:contacts.get(row.user_id)?.mobile_verified||'No'}))};
+  }
   if(p.action==='list_affidavits')return {affidavits:mpRows_(tables.AffidavitProfiles).map(mpPublic_)};
   if(p.action==='status')return {spreadsheet_id:MP_TENDER_SHEET_ID,unique_users:mpRows_(tables.Users).length,visitor_sessions:mpRows_(tables.VisitorSessions).length};
   if(!mpUuid_(p.visitor_id))mpError_(400,'Invalid visitor ID.');
@@ -147,7 +150,12 @@ function mpAccountHandle_(tables,p){
     if(!row||Number(row.revision)!==Number(p.expected_revision))return {updated:false};
     if(row.mobile!==record.mobile)mpError_(400,'Account mobile cannot be changed through this operation.');
     record.revision=Number(p.expected_revision)+1;
-    mpWrite_(tables.Accounts,{...row,revision:record.revision,record_json:JSON.stringify(record)});return {updated:true};
+    mpWrite_(tables.Accounts,{...row,revision:record.revision,record_json:JSON.stringify(record)});
+    if(record.mobile_verified===true){
+      const contact=mpRows_(tables.Users).find(contact=>contact.mobile===record.mobile);
+      if(contact){contact.mobile_verified='Yes';mpWrite_(tables.Users,contact);}
+    }
+    return {updated:true};
   }
   if(action==='rate'){
     if(!/^[a-f0-9]{64}$/.test(String(p.key||''))||![12,120].includes(p.limit))mpError_(400,'Invalid limit.');
@@ -171,7 +179,7 @@ function doPost(event){
     lock=LockService.getScriptLock();lock.waitLock(20000);
     const account=String(request.action||'').slice(8);
     const names=String(request.action||'').startsWith('account_')&&['lookup','get','update','rate'].includes(account)
-      ? (account==='rate'?['Accounts','AccountRateLimits']:['Accounts',...(request.rate_checks?['AccountRateLimits']:[])]) : undefined;
+      ? (account==='rate'?['Accounts','AccountRateLimits']:['Accounts',...(request.rate_checks?['AccountRateLimits']:[]),...(account==='update'&&request.record?.mobile_verified===true?['Users']:[])]) : undefined;
     const result=mpHandle_(mpTables_(mpBook_(),names),request);SpreadsheetApp.flush();
     return ContentService.createTextOutput(JSON.stringify({ok:true,...result})).setMimeType(ContentService.MimeType.JSON);
   }catch(error){return ContentService.createTextOutput(JSON.stringify({ok:false,status:error.status||503,message:error.status?error.message:'Sheet operation failed. Please retry.'})).setMimeType(ContentService.MimeType.JSON);}

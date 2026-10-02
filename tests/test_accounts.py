@@ -37,13 +37,14 @@ class AccountsTests(unittest.TestCase):
             self.assertEqual(records[signup['visitor_id']]['affidavit_profile']['address'],'Updated address')
 
     def setUp(self):
+        self.clock=patch('account_access.time.time',return_value=1800000000);self.clock.start()
         self.tmp=tempfile.TemporaryDirectory()
         self.env=patch.dict(os.environ,{'ADMIN_SESSION_SECRET':'account-tests','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','VISITOR_PROFILE_LEGACY_ALLOWED':'0','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.env.start()
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start();self.client=server.app.test_client()
         self.password='Private1!'
         self.data={'first_name':'Bidder','middle_name':'','last_name':'Test','tehsil':'Kannod','mobile':'9876543210','district':'Dewas','password':self.password,'confirm_password':self.password}
-    def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup()
+    def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup();self.clock.stop()
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
     def login(self,password=None):return self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':password or self.password})
@@ -192,10 +193,17 @@ class AccountsTests(unittest.TestCase):
         with patch.object(server,'require_admin',return_value=('admin@example.com','')):
             self.assertEqual(self.client.post('/api/admin/accounts/reset-link',json={'mobile':'9876543210'}).status_code,400)
             result=self.client.post('/api/admin/accounts/reset-link',json=body);self.assertEqual(result.status_code,200)
+        record=server.account_service.get(user_id=account['visitor_id'])
+        self.assertIs(record['mobile_verified'],True)
+        self.assertEqual(record['mobile_verified_method'],'admin_whatsapp')
         token=result.json['reset_url'].split('#reset=')[1]
         self.assertNotIn(token,json.dumps(server.account_service.get(user_id=account['visitor_id'])))
+        # A previously issued admin reset link also records verification when used.
+        revision=record['revision'];record.pop('mobile_verified')
+        self.assertTrue(server.account_service.update(record,revision))
         new='Different2!';reset={'reset_token':token,'password':new,'confirm_password':new}
         self.assertEqual(self.client.post('/api/accounts/reset-password',json=reset).status_code,200)
+        self.assertIs(server.account_service.get(user_id=account['visitor_id'])['mobile_verified'],True)
         self.assertEqual(self.client.post('/api/accounts/reset-password',json=reset).status_code,400)
         self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':account['session_token']}).status_code,401)
         self.assertEqual(self.login().status_code,401);self.assertEqual(self.login(new).status_code,200)
@@ -249,7 +257,8 @@ class AccountsTests(unittest.TestCase):
         with patch('account_access.time.time',return_value=datetime.fromisoformat('2026-10-02T00:30:00+05:30').timestamp()):
             self.assertEqual(self.client.post('/api/accounts/session',json={'session_token':account['session_token']}).status_code,401)
 
-    def test_refresh_preserves_session_and_never_counts_as_new_login(self):
+    @patch('account_access.time.time', return_value=1800000000)
+    def test_refresh_preserves_session_and_never_counts_as_new_login(self, _clock):
         account=self.signup();token=account['session_token']
         record=server.account_service.get(user_id=account['visitor_id']);initial=record['sessions'][0]['last_active']
         def counts():
