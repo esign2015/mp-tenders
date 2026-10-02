@@ -22,7 +22,7 @@ def read_json(path):
         return {}
 
 
-def due_alert(cfg, state, now, extraction_result='', completion=None):
+def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_at=None):
     now = now.astimezone(IST)
     current = now.hour * 60 + now.minute
     due = []
@@ -32,13 +32,30 @@ def due_alert(cfg, state, now, extraction_result='', completion=None):
             try:
                 stamp=datetime.fromisoformat((completion or {})['completed_at']).astimezone(IST)
             except (KeyError,ValueError,TypeError):
+                stamp = None
+            if stamp is not None and (stamp.date()!=now.date() or not (completion or {}).get('run_id')):
+                stamp = None
+            fallback = cfg.get('evening_fallback_ist')
+            if stamp is None and not fallback:
                 continue
-            if stamp.date()!=now.date() or not (completion or {}).get('run_id'):
-                continue
-            deadline=stamp+timedelta(minutes=int(delay))
+            deadline = stamp+timedelta(minutes=int(delay)) if stamp else now.replace(hour=hm(fallback)//60, minute=hm(fallback)%60, second=0, microsecond=0)
+            # Missing/failed/stuck extraction must not suppress the PDFs.
+            if fallback:
+                cutoff = now.replace(hour=hm(fallback)//60, minute=hm(fallback)%60, second=0, microsecond=0)
+                if mode == 'evening_total':
+                    cutoff += timedelta(minutes=int(cfg.get('evening_pdf_gap_minutes', 10)))
+                deadline = min(deadline, cutoff) if stamp else cutoff
+            if mode == 'evening_total' and cfg.get('evening_pdf_gap_minutes') is not None:
+                if state.get('evening_new') != f'{now.date().isoformat()}:evening_new' or not new_sent_at:
+                    continue
+                try:
+                    delivered = datetime.fromisoformat(new_sent_at).astimezone(IST)
+                except (ValueError,TypeError):
+                    continue
+                deadline = max(deadline, delivered+timedelta(minutes=int(cfg['evening_pdf_gap_minutes'])))
             if now<deadline:continue
             target=deadline.hour*60+deadline.minute
-            key=f'{stamp.date().isoformat()}:{mode}'
+            key=f'{now.date().isoformat()}:{mode}'
             if state.get(mode)!=key:due.append((target,mode,key))
             continue
         if not cfg.get(field):
@@ -55,7 +72,8 @@ def due_alert(cfg, state, now, extraction_result='', completion=None):
 
 
 def main():
-    result = due_alert(read_json(CONFIG), read_json(STATE), datetime.now(IST), os.getenv('MORNING_EXTRACTION_RESULT', ''),read_json(ROOT/'data/evening_detail_completion.json'))
+    state = read_json(STATE)
+    result = due_alert(read_json(CONFIG), state, datetime.now(IST), os.getenv('MORNING_EXTRACTION_RESULT', ''),read_json(ROOT/'data/evening_detail_completion.json'),state.get('evening_new_sent_at'))
     if not result:
         print('TELEGRAM_SCHEDULE: no alert due now.')
         return 0

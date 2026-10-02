@@ -1,0 +1,23 @@
+name: Telegram Delivery Checks
+on:
+  push:
+    branches: [main]
+    paths: ['backend/telegram*.py', 'backend/scheduled_telegram_delivery.py', 'backend/record_evening_completion.py', 'backend/finalize_portal_snapshot.py', 'tests/test_evening_delivery.py', 'tests/test_morning_telegram.py', '.github/workflows/telegram*.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install reportlab pypdf
+      - name: Check failures, missing completion, confirmed PDF gap, empty reports and counts
+        run: |
+          python -m unittest discover -s tests -p test_evening_delivery.py -q
+          python -m unittest discover -s tests -p test_morning_telegram.py -q
+          python -m unittest discover -s tests -p test_telegram_pdf.py -q
+          python -m unittest discover -s tests -p test_card_pdf.py -q

@@ -1,3 +1,4 @@
+from telegram_text import HINDI_DISCLAIMER
 import csv
 import os
 import re
@@ -196,16 +197,15 @@ def main():
             today_new += 1
 
     message = (
-        "🔔 MP Tenders Alert Bot\n\n"
-        f"📅 Date: {today}\n"
-        f"🆕 Today’s New Published Tenders: {today_new}\n"
-        f"🏢 Organisation Summary: {org_count} organisations / {len(rows)} tender records\n\n"
-        f"🌐 Website: {SITE_URL}\n"
-        "📎 Current Tender Data PDF: attached\n\n"
-        f"📢 Daily alert पाने के लिए Telegram channel join करें: {TELEGRAM_URL}\n\n"
-        "⚠️ This dashboard is an assistance tool only. Always verify the final tender notice, "
-        "corrigendum, eligibility requirements, fees, and deadline on the official tender portal.\n\n"
-        f"🕒 Updated: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+        "🔔 एमपी टेंडर्स — परीक्षण संदेश\n\n"
+        f"📅 दिनांक: {today}\n"
+        f"🆕 आज प्रकाशित नए टेंडर: {today_new}\n"
+        f"🏢 कुल संगठन: {org_count}; सूची में टेंडर: {len(rows)}\n\n"
+        f"🌐 वेबसाइट: {SITE_URL}\n"
+        "📎 वर्तमान टेंडर सूची की PDF संलग्न है।\n"
+        f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
+        + HINDI_DISCLAIMER + "\n\n"
+        + f"🕒 रिपोर्ट समय: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
     )
 
     send_message(token, chat_id, message)
@@ -213,7 +213,7 @@ def main():
         token,
         chat_id,
         PDF_PATH,
-        "📎 MP Tender Current Data PDF • Test message"
+        "📎 वर्तमान टेंडर सूची — परीक्षण PDF\n\n" + HINDI_DISCLAIMER
     )
     print(f"TEST Telegram message + PDF sent. Rows: {len(rows)}, organisations: {org_count}")
     return 0

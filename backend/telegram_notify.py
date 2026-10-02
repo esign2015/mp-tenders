@@ -1,3 +1,4 @@
+from telegram_text import HINDI_DISCLAIMER
 import csv
 import os
 import re
@@ -89,14 +90,14 @@ def main():
     today = datetime.now(IST).strftime("%d/%m/%Y")
 
     message = (
-        "🔔 MP Tender Daily Update\n\n"
-        f"📅 Date: {today}\n"
-        f"🆕 New tenders published today: {len(today_rows)}\n"
-        f"📋 Total tender-list records: {len(rows)}\n\n"
-        f"🌐 Dashboard: {SITE_URL}\n👤 Contact Admin: https://t.me/rdgyan\n\n"
-        "⚠️ This dashboard is an assistance tool only. "
-        "Always verify the final tender notice, corrigendum, eligibility, "
-        "fees and deadline on the official tender portal."
+        "🔔 एमपी टेंडर्स दैनिक सूचना\n\n"
+        f"📅 दिनांक: {today}\n"
+        f"🆕 आज प्रकाशित नए टेंडर: {len(today_rows)}\n"
+        f"📋 टेंडर सूची में कुल रिकॉर्ड: {len(rows)}\n\n"
+        f"🌐 वेबसाइट: {SITE_URL}\n"
+        "📢 टेलीग्राम चैनल: https://t.me/mptendersalert\n"
+        "👤 व्यवस्थापक: https://t.me/rdgyan\n\n"
+        + HINDI_DISCLAIMER
     )
 
     send_message(token, chat_id, message)

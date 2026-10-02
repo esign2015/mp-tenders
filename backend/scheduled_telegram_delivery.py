@@ -49,13 +49,14 @@ def deliver(root, mode, key, extraction_result='', alert_module=None):
             result = alert_module.main()
             if result not in (None, 0):
                 raise RuntimeError('Telegram alert did not finish')
-        if not operations:
-            raise RuntimeError('No Telegram delivery receipt')
+        if not any(value.get('kind') == 'document' for value in operations.values()):
+            raise RuntimeError('No Telegram PDF delivery receipt')
         ledger['completed_at'] = datetime.now(timezone.utc).isoformat()
         write_json(ledger_path, ledger)
         state_path = root / 'data/telegram_schedule.json'
         state = read_json(state_path)
         state[mode] = key
+        state[mode + '_sent_at'] = ledger['completed_at']
         write_json(state_path, state)
         attempt['send_outcome'] = 'success'
         attempt['message_ids'] = [value['message_id'] for value in operations.values()]
@@ -70,11 +71,15 @@ def deliver(root, mode, key, extraction_result='', alert_module=None):
 def main():
     root = ROOT
     extraction_result = os.getenv('MORNING_EXTRACTION_RESULT', '')
-    due = due_alert(read_json(root / 'data/schedule_config.json'), read_json(root / 'data/telegram_schedule.json'), datetime.now(IST), extraction_result,read_json(root/'data/evening_detail_completion.json'))
+    state = read_json(root / 'data/telegram_schedule.json')
+    due = due_alert(read_json(root / 'data/schedule_config.json'), state, datetime.now(IST), extraction_result,read_json(root/'data/evening_detail_completion.json'),state.get('evening_new_sent_at'))
     if not due:
         print('No unsent daily Telegram alert is due.')
         return 0
     _, mode, key = due
+    if mode != 'morning':
+        completion = read_json(root/'data/evening_detail_completion.json')
+        extraction_result = completion.get('result', 'not-refreshed')
     if mode == 'morning' and not extraction_result:
         summary = read_json(root / 'data/inventory_counts.json')
         try:

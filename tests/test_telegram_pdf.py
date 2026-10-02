@@ -64,7 +64,7 @@ class TelegramPdfTests(unittest.TestCase):
             self.assertEqual([r['Tender ID'] for r in alerts.live_rows(rows,now,root)],['live'])
             for change in ({'verified':False},{'snapshot_at':'2026-09-29T20:35:00+05:30'}, {'snapshot_at':'2026-09-30T18:35:00+05:30'}):
                 path.write_text(json.dumps({**snapshot,**change}))
-                self.assertEqual(len(alerts.live_rows(rows,now,root)),2)
+                self.assertEqual(len(alerts.live_rows(rows,now,root)),2 if change.get('verified') is False else 1)
 
     def test_fee_text_always_retains_two_decimal_places(self):
         for value in ('1000','1000.0','1000.00'):
@@ -78,7 +78,8 @@ class TelegramPdfTests(unittest.TestCase):
             ('2026_AICTS_531643_1','28-Sep-2026 06:55 PM'),('equal','30-Sep-2026 12:45 PM'),
             ('future','30-Sep-2026 12:46 PM'),('unknown',''))]
         rows.append({'Tender ID':'cancelled','Closing Date':'01-Oct-2026 06:55 PM','Status':'Cancelled'})
-        self.assertEqual([r['Tender ID'] for r in alerts.live_rows(rows,now)],['future'])
+        with tempfile.TemporaryDirectory() as temporary:
+            self.assertEqual([r['Tender ID'] for r in alerts.live_rows(rows,now,Path(temporary))],['future'])
 
     def test_total_uses_all_three_components_and_preserves_explicit_zero(self):
         self.assertEqual(alerts.total_tender_fee({'EMD Fee':'35,400','Tender Fee':'1000','Processing Fee':'295'}),Decimal('36695'))

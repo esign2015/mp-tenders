@@ -196,11 +196,6 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
-      - name: Record final evening detail completion
-        if: success() && github.event_name == 'schedule' && github.event.schedule == '35 13 * * *'
-        run: |
-          python backend/record_evening_completion.py
-          python backend/publish_data_checkpoint.py data/evening_detail_completion.json
       - name: Show detail worker log
         if: always()
         run: cat new_tender_detail_live.log || true
@@ -801,7 +796,29 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json data/admin_mismatch_alert_status.json
+          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv scrape_batch_state.json data/status.json data/organisation_changes.json data/closing_date_recovery.csv data/live_snapshot.json data/run_snapshot.json data/run_history.jsonl data/count_mismatch_retry.json data/admin_mismatch_alert_status.json data/cleanup_status.json tender_details.csv
+  evening_run_finished:
+    needs: [scrape_full, new_tender_detail_worker]
+    if: always() && needs.scrape_full.result != 'skipped'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Record evening success or failure for PDF fallback
+        env:
+          COPY_JOB_RESULT: ${{ needs.scrape_full.result }}
+          DETAIL_JOB_RESULT: ${{ needs.new_tender_detail_worker.result }}
+        run: |
+          python backend/record_evening_completion.py
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py data/evening_detail_completion.json
+
   morning_telegram_after_extraction:
     needs: scrape_full
     # Closing Today is sent independently at 08:00 IST by telegram_scheduled_v2.

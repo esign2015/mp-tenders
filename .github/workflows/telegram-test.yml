@@ -1,10 +1,6 @@
 name: MP Tender Telegram Test
 
 on:
-  push:
-    paths:
-      - ".github/workflows/telegram-test.yml"
-      - "backend/telegram_test.py"
   workflow_dispatch:
 
 jobs:

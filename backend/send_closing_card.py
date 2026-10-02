@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import telegram_alerts as alerts
 from telegram_card_pdf import make_card_pdf
+from telegram_text import HINDI_DISCLAIMER
 from scheduled_telegram_delivery import read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +29,7 @@ def main():
         pdf = make_card_pdf(selected, f'Closing Today {date} Card View.pdf', f'Closing Today {date}',
                             total_available=len(rows), filter_detail='Closing Today', filter_live=False)
         response = alerts.telegram_document(token, chat, pdf,
-                    f'📎 आज Closing वाले {len(selected)} टेंडर | Card View: 6 cards/page + SAR Services | {date}')
+                    f'📎 आज अंतिम तिथि वाले {len(selected)} टेंडर — कार्ड प्रारूप — {date}\n\n' + HINDI_DISCLAIMER)
     else:
         response = alerts.telegram_message(token, chat, 'ℹ️ आज Closing Today में कोई live tender नहीं है, इसलिए card-view PDF नहीं भेजी गई।')
     message_id = response.get('result', {}).get('message_id')

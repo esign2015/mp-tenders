@@ -141,7 +141,7 @@ context.portalActiveIds=new Set(['present']);
 assert.equal(context.currentPortalAllows({'Tender ID':'present'},eveningNow),true);
 assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),false);
 context.portalSnapshot.verified=false;
-assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
+assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),false);
 context.portalSnapshot={verified:true,snapshot_at:'2026-09-29T19:51:00+05:30'};
 assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),false);
 for(const time of ['2026-10-01T00:00:01+05:30','2026-10-01T08:59:59+05:30','2026-10-01T09:00:00+05:30'])assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},Date.parse(time)),false);

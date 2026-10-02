@@ -3131,12 +3131,9 @@ function mergeCurrentPortalRows(detailedRows, portalRows){
 }
 
 function currentPortalAllows(row, now=Date.now()){
-  const stamp = portalSnapshot && portalSnapshot.verified === true
-    ? Date.parse(portalSnapshot.snapshot_at) : NaN;
-  // Keep the verified inventory across midnight and the 19:00–09:00
-  // publication pause. At 09:00 a new verified inventory replaces it;
-  // a clock change alone must never resurrect retired master records.
-  if(!Number.isFinite(stamp) || stamp > now) return true;
+  // The latest copied portal list defines membership; details enrich it.
+  // A failed refresh keeps the previous list, never the historical master.
+  if(!portalSnapshot) return true;
   return portalActiveIds.has(clean(row["Tender ID"]));
 }
 
@@ -3732,17 +3729,17 @@ async function refreshPublishedData(){
     let data = await loadFromCsv();
     try{
       const portalRows = await loadOrganisationTenderCsv();
-      const liveSnapshot = await loadLiveSnapshot();
-      portalSnapshot = liveSnapshot;
+      const liveSnapshot = await loadLiveSnapshot().catch(() => null);
+      portalSnapshot = liveSnapshot || (portalRows.length ? {source:"copied-list"} : null);
       try{
-        portalTenderCountTotal = Number(liveSnapshot?.portal_tender_count||0) || await loadPortalTenderCountTotal();
+        portalTenderCountTotal = await loadPortalTenderCountTotal() || Number(liveSnapshot?.portal_tender_count||0);
       }catch(_countError){
         portalTenderCountTotal = Number(liveSnapshot?.portal_tender_count||0) || portalTenderCountTotal;
       }
       const nextPortalIds = new Set(
-        liveSnapshot && Array.isArray(liveSnapshot.tender_ids)
-          ? liveSnapshot.tender_ids.map(clean).filter(Boolean)
-          : portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
+        portalRows.length
+          ? portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
+          : (liveSnapshot?.tender_ids || []).map(clean).filter(Boolean)
       );
       portalActiveIds = nextPortalIds;
     }catch(portalError){
@@ -3852,11 +3849,11 @@ async function loadData(){
     const liveSnapshot = snapshotResult.status === "fulfilled"
       ? snapshotResult.value
       : null;
-    portalSnapshot = liveSnapshot;
+    portalSnapshot = liveSnapshot || (portalRows.length ? {source:"copied-list"} : null);
 
     portalTenderCountTotal =
-      Number(liveSnapshot?.portal_tender_count||0) ||
       (portalCountResult.status === "fulfilled" ? Number(portalCountResult.value||0) : 0) ||
+      Number(liveSnapshot?.portal_tender_count||0) ||
       portalTenderCountTotal;
 
     if(snapshotResult.status === "rejected"){
@@ -3885,11 +3882,9 @@ async function loadData(){
 
     // The organisation snapshot is the authoritative current-tender list.
     portalActiveIds = new Set(
-      liveSnapshot && Array.isArray(liveSnapshot.tender_ids)
-        ? liveSnapshot.tender_ids.map(clean).filter(Boolean)
-        : (Array.isArray(portalRows) ? portalRows : [])
-            .map(row => clean(row["Tender ID"]))
-            .filter(Boolean)
+      Array.isArray(portalRows) && portalRows.length
+        ? portalRows.map(row => clean(row["Tender ID"])).filter(Boolean)
+        : (liveSnapshot?.tender_ids || []).map(clean).filter(Boolean)
     );
 
     buildOrganisationOptions();

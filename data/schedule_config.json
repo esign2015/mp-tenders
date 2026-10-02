@@ -13,6 +13,8 @@
     "start_ist": "09:50"
   },
   "morning_send_after_extraction": false,
-  "evening_new_after_detail_minutes": 15,
-  "evening_total_after_detail_minutes": 30
+  "evening_new_after_detail_minutes": 10,
+  "evening_total_after_detail_minutes": 20,
+  "evening_fallback_ist": "20:00",
+  "evening_pdf_gap_minutes": 10
 }

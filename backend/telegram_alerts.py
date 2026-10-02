@@ -1,4 +1,5 @@
 from portal_fee_exceptions import verified_fee_omission
+from telegram_text import HINDI_DISCLAIMER
 import csv
 import json
 import os
@@ -139,7 +140,19 @@ def morning_inventory_rows(rows, root):
 
 
 def current_portal_ids(root, now=None):
-    """Match the dashboard's same-day, verified after-19:00 inventory guard."""
+    """The latest copied list defines membership, also when extraction fails.
+
+    Details only enrich IDs; old master-only rows never add live tenders.
+    A verified snapshot is a fallback when the copied CSV is unavailable.
+    """
+    listing = Path(root) / "organisation_tenders.csv"
+    try:
+        with listing.open(encoding="utf-8-sig", newline="") as stream:
+            reader = csv.DictReader(stream)
+            if "Tender ID" in (reader.fieldnames or []):
+                return {clean(row.get("Tender ID")) for row in reader} - {""}
+    except OSError:
+        pass
     now = (now or datetime.now(IST)).astimezone(IST)
     try:
         snapshot = json.loads((Path(root) / "data/live_snapshot.json").read_text())
@@ -149,7 +162,7 @@ def current_portal_ids(root, now=None):
         stamp = stamp.astimezone(IST)
     except (OSError, ValueError, TypeError):
         return None
-    if snapshot.get("verified") is not True or stamp.date() != now.date() or stamp.hour < 19 or stamp > now:
+    if snapshot.get("verified") is not True or stamp > now:
         return None
     return set(snapshot.get("tender_ids") or [])
 
@@ -328,6 +341,8 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         ("BOTTOMPADDING", (0,0), (-1,-1), 5),
     ]))
     story.append(table)
+    if not rows:
+        story.extend([Spacer(1, 18), Paragraph("No tenders match this report. Total Records: 0.", subtitle)])
 
     generated = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
 
@@ -404,268 +419,87 @@ def main():
     token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
     chat_id = clean(os.getenv("TELEGRAM_CHAT_ID"))
     mode = clean(os.getenv("NOTIFY_MODE", "evening")).lower()
-
     if not token or not chat_id:
         raise RuntimeError("TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID secrets are missing.")
     if not CSV_PATH.exists() and not (CSV_PATH.parent / "organisation_tenders.csv").exists():
         raise FileNotFoundError("No available tender list or detail CSV")
 
-    rows = live_rows(load_report_rows())
-
-    today = datetime.now(IST).date()
+    now = datetime.now(IST)
+    today = now.date()
     d = today.strftime("%d-%m-%Y")
-    display = today.strftime("%d/%m/%Y")
-
-    warning = (
-        "⚠️ Disclaimer: This dashboard is an assistance tool only. Always verify the final tender notice, "
-        "corrigendum, eligibility requirements, fees, and deadline on the official tender portal."
-    )
-
+    rows = live_rows(load_report_rows())
+    warning = HINDI_DISCLAIMER
+    footer = f"🌐 वेबसाइट: {SITE_URL}\n📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n👤 व्यवस्थापक: https://t.me/rdgyan\n\n{warning}"
+    if mode == "morning":
+        rows = morning_inventory_rows(rows, CSV_PATH.parent)
     if mode == "manual":
         report = clean(os.getenv("MANUAL_REPORT", "closing_today")).lower()
         view = clean(os.getenv("MANUAL_VIEW", "table")).lower()
-        if view not in {"table", "card"}:
-            raise RuntimeError(f"Unknown MANUAL_VIEW: {view}")
-        today = datetime.now(IST).date()
-        display = today.strftime("%d/%m/%Y")
-        stamp = datetime.now(IST).strftime("%d/%m/%Y %I:%M %p IST")
+        if report not in {"closing_today", "new_today", "all"} or view not in {"table", "card"}:
+            raise RuntimeError("Invalid manual report or view")
+    else:
+        report = {"morning":"closing_today", "evening_new":"new_today", "evening_total":"all", "evening":"all"}.get(mode)
+        view = "table"
+        if report is None:
+            raise RuntimeError(f"Unknown NOTIFY_MODE: {mode}")
 
-        if report == "closing_today":
-            selected = sorted(
-                [r for r in rows if is_on_date(r.get("Closing Date"), today)],
-                key=closing_sort_key
-            )
-            title = f"Admin Manual — Closing Today {today.strftime('%d-%m-%Y')} • {len(selected)} tenders"
-            filename = f"ADMIN Latest Closing Today {today.strftime('%d-%m-%Y')} MPTenders.pdf"
-            label = f"आज Closing वाले {len(selected)} टेंडर"
-        elif report == "new_today":
-            selected = sorted(
-                [r for r in rows if is_on_date(r.get("Published Date"), today)],
-                key=closing_sort_key
-            )
-            title = f"Admin Manual — New Published {today.strftime('%d-%m-%Y')} • {len(selected)} tenders"
-            filename = f"ADMIN Latest New Published {today.strftime('%d-%m-%Y')} MPTenders.pdf"
-            label = f"आज Published हुए {len(selected)} टेंडर"
-        elif report == "all":
-            selected = sorted(rows, key=closing_sort_key)
-            title = f"Admin Manual — All Live Tender Data • {len(selected)} tenders"
-            filename = f"ADMIN Latest All Tenders {today.strftime('%d-%m-%Y')} MPTenders.pdf"
-            label = f"कुल live tenders: {len(selected)} टेंडर"
-        else:
-            raise RuntimeError(f"Unknown MANUAL_REPORT: {report}")
-
-        message = (
-            "👤 ADMIN MANUAL TELEGRAM UPDATE\n\n"
-            f"📅 दिनांक: {display}\n"
-            f"🕒 Data/PDF generated: {stamp}\n"
-            f"📋 {label}\n\n"
-            "यह PDF Admin द्वारा manually भेजी गई latest available data से बनाई गई है।\n"
-            f"🌐 वेबसाइट: {SITE_URL}\n"
-            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n"
-            "👤 Admin: https://t.me/rdgyan\n\n"
-            + warning + "\n"
-        )
-        telegram_message(token, chat_id, message)
-        if selected:
-            if view == "card":
-                from telegram_card_pdf import make_card_pdf
-                filename = filename.replace(".pdf", " Card View.pdf")
-                pdf = make_card_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
-            else:
-                pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=report)
-            telegram_document(token, chat_id, pdf, f"📎 {title}")
-        else:
-            telegram_message(token, chat_id, "ℹ️ चुने गए filter में अभी कोई tender नहीं मिला, इसलिए PDF नहीं भेजी गई।")
-        return 0
-
-    if mode == "morning":
-        rows = morning_inventory_rows(rows, CSV_PATH.parent)
-        extraction_result = os.getenv("MORNING_EXTRACTION_RESULT", "")
-        fallback_note = ("⚠️ आज सुबह data extraction पूरा नहीं हो सका; उपलब्ध पिछले data से आज Closing वाली सूची भेजी जा रही है।\n\n"
-                         if extraction_result and extraction_result != "success" else "")
-        closing = sorted(
-            [r for r in rows if is_on_date(r.get("Closing Date"), today)],
-            key=closing_sort_key
-        )
-        message = (
-            "🔔 एमपी टेंडर्स अलर्ट\n\n"
-            f"📅 दिनांक: {display}\n\n"
-            f"⏰ आज बंद होने वाले टेंडर: {len(closing)}\n"
-            f"📋 PDF में: {len(closing)} out of {len(rows)} total records • Filter: आज Closing\n\n"
-            + fallback_note
-            + ("📎 आज कोई भी टेंडर Closing Today में नहीं है, इसलिए इसकी PDF नहीं भेजी जा रही है।\n\n" if not closing else "")
-            + f"🌐 वेबसाइट: {SITE_URL}\n"
-            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
-            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
-            f"🕒 मॉर्निंग अलर्ट: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
-        )
-        # Text alert must be sent before PDF generation. A PDF failure
-        # must never suppress the scheduled Telegram message.
-        telegram_message(token, chat_id, message)
-        if closing:
-            try:
-                pdf = make_pdf(
-                    closing,
-                    f"Closing Date {d} Tenders List on MPTenders.pdf",
-                    f"Closing Date {d} Tenders List on MPTenders • {len(closing)} tenders",
-                    total_available=len(rows), filter_detail="Closing Today", filter_live=False,
-                )
-                telegram_document(
-                    token, chat_id, pdf,
-                    f"📎 Closing Today {d} - Table View"
-                )
-                from telegram_card_pdf import make_card_pdf
-                card_pdf = make_card_pdf(closing, f"Closing Today {d} Card View.pdf", f"Closing Today {d}",
-                                         total_available=len(rows), filter_detail="Closing Today", filter_live=False)
-                telegram_document(token, chat_id, card_pdf, f"📎 Closing Today {d} - Card View with SAR Services")
-            except Exception as exc:
-                telegram_message(
-                    token, chat_id,
-                    f"⚠️ Closing-date PDF delivery failed: {type(exc).__name__}. Automatic retry जारी है।"
-                )
-                raise
-        return 0
-    new = sorted(
-        [r for r in rows if is_on_date(r.get("Published Date"), today)],
-        key=closing_sort_key
-    )
-    total_sorted = sorted(rows, key=closing_sort_key)
-
-    # Final verification is generated by the evening workflow. Use it in the
-    # 11:15 PM alert so the message reports the live portal/copy/detail state,
-    # not merely the size of the historical master CSV.
-    verification = {}
-    verification_path = ROOT / "data" / "evening_verification.json"
-    if verification_path.exists():
-        try:
-            verification = json.loads(verification_path.read_text(encoding="utf-8"))
-        except Exception:
-            verification = {}
-    portal_count = int(verification.get("portal_tender_count", 0) or 0)
-    copied_count = int(verification.get("copied_unique_tender_ids", 0) or 0)
-    detail_success = int(verification.get("detail_success", 0) or 0)
-    detail_pending = int(verification.get("detail_pending", 0) or 0)
-    detail_failed = int(verification.get("detail_failed", 0) or 0)
-    reactivated = int(verification.get("portal_listed_with_past_closing", 0) or 0)
-    org_mismatches = int(verification.get("organisation_count_mismatches", 0) or 0)
-
-    # The final evening alert is sent at 11:15 PM IST and reports today's
-    # newly published tenders plus the final portal/copy/detail verification.
-    if mode == "evening_new":
-        message = (
-            "🔔 एमपी टेंडर्स अलर्ट\n\n"
-            f"📅 दिनांक: {display}\n\n"
-            f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n"
-            f"🌐 MP Tender Portal Count: {portal_count or '—'}\n"
-            f"📥 Copied Tender IDs: {copied_count or '—'}\n"
-            f"✅ Detail Success: {detail_success}\n"
-            f"⏳ Detail Pending: {detail_pending}\n"
-            f"❌ Detail Failed: {detail_failed}\n"
-            f"🔄 Portal में वापस मिले/Live किए गए: {reactivated}\n"
-            f"⚠️ Organisation Count Mismatch: {org_mismatches}\n"
-            f"📋 PDF में: {len(new)} out of {len(rows)} master records • Filter: आज प्रकाशित\n\n"
-            + ("📎 आज एक भी नया टेंडर प्रकाशित नहीं हुआ है, इसलिए PDF नहीं भेजी जा रही है।\n\n" if not new else "")
-            + f"🌐 वेबसाइट: {SITE_URL}\n"
-            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
-            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
-            f"🕒 New Published Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
-        )
-        # Text alert must be sent before PDF generation. A PDF failure
-        # must never suppress the scheduled Telegram message.
-        telegram_message(token, chat_id, message)
-        if new:
-            try:
-                new_pdf = make_pdf(
-                    new,
-                    f"New Publish Tender List on Date {d} on MPTenders.pdf",
-                    f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
-                    total_available=len(rows), filter_detail="New Published Today", filter_live=False,
-                )
-                telegram_document(
-                    token, chat_id, new_pdf,
-                    f"📎 New Published {d} - Table View"
-                )
-                from telegram_card_pdf import make_card_pdf
-                card_pdf = make_card_pdf(new, f"New Published {d} Card View.pdf", f"New Published Today {d}",
-                                         total_available=len(rows), filter_detail="New Published Today", filter_live=False)
-                telegram_document(token, chat_id, card_pdf, f"📎 New Published {d} - Card View with SAR Services")
-            except Exception as exc:
-                telegram_message(
-                    token, chat_id,
-                    f"⚠️ New-published PDF delivery failed: {type(exc).__name__}. Automatic retry जारी है।"
-                )
-                raise
-        return 0
-
-    if mode == "evening_total":
-        message = (
-            "🔔 एमपी टेंडर्स अलर्ट\n\n"
-            f"📅 दिनांक: {display}\n\n"
-            f"📋 आज तक कुल टेंडर: {len(total_sorted)}\n"
-            f"📋 PDF में: {len(total_sorted)} out of {len(rows)} total records • Filter: All Tenders\n\n"
-            f"🌐 वेबसाइट: {SITE_URL}\n"
-            f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
-            f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
-            f"🕒 Total Tenders Alert: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
-        )
-        total_pdf = make_pdf(
-            total_sorted,
-            f"Total Tenders as on {d} on MPTenders.pdf",
-            f"Total Tenders as on {d} on MPTenders • {len(total_sorted)} tenders",
-        )
-        telegram_message(token, chat_id, message)
-        telegram_document(
-            token, chat_id, total_pdf,
-            f"📎 Total Tenders as on {d} on MPTenders"
-        )
-        return 0
-
-    if mode != "evening":
-        raise RuntimeError(f"Unknown NOTIFY_MODE: {mode}")
-
-    # Legacy combined mode retained only for manual compatibility.
-
-    new = sorted(
-        [r for r in rows if is_on_date(r.get("Published Date"), today)],
-        key=closing_sort_key
-    )
-    total_sorted = sorted(rows, key=closing_sort_key)
-
+    if report == "closing_today":
+        selected = [r for r in rows if is_on_date(r.get("Closing Date"), today)]
+        label, english = "आज अंतिम तिथि वाले टेंडर", "Closing Today"
+    elif report == "new_today":
+        selected = [r for r in rows if is_on_date(r.get("Published Date"), today)]
+        label, english = "आज प्रकाशित नए टेंडर", "New Published Today"
+    else:
+        selected = rows
+        label, english = "सभी चालू टेंडर", "All Tenders"
+    selected = sorted(selected, key=closing_sort_key)
+    result = os.getenv("MORNING_EXTRACTION_RESULT", "")
+    fallback_note = ""
+    if mode != "manual" and result and result != "success":
+        fallback_note = "⚠️ नया डेटा संग्रह या जाँच पूरी नहीं हो सकी; उपलब्ध पिछले data से PDF भेजी जा रही है।\n"
+    summary = {}
+    try:
+        with (CSV_PATH.parent / 'organisations.csv').open(encoding='utf-8-sig', newline='') as stream:
+            summary['portal_tender_count'] = sum(int(re.sub(r'\D','',clean(r.get('Tender Count'))) or 0) for r in csv.DictReader(stream))
+    except OSError:
+        pass
+    source_time = read_json_report(CSV_PATH.parent / 'data/inventory_counts.json').get('snapshot_at', '')
     message = (
-        "🔔 एमपी टेंडर्स अलर्ट\n\n"
-        f"📅 दिनांक: {display}\n\n"
-        f"🆕 आज प्रकाशित नए टेंडर: {len(new)}\n\n"
-        + ("📎 आज एक भी टेंडर प्रकाशित नहीं हुआ है, इसलिए New Published Tenders की PDF नहीं भेजी जा रही है।\n\n" if not new else "")
-        + f"📋 आज तक कुल टेंडर: {len(rows)}\n\n"
-        f"🌐 वेबसाइट: {SITE_URL}\n"
-        f"📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n"
-        f"⚠️ सूचना: यह डैशबोर्ड केवल सहायता के लिए है। अंतिम टेंडर सूचना, शुद्धिपत्र, पात्रता, शुल्क और अंतिम तिथि की पुष्टि आधिकारिक टेंडर पोर्टल से करें।\n\n"
-        f"🕒 अपडेट: {datetime.now(IST).strftime('%d/%m/%Y %I:%M %p')} IST"
+        ("👤 व्यवस्थापक द्वारा भेजी गई टेंडर रिपोर्ट\n\n" if mode == 'manual' else "🔔 एमपी टेंडर्स अलर्ट\n\n")
+        + f"📅 दिनांक: {today.strftime('%d/%m/%Y')}\n"
+        + f"🕒 रिपोर्ट समय: {now.strftime('%d/%m/%Y %I:%M %p')} IST\n"
+        + (f"📥 डेटा संग्रह समय: {source_time}\n" if source_time else "")
+        + f"📋 {label}: {len(selected)}\n"
+        + f"📊 PDF में {len(selected)} रिकॉर्ड; कुल उपलब्ध चालू टेंडर: {len(rows)}\n"
+        + (f"🌐 पोर्टल सूची का कुल टेंडर count: {summary['portal_tender_count']}\n" if summary else "")
+        + fallback_note
+        + ("ℹ️ इस सूची में शून्य टेंडर हैं; शून्य रिकॉर्ड वाली PDF संलग्न है।\n" if not selected else "")
+        + "\n" + footer
     )
-
-    total_pdf = make_pdf(
-        total_sorted,
-        f"Total Tenders as on {d} on MPTenders.pdf",
-        f"Total Tenders as on {d} on MPTenders • {len(rows)} tenders",
-    )
-    new_pdf = make_pdf(
-        new,
-        f"New Publish Tender List on Date {d} on MPTenders.pdf",
-        f"New Publish Tender List on Date {d} on MPTenders • {len(new)} tenders",
-    )
-
     telegram_message(token, chat_id, message)
-    telegram_document(
-        token, chat_id, total_pdf,
-        f"📎 Total Tenders as on {d} on MPTenders"
-    )
-    if new:
-        telegram_document(
-            token, chat_id, new_pdf,
-            f"📎 New Publish Tender List on Date {d} on MPTenders"
-        )
+    title = f"{english} {d} • {len(selected)} tenders"
+    filename = f"{english.replace(' ', '_')}_{d}.pdf"
+    if view == 'card' and selected:
+        from telegram_card_pdf import make_card_pdf
+        pdf = make_card_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
+    else:
+        pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
+    telegram_document(token, chat_id, pdf, f"📎 {label} — {d} — {len(selected)} रिकॉर्ड\n\n{footer}")
+    # Keep the established card companion for automatic morning/new reports.
+    if mode in {'morning', 'evening_new'} and selected:
+        from telegram_card_pdf import make_card_pdf
+        card = make_card_pdf(selected, f"{english.replace(' ', '_')}_{d}_Card.pdf", title,
+                             total_available=len(rows), filter_detail=english, filter_live=False)
+        telegram_document(token, chat_id, card, f"📎 {label} — कार्ड प्रारूप — {len(selected)} रिकॉर्ड\n\n{footer}")
     return 0
 
 
-if __name__ == "__main__":
+def read_json_report(path):
+    try:
+        return json.loads(Path(path).read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
+if __name__ == '__main__':
     raise SystemExit(main())

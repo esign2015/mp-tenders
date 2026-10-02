@@ -17,7 +17,8 @@ def read_csv(p):
     with p.open(encoding="utf-8-sig",newline="") as f: return list(csv.DictReader(f))
 def write_csv(p,rows):
     with p.open("w",encoding="utf-8-sig",newline="") as f:
-        w=csv.DictWriter(f,fieldnames=TENDER_FIELDS,extrasaction="ignore"); w.writeheader(); w.writerows(rows)
+        fields=list(dict.fromkeys(TENDER_FIELDS + [k for row in rows for k in row]))
+        w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore",lineterminator="\n"); w.writeheader(); w.writerows(rows)
 def count(v):
     m=re.search(r"\d[\d,]*",clean(v)); return int(m.group(0).replace(",","")) if m else 0
 def tid(v):
@@ -103,7 +104,7 @@ def main():
     print(json.dumps(report,ensure_ascii=False,indent=2))
     # The 19:00 job removes expired records; once the evening copy is
     # verified, also retire records absent from that complete inventory.
-    from nightly_cleanup import cleanup, IST
+    from nightly_cleanup import cleanup
     local_now = now.astimezone(IST)
     if not mismatches and (local_now.hour >= 19 or local_now.hour < 9):
         cleanup(ROOT, local_now)
