@@ -351,6 +351,8 @@ def visitor_verification_flags(visitors):
     # Password-account verification is canonical; legacy visitor rows may not
     # have this field. Query once per mobile only during the admin export.
     mobiles = {row['mobile'] for row in visitors}
+    if not sheet_store.enabled() and not DATABASE_URL and os.getenv('ALLOW_EPHEMERAL_ACCOUNTS','0') != '1':
+        return {mobile:any(row['mobile']==mobile and str(dict(row).get('mobile_verified','')).lower() in {'true','yes','1'} for row in visitors) for mobile in mobiles}
     def read(mobile):
         record = account_service.get(mobile=mobile)
         legacy_verified = any(row['mobile'] == mobile and str(dict(row).get('mobile_verified', '')).lower() in {'true','yes','1'} for row in visitors)

@@ -8,7 +8,7 @@ class UserExportTests(unittest.TestCase):
     def test_visitor_export_uses_saved_verification_instead_of_hardcoded_no(self):
         visitors=[{'mobile':'+919876543210'},{'mobile':'+919876543211'},{'mobile':'+919876543210'}]
         def account(mobile):return {'mobile_verified':mobile=='+919876543210'}
-        with patch.object(server.account_service,'get',side_effect=account) as lookup:
+        with patch.object(server.sheet_store,'enabled',return_value=True),patch.object(server.account_service,'get',side_effect=account) as lookup:
             self.assertEqual(server.visitor_verification_flags(visitors),{'+919876543210':True,'+919876543211':False})
             self.assertEqual(lookup.call_count,2)
 
