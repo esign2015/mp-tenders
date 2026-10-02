@@ -5258,11 +5258,12 @@ function appendPdfPromotionPage(doc){
 }
 
 function createDashboardCardPdf(rows, totalAvailable, scope, now = new Date()){
-  const doc = new window.jspdf.jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  const doc = new window.jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
   const width=doc.internal.pageSize.getWidth(), height=doc.internal.pageSize.getHeight();
   const navy=[23,61,112], muted=[100,116,139], gold=[212,165,20];
-  const margin=8, gap=4, cardWidth=(width-margin*2-gap)/2, cardHeight=80;
-  const pages=Math.max(1,Math.ceil(rows.length/4));
+  const margin=8, gap=4, columns=4, slotsPerPage=8, tendersPerPage=slotsPerPage-2;
+  const cardWidth=(width-margin*2-gap*(columns-1))/columns, cardHeight=80;
+  const pages=Math.max(1,Math.ceil(rows.length/tendersPerPage));
   const stamp=now.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",hour12:true});
   function text(value,x,y,w,size=8,maxLines=1,bold=false,color=navy){
     doc.setFont("helvetica",bold?"bold":"normal");
@@ -5290,7 +5291,9 @@ function createDashboardCardPdf(rows, totalAvailable, scope, now = new Date()){
       x+4,y+46,cardWidth-8,7,2,false,muted);
     text([row["District"],row["Location"],row["Pincode"]].filter(Boolean).join(" | "),x+4,y+55,cardWidth-8,7,1,false,muted);
     [["PAC",row["PAC Amount"]],["EMD",row["EMD Fee"]],["Form Fee",row["Tender Fee"]],["Processing",row["Processing Fee"]]].forEach(([label,value],i)=>{
-      text(label+": "+(label==="Processing"&&clean(value)==="Not provided on portal"?"Not provided":formatPdfAmount(value)),x+4+(i%2)*(cardWidth/2),y+63+Math.floor(i/2)*7,cardWidth/2-7,7,1,true);
+      const feeX=x+4+(i%2)*(cardWidth/2),feeY=y+60+Math.floor(i/2)*9;
+      text(label,feeX,feeY,cardWidth/2-7,6,1,false,muted);
+      text(label==="Processing"&&clean(value)==="Not provided on portal"?"Not provided":formatPdfAmount(value),feeX,feeY+3.5,cardWidth/2-7,7,1,true);
     });
     text("Total Fee: "+formatPdfAmount(row["Total Fee"]),x+4,y+77,cardWidth-8,8,1,true);
   }
@@ -5300,9 +5303,9 @@ function createDashboardCardPdf(rows, totalAvailable, scope, now = new Date()){
     text("SAR Digital Services, Kannod",margin,8,width-16,12,1,true,[255,255,255]);
     text("Card View | "+rows.length+" records out of "+totalAvailable+" | "+stamp+" IST",margin,15,width-16,8,1,false,[255,255,255]);
     text(scope,margin,22,width-16,7,1,false,[255,255,255]);
-    for(let pos=0;pos<6;pos++){
-      const index=page*4+pos-2;if(pos>=2&&index>=rows.length)break;
-      const x=margin+(pos%2)*(cardWidth+gap),y=32+Math.floor(pos/2)*(cardHeight+gap);
+    for(let pos=0;pos<slotsPerPage;pos++){
+      const index=page*tendersPerPage+pos-2;if(pos>=2&&index>=rows.length)break;
+      const x=margin+(pos%columns)*(cardWidth+gap),y=32+Math.floor(pos/columns)*(cardHeight+gap);
       if(pos<2)drawPdfPromotionCard(doc,pos===0?'services':'community',x,y,cardWidth,cardHeight);
       else card(rows[index],index+1,x,y);
     }

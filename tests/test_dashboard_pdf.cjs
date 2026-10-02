@@ -1,6 +1,6 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync('index.html','utf8');
-for(const m of html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\/script>/g))new vm.Script(m[1]);
+for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
 assert(html.includes('$("pdfBtn").addEventListener("click",exportCardPdf)'));
 assert(html.includes('$("pdfBtn2").addEventListener("click",exportPdf)'));
 assert(html.includes('>▤ Card View PDF</button>'));
@@ -8,8 +8,8 @@ assert(html.includes('>▤ Table View PDF</button>'));
 assert(!html.includes('filteredTenders.length ? filteredTenders : allTenders'));
 const calls=[],docs=[],links=[];
 class Pdf{
- constructor(){this.pages=1;this.internal={getPageSize:()=>({width:210,height:297}),pageSize:{getWidth:()=>210,getHeight:()=>297},getNumberOfPages:()=>this.pages};docs.push(this);}
- setFont(){}setFontSize(){}setTextColor(){}setFillColor(){}setDrawColor(){}roundedRect(){}rect(){}link(x,y,w,h,a){links.push(a.url)}
+ constructor(options={}){this.options=options;this.pages=1;this.width=options.orientation==='landscape'?297:210;this.height=options.orientation==='landscape'?210:297;this.cards=[];this.internal={getPageSize:()=>({width:this.width,height:this.height}),pageSize:{getWidth:()=>this.width,getHeight:()=>this.height},getNumberOfPages:()=>this.pages};docs.push(this);}
+ setFont(){}setFontSize(){}setTextColor(){}setFillColor(){}setDrawColor(){}roundedRect(x,y,w,h){if(h===80)this.cards.push({page:this.pages,x,y,w,h});}rect(){}link(x,y,w,h,a){links.push(a.url)}
  splitTextToSize(v){return[String(v)];}getTextWidth(v){return String(v).length;}
  text(v,x,y){calls.push({v:Array.isArray(v)?v.join(' '):v,x,y});}
  textWithLink(v,x,y,a){links.push(a.url);this.text(v,x,y);}
@@ -34,11 +34,23 @@ context.parseDate=()=>null;
 const rows=Array.from({length:7},(_,i)=>({'Tender ID':'ID-'+i,'Title':'Tender '+i,'Processing Fee':'295','Total Fee':'1295'}));
 const doc=context.createDashboardCardPdf(rows,100,'Closing Today');
 assert.equal(doc.pages,2);
+assert.equal(doc.options.orientation,'landscape');
+assert.equal(doc.cards.filter(c=>c.page===1).length,8);
+assert.deepEqual([...new Set(doc.cards.filter(c=>c.page===1).map(c=>c.x))].length,4);
+assert.deepEqual([...new Set(doc.cards.filter(c=>c.page===1).map(c=>c.y))],[32,116]);
+assert(doc.cards.every(c=>c.x>=8&&c.x+c.w<=289&&c.y+c.h<=196));
 for(let i=0;i<7;i++)assert.equal(calls.filter(c=>c.v.endsWith('ID-'+i)).length,1);
 assert.equal(calls.filter(c=>c.v==='ADVERTISEMENT').length,2);
 assert.equal(calls.filter(c=>c.v==='MP Tender Alerts').length,2);
 assert.equal(links.filter(url=>url==='https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ').length,2);
-assert(calls.every(c=>c.y<=291));
+assert(calls.every(c=>c.y<=204));
+for(const [count,pages] of [[1,1],[6,1],[12,2],[13,3]]){
+ const sample=Array.from({length:count},(_,i)=>({'Tender ID':'PAGE-'+count+'-'+i,'Title':'Tender '+i}));
+ const before=calls.length,testDoc=context.createDashboardCardPdf(sample,count,'All Tenders');
+ assert.equal(testDoc.pages,pages);
+ assert.equal(testDoc.cards.length,count+2*pages);
+ for(let i=0;i<count;i++)assert.equal(calls.slice(before).filter(c=>c.v.endsWith('PAGE-'+count+'-'+i)).length,1);
+}
 (async()=>{
  const before=docs.length;
  await context.exportCardPdf();
@@ -56,5 +68,5 @@ assert(calls.every(c=>c.y<=291));
  assert.equal(links.filter(x=>x.includes('chat.whatsapp.com/')).length,groupBefore+1);
  const pages=docs.at(-1).pages;context.appendPdfPromotionPage(docs.at(-1));assert.equal(docs.at(-1).pages,pages+1);
  assert(html.includes('appendPdfPromotionPage(doc);\n      const pdfName=fileBase(d)+".pdf";'));
- console.log('PASS: distinct PDF buttons, both clickable promotional cards on every card page, exact filtered rows and empty-filter protection');
+ console.log('PASS: landscape Card PDF with four columns, two rows, six tenders plus two clickable promotional cards, exact pagination and unchanged Table PDF');
 })().catch(e=>{console.error(e);process.exitCode=1;});
