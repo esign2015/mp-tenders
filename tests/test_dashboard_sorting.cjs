@@ -50,13 +50,32 @@ for(const [now,next] of [
 ]) assert.equal(context.nextDashboardRefreshAt(Date.parse(now)),Date.parse(next));
 let clockNow=Date.parse('2026-09-30T09:00:00+05:30');
 context.Date=class extends Date{static now(){return clockNow;}};
-const countdowns=Array.from({length:2},()=>({dataset:{timeLeft:'30-Sep-2026 09:02 AM'},textContent:'',classList:{contains:()=>false}}));
+const countdowns=['tender-card-time','time-left'].map(type=>({dataset:{timeLeft:'30-Sep-2026 09:02 AM'},textContent:'',classList:classList([type])}));
 context.document.querySelectorAll=selector=>selector==='[data-time-left]'?countdowns:[];
 context.updateVisibleTimeLeft();
 assert(countdowns.every(x=>x.textContent==='2m 0s'));
-clockNow+=20000;
+assert(countdowns.every(x=>x.classList.contains('countdown-deadline-blink')));
+clockNow+=1000;
 context.updateVisibleTimeLeft();
-assert(countdowns.every(x=>x.textContent==='1m 40s'));
+assert(countdowns.every(x=>x.textContent==='1m 59s'));
+assert(countdowns[1].classList.contains('time-left-urgent'));
+for(const node of countdowns)node.dataset.timeLeft='01-Oct-2026 10:02 AM';
+context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='1d 1h 1m 59s'&&!x.classList.contains('countdown-deadline-blink')));
+clockNow+=1000;context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='1d 1h 1m 58s'));
+for(const node of countdowns)node.dataset.timeLeft='30-Sep-2026 09:00 AM';
+context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='Closed'&&!x.classList.contains('countdown-deadline-blink')));
+assert(countdowns[1].classList.contains('time-left-closed'));
+for(const node of countdowns)node.dataset.timeLeft='invalid';
+context.updateVisibleTimeLeft();
+assert(countdowns.every(x=>x.textContent==='—'&&!x.classList.contains('countdown-deadline-blink')));
+assert(html.includes('.countdown-deadline-blink{animation:tender-deadline-blink 2s'));
+assert(!/\.tender-card\.closing-final-minutes\{[^}]*animation/.test(html));
+assert(!html.includes('setInterval(updateVisibleTimeLeft,20000)'));
+assert(/setInterval\(\(\) => \{\s*updateCardDeadlineAlerts\(\);\s*updateVisibleTimeLeft\(\);[\s\S]*?\},1000\);/.test(html));
+console.log('PASS: both view countdowns update every second, display seconds beyond a day, blink only the timer for final ten minutes and stop after expiry.');
 context.Date=Date;
 context.document.querySelectorAll=()=>[];
 for(const [id,ref] of [['2026_MPCDF_536489_1','1666/JSDSM/2026/Jabalpur'],['2026_MPTAX_534364_2','CTD/DC-2/STORE/2026/393']]){
@@ -257,7 +276,7 @@ const cardNodes={tenderCardGrid:{innerHTML:''},recordCount:{}};
 const cardRows=Array.from({length:130},(_,i)=>({'Tender ID':'T'+(i+1)}));
 const cardContext=vm.createContext({virtualRows:cardRows,virtualStart:0,virtualEnd:100,CARD_AD_INTERVAL:12,CARD_ALERT_INTERVAL:20,VIRTUAL_CHUNK_SIZE:100,currentLanguage:'en',
  $:id=>cardNodes[id],escapeHtml:s=>String(s||''),displayTenderValue:(r,k)=>r[k],getDistrictInfo:()=>({name:'Dewas'}),
- cardClosingClass:()=>'',parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>''});
+ cardClosingClass:()=>'',isDeadlineAlertActive:()=>false,parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>''});
 for(const name of ['tenderAlertsCard','sarAdCard','renderCardWindow'])vm.runInContext(source(name),cardContext);
 function cardOrder(){return [...cardNodes.tenderCardGrid.innerHTML.matchAll(/<article class="tender-card [^"]*"|<aside class="(tender-alert-card|sar-ad-card)"/g)].map(m=>m[1]||'tender')}
 function alertAfter(){let tenders=cardContext.virtualStart;return cardOrder().flatMap(type=>{if(type==='tender')tenders++;return type==='tender-alert-card'?[tenders]:[]})}

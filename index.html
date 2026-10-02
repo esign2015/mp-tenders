@@ -1189,10 +1189,10 @@ td.title-cell{
 .tender-card{border:1px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 2px 7px #0f172a12;padding:10px;display:flex;flex-direction:column;min-height:280px}
 .tender-card.closing-today{border-color:#dc2626;box-shadow:0 0 0 1px #dc262622}
 .tender-card.closing-soon{border-color:#f59e0b}
-.tender-card.closing-final-minutes{border-color:#dc2626;box-shadow:0 0 0 2px #dc262655;animation:tender-deadline-blink 5s steps(1,end) infinite}
-@keyframes tender-deadline-blink{0%,100%{opacity:1}80%{opacity:0}}
-.tender-card.closing-final-minutes:focus-within{animation:none;opacity:1}
-@media(prefers-reduced-motion:reduce){.tender-card.closing-final-minutes{animation:none;opacity:1}}
+.tender-card.closing-final-minutes{border-color:#dc2626;box-shadow:0 0 0 2px #dc262655}
+.countdown-deadline-blink{animation:tender-deadline-blink 2s steps(1,end) infinite}
+@keyframes tender-deadline-blink{0%,100%{opacity:1}50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.countdown-deadline-blink{animation:none;opacity:1}}
 .tender-card-id-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
 .tender-card-id{font-weight:800;color:#0f4c81;font-size:14px;word-break:break-word}
 .tender-card-time{font-size:11px;font-weight:800;background:#eef6ff;color:#0f4c81;border-radius:999px;padding:4px 7px;white-space:nowrap}
@@ -3221,14 +3221,13 @@ function formatTimeLeft(value){
   if(!closing) return "—";
   const ms = closing.getTime() - Date.now();
   if(ms <= 0) return "Closed";
-  const totalMinutes = Math.floor(ms / 60000);
+  const totalSeconds = Math.floor(ms / 1000);
+  const totalMinutes = Math.floor(totalSeconds / 60);
   const days = Math.floor(totalMinutes / 1440);
   const hours = Math.floor((totalMinutes % 1440) / 60);
   const minutes = totalMinutes % 60;
-  if(days > 0) return days + "d " + hours + "h";
-  if(hours > 0) return hours + "h " + minutes + "m";
-  const seconds=Math.floor((ms % 60000)/1000);
-  return minutes + "m " + seconds + "s";
+  const seconds=totalSeconds % 60;
+  return (days > 0 ? days + "d " : "") + (days > 0 || hours > 0 ? hours + "h " : "") + minutes + "m " + seconds + "s";
 }
 
 function getTimeLeftClass(value){
@@ -3712,9 +3711,12 @@ function startDashboardRefreshSchedule(){
 }
 
 function updateVisibleTimeLeft(){
+  const now=Date.now();
   document.querySelectorAll("[data-time-left]").forEach(element=>{
     const closing=element.dataset.timeLeft;
-    element.textContent=formatTimeLeft(closing);
+    const text=formatTimeLeft(closing);
+    if(element.textContent!==text)element.textContent=text;
+    element.classList.toggle("countdown-deadline-blink",isDeadlineAlertActive(parseDate(closing)?.getTime()||0,now));
     if(element.classList.contains("time-left")){
       element.classList.remove("time-left-urgent","time-left-soon","time-left-normal","time-left-closed");
       const cls=getTimeLeftClass(closing);
@@ -4184,7 +4186,7 @@ function renderCardWindow(){
       <article class="tender-card ${cardClosingClass(row)}" data-closing-time="${parseDate(row["Closing Date"])?.getTime()||0}">
         <div class="tender-card-id-row">
           <div class="tender-card-id">${escapeHtml(row["Tender ID"])||"—"}</div>
-          <div class="tender-card-time" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
+          <div class="tender-card-time${isDeadlineAlertActive(parseDate(row["Closing Date"])?.getTime()||0)?' countdown-deadline-blink':''}" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
         </div>
         <div class="tender-card-ref">#${n} • Ref: ${escapeHtml(displayTenderValue(row,"Reference Number"))||"—"}</div>
         <div class="tender-card-title">${title}</div>
@@ -4276,7 +4278,7 @@ function renderVirtualWindow(){
         <td class="date-closing ${closingClass}">
           ${escapeHtml(formatClosingDateTime(row["Closing Date"]))}
         </td>
-        <td class="time-left ${getTimeLeftClass(row["Closing Date"])}" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
+        <td class="time-left ${getTimeLeftClass(row["Closing Date"])}${isDeadlineAlertActive(parseDate(row["Closing Date"])?.getTime()||0)?' countdown-deadline-blink':''}" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</td>
         <td>${formatMoney(row["PAC Amount"])}</td>
         <td>${formatMoney(row["EMD Fee"])}</td>
         <td>${formatMoney(row["Tender Fee"])}</td>
@@ -6030,6 +6032,7 @@ setInterval(updateDateTime,1000);
 let previousLiveIds = "";
 setInterval(() => {
   updateCardDeadlineAlerts();
+  updateVisibleTimeLeft();
   if(Array.isArray(allTenders) && allTenders.length){
     const now = Date.now();
     const liveIds = allTenders.filter(row => {
@@ -6043,7 +6046,6 @@ setInterval(() => {
     }
   }
 },1000);
-setInterval(updateVisibleTimeLeft,20000);
 
 setupVirtualTable();
 updateVirtualPager();
