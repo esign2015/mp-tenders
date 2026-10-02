@@ -1,1 +1,1 @@
-2026-10-02:morning
+2026-10-02:evening_new:manual-send-now
