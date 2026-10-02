@@ -211,13 +211,14 @@ async function accountUnlock(data){
 }
 const accountBusyForms=new Set();
 let accountLoadingFocus=null;
-function accountShowLoginLoading(show){
+function accountShowLoginLoading(show,name='SignIn'){
   const overlay=visitorNode('accountLoginLoading'),gate=visitorNode('telegramGate');
   if(!overlay)return;
   overlay.hidden=!show;
   overlay.setAttribute('aria-busy',String(show));
   if(gate)gate.inert=show;
   if(show){
+    visitorNode('accountLoadingTitle').textContent=name==='SignUp'?'Sign up हो रहा है…':'Sign in हो रहा है…';
     accountLoadingFocus=document.activeElement;visitorNode('accountLoadingTitle')?.focus?.();
     overlay.onkeydown=event=>{
       if(event.key!=='Tab')return;
@@ -248,7 +249,7 @@ function accountUpdateSubmit(name){
 }
 function accountSetBusy(name,busy){
   if(busy)accountBusyForms.add(name);else accountBusyForms.delete(name);
-  if(name==='SignIn')accountShowLoginLoading(busy);
+  if(name==='SignIn'||name==='SignUp')accountShowLoginLoading(busy,name);
   accountUpdateSubmit(name);
 }
 function accountUpdateAllSubmits(){for(const name of ['SignIn','SignUp','Forgot','Reset'])accountUpdateSubmit(name)}
