@@ -11,6 +11,7 @@ from unittest.mock import patch
 from pypdf import PdfReader
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 import telegram_alerts as alerts
+from pdf_promotions import SERVICE_LINKS, COMMUNITY_LINKS
 
 
 def write_csv(path, rows):
@@ -22,6 +23,21 @@ def write_csv(path, rows):
 
 
 class TelegramPdfTests(unittest.TestCase):
+    def test_table_second_page_cards_short_and_long_reports_keep_all_tenders(self):
+        for count in (1,100):
+            with self.subTest(count=count),tempfile.TemporaryDirectory() as temporary:
+                rows=[{'Tender ID':f'2026_TEST_{500000+i}_1','Title':'Sample tender work','Closing Date':'01-Jan-2099 06:00 PM'} for i in range(count)]
+                path=alerts.make_pdf(rows,str(Path(temporary)/'table.pdf'),'Table Report',filter_live=False)
+                reader=PdfReader(path)
+                self.assertGreaterEqual(len(reader.pages),2)
+                second=reader.pages[1]
+                self.assertIn('ADVERTISEMENT',second.extract_text())
+                self.assertIn('MP Tender Alerts',second.extract_text())
+                links={str(a.get_object().get('/A',{}).get('/URI','')) for a in second.get('/Annots',[])}
+                self.assertTrue({url for _,url in (*SERVICE_LINKS,*COMMUNITY_LINKS)}<=links)
+                text='\n'.join(p.extract_text() for p in reader.pages)
+                for row in rows:self.assertEqual(text.count(row['Tender ID']),1)
+
     def test_merges_real_reference_and_fees_without_importing_detail_only_history(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

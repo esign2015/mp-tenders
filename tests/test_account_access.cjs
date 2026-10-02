@@ -2,7 +2,7 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const html=fs.readFileSync('index.html','utf8');assert(html.includes('enforceAccountAccess().then'));assert(!html.includes('enforceTelegramAccess().then'));assert(html.includes('logoutBtn.onclick=()=>localStorage.getItem(VISITOR_SESSION_KEY)?accountLogout():logoutTelegram()'));
 for(const source of [html,fs.readFileSync('admin/index.html','utf8')])for(const script of source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(script[1]);
 const nodes={},local=new Map(),session=new Map();let now=Date.parse('2026-10-02T09:00:00+05:30');const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',classList:{toggle(){},add(){},remove(){}},addEventListener(e,h){this[e]=h},reportValidity(){return true},querySelector(){return this.button??={disabled:false,setAttribute(){}}},appendChild(child){(this.children??=[]).push(child)},replaceChildren(){this.children=[]},removeAttribute(name){delete this[name]},setAttribute(){}};
-let fail=true,unlocked=false,opened='',reply=null,postCount=0;
+let fail=true,unlocked=false,opened='',reply=null,postCount=0,viewChanges=[];
 const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR_PROFILE_KEY:'profile',Date:{now:()=>now},setInterval(){return 1},clearInterval(){},sessionStorage:{getItem:k=>session.get(k)||null,setItem:(k,v)=>session.set(k,v),removeItem:k=>session.delete(k)},localStorage:{getItem:k=>local.get(k)||null,setItem:(k,v)=>local.set(k,v),removeItem:k=>local.delete(k)},visitorUnlock:data=>{unlocked=true;local.set('token',data.session_token)},location:{hash:'',pathname:'/',search:'',reload(){}},history:{replaceState(){}},window:{open:url=>opened=url,addEventListener(){}},document:{body:{classList:{add(){}}},addEventListener(){},createElement:()=>({})},alert(){},fetch:async(url,options)=>{
  if(url.endsWith('/ready'))return{ok:true,json:async()=>({ok:true})};
  assert(!url.includes('/telegram/'));if(url.includes('mp_tehsils'))return{json:async()=>({districts:{Dewas:['Kannod','Bagli'],Datia:['Datia'],Indore:['Indore']}})};
@@ -13,6 +13,7 @@ const ctx=vm.createContext({visitorNode:node,VISITOR_SESSION_KEY:'token',VISITOR
  return{ok:true,json:async()=>({ok:true,session_token:'account-token',visitor_id:'user-id',profile:{name:'Test',mobile:'+919876543210',district:'Dewas'}})};
 }});
 vm.runInContext(fs.readFileSync('assets/account_access.js','utf8'),ctx);
+ctx.setTenderView=mode=>{viewChanges.push(mode);local.set('mpTenderViewMode',mode)};
 for(const [input,expected] of [['6000000000','6000000000'],['9999999999','9999999999'],['5999999999',''],['abc98765-x43210','9876543210'],['+91 9876543210','9876543210'],['987654321012','9876543210']])assert.equal(ctx.accountMobileValue(input),expected);
 for(const [input,expected] of [['9876543210',''],['कुमार१२३','कुमार'],['Kumar123','Kumar'],['O’Neil','O’Neil'],['कुमार','कुमार'],['Ram@12','Ram']])assert.equal(ctx.accountMiddleNameValue(input),expected);
 assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
@@ -72,6 +73,13 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  node('accountSignInTab').onclick();node('accountLoginPassword').value='Private1!';
  reply=null;fail=false;await node('accountSignInForm').submit({preventDefault(){},currentTarget:node('accountSignInForm')});await pending;assert(unlocked);assert.equal(node('accountLoginPassword').value,'');assert(node('accountLoginLoading').hidden);assert.equal(node('telegramGate').inert,false);
  node('accountProfileBtn').onclick();assert.equal(node('accountEditName').value,'Test');assert.equal(node('accountEditMobile').value,'+919876543210');
+ // Restoring a session keeps its view; a real login starts in card view.
+ local.set('mpTenderViewMode','table');
+ const viewProfile={name:'Test',mobile:'9876543210',district:'Dewas'};
+ await ctx.accountUnlock({session_token:'account-token',profile:viewProfile,new_login:false});
+ assert.equal(local.get('mpTenderViewMode'),'table');assert.equal(viewChanges.length,0);
+ await ctx.accountUnlock({session_token:'account-token',profile:viewProfile,new_login:true});
+ assert.equal(local.get('mpTenderViewMode'),'card');assert.deepEqual(viewChanges,['card']);
  // Historical names must be confirmed and saved before unlock.
  unlocked=false;local.delete('token');
  ctx.accountShowLoginLoading(true);
@@ -83,7 +91,8 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  reply={ok:true,json:async()=>({ok:true,profile:{name:'Test Surname',first_name:'Test',middle_name:'',last_name:'Surname',district:'Dewas',mobile:'+919876543210'},profile_corrections:[]})};
  await node('accountRepairForm').onsubmit({preventDefault(){}});await correction;assert(unlocked);assert.equal(local.get('token'),'repair-token');reply=null;
  const activityBeforeRefresh=local.get('mp_account_activity_v1');ctx.accountSetupControls({profile:{name:'Test',mobile:'9876543210'},new_login:false});assert.equal(local.get('mp_account_activity_v1'),activityBeforeRefresh);
- now=Date.parse('2026-10-02T23:29:59+05:30');assert.equal(ctx.accountExpired(),false);now+=1000;assert.equal(ctx.accountExpired(),true);assert(!local.has('token'));assert(session.get('mp_account_notice').includes('12:30'));
+ local.set('mpTenderViewMode','table');
+ now=Date.parse('2026-10-02T23:29:59+05:30');assert.equal(ctx.accountExpired(),false);now+=1000;assert.equal(ctx.accountExpired(),true);assert(!local.has('token'));assert(session.get('mp_account_notice').includes('12:30'));assert.equal(local.get('mpTenderViewMode'),'card');
  assert.equal(ctx.accountMaintenanceActive(Date.parse('2026-10-03T00:29:59+05:30')),true);assert.equal(ctx.accountMaintenanceActive(Date.parse('2026-10-03T00:30:00+05:30')),false);ctx.accountApplyMaintenance();assert(!node('accountMaintenanceNotice').hidden);assert(node('accountSignInForm').hidden);
  now=Date.parse('2026-10-03T00:30:00+05:30');ctx.accountApplyMaintenance();assert(node('accountMaintenanceNotice').hidden);assert(!node('accountSignInForm').hidden);
  local.set('token','another-token');reply={ok:false,status:401,json:async()=>({message:'Logged in on another device'})};await ctx.accountCheckSession();assert(!local.has('token'));assert.equal(session.get('mp_account_notice'),'Logged in on another device');

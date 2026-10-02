@@ -96,6 +96,7 @@ async function accountCheckSession(){
 function accountLogout(message=''){
   const token=localStorage.getItem(VISITOR_SESSION_KEY);
   localStorage.removeItem(VISITOR_SESSION_KEY);localStorage.removeItem(VISITOR_PROFILE_KEY);localStorage.removeItem(ACCOUNT_ACTIVITY_KEY);localStorage.removeItem(ACCOUNT_EXPIRY_KEY);
+  localStorage.setItem('mpTenderViewMode','card');
   sessionStorage.removeItem('mp_visitor_request_id');
   if(message)sessionStorage.setItem('mp_account_notice',message);
   document.body.classList.add('telegram-locked');
@@ -192,6 +193,10 @@ function accountEnsureProfile(data){
 }
 async function accountUnlock(data){
   data=await accountEnsureProfile(data);
+  if(data.new_login){
+    localStorage.setItem('mpTenderViewMode','card');
+    if(typeof setTenderView==='function')setTenderView('card');
+  }
   visitorUnlock(data);
   visitorNode('telegramLogoutBtn').onclick=()=>accountLogout();
   accountSetupControls(data);

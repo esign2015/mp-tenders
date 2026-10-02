@@ -8,13 +8,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
+from pdf_promotions import SERVICE_LINKS, draw_promotion_card
 
-AD_LINKS = (
-    ('WhatsApp', 'https://wa.me/919893610244'),
-    ('Telegram', 'https://t.me/rdgyan'),
-    ('Email', 'mailto:imriteshdhoot@gmail.com'),
-    ('Buy DSC', 'https://secure.certificate.digital/web/dsc/referral/?bp=fVNSQNJt@@@@@@L0='),
-)
+AD_LINKS = SERVICE_LINKS
 NAVY = colors.HexColor('#173d70')
 GOLD = colors.HexColor('#d4a514')
 MUTED = colors.HexColor('#64748b')
@@ -52,24 +48,7 @@ def button(canvas, label, url, x, y, width, fill=NAVY):
 
 
 def ad_card(canvas, x, y, width, height):
-    canvas.setFillColor(NAVY)
-    canvas.setStrokeColor(GOLD)
-    canvas.setLineWidth(1.5)
-    canvas.roundRect(x, y, width, height, 10, fill=1, stroke=1)
-    top = y + height
-    paragraph(canvas, 'ADVERTISEMENT', x+14, top-12, width-28, 12, 7, True, GOLD)
-    canvas.setFillColor(GOLD)
-    canvas.roundRect(x+14, top-60, 50, 28, 5, fill=1, stroke=0)
-    canvas.setFont('Helvetica-Bold', 16)
-    canvas.setFillColor(NAVY)
-    canvas.drawCentredString(x+39, top-51, 'SAR')
-    paragraph(canvas, 'SAR Digital Services, Kannod', x+74, top-29, width-88, 31, 11, True, colors.white)
-    paragraph(canvas, 'DSC Sale | PWD Registration | Tender Submission', x+14, top-74, width-28, 34, 11, True, colors.white)
-    paragraph(canvas, 'Tender Submission only Rs 1,000.00 per tender.', x+14, top-111, width-28, 27, 10, True, GOLD)
-    paragraph(canvas, 'DSC and PWD registration assistance available.', x+14, top-143, width-28, 18, 7, False, colors.white)
-    bw = (width-38)/2
-    for i,(label,url) in enumerate(AD_LINKS):
-        button(canvas,label,url,x+14+(i%2)*(bw+10),y+12+(1-i//2)*28,bw,colors.HexColor('#2563eb'))
+    draw_promotion_card(canvas, 'services', x, y, width, height)
 
 
 def tender_card(canvas, row, number, x, y, width, height):
@@ -106,11 +85,7 @@ def make_card_pdf(rows, filename, report_title, total_available=None, filter_det
     from telegram_alerts import live_rows, closing_sort_key, IST, SITE_URL, TELEGRAM_URL
     rows=sorted(live_rows(rows) if filter_live else list(rows),key=closing_sort_key)
     total_available=len(rows) if total_available is None else total_available
-    slots=[None]
-    for i,row in enumerate(rows,1):
-        slots.append((i,row))
-        if i%12==0 and i<len(rows):slots.append(None)
-    pages=(len(slots)+5)//6
+    pages=max(1,(len(rows)+3)//4)
     path=Path(filename)
     path.parent.mkdir(parents=True,exist_ok=True)
     canvas=Canvas(str(path),pagesize=A4)
@@ -127,10 +102,11 @@ def make_card_pdf(rows, filename, report_title, total_available=None, filter_det
         paragraph(canvas,'SAR Digital Services, Kannod',margin,h-14,w-2*margin,22,16,True,colors.white)
         paragraph(canvas,report_title+' - Card View',margin,h-40,w-2*margin,20,10,True,colors.white)
         paragraph(canvas,f'Total Records: {len(rows)} out of {total_available} | {filter_detail}',margin,h-63,w-2*margin,15,9,False,colors.white)
-        for slot,item in enumerate(slots[page*6:(page+1)*6]):
+        items=['services','community',*list(enumerate(rows[page*4:(page+1)*4],page*4+1))]
+        for slot,item in enumerate(items):
             x=margin+(slot%2)*(cw+gap)
             y=h-100-(slot//2)*(ch+gap)-ch
-            if item is None:ad_card(canvas,x,y,cw,ch)
+            if isinstance(item,str):draw_promotion_card(canvas,item,x,y,cw,ch)
             else:tender_card(canvas,item[1],item[0],x,y,cw,ch)
         paragraph(canvas,'This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.',margin,42,w-2*margin,18,7,False,MUTED)
         canvas.setFont('Helvetica',7);canvas.setFillColor(NAVY)

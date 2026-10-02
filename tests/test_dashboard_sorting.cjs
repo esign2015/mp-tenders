@@ -252,6 +252,26 @@ assert.match(html,/#tenderTable \.table-detail-text\{[^}]*-webkit-line-clamp:3;[
 assert(html.includes('title="${value}"><span class="table-detail-text">${value}</span>'));
 console.log('PASS: advanced column widths survive selection changes, scrollbars stay aligned, long text clamps to three lines with full hover text.');
 
+// Alert placements count tenders, including across the 100-row page boundary.
+const cardNodes={tenderCardGrid:{innerHTML:''},recordCount:{}};
+const cardRows=Array.from({length:130},(_,i)=>({'Tender ID':'T'+(i+1)}));
+const cardContext=vm.createContext({virtualRows:cardRows,virtualStart:0,virtualEnd:100,CARD_AD_INTERVAL:12,CARD_ALERT_INTERVAL:20,VIRTUAL_CHUNK_SIZE:100,currentLanguage:'en',
+ $:id=>cardNodes[id],escapeHtml:s=>String(s||''),displayTenderValue:(r,k)=>r[k],getDistrictInfo:()=>({name:'Dewas'}),
+ cardClosingClass:()=>'',parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>''});
+for(const name of ['tenderAlertsCard','sarAdCard','renderCardWindow'])vm.runInContext(source(name),cardContext);
+function cardOrder(){return [...cardNodes.tenderCardGrid.innerHTML.matchAll(/<article class="tender-card [^"]*"|<aside class="(tender-alert-card|sar-ad-card)"/g)].map(m=>m[1]||'tender')}
+function alertAfter(){let tenders=cardContext.virtualStart;return cardOrder().flatMap(type=>{if(type==='tender')tenders++;return type==='tender-alert-card'?[tenders]:[]})}
+cardContext.renderCardWindow();
+assert.equal(cardOrder()[3],'tender-alert-card');assert.equal(cardOrder().filter(x=>x==='tender').length,100);
+assert.deepEqual(alertAfter(),[3,20,40,60,80,100]);assert.equal(cardOrder().filter(x=>x==='sar-ad-card').length,8);
+assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://t.me/mptendersalert"'));
+assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ"'));
+cardContext.virtualStart=100;cardContext.virtualEnd=130;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[120]);
+cardContext.virtualStart=0;cardContext.virtualEnd=3;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[3]);
+cardContext.virtualEnd=2;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[]);
+cardContext.virtualEnd=0;cardContext.renderCardWindow();assert(cardNodes.tenderCardGrid.innerHTML.includes('No tender records found.'));assert.deepEqual(alertAfter(),[]);
+console.log('PASS: community alert card is fourth, repeats after every 20 tenders across pages, preserves service ads and uses the correct join links.');
+
 assert.equal(context.formatMoney('Not provided on portal'),'Not provided on portal');
 assert.equal(context.formatMoney('Not available (processing fee not published)'),'Not available');
 assert.equal(context.effectiveProcessingFee({'Processing Fee':'Not provided on portal','Total Fee':'1295','Tender Fee':'1000','EMD Fee':'0'}),0);

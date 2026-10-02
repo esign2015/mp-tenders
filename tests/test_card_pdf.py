@@ -7,6 +7,7 @@ from unittest.mock import patch
 from pypdf import PdfReader
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'backend'))
 from telegram_card_pdf import make_card_pdf, AD_LINKS
+from pdf_promotions import COMMUNITY_LINKS
 import telegram_alerts as alerts
 
 class CardPdfTests(unittest.TestCase):
@@ -15,16 +16,20 @@ class CardPdfTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p=make_card_pdf(rows,Path(tmp)/'cards.pdf','New Published Today',total_available=99,filter_detail='New Published Today',filter_live=False)
             reader=PdfReader(p);text='\n'.join(p.extract_text() for p in reader.pages)
-            self.assertEqual(len(reader.pages),3)
-            self.assertEqual(reader.pages[0].extract_text().count("2026_UAD_")+reader.pages[0].extract_text().count("ADVERTISEMENT"),6)
-            self.assertEqual(reader.pages[1].extract_text().count("2026_UAD_"),6)
+            self.assertEqual(len(reader.pages),4)
+            self.assertEqual(reader.pages[0].extract_text().count("2026_UAD_"),4)
+            self.assertEqual(reader.pages[1].extract_text().count("2026_UAD_"),4)
             self.assertIn('Total Records: 13 out of 99',text)
             for row in rows:self.assertEqual(text.count(row['Tender ID']),1)
-            self.assertEqual(text.count('ADVERTISEMENT'),2)
+            self.assertEqual(text.count('ADVERTISEMENT'),4)
             self.assertIn('1,000.00',text);self.assertIn('1,795.00',text)
             links={str(a.get_object().get('/A',{}).get('/URI','')) for page in reader.pages for a in page.get('/Annots',[])}
             self.assertTrue({url for _,url in AD_LINKS}<=links)
             self.assertIn('Rs 1,000.00 per tender',' '.join(text.split()))
+            for page in reader.pages:
+                self.assertIn('MP Tender Alerts',page.extract_text())
+                page_links={str(a.get_object().get('/A',{}).get('/URI','')) for a in page.get('/Annots',[])}
+                self.assertTrue({url for _,url in (*AD_LINKS,*COMMUNITY_LINKS)}<=page_links)
 
     def test_evening_sends_matching_table_and_card_selection(self):
         class Clock(datetime):

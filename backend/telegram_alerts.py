@@ -13,7 +13,8 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, LongTable, TableStyle, Paragraph, Spacer
+from reportlab.platypus import LongTable, TableStyle, Paragraph, Spacer, BaseDocTemplate, PageTemplate, Frame, Flowable
+from pdf_promotions import draw_table_promotions
 
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
@@ -257,7 +258,7 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         textColor=colors.HexColor("#4b5563")
     )
 
-    doc = SimpleDocTemplate(
+    doc = BaseDocTemplate(
         str(path), pagesize=landscape(A3),
         leftMargin=18, rightMargin=18, topMargin=78, bottomMargin=24,
         title=report_title, author="SAR Digital Services, Kannod",
@@ -375,7 +376,27 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         canvas.drawRightString(w-18, 6, f"Page {document.page} • Generated {generated}")
         canvas.restoreState()
 
-    doc.build(story, onFirstPage=page_header_footer, onLaterPages=page_header_footer)
+        if document.page == 2:
+            draw_table_promotions(canvas, w, h)
+
+    # Page two reserves space for both cards before the continuing tender table.
+    w, h = landscape(A3)
+    def frame(name, top):
+        return Frame(18,24,w-36,h-top-24,id=name)
+    doc.addPageTemplates([
+        PageTemplate(id='first',frames=[frame('first-frame',78)],onPage=page_header_footer,autoNextPageTemplate='promotions'),
+        PageTemplate(id='promotions',frames=[frame('promotions-frame',240)],onPage=page_header_footer,autoNextPageTemplate='remaining'),
+        PageTemplate(id='remaining',frames=[frame('remaining-frame',78)],onPage=page_header_footer),
+    ])
+    # Even a short report includes the requested second-page cards.
+    # A zero-size end marker adds that page only if the table stayed on page one.
+    class EnsurePromotionPage(Flowable):
+        def wrap(self, available_width, available_height):
+            return (0, available_height+1) if self.canv.getPageNumber()==1 else (0,0)
+        def draw(self):
+            pass
+    story.append(EnsurePromotionPage())
+    doc.build(story)
     return path
 
 
