@@ -1,0 +1,23 @@
+{
+  "operations": {
+    "text:1": {
+      "message_id": 81,
+      "sent_at": "2026-10-02T17:51:49.587267+00:00",
+      "kind": "text"
+    },
+    "document:1": {
+      "message_id": 82,
+      "sent_at": "2026-10-02T17:51:51.567891+00:00",
+      "kind": "document"
+    },
+    "document:2": {
+      "message_id": 83,
+      "sent_at": "2026-10-02T17:51:54.256838+00:00",
+      "kind": "document"
+    }
+  },
+  "mode": "evening_new",
+  "key": "2026-10-02:evening_new",
+  "extraction_result": "not-refreshed",
+  "completed_at": "2026-10-02T17:51:54.264867+00:00"
+}
