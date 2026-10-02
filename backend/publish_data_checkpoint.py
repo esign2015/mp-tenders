@@ -95,6 +95,13 @@ def publish(paths):
             cutoff = None
         if cutoff:
             removed_ids = set()
+            retired = set(cleanup_report.get('retired_tender_ids', []))
+            try:
+                current_snapshot = json.loads(updates.get('data/live_snapshot.json', blob(parent, 'data/live_snapshot.json')))
+                if current_snapshot.get('verified') is True:
+                    retired.difference_update(current_snapshot.get('tender_ids', []))
+            except (ValueError, TypeError):
+                pass
             for path in DATA_FILES:
                 if path not in updates and not cleanup_mode:
                     continue
@@ -102,7 +109,7 @@ def publish(paths):
                 data = blob(parent, path) if cleanup_mode else updates[path]
                 if not data:
                     continue
-                purged, removed = purge_csv(data, cutoff)
+                purged, removed = purge_csv(data, cutoff, retired)
                 updates[path] = purged
                 removed_ids.update(removed)
                 if cleanup_mode:
@@ -123,12 +130,12 @@ def publish(paths):
         # Derive progress from the exact CSV bytes being published together.
         with tempfile.TemporaryDirectory() as summary_dir:
             root = Path(summary_dir)
-            for path in ("organisations.csv", "organisation_tenders.csv", "all_tenders_org_detailed.csv", "data/existing_id_detail_status.json"):
+            for path in ("organisations.csv", "organisation_tenders.csv", "all_tenders_org_detailed.csv", "data/existing_id_detail_status.json", "data/live_snapshot.json"):
                 target = root / path
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(updates.get(path, blob(parent, path)))
             write_summary(root)
-            for filename in ("inventory_summary.json", "inventory_counts.json"):
+            for filename in ("inventory_summary.json", "inventory_counts.json", "live_count_verification.json"):
                 updates["data/" + filename] = (root / "data" / filename).read_bytes()
         with tempfile.TemporaryDirectory() as index_dir:
             env = dict(os.environ, GIT_INDEX_FILE=str(Path(index_dir) / "index"))

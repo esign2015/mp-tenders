@@ -24,7 +24,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add data/evening_verification.json
+          git add data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json
           git diff --cached --quiet || git commit -m "Publish evening tender verification [skip ci]"
           git push
 
@@ -106,7 +106,7 @@ jobs:
           python backend/evening_verify.py || true
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json data/evening_verification.json || true
+          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json || true
           git diff --cached --quiet || git commit -m "Publish final evening tender verification [skip ci]"
           git push || true
 

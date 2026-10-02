@@ -101,6 +101,12 @@ def main():
     )
     with (ROOT/"data"/"run_history.jsonl").open("a",encoding="utf-8") as f: f.write(json.dumps(report,ensure_ascii=False)+"\n")
     print(json.dumps(report,ensure_ascii=False,indent=2))
+    # The 19:00 job removes expired records; once the evening copy is
+    # verified, also retire records absent from that complete inventory.
+    from nightly_cleanup import cleanup, IST
+    local_now = now.astimezone(IST)
+    if not mismatches and (local_now.hour >= 19 or local_now.hour < 9):
+        cleanup(ROOT, local_now)
     from inventory_summary import write_summary
     write_summary(ROOT)
     if mismatches: raise SystemExit("FINAL SNAPSHOT MISMATCH")

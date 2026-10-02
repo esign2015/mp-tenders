@@ -124,9 +124,12 @@ assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),
 context.portalSnapshot.verified=false;
 assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
 context.portalSnapshot={verified:true,snapshot_at:'2026-09-29T19:51:00+05:30'};
-assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),true);
+assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},eveningNow),false);
+for(const time of ['2026-10-01T00:00:01+05:30','2026-10-01T08:59:59+05:30','2026-10-01T09:00:00+05:30'])assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},Date.parse(time)),false);
+context.portalSnapshot={verified:true,snapshot_at:'2026-10-01T00:32:00+05:30'};assert.equal(context.currentPortalAllows({'Tender ID':'old-import'},Date.parse('2026-10-01T00:35:00+05:30')),false);
+context.portalSnapshot={verified:true,snapshot_at:'2026-10-01T10:00:00+05:30'};context.portalActiveIds.add('new-official');assert.equal(context.currentPortalAllows({'Tender ID':'new-official'},Date.parse('2026-10-01T10:01:00+05:30')),true);
 context.portalSnapshot=null;
-console.log('PASS: complete same-day evening inventory excludes stale imported IDs; partial and old snapshots do not.');
+console.log('PASS: verified inventory remains authoritative through midnight and 09:00; only new verified IDs enter Live.');
 
 for(const value of ['1000','1000.0','1000.00']){
  assert.equal(context.formatMoney(value),'₹ 1,000.00');
