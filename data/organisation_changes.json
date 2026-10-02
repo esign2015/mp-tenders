@@ -1,89 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-02T19:57:32.396619+05:30",
+  "snapshot_at": "2026-10-02T21:53:20.295931+05:30",
   "previous_organisation_count": 96,
   "current_organisation_count": 96,
-  "previous_tender_count": 5545,
+  "previous_tender_count": 5518,
   "current_tender_count": 5518,
-  "organisations_with_changes": 7,
-  "organisations_with_new_tenders": 3,
-  "new_tender_count": 17,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3042,
-      "Current Tender Count": 3017,
-      "Count Difference": -25,
-      "New Tender Count": 9,
-      "New Tender IDs": [
-        "2026_UAD_539435_1",
-        "2026_UAD_540322_1",
-        "2026_UAD_540366_1",
-        "2026_UAD_540371_1",
-        "2026_UAD_540382_1",
-        "2026_UAD_540386_1",
-        "2026_UAD_540390_1",
-        "2026_UAD_540421_1",
-        "2026_UAD_540450_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 369,
-      "Current Tender Count": 375,
-      "Count Difference": 6,
-      "New Tender Count": 7,
-      "New Tender IDs": [
-        "2026_PWDRB_537856_1",
-        "2026_PWDRB_539556_1",
-        "2026_PWDRB_539558_1",
-        "2026_PWDRB_539559_1",
-        "2026_PWDRB_539561_1",
-        "2026_PWDRB_539562_1",
-        "2026_PWDRB_539603_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
-      "Previous Tender Count": 31,
-      "Current Tender Count": 32,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_SCMFL_540402_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Forest Department",
-      "Previous Tender Count": 93,
-      "Current Tender Count": 89,
-      "Count Difference": -4,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Directorate of Medical Education",
-      "Previous Tender Count": 33,
-      "Current Tender Count": 30,
-      "Count Difference": -3,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 57,
-      "Current Tender Count": 56,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Rural Engineering Service",
-      "Previous Tender Count": 83,
-      "Current Tender Count": 82,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
