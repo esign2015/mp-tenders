@@ -103,7 +103,9 @@ class AccountError(RuntimeError):
     def __init__(self,message,status=400,code=None):super().__init__(message);self.status=status;self.code=code
 
 class Accounts:
-    def __init__(self,server):self.server=server
+    def __init__(self,server):
+        self.server=server
+        self._batch_lookup_supported=None
     def operation(self,action,**data):
         if sheets.enabled():
             started=time.monotonic()
@@ -174,12 +176,25 @@ class Accounts:
         # Independent remote calls overlap their network/startup time. The Sheet
         # still serializes mutations; every rate check must pass before login.
         checks=self.rate_checks(mobile)
-        if os.getenv('GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP') == '1':
+        batch_mode=os.getenv('GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP','auto')
+        if batch_mode=='1' or (batch_mode=='auto' and self._batch_lookup_supported is not False):
             result=self.operation('lookup',mobile=mobile,rate_checks=checks)
             limits=result.get('rate_results')
-            if not isinstance(limits,list) or len(limits)!=len(checks):
+            if limits is not None:
+                if (not isinstance(limits,list) or len(limits)!=len(checks)
+                        or any(not isinstance(item,dict) or not isinstance(item.get('allowed'),bool) for item in limits)):
+                    raise AccountError('Google Sheet account limits response invalid.',503)
+                self._batch_lookup_supported=True
+                self.check_rate_results(limits)
+                return result['record']
+            if batch_mode=='1':
                 raise AccountError('Google Sheet account script update बाकी है।',503)
-            self.check_rate_results(limits)
+            # Older Script versions ignore rate_checks. Still enforce both
+            # persistent limits, then use the already fetched account record.
+            self._batch_lookup_supported=False
+            with ThreadPoolExecutor(max_workers=2,thread_name_prefix='account-check') as pool:
+                futures=[pool.submit(self.operation,'rate',**data) for data in checks]
+                self.check_rate_results([future.result() for future in futures])
             return result['record']
         with ThreadPoolExecutor(max_workers=3,thread_name_prefix='account-check') as pool:
             limits=[pool.submit(self.operation,'rate',**data) for data in checks]
@@ -222,6 +237,7 @@ class Accounts:
             aff=saved if isinstance(saved,dict) else {}
             if record_visit or not isinstance(saved,dict):
                 details_id=queue_details(record['user_id'],token,record_visit=record_visit,profile=aff if isinstance(saved,dict) else None)
+                if isinstance(saved,dict):details_id=None  # Visit logging needs no browser polling.
         else:
             conn=self.server.visitor_db()
             try:
@@ -261,9 +277,9 @@ def install(server):
     @app.post('/api/accounts/signin')
     def signin():
         p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
+        if not mobile:raise AccountError('सही Mobile Number भरें।')
         record=accounts.lookup_limited(mobile);password=p.get('password')
         valid= isinstance(password,str) and len(password)<=128 and check_password_hash(record['password_hash'] if record else _DUMMY_HASH,password)
-        if not mobile:raise AccountError('सही Mobile Number भरें।')
         if not record:raise AccountError('इस mobile से Sign up नहीं हुआ है। कृपया Sign up form पूरा करें।',404,'signup_required')
         if not valid:raise AccountError('Mobile या password सही नहीं है।',401)
         if record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')

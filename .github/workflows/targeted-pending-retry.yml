@@ -26,7 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     concurrency:
-      group: mp-tender-details
+      # Explicit reported IDs can proceed while a large scheduled batch runs.
+      group: ${{ (inputs.tender_ids != '' || contains(github.event.head_commit.message, '[tender-ids=')) && 'mp-tender-priority' || 'mp-tender-details' }}
       cancel-in-progress: false
     env:
       PRIORITY_TENDER_IDS: ${{ inputs.tender_ids || '' }}

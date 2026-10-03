@@ -39,7 +39,7 @@ class AccountsTests(unittest.TestCase):
     def setUp(self):
         self.clock=patch('account_access.time.time',return_value=1800000000);self.clock.start()
         self.tmp=tempfile.TemporaryDirectory()
-        self.env=patch.dict(os.environ,{'ADMIN_SESSION_SECRET':'account-tests','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','VISITOR_PROFILE_LEGACY_ALLOWED':'0','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.env.start()
+        self.env=patch.dict(os.environ,{'ADMIN_SESSION_SECRET':'account-tests','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP':'0','VISITOR_PROFILE_LEGACY_ALLOWED':'0','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.env.start()
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start();self.client=server.app.test_client()
         self.password='Private1!'
@@ -90,6 +90,43 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(error.exception.status,429)
         with patch.object(sheets,'call',side_effect=AssertionError('Readiness must not access Sheet')):
             self.assertEqual(self.client.get('/api/accounts/ready').status_code,200)
+
+    def test_auto_batch_uses_one_request_and_legacy_fallback_keeps_persistent_limits(self):
+        from account_access import Accounts,AccountError
+        accounts=Accounts(server)
+        with patch.dict(os.environ,{'GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP':'auto'}),patch.object(sheets,'enabled',return_value=True),server.app.test_request_context():
+            with patch.object(accounts,'operation',return_value={'record':{'user_id':'test'},'rate_results':[{'allowed':True},{'allowed':True}]}) as operation:
+                self.assertEqual(accounts.lookup_limited('+919876543210')['user_id'],'test')
+                self.assertEqual(operation.call_count,1)
+            with patch.object(accounts,'operation',return_value={'record':None,'rate_results':[{'allowed':True},{'allowed':False}]}),self.assertRaises(AccountError) as denied:
+                accounts.lookup_limited('+919876543210')
+            self.assertEqual(denied.exception.status,429)
+            with patch.object(accounts,'operation',return_value={'record':None,'rate_results':[]}),self.assertRaises(AccountError):
+                accounts.lookup_limited('+919876543210')
+            accounts=Accounts(server)
+            def legacy(action,**fields):
+                return {'allowed':True} if action=='rate' else {'record':{'user_id':'legacy'}}
+            with patch.object(accounts,'operation',side_effect=legacy) as operation:
+                self.assertEqual(accounts.lookup_limited('+919876543210')['user_id'],'legacy')
+                self.assertEqual(operation.call_count,3)
+                self.assertFalse(accounts._batch_lookup_supported)
+                self.assertEqual(accounts.lookup_limited('+919876543210')['user_id'],'legacy')
+                self.assertEqual(operation.call_count,6)
+
+    def test_canonical_profile_visit_is_logged_without_browser_polling(self):
+        result=self.signup();token=result['session_token']
+        record=server.account_service.get(user_id=result['visitor_id'])
+        record['affidavit_profile']={'firmName':'Saved Firm'}
+        with patch.object(sheets,'enabled',return_value=True),patch('account_access.queue_details',return_value='background-visit') as queue,server.app.test_request_context():
+            response=server.account_service.response(record,token,record_visit=True).json
+        queue.assert_called_once()
+        self.assertTrue(queue.call_args.kwargs['record_visit'])
+        self.assertIsNone(response['details_id'])
+        self.assertEqual(response['affidavit_profile'],record['affidavit_profile'])
+
+    def test_invalid_signin_does_not_wait_for_account_storage(self):
+        with patch.object(server.account_service,'lookup_limited',side_effect=AssertionError('Invalid mobile needs no remote lookup')):
+            self.assertEqual(self.client.post('/api/accounts/signin',json={'mobile':'invalid','password':'test'}).status_code,400)
 
     def test_middle_name_rejects_numbers_in_signup_and_profile(self):
         for value in ('9876543210','Kumar123','कुमार१२३','Ram@example'):
