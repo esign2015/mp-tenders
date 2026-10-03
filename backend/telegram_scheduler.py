@@ -24,11 +24,17 @@ def read_json(path):
 
 def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_at=None):
     now = now.astimezone(IST)
+    if now.date().isoformat() < cfg.get('telegram_schedule_start_date', ''):
+        return None
     current = now.hour * 60 + now.minute
     due = []
-    for mode, field in (('morning','morning_telegram_ist'), ('evening_new','evening_new_telegram_ist'), ('evening_total','evening_total_telegram_ist')):
+    # These are the only daily channel reports. Legacy All-Tender settings
+    # cannot re-enable a fourth report, including during delayed retries.
+    for mode, field in (('morning','morning_telegram_ist'), ('afternoon','afternoon_telegram_ist'), ('evening_new','evening_new_telegram_ist')):
         delay=cfg.get(mode+'_after_detail_minutes')
         if mode != 'morning' and delay is not None:
+            if (completion or {}).get('result') == 'in_progress':
+                continue
             try:
                 stamp=datetime.fromisoformat((completion or {})['completed_at']).astimezone(IST)
             except (KeyError,ValueError,TypeError):
@@ -42,17 +48,9 @@ def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_a
             # Missing/failed/stuck extraction must not suppress the PDFs.
             if fallback:
                 cutoff = now.replace(hour=hm(fallback)//60, minute=hm(fallback)%60, second=0, microsecond=0)
-                if mode == 'evening_total':
-                    cutoff += timedelta(minutes=int(cfg.get('evening_pdf_gap_minutes', 10)))
-                deadline = min(deadline, cutoff) if stamp else cutoff
-            if mode == 'evening_total' and cfg.get('evening_pdf_gap_minutes') is not None:
-                if state.get('evening_new') != f'{now.date().isoformat()}:evening_new' or not new_sent_at:
-                    continue
-                try:
-                    delivered = datetime.fromisoformat(new_sent_at).astimezone(IST)
-                except (ValueError,TypeError):
-                    continue
-                deadline = max(deadline, delivered+timedelta(minutes=int(cfg['evening_pdf_gap_minutes'])))
+                # A real completion wins over the missing-run fallback clock.
+                # Do not send at 20:00 while a known evening run is still busy.
+                deadline = deadline if stamp else cutoff
             if now<deadline:continue
             target=deadline.hour*60+deadline.minute
             key=f'{now.date().isoformat()}:{mode}'

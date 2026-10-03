@@ -41,7 +41,7 @@ class CardPdfTests(unittest.TestCase):
                     self.assertGreaterEqual(left,0);self.assertGreaterEqual(bottom,0)
                     self.assertLessEqual(right,float(page.mediabox.width));self.assertLessEqual(top,float(page.mediabox.height))
 
-    def test_evening_sends_matching_table_and_card_selection(self):
+    def test_evening_sends_only_the_table_selection(self):
         class Clock(datetime):
             @classmethod
             def now(cls,tz=None):return cls(2026,10,1,20,45,tzinfo=alerts.IST)
@@ -50,19 +50,19 @@ class CardPdfTests(unittest.TestCase):
             p=Path(tmp)/'master.csv';p.write_text('Tender ID\n')
             with patch.dict('os.environ',{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'evening_new'}),patch.object(alerts,'CSV_PATH',p),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message'),patch.object(alerts,'telegram_document') as send,patch.object(alerts,'make_pdf',return_value=Path('table.pdf')) as table,patch('telegram_card_pdf.make_card_pdf',return_value=Path('card.pdf')) as cards:
                 self.assertEqual(alerts.main(),0)
-                self.assertEqual(send.call_count,2)
-                self.assertEqual(table.call_args.args[0],cards.call_args.args[0])
-                self.assertEqual([r['Tender ID'] for r in cards.call_args.args[0]],['today'])
-                self.assertEqual(cards.call_args.kwargs['filter_live'],False)
+                self.assertEqual(send.call_count,1)
+                cards.assert_not_called()
+                self.assertEqual([r['Tender ID'] for r in table.call_args.args[0]],['today'])
+                self.assertEqual(table.call_args.kwargs['filter_live'],False)
 
-    def test_second_pdf_failure_does_not_mark_evening_success(self):
+    def test_table_pdf_failure_does_not_mark_evening_success(self):
         class Clock(datetime):
             @classmethod
             def now(cls,tz=None):return cls(2026,10,1,20,45,tzinfo=alerts.IST)
         rows=[{'Tender ID':'today','Published Date':'01-Oct-2026 10:00 AM','Closing Date':'05-Oct-2026 05:00 PM'}]
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'master.csv';p.write_text('Tender ID\n')
-            with patch.dict('os.environ',{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'evening_new'}),patch.object(alerts,'CSV_PATH',p),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message'),patch.object(alerts,'telegram_document'),patch.object(alerts,'make_pdf',return_value=Path('table.pdf')),patch('telegram_card_pdf.make_card_pdf',side_effect=RuntimeError('card PDF failed')):
+            with patch.dict('os.environ',{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'evening_new'}),patch.object(alerts,'CSV_PATH',p),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message'),patch.object(alerts,'telegram_document'),patch.object(alerts,'make_pdf',side_effect=RuntimeError('table PDF failed')),patch('telegram_card_pdf.make_card_pdf'):
                 with self.assertRaises(RuntimeError):alerts.main()
 
 if __name__=='__main__':unittest.main()

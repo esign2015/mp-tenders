@@ -14,8 +14,9 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import LongTable, TableStyle, Paragraph, Spacer, BaseDocTemplate, PageTemplate, Frame, Flowable
-from pdf_promotions import draw_table_promotions
+from reportlab.platypus import LongTable, TableStyle, Paragraph, Spacer, BaseDocTemplate, PageTemplate, Frame
+from reportlab.pdfgen.canvas import Canvas
+from pdf_promotions import draw_table_promotions, TABLE_PROMOTION_HEIGHT, TABLE_PROMOTION_BOTTOM
 
 IST = timezone(timedelta(hours=5, minutes=30))
 SITE_URL = "https://tenders.codinglms.xyz/"
@@ -424,34 +425,48 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
         canvas.drawRightString(w-18, 6, f"Page {document.page} • Generated {generated}")
         canvas.restoreState()
 
-        if document.page == 2:
-            draw_table_promotions(canvas, w, h)
+    # Reserve a small strip so even a full final page can carry both adverts.
+    # The final page count is known only after the table has finished flowing.
+    class PromotionCanvas(Canvas):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._report_pages = []
 
-    # Page two reserves space for both cards before the continuing tender table.
+        def showPage(self):
+            self._report_pages.append(dict(self.__dict__))
+            self._startPage()
+
+        def save(self):
+            page_count = len(self._report_pages)
+            annotation_count = self._annotationCount
+            for state in self._report_pages:
+                self.__dict__.update(state)
+                # Header links were registered during layout. Footer links
+                # must use new IDs across all replayed pages.
+                self._annotationCount = annotation_count
+                if self._pageNumber % 2 == 1 or self._pageNumber == page_count:
+                    draw_table_promotions(self, w, h)
+                annotation_count = self._annotationCount
+                Canvas.showPage(self)
+            Canvas.save(self)
+
     w, h = landscape(A3)
-    def frame(name, top):
-        return Frame(18,24,w-36,h-top-24,id=name)
+    bottom = TABLE_PROMOTION_BOTTOM + TABLE_PROMOTION_HEIGHT + 10
     doc.addPageTemplates([
-        PageTemplate(id='first',frames=[frame('first-frame',78)],onPage=page_header_footer,autoNextPageTemplate='promotions'),
-        PageTemplate(id='promotions',frames=[frame('promotions-frame',240)],onPage=page_header_footer,autoNextPageTemplate='remaining'),
-        PageTemplate(id='remaining',frames=[frame('remaining-frame',78)],onPage=page_header_footer),
+        PageTemplate(id='table', frames=[Frame(18, bottom, w-36, h-78-bottom, id='table-frame')],
+                     onPage=page_header_footer),
     ])
-    # Even a short report includes the requested second-page cards.
-    # A zero-size end marker adds that page only if the table stayed on page one.
-    class EnsurePromotionPage(Flowable):
-        def wrap(self, available_width, available_height):
-            return (0, available_height+1) if self.canv.getPageNumber()==1 else (0,0)
-        def draw(self):
-            pass
-    story.append(EnsurePromotionPage())
-    doc.build(story)
+    doc.build(story, canvasmaker=PromotionCanvas)
     return path
 
 
 def main():
     token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
     chat_id = clean(os.getenv("TELEGRAM_CHAT_ID"))
-    mode = clean(os.getenv("NOTIFY_MODE", "evening")).lower()
+    mode = clean(os.getenv("NOTIFY_MODE", "evening_new")).lower()
+    if mode in {'evening_total', 'evening'}:
+        print('All-Tender Telegram reports are disabled.')
+        return 0
     if not token or not chat_id:
         raise RuntimeError("TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID secrets are missing.")
     if not CSV_PATH.exists() and not (CSV_PATH.parent / "organisation_tenders.csv").exists():
@@ -468,10 +483,10 @@ def main():
     if mode == "manual":
         report = clean(os.getenv("MANUAL_REPORT", "closing_today")).lower()
         view = clean(os.getenv("MANUAL_VIEW", "table")).lower()
-        if report not in {"closing_today", "new_today", "all"} or view not in {"table", "card"}:
+        if report not in {"closing_today", "closing_tomorrow", "new_today"} or view != "table":
             raise RuntimeError("Invalid manual report or view")
     else:
-        report = {"morning":"closing_today", "evening_new":"new_today", "evening_total":"all", "evening":"all"}.get(mode)
+        report = {"morning":"closing_today", "afternoon":"closing_tomorrow", "evening_new":"new_today"}.get(mode)
         view = "table"
         if report is None:
             raise RuntimeError(f"Unknown NOTIFY_MODE: {mode}")
@@ -479,17 +494,18 @@ def main():
     if report == "closing_today":
         selected = [r for r in rows if is_on_date(r.get("Closing Date"), today)]
         label, english = "आज अंतिम तिथि वाले टेंडर", "Closing Today"
-    elif report == "new_today":
+    elif report == "closing_tomorrow":
+        tomorrow = today + timedelta(days=1)
+        selected = [r for r in rows if is_on_date(r.get("Closing Date"), tomorrow)]
+        label, english = f"कल अंतिम तिथि वाले टेंडर ({tomorrow.strftime('%d/%m/%Y')})", "Closing Tomorrow"
+    else:
         selected = [r for r in rows if is_on_date(r.get("Published Date"), today)]
         label, english = "आज प्रकाशित नए टेंडर", "New Published Today"
-    else:
-        selected = rows
-        label, english = "सभी एक्टिव टेंडर", "All Tenders"
     selected = sorted(selected, key=closing_sort_key)
     result = os.getenv("MORNING_EXTRACTION_RESULT", "")
     fallback_note = ""
     if mode != "manual" and result and result != "success":
-        fallback_note = "⚠️ नया डेटा संग्रह या जाँच पूरी नहीं हो सकी; उपलब्ध पिछले data से PDF भेजी जा रही है।\n"
+        fallback_note = "⚠️ नया डेटा संग्रह या जाँच पूरी नहीं हो सकी; उपलब्ध पिछले डेटा से PDF भेजी जा रही है।\n"
     summary = {}
     try:
         with (CSV_PATH.parent / 'organisations.csv').open(encoding='utf-8-sig', newline='') as stream:
@@ -509,21 +525,12 @@ def main():
         + ("ℹ️ इस सूची में शून्य टेंडर हैं; शून्य रिकॉर्ड वाली PDF संलग्न है।\n" if not selected else "")
         + footer
     )
-    telegram_message(token, chat_id, message)
     title = f"{english} {d} • {len(selected)} tenders"
     filename = f"{english.replace(' ', '_')}_{d}.pdf"
-    if view == 'card':
-        from telegram_card_pdf import make_card_pdf
-        pdf = make_card_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
-    else:
-        pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
-    telegram_document(token, chat_id, pdf, f"📎 {label} — {d} — {len(selected)} रिकॉर्ड\n\n{footer}")
-    # Keep the established card companion for automatic morning/new reports.
-    if mode in {'morning', 'evening_new'} and selected:
-        from telegram_card_pdf import make_card_pdf
-        card = make_card_pdf(selected, f"{english.replace(' ', '_')}_{d}_Card.pdf", title,
-                             total_available=len(rows), filter_detail=english, filter_live=False)
-        telegram_document(token, chat_id, card, f"📎 {label} — कार्ड प्रारूप — {len(selected)} रिकॉर्ड\n\n{footer}")
+    pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
+    # One PDF message per report. The Hindi report accompanies the document
+    # itself, keeping the daily channel total at three messages.
+    telegram_document(token, chat_id, pdf, message)
     return 0
 
 

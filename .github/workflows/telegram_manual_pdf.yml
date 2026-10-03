@@ -10,8 +10,8 @@ on:
         type: choice
         options:
           - closing_today
+          - closing_tomorrow
           - new_today
-          - all
 
       view:
         description: "PDF layout"
@@ -20,7 +20,6 @@ on:
         type: choice
         options:
           - table
-          - card
 
 permissions:
   contents: write

@@ -72,7 +72,9 @@ def main():
     root = ROOT
     extraction_result = os.getenv('MORNING_EXTRACTION_RESULT', '')
     state = read_json(root / 'data/telegram_schedule.json')
-    due = due_alert(read_json(root / 'data/schedule_config.json'), state, datetime.now(IST), extraction_result,read_json(root/'data/evening_detail_completion.json'),state.get('evening_new_sent_at'))
+    now = datetime.now(IST)
+    completion = evening_completion(root, now)
+    due = due_alert(read_json(root / 'data/schedule_config.json'), state, now, extraction_result, completion, state.get('evening_new_sent_at'))
     if not due:
         # Keep the monitor consistent with the current copied IDs even on a
         # notification tick with nothing left to send. Rebuild only if counts
@@ -87,10 +89,9 @@ def main():
         print('No unsent daily Telegram alert is due.')
         return 0
     _, mode, key = due
-    if mode != 'morning':
-        completion = read_json(root/'data/evening_detail_completion.json')
+    if mode == 'evening_new':
         extraction_result = completion.get('result', 'not-refreshed')
-    if mode == 'morning' and not extraction_result:
+    if mode in {'morning', 'afternoon'} and not extraction_result:
         summary = read_json(root / 'data/inventory_counts.json')
         try:
             stamp = datetime.fromisoformat(summary.get('snapshot_at', '')).astimezone(IST)
@@ -99,6 +100,25 @@ def main():
             extraction_result = 'not-refreshed'
     deliver(root, mode, key, extraction_result)
     return 0
+
+
+def evening_completion(root, now):
+    """Wait for a known run; use the fallback if its terminal marker is lost."""
+    root = Path(root)
+    completion = read_json(root/'data/evening_detail_completion.json')
+    start = read_json(root/'data/evening_run_start.json')
+    try:
+        started = datetime.fromisoformat(start['started_at']).astimezone(IST)
+    except (KeyError, TypeError, ValueError):
+        return completion
+    if (start.get('run_id') and start.get('run_id') != completion.get('run_id')
+            and started.date() == now.astimezone(IST).date()
+            and 0 <= (now - started).total_seconds() < 6 * 60 * 60
+            and (now.astimezone(IST).hour, now.astimezone(IST).minute) < (23, 30)):
+        return {**start, 'result': 'in_progress'}
+    if start.get('run_id') and start.get('run_id') != completion.get('run_id') and started.date() == now.astimezone(IST).date():
+        return {**start, 'result': 'failure'}
+    return completion
 
 
 if __name__ == '__main__':

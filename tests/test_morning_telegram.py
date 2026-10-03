@@ -40,15 +40,16 @@ class MorningTelegramTests(unittest.TestCase):
             path=root/'all_tenders_org_detailed.csv';path.write_text('Tender ID\n')
             (root/'organisation_tenders.csv').write_text('Tender ID\nsample\n')
             (root/'organisations.csv').write_text('Tender Count,Retrieved At\n1,2026-10-02T17:58:57+00:00\n')
-            rows=[{'Tender ID':'sample','Closing Date':'03-Oct-2026 05:00 PM'}]
-            for mode in ('evening_total', 'manual'):
-                with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'all','MANUAL_VIEW':'table','MORNING_EXTRACTION_RESULT':''}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')):
+            rows=[{'Tender ID':'sample','Closing Date':'03-Oct-2026 05:00 PM','Published Date':'02-Oct-2026 10:00 AM'}]
+            for mode in ('evening_new', 'manual'):
+                with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'new_today','MANUAL_VIEW':'table','MORNING_EXTRACTION_RESULT':''}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')):
                     self.assertEqual(alerts.main(),0)
-                    text=message.call_args.args[2]
+                    text=document.call_args.args[3]
+                    message.assert_not_called()
                     self.assertTrue(text.startswith('🔔 एमपी टेंडर्स अलर्ट\n\n'))
                     self.assertNotIn('व्यवस्थापक द्वारा',text)
                     self.assertNotIn('manual',text.lower())
-                    self.assertIn('📅 दिनांक: 02/10/2026\n🕒 रिपोर्ट समय: 02/10/2026 11:32 PM IST\n📥 डेटा संग्रह समय: 02/10/2026 23:28:57 IST\n📋 सभी एक्टिव टेंडर: 1\n📊 PDF में 1 रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: 1, Mptender पोर्टल सूची का कुल टेंडर count: 1\n🌐 वेबसाइट:',text)
+                    self.assertIn('📅 दिनांक: 02/10/2026\n🕒 रिपोर्ट समय: 02/10/2026 11:32 PM IST\n📥 डेटा संग्रह समय: 02/10/2026 23:28:57 IST\n📋 आज प्रकाशित नए टेंडर: 1\n📊 PDF में 1 रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: 1, Mptender पोर्टल सूची का कुल टेंडर count: 1\n🌐 वेबसाइट:',text)
                     self.assertIn('https://tenders.codinglms.xyz/\n\n📢 टेलीग्राम चैनल:',text)
                     self.assertIn('https://t.me/mptendersalert\n\n👤 व्यवस्थापक:',text)
                     self.assertIn('https://t.me/rdgyan\n\n'+alerts.HINDI_DISCLAIMER,text)
@@ -72,7 +73,7 @@ class MorningTelegramTests(unittest.TestCase):
         self.assertEqual(due_alert(cfg,sent,datetime(2026,10,1,19,45,tzinfo=IST),completion=complete)[1],'evening_new')
         sent['evening_new']='2026-10-01:evening_new'
         self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,19,59,tzinfo=IST),completion=complete))
-        self.assertEqual(due_alert(cfg,sent,datetime(2026,10,1,20,0,tzinfo=IST),completion=complete)[1],'evening_total')
+        self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,1,20,0,tzinfo=IST),completion=complete))
         sent['morning']='2026-10-02:morning'
         self.assertIsNone(due_alert(cfg,sent,datetime(2026,10,2,20,0,tzinfo=IST),completion=complete))
 
@@ -113,27 +114,6 @@ class MorningTelegramTests(unittest.TestCase):
             self.assertEqual(json.loads((root/'data/telegram_schedule.json').read_text())['morning'],'2026-10-01:morning')
             self.assertEqual(json.loads((root/'data/telegram_last_attempt.json').read_text())['message_ids'],[101,102])
 
-    def test_card_retry_keeps_already_confirmed_table_pdf(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            calls={'text':0,'table':0,'card':0}
-            def text(*args):
-                calls['text']+=1
-                return {'ok':True,'result':{'message_id':101}}
-            def document(kind):
-                calls[kind]+=1
-                if kind=='card' and calls[kind]==1:raise RuntimeError('card failed')
-                return {'ok':True,'result':{'message_id':102 if kind=='table' else 103}}
-            module=SimpleNamespace(telegram_message=text,telegram_document=document)
-            def main():
-                module.telegram_message('message')
-                module.telegram_document('table')
-                module.telegram_document('card')
-                return 0
-            module.main=main
-            with self.assertRaises(RuntimeError):deliver(Path(tmp),'evening_new','2026-10-01:evening_new','',module)
-            deliver(Path(tmp),'evening_new','2026-10-01:evening_new','',module)
-            self.assertEqual(calls,{'text':1,'table':1,'card':2})
-
     def test_unconfirmed_response_does_not_mark_sent(self):
         with tempfile.TemporaryDirectory() as tmp:
             module=SimpleNamespace(telegram_message=lambda *a:{'ok':True},telegram_document=lambda *a:{'ok':True})
@@ -151,10 +131,11 @@ class MorningTelegramTests(unittest.TestCase):
             rows=[{'Tender ID':'today','Closing Date':'01-Oct-2026 05:00 PM'},{'Tender ID':'tomorrow','Closing Date':'02-Oct-2026 05:00 PM'},{'Tender ID':'old-master-only','Closing Date':'01-Oct-2026 05:00 PM'}]
             with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'morning','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')) as pdf,patch('telegram_card_pdf.make_card_pdf',return_value=Path('cardpdf')) as card_pdf:
                 self.assertEqual(alerts.main(),0)
-                self.assertIn('उपलब्ध पिछले data',message.call_args.args[2])
+                self.assertIn('उपलब्ध पिछले डेटा',document.call_args.args[3])
+                message.assert_not_called()
                 self.assertEqual([r['Tender ID'] for r in pdf.call_args.args[0]],['today'])
-                self.assertEqual(document.call_count,2)
-                self.assertEqual([r['Tender ID'] for r in card_pdf.call_args.args[0]],['today'])
+                self.assertEqual(document.call_count,1)
+                card_pdf.assert_not_called()
 
     def test_morning_alert_is_independent_of_extraction(self):
         root=Path(__file__).resolve().parents[1]

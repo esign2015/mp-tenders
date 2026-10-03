@@ -6,33 +6,35 @@ import server
 import telegram_alerts as alerts
 
 class ManualPdfTests(unittest.TestCase):
-    def test_admin_dispatch_validates_and_passes_card_view(self):
+    def test_admin_dispatch_allows_three_table_reports_only(self):
         client=server.app.test_client()
         with patch.object(server,'require_admin',return_value=('admin@example.com',None)),patch.object(server,'github_dispatch') as dispatch:
-            response=client.post('/api/admin/action',json={'action':'telegram_pdf','report':'all','view':'card'})
-            self.assertEqual(response.status_code,200)
-            dispatch.assert_called_once_with('telegram_manual_pdf.yml',{'report':'all','view':'card'})
-            dispatch.reset_mock()
-            self.assertEqual(client.post('/api/admin/action',json={'action':'telegram_pdf','report':'all','view':'invalid'}).status_code,400)
-            dispatch.assert_not_called()
-    def test_manual_card_only_and_table_only_delivery(self):
-        rows=[{'Tender ID':'sample','Closing Date':'01-Jan-2099 05:00 PM'}]
-        with tempfile.TemporaryDirectory() as tmp:
-            path=Path(tmp)/'list.csv';path.write_text('Tender ID\n')
-            for view in ('card','table'):
-                with self.subTest(view=view),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'manual','MANUAL_REPORT':'all','MANUAL_VIEW':view}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'live_rows',return_value=rows),patch.object(alerts,'telegram_message'),patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('table.pdf')) as table,patch('telegram_card_pdf.make_card_pdf',return_value=Path('card.pdf')) as card:
-                    self.assertEqual(alerts.main(),0)
-                    self.assertEqual(document.call_count,1)
-                    self.assertEqual(card.call_count,int(view=='card'))
-                    self.assertEqual(table.call_count,int(view=='table'))
+            for report in ('closing_today','closing_tomorrow','new_today'):
+                response=client.post('/api/admin/action',json={'action':'telegram_pdf','report':report,'view':'table'})
+                self.assertEqual(response.status_code,200)
+                dispatch.assert_called_once_with('telegram_manual_pdf.yml',{'report':report,'view':'table'})
+                dispatch.reset_mock()
+            for report,view in (('all','table'),('closing_today','card'),('new_today','invalid')):
+                self.assertEqual(client.post('/api/admin/action',json={'action':'telegram_pdf','report':report,'view':view}).status_code,400)
+                dispatch.assert_not_called()
 
-    def test_empty_manual_card_report_keeps_card_layout(self):
+    def test_manual_only_sends_table_pdf_including_zero_rows(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'list.csv';path.write_text('Tender ID\n')
-            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'manual','MANUAL_REPORT':'all','MANUAL_VIEW':'card'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=[]),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf') as table,patch('telegram_card_pdf.make_card_pdf',return_value=Path('card.pdf')) as card:
-                self.assertEqual(alerts.main(),0)
-                self.assertTrue(message.call_args.args[2].startswith('🔔 एमपी टेंडर्स अलर्ट'))
-                card.assert_called_once();table.assert_not_called()
-                self.assertEqual(document.call_count,1)
+            for rows in ([],[{'Tender ID':'sample','Closing Date':'01-Jan-2099 05:00 PM'}]):
+                with self.subTest(rows=rows),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'manual','MANUAL_REPORT':'closing_tomorrow','MANUAL_VIEW':'table'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'live_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('table.pdf')) as table,patch('telegram_card_pdf.make_card_pdf') as card:
+                    self.assertEqual(alerts.main(),0)
+                    self.assertEqual(document.call_count,1);message.assert_not_called()
+                    card.assert_not_called();table.assert_called_once()
+                    self.assertTrue(document.call_args.args[3].startswith('🔔 एमपी टेंडर्स अलर्ट'))
+                    self.assertNotIn('manual',document.call_args.args[3].lower())
+
+    def test_legacy_manual_all_and_card_cannot_send(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'list.csv';path.write_text('Tender ID\n')
+            for report,view in (('all','table'),('closing_today','card')):
+                with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'manual','MANUAL_REPORT':report,'MANUAL_VIEW':view}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=[]),patch.object(alerts,'telegram_document') as document:
+                    with self.assertRaises(RuntimeError):alerts.main()
+                    document.assert_not_called()
 
 if __name__=='__main__':unittest.main()

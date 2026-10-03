@@ -56,9 +56,40 @@ def draw_promotion_card(canvas, kind, x, y, width, height):
     canvas.restoreState()
 
 
-def draw_table_promotions(canvas, page_width, page_height, top=78):
-    gap, margin, height = 16, 24, 150
+TABLE_PROMOTION_HEIGHT = 64
+TABLE_PROMOTION_BOTTOM = 24
+
+
+def draw_table_promotions(canvas, page_width, page_height):
+    """Two compact card-style adverts below the table, above the footer."""
+    margin, gap, height, y = 24, 12, TABLE_PROMOTION_HEIGHT, TABLE_PROMOTION_BOTTOM
     width = (page_width - 2 * margin - gap) / 2
-    y = page_height - top - height
-    draw_promotion_card(canvas, 'services', margin, y, width, height)
-    draw_promotion_card(canvas, 'community', margin + width + gap, y, width, height)
+    canvas.saveState()
+    for kind, x in (('services', margin), ('community', margin + width + gap)):
+        services = kind == 'services'
+        canvas.setFillColor(NAVY if services else colors.HexColor('#eff6ff'))
+        canvas.setStrokeColor(colors.HexColor('#d4a514' if services else '#bfdbfe'))
+        canvas.roundRect(x, y, width, height, 6, fill=1, stroke=1)
+        canvas.setFillColor(colors.white if services else NAVY)
+        canvas.setFont('Helvetica-Bold', 10)
+        canvas.drawString(x + 12, y + height - 15,
+                          'SAR Digital Services, Kannod' if services else 'MP Tender Alerts')
+        canvas.setFont('Helvetica', 8)
+        canvas.drawString(x + 12, y + height - 29,
+                          'DSC Sale | PWD Registration | E-Tender Submission Assistance'
+                          if services else 'Today closing: 8 AM | Tomorrow closing: 4 PM | New tenders: evening')
+        if services:
+            canvas.setFillColor(colors.HexColor('#fde68a'))
+            canvas.setFont('Helvetica-Bold', 9)
+            canvas.drawRightString(x + width - 12, y + height - 15, 'Rs 1,000.00 per tender')
+        links = SERVICE_LINKS if services else COMMUNITY_LINKS
+        button_width = (width - 24 - 6 * (len(links) - 1)) / len(links)
+        for index, (label, url) in enumerate(links):
+            bx, by = x + 12 + index * (button_width + 6), y + 7
+            canvas.setFillColor(colors.HexColor('#2563eb' if services else '#0284c7' if index == 0 else '#16a34a'))
+            canvas.roundRect(bx, by, button_width, 16, 3, fill=1, stroke=0)
+            canvas.setFillColor(colors.white)
+            canvas.setFont('Helvetica-Bold', 7.5)
+            canvas.drawCentredString(bx + button_width / 2, by + 5, label)
+            canvas.linkURL(url, (bx, by, bx + button_width, by + 16), relative=0)
+    canvas.restoreState()

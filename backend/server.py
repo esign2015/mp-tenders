@@ -1475,8 +1475,8 @@ def admin_workflow_status():
         "retry_pending": "targeted-pending-retry.yml",
         "telegram_test": "telegram-test.yml",
         "closing_today": "telegram_manual_pdf.yml",
+        "closing_tomorrow": "telegram_manual_pdf.yml",
         "new_today": "telegram_manual_pdf.yml",
-        "all": "telegram_manual_pdf.yml",
     }
     workflow = mapping.get(action)
     if not workflow:
@@ -1497,10 +1497,10 @@ def admin_action():
     try:
         if action == "telegram_pdf":
             report = clean(payload.get("report", "closing_today"))
-            if report not in {"closing_today", "new_today", "all"}:
+            if report not in {"closing_today", "closing_tomorrow", "new_today"}:
                 return jsonify({"ok": False, "message": "Invalid PDF report."}), 400
             view = clean(payload.get("view", "table")).lower()
-            if view not in {"table", "card"}:
+            if view != "table":
                 return jsonify({"ok": False, "message": "Invalid PDF view."}), 400
             github_dispatch("telegram_manual_pdf.yml", {"report": report, "view": view})
             message = f"Telegram {view.title()} PDF workflow started: {report}"

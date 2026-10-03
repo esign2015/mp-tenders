@@ -7,12 +7,11 @@ from scheduled_telegram_delivery import write_json
 
 def main():
     now = datetime.now(IST)
-    # Every actual organisation-copy run ending in the evening qualifies.
-    # No dependency on the exact scheduled cron identity.
-    if now.hour < 19:
+    run = os.environ['GITHUB_RUN_ID']
+    start = read_json(ROOT/'data/evening_run_start.json')
+    if start.get('run_id') != run and os.getenv('SCRAPE_SCHEDULE') != '35 13 * * *':
         print('Not an evening organisation run; no evening marker changed.')
         return
-    run = os.environ['GITHUB_RUN_ID']
     status = read_json(ROOT/'data/existing_id_detail_status.json')
     detail_result = os.getenv('DETAIL_JOB_RESULT', 'unknown')
     copy_result = os.getenv('COPY_JOB_RESULT', 'unknown')

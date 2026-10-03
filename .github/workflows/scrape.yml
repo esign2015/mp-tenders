@@ -555,6 +555,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Mark the evening run before extraction
+        env:
+          SCRAPE_SCHEDULE: ${{ github.event.schedule }}
+          SCRAPE_EVENT: ${{ github.event_name }}
+        run: |
+          python backend/record_evening_start.py
+          git config user.name "mp-tenders-bot"
+          git config user.email "actions@github.com"
+          python backend/publish_data_checkpoint.py data/evening_run_start.json
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -811,6 +820,7 @@ jobs:
           python-version: "3.12"
       - name: Record evening success or failure for PDF fallback
         env:
+          SCRAPE_SCHEDULE: ${{ github.event.schedule }}
           COPY_JOB_RESULT: ${{ needs.scrape_full.result }}
           DETAIL_JOB_RESULT: ${{ needs.new_tender_detail_worker.result }}
         run: |

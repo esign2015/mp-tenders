@@ -1,7 +1,8 @@
 {
   "morning_telegram_ist": "08:00",
+  "afternoon_telegram_ist": "16:00",
+  "telegram_schedule_start_date": "2026-10-04",
   "evening_new_telegram_ist": null,
-  "evening_total_telegram_ist": null,
   "telegram_max_delay_minutes": 45,
   "organisation_monitor": {
     "start_before_morning_minutes": 30,
@@ -14,7 +15,5 @@
   },
   "morning_send_after_extraction": false,
   "evening_new_after_detail_minutes": 10,
-  "evening_total_after_detail_minutes": 20,
-  "evening_fallback_ist": "20:00",
-  "evening_pdf_gap_minutes": 10
+  "evening_fallback_ist": "20:00"
 }

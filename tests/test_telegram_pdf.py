@@ -23,20 +23,31 @@ def write_csv(path, rows):
 
 
 class TelegramPdfTests(unittest.TestCase):
-    def test_table_second_page_cards_short_and_long_reports_keep_all_tenders(self):
-        for count in (1,100):
+    def test_compact_ads_on_odd_and_last_pages_without_extra_page(self):
+        for count in (0,1,40,100):
             with self.subTest(count=count),tempfile.TemporaryDirectory() as temporary:
                 rows=[{'Tender ID':f'2026_TEST_{500000+i}_1','Title':'Sample tender work','Closing Date':'01-Jan-2099 06:00 PM'} for i in range(count)]
                 path=alerts.make_pdf(rows,str(Path(temporary)/'table.pdf'),'Table Report',filter_live=False)
                 reader=PdfReader(path)
-                self.assertGreaterEqual(len(reader.pages),2)
-                second=reader.pages[1]
-                self.assertIn('ADVERTISEMENT',second.extract_text())
-                self.assertIn('MP Tender Alerts',second.extract_text())
-                links={str(a.get_object().get('/A',{}).get('/URI','')) for a in second.get('/Annots',[])}
-                self.assertTrue({url for _,url in (*SERVICE_LINKS,*COMMUNITY_LINKS)}<=links)
+                if count<=1:self.assertEqual(len(reader.pages),1)
                 text='\n'.join(p.extract_text() for p in reader.pages)
                 for row in rows:self.assertEqual(text.count(row['Tender ID']),1)
+                for number,page in enumerate(reader.pages,1):
+                    expected=number%2==1 or number==len(reader.pages)
+                    self.assertEqual('Rs 1,000.00' in page.extract_text(),expected)
+                    self.assertEqual('MP Tender Alerts' in page.extract_text(),expected)
+                    links={str(a.get_object().get('/A',{}).get('/URI','')) for a in page.get('/Annots',[])}
+                    promotion_links={url for _,url in (*SERVICE_LINKS,*COMMUNITY_LINKS)}
+                    if expected:self.assertTrue(promotion_links<=links)
+                    else:self.assertNotIn(COMMUNITY_LINKS[1][1],links)
+                    for annotation in page.get('/Annots',[]):
+                        obj=annotation.get_object()
+                        if str(obj.get('/A',{}).get('/URI','')) in promotion_links and 20 < float(obj['/Rect'][3]) < 100:
+                            left,bottom,right,top=map(float,obj['/Rect'])
+                            self.assertGreaterEqual(bottom,24)
+                            self.assertLessEqual(top,88)
+                            self.assertGreaterEqual(left,0)
+                            self.assertLessEqual(right,float(page.mediabox.width))
 
     def test_merges_real_reference_and_fees_without_importing_detail_only_history(self):
         with tempfile.TemporaryDirectory() as temporary:

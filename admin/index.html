@@ -76,9 +76,9 @@ button.secondary{background:#e8f3fa;color:#03638c;border-color:#cce6f3}button.se
   <div class="card controls-card">
     <h2>📩 Telegram Controls</h2>
     <div class="grid telegram-grid">
-      <div class="action"><h3>Closing Today PDF</h3><p>Latest current data से आज closing वाले tenders की नई PDF भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'closing_today',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'closing_today',view:'card'})">Send Card PDF</button></div></div>
-      <div class="action"><h3>New Today PDF</h3><p>आज published tenders की latest PDF भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'new_today',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'new_today',view:'card'})">Send Card PDF</button></div></div>
-      <div class="action"><h3>All Latest Data PDF</h3><p>Latest available tender data की complete PDF बनाकर भेजें।</p><div class="report-actions"><button class="secondary" onclick="run('telegram_pdf',{report:'all',view:'table'})">Send Table PDF</button><button onclick="run('telegram_pdf',{report:'all',view:'card'})">Send Card PDF</button></div></div>
+      <div class="action"><h3>Closing Today PDF</h3><p>आज अंतिम तिथि वाले टेंडर। रोज़ सुबह लगभग 8 बजे Table PDF भेजी जाती है।</p><button onclick="run('telegram_pdf',{report:'closing_today',view:'table'})">Send Table PDF</button></div>
+      <div class="action"><h3>Closing Tomorrow PDF</h3><p>कल अंतिम तिथि वाले टेंडर। रोज़ शाम लगभग 4 बजे Table PDF भेजी जाती है।</p><button onclick="run('telegram_pdf',{report:'closing_tomorrow',view:'table'})">Send Table PDF</button></div>
+      <div class="action"><h3>New Today PDF</h3><p>आज प्रकाशित नए टेंडर। शाम 7 बजे के run के बाद, fail होने पर भी उपलब्ध डेटा से Table PDF भेजी जाती है।</p><button onclick="run('telegram_pdf',{report:'new_today',view:'table'})">Send Table PDF</button></div>
       <div class="action"><h3>Telegram Test</h3><p>Telegram delivery ठीक है या नहीं जाँचने के लिए test message/PDF।</p><button class="warn" onclick="run('telegram_test')">Send Test</button></div>
     </div>
   </div>
@@ -201,7 +201,7 @@ function showToast(message,type="info"){const t=$("toast");clearTimeout(toastTim
 let workflowPollTimer=null;
 let workflowWatchId=0;
 let publicWorkflowStatus=false;
-const WORKFLOWS={data_refresh:"scrape.yml",retry_pending:"targeted-pending-retry.yml",telegram_test:"telegram-test.yml",closing_today:"telegram_manual_pdf.yml",new_today:"telegram_manual_pdf.yml",all:"telegram_manual_pdf.yml"};
+const WORKFLOWS={data_refresh:"scrape.yml",retry_pending:"targeted-pending-retry.yml",telegram_test:"telegram-test.yml",closing_today:"telegram_manual_pdf.yml",closing_tomorrow:"telegram_manual_pdf.yml",new_today:"telegram_manual_pdf.yml"};
 async function fetchStatusJson(url, options={}){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),15000);

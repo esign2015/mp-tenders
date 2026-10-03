@@ -7,12 +7,12 @@ from telegram_scheduler import due_alert,IST
 import telegram_alerts as alerts
 import finalize_portal_snapshot as finalizer
 
-CFG={'morning_telegram_ist':'08:00','morning_send_after_extraction':False,
+CFG={'morning_telegram_ist':'08:00','morning_send_after_extraction':False,'afternoon_telegram_ist':'16:00',
      'evening_new_after_detail_minutes':10,'evening_total_after_detail_minutes':20,
      'evening_fallback_ist':'20:00','evening_pdf_gap_minutes':10}
 class EveningDelivery(unittest.TestCase):
     def test_success_failure_missing_marker_and_actual_delivery_gap(self):
-        sent={'morning':'2026-10-02:morning'}
+        sent={'morning':'2026-10-02:morning','afternoon':'2026-10-02:afternoon'}
         done={'completed_at':'2026-10-02T19:30:00+05:30','run_id':'42','result':'failure'}
         clock=lambda h,m:datetime(2026,10,2,h,m,tzinfo=IST)
         self.assertIsNone(due_alert(CFG,sent,clock(19,39),completion=done))
@@ -24,20 +24,21 @@ class EveningDelivery(unittest.TestCase):
         sent['evening_new']='2026-10-02:evening_new'
         self.assertIsNone(due_alert(CFG,sent,clock(22,0)))
         self.assertIsNone(due_alert(CFG,sent,clock(20,15),new_sent_at='2026-10-02T20:06:00+05:30'))
-        self.assertEqual(due_alert(CFG,sent,clock(20,16),new_sent_at='2026-10-02T20:06:00+05:30')[1],'evening_total')
+        self.assertIsNone(due_alert(CFG,sent,clock(20,16),new_sent_at='2026-10-02T20:06:00+05:30'))
 
     def test_zero_rows_still_sends_pdf_and_all_messages_are_hindi(self):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'all_tenders_org_detailed.csv';path.write_text('Tender ID,Closing Date\n')
-            for mode in ('morning','evening_new','evening_total','manual'):
-                with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'all','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=[]),patch.object(alerts,'make_pdf',return_value=Path('zero.pdf')) as pdf,patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document:
+            for mode in ('morning','afternoon','evening_new','manual'):
+                with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'closing_tomorrow','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=[]),patch.object(alerts,'make_pdf',return_value=Path('zero.pdf')) as pdf,patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document:
                     self.assertEqual(alerts.main(),0)
                     self.assertEqual(pdf.call_args.args[0],[])
                     self.assertEqual(document.call_count,1)
-                    for text in (message.call_args.args[2],document.call_args.args[3]):
+                    message.assert_not_called()
+                    for text in (document.call_args.args[3],):
                         self.assertIn('आधिकारिक टेंडर पोर्टल',text)
                         self.assertNotIn('Disclaimer',text)
-                    if mode!='manual':self.assertIn('उपलब्ध पिछले data',message.call_args.args[2])
+                    if mode!='manual':self.assertIn('उपलब्ध पिछले डेटा',document.call_args.args[3])
 
     def test_real_finalizer_publishes_exact_ids_including_zero_count_org(self):
         with tempfile.TemporaryDirectory() as directory:
