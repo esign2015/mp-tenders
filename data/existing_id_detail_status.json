@@ -1,16 +1,16 @@
 {
   "status": "running",
-  "github_run_id": "37129370821",
-  "github_run_number": "860",
-  "github_commit_sha": "6d45a007260c4a84cbbff1b195c2699769a878c4",
-  "batch_size": 500,
-  "total_csv_ids": 5318,
-  "current_portal_ids": 5318,
-  "initial_incomplete": 622,
-  "batch_targets": 500,
-  "batch_attempted": 349,
-  "batch_complete": 347,
-  "started_at": "2026-10-03T15:19:57.392379+00:00",
+  "github_run_id": "37135655246",
+  "github_run_number": "20",
+  "github_commit_sha": "0d118156b5f0e29cffa95c91da5020024d25c918",
+  "batch_size": 0,
+  "total_csv_ids": 5317,
+  "current_portal_ids": 5317,
+  "initial_incomplete": 46,
+  "batch_targets": 46,
+  "batch_attempted": 13,
+  "batch_complete": 13,
+  "started_at": "2026-10-03T16:07:34.970246+00:00",
   "success": 5244,
   "failed": 0,
   "success_ids": [
@@ -5321,7 +5321,6 @@
     "2026_PWDRB_540033_1",
     "2026_RUMSL_528528_1",
     "2026_STDC_531278_1",
-    "2026_UAD_534957_1",
     "2026_UAD_538840_1",
     "2026_UAD_538840_2",
     "2026_UAD_538840_3",
@@ -5337,13 +5336,7 @@
     "2026_UAD_540535_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_MPP_531906_1",
-  "errors": [
-    {
-      "Tender ID": "2026_PWDRB_534454_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    }
-  ],
-  "updated_at": "2026-10-03T16:04:07.599181+00:00"
+  "last_successful_tender_id": "2026_UAD_539507_1",
+  "errors": [],
+  "updated_at": "2026-10-03T16:09:28.913375+00:00"
 }
