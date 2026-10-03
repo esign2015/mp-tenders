@@ -8,10 +8,10 @@
   "current_portal_ids": 5317,
   "initial_incomplete": 46,
   "batch_targets": 46,
-  "batch_attempted": 13,
-  "batch_complete": 13,
+  "batch_attempted": 25,
+  "batch_complete": 22,
   "started_at": "2026-10-03T16:07:34.970246+00:00",
-  "success": 5244,
+  "success": 5249,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -4606,6 +4606,8 @@
     "2026_UAD_538829_1",
     "2026_UAD_538838_1",
     "2026_UAD_538839_1",
+    "2026_UAD_538840_1",
+    "2026_UAD_538840_2",
     "2026_UAD_538841_1",
     "2026_UAD_538843_1",
     "2026_UAD_538844_1",
@@ -5229,6 +5231,9 @@
     "2026_UAD_540501_1",
     "2026_UAD_540503_1",
     "2026_UAD_540507_1",
+    "2026_UAD_540509_1",
+    "2026_UAD_540510_1",
+    "2026_UAD_540512_1",
     "2026_UAD_540551_1",
     "2026_UAD_540554_1",
     "2026_UAD_540555_1",
@@ -5321,22 +5326,28 @@
     "2026_PWDRB_540033_1",
     "2026_RUMSL_528528_1",
     "2026_STDC_531278_1",
-    "2026_UAD_538840_1",
-    "2026_UAD_538840_2",
     "2026_UAD_538840_3",
     "2026_UAD_538842_1",
     "2026_UAD_538842_2",
     "2026_UAD_540119_1",
     "2026_UAD_540120_1",
     "2026_UAD_540121_1",
-    "2026_UAD_540509_1",
-    "2026_UAD_540510_1",
     "2026_UAD_540511_1",
-    "2026_UAD_540512_1",
     "2026_UAD_540535_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_539507_1",
-  "errors": [],
-  "updated_at": "2026-10-03T16:09:28.913375+00:00"
+  "last_successful_tender_id": "2026_UAD_540509_1",
+  "errors": [
+    {
+      "Tender ID": "2026_UAD_538842_2",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_538842_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-03T16:11:33.850724+00:00"
 }
