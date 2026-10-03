@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-03T15:15:44.715599+05:30",
+    "checked_at": "2026-10-03T15:18:24.853705+05:30",
     "snapshot_at": "2026-10-03T09:18:06.272528+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5624,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-03T09:45:46.243920+00:00",
+  "updated_at": "2026-10-03T09:48:26.332316+00:00",
   "snapshot_at": "2026-10-03T09:18:06.272528+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5624,
   "copied_tenders": 5624,
-  "detail_complete": 5577,
+  "detail_complete": 5579,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 47,
+  "detail_pending": 45,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -90,10 +90,10 @@
       "snapshot_at": "2026-10-03T09:18:06.272528+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 32,
+      "detail_complete": 33,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
@@ -640,10 +640,10 @@
       "snapshot_at": "2026-10-03T09:18:06.272528+00:00",
       "portal_tender_count": 91,
       "copied_tenders": 91,
-      "detail_complete": 90,
+      "detail_complete": 91,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1088,16 +1088,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 45,
-  "missing_district_count": 2,
-  "missing_district_ids": [
-    "2026_HED_535692_2",
-    "2026_MPFD_540458_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 382,
   "department_count": 338,
-  "missing_pincode_count": 2,
-  "missing_pincode_ids": [
-    "2026_HED_535692_2",
-    "2026_MPFD_540458_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
