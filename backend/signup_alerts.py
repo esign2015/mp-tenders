@@ -41,7 +41,7 @@ https://tenders.codinglms.xyz/
 https://t.me/mptendersalert
 
 🟢 *हमारे WhatsApp ग्रुप से जुड़ें*
-https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ
+https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy
 
 💬 *सहायता या सुझाव के लिए संपर्क करें*
 https://t.me/rdgyan

@@ -64,7 +64,7 @@ class SignupAlertsTests(unittest.TestCase):
         draft = parse_qs(url.query)['text'][0]
         self.assertEqual(draft, alerts.welcome_message(record['name']))
         for value in ('नमस्कार Bidder नाम जी', 'MP Tender Live Dashboard', 'https://tenders.codinglms.xyz/',
-                      'https://t.me/mptendersalert', 'https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ', 'https://t.me/rdgyan'):
+                      'https://t.me/mptendersalert', 'https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy', 'https://t.me/rdgyan'):
             self.assertIn(value, draft)
         self.assertNotIn('private-password', draft)
         for number in ('9876543210', '+91foo', '-100123', '@mptendersalert'):

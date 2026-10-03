@@ -42,7 +42,7 @@ assert(doc.cards.every(c=>c.x>=8&&c.x+c.w<=289&&c.y+c.h<=196));
 for(let i=0;i<7;i++)assert.equal(calls.filter(c=>c.v.endsWith('ID-'+i)).length,1);
 assert.equal(calls.filter(c=>c.v==='ADVERTISEMENT').length,2);
 assert.equal(calls.filter(c=>c.v==='MP Tender Alerts').length,2);
-assert.equal(links.filter(url=>url==='https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ').length,2);
+assert.equal(links.filter(url=>url==='https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy').length,2);
 assert(calls.every(c=>c.y<=204));
 for(const [count,pages] of [[1,1],[6,1],[12,2],[13,3]]){
  const sample=Array.from({length:count},(_,i)=>({'Tender ID':'PAGE-'+count+'-'+i,'Title':'Tender '+i}));

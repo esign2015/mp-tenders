@@ -9,7 +9,7 @@ SERVICE_LINKS = (
 )
 COMMUNITY_LINKS = (
     ('Join Telegram Channel', 'https://t.me/mptendersalert'),
-    ('Join WhatsApp Group', 'https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ'),
+    ('Join WhatsApp Group', 'https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy'),
 )
 NAVY = colors.HexColor('#173d70')
 

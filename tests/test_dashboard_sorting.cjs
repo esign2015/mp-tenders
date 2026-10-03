@@ -284,7 +284,7 @@ cardContext.renderCardWindow();
 assert.equal(cardOrder()[3],'tender-alert-card');assert.equal(cardOrder().filter(x=>x==='tender').length,100);
 assert.deepEqual(alertAfter(),[3,20,40,60,80,100]);assert.equal(cardOrder().filter(x=>x==='sar-ad-card').length,8);
 assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://t.me/mptendersalert"'));
-assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://chat.whatsapp.com/IySc5P5Q1X79AxKpQCgMyQ"'));
+assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy"'));
 cardContext.virtualStart=100;cardContext.virtualEnd=130;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[120]);
 cardContext.virtualStart=0;cardContext.virtualEnd=3;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[3]);
 cardContext.virtualEnd=2;cardContext.renderCardWindow();assert.deepEqual(alertAfter(),[]);
