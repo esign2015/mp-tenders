@@ -1,0 +1,23 @@
+{
+  "operations": {
+    "text:1": {
+      "message_id": 92,
+      "sent_at": "2026-10-03T14:32:58.772588+00:00",
+      "kind": "text"
+    },
+    "document:1": {
+      "message_id": 93,
+      "sent_at": "2026-10-03T14:33:00.519036+00:00",
+      "kind": "document"
+    },
+    "document:2": {
+      "message_id": 94,
+      "sent_at": "2026-10-03T14:33:02.616590+00:00",
+      "kind": "document"
+    }
+  },
+  "mode": "evening_new",
+  "key": "2026-10-03:evening_new",
+  "extraction_result": "success",
+  "completed_at": "2026-10-03T14:33:02.626073+00:00"
+}
