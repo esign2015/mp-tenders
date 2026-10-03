@@ -26,4 +26,13 @@ class ManualPdfTests(unittest.TestCase):
                     self.assertEqual(card.call_count,int(view=='card'))
                     self.assertEqual(table.call_count,int(view=='table'))
 
+    def test_empty_manual_card_report_keeps_card_layout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'list.csv';path.write_text('Tender ID\n')
+            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'manual','MANUAL_REPORT':'all','MANUAL_VIEW':'card'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'load_report_rows',return_value=[]),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf') as table,patch('telegram_card_pdf.make_card_pdf',return_value=Path('card.pdf')) as card:
+                self.assertEqual(alerts.main(),0)
+                self.assertTrue(message.call_args.args[2].startswith('🔔 एमपी टेंडर्स अलर्ट'))
+                card.assert_called_once();table.assert_not_called()
+                self.assertEqual(document.call_count,1)
+
 if __name__=='__main__':unittest.main()

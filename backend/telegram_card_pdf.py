@@ -1,10 +1,11 @@
 from portal_fee_exceptions import verified_fee_omission
-"""A separate six-card A4 report with the dashboard's SAR advertisement."""
+"""Match the dashboard's landscape A4, four-column card report."""
 from datetime import datetime
 from pathlib import Path
 from xml.sax.saxutils import escape
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
@@ -85,30 +86,33 @@ def make_card_pdf(rows, filename, report_title, total_available=None, filter_det
     from telegram_alerts import live_rows, closing_sort_key, IST, SITE_URL, TELEGRAM_URL
     rows=sorted(live_rows(rows) if filter_live else list(rows),key=closing_sort_key)
     total_available=len(rows) if total_available is None else total_available
-    pages=max(1,(len(rows)+3)//4)
+    tenders_per_page=6
+    pages=max(1,(len(rows)+tenders_per_page-1)//tenders_per_page)
     path=Path(filename)
     path.parent.mkdir(parents=True,exist_ok=True)
-    canvas=Canvas(str(path),pagesize=A4)
+    canvas=Canvas(str(path),pagesize=landscape(A4))
     canvas.setTitle(report_title+' - Card View')
     canvas.setAuthor('SAR Digital Services, Kannod')
-    w,h=A4
-    margin,gap=22,10
-    cw=(w-2*margin-gap)/2
-    ch=(h-100-55-2*gap)/3
+    w,h=landscape(A4)
+    margin,gap=8*mm,4*mm
+    columns=4
+    cw=(w-2*margin-(columns-1)*gap)/columns
+    ch=80*mm
     generated=datetime.now(IST).strftime('%d/%m/%Y %I:%M %p IST')
     for page in range(pages):
         canvas.setFillColor(colors.HexColor('#f4f7fb'));canvas.rect(0,0,w,h,fill=1,stroke=0)
-        canvas.setFillColor(NAVY);canvas.rect(0,h-85,w,85,fill=1,stroke=0)
-        paragraph(canvas,'SAR Digital Services, Kannod',margin,h-14,w-2*margin,22,16,True,colors.white)
-        paragraph(canvas,report_title+' - Card View',margin,h-40,w-2*margin,20,10,True,colors.white)
-        paragraph(canvas,f'Total Records: {len(rows)} out of {total_available} | {filter_detail}',margin,h-63,w-2*margin,15,9,False,colors.white)
-        items=['services','community',*list(enumerate(rows[page*4:(page+1)*4],page*4+1))]
+        canvas.setFillColor(NAVY);canvas.rect(0,h-27*mm,w,27*mm,fill=1,stroke=0)
+        paragraph(canvas,'SAR Digital Services, Kannod',margin,h-4*mm,w-2*margin,20,12,True,colors.white)
+        paragraph(canvas,report_title+' - Card View',margin,h-12*mm,w-2*margin,15,9,True,colors.white)
+        paragraph(canvas,f'Total Records: {len(rows)} out of {total_available} | {filter_detail}',margin,h-19*mm,w-2*margin,15,8,False,colors.white)
+        start=page*tenders_per_page
+        items=['services','community',*list(enumerate(rows[start:start+tenders_per_page],start+1))]
         for slot,item in enumerate(items):
-            x=margin+(slot%2)*(cw+gap)
-            y=h-100-(slot//2)*(ch+gap)-ch
+            x=margin+(slot%columns)*(cw+gap)
+            y=h-32*mm-(slot//columns)*(ch+gap)-ch
             if isinstance(item,str):draw_promotion_card(canvas,item,x,y,cw,ch)
             else:tender_card(canvas,item[1],item[0],x,y,cw,ch)
-        paragraph(canvas,'This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.',margin,42,w-2*margin,18,7,False,MUTED)
+        paragraph(canvas,'This dashboard is an assistance tool. Always verify the final tender notice, corrigendum, eligibility, fee and deadline on the official tender portal.',margin,31,w-2*margin,12,6,False,MUTED)
         canvas.setFont('Helvetica',7);canvas.setFillColor(NAVY)
         canvas.drawString(margin,13,'tenders.codinglms.xyz | Telegram: @mptendersalert')
         canvas.linkURL(SITE_URL,(margin,11,160,22),relative=0)

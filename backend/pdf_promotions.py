@@ -17,17 +17,18 @@ NAVY = colors.HexColor('#173d70')
 def draw_promotion_card(canvas, kind, x, y, width, height):
     """Scale two bounded card layouts for A4 cards and A3 table page two."""
     scale = height / 220
+    font_scale = min(1, width / 265)
     pad = 14
     def text(value, offset, size=10, color=NAVY, bold=False):
         canvas.setFillColor(color)
-        canvas.setFont('Helvetica-Bold' if bold else 'Helvetica', size)
+        canvas.setFont('Helvetica-Bold' if bold else 'Helvetica', size * font_scale)
         canvas.drawString(x + pad, y + height - offset * scale, value)
     def button(label, url, bx, by, bw, fill):
         bh = 25 * scale
         canvas.setFillColor(fill)
         canvas.roundRect(bx, by, bw, bh, 4, fill=1, stroke=0)
         canvas.setFillColor(colors.white)
-        canvas.setFont('Helvetica-Bold', max(7, 9 * scale))
+        canvas.setFont('Helvetica-Bold', max(7, 9 * min(scale, font_scale)))
         canvas.drawCentredString(bx + bw / 2, by + bh / 2 - 2.5, label)
         canvas.linkURL(url, (bx, by, bx + bw, by + bh), relative=0)
     canvas.saveState()

@@ -45,6 +45,9 @@ class MorningTelegramTests(unittest.TestCase):
                 with self.subTest(mode=mode),patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':mode,'MANUAL_REPORT':'all','MANUAL_VIEW':'table','MORNING_EXTRACTION_RESULT':''}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')):
                     self.assertEqual(alerts.main(),0)
                     text=message.call_args.args[2]
+                    self.assertTrue(text.startswith('🔔 एमपी टेंडर्स अलर्ट\n\n'))
+                    self.assertNotIn('व्यवस्थापक द्वारा',text)
+                    self.assertNotIn('manual',text.lower())
                     self.assertIn('📅 दिनांक: 02/10/2026\n🕒 रिपोर्ट समय: 02/10/2026 11:32 PM IST\n📥 डेटा संग्रह समय: 02/10/2026 23:28:57 IST\n📋 सभी एक्टिव टेंडर: 1\n📊 PDF में 1 रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: 1, Mptender पोर्टल सूची का कुल टेंडर count: 1\n🌐 वेबसाइट:',text)
                     self.assertIn('https://tenders.codinglms.xyz/\n\n📢 टेलीग्राम चैनल:',text)
                     self.assertIn('https://t.me/mptendersalert\n\n👤 व्यवस्थापक:',text)

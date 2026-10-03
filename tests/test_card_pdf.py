@@ -9,19 +9,25 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'backend'))
 from telegram_card_pdf import make_card_pdf, AD_LINKS
 from pdf_promotions import COMMUNITY_LINKS
 import telegram_alerts as alerts
+import telegram_card_pdf as cards
 
 class CardPdfTests(unittest.TestCase):
     def test_all_ids_once_ads_do_not_change_count_and_links_are_clickable(self):
         rows=[{'Tender ID':f'2026_UAD_{500000+i}_1','Title':'A long title with an organisation '+'word '*150,'Closing Date':'01-Jan-2099 05:00 PM','Organisation':'Very long organisation '*50,'PAC Amount':'5000000','EMD Fee':'1000','Tender Fee':'500','Processing Fee':'295'} for i in range(13)]
         with tempfile.TemporaryDirectory() as tmp:
-            p=make_card_pdf(rows,Path(tmp)/'cards.pdf','New Published Today',total_available=99,filter_detail='New Published Today',filter_live=False)
+            with patch.object(cards,'tender_card',wraps=cards.tender_card) as draw:
+                p=make_card_pdf(rows,Path(tmp)/'cards.pdf','New Published Today',total_available=99,filter_detail='New Published Today',filter_live=False)
+            positions=[call.args[3:5] for call in draw.call_args_list[:6]]
+            self.assertEqual(len({x for x,y in positions}),4)
+            self.assertEqual(len({y for x,y in positions}),2)
             reader=PdfReader(p);text='\n'.join(p.extract_text() for p in reader.pages)
-            self.assertEqual(len(reader.pages),4)
-            self.assertEqual(reader.pages[0].extract_text().count("2026_UAD_"),4)
-            self.assertEqual(reader.pages[1].extract_text().count("2026_UAD_"),4)
+            self.assertEqual(len(reader.pages),3)
+            self.assertGreater(float(reader.pages[0].mediabox.width),float(reader.pages[0].mediabox.height))
+            self.assertEqual(reader.pages[0].extract_text().count("2026_UAD_"),6)
+            self.assertEqual(reader.pages[1].extract_text().count("2026_UAD_"),6)
             self.assertIn('Total Records: 13 out of 99',text)
             for row in rows:self.assertEqual(text.count(row['Tender ID']),1)
-            self.assertEqual(text.count('ADVERTISEMENT'),4)
+            self.assertEqual(text.count('ADVERTISEMENT'),3)
             self.assertIn('1,000.00',text);self.assertIn('1,795.00',text)
             links={str(a.get_object().get('/A',{}).get('/URI','')) for page in reader.pages for a in page.get('/Annots',[])}
             self.assertTrue({url for _,url in AD_LINKS}<=links)
@@ -30,6 +36,10 @@ class CardPdfTests(unittest.TestCase):
                 self.assertIn('MP Tender Alerts',page.extract_text())
                 page_links={str(a.get_object().get('/A',{}).get('/URI','')) for a in page.get('/Annots',[])}
                 self.assertTrue({url for _,url in (*AD_LINKS,*COMMUNITY_LINKS)}<=page_links)
+                for annotation in page.get('/Annots',[]):
+                    left,bottom,right,top=map(float,annotation.get_object()['/Rect'])
+                    self.assertGreaterEqual(left,0);self.assertGreaterEqual(bottom,0)
+                    self.assertLessEqual(right,float(page.mediabox.width));self.assertLessEqual(top,float(page.mediabox.height))
 
     def test_evening_sends_matching_table_and_card_selection(self):
         class Clock(datetime):

@@ -499,7 +499,7 @@ def main():
     source_time = data_collection_time(CSV_PATH.parent)
     portal_count = summary.get('portal_tender_count', 'उपलब्ध नहीं')
     message = (
-        ("👤 व्यवस्थापक द्वारा भेजी गई टेंडर रिपोर्ट\n\n" if mode == 'manual' else "🔔 एमपी टेंडर्स अलर्ट\n\n")
+        "🔔 एमपी टेंडर्स अलर्ट\n\n"
         + f"📅 दिनांक: {today.strftime('%d/%m/%Y')}\n"
         + f"🕒 रिपोर्ट समय: {now.strftime('%d/%m/%Y %I:%M %p')} IST\n"
         + f"📥 डेटा संग्रह समय: {source_time}\n"
@@ -512,7 +512,7 @@ def main():
     telegram_message(token, chat_id, message)
     title = f"{english} {d} • {len(selected)} tenders"
     filename = f"{english.replace(' ', '_')}_{d}.pdf"
-    if view == 'card' and selected:
+    if view == 'card':
         from telegram_card_pdf import make_card_pdf
         pdf = make_card_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
     else:
