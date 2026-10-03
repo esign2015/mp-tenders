@@ -5,6 +5,7 @@ from datetime import timedelta
 from flask import jsonify,request
 from werkzeug.security import generate_password_hash,check_password_hash
 import google_sheet_store as sheets
+import signup_alerts
 
 logger=logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -211,6 +212,10 @@ class Accounts:
         return record
     def response(self,record,token,new_login=False,record_visit=False):
         if maintenance_active():raise AccountError(MAINTENANCE_MESSAGE,503,'maintenance')
+        notice=record.get('signup_alert') or {}
+        if notice and notice.get('state')!='sent':
+            try:signup_alerts.queue(self,record['user_id'])
+            except Exception as exc:logger.warning('Signup notification remains pending: %s',type(exc).__name__)
         details_id=None
         if sheets.enabled():
             saved=record.get('affidavit_profile')
@@ -250,7 +255,7 @@ def install(server):
         if not mobile:raise AccountError('सही Mobile भरें।')
         if record:raise AccountError('आप पहले से Sign up हैं। Sign in में password भरें।',409,'account_exists')
         if p.get('password')!=p.get('confirm_password'):raise AccountError('दोनों passwords एक समान रखें।')
-        record={'user_id':str(uuid.uuid4()),'mobile':mobile,**profile,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat()}
+        record={'user_id':str(uuid.uuid4()),'mobile':mobile,**profile,'password_hash':accounts.password(p.get('password')),'sessions':[],'reset':None,'signup_at':server.now_ist().isoformat(),'signup_alert':{'state':'pending'}}
         token=accounts.issue(record);record=accounts.operation('create',record=record)['record']
         return accounts.response(record,token,new_login=True)
     @app.post('/api/accounts/signin')

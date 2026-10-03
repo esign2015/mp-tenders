@@ -47,6 +47,22 @@ class AccountsTests(unittest.TestCase):
     def tearDown(self):self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup();self.clock.stop()
     def signup(self):
         r=self.client.post('/api/accounts/signup',json=self.data);self.assertEqual(r.status_code,200);return r.json
+    def test_signup_alert_is_queued_only_after_save_and_never_again_after_sent(self):
+        def queue(accounts,user_id):
+            self.assertEqual(accounts.get(user_id=user_id)['signup_alert']['state'],'pending')
+        with patch('account_access.signup_alerts.queue',side_effect=queue) as notify:
+            account=self.signup();self.assertEqual(notify.call_count,1)
+            self.assertEqual(self.client.post('/api/accounts/signup',json=self.data).status_code,409)
+            self.assertEqual(notify.call_count,1)
+        record=server.account_service.get(user_id=account['visitor_id'])
+        record['signup_alert']={'state':'sent','message_id':456}
+        server.account_service.update(record,record['revision'])
+        with patch('account_access.signup_alerts.queue') as notify:
+            self.assertEqual(self.login().status_code,200);notify.assert_not_called()
+    def test_signup_succeeds_when_notification_queue_is_unavailable(self):
+        with patch('account_access.signup_alerts.queue',side_effect=RuntimeError('Queue unavailable')):
+            account=self.signup()
+        self.assertEqual(server.account_service.get(user_id=account['visitor_id'])['signup_alert']['state'],'pending')
     def login(self,password=None):return self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':password or self.password})
     def test_batched_sheet_login_keeps_both_limits_in_one_lookup(self):
         with patch.dict(os.environ,{'GOOGLE_SHEETS_BATCH_ACCOUNT_LOOKUP':'1'}),patch.object(sheets,'enabled',return_value=True),server.app.test_request_context():

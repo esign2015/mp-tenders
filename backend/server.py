@@ -1287,6 +1287,30 @@ def scheduled_admin_stats_refresh():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
+
+@app.post('/api/internal/signup-alert-status')
+def signup_alert_status():
+    """Signed setup check: report private bot readiness without user details."""
+    import signup_alerts
+    timestamp = request.headers.get('X-Alert-Timestamp', '')
+    signature = request.headers.get('X-Alert-Signature', '')
+    secret = clean(os.getenv('TELEGRAM_BOT_TOKEN'))
+    raw = request.get_data()
+    if not secret or not timestamp.isdigit() or abs(time.time() - int(timestamp)) > 300 or len(raw) > 256:
+        return jsonify({'ok': False}), 401
+    expected = hmac.new(secret.encode(), b'mp-signup-alert-status\n' + timestamp.encode() + b'\n' + raw, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature, expected):
+        return jsonify({'ok': False}), 401
+    if not signup_alerts.enabled():
+        return jsonify({'ok': False, 'status': 'disabled'}), 503
+    try:
+        signup_alerts.private_destination(signup_alerts.configured_call, clean(os.getenv('TELEGRAM_ADMIN_CHAT_ID')))
+    except Exception as exc:
+        reason = 'bot_or_private_chat_not_ready' if isinstance(exc, ValueError) else type(exc).__name__
+        return jsonify({'ok': False, 'status': reason}), 503
+    return jsonify({'ok': True, 'bot_username': 'mptenders_bot', 'destination': 'private_admin',
+                    'private_chat_verified': True, 'welcome_link': 'whatsapp_prefilled', 'outbox': 'saved_account_record'})
+
 @app.get("/api/admin/users-migration")
 def users_migration_snapshot():
     """Private, consistent export for moving users and their login history."""

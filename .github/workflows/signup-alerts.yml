@@ -1,0 +1,32 @@
+name: Private Signup Alerts
+on:
+  push:
+    branches: [main]
+    paths: ['backend/signup_alerts.py', 'backend/check_signup_alerts.py', 'backend/account_access.py', 'backend/server.py', 'tests/test_signup_alerts.py', '.github/workflows/signup-alerts.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r backend/requirements.txt
+      - run: python -m unittest discover -s tests -p test_signup_alerts.py -q
+      - run: python -m unittest discover -s tests -p test_accounts.py -q
+  live:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Confirm private bot destination after backend deployment
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: python backend/check_signup_alerts.py
