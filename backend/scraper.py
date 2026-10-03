@@ -1659,6 +1659,8 @@ def monitor_corrigendum_changes(csv_file, urgent_only=False):
                     old_open = clean(row.get("Opening Date") or row.get("Bid Opening Date"))
                     new_open = clean(fresh.get("Opening Date") or fresh.get("Bid Opening Date")) or old_open
                     old_corr = clean(row.get("Corrigendum"))
+                    if old_corr.casefold() in ("no", "none", "false", "0"):
+                        old_corr = ""
                     old_type = clean(row.get("Corrigendum Type"))
                     new_corr = clean(fresh.get("Corrigendum"))
                     new_type = clean(fresh.get("Corrigendum Type"))

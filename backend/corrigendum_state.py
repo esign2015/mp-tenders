@@ -1,5 +1,5 @@
 """Preserve the newest official presence/absence check across CSV writers."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 FIELDS = ('Corrigendum', 'Corrigendum Type', 'Corrigendum Detected At', 'Corrigendum Last Checked')
 
@@ -26,7 +26,11 @@ def merge_state(result, *sources):
         result['Corrigendum Type'] = ''
         result['Corrigendum Detected At'] = ''
     elif not result['Corrigendum Detected At']:
-        result['Corrigendum Detected At'] = result['Corrigendum Last Checked']
+        prior = [row.get('Corrigendum Detected At') for _, row in checked
+                 if row.get('Corrigendum') == result['Corrigendum']
+                 and row.get('Corrigendum Type', '') == result['Corrigendum Type']
+                 and stamp(row.get('Corrigendum Detected At'))]
+        result['Corrigendum Detected At'] = min(prior, key=stamp) if prior else result['Corrigendum Last Checked']
     return result
 
 
@@ -36,4 +40,5 @@ def recheck_due(row):
         return False
     checked = stamp(row.get('Corrigendum Last Checked'))
     extracted = stamp(row.get('Tested At'))
-    return checked is None or bool(extracted and checked < extracted)
+    # Parsing the page precedes saving its details by a few milliseconds.
+    return checked is None or bool(extracted and checked + timedelta(minutes=1) < extracted)

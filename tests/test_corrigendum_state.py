@@ -51,6 +51,15 @@ class CorrigendumStateTests(unittest.TestCase):
         self.assertFalse(recheck_due({**row, 'Corrigendum Last Checked': '2026-10-03T10:00:00+00:00'}))
         self.assertFalse(recheck_due({'Corrigendum': ''}))
 
+    def test_same_positive_keeps_detection_time_and_does_not_immediately_requeue(self):
+        previous = {**self.old, 'Corrigendum Detected At': '2026-09-22T13:33:52+00:00'}
+        fresh = {**self.fresh, 'Corrigendum': previous['Corrigendum'],
+                 'Corrigendum Type': previous['Corrigendum Type']}
+        merged = merge_state({}, previous, fresh)
+        self.assertEqual(merged['Corrigendum Detected At'], previous['Corrigendum Detected At'])
+        merged['Tested At'] = '2026-10-03T10:00:00.025+00:00'
+        self.assertFalse(recheck_due(merged))
+
     def test_no_records_row_is_not_a_corrigendum(self):
         prefix = '<table><tr><td>S.No</td><td>Corrigendum Title</td><td>Corrigendum Type</td></tr>'
         absent = BeautifulSoup(prefix+'<tr><td colspan="3">No Corrigendum Found</td></tr></table>', 'html.parser')
