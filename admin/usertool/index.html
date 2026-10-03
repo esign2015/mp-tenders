@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>404 — Page not found</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f9;color:#18263b;font:14px Arial,sans-serif}[hidden]{display:none!important}
+.error{max-width:440px;margin:18vh auto;padding:32px 24px;text-align:center}.error strong{display:block;font-size:72px;color:#244da0;margin-bottom:16px}.error h1{font-size:23px;margin:0 0 12px}.error p{color:#63738a;line-height:1.7}.error a{display:inline-block;margin-top:16px;color:#244da0}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(110deg,#172b54,#244da0);color:#fff;padding:20px 24px}h1{font-size:23px;margin:0 0 6px}header p{margin:0;opacity:.8;font-size:12px}.header-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}.header-actions a{border:1px solid #ffffff55;border-radius:8px;color:#fff;text-decoration:none;padding:9px 12px;font-weight:700;font-size:12px}#userToolEmail{font-size:12px;overflow-wrap:anywhere}
+main{max-width:1100px;margin:22px auto;padding:0 20px}.tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{min-width:0;background:#fff;border:1px solid #dee5ef;border-radius:12px;padding:22px;box-shadow:0 2px 5px #17203304}.card h2{font-size:17px;margin:0 0 10px}.small{font-size:12px;color:#63738a;line-height:1.7}.card-intro{margin:0 0 18px}.reset-form{display:grid;gap:14px}.mobile-label{display:grid;gap:8px;font-size:12px;font-weight:700}.mobile-input{width:100%;max-width:320px;height:40px;border:1px solid #cad4e2;border-radius:8px;padding:10px;font:14px Arial,sans-serif}.verification-label{display:flex;align-items:flex-start;gap:8px;color:#52627a;font-size:12px;line-height:1.6}.verification-label input{accent-color:#244da0;margin:3px 0 0}
+button{justify-self:start;background:#244da0;color:#fff;border:1px solid transparent;border-radius:8px;padding:10px 13px;font:700 12px Arial,sans-serif;cursor:pointer}button:hover{background:#1b3a7d}button:disabled{opacity:.45;cursor:not-allowed}.danger{background:#fff0ee;border-color:#f7cfca;color:#b42318}.danger:hover{background:#ffe1dc}.form-actions{display:flex;gap:8px;flex-wrap:wrap}#passwordResetLink{width:100%;min-width:0;border:1px solid #cad4e2;border-radius:8px;padding:10px;font:12px Arial,sans-serif}[role=status]{overflow-wrap:anywhere}[role=status]:empty{display:none}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+@media(max-width:760px){header{flex-wrap:wrap;padding:18px 16px}main{padding:0 12px}.tools-grid{grid-template-columns:1fr}.card{padding:18px}.mobile-input{max-width:100%}.header-actions{width:100%;justify-content:space-between}}
+</style>
+</head>
+<body>
+<section id="userToolError" class="error" aria-live="polite"><strong id="userToolErrorCode">404</strong><h1 id="userToolErrorTitle">Page not found</h1><p id="userToolErrorMessage">यह पेज उपलब्ध नहीं है।</p><a href="../../">मुख्य पेज पर जाएँ</a></section>
+<section id="userToolPanel" hidden>
+<header><div><h1>User Tools</h1><p>MP Tender Live Dashboard · SAR Digital Services, Kannod</p></div><div class="header-actions"><span id="userToolEmail"></span><a href="../">← Admin Panel</a></div></header>
+<main><div class="tools-grid">  <div class="card account-control">
+    <h2>User Password Reset</h2>
+    <p class="small card-intro">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
+    <form id="passwordResetAdminForm" class="reset-form">
+      <label class="mobile-label">Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
+      <label class="verification-label"><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
+      <button id="passwordResetCreate" type="submit">Create 15-minute Reset Link</button>
+      <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link">
+      <button id="passwordResetCopy" type="button" hidden>Copy Reset Link</button>
+      <div id="passwordResetStatus" role="status" class="small"></div>
+    </form>
+  </div>
+  <div class="card account-control">
+    <h2>User Block / Unblock</h2>
+    <p class="small card-intro">Registered user की access जाँचें और यहीं से Block / Unblock करें।</p>
+    <form id="userAccessForm" class="reset-form">
+      <label class="mobile-label">Registered Mobile <input id="userAccessMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
+      <div class="form-actions"><button type="submit">Check User</button><button id="userBlock" type="button" class="danger" disabled>Block</button><button id="userUnblock" type="button" disabled>Unblock</button></div>
+      <div id="userAccessStatus" role="status" class="small"></div>
+    </form>
+  </div>
+</div></main>
+</section>
+<script src="../../assets/admin_usertool.js?v=1"></script>
+</body></html>

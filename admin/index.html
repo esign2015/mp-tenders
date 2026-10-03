@@ -18,7 +18,7 @@ button,.shortcut{display:inline-flex;align-items:center;justify-content:center;m
 button:hover,.shortcut:hover{background:#1b3a7d}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
 button.secondary{background:#e8f3fa;color:#03638c;border-color:#cce6f3}button.secondary:hover{background:#d7ecf7}button.warn{background:#fff4dc;color:#995b00;border-color:#f3dfb0}button.danger{background:#fff0ee;color:#b42318;border-color:#f7cfca}button.danger:hover{background:#ffe1dc}button.logout-button{background:#ffffff0a;border-color:#ffffff45;color:#fff;padding:9px 14px}button.logout-button:hover{background:#ffffff20}
 .quick-links{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;margin-bottom:12px}.quick-links h2{margin:0 12px 0 0;font-size:13px;color:#52627a}.quick-links .shortcut{background:#f0f4fa;color:#244778;border-color:#e1e7f1}.quick-links .shortcut:hover{background:#e5edf8}#usersDownload{margin-left:auto}
-.management-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr) minmax(0,1.45fr);gap:12px;margin-bottom:12px;align-items:start}.controls-card{margin-bottom:12px}
+.management-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:12px;align-items:start}.controls-card{margin-bottom:12px}
 .grid{display:grid;gap:10px}.telegram-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.action{min-width:0;border:1px solid #e3e9f2;background:#f8fafd;border-radius:9px;padding:12px;display:flex;flex-direction:column}.action h3{margin:0 0 6px;font-size:13px;line-height:1.4}.action p{color:#607087;font-size:12px;line-height:1.6;margin:0 0 12px;flex:1}.action>button{align-self:flex-start}.report-actions,.form-actions{display:flex;gap:6px;flex-wrap:wrap}
 .reset-form{display:grid;gap:10px}.mobile-label{display:grid;gap:6px;font-weight:600;font-size:12px}.mobile-input{width:100%;max-width:270px;height:36px;padding:8px 10px;border:1px solid #cad4e2;border-radius:7px;font-size:14px;font-family:inherit;background:#fff;color:#18263b}.verification-label{display:flex;align-items:flex-start;gap:7px;font-size:12px;line-height:1.55;color:#52627a}.verification-label input{margin:3px 0 0;accent-color:#244da0;flex-shrink:0}.reset-form>button{justify-self:start}#passwordResetLink{width:100%;min-width:0;padding:9px;border:1px solid #cad4e2;border-radius:7px;font:12px Arial,sans-serif}.reset-form [role=status]{line-height:1.6;overflow-wrap:anywhere}.reset-form [role=status]:empty{display:none}
 .result-card h2{margin-bottom:8px}#result{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f7fb;color:#334760;border:1px solid #e3e9f2;border-radius:8px;padding:11px;font-size:12px;line-height:1.5;min-height:40px}#workflowState{margin-top:8px;line-height:1.5}#workflowState:empty{display:none}
@@ -62,30 +62,9 @@ button.secondary{background:#e8f3fa;color:#03638c;border-color:#cce6f3}button.se
     <div class="card stat-card"><span class="stat-label">Returning Today</span><strong id="statTodayReturning" class="stat-number">—</strong><span class="stat-note">पुराने users जो आज वापस आए</span></div>
   </div>
   <div class="stats-toolbar"><p id="statsStatus" class="small" role="status">आँकड़े लोड होने पर यहाँ समय दिखेगा।</p><button id="statsRefresh" type="button" onclick="loadAdminStats()">↻ Refresh Counts</button></div>
-  <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a> <button id="usersDownload" onclick="downloadUsers()" title="Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें">👥 Download Users Excel</button></div>
+  <div class="card quick-links"><h2>🔗 Quick Links</h2><a href="./usertool/" class="shortcut">👤 User Tools</a><a href="../org/" class="shortcut">🏢 Organisation Counts</a> <a href="../data/" class="shortcut">📊 Data &amp; Extraction Status</a> <button id="usersDownload" onclick="downloadUsers()" title="Registered users के नाम, mobile, email, district और login जानकारी Excel में डाउनलोड करें">👥 Download Users Excel</button></div>
 
   <div class="management-grid">
-  <div class="card account-control">
-    <h2>User Password Reset</h2>
-    <p class="small card-intro">Registered WhatsApp number और account ownership verify करने के बाद ही reset link बनाएँ। Password देखा या वापस भेजा नहीं जा सकता।</p>
-    <form id="passwordResetAdminForm" class="reset-form">
-      <label class="mobile-label">Registered Mobile <input id="passwordResetMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
-      <label class="verification-label"><input id="passwordResetVerified" type="checkbox" required> मैंने registered WhatsApp number और account ownership verify की है।</label>
-      <button id="passwordResetCreate" type="submit">Create 15-minute Reset Link</button>
-      <input id="passwordResetLink" type="text" readonly hidden aria-label="Password reset link">
-      <button id="passwordResetCopy" type="button" hidden>Copy Reset Link</button>
-      <div id="passwordResetStatus" role="status" class="small"></div>
-    </form>
-  </div>
-  <div class="card account-control">
-    <h2>User Block / Unblock</h2>
-    <p class="small card-intro">Registered user की access जाँचें और यहीं से Block / Unblock करें।</p>
-    <form id="userAccessForm" class="reset-form">
-      <label class="mobile-label">Registered Mobile <input id="userAccessMobile" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number" class="mobile-input"></label>
-      <div class="form-actions"><button type="submit">Check User</button><button id="userBlock" type="button" class="danger" disabled>Block</button><button id="userUnblock" type="button" disabled>Unblock</button></div>
-      <div id="userAccessStatus" role="status" class="small"></div>
-    </form>
-  </div>
   <div class="card data-controls">
     <h2>⚙️ Data Controls</h2>
     <div class="grid data-grid">
@@ -113,36 +92,6 @@ button.secondary{background:#e8f3fa;color:#03638c;border-color:#cce6f3}button.se
 const API="https://mp-tenders-api.onrender.com";
 const KEY="mp_admin_session";
 const $=id=>document.getElementById(id);
-let checkedAccessMobile='';
-function clearAccess(){checkedAccessMobile='';$('userBlock').disabled=true;$('userUnblock').disabled=true;$('userAccessStatus').textContent=''}
-$('userAccessMobile').addEventListener('input',clearAccess);
-async function userAccess(blocked){
-  const mobile=$('userAccessMobile').value.trim();
-  if(!$('userAccessForm').reportValidity() || (typeof blocked==='boolean' && mobile!==checkedAccessMobile))return;
-  $('userBlock').disabled=true;$('userUnblock').disabled=true;
-  try{
-    const body={mobile};if(typeof blocked==='boolean')body.blocked=blocked;
-    const response=await fetch(API+'/api/admin/accounts/access',{method:'POST',headers:{Authorization:'Bearer '+localStorage.getItem(KEY),'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
-    const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'Status नहीं मिला।');
-    if($('userAccessMobile').value.trim()!==mobile)return;
-    checkedAccessMobile=mobile;$('userAccessStatus').textContent=data.profile.name+' · '+data.profile.mobile+' · '+data.profile.district+' / '+data.profile.tehsil+' · '+(data.blocked?'Blocked':'Active');
-    $('userBlock').disabled=data.blocked;$('userUnblock').disabled=!data.blocked;
-  }catch(error){clearAccess();$('userAccessStatus').textContent=error.message}
-}
-$('userAccessForm').onsubmit=event=>{event.preventDefault();userAccess()};
-$('userBlock').onclick=()=>userAccess(true);$('userUnblock').onclick=()=>userAccess(false);
-document.getElementById('passwordResetAdminForm').addEventListener('submit',async event=>{
-  event.preventDefault();if(!event.currentTarget.reportValidity())return;
-  const button=$('passwordResetCreate');button.disabled=true;$('passwordResetLink').hidden=true;$('passwordResetCopy').hidden=true;$('passwordResetStatus').textContent='Reset link बन रही है…';
-  try{
-    const response=await fetch(API+'/api/admin/accounts/reset-link',{method:'POST',headers:{Authorization:'Bearer '+localStorage.getItem(KEY),'Content-Type':'application/json'},body:JSON.stringify({mobile:$('passwordResetMobile').value.trim(),identity_verified:$('passwordResetVerified').checked}),cache:'no-store'});
-    const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Reset link नहीं बनी।');
-    $('passwordResetLink').value=result.reset_url;$('passwordResetLink').hidden=false;$('passwordResetCopy').hidden=false;
-    $('passwordResetStatus').textContent='यह link 15 मिनट में expire होगी और एक बार चलेगी। Verified user को WhatsApp पर भेजें।';$('passwordResetVerified').checked=false;
-  }catch(error){$('passwordResetStatus').textContent=error.message}finally{button.disabled=false}
-});
-$('passwordResetCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('passwordResetLink').value);$('passwordResetStatus').textContent='Link copied. Verified user को WhatsApp पर भेजें।'}catch(_){$('passwordResetLink').select();$('passwordResetStatus').textContent='Link select है; copy करें।'}};
-
 async function boot(){
   try{
     const r=await fetch(API+"/api/admin/config",{cache:"no-store"});
@@ -174,7 +123,7 @@ function showPanel(email){
   $("adminAvatar").textContent=(parts.length>1?parts[0][0]+parts[parts.length-1][0]:name.slice(0,2)).toUpperCase();
   loadAdminStats();
 }
-function logout(){$("passwordResetLink").value="";$("passwordResetLink").hidden=true;$("passwordResetCopy").hidden=true;$("passwordResetStatus").textContent="";localStorage.removeItem(KEY);clearAdminStats();$("panel").classList.add("hidden");$("adminSession").classList.add("hidden");$("adminEmail").textContent="";$("adminEmail").title="";$("adminAvatar").textContent="A";$("login").classList.remove("hidden");}
+function logout(){localStorage.removeItem(KEY);clearAdminStats();$("panel").classList.add("hidden");$("adminSession").classList.add("hidden");$("adminEmail").textContent="";$("adminEmail").title="";$("adminAvatar").textContent="A";$("login").classList.remove("hidden");}
 const STAT_FIELDS={total_users:'statTotalUsers',today_signups:'statTodaySignups',today_active_users:'statTodayActive',today_returning_users:'statTodayReturning'};
 let statsController=null,statsTimer=null;
 function clearAdminStats(){
