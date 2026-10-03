@@ -13,6 +13,7 @@ import sys
 import tempfile
 from pathlib import Path
 from inventory_summary import detail_complete, write_summary
+from corrigendum_state import merge_state
 from nightly_cleanup import DATA_FILES, parse_dt, purge_csv
 
 DETAIL_FILES = {"all_tenders_org_detailed.csv", "tender_details.csv"}
@@ -49,6 +50,7 @@ def merge_details(remote, local):
         merged = dict(row) if remote_newer else dict(old)
         preferred = old if remote_newer else row
         merged.update({key: value for key, value in preferred.items() if str(value or "").strip()})
+        merge_state(merged, old, row)
         rows[tid] = merged
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")

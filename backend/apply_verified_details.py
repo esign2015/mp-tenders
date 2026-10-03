@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 from inventory_summary import detail_complete
+from corrigendum_state import merge_state
 
 def apply(root, repairs):
     root = Path(root)
@@ -20,6 +21,7 @@ def apply(root, repairs):
             tid = repair["Tender ID"]
             merged = dict(rows.get(tid, {}))
             merged.update({key: value for key, value in repair.items() if str(value or "").strip()})
+            merge_state(merged, rows.get(tid, {}), repair)
             rows[tid] = merged
             fields = list(dict.fromkeys(fields + list(merged)))
         temporary = path.with_suffix(".tmp")

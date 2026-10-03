@@ -28,6 +28,8 @@ jobs:
     concurrency:
       group: mp-tender-details
       cancel-in-progress: false
+    env:
+      PRIORITY_TENDER_IDS: ${{ inputs.tender_ids || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,9 +44,23 @@ jobs:
         run: pip install -r backend/requirements.txt
       - name: Install Chromium for Home Tender ID search
         run: python -m playwright install --with-deps chromium
-      - name: Resume incomplete live details
+      - name: Read explicit priority IDs from this requested retry
+        if: github.event_name == 'push'
         env:
-          PRIORITY_TENDER_IDS: ${{ inputs.tender_ids || '' }}
+          REQUEST_COMMIT_MESSAGE: ${{ github.event.head_commit.message || '' }}
+        run: |
+          python - <<'PY'
+          import os, re
+          message = os.environ['REQUEST_COMMIT_MESSAGE']
+          match = re.search(r'\[tender-ids=([^\]]+)\]', message)
+          if match:
+              ids = [item.strip() for item in match.group(1).split(',')]
+              if not all(re.fullmatch(r'20\d{2}_[A-Za-z0-9]+_\d+_\d+', item) for item in ids):
+                  raise ValueError('Invalid requested Tender ID')
+              with open(os.environ['GITHUB_ENV'], 'a') as target:
+                  target.write('PRIORITY_TENDER_IDS=' + ','.join(ids) + '\n')
+          PY
+      - name: Resume incomplete live details
         run: |
           set -o pipefail
           git config user.name "mp-tenders-bot"

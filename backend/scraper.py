@@ -266,7 +266,8 @@ def parse_latest_corrigendum(soup):
             continue
         vals = [clean(cell.get_text(" ", strip=True)) for cell in cells]
         joined = " ".join(vals).casefold()
-        if not joined or "corrigendum title" in joined:
+        if (not joined or "corrigendum title" in joined or
+                (len(vals) == 1 and re.search(r"\b(no\s+(corrigendums?|records?|data)|not\s+available)\b", joined))):
             continue
         title = vals[1] if len(vals) >= 3 else (vals[0] if vals else "")
         ctype = vals[2] if len(vals) >= 3 else (vals[1] if len(vals) >= 2 else "")
@@ -669,6 +670,8 @@ def parse_detail(soup, url):
         # contains a real row. Generic YES/NO flags are intentionally ignored.
         "Corrigendum": clean(latest_corrigendum.get("title")),
         "Corrigendum Type": clean(latest_corrigendum.get("type")),
+        "Corrigendum Last Checked": datetime.now(timezone.utc).isoformat(),
+        "Corrigendum Detected At": "",
         # Never persist a JSF session URL.
         "URL": PORTAL,
     }

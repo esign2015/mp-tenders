@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from queue import Queue, Empty
 from urllib.parse import urljoin
 from inventory_summary import detail_complete, write_summary
+from corrigendum_state import merge_state, recheck_due
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
@@ -40,7 +41,8 @@ DETAIL_FIELDS = [
     "Bid Submission End Date","Bid Opening Date","Document Download Start Date",
     "Document Download End Date","Fee Payable To","Fee Payable At",
     "Published Date","Closing Date","Opening Date","Detail Extracted","Search Route",
-    "Start Date Refreshed Through", "Start Date Refreshed At", "Tested At"
+    "Start Date Refreshed Through", "Start Date Refreshed At", "Tested At",
+    "Corrigendum", "Corrigendum Type", "Corrigendum Last Checked", "Corrigendum Detected At"
 ]
 
 def start_date_refresh_due(row, now=None):
@@ -66,6 +68,7 @@ def merge_extracted_detail(base, detail):
     # A later page may still omit fields; keep previously verified values.
     merged = dict(base)
     merged.update({key: value for key, value in detail.items() if clean(value)})
+    merge_state(merged, base, detail)
     merged["Tested At"] = datetime.now(timezone.utc).isoformat()
     due = start_date_refresh_due(merged)
     if due:
@@ -94,6 +97,16 @@ def money_number(value):
         return float(m.group(0)) if m else 0.0
     except Exception:
         return 0.0
+
+
+def seed_priority_ids(rows, fields, current_ids, priority_ids):
+    """Explicit official Tender-ID searches need not wait for a full list copy."""
+    if any(not TENDER_ID_RE.fullmatch(tid) for tid in priority_ids):
+        raise ValueError('Invalid priority Tender ID')
+    known = {clean(row.get('Tender ID')) for row in rows}
+    for tid in sorted(priority_ids - known):
+        rows.append({**dict.fromkeys(fields, ''), 'Tender ID': tid})
+    current_ids.extend(sorted(priority_ids - set(current_ids)))
 
 def visible_text_inputs(scope):
     return [x for x in scope.locator("input").all()
@@ -461,6 +474,8 @@ def main():
         current_ids = list(dict.fromkeys(
             clean(r.get("Tender ID")) for r in rows if clean(r.get("Tender ID"))
         ))
+    priority_ids = {clean(value) for value in os.getenv("PRIORITY_TENDER_IDS", "").split(",") if clean(value)}
+    seed_priority_ids(rows, fields, current_ids, priority_ids)
     current_set = set(current_ids)
     # Reconciliation may recover IDs that have no master row yet. Seed them
     # from the current listing so they cannot be silently excluded from retry.
@@ -494,13 +509,13 @@ def main():
         ] + [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and (not detail_complete(row) or start_date_refresh_due(row))
+            and (not detail_complete(row) or start_date_refresh_due(row) or recheck_due(row))
         ]
     else:
         candidate_rows = [
             row for row in rows
             if clean(row.get("Tender ID")) in current_set
-            and (not detail_complete(row) or start_date_refresh_due(row))
+            and (not detail_complete(row) or start_date_refresh_due(row) or recheck_due(row))
         ]
 
     for row in candidate_rows:
@@ -509,7 +524,6 @@ def main():
             seen_incomplete.add(tid)
             incomplete.append(row)
 
-    priority_ids = {clean(value) for value in os.getenv("PRIORITY_TENDER_IDS", "").split(",") if clean(value)}
     if priority_ids:
         incomplete = [row for row in incomplete if clean(row.get("Tender ID")) in priority_ids]
     else:
