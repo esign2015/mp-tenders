@@ -1,22 +1,21 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-03T20:47:56.441668+05:30",
+  "snapshot_at": "2026-10-03T21:16:08.526768+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
   "previous_tender_count": 5284,
-  "current_tender_count": 5318,
+  "current_tender_count": 5317,
   "organisations_with_changes": 3,
-  "organisations_with_new_tenders": 2,
-  "new_tender_count": 19,
+  "organisations_with_new_tenders": 3,
+  "new_tender_count": 33,
   "changes": [
     {
       "Organisation Name": "Directorate Urban Administration and Development",
       "Previous Tender Count": 3018,
-      "Current Tender Count": 3036,
-      "Count Difference": 18,
-      "New Tender Count": 18,
+      "Current Tender Count": 3035,
+      "Count Difference": 17,
+      "New Tender Count": 17,
       "New Tender IDs": [
-        "2026_UAD_534957_1",
         "2026_UAD_538840_3",
         "2026_UAD_540119_1",
         "2026_UAD_540120_1",
@@ -37,6 +36,30 @@
       ]
     },
     {
+      "Organisation Name": "PWD- Roads and Bridges",
+      "Previous Tender Count": 379,
+      "Current Tender Count": 394,
+      "Count Difference": 15,
+      "New Tender Count": 15,
+      "New Tender IDs": [
+        "2026_PWDRB_540018_1",
+        "2026_PWDRB_540019_1",
+        "2026_PWDRB_540020_1",
+        "2026_PWDRB_540021_1",
+        "2026_PWDRB_540023_1",
+        "2026_PWDRB_540024_1",
+        "2026_PWDRB_540025_1",
+        "2026_PWDRB_540026_1",
+        "2026_PWDRB_540027_1",
+        "2026_PWDRB_540028_1",
+        "2026_PWDRB_540029_1",
+        "2026_PWDRB_540030_1",
+        "2026_PWDRB_540031_1",
+        "2026_PWDRB_540032_1",
+        "2026_PWDRB_540033_1"
+      ]
+    },
+    {
       "Organisation Name": "MP Police",
       "Previous Tender Count": 39,
       "Current Tender Count": 40,
@@ -45,14 +68,6 @@
       "New Tender IDs": [
         "2026_MPP_538889_1"
       ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 379,
-      "Current Tender Count": 394,
-      "Count Difference": 15,
-      "New Tender Count": 0,
-      "New Tender IDs": []
     }
   ]
 }
