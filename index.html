@@ -3131,10 +3131,20 @@ function mergeCurrentPortalRows(detailedRows, portalRows){
 }
 
 function currentPortalAllows(row, now=Date.now()){
-  // The latest copied portal list defines membership; details enrich it.
-  // A failed refresh keeps the previous list, never the historical master.
   if(!portalSnapshot) return true;
-  return portalActiveIds.has(clean(row["Tender ID"]));
+  if(portalActiveIds.has(clean(row["Tender ID"]))) return true;
+  // A successful official lookup after the last full snapshot can discover
+  // a new/reopened tender before the next organisation copy is published.
+  const checked=Date.parse(clean(row["Tested At"]));
+  const snapshot=Date.parse(clean(portalSnapshot.snapshot_at));
+  const closing=parseDate(row["Closing Date"]),published=parseDate(row["Published Date"]);
+  const official=/^Home(?:\s*->\s*Tender ID|\s+latest\s*->\s*exact reference)/i.test(clean(row["Search Route"]));
+  return clean(row["Detail Extracted"]).toUpperCase()==="YES" && official
+    && clean(row["Status"]).toLowerCase()==="open"
+    && Number.isFinite(checked) && Number.isFinite(snapshot)
+    && checked>snapshot && checked<=now+120000
+    && closing && closing.getTime()>now
+    && published && published.getTime()<=now;
 }
 
 function escapeHtml(value){
