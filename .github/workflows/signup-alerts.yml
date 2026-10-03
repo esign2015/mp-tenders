@@ -2,7 +2,7 @@ name: Private Signup Alerts
 on:
   push:
     branches: [main]
-    paths: ['backend/signup_alerts.py', 'backend/check_signup_alerts.py', 'backend/account_access.py', 'backend/server.py', 'tests/test_signup_alerts.py', '.github/workflows/signup-alerts.yml']
+    paths: ['backend/signup_alerts.py', 'backend/check_signup_alerts.py', 'backend/welcome_backfill.py', 'backend/account_access.py', 'backend/server.py', 'tests/test_signup_alerts.py', 'tests/test_welcome_backfill.py', '.github/workflows/signup-alerts.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,6 +16,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -r backend/requirements.txt
       - run: python -m unittest discover -s tests -p test_signup_alerts.py -q
+      - run: python -m unittest discover -s tests -p test_welcome_backfill.py -q
       - run: python -m unittest discover -s tests -p test_accounts.py -q
   live:
     needs: checks

@@ -82,13 +82,14 @@ def configured_call(method, **params):
     return telegram_call(os.getenv('TELEGRAM_BOT_TOKEN', '').strip(), method, **params)
 
 
-def send_signup_alert(record, call=configured_call):
+def send_signup_alert(record, call=configured_call, welcome_batch=False):
     chat_id = private_destination(call, os.getenv('TELEGRAM_ADMIN_CHAT_ID', '').strip(), use_cache=call is configured_call)
     try:
         stamp = datetime.fromisoformat(record['signup_at']).astimezone(IST).strftime('%d/%m/%Y %I:%M:%S %p IST')
     except (KeyError, ValueError):
         stamp = 'उपलब्ध नहीं'
-    text = ('👤 नया signup — MP Tender Live Dashboard\n\n'
+    heading = '👤 पहले पंजीकृत user — स्वागत संदेश भेजें' if welcome_batch else '👤 नया signup — MP Tender Live Dashboard'
+    text = (heading + '\n\n'
             f"नाम: {record.get('name', '—')}\nमोबाइल: {record.get('mobile', '—')}\n"
             f"जिला: {record.get('district', '—')}\nतहसील: {record.get('tehsil', '—')}\n"
             f'समय: {stamp}\n\n'
@@ -100,38 +101,38 @@ def send_signup_alert(record, call=configured_call):
     return result['message_id']
 
 
-def _claim(accounts, user_id, lease):
+def _claim(accounts, user_id, lease, outbox='signup_alert'):
     for _ in range(4):
         record = accounts.get(user_id=user_id)
-        notice = (record or {}).get('signup_alert') or {}
+        notice = (record or {}).get(outbox) or {}
         if not notice or notice.get('state') == 'sent' or notice.get('retry_at', 0) > time.time():
             return None
         if notice.get('state') == 'sending' and notice.get('lease_until', 0) > time.time():
             return None
         revision = record['revision']
-        record['signup_alert'] = {**notice, 'state': 'sending', 'lease': lease, 'lease_until': time.time() + 900}
+        record[outbox] = {**notice, 'state': 'sending', 'lease': lease, 'lease_until': time.time() + 900}
         if accounts.update(record, revision):
             return record
     return None
 
 
-def _settle(accounts, user_id, lease, result):
+def _settle(accounts, user_id, lease, result, outbox='signup_alert'):
     # Read again so concurrent profile/session updates are preserved.
     for _ in range(4):
         record = accounts.get(user_id=user_id)
-        notice = (record or {}).get('signup_alert') or {}
+        notice = (record or {}).get(outbox) or {}
         if notice.get('lease') != lease:
             return
         revision = record['revision']
-        record['signup_alert'] = result
+        record[outbox] = result
         if accounts.update(record, revision):
             return
     raise RuntimeError('Signup alert receipt save conflict')
 
 
-def deliver(accounts, user_id, sender=send_signup_alert, pause=time.sleep):
+def deliver(accounts, user_id, sender=send_signup_alert, pause=time.sleep, outbox='signup_alert'):
     lease = str(uuid.uuid4())
-    record = _claim(accounts, user_id, lease)
+    record = _claim(accounts, user_id, lease, outbox)
     if record is None:
         return
     error_type = ''
@@ -145,9 +146,9 @@ def deliver(accounts, user_id, sender=send_signup_alert, pause=time.sleep):
             continue
         # Never resend an acknowledged Telegram message if saving its receipt fails.
         _settle(accounts, user_id, lease, {'state': 'sent', 'message_id': message_id,
-                                         'sent_at': datetime.now(IST).isoformat()})
+                                         'sent_at': datetime.now(IST).isoformat()}, outbox)
         return
-    _settle(accounts, user_id, lease, {'state': 'failed', 'error_type': error_type, 'retry_at': time.time() + 60})
+    _settle(accounts, user_id, lease, {'state': 'failed', 'error_type': error_type, 'retry_at': time.time() + 60}, outbox)
 
 
 def queue(accounts, user_id):

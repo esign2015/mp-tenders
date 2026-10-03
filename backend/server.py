@@ -1311,6 +1311,33 @@ def signup_alert_status():
     return jsonify({'ok': True, 'bot_username': 'mptenders_bot', 'destination': 'private_admin',
                     'private_chat_verified': True, 'welcome_link': 'whatsapp_prefilled', 'outbox': 'saved_account_record'})
 
+@app.post('/api/internal/welcome-backfill')
+def welcome_backfill():
+    import sys
+    import welcome_backfill as batch
+    import signup_alerts
+    timestamp = request.headers.get('X-Alert-Timestamp', '')
+    signature = request.headers.get('X-Alert-Signature', '')
+    secret = clean(os.getenv('TELEGRAM_BOT_TOKEN'))
+    raw = request.get_data()
+    if not secret or not timestamp.isdigit() or abs(time.time()-int(timestamp)) > 300 or len(raw) > 512:
+        return jsonify({'ok': False}), 401
+    expected = hmac.new(secret.encode(), b'mp-welcome-backfill\n'+timestamp.encode()+b'\n'+raw, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature, expected):
+        return jsonify({'ok': False}), 401
+    payload = request.get_json(silent=True) or {}
+    if payload.get('campaign') != batch.CAMPAIGN or payload.get('cutoff') != batch.CUTOFF:
+        return jsonify({'ok': False}), 400
+    if not signup_alerts.enabled():
+        return jsonify({'ok': False, 'status': 'disabled'}), 503
+    try:
+        signup_alerts.private_destination(signup_alerts.configured_call, clean(os.getenv('TELEGRAM_ADMIN_CHAT_ID')), use_cache=True)
+    except Exception:
+        return jsonify({'ok': False, 'status': 'private_chat_not_ready'}), 503
+    status = batch.start(sys.modules[__name__], retry=payload.get('retry') is True)
+    return jsonify({'ok': True, **status}), 200 if status['state'] == 'complete' else 202
+
+
 @app.get("/api/admin/users-migration")
 def users_migration_snapshot():
     """Private, consistent export for moving users and their login history."""
