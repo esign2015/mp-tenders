@@ -1,39 +1,50 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-03T15:12:13.460235+05:30",
+  "snapshot_at": "2026-10-03T15:55:14.957241+05:30",
   "previous_organisation_count": 96,
   "current_organisation_count": 96,
-  "previous_tender_count": 5623,
-  "current_tender_count": 5624,
+  "previous_tender_count": 5624,
+  "current_tender_count": 5635,
   "organisations_with_changes": 3,
   "organisations_with_new_tenders": 2,
-  "new_tender_count": 2,
+  "new_tender_count": 13,
   "changes": [
     {
-      "Organisation Name": "Department of Higher Education",
-      "Previous Tender Count": 32,
-      "Current Tender Count": 33,
-      "Count Difference": 1,
-      "New Tender Count": 1,
+      "Organisation Name": "Directorate Urban Administration and Development",
+      "Previous Tender Count": 3092,
+      "Current Tender Count": 3104,
+      "Count Difference": 12,
+      "New Tender Count": 12,
       "New Tender IDs": [
-        "2026_HED_535692_2"
+        "2026_UAD_540057_1",
+        "2026_UAD_540058_1",
+        "2026_UAD_540059_1",
+        "2026_UAD_540060_1",
+        "2026_UAD_540061_1",
+        "2026_UAD_540062_1",
+        "2026_UAD_540063_1",
+        "2026_UAD_540064_1",
+        "2026_UAD_540065_1",
+        "2026_UAD_540066_1",
+        "2026_UAD_540067_1",
+        "2026_UAD_540551_1"
       ]
     },
     {
-      "Organisation Name": "MP Forest Department",
-      "Previous Tender Count": 90,
-      "Current Tender Count": 91,
+      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Previous Tender Count": 268,
+      "Current Tender Count": 269,
       "Count Difference": 1,
       "New Tender Count": 1,
       "New Tender IDs": [
-        "2026_MPFD_540458_1"
+        "2026_MPPGC_540037_1"
       ]
     },
     {
-      "Organisation Name": "Madhya Pradesh State Electronics Development Corporation Ltd.",
-      "Previous Tender Count": 5,
-      "Current Tender Count": 4,
-      "Count Difference": -1,
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 44,
+      "Current Tender Count": 42,
+      "Count Difference": -2,
       "New Tender Count": 0,
       "New Tender IDs": []
     }
