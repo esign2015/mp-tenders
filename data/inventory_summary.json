@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-03T22:32:32.373602+05:30",
+    "checked_at": "2026-10-03T22:34:37.421112+05:30",
     "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5317,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-03T17:02:33.561696+00:00",
+  "updated_at": "2026-10-03T17:04:38.606472+00:00",
   "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5317,
   "copied_tenders": 5317,
-  "detail_complete": 5272,
+  "detail_complete": 5273,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 45,
+  "detail_pending": 44,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -495,10 +495,10 @@
       "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
       "portal_tender_count": 42,
       "copied_tenders": 42,
-      "detail_complete": 38,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -1075,14 +1075,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 44,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2026_PKVVC_533695_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 374,
   "department_count": 334,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_PKVVC_533695_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
