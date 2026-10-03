@@ -1,73 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-03T21:16:08.526768+05:30",
+  "snapshot_at": "2026-10-03T22:46:19.173473+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
-  "previous_tender_count": 5284,
+  "previous_tender_count": 5317,
   "current_tender_count": 5317,
-  "organisations_with_changes": 3,
-  "organisations_with_new_tenders": 3,
-  "new_tender_count": 33,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3018,
-      "Current Tender Count": 3035,
-      "Count Difference": 17,
-      "New Tender Count": 17,
-      "New Tender IDs": [
-        "2026_UAD_538840_3",
-        "2026_UAD_540119_1",
-        "2026_UAD_540120_1",
-        "2026_UAD_540121_1",
-        "2026_UAD_540507_1",
-        "2026_UAD_540535_1",
-        "2026_UAD_540554_1",
-        "2026_UAD_540555_1",
-        "2026_UAD_540557_1",
-        "2026_UAD_540558_1",
-        "2026_UAD_540560_1",
-        "2026_UAD_540562_1",
-        "2026_UAD_540563_1",
-        "2026_UAD_540564_1",
-        "2026_UAD_540565_1",
-        "2026_UAD_540566_1",
-        "2026_UAD_540641_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 379,
-      "Current Tender Count": 394,
-      "Count Difference": 15,
-      "New Tender Count": 15,
-      "New Tender IDs": [
-        "2026_PWDRB_540018_1",
-        "2026_PWDRB_540019_1",
-        "2026_PWDRB_540020_1",
-        "2026_PWDRB_540021_1",
-        "2026_PWDRB_540023_1",
-        "2026_PWDRB_540024_1",
-        "2026_PWDRB_540025_1",
-        "2026_PWDRB_540026_1",
-        "2026_PWDRB_540027_1",
-        "2026_PWDRB_540028_1",
-        "2026_PWDRB_540029_1",
-        "2026_PWDRB_540030_1",
-        "2026_PWDRB_540031_1",
-        "2026_PWDRB_540032_1",
-        "2026_PWDRB_540033_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police",
-      "Previous Tender Count": 39,
-      "Current Tender Count": 40,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPP_538889_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
