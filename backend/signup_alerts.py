@@ -25,14 +25,16 @@ def enabled():
     return os.getenv('SIGNUP_ALERTS_ENABLED', '1') != '0' and bool(os.getenv('TELEGRAM_BOT_TOKEN', '').strip())
 
 
-def welcome_message(name):
+def welcome_message(name, mobile):
     name = ' '.join(str(name or '').split())
     return f'''👋 नमस्कार {name} जी,
 
 🎉 *MP Tender Live Dashboard में आपका स्वागत है!*
 आपका रजिस्ट्रेशन सफलतापूर्वक पूरा हो गया है।
 
-यहाँ आप चालू टेंडर, अंतिम तिथि व समय, PAC, EMD और अन्य शुल्क देख सकते हैं। जिला, विभाग और अंतिम तिथि के अनुसार टेंडर खोजकर PDF भी डाउनलोड कर सकते हैं।
+📱 हमें आपके मोबाइल नंबर *{mobile}* से पंजीकरण मिला है। यदि आपने यह पंजीकरण नहीं किया है या आपके नाम में कोई गलती है, तो कृपया हमें बताएं, ताकि हम गलत रिकॉर्ड सुधार सकें या आपका पंजीकरण रिकॉर्ड हटा सकें।
+
+यहाँ आप एक्टिव टेंडर, अंतिम तिथि व समय, PAC, EMD और अन्य शुल्क देख सकते हैं। जिला, विभाग और अंतिम तिथि के अनुसार टेंडर खोजकर PDF भी डाउनलोड कर सकते हैं।
 
 🌐 *डैशबोर्ड खोलें*
 https://tenders.codinglms.xyz/
@@ -55,7 +57,7 @@ def whatsapp_link(record):
     mobile = str(record.get('mobile', ''))
     if not re.fullmatch(r'\+91[6-9][0-9]{9}', mobile):
         raise ValueError('A valid signup mobile is required')
-    return 'https://wa.me/' + mobile[1:] + '?text=' + quote(welcome_message(record.get('name')), safe='')
+    return 'https://wa.me/' + mobile[1:] + '?text=' + quote(welcome_message(record.get('name'), mobile), safe='')
 
 
 def private_destination(call, configured_id='', use_cache=False):

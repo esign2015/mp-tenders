@@ -62,10 +62,15 @@ class SignupAlertsTests(unittest.TestCase):
         self.assertEqual(url.netloc, 'wa.me')
         self.assertEqual(url.path, '/919876543210')
         draft = parse_qs(url.query)['text'][0]
-        self.assertEqual(draft, alerts.welcome_message(record['name']))
+        self.assertEqual(draft, alerts.welcome_message(record['name'], record['mobile']))
         for value in ('नमस्कार Bidder नाम जी', 'MP Tender Live Dashboard', 'https://tenders.codinglms.xyz/',
                       'https://t.me/mptendersalert', 'https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy', 'https://t.me/rdgyan'):
             self.assertIn(value, draft)
+        self.assertIn('एक्टिव टेंडर', draft)
+        self.assertNotIn('चालू टेंडर', draft)
+        self.assertIn('मोबाइल नंबर *' + record['mobile'] + '* से पंजीकरण मिला है', draft)
+        self.assertIn('यदि आपने यह पंजीकरण नहीं किया है या आपके नाम में कोई गलती है', draft)
+        self.assertIn('पंजीकरण रिकॉर्ड हटा सकें', draft)
         self.assertNotIn('private-password', draft)
         for number in ('9876543210', '+91foo', '-100123', '@mptendersalert'):
             with self.assertRaises(ValueError):
