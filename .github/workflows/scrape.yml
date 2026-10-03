@@ -168,7 +168,7 @@ jobs:
           EXISTING_ID_BATCH_SIZE: "500"
           RSP_FAST: "0" # Unresolved fast-route IDs must reach the ID-search fallback.
           RSP_FAST_MAX_DETAILS: "500"
-          # Normal scheduled mode: do not reopen completed detail pages.
+          # Refresh incomplete details and completed rows with stale corrigendum checks.
           REPAIR_COMPLETED_DETAILS: "0"
           PRIMARY_ID_SEARCH: "1"
           DETAIL_SEARCH_WORKERS: "3"
