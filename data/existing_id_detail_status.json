@@ -8,10 +8,10 @@
   "current_portal_ids": 5317,
   "initial_incomplete": 46,
   "batch_targets": 46,
-  "batch_attempted": 25,
-  "batch_complete": 22,
+  "batch_attempted": 34,
+  "batch_complete": 27,
   "started_at": "2026-10-03T16:07:34.970246+00:00",
-  "success": 5249,
+  "success": 5254,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -1944,6 +1944,7 @@
     "2026_PWDRB_539249_1",
     "2026_PWDRB_539342_1",
     "2026_PWDRB_539343_1",
+    "2026_PWDRB_539416_1",
     "2026_PWDRB_539423_1",
     "2026_PWDRB_539424_1",
     "2026_PWDRB_539425_1",
@@ -1987,6 +1988,7 @@
     "2026_PWDRB_539914_1",
     "2026_PWDRB_539915_1",
     "2026_PWDRB_539953_1",
+    "2026_PWDRB_540018_1",
     "2026_PWDRB_540378_1",
     "2026_PWDRB_540384_1",
     "2026_PWDRB_540385_1",
@@ -5109,6 +5111,7 @@
     "2026_UAD_540105_1",
     "2026_UAD_540107_1",
     "2026_UAD_540117_1",
+    "2026_UAD_540119_1",
     "2026_UAD_540128_1",
     "2026_UAD_540133_1",
     "2026_UAD_540144_1",
@@ -5233,7 +5236,9 @@
     "2026_UAD_540507_1",
     "2026_UAD_540509_1",
     "2026_UAD_540510_1",
+    "2026_UAD_540511_1",
     "2026_UAD_540512_1",
+    "2026_UAD_540535_1",
     "2026_UAD_540551_1",
     "2026_UAD_540554_1",
     "2026_UAD_540555_1",
@@ -5308,8 +5313,6 @@
     "2026_PKVVC_488814_1",
     "2026_PKVVC_523309_1",
     "2026_PKVVC_534255_1",
-    "2026_PWDRB_539416_1",
-    "2026_PWDRB_540018_1",
     "2026_PWDRB_540019_1",
     "2026_PWDRB_540020_1",
     "2026_PWDRB_540021_1",
@@ -5329,14 +5332,11 @@
     "2026_UAD_538840_3",
     "2026_UAD_538842_1",
     "2026_UAD_538842_2",
-    "2026_UAD_540119_1",
     "2026_UAD_540120_1",
     "2026_UAD_540121_1",
-    "2026_UAD_540511_1",
-    "2026_UAD_540535_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_540509_1",
+  "last_successful_tender_id": "2026_PWDRB_540018_1",
   "errors": [
     {
       "Tender ID": "2026_UAD_538842_2",
@@ -5347,7 +5347,32 @@
       "Tender ID": "2026_UAD_538842_1",
       "error": "RuntimeError: Search Tender input not found",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_540121_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_540120_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_538840_3",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_540030_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_540033_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PWDRB_540033_1",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-03T16:11:33.850724+00:00"
+  "updated_at": "2026-10-03T16:13:35.190500+00:00"
 }

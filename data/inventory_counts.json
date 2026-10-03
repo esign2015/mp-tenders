@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-03T21:41:40.879607+05:30",
+    "checked_at": "2026-10-03T21:43:47.735727+05:30",
     "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5317,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-03T16:11:42.516180+00:00",
+  "updated_at": "2026-10-03T16:13:49.341578+00:00",
   "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5317,
   "copied_tenders": 5317,
-  "detail_complete": 5249,
+  "detail_complete": 5254,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 68,
+  "detail_pending": 63,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -286,10 +286,10 @@
       "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
       "portal_tender_count": 3035,
       "copied_tenders": 3035,
-      "detail_complete": 3027,
+      "detail_complete": 3030,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 5
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -968,10 +968,10 @@
       "snapshot_at": "2026-10-03T15:20:09.330779+00:00",
       "portal_tender_count": 394,
       "copied_tenders": 394,
-      "detail_complete": 378,
+      "detail_complete": 380,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 14
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1079,10 +1079,8 @@
   "missing_district_ids": [],
   "known_pincode_count": 374,
   "department_count": 334,
-  "missing_pincode_count": 24,
+  "missing_pincode_count": 19,
   "missing_pincode_ids": [
-    "2026_PWDRB_539416_1",
-    "2026_PWDRB_540018_1",
     "2026_PWDRB_540019_1",
     "2026_PWDRB_540020_1",
     "2026_PWDRB_540021_1",
@@ -1100,10 +1098,7 @@
     "2026_UAD_538840_3",
     "2026_UAD_538842_1",
     "2026_UAD_538842_2",
-    "2026_UAD_540119_1",
     "2026_UAD_540120_1",
-    "2026_UAD_540121_1",
-    "2026_UAD_540511_1",
-    "2026_UAD_540535_1"
+    "2026_UAD_540121_1"
   ]
 }
