@@ -1,24 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-04T21:15:24.920015+05:30",
+  "snapshot_at": "2026-10-04T22:01:08.048570+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
-  "previous_tender_count": 5320,
+  "previous_tender_count": 5322,
   "current_tender_count": 5322,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 2,
-  "changes": [
-    {
-      "Organisation Name": "Rural Engineering Service",
-      "Previous Tender Count": 81,
-      "Current Tender Count": 83,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_RES_535681_1",
-        "2026_RES_535683_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
