@@ -6382,6 +6382,7 @@ enforceAccountAccess().then(async () => {
       address:safe(byId("affAddress")?.value),
       tenderId:safe(byId("affTenderId")?.value),
       tenderRef:safe(byId("affTenderRef")?.value),
+      referenceNumber:validReferenceNumber(selectedAffidavitTender?.["Reference Number"]),
       noticeDate:formatVerifyDate(byId("affNoticeDate")?.value),
       workName:safe(byId("affWorkName")?.value),
       department:safe(byId("affDepartment")?.value),
@@ -6394,6 +6395,10 @@ enforceAccountAccess().then(async () => {
     if(d.relative==="yes" && (!d.relativeName || !d.relativePost || !d.relativePosting)) miss.push("Close-relative Name, Post और Present Posting");
     if(miss.length){byId("affidavitStatus").textContent="पहले यह जानकारी भरें: "+miss.join(", ");return false;}
     return true;
+  }
+  function noticeTenderNumber(d){
+    const reference=safe(d.referenceNumber);
+    return d.tenderRef+(reference && !/^(?:na|n\/a|null|none|not available|[-—])$/i.test(reference)?" (ref no. "+reference+")":"");
   }
   function affidavitLines(d){
     const strikeText=s=>"~~"+s+"~~";
@@ -6410,7 +6415,7 @@ enforceAccountAccess().then(async () => {
       "",
       "I am "+d.bidderName+" who is "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
       "",
-      "I am "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+d.tenderRef+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
+      "I am "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+noticeTenderNumber(d)+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
       "",
       "I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:",
       "1. That the self-certified information given in the bid document is fully true and authentic.",
@@ -6474,7 +6479,7 @@ enforceAccountAccess().then(async () => {
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
       '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200.00)</em></p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
-      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(d.tenderRef)+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
+      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(noticeTenderNumber(d))+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
       '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
       '<p class="aff-prev-list">1. That the self-certified information given in the bid document is fully true and authentic.</p>'+
       '<p class="aff-prev-list">2. That:</p>'+
@@ -6604,7 +6609,7 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([
         run("I am "),run(d.bidderName,true,false,20,true),
         run(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
-        run(d.tenderRef,true,false,20,true),run(" for "),run(d.workName,true,false,20,true),
+        run(noticeTenderNumber(d),true,false,20,true),run(" for "),run(d.workName,true,false,20,true),
         run(" (name of work) dated "),run(d.noticeDate||"____________________________",true,false,20,true),
         run(" issued by the "),run(d.department,true,false,20,true),run(" (name of the department).")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
@@ -6658,7 +6663,7 @@ enforceAccountAccess().then(async () => {
 
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
-        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:1440,left:720,header:720,footer:360}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This Affidavit is generated from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]}),new Paragraph({alignment:AlignmentType.JUSTIFIED,spacing:{before:80,after:0},children:[new TextRun({text:AFFIDAVIT_FORMAT_NOTICE,size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
+        sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:1440,left:720,header:720,footer:360}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This format is downloaded from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]}),new Paragraph({alignment:AlignmentType.JUSTIFIED,spacing:{before:80,after:0},children:[new TextRun({text:AFFIDAVIT_FORMAT_NOTICE,size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx",mobileWindow);
       byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
@@ -6786,7 +6791,7 @@ enforceAccountAccess().then(async () => {
         {text:"I am "},
         {text:d.bidderName,bold:true,underline:true},
         {text:" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "},
-        {text:d.tenderRef,bold:true,underline:true},
+        {text:noticeTenderNumber(d),bold:true,underline:true},
         {text:" for "},
         {text:d.workName,bold:true,underline:true},
         {text:" (name of work) dated "},
@@ -6888,7 +6893,7 @@ enforceAccountAccess().then(async () => {
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,271,192,271);
         doc.setTextColor(0);
-        const footerPrefix="This Affidavit is generated from ";
+        const footerPrefix="This format is downloaded from ";
         const footerUrl="https://tenders.codinglms.xyz";
         const footerSuffix=" • SAR Digital Services, Kannod • MP Tender Live Dashboard";
         const footerY=276;

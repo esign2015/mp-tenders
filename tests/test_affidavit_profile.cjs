@@ -6,6 +6,8 @@ const node=id=>nodes[id]??={value:'',hidden:false,textContent:'',innerHTML:'',st
 let profileOpens=0;node('accountProfileBtn').onclick=()=>profileOpens++;
 const row={'Tender ID':'TENDER-1',Title:'Work title',Organisation:'PWD',Department:'Dewas'};
 const ctx=vm.createContext({Date,window:{dashboardVisitorProfile:{visitor_id:'USER-1',name:'Full Name',district:'Dewas'}},allTenders:[row],filteredTenders:[row],localStorage:{getItem:k=>local.get(k)||null,setItem:(k,v)=>local.set(k,v)},document:{getElementById:node,readyState:'complete',body:{style:{}},addEventListener(){}},escapeHtml:s=>String(s),alert:()=>{},navigator:{userAgent:''},clearTimeout(){},setTimeout(){}});
+ctx.clean=v=>String(v??'').trim();
+vm.runInContext(html.slice(html.indexOf('function validReferenceNumber('),html.indexOf('\nfunction extractReferenceFromTitle(')),ctx);
 vm.runInContext(source,ctx);
 ctx.window.dashboardAffidavitProfile={bidderName:'Full Name',firmName:'Firm',status:'Proprietor',place:'Kannod',relative:'no'};
 ctx.window.openAffidavitForTender('TENDER-1');assert.equal(profileOpens,1);assert.equal(ctx.window.pendingAffidavitTenderId,'TENDER-1');assert(!node('affidavitModal').classList.contains('open'));
@@ -30,5 +32,16 @@ delete ctx.window.dashboardVisitorProfile.mobile;delete ctx.window.dashboardVisi
 ctx.window.openAffidavitForTender('TENDER-1');
 assert(!node('affidavitPreview').innerHTML.includes('Mobile:'));
 assert(!node('affidavitPreview').innerHTML.includes('Email:'));
+// Reference follows the Tender ID inside the same bold, underlined field.
+const sample={'Tender ID':'2026_MPPHC_538538_1','Reference Number':'NIT_21/2026-27_1',Title:'Repair of police station',Organisation:'MP Police Housing'};
+ctx.allTenders.push(sample);
+ctx.window.openAffidavitForTender(sample['Tender ID']);
+assert(node('affidavitPreview').innerHTML.includes('notice inviting e-tender No. <strong><u>2026_MPPHC_538538_1 (ref no. NIT_21/2026-27_1)</u></strong>'));
+for(const missing of ['',sample['Tender ID'],'NA']){
+ sample['Reference Number']=missing;ctx.window.openAffidavitForTender(sample['Tender ID']);
+ assert(!node('affidavitPreview').innerHTML.includes('(ref no.'));
+}
+ctx.window.openAffidavitForTender('TENDER-1');assert(!node('affidavitPreview').innerHTML.includes('(ref no.'));
 console.log('PASS: incomplete profiles route to My Profile, saved profiles open Word/PDF options, parent/address survive legacy responses, editing resumes the selected tender and downloads do not resave basic details.');
 console.log('PASS: certificate preview includes the saved profile letterhead and only available contact details.');
+console.log('PASS: affidavit shows the selected tender reference in bold/underline, omits missing references and does not reuse another tender reference.');
