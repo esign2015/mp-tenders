@@ -11,7 +11,7 @@ vm.runInContext(html.slice(html.indexOf('function validReferenceNumber('),html.i
 vm.runInContext(source,ctx);
 ctx.window.dashboardAffidavitProfile={bidderName:'Full Name',firmName:'Firm',status:'Proprietor',place:'Kannod',relative:'no'};
 ctx.window.openAffidavitForTender('TENDER-1');assert.equal(profileOpens,1);assert.equal(ctx.window.pendingAffidavitTenderId,'TENDER-1');assert(!node('affidavitModal').classList.contains('open'));
-const complete={...ctx.window.dashboardAffidavitProfile,parentName:'Parent Name',parentRelation:'D/o',address:'Ward 2, Kannod'};
+const complete={...ctx.window.dashboardAffidavitProfile,email:'bidder@example.test',parentName:'Parent Name',parentRelation:'D/o',address:'Ward 2, Kannod'};
 ctx.window.cacheDashboardAffidavitProfile(complete);
 // A legacy response must not erase previously saved parent/address details.
 ctx.window.dashboardAffidavitProfile={bidderName:'Full Name',firmName:'Firm',status:'Proprietor',place:'Kannod',relative:'no'};
@@ -31,7 +31,28 @@ assert(node('affidavitSavedDetails').textContent.includes('letterhead'));
 delete ctx.window.dashboardVisitorProfile.mobile;delete ctx.window.dashboardVisitorProfile.email;
 ctx.window.openAffidavitForTender('TENDER-1');
 assert(!node('affidavitPreview').innerHTML.includes('Mobile:'));
-assert(!node('affidavitPreview').innerHTML.includes('Email:'));
+assert(node('affidavitPreview').innerHTML.includes('Email: bidder@example.test'));
+const opensBefore=profileOpens;
+ctx.window.dashboardAffidavitProfile={...complete,email:''};
+ctx.window.openAffidavitForTender('TENDER-1');
+assert.equal(profileOpens,opensBefore+1);
+assert(node('accountSettingsStatus').textContent.includes('email'));
+ctx.window.dashboardAffidavitProfile={...complete,address:'Updated Address'};
+ctx.window.openAffidavitForTender('TENDER-1');
+node('affSelectAffidavit').checked=false;node('affSelectAnnexureH').checked=true;node('affSelectAnnexureH').change();
+assert(!node('affidavitPreview').innerHTML.includes('|| AFFIDAVIT ||'));
+assert(node('affidavitPreview').innerHTML.includes('No Relation Certificate'));
+assert(node('affidavitPreview').innerHTML.includes('Annexure - H'));
+assert(!node('affidavitPreview').innerHTML.includes('DECLARATION / UNDERTAKING'));
+assert(!node('affidavitPreview').innerHTML.includes('EPF'));
+assert(!node('affidavitPreview').innerHTML.includes('ESIC'));
+ctx.window.openAffidavitForTender('TENDER-1');
+assert.equal(node('affSelectAffidavit').checked,false);
+node('affSelectNoRelation').checked=false;node('affSelectAnnexureH').checked=false;node('affSelectAnnexureH').change();
+assert(node('affidavitWord').disabled&&node('affidavitPdf').disabled);
+node('affidavitPdf').click();
+assert(node('affidavitStatus').textContent.includes('कम से कम एक'));
+node('affSelectAffidavit').checked=true;node('affSelectNoRelation').checked=true;node('affSelectNoRelation').change();
 // Reference follows the Tender ID inside the same bold, underlined field.
 const sample={'Tender ID':'2026_MPPHC_538538_1','Reference Number':'NIT_21/2026-27_1',Title:'Repair of police station',Organisation:'MP Police Housing'};
 ctx.allTenders.push(sample);
@@ -43,5 +64,5 @@ for(const missing of ['',sample['Tender ID'],'NA']){
 }
 ctx.window.openAffidavitForTender('TENDER-1');assert(!node('affidavitPreview').innerHTML.includes('(ref no.'));
 console.log('PASS: incomplete profiles route to My Profile, saved profiles open Word/PDF options, parent/address survive legacy responses, editing resumes the selected tender and downloads do not resave basic details.');
-console.log('PASS: certificate preview includes the saved profile letterhead and only available contact details.');
+console.log('PASS: certificate preview includes the saved profile letterhead and available mobile and required profile email; selected document previews and empty-choice protection work.');
 console.log('PASS: affidavit shows the selected tender reference in bold/underline, omits missing references and does not reuse another tender reference.');

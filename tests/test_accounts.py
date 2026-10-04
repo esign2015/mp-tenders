@@ -17,7 +17,7 @@ class AccountsTests(unittest.TestCase):
             if old['revision']!=fields['expected_revision']:return {'updated':False}
             record['revision']=old['revision']+1;records[record['user_id']]=deepcopy(record)
             return {'updated':True}
-        profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','parentRelation':'D/o','parentName':'Parent Test','address':'Ward 2, Kannod'}
+        profile={'bidderName':'Bidder Test','email':'bidder@example.test','pan':'ABCDE1234F','registrationNumber':'REG-42','registrationDate':'2025-01-01','registrationValidTill':'2030-01-01','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','parentRelation':'D/o','parentName':'Parent Test','address':'Ward 2, Kannod'}
         legacy={k:v for k,v in profile.items() if k not in ('parentRelation','parentName','address')}
         with patch.object(sheets,'enabled',return_value=True),patch.object(server.account_service,'operation',side_effect=operation),patch.object(sheets,'call',return_value={'profile':legacy}) as call,patch('account_access._detail_pool.submit',side_effect=lambda fn:fn()):
             saved=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile})
@@ -228,8 +228,12 @@ class AccountsTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/accounts/forgot-check',json={'mobile':self.data['mobile']}).status_code,200)
     def test_new_login_revokes_old_session_and_preserves_affidavit(self):
         first=self.signup()
-        profile={'bidderName':'Bidder Test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','parentRelation':'W/o','parentName':'Spouse Test','address':'Ward 2, Dewas'}
+        profile={'bidderName':'Bidder Test','email':'bidder@example.test','pan':'ABCDE1234F','registrationNumber':'REG-42','registrationDate':'2025-01-01','registrationValidTill':'2030-01-01','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','parentRelation':'W/o','parentName':'Spouse Test','address':'Ward 2, Dewas'}
         saved=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':profile});self.assertEqual(saved.status_code,200)
+        cached_client={key:value for key,value in profile.items() if key not in ('email','pan','registrationNumber','registrationDate','registrationValidTill')}
+        saved_again=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':cached_client})
+        self.assertEqual(saved_again.status_code,200)
+        for key in ('email','pan','registrationNumber'):self.assertEqual(saved_again.json['profile'][key],profile[key])
         second=self.login().json
         self.assertEqual(self.client.post('/api/accounts/session-check',json={'session_token':first['session_token']}).status_code,401)
         self.assertEqual(self.client.post('/api/accounts/session-check',json={'session_token':second['session_token']}).status_code,200)

@@ -45,6 +45,7 @@ window.saveDashboardAffidavitProfile=async function(profile){
   if(!token)throw new Error('पहले Name, Mobile और District save करें।');
   const result=await visitorPost('/affidavit',{session_token:token,profile});
   if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)throw new Error('Session changed. Please Sign in again.');
+  if(profile.email && result.profile?.email!==profile.email)throw new Error('Email सहित profile save नहीं हुई। कृपया refresh करके फिर कोशिश करें।');
   window.dashboardAffidavitProfile=result.profile;
   window.dashboardAffidavitProfileCanonical=!!result.canonical;
   window.cacheDashboardAffidavitProfile?.(result.profile);

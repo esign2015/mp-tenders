@@ -606,11 +606,32 @@ def visitor_affidavit():
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
     if profile is not None:
-        keys=('bidderName','firmName','status','place','relative','relativeName','relativePost','relativePosting','parentName','parentRelation','address')
+        keys=('bidderName', 'parentRelation', 'parentName', 'address', 'firmName', 'status', 'place', 'relative', 'relativeName', 'relativePost', 'relativePosting', 'email', 'registrationNumber', 'registrationClass', 'registrationDate', 'registrationValidTill', 'pan', 'gst', 'telephone', 'fax', 'representativeName', 'representativeDesignation', 'representativeAddress', 'representativeTelephone', 'representativeFax', 'representativeMobile', 'representativeEmail', 'organisationType')
         if not isinstance(profile,dict):
             return jsonify({'ok':False,'message':'Invalid affidavit profile.'}),400
-        profile={key:clean(profile.get(key)) for key in keys}
+        saved_profile=(account or {}).get('affidavit_profile') or {}
+        if not saved_profile and not sheet_store.enabled():
+            existing=visitor_db()
+            try:
+                row=existing.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
+                saved_profile=json.loads(row['profile_json']) if row else {}
+            finally:
+                existing.close()
+        profile={key:clean(profile.get(key,saved_profile.get(key))) for key in keys}
         profile['parentRelation']=profile['parentRelation'] or 'S/o'
+        import re
+        if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',profile['email']):
+            return jsonify({'ok':False,'message':'Letterhead के लिए सही email अनिवार्य है.'}),400
+        if profile['representativeEmail'] and not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',profile['representativeEmail']):
+            return jsonify({'ok':False,'message':'Authorized representative का email सही भरें.'}),400
+        for key in ('registrationDate','registrationValidTill'):
+            if profile[key]:
+                try:
+                    from datetime import date
+                    date.fromisoformat(profile[key])
+                except ValueError:
+                    return jsonify({'ok':False,'message':'Registration date सही भरें.'}),400
+
         if (any(len(value)>240 for value in profile.values())
             or not all(profile[key] for key in ('bidderName','firmName','status','place'))
             or profile['parentRelation'] not in ('S/o','D/o','W/o')

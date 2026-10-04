@@ -1903,6 +1903,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 .affidavit-status{font-size:11px;font-weight:700;color:#475569;margin-top:8px}
 .affidavit-modal.download-mode .affidavit-card{width:min(620px,96vw)}
 .affidavit-modal.download-mode .affidavit-grid>.affidavit-field:not(.affidavit-date-field),.affidavit-modal.download-mode .affidavit-relative-box,.affidavit-modal.download-mode .affidavit-preview,.affidavit-modal.download-mode #affidavitSaveProfile,.affidavit-modal.download-mode #affidavitProfileSaveStatus{display:none!important}
+.document-choices{margin:0 0 14px;padding:12px;border:1px solid #cbd5e1;border-radius:8px}.document-choices legend{font-size:13px;font-weight:800}.document-choice-options{display:flex;flex-wrap:wrap;gap:12px 20px}.document-choice-options label{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;cursor:pointer}.document-choice-options input{width:18px;height:18px;accent-color:#1d4ed8}.annexure-profile-details{margin:12px 0}.annexure-profile-details summary{cursor:pointer;font-weight:700;color:#173d70}.annexure-preview-table{border-collapse:collapse;width:100%;font-size:10px;white-space:normal}.annexure-preview-table th,.annexure-preview-table td{border:1px solid #d9d9d9;padding:5px;overflow-wrap:anywhere}.affidavit-actions button:disabled{opacity:.5;cursor:not-allowed}
 .affidavit-download-summary{padding:14px;margin-bottom:14px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;font-size:13px;line-height:1.6;color:#173d70}.affidavit-download-summary button{margin-top:8px;padding:7px 12px;background:#173d70;color:white}
 @media(max-width:700px){.affidavit-card{padding:12px}.affidavit-head{margin:-12px -12px 10px;padding:10px 12px;top:-12px}.affidavit-actions{margin:10px -12px -12px;padding:9px 12px;bottom:-12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
 </style>
@@ -2072,8 +2073,8 @@ body.telegram-locked .site-footer{visibility:hidden}
 .account-form button[type="submit"][aria-busy="true"]{background:#dbeafe;color:#1d4ed8;cursor:wait}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
-<script src="assets/visitor_access.js?v=4"></script>
-<script src="assets/account_access.js?v=17"></script>
+<script src="assets/visitor_access.js?v=5"></script>
+<script src="assets/account_access.js?v=18"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -2115,13 +2116,14 @@ body.telegram-locked .site-footer{visibility:hidden}
       <datalist id="accountDistrictList"></datalist><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select><button class="user-profile-save" type="submit">Save Profile</button>
     </form>
     <form id="accountEditAffidavitForm">
-      <div class="account-profile-section-title">Affidavit / No Relation Profile</div>
+      <div class="account-profile-section-title">Documents / Letterhead Profile</div>
       <div class="user-profile-sub">यह basic जानकारी एक बार save करें। अगले tender पर फिर भरने की जरूरत नहीं होगी।</div>
       <label class="user-profile-label" for="accountAffBidderName">Bidder / Deponent का पूरा नाम</label><input class="user-profile-input" id="accountAffBidderName" maxlength="120" required>
       <label class="user-profile-label" for="accountAffParentRelation">Relationship</label><select class="user-profile-input" id="accountAffParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select>
       <label class="user-profile-label" for="accountAffParentName">Father / Parent / Spouse Name</label><input class="user-profile-input" id="accountAffParentName" maxlength="120" required>
       <label class="user-profile-label" for="accountAffAddress">Residential Address / पता</label><textarea class="user-profile-input" id="accountAffAddress" maxlength="240" rows="3" required></textarea>
       <label class="user-profile-label" for="accountAffFirmName">Firm / Company Name</label><input class="user-profile-input" id="accountAffFirmName" maxlength="160" required>
+      <label class="user-profile-label" for="accountAffEmail">Email for letterhead / लेटरहेड के लिए ईमेल *</label><input class="user-profile-input" id="accountAffEmail" type="email" maxlength="240" required>
       <label class="user-profile-label" for="accountAffStatus">Status in Firm / Company</label><select class="user-profile-input" id="accountAffStatus"><option>Proprietor</option><option>Partner</option><option>Director</option><option>Authorized Signatory</option><option>Other</option></select>
       <label class="user-profile-label" for="accountAffPlace">Verification Place</label><input class="user-profile-input" id="accountAffPlace" maxlength="100" required>
       <label class="user-profile-label" for="accountAffRelative">Close relative working in department?</label><select class="user-profile-input" id="accountAffRelative"><option value="no">No</option><option value="yes">Yes</option></select>
@@ -2130,7 +2132,8 @@ body.telegram-locked .site-footer{visibility:hidden}
         <label class="user-profile-label" for="accountAffRelativePost">Post</label><input class="user-profile-input" id="accountAffRelativePost" maxlength="120">
         <label class="user-profile-label" for="accountAffRelativePosting">Present Posting</label><input class="user-profile-input" id="accountAffRelativePosting" maxlength="160">
       </div>
-      <button class="user-profile-save" type="submit">Save Affidavit Profile</button>
+      <details class="annexure-profile-details"><summary>Annexure H की अतिरिक्त जानकारी (वैकल्पिक)</summary><p class="user-profile-sub">जो जानकारी नहीं भरी गई है, वह document में खाली रहेगी। Authorized representative अलग हो तो उसकी जानकारी भरें।</p><label class="user-profile-label" for="accountAffOrganisationType">Entity of Organization (खाली रहने पर status से)</label><select class="user-profile-input" id="accountAffOrganisationType"><option value="">Profile status से</option><option>Individual</option><option>Proprietary Firm</option><option>Partnership Firm</option><option>Limited Company</option><option>Corporation</option><option>Joint Venture</option></select><label class="user-profile-label" for="accountAffRegistrationNumber">Centralized Registration / Application No.</label><input class="user-profile-input" id="accountAffRegistrationNumber" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRegistrationClass">Registration Class</label><input class="user-profile-input" id="accountAffRegistrationClass" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRegistrationDate">Registration Date</label><input class="user-profile-input" id="accountAffRegistrationDate" type="date" maxlength="240"><label class="user-profile-label" for="accountAffRegistrationValidTill">Registration Valid Till</label><input class="user-profile-input" id="accountAffRegistrationValidTill" type="date" maxlength="240"><label class="user-profile-label" for="accountAffPan">PAN Number</label><input class="user-profile-input" id="accountAffPan" type="text" maxlength="240"><label class="user-profile-label" for="accountAffGst">GST Registration</label><input class="user-profile-input" id="accountAffGst" type="text" maxlength="240"><label class="user-profile-label" for="accountAffTelephone">Telephone with STD Code</label><input class="user-profile-input" id="accountAffTelephone" type="text" maxlength="240"><label class="user-profile-label" for="accountAffFax">Fax with STD Code</label><input class="user-profile-input" id="accountAffFax" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeName">Authorized Representative Name (खाली रहने पर bidder का नाम)</label><input class="user-profile-input" id="accountAffRepresentativeName" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeDesignation">Representative Designation (खाली रहने पर bidder का status)</label><input class="user-profile-input" id="accountAffRepresentativeDesignation" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeAddress">Representative Postal Address (खाली रहने पर profile address)</label><input class="user-profile-input" id="accountAffRepresentativeAddress" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeTelephone">Representative Telephone with STD Code</label><input class="user-profile-input" id="accountAffRepresentativeTelephone" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeFax">Representative Fax with STD Code</label><input class="user-profile-input" id="accountAffRepresentativeFax" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeMobile">Representative Mobile (खाली रहने पर registered mobile)</label><input class="user-profile-input" id="accountAffRepresentativeMobile" type="tel" maxlength="240"><label class="user-profile-label" for="accountAffRepresentativeEmail">Representative Email (खाली रहने पर letterhead email)</label><input class="user-profile-input" id="accountAffRepresentativeEmail" type="email" maxlength="240"></details>
+      <button class="user-profile-save" type="submit">Save Document Profile</button>
     </form>
     </div>
     <form id="accountChangePasswordForm" hidden>
@@ -2190,6 +2193,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       <button class="affidavit-close" id="affidavitClose" type="button" aria-label="Close">×</button>
     </div>
     <div class="affidavit-download-summary" id="affidavitDownloadSummary" hidden><div id="affidavitSavedDetails"></div><button type="button" id="affidavitEditProfile">👤 Profile में details बदलें</button></div>
+    <fieldset class="document-choices"><legend>कौन से documents डाउनलोड करने हैं?</legend><div class="document-choice-options"><label><input type="checkbox" id="affSelectAffidavit" checked> Affidavit</label><label><input type="checkbox" id="affSelectNoRelation" checked> No Relation</label><label><input type="checkbox" id="affSelectAnnexureH"> Annexure H</label></div></fieldset>
     <div class="affidavit-grid">
       <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="Bidder / Deponent का पूरा नाम"></div>
       <div class="affidavit-field"><label for="affParentRelation">Relationship (Page 2)</label><select id="affParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select></div>
@@ -6336,7 +6340,7 @@ enforceAccountAccess().then(async () => {
 (function(){
   let selectedAffidavitTender=null;
   const byId=id=>document.getElementById(id);
-  const AFFIDAVIT_FORMAT_NOTICE="General (universal) format: Before notarisation or attaching this affidavit to a bid, verify it against the prescribed format and requirements in the tender documents and make all necessary changes. SAR Digital Services, Kannod and this website are not responsible for required changes, discrepancies, or use of this format.";
+  const AFFIDAVIT_FORMAT_NOTICE="General (universal) format: Before notarisation or attaching this document to a bid, verify it against the prescribed format and requirements in the tender documents and make all necessary changes. SAR Digital Services, Kannod and this website are not responsible for required changes, discrepancies, or use of this format.";
   const profileKey=()=>{
     const telegramId=(typeof telegramAuthData!=="undefined" && telegramAuthData && telegramAuthData.id) ? String(telegramAuthData.id) : "local";
     const visitorId=window.dashboardVisitorProfile?.visitor_id;
@@ -6358,8 +6362,27 @@ enforceAccountAccess().then(async () => {
   window.getDashboardAffidavitProfile=getSavedProfile;
   window.cacheDashboardAffidavitProfile=function(profile){localStorage.setItem(profileKey(),JSON.stringify(profile));window.dashboardAffidavitProfile=profile;window.dashboardAffidavitProfileEdited=true;};
   function profileComplete(profile){
-    return ['bidderName','parentName','address','firmName','status','place'].every(key=>safe(profile[key]))&&['S/o','D/o','W/o'].includes(profile.parentRelation)&&['yes','no'].includes(profile.relative)&&
+    return validLetterheadEmail(profile.email||getSavedGeneralProfile().email)&&['bidderName','parentName','address','firmName','status','place'].every(key=>safe(profile[key]))&&['S/o','D/o','W/o'].includes(profile.parentRelation)&&['yes','no'].includes(profile.relative)&&
       (profile.relative!=='yes'||['relativeName','relativePost','relativePosting'].every(key=>safe(profile[key])));
+  }
+  function validLetterheadEmail(value){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safe(value)) && safe(value).length<=240;
+  }
+  const documentOptions=[['affidavit','affSelectAffidavit'],['noRelation','affSelectNoRelation'],['annexureH','affSelectAnnexureH']];
+  function selectedDocuments(){
+    return documentOptions.filter(([,id])=>byId(id)?.checked).map(([key])=>key);
+  }
+  function restoreDocumentChoices(){
+    let selected=['affidavit','noRelation'];
+    try{const stored=JSON.parse(localStorage.getItem(profileKey()+'_documents')||'null');if(Array.isArray(stored))selected=stored;}catch(_e){}
+    documentOptions.forEach(([key,id])=>{byId(id).checked=selected.includes(key);});
+  }
+  function updateDocumentChoices(){
+    const selected=selectedDocuments();
+    localStorage.setItem(profileKey()+'_documents',JSON.stringify(selected));
+    for(const id of ['affidavitWord','affidavitPdf'])byId(id).disabled=!selected.length;
+    byId('affidavitStatus').textContent=selected.length?'':'कम से कम एक document चुनें।';
+    updatePreview();
   }
   function saveNoticeDate(){
     try{const dates=JSON.parse(localStorage.getItem(profileKey()+"_notice_dates")||"{}");const id=safe(byId("affTenderId")?.value);if(id){dates[id]=safe(byId("affNoticeDate")?.value);localStorage.setItem(profileKey()+"_notice_dates",JSON.stringify(dates));}}catch(_e){}
@@ -6418,7 +6441,9 @@ enforceAccountAccess().then(async () => {
     return {
       ...readProfile(),
       mobile:safe(general.mobile),
-      email:safe(general.email),
+      email:safe(getSavedProfile().email||general.email),
+      documents:selectedDocuments(),
+      annexure:getSavedProfile(),
       parentName:safe(byId("affParentName")?.value),
       parentRelation:["S/o","D/o","W/o"].includes(byId("affParentRelation")?.value)?byId("affParentRelation").value:"S/o",
       address:safe(byId("affAddress")?.value),
@@ -6433,8 +6458,10 @@ enforceAccountAccess().then(async () => {
   }
   function validateDoc(d){
     const required=[["Bidder / Deponent Name",d.bidderName],["Firm / Company Name",d.firmName],["Status",d.status],["Verification Place",d.place],["Tender Reference",d.tenderRef],["Name of Work",d.workName],["Department / Organisation",d.department],["Verification Date",d.verifyDate]];
+    if(!d.documents.length){byId("affidavitStatus").textContent="कम से कम एक document चुनें।";return false;}
+    if(d.documents.some(key=>key!=='affidavit')&&!validLetterheadEmail(d.email)){byId("affidavitStatus").textContent="Letterhead के लिए My Profile में सही email save करें।";return false;}
     const miss=required.filter(x=>!x[1]).map(x=>x[0]);
-    if(d.relative==="yes" && (!d.relativeName || !d.relativePost || !d.relativePosting)) miss.push("Close-relative Name, Post और Present Posting");
+    if(d.documents.some(key=>key!=='annexureH') && d.relative==="yes" && (!d.relativeName || !d.relativePost || !d.relativePosting)) miss.push("Close-relative Name, Post और Present Posting");
     if(miss.length){byId("affidavitStatus").textContent="पहले यह जानकारी भरें: "+miss.join(", ");return false;}
     return true;
   }
@@ -6503,8 +6530,35 @@ enforceAccountAccess().then(async () => {
     const field=value=>'<strong><u>'+escapeHtml(value)+'</u></strong>';
     return '<hr>'+letterheadPreview(d)+'<p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationSegments(d).map(segments=>'<p class="aff-prev-justify">'+segments.map(s=>s.bold?field(s.text):escapeHtml(s.text)).join('')+'</p>').join('')+'<div class="aff-sign-space"></div><p style="display:flex;justify-content:space-between;gap:20px"><span>Date: '+field(d.verifyDate)+'</span><span>Signature ____________________</span></p><p style="display:flex;justify-content:space-between;gap:20px"><span>Place: '+field(d.place)+'</span><span>'+field(d.bidderName)+'</span></p>';
   }
+  const ANNEXURE_NOTE="Note: In case of partnership firm and limited company certified copy of partnership deed/ Articles of Association and Memorandum of Association along with registration certificate of the company shall have to be enclosed.";
+  const ANNEXURE_LABELS=[["1.", "Registration number issued by Centralized Registration System of Govt. of M.P. or Proof of application for registration."], ["2.", "Valid Registration of bidder in appropriate class through Centralized Registration of Govt. of MP"], ["3.", "Name of Organization/ Individual/ Proprietary Firm/ Partnership Firm"], ["4.", "Entity of Organization Individual/ Proprietary Firm/ Partnership Firm (Registered under Partnership Act)/ Limited Company (Registered under the Companies Act\u20131956)/ Corporation/ Joint Venture"], ["5.", "PAN Number"], ["6.", "GST Registration"], ["7.", "Address of Communication"], ["8.", "Telephone Number with STD Code"], ["9.", "Fax Number with STD Code"], ["10.", "Mobile Number"], ["11.", "E-mail Address for all communications"], ["", "Details of Authorized Representative"], ["12.", "Name"], ["13.", "Designation"], ["14.", "Postal Address"], ["15.", "Telephone Number with STD Code"], ["16.", "Fax Number with STD Code"], ["17.", "Mobile Number"], ["18.", "E-mail Address"]];
+
+  function annexureRows(d){
+    const a=d.annexure||{},blank='____________________';
+    const value=key=>safe(a[key])||blank;
+    const entity=safe(a.organisationType)||({Proprietor:'Proprietary Firm',Partner:'Partnership Firm',Director:'Limited Company'}[d.status]||blank);
+    const details={
+      '1.':value('registrationNumber')+'\n(If applicable, scanned copy of proof of application for registration to be uploaded)',
+      '2.':'Registration No: '+value('registrationNumber')+'\nClass: '+value('registrationClass')+'\nDate: '+(formatVerifyDate(a.registrationDate)||'__/__/____')+'\nValid Till: '+(formatVerifyDate(a.registrationValidTill)||'__/__/____'),
+      '3.':d.firmName,'4.':entity,'5.':value('pan'),'6.':value('gst'),'7.':d.address,
+      '8.':value('telephone'),'9.':value('fax'),'10.':d.mobile||blank,'11.':d.email,
+      '12.':safe(a.representativeName)||d.bidderName,'13.':safe(a.representativeDesignation)||d.status,
+      '14.':safe(a.representativeAddress)||d.address,'15.':value('representativeTelephone'),'16.':value('representativeFax'),
+      '17.':safe(a.representativeMobile)||d.mobile||blank,'18.':safe(a.representativeEmail)||d.email
+    };
+    return ANNEXURE_LABELS.map(([number,label])=>[number,label,details[number]||'']);
+  }
+  function annexurePreview(d){
+    return '<hr>'+letterheadPreview(d)+'<p class="aff-prev-center"><strong>Annexure - H</strong></p>'+
+      '<p class="aff-prev-center">(See clause 12 of Section 2 –ITB &amp; clause 4 of GCC)</p>'+
+      '<p class="aff-prev-center"><strong>ORGANIZATIONAL DETAILS (To be Contained in Envelope - A)</strong></p>'+
+      '<table class="annexure-preview-table"><thead><tr><th>S.No.</th><th>Particulars</th><th>Details</th></tr></thead><tbody>'+
+      annexureRows(d).map(row=>'<tr>'+row.map(value=>'<td>'+escapeHtml(value).replace(/\n/g,'<br>')+'</td>').join('')+'</tr>').join('')+
+      '</tbody></table><p>'+escapeHtml(ANNEXURE_NOTE)+'</p><p>Date: '+escapeHtml(d.verifyDate)+'</p><p class="aff-prev-right">Signature of Bidder with Seal</p>';
+  }
   function updatePreview(){
     const d=documentData();
+    for(const id of ['affidavitWord','affidavitPdf'])byId(id).disabled=!d.documents.length;
     const point3=d.relative==="yes"
       ? '<p class="aff-prev-list aff-strike">3. No close relative of the undersigned and our firm/company is working in the department.</p>'
       : '<p class="aff-prev-list">3. No close relative of the undersigned and our firm/company is working in the department. <strong>✓</strong></p>';
@@ -6516,7 +6570,7 @@ enforceAccountAccess().then(async () => {
       ? '<p class="aff-prev-relative-detail">Name <strong><u>'+escapeHtml(d.relativeName)+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost)+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting)+'</u></strong></p>'
       : '<p class="aff-prev-relative-detail aff-strike-inline">Name <strong><u>NA</u></strong> &nbsp;&nbsp; Post <strong><u>NA</u></strong> &nbsp;&nbsp; Present Posting <strong><u>NA</u></strong></p>';
     const relHtml=point3+orLine+point4+relativeDetails;
-    byId("affidavitPreview").innerHTML=
+    const affidavitHtml=
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
       '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200.00)</em></p>'+
@@ -6532,10 +6586,12 @@ enforceAccountAccess().then(async () => {
       '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+
       '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
       '<p class="aff-prev-left">Verified today <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> (dated) at <strong><u>'+escapeHtml(d.place)+'</u></strong> (place).</p>'+
-      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+noRelationPreview(d);
+      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>';
+    byId('affidavitPreview').innerHTML=(d.documents.includes('affidavit')?affidavitHtml:'')+(d.documents.includes('noRelation')?noRelationPreview(d):'')+(d.documents.includes('annexureH')?annexurePreview(d):'');
   }
   function fillFromTender(row){
     selectedAffidavitTender=row;
+    restoreDocumentChoices();
     const saved=getSavedProfile();
     const general=getSavedGeneralProfile();
     const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
@@ -6570,18 +6626,18 @@ enforceAccountAccess().then(async () => {
     if(!profileComplete(saved)){
       window.pendingAffidavitTenderId=id;
       byId('accountProfileBtn')?.onclick?.();
-      byId('accountSettingsStatus').textContent='पहले Affidavit Profile में नाम, पिता/संबंधित व्यक्ति का नाम, address और firm की basic details save करें।';
+      byId('accountSettingsStatus').textContent='पहले Document Profile में नाम, पिता/संबंधित व्यक्ति का नाम, address, firm और सही email save करें।';
       byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});
       return;
     }
     fillFromTender(source);
     const modal=byId("affidavitModal");modal.classList.add('download-mode');modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
-    byId('affidavitTitle').textContent='📄 Download Affidavit / No Relation';
+    byId('affidavitTitle').textContent='📄 Download Tender Documents';
     byId('affidavitDownloadSummary').hidden=false;
     byId('affidavitSavedDetails').textContent=saved.bidderName+' • '+saved.firmName+' • '+saved.place+' — Certificate में profile से letterhead भी छपेगा।';
   };
   function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
-  function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
+  function fileBase(d){return ((d.documents.length===1?({affidavit:"Affidavit",noRelation:"No_Relation",annexureH:"Annexure_H"}[d.documents[0]]):"Tender_Documents")+"_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
   function isMobileChrome(){
     const ua=navigator.userAgent||"";
     return /Android/i.test(ua) && /Chrome\//i.test(ua);
@@ -6621,10 +6677,10 @@ enforceAccountAccess().then(async () => {
   async function downloadWord(){
     const d=documentData();if(!validateDoc(d))return;saveNoticeDate();
     const mobileWindow=reserveMobileDownloadWindow();
-    byId("affidavitStatus").textContent="⏳ Word affidavit तैयार हो रही है…";
+    byId("affidavitStatus").textContent="⏳ चुने हुए Word documents तैयार हो रहे हैं…";
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
-      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink,TabStopType,BorderStyle}=window.docx;
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink,TabStopType,BorderStyle,Table,TableRow,TableCell,WidthType,VerticalAlign}=window.docx;
       const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
@@ -6638,6 +6694,7 @@ enforceAccountAccess().then(async () => {
       });
       const normal={before:100,after:100};
       const paragraphs=[];
+      if(d.documents.includes('affidavit')){
       // These first three lines are centered in the supplied affidavit.
       paragraphs.push(para([run("|| AFFIDAVIT ||",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       paragraphs.push(para([run("(To be contained in Envelope A)",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
@@ -6691,11 +6748,16 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
-      // Print the saved profile's letterhead on the certificate's own page.
+      }
+      // Print the saved profile's letterhead on each selected certificate.
+      const appendLetterhead=()=>{
       const headerRun=(text,size,bold=false)=>new TextRun({text,font:"Arial",size,bold,color:"243B53"});
-      paragraphs.push(para([headerRun(d.firmName,d.firmName.length>70?32:44,true)],{pageBreakBefore:true,alignment:AlignmentType.CENTER,keepNext:true,spacing:{before:160,after:100}}));
+        paragraphs.push(para([headerRun(d.firmName,d.firmName.length>70?32:44,true)],{pageBreakBefore:paragraphs.length>0,alignment:AlignmentType.CENTER,keepNext:true,spacing:{before:160,after:100}}));
       const details=letterheadDetails(d);
       details.forEach((line,index)=>paragraphs.push(para([headerRun(line,18)],{alignment:AlignmentType.CENTER,keepNext:true,spacing:{before:0,after:index===details.length-1?360:60},border:index===details.length-1?{bottom:{style:BorderStyle.SINGLE,size:12,color:"243B53",space:12}}:undefined})));
+      };
+      if(d.documents.includes('noRelation')){
+      appendLetterhead();
       paragraphs.push(para([run(relationTitle(d),true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       for(const segments of noRelationSegments(d))paragraphs.push(para(segments.map(s=>run(s.text,!!s.bold,false,20,!!s.underline)),{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
@@ -6703,18 +6765,38 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([run("Date: "),run(d.verifyDate,true,false,20,true),run("\tSignature ____________________")],relationRow));
       paragraphs.push(para([run("Place: "),run(d.place,true,false,20,true),run("\t"),run(d.bidderName,true,false,20,true)],relationRow));
 
+      }
+      if(d.documents.includes('annexureH')){
+        appendLetterhead();
+        paragraphs.push(para([run('Annexure - H',true,false,26)],{alignment:AlignmentType.CENTER,keepNext:true,spacing:{after:80}}));
+        paragraphs.push(para([run('(See clause 12 of Section 2 –ITB & clause 4 of GCC)',false,false,18)],{alignment:AlignmentType.CENTER,keepNext:true,spacing:{after:80}}));
+        paragraphs.push(para([run('ORGANIZATIONAL DETAILS (To be Contained in Envelope - A)',true,false,20)],{alignment:AlignmentType.CENTER,keepNext:true,spacing:{after:140}}));
+        const widths=[600,5250,4616],border={style:BorderStyle.SINGLE,size:4,color:'D9D9D9'};
+        const rows=[['S.No.','Particulars','Details'],...annexureRows(d)];
+        paragraphs.push(new Table({width:{size:10466,type:WidthType.DXA},columnWidths:widths,
+          rows:rows.map((row,index)=>new TableRow({tableHeader:index===0,cantSplit:true,
+            children:row.map((value,column)=>new TableCell({width:{size:widths[column],type:WidthType.DXA},verticalAlign:VerticalAlign.CENTER,
+              margins:{top:65,bottom:65,left:85,right:85},borders:{top:border,bottom:border,left:border,right:border},
+              shading:index===0?{fill:'E8EEF5'}:undefined,
+              children:String(value).split('\n').map(line=>para([run(line,index===0||!row[0]||column===2,false,18)],{alignment:column===0?AlignmentType.CENTER:AlignmentType.LEFT,spacing:{after:0,line:220,lineRule:LineRuleType.AUTO}}))}))
+          }))}));
+        paragraphs.push(para([run(ANNEXURE_NOTE,false,false,18)],{spacing:{before:120,after:100}}));
+        paragraphs.push(para([run('Date: '+d.verifyDate)],{spacing:{before:120,after:80}}));
+        paragraphs.push(para([run('Signature of Bidder with Seal',true)],{alignment:AlignmentType.RIGHT,spacing:{before:400,after:100}}));
+
+      }
       const doc=new Document({
         styles:{default:{document:{run:{font:"Times New Roman",size:20}}}},
         sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:1440,left:720,header:720,footer:360}}},footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"This format is downloaded from ",size:16,font:"Arial",color:"000000"}),new ExternalHyperlink({link:"https://tenders.codinglms.xyz",children:[new TextRun({text:"https://tenders.codinglms.xyz",size:18,font:"Arial",bold:true,underline:{},color:"000000"})]}),new TextRun({text:" • SAR Digital Services, Kannod • MP Tender Live Dashboard",size:16,font:"Arial",color:"000000"})]}),new Paragraph({alignment:AlignmentType.JUSTIFIED,spacing:{before:80,after:0},children:[new TextRun({text:AFFIDAVIT_FORMAT_NOTICE,size:16,font:"Arial",color:"000000"})]})]})},children:paragraphs}]
       });
       const blob=await Packer.toBlob(doc);downloadBlob(blob,fileBase(d)+".docx",mobileWindow);
-      byId("affidavitStatus").textContent="✓ Word affidavit source format की alignment/position के अनुसार तैयार है।";
+      byId("affidavitStatus").textContent="✓ चुने हुए Word documents तैयार हैं।";
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="Word file बनाते समय error: "+e.message;}
   }
   function downloadPdf(){
     const d=documentData();if(!validateDoc(d))return;saveNoticeDate();
     const mobileWindow=reserveMobileDownloadWindow();
-    byId("affidavitStatus").textContent="⏳ PDF affidavit तैयार हो रही है…";
+    byId("affidavitStatus").textContent="⏳ चुने हुए PDF documents तैयार हो रहे हैं…";
     try{
       const jsPDF=window.jspdf?.jsPDF;if(!jsPDF) throw new Error("PDF library load नहीं हुई");
       const doc=new jsPDF({unit:"mm",format:"a4"});
@@ -6817,6 +6899,7 @@ enforceAccountAccess().then(async () => {
         doc.setFont("times",bold?"bold":"normal");doc.setFontSize(10);addPageIf(7);
         doc.text(text,right,y,{align:"right"});y+=7;
       };
+      if(d.documents.includes('affidavit')){
       center("|| AFFIDAVIT ||",true,false,14,3);
       center("(To be contained in Envelope A)",true,false,14,3);
       center("(On Non Judicial Stamp of Rs. 200.00)",false,true,10,4);
@@ -6896,7 +6979,10 @@ enforceAccountAccess().then(async () => {
       ],{firstIndent:12.7,after:5});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
-      doc.addPage();y=22;
+      }
+      let documentsStarted=d.documents.includes('affidavit');
+      const appendLetterhead=()=>{
+        if(documentsStarted)doc.addPage();documentsStarted=true;y=22;
       doc.setTextColor(36,59,83);doc.setFont("helvetica","bold");doc.setFontSize(d.firmName.length>70?16:22);
       const firmLines=doc.splitTextToSize(d.firmName,width);
       doc.text(firmLines,105,y,{align:"center"});y+=firmLines.length*8+2;
@@ -6907,6 +6993,9 @@ enforceAccountAccess().then(async () => {
       }
       doc.setDrawColor(36,59,83);doc.setLineWidth(0.6);doc.line(left,y+1,right,y+1);
       y+=12;doc.setTextColor(0);doc.setDrawColor(0);
+      };
+      if(d.documents.includes('noRelation')){
+      appendLetterhead();
       center(relationTitle(d),true,false,14,5);
       for(const segments of noRelationSegments(d))richParagraph(segments,{leading:5.7,after:4});
       y+=18;
@@ -6931,6 +7020,25 @@ enforceAccountAccess().then(async () => {
         y+=rowHeight;
       }
 
+      }
+      if(d.documents.includes('annexureH')){
+        appendLetterhead();
+        center('Annexure - H',true,false,13,1);
+        center('(See clause 12 of Section 2 –ITB & clause 4 of GCC)',false,false,9,1);
+        center('ORGANIZATIONAL DETAILS (To be Contained in Envelope - A)',true,false,10,1);
+        if(typeof doc.autoTable!=='function')throw new Error('Table PDF library load नहीं हुई');
+        doc.autoTable({startY:y,head:[['S.No.','Particulars','Details']],body:annexureRows(d),
+          margin:{left,right:18,top:18,bottom:35},tableWidth:width,pageBreak:'auto',rowPageBreak:'avoid',
+          styles:{font:'times',fontSize:9,cellPadding:0.85,lineColor:[217,217,217],lineWidth:0.15,overflow:'linebreak',valign:'middle',textColor:0},
+          headStyles:{fillColor:[232,238,245],textColor:0,fontStyle:'bold'},
+          columnStyles:{0:{cellWidth:10,halign:'center'},1:{cellWidth:87},2:{cellWidth:77,fontStyle:'bold'}},
+          didParseCell:data=>{if(data.section==='body'&&!data.row.raw[0]){data.cell.styles.fontStyle='bold';data.cell.styles.fillColor=[245,247,250];}}
+        });
+        y=doc.lastAutoTable.finalY+6;
+        textBlock(ANNEXURE_NOTE,{size:9,leading:4.4,after:3});
+        addPageIf(25);textBlock('Date: '+d.verifyDate,{after:2});y+=10;rightText('Signature of Bidder with Seal',true);
+
+      }
       const pageCount=doc.getNumberOfPages();
       for(let pageNo=1;pageNo<=pageCount;pageNo++){
         doc.setPage(pageNo);doc.setDrawColor(190);doc.setLineWidth(0.2);doc.line(18,271,192,271);
@@ -6969,7 +7077,7 @@ enforceAccountAccess().then(async () => {
         if(mobileWindow && !mobileWindow.closed) mobileWindow.close();
         doc.save(pdfName);
       }
-      byId("affidavitStatus").textContent="✓ PDF affidavit तैयार है। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
+      byId("affidavitStatus").textContent="✓ चुने हुए PDF documents तैयार हैं। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
   function init(){
@@ -6979,6 +7087,7 @@ enforceAccountAccess().then(async () => {
     ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId('affNoticeDate')?.addEventListener('change',saveNoticeDate);
     byId('affidavitEditProfile')?.addEventListener('click',()=>{const id=safe(byId('affTenderId')?.value);closeModal();window.pendingAffidavitTenderId=id;byId('accountProfileBtn')?.onclick?.();byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});});
+    documentOptions.forEach(([,id])=>byId(id)?.addEventListener('change',updateDocumentChoices));
     byId("affidavitWord")?.addEventListener("click",downloadWord);
     byId("affidavitPdf")?.addEventListener("click",downloadPdf);
     document.addEventListener("click",e=>{const b=e.target.closest("[data-affidavit-id]");if(!b)return;e.preventDefault();e.stopPropagation();window.openAffidavitForTender(b.getAttribute("data-affidavit-id"));});
