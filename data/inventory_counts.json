@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-04T22:06:01.515120+05:30",
+    "checked_at": "2026-10-04T22:17:44.217433+05:30",
     "snapshot_at": "2026-10-04T15:54:17.281204+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5322,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-04T16:36:02.583974+00:00",
+  "updated_at": "2026-10-04T16:47:44.860247+00:00",
   "snapshot_at": "2026-10-04T15:54:17.281204+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5322,
   "copied_tenders": 5322,
-  "detail_complete": 5276,
+  "detail_complete": 5278,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 46,
+  "detail_pending": 44,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -1023,10 +1023,10 @@
       "snapshot_at": "2026-10-04T15:54:17.281204+00:00",
       "portal_tender_count": 83,
       "copied_tenders": 83,
-      "detail_complete": 81,
+      "detail_complete": 83,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
@@ -1075,16 +1075,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 44,
-  "missing_district_count": 2,
-  "missing_district_ids": [
-    "2026_RES_535681_1",
-    "2026_RES_535683_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 374,
   "department_count": 334,
-  "missing_pincode_count": 2,
-  "missing_pincode_ids": [
-    "2026_RES_535681_1",
-    "2026_RES_535683_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
