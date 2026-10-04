@@ -11,47 +11,24 @@ class VisitorTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory()
         self.database=patch.object(server,'DATABASE_URL','');self.database.start()
         self.path=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.path.start()
-        self.secret=patch.dict('os.environ',{'VISITOR_SESSION_SECRET':'visitor-test-secret','VISITOR_PROFILE_LEGACY_ALLOWED':'1'});self.secret.start()
+        self.secret=patch.dict('os.environ',{'ADMIN_SESSION_SECRET':'visitor-test-secret','GOOGLE_SHEETS_WEBAPP_URL':'','GOOGLE_SHEETS_SHARED_SECRET':'','ALLOW_EPHEMERAL_ACCOUNTS':'1'});self.secret.start()
+        self.clock=patch('account_access.time.time',return_value=1800000000);self.clock.start();self.number=0
         self.client=server.app.test_client()
     def tearDown(self):
-        self.secret.stop();self.path.stop();self.database.stop();self.tmp.cleanup()
-    def payload(self):return {'registration_id':str(uuid.uuid4()),'name':'Visitor Test','mobile':'9876543210','district':'Dewas'}
-    def test_save_three_fields_once_restore_and_export_without_telegram(self):
-        data=self.payload()
-        with patch.object(server,'telegram_api',side_effect=AssertionError('Telegram must not be called')):
-            response=self.client.post('/api/visitors/register',json=data)
-            self.assertEqual(response.status_code,200)
-            self.assertEqual(response.json['profile'],{'name':'Visitor Test','mobile':'+919876543210','district':'Dewas'})
-            self.assertEqual(self.client.post('/api/visitors/register',json=data).status_code,200)
-            token=response.json['session_token']
-            restored=self.client.post('/api/visitors/session',json={'session_token':token})
-            self.assertEqual(restored.status_code,200)
-            self.assertEqual(restored.headers['Cache-Control'],'no-store')
-        self.assertIsNone(server.read_telegram_session(token))
-        conn=server.visitor_db()
-        self.assertEqual(conn.execute('SELECT COUNT(*) FROM visitor_registrations').fetchone()[0],1)
-        self.assertEqual(conn.execute('SELECT COUNT(*) FROM users').fetchone()[0],0)
-        self.assertEqual(conn.execute('SELECT visit_count FROM visitor_registrations').fetchone()[0],2)
-        conn.close()
+        self.clock.stop();self.secret.stop();self.path.stop();self.database.stop();self.tmp.cleanup()
+    def payload(self):
+        self.number+=1
+        return {'first_name':'Visitor','last_name':'Test','mobile':str(9876543210+self.number),'district':'Dewas','tehsil':'Kannod','password':'Private1!','confirm_password':'Private1!'}
+    def test_removed_login_routes_are_404_and_legacy_rows_survive(self):
+        conn=server.visitor_db();key=str(uuid.uuid4())
+        conn.execute('INSERT INTO visitor_registrations (visitor_id,name,mobile,district,signup_at,last_visit_at,visit_count) VALUES (?,?,?,?,?,?,?)',(key,'=1+1','+919876543210','Dewas','2026-01-01','2026-01-01',1));conn.commit();conn.close()
+        for path in ('/api/visitors/register','/api/visitors/session','/api/telegram/auth','/api/telegram/session'):
+            self.assertEqual(self.client.post(path,json={}).status_code,404)
         workbook=load_workbook(BytesIO(server.build_user_excel()))
-        self.assertEqual(list(workbook['Visitor Registrations'].values)[1][1:4],('Visitor Test','+919876543210','Dewas'))
-    def test_invalid_input_and_tampered_token_are_rejected(self):
-        for change in ({'name':''},{'mobile':'1234'},{'district':''},{'registration_id':'1'}):
-            self.assertEqual(self.client.post('/api/visitors/register',json={**self.payload(),**change}).status_code,400)
-        token=self.client.post('/api/visitors/register',json=self.payload()).json['session_token']
-        self.assertEqual(self.client.post('/api/visitors/session',json={'session_token':token+'x'}).status_code,401)
-        self.assertEqual(self.client.post('/api/users/export',json={'session_token':token}).status_code,403)
-        self.assertEqual(self.client.get('/api/admin/visitor-registrations').status_code,401)
-    def test_replayed_registration_cannot_overwrite_profile(self):
-        data=self.payload();self.client.post('/api/visitors/register',json=data)
-        self.assertEqual(self.client.post('/api/visitors/register',json={**data,'name':'Different person'}).status_code,409)
-    def test_formula_input_is_exported_as_text(self):
-        self.client.post('/api/visitors/register',json={**self.payload(),'name':'=1+1'})
-        workbook=load_workbook(BytesIO(server.build_user_excel()))
-        self.assertEqual(workbook['Visitor Registrations']['B2'].value,'=1+1')
-        self.assertEqual(workbook['Visitor Registrations']['B2'].data_type,'s')
+        self.assertEqual(workbook['Visitor Registrations']['B2'].value,'=1+1');self.assertEqual(workbook['Visitor Registrations']['B2'].data_type,'s')
+
     def test_document_profile_requires_email_and_validates_registration_dates(self):
-        token=self.client.post('/api/visitors/register',json=self.payload()).json['session_token']
+        token=self.client.post('/api/accounts/signup',json=self.payload()).json['session_token']
         profile={'bidderName':'Bidder','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','email':'bidder@example.test'}
         for change in ({'email':''},{'email':'invalid'},{'representativeEmail':'bad address'},{'registrationDate':'2026-02-30'},{'pincode':'12345'},{'pincode':'000000'}):
             response=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{**profile,**change}})
@@ -62,7 +39,7 @@ class VisitorTests(unittest.TestCase):
         for key in profile:self.assertEqual(restored[key],profile[key])
 
     def test_structured_address_and_gst_pan_validation(self):
-        token=self.client.post('/api/visitors/register',json=self.payload()).json['session_token']
+        token=self.client.post('/api/accounts/signup',json=self.payload()).json['session_token']
         profile={'bidderName':'Bidder','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','email':'bidder@example.test','houseNumber':'12','roadStreet':'Main Road','locality':'Pipla','landmark':'Near Temple','gst':'23abcde1234f1z5','pan':''}
         saved=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile})
         self.assertEqual(saved.status_code,200)
@@ -81,12 +58,12 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(changed.json['profile']['houseNumber'],'')
 
     def test_affidavit_profile_restores_only_in_its_signed_session(self):
-        first=self.client.post('/api/visitors/register',json=self.payload()).json
-        second=self.client.post('/api/visitors/register',json=self.payload()).json
+        first=self.client.post('/api/accounts/signup',json=self.payload()).json
+        second=self.client.post('/api/accounts/signup',json=self.payload()).json
         profile={'bidderName':'Bidder','email':'bidder@example.test','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no'}
         saved=self.client.post('/api/visitors/affidavit',json={'session_token':first['session_token'],'profile':profile})
         self.assertEqual(saved.status_code,200)
-        restored=self.client.post('/api/visitors/session',json={'session_token':first['session_token']})
+        restored=self.client.post('/api/accounts/session',json={'session_token':first['session_token']})
         self.assertEqual(restored.json['affidavit_profile']['firmName'],'Firm')
         isolated=self.client.post('/api/visitors/affidavit',json={'session_token':second['session_token']})
         self.assertEqual(isolated.json['profile'],{})

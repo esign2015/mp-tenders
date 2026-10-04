@@ -22,11 +22,11 @@ class Pdf{
  }
  addPage(){this.pages++;this.currentPage=this.pages;}setPage(page){this.currentPage=page;}save(name){this.saved=name;}
 }
-const context=vm.createContext({window:{jspdf:{jsPDF:Pdf}},clean:v=>String(v??'').trim(),
+const context=vm.createContext({ensureExportLibraries:async()=>{},window:{jspdf:{jsPDF:Pdf}},clean:v=>String(v??'').trim(),
  cleanDisplayTitle:v=>String(v??''),formatClosingDateTime:v=>v,
  formatPdfAmount:v=>String(v),filteredTenders:[],allTenders:[],
  quickFilterMode:'', $:()=>({value:'',textContent:'All PAC'}),alert:v=>{context.message=v;}});
-const start=html.indexOf('function drawPdfPromotionCard('),end=html.indexOf('\nasync function exportPdf(){',start);
+const start=html.indexOf('function drawPdfPromotionCard('),end=html.indexOf('\nasync function exportPdf(',start);
 vm.runInContext(html.slice(start,end),context);
 const tableEnd=html.indexOf('\n/*\n   Search is intentionally',end);
 vm.runInContext(html.slice(end,tableEnd),context);

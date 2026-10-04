@@ -467,7 +467,7 @@ class PublisherTests(unittest.TestCase):
             before = Path.cwd()
             try:
                 os.chdir(local)
-                with patch.dict(os.environ, {"RUNNER_TEMP": temporary, "GITHUB_REF_NAME": "main"}):
+                with patch.object(publisher,"DATA_BRANCH","main"),patch.dict(os.environ, {"RUNNER_TEMP": temporary, "GITHUB_REF_NAME": "main"}):
                     publisher.publish(["all_tenders_org_detailed.csv"])
                 run(local, "fetch", "origin", "main")
                 data = run(local, "show", "origin/main:all_tenders_org_detailed.csv")
@@ -506,7 +506,7 @@ class PublisherTests(unittest.TestCase):
             before = Path.cwd()
             try:
                 os.chdir(local)
-                with patch.dict(os.environ, {"RUNNER_TEMP": temporary, "GITHUB_REF_NAME": "main"}):
+                with patch.object(publisher,"DATA_BRANCH","main"),patch.dict(os.environ, {"RUNNER_TEMP": temporary, "GITHUB_REF_NAME": "main"}):
                     publisher.publish(["all_tenders_org_detailed.csv"])
                 self.assertEqual(run(local, "rev-parse", "HEAD"), original_head)
                 run(local, "fetch", "origin", "main")

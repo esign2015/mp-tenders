@@ -40,6 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -99,11 +101,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add manual_detail_test.csv all_tenders_org_detailed.csv data/manual_detail_test_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Save manual tender detail route test results [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py manual_detail_test.csv all_tenders_org_detailed.csv data/manual_detail_test_status.json
 
 
   visible_fee_repair:
@@ -118,6 +116,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -153,6 +153,8 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -217,6 +219,8 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -245,11 +249,7 @@ jobs:
             if [ -s data/existing_id_detail_status.json ]; then
               COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
               if [ "$COUNT" -gt "$LAST" ]; then
-                git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
-                if ! git diff --cached --quiet; then
-                  git commit -m "Publish detail recovery checkpoint $COUNT [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
                 LAST="$COUNT"
               fi
             fi
@@ -261,11 +261,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete Tender detail recovery [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
       - name: Show detail recovery log
         if: always()
         run: cat detail_recovery_live.log || true
@@ -281,6 +277,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -303,11 +301,7 @@ jobs:
             if [ -s data/existing_id_detail_status.json ]; then
               COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
               if [ "$COUNT" -gt "$LAST" ]; then
-                git add all_tenders_org_detailed.csv data/existing_id_detail_status.json
-                if ! git diff --cached --quiet; then
-                  git commit -m "Publish existing-ID detail checkpoint $COUNT [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/existing_id_detail_status.json
                 LAST="$COUNT"
               fi
             fi
@@ -319,11 +313,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete existing Tender ID detail batch [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/existing_id_detail_status.json
       - name: Show existing-ID detail log
         if: always()
         run: cat existing_id_detail_live.log || true
@@ -339,6 +329,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -362,11 +354,7 @@ jobs:
               ORG="$(python -c 'import json; print(json.load(open("data/low_count_detail_status.json")).get("current_organisation",""))' 2>/dev/null || echo "")"
               if [ "$SUCCESS" -gt "$LAST_SUCCESS" ]; then
                 echo "LIVE PUBLISH: success=$SUCCESS range=$RANGE org=$ORG"
-                git add all_tenders_org_detailed.csv data/low_count_detail_status.json
-                if ! git diff --cached --quiet; then
-                  git commit -m "Publish live low-count tender detail $SUCCESS [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/low_count_detail_status.json
                 LAST_SUCCESS="$SUCCESS"
               fi
             fi
@@ -378,11 +366,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv data/low_count_detail_status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete low-count sequential detail batch [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/low_count_detail_status.json
       - name: Show low-count batch log
         if: always()
         run: |
@@ -396,6 +380,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -417,9 +403,7 @@ jobs:
           SCRAPER_PID=$!
           while kill -0 "$SCRAPER_PID" 2>/dev/null; do
             if [ -f data/status.json ]; then
-              git add data/status.json
-              git diff --cached --quiet || git commit -m "Update extraction status [skip ci]"
-              git push origin "HEAD:${GITHUB_REF_NAME}" || true
+              python backend/publish_data_checkpoint.py data/status.json
             fi
             sleep 30
           done
@@ -428,13 +412,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv detail_validation.csv
-          if git diff --cached --quiet; then
-            echo "No 9-detail changes to commit."
-          else
-            git commit -m "Update 9 Directorate Sports detail validation records"
-            git push
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv detail_validation.csv
 
   fresh_bootstrap:
     # One-time clean rebuild:
@@ -451,6 +429,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -476,13 +456,7 @@ jobs:
             if [ -f data/status.json ]; then
               ORG="$(python -c 'import json; print(json.load(open("data/status.json")).get("organisation_progress",""))' 2>/dev/null || echo "")"
               if [ -n "$ORG" ] && [ "$ORG" != "$LAST_ORG" ]; then
-                for f in organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json; do
-                  [ -s "$f" ] && git add "$f"
-                done
-                if ! git diff --cached --quiet; then
-                  git commit -m "Fresh organisation snapshot $ORG [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json
                 LAST_ORG="$ORG"
               fi
             fi
@@ -493,11 +467,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete fresh MP tender list snapshot [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json
       - name: Fresh Phase 2 — extract each Tender ID by Home Search route
         env:
           EXISTING_ID_BATCH_SIZE: "0"
@@ -512,11 +482,7 @@ jobs:
             if [ -s data/existing_id_detail_status.json ]; then
               SUCCESS="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
               if [ "$SUCCESS" -gt "$LAST_SUCCESS" ]; then
-                git add all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json || true
-                if ! git diff --cached --quiet; then
-                  git commit -m "Publish fresh Tender detail $SUCCESS [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv tender_details.csv data/existing_id_detail_status.json
                 LAST_SUCCESS="$SUCCESS"
               fi
             fi
@@ -528,11 +494,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv tender_details.csv data/*.json || true
-          if ! git diff --cached --quiet; then
-            git commit -m "Complete fresh MP tender inventory and detail extraction [skip ci]"
-            git push || true
-          fi
+          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv tender_details.csv data/*.json
       - name: Show fresh bootstrap logs
         if: always()
         run: |
@@ -555,6 +517,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Mark the evening run before extraction
         env:
           SCRAPE_SCHEDULE: ${{ github.event.schedule }}
@@ -636,15 +600,7 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          for f in all_tenders_org_detailed.csv organisations.csv organisation_tenders.csv data/status.json; do
-            if [ -s "$f" ]; then git add "$f"; fi
-          done
-          if ! git diff --cached --quiet; then
-            git commit -m "Recover protected tender dataset from Render [skip ci]"
-            git push || echo "Recovery dataset push failed."
-          else
-            echo "No recovery changes to commit."
-          fi
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv organisations.csv organisation_tenders.csv data/status.json
 
       - name: Run MP Tender scraper — full organisation/tender list
         env:
@@ -815,6 +771,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -829,36 +787,6 @@ jobs:
           git config user.email "actions@github.com"
           python backend/publish_data_checkpoint.py data/evening_detail_completion.json
 
-  morning_telegram_after_extraction:
-    needs: scrape_full
-    # Closing Today is sent independently at 08:00 IST by telegram_scheduled_v2.
-    if: false
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    concurrency:
-      group: mp-telegram-sender
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: pip install reportlab pypdf
-      - name: Send Closing Today after morning extraction, including failure
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          MORNING_EXTRACTION_RESULT: ${{ needs.scrape_full.result }}
-        run: python backend/scheduled_telegram_delivery.py
-      - name: Publish confirmed delivery or retry state
-        if: always()
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          python backend/publish_data_checkpoint.py data/telegram_schedule.json data/telegram_last_attempt.json data/telegram_delivery/*.json
-
   corrigendum_watch:
     if: github.event_name == 'schedule' && (github.event.schedule == '35 4 * * *' || github.event.schedule == '35 10 * * *')
     runs-on: ubuntu-latest
@@ -870,6 +798,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -888,13 +818,7 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           if [ -s all_tenders_org_detailed.csv ]; then
-            git add all_tenders_org_detailed.csv
-          fi
-          if git diff --cached --quiet; then
-            echo "No corrigendum changes."
-          else
-            git commit -m "Update scheduled corrigendum watch [skip ci]"
-            git push || echo "Corrigendum checkpoint push failed."
+            python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv
           fi
 
   corrigendum_urgent:
@@ -907,6 +831,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -926,79 +852,8 @@ jobs:
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
           if [ -s all_tenders_org_detailed.csv ]; then
-            git add all_tenders_org_detailed.csv
+            python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv
           fi
-          if git diff --cached --quiet; then
-            echo "No urgent corrigendum changes."
-          else
-            git commit -m "Update pre-opening corrigendum check [skip ci]"
-            git push || echo "Urgent corrigendum checkpoint push failed."
-          fi
-
-  telegram_scheduler:
-    # Telegram alerts run from the dedicated .github/workflows/telegram.yml.
-    # Keep this legacy job disabled to prevent duplicate messages.
-    if: false
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    concurrency:
-      group: mp-telegram-sender
-      cancel-in-progress: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Decide whether a Telegram alert is due
-        id: gate
-        run: |
-          python backend/telegram_scheduler.py | tee /tmp/telegram_schedule.txt
-          if grep -q '^run=true$' /tmp/telegram_schedule.txt; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          fi
-          grep '^mode=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_mode || true
-          grep '^key=' /tmp/telegram_schedule.txt | cut -d= -f2- > /tmp/telegram_key || true
-      - name: Install ReportLab
-        if: steps.gate.outputs.run == 'true'
-        run: pip install reportlab
-      - name: Send scheduled Telegram alert
-        if: steps.gate.outputs.run == 'true'
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          MODE="$(cat /tmp/telegram_mode)"
-          NOTIFY_MODE="$MODE" python backend/telegram_alerts.py
-      - name: Mark Telegram alert complete
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          mode=Path("/tmp/telegram_mode").read_text(encoding="utf-8").strip()
-          key=Path("/tmp/telegram_key").read_text(encoding="utf-8").strip()
-          path=Path("data/telegram_schedule.json")
-          state={}
-          if path.exists():
-              try:
-                  state=json.loads(path.read_text(encoding="utf-8"))
-              except Exception:
-                  state={}
-          state[mode]=key
-          path.write_text(json.dumps(state, indent=2), encoding="utf-8")
-          PY
-      - name: Commit Telegram scheduler state
-        if: steps.gate.outputs.run == 'true'
-        run: |
-          git config user.name "mp-tenders-bot"
-          git config user.email "actions@github.com"
-          git add data/telegram_schedule.json
-          git diff --cached --quiet || git commit -m "Record Telegram alert schedule state [skip ci]"
-          git push || echo "Telegram schedule state push failed."
 
   monitor_changes:
     # Random organisation monitor. The Python scheduler chooses irregular
@@ -1014,6 +869,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -1056,10 +913,4 @@ jobs:
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/org_monitor_schedule.json || true
-          if git diff --cached --quiet; then
-            echo "No organisation monitor changes."
-          else
-            git commit -m "Random MP organisation tender monitor [skip ci]"
-            git push || echo "Organisation monitor push failed."
-          fi
+          python backend/publish_data_checkpoint.py organisations.csv organisation_tenders.csv all_tenders_org_detailed.csv data/status.json data/org_monitor_schedule.json

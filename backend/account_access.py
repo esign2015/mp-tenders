@@ -2,7 +2,7 @@
 import hashlib,hmac,json,os,re,secrets,time,uuid,threading,logging,unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
-from flask import jsonify,request
+from flask import jsonify,request,g,has_request_context
 from werkzeug.security import generate_password_hash,check_password_hash
 import google_sheet_store as sheets
 import signup_alerts
@@ -110,7 +110,10 @@ class Accounts:
         if sheets.enabled():
             started=time.monotonic()
             try:return sheets.call('account_'+action,**data)
-            finally:logger.info('Account storage action=%s elapsed=%.2fs',action,time.monotonic()-started)
+            finally:
+                elapsed=time.monotonic()-started
+                logger.info('Account storage action=%s elapsed=%.2fs',action,elapsed)
+                if has_request_context():g.account_timings=getattr(g,'account_timings',[])+[(action,elapsed)]
         if not self.server.DATABASE_URL and os.getenv('ALLOW_EPHEMERAL_ACCOUNTS','0')!='1':
             raise AccountError('Account storage अभी connect नहीं है। कृपया थोड़ी देर बाद प्रयास करें।',503)
         conn=self.server.visitor_db()
@@ -140,8 +143,19 @@ class Accounts:
                 return {'allowed':row['attempts']<=data['limit']}
             raise AccountError('Unknown account operation.')
         finally:conn.close()
-    def get(self,**kwargs):return self.operation('lookup' if 'mobile' in kwargs else 'get',**kwargs)['record']
-    def update(self,record,revision):return self.operation('update',record=record,expected_revision=revision)['updated']
+    def get(self,**kwargs):
+        key=tuple(sorted(kwargs.items()))
+        cache=getattr(g,'account_records',{}) if has_request_context() else {}
+        if key not in cache:
+            cache[key]=self.operation('lookup' if 'mobile' in kwargs else 'get',**kwargs)['record']
+            if has_request_context():g.account_records=cache
+        return cache[key]
+    def update(self,record,revision):
+        from bidder_tools import bound_record
+        bound_record(record)
+        result=self.operation('update',record=record,expected_revision=revision)['updated']
+        if has_request_context():g.account_records={}
+        return result
     def digest(self,value):return hashlib.sha256(value.encode()).hexdigest()
     def rate_checks(self,mobile=''):
         # Capture Flask request information before starting remote requests.
@@ -242,20 +256,32 @@ class Accounts:
             conn=self.server.visitor_db()
             try:
                 row=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(record['user_id'],)).fetchone()
-                aff=json.loads(row['profile_json']) if row else {}
+                aff=record.get('affidavit_profile') if isinstance(record.get('affidavit_profile'),dict) else (json.loads(row['profile_json']) if row else {})
                 if record_visit:
                     now=self.server.now_ist().isoformat()
                     conn.execute('UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?',(now,record['user_id']))
                     conn.execute('INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)',(str(uuid.uuid4()),record['user_id'],now));conn.commit()
             finally:conn.close()
         session=next(s for s in record['sessions'] if hmac.compare_digest(s['hash'],self.digest(token)))
-        response=jsonify({'ok':True,'session_token':token,'session_expires_at':min(session['expires'],next_daily_logout()),'server_time':time.time(),'new_login':new_login,'visitor_id':record['user_id'],'profile':public_profile(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'affidavit_profile_canonical':isinstance(record.get('affidavit_profile'),dict),'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
+        response=jsonify({'ok':True,'session_token':token,'session_expires_at':min(session['expires'],next_daily_logout()),'server_time':time.time(),'new_login':new_login,'visitor_id':record['user_id'],'profile':public_profile(record),'bidder_tools':__import__('bidder_tools').tools_state(record),'profile_corrections':profile_corrections(record),'affidavit_profile':aff,'affidavit_profile_canonical':isinstance(record.get('affidavit_profile'),dict),'details_id':details_id,'storage':'google_sheets' if sheets.enabled() else self.server.user_db_backend()})
         response.headers['Cache-Control']='no-store';return response
 
 def install(server):
     accounts=Accounts(server);app=server.app
     @app.errorhandler(AccountError)
     def account_error(error):return jsonify({'ok':False,'message':str(error),'code':error.code,'server_time':time.time()}),error.status
+    @app.before_request
+    def start_account_timing():
+        if request.path.startswith('/api/accounts/'):
+            g.account_started=time.monotonic();g.account_timings=[]
+    @app.after_request
+    def finish_account_timing(response):
+        if hasattr(g,'account_started'):
+            elapsed=time.monotonic()-g.account_started
+            stages=getattr(g,'account_timings',[])
+            response.headers['Server-Timing']=', '.join([f'storage{index};desc="{action}";dur={seconds*1000:.1f}' for index,(action,seconds) in enumerate(stages)]+[f'account;dur={elapsed*1000:.1f}'])
+            logger.info('Account request path=%s status=%s elapsed=%.2fs storage_calls=%s',request.path,response.status_code,elapsed,len(stages))
+        return response
     @app.before_request
     def maintenance_gate():
         if request.path.startswith('/api/accounts/') and request.path not in ('/api/accounts/ready','/api/accounts/logout') and maintenance_active():
@@ -279,7 +305,9 @@ def install(server):
         p=request.get_json(silent=True) or {};mobile=account_mobile(server,p.get('mobile'))
         if not mobile:raise AccountError('सही Mobile Number भरें।')
         record=accounts.lookup_limited(mobile);password=p.get('password')
+        verify_started=time.monotonic()
         valid= isinstance(password,str) and len(password)<=128 and check_password_hash(record['password_hash'] if record else _DUMMY_HASH,password)
+        g.account_timings=getattr(g,'account_timings',[])+[('password_verify',time.monotonic()-verify_started)]
         if not record:raise AccountError('इस mobile से Sign up नहीं हुआ है। कृपया Sign up form पूरा करें।',404,'signup_required')
         if not valid:raise AccountError('Mobile या password सही नहीं है।',401)
         if record.get('blocked'):raise AccountError('आपका account Admin द्वारा block किया गया है।',401,'account_blocked')
@@ -353,7 +381,7 @@ def install(server):
                     conn=server.visitor_db()
                     try:conn.execute('UPDATE visitor_registrations SET name=? WHERE visitor_id=?',(record['name'],record['user_id']));conn.commit()
                     finally:conn.close()
-                return jsonify({'ok':True,'profile':public_profile(record),'profile_corrections':profile_corrections(record)})
+                return jsonify({'ok':True,'profile':public_profile(record),'bidder_tools':__import__('bidder_tools').tools_state(record),'profile_corrections':profile_corrections(record)})
         raise AccountError('Profile save फिर प्रयास करें।',409)
     @app.post('/api/accounts/change-password')
     def change_password():
@@ -386,6 +414,8 @@ def install(server):
         if 'blocked' in p:
             if type(p['blocked']) is not bool:raise AccountError('Invalid block status.')
             for _ in range(3):
+                from bidder_tools import audit
+                audit(record,email,'user_block' if p['blocked'] else 'user_unblock')
                 revision=record['revision'];record.update(blocked=p['blocked'],access_updated_by=email,access_updated_at=server.now_ist().isoformat())
                 if p['blocked']:record.update(sessions=[],reset=None)
                 if accounts.update(record,revision):break
@@ -404,6 +434,8 @@ def install(server):
         if not record:raise AccountError('Registered account नहीं मिला।',404)
         raw=record['user_id']+'.'+secrets.token_urlsafe(32)
         for _ in range(3):
+            from bidder_tools import audit
+            audit(record,email,'password_reset_link')
             revision=record['revision'];record['reset']={'hash':accounts.digest(raw),'expires':int(time.time())+900,'issued_by':email}
             mark_mobile_verified(record, server, email)
             if accounts.update(record,revision):

@@ -20,11 +20,9 @@ const ctx=vm.createContext({window:{},document,localStorage:storage(local),sessi
 }});
 vm.runInContext(source,ctx);
 (async()=>{
- const pending=ctx.enforceVisitorAccess();await new Promise(r=>setImmediate(r));
- node('visitorName').value='Visitor';node('visitorMobile').value='9876543210';node('visitorDistrict').value='Dewas';
- fail=true;await node('visitorRegistrationForm').submit({preventDefault(){}});assert(locked);assert.equal(local.size,0);
- fail=false;await node('visitorRegistrationForm').submit({preventDefault(){}});await pending;assert(!locked);assert.equal(local.get('mp_visitor_session_v1'),'saved-token');assert.equal(ctx.window.dashboardVisitorProfile.visitor_id,'visitor-test');
- locked=true;await ctx.enforceVisitorAccess();assert(!locked);assert.equal(node('visitorMobile').value,'9876543210');
+ assert.equal(typeof ctx.enforceVisitorAccess,'undefined');
+ ctx.visitorUnlock({visitor_id:'visitor-test',session_token:'saved-token',profile:{name:'Visitor',mobile:'+919876543210',district:'Dewas'},affidavit_profile:{firmName:'Restored firm'}});
+ assert(!locked);assert.equal(local.get('mp_visitor_session_v1'),'saved-token');
  assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Restored firm');
  fail=true;await assert.rejects(ctx.window.saveDashboardAffidavitProfile({firmName:'Failed firm'}));assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Restored firm');
  fail=false;const saved=await ctx.window.saveDashboardAffidavitProfile({firmName:'Saved firm'});assert.equal(saved.storage,'google_sheets');assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Saved firm');

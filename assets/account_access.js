@@ -109,7 +109,8 @@ function accountExpired(){
   return false;
 }
 function accountActivity(){
-  if(localStorage.getItem(VISITOR_SESSION_KEY)&&!accountExpired()&&!document.hidden)localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(accountNow()));
+  const last=Number(localStorage.getItem(ACCOUNT_ACTIVITY_KEY));
+  if(localStorage.getItem(VISITOR_SESSION_KEY)&&!accountExpired()&&!document.hidden&&accountNow()-last>=30000)localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(accountNow()));
 }
 function accountSetupControls(data){
   if(data.new_login||!localStorage.getItem(ACCOUNT_ACTIVITY_KEY))localStorage.setItem(ACCOUNT_ACTIVITY_KEY,String(Date.now()));
@@ -197,8 +198,12 @@ function accountSetupControls(data){
 }
 
 async function accountPost(path,body){
+  const started=Date.now();
   const response=await fetch('https://mp-tenders-api.onrender.com/api/accounts'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store',keepalive:path==='/logout'});
   const data=await response.json().catch(()=>({}));
+  const elapsed=Date.now()-started;
+  window.dashboardAccountTiming={path,milliseconds:Math.round(elapsed),serverTiming:response.headers?.get?.("Server-Timing")||""};
+  if(path==="/signin"||path==="/session")console.info("Account request timing",window.dashboardAccountTiming);
   if(Number.isFinite(data.server_time))accountClockOffset=data.server_time*1000-Date.now();
   if(data.code==='maintenance')accountApplyMaintenance();
   if(!response.ok||!data.ok){const error=new Error(data.message||'Server से जवाब नहीं आया। फिर प्रयास करें।');error.status=response.status;error.code=data.code;throw error}
@@ -249,6 +254,7 @@ async function accountUnlock(data){
   visitorUnlock(data);
   visitorNode('telegramLogoutBtn').onclick=()=>accountLogout();
   accountSetupControls(data);
+  window.bidderTools?.hydrate(data.bidder_tools||{});
   if(data.details_id){
     const token=data.session_token;
     (async()=>{
@@ -344,7 +350,7 @@ async function enforceAccountAccess(){
   for(const id of ['visitorMiddleName','accountEditMiddleName'])accountBindMiddleName(id);
   try{const cached=JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY)||'{}');visitorNode('accountLoginMobile').value=String(cached.mobile||'').replace(/^\+91/,'')}catch(_){}
   for(const [district,tehsil] of [['accountEditDistrict','accountEditTehsil']])visitorNode(district).addEventListener('input',()=>{accountTehsilOptions(district,tehsil);accountUpdateAllSubmits()});
-  fetch('data/mp_tehsils.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
+  fetch('data/mp_tehsils.json',{cache:'force-cache'}).then(r=>r.json()).then(data=>{
     accountTehsilDirectory=data.districts||{};
     for(const district of Object.keys(accountTehsilDirectory))for(const id of ['accountDistrictList']){const option=document.createElement('option');option.value=district;visitorNode(id)?.appendChild(option)}
     visitorNode('visitorDistrict').disabled=false;

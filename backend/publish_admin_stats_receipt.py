@@ -5,6 +5,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from data_branch import DATA_BRANCH
 PATH = 'data/admin_stats_schedule.json'
 
 
@@ -16,8 +17,8 @@ def git(*args, data=None, env=None):
 def main():
     local = json.loads(Path(PATH).read_text())
     for _ in range(3):
-        git('fetch', 'origin', 'main')
-        parent = git('rev-parse', 'origin/main').decode().strip()
+        git('fetch', 'origin', DATA_BRANCH)
+        parent = git('rev-parse', 'origin/'+DATA_BRANCH).decode().strip()
         try:
             old = git('show', parent + ':' + PATH)
             remote = json.loads(old)
@@ -38,7 +39,7 @@ def main():
             tree = git('write-tree', env=env).decode().strip()
             commit = git('commit-tree', tree, '-p', parent, data=b'Update admin count refresh receipt [skip ci]\n').decode().strip()
         try:
-            git('push', 'origin', commit + ':refs/heads/main')
+            git('push', 'origin', commit + ':refs/heads/'+DATA_BRANCH)
             print('Stats receipt saved.')
             return
         except subprocess.CalledProcessError:

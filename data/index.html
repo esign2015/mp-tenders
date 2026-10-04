@@ -81,8 +81,8 @@ async function ensureDataAuth(){
 }
 
 // Read extraction checkpoints directly so Pages deployment queues cannot freeze progress.
-const progressRoot='https://raw.githubusercontent.com/esign2015/mp-tenders/main/data/';
-const statusUrl=progressRoot+'status.json', manualTestUrl='./manual_detail_test_status.json', detailStatusUrl=progressRoot+'existing_id_detail_status.json', changesUrl='./organisation_changes.json', verifyUrl='./evening_verification.json', telegramUrl='./telegram_last_attempt.json', telegramHealthUrl='./telegram_health.json', mismatchRetryUrl='./count_mismatch_retry.json', manualTelegramUrl='./telegram_manual_last_send.json';
+const progressRoot='https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/data/';
+const statusUrl=progressRoot+'status.json', manualTestUrl=progressRoot+'manual_detail_test_status.json', detailStatusUrl=progressRoot+'existing_id_detail_status.json', changesUrl=progressRoot+'organisation_changes.json', verifyUrl=progressRoot+'evening_verification.json', telegramUrl=progressRoot+'telegram_last_attempt.json', telegramHealthUrl=progressRoot+'telegram_health.json', mismatchRetryUrl=progressRoot+'count_mismatch_retry.json', manualTelegramUrl=progressRoot+'telegram_manual_last_send.json';
 function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++){const c=t[i],n=t[i+1];if(c=='"'&&q&&n=='"'){v+='"';i++;continue}if(c=='"'){q=!q;continue}if(c==','&&!q){row.push(v);v='';continue}if((c=='\\n'||c=='\\r')&&!q){if(c=='\\r'&&n=='\\n')i++;row.push(v);v='';if(row.some(x=>String(x).trim()))rows.push(row);row=[];continue}v+=c}if(v!==''||row.length){row.push(v);rows.push(row)}if(rows.length<2)return[];const h=rows[0].map(x=>String(x).replace(/^\\uFEFF/,'').trim());return rows.slice(1).map(a=>{const o={};h.forEach((k,i)=>o[k]=String(a[i]||'').trim());return o})}
 function row(k,v,c=''){return '<div class="row"><span>'+k+'</span><b class="'+c+'">'+v+'</b></div>'}
 function esc(x){return String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
@@ -98,7 +98,7 @@ const [st,manual,detailStatus,changes,verify,telegram,telegramHealth,mismatchRet
   fetch(mismatchRetryUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(manualTelegramUrl+'?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
   fetch(progressRoot+'inventory_counts.json?ts='+stamp,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Inventory summary unavailable');return r.json()}),
-  fetch('./home_latest_status.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
+  fetch(progressRoot+'home_latest_status.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({}))
 ]);
 if(inventory.policy_version!=='official-portal-v1')throw Error('Updated inventory summary pending');
 document.getElementById('homeLatest').innerHTML=row('Worker',esc(homeLatest.status||'Waiting for first run'))+row('Home copy time (IST)',homeLatest.copied_at?esc(new Date(homeLatest.copied_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}))+' IST':'—')+row('Latest Tenders / Corrigenda',(homeLatest.latest_tenders||0)+' / '+(homeLatest.latest_corrigenda||0))+row('Details confirmed',(homeLatest.success_ids||[]).length)+row('Already complete',(homeLatest.unchanged_ids||[]).length)+row('Pending retry',(homeLatest.pending||[]).length)+row('Schedule / extraction budget','14 minutes / 12 minutes');
@@ -152,5 +152,5 @@ document.getElementById('refreshTime').textContent='Last refresh: '+new Date().t
 }catch(e){document.getElementById('refreshTime').textContent='Refresh error';document.getElementById('error').textContent=e.message;document.getElementById('errBox').style.display='block'}}
 document.getElementById('refresh').onclick=async()=>{if(await ensureDataAuth()) load();};
 ensureDataAuth().then(ok=>{if(ok) load();});
-setInterval(async()=>{if(await ensureDataAuth()) load();},15000);
+setInterval(async()=>{if(!document.hidden&&await ensureDataAuth()) load();},30000);
 </script></body></html>

@@ -24,6 +24,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: mp-telegram-sender
+  cancel-in-progress: false
+
 jobs:
   send-manual-pdf:
     runs-on: ubuntu-latest
@@ -32,6 +36,8 @@ jobs:
       - name: Checkout latest data
         uses: actions/checkout@v4
 
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -71,6 +77,4 @@ jobs:
           PY
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add data/telegram_manual_last_send.json
-          git diff --cached --quiet || git commit -m "Record admin manual Telegram PDF delivery [skip ci]"
-          git push
+          python backend/publish_data_checkpoint.py data/telegram_manual_last_send.json

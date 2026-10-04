@@ -1,0 +1,20 @@
+name: Preserve pre-cutover tender checkpoints
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mp-data-cutover
+  cancel-in-progress: false
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name mp-tenders-bot
+          git config user.email actions@github.com
+          python3 backend/prepare_data.py

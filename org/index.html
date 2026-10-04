@@ -63,7 +63,7 @@ function render(){
 async function load(){
  $('msg').textContent='Live organisation data loading...';
  try{
-  const response=await fetch('https://raw.githubusercontent.com/esign2015/mp-tenders/main/data/inventory_counts.json?t='+Date.now(),{cache:'no-store'});
+  const response=await fetch('https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/data/inventory_counts.json?t='+Date.now(),{cache:'no-store'});
   if(!response.ok)throw Error('Summary HTTP '+response.status);
   const next=await response.json();
   if(next.policy_version!=='official-portal-v1'||!Array.isArray(next.organisations))throw Error('Updated summary pending');
@@ -77,6 +77,6 @@ async function load(){
  }catch(e){$('msg').textContent='नया verified count उपलब्ध नहीं है; retry जारी है। '+e.message;}
 }
 $('search').addEventListener('input',render);$('reload').addEventListener('click',load);load();
-setInterval(load,15000);
+setInterval(()=>{if(!document.hidden)load();},30000);
 </script>
 </body></html>

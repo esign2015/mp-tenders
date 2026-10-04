@@ -15,6 +15,8 @@ from pathlib import Path
 from inventory_summary import detail_complete, write_summary
 from corrigendum_state import merge_state
 from nightly_cleanup import DATA_FILES, parse_dt, purge_csv
+from data_branch import DATA_BRANCH, STATIC_DATA, runtime_path
+from tender_history import changes
 
 DETAIL_FILES = {"all_tenders_org_detailed.csv", "tender_details.csv"}
 
@@ -59,7 +61,7 @@ def merge_details(remote, local):
     return stream.getvalue().encode("utf-8-sig")
 
 def publish(paths):
-    branch = os.getenv("GITHUB_REF_NAME", "main")
+    branch = DATA_BRANCH
     cache_file = Path(os.getenv("RUNNER_TEMP", "/tmp")) / "mp-published-digests.json"
     try:
         previous = json.loads(cache_file.read_text())
@@ -68,6 +70,9 @@ def publish(paths):
     changed = {}
     digests = {}
     for path in paths:
+        if path in STATIC_DATA:continue
+        if not runtime_path(path):
+            raise ValueError("Only public tender runtime state can be published: "+path)
         source = Path(path)
         if not source.is_file():
             continue
@@ -129,6 +134,8 @@ def publish(paths):
                 else:
                     snapshot["tender_ids"] = [tid for tid in snapshot.get("tender_ids", []) if tid not in removed_ids]
                 updates["data/live_snapshot.json"] = json.dumps(snapshot, ensure_ascii=False, indent=2).encode()
+        detailed=updates.get("all_tenders_org_detailed.csv",blob(parent,"all_tenders_org_detailed.csv"))
+        updates["data/tender_changes.json"]=changes(blob(parent,"all_tenders_org_detailed.csv"),detailed,blob(parent,"data/tender_changes.json"))
         # Derive progress from the exact CSV bytes being published together.
         with tempfile.TemporaryDirectory() as summary_dir:
             root = Path(summary_dir)

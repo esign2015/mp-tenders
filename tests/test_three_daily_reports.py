@@ -98,11 +98,10 @@ class ThreeDailyReportsTests(unittest.TestCase):
                     'MORNING_EXTRACTION_RESULT': 'failure'}), patch.object(alerts, 'CSV_PATH', path), \
                     patch.object(alerts, 'datetime', Clock), patch.object(alerts, 'load_report_rows', return_value=rows), \
                     patch.object(alerts, 'make_pdf', return_value=Path('table.pdf')) as pdf, \
-                    patch.object(alerts, 'telegram_message') as text, patch.object(alerts, 'telegram_document') as document, \
-                    patch('telegram_card_pdf.make_card_pdf') as card:
+                    patch.object(alerts, 'telegram_message') as text, patch.object(alerts, 'telegram_document') as document:
                     self.assertEqual(alerts.main(), 0)
                     self.assertEqual([r['Tender ID'] for r in pdf.call_args.args[0]], [expected])
-                    self.assertEqual(document.call_count, 1); text.assert_not_called(); card.assert_not_called()
+                    self.assertEqual(document.call_count, 1); text.assert_not_called()
                     caption = document.call_args.args[3]
                     self.assertLessEqual(len(caption.encode('utf-16-le')) // 2, 1024)
                     self.assertIn('उपलब्ध पिछले डेटा', caption)
@@ -111,11 +110,10 @@ class ThreeDailyReportsTests(unittest.TestCase):
                     if mode == 'afternoon': self.assertIn('01/01/2027', caption)
 
     def test_retired_all_and_card_entrypoints_send_nothing(self):
-        import send_closing_card
+        self.assertFalse((Path(__file__).resolve().parents[1]/"backend/send_closing_card.py").exists())
         with patch.object(alerts, 'telegram_document') as document, patch.object(alerts, 'telegram_message') as message:
             for mode in ('evening_total', 'evening'):
                 with patch.dict(os.environ, {'NOTIFY_MODE': mode}): self.assertEqual(alerts.main(), 0)
-            self.assertEqual(send_closing_card.main(), 0)
             document.assert_not_called(); message.assert_not_called()
 
     def test_pdf_receipt_retry_does_not_duplicate_the_message(self):

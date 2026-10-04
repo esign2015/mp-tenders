@@ -8,7 +8,7 @@ import google_sheet_store as store
 class SheetStoreTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
-        self.env=patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48,'VISITOR_SESSION_SECRET':'session-secret','VISITOR_PROFILE_LEGACY_ALLOWED':'1'})
+        self.env=patch.dict(os.environ,{'GOOGLE_SHEETS_WEBAPP_URL':'https://script.google.com/macros/s/example/exec','GOOGLE_SHEETS_SHARED_SECRET':'s'*48,'ADMIN_SESSION_SECRET':'session-secret','VISITOR_PROFILE_LEGACY_ALLOWED':'1'})
         self.env.start()
         self.db=patch.object(server,'USER_DB_PATH',Path(self.tmp.name)/'users.db');self.db.start()
         self.pg=patch.object(server,'DATABASE_URL','');self.pg.start()
@@ -43,34 +43,29 @@ class SheetStoreTests(unittest.TestCase):
         retry=Mock(ok=True);retry.json.return_value={'ok':False,'status':409,'message':'Already registered'}
         with patch.object(store.requests,'post',side_effect=[requests.Timeout(),read,retry]):
             with self.assertRaises(store.SheetStoreError):store.call('account_create',record=record)
-    def test_registration_session_and_affidavit_use_sheet_and_never_local_db(self):
-        data=self.data();visitor={'visitor_id':data['registration_id'],**{k:data[k] for k in ('name','mobile','district')}}
-        visitor['mobile']='+919876543210'
-        with patch.object(store,'call',return_value={'ok':True,'visitor':visitor,'affidavit_profile':self.affidavit()}) as remote:
-            saved=self.client.post('/api/visitors/register',json=data)
-            self.assertEqual(saved.status_code,200);self.assertEqual(saved.json['storage'],'google_sheets')
-            token=saved.json['session_token']
-            restored=self.client.post('/api/visitors/session',json={'session_token':token})
-            self.assertEqual(restored.json['affidavit_profile'],self.affidavit())
-            self.assertEqual([call.args[0] for call in remote.call_args_list],['register','session'])
-        with patch.object(store,'call',return_value={'ok':True,'profile':self.affidavit()}) as remote:
-            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':self.affidavit()}).status_code,200)
-            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token}).status_code,200)
-            self.assertEqual([call.args[0] for call in remote.call_args_list],['save_affidavit','read_affidavit'])
+    def test_obsolete_registration_is_gone_and_canonical_account_profile_is_remote(self):
+        from copy import deepcopy
+        from account_access import next_daily_logout
+        import time
+        key=str(uuid.uuid4());token='acct_'+key+'.example';record={'user_id':key,'mobile':'+919876543210','password_hash':'scrypt:test','revision':1,'sessions':[{'hash':server.account_service.digest(token),'expires':int(time.time())+3600,'issued_at':int(time.time())}],'affidavit_profile':self.affidavit()}
+        with patch.object(store,'call',return_value={'record':deepcopy(record)}) as remote,patch.object(server,'visitor_db',side_effect=AssertionError('No SQLite fallback')):
+            self.assertEqual(self.client.post('/api/visitors/register',json=self.data()).status_code,404)
+            response=self.client.post('/api/visitors/affidavit',json={'session_token':token})
+            self.assertEqual(response.status_code,200);self.assertEqual(response.json['profile'],self.affidavit());remote.assert_called_once_with('account_get',user_id=key)
         self.assertFalse(server.USER_DB_PATH.exists())
     def test_remote_failure_never_claims_success_or_falls_back(self):
         with patch.object(store,'call',side_effect=store.SheetStoreError('Retry')):
-            response=self.client.post('/api/visitors/register',json=self.data())
+            response=self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':'Private1!'})
             self.assertEqual(response.status_code,503);self.assertFalse(response.json['ok'])
         self.assertFalse(server.USER_DB_PATH.exists())
     def test_partial_configuration_and_profile_access_are_rejected(self):
         with patch.dict(os.environ,{'GOOGLE_SHEETS_SHARED_SECRET':''}):
             self.assertTrue(store.enabled())
-            self.assertEqual(self.client.post('/api/visitors/register',json=self.data()).status_code,503)
+            self.assertEqual(self.client.post('/api/accounts/signin',json={'mobile':'9876543210','password':'Private1!'}).status_code,503)
         self.assertEqual(self.client.post('/api/visitors/affidavit',json={'visitor_id':str(uuid.uuid4())}).status_code,401)
-        token=server.make_visitor_session(str(uuid.uuid4()))
+        token='legacy_'+str(uuid.uuid4())
         with patch.object(store,'call') as remote:
-            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{'bidderName':'bad'}}).status_code,400)
+            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{'bidderName':'bad'}}).status_code,401)
             remote.assert_not_called()
 
 if __name__=='__main__':unittest.main()

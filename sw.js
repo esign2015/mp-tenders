@@ -1,5 +1,5 @@
-const CACHE_NAME="mp-tenders-shell-v3";
-const SHELL=["./","./index.html","./manifest.webmanifest","./assets/sar-logo.png"];
+const CACHE_NAME="mp-tenders-shell-v4";
+const SHELL=["./","./index.html","./manifest.webmanifest","./assets/sar-logo.png","./assets/visitor_access.js?v=8","./assets/account_access.js?v=24","./assets/bidder_tools.js?v=1","./assets/export_libraries.js?v=1"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
 });

@@ -18,15 +18,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Verify portal, copied, dashboard and detail counts
         run: python backend/evening_verify.py
       - name: Publish verification report
         run: |
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json
-          git diff --cached --quiet || git commit -m "Publish evening tender verification [skip ci]"
-          git push
+          python backend/publish_data_checkpoint.py data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json
 
   final_detail:
     needs: verify
@@ -46,6 +46,8 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
+      - name: Load latest tender runtime state
+        run: python3 backend/prepare_data.py
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -88,11 +90,7 @@ jobs:
             if [ -s data/existing_id_detail_status.json ]; then
               COUNT="$(python -c 'import json; print(json.load(open("data/existing_id_detail_status.json")).get("success",0))' 2>/dev/null || echo 0)"
               if [ "$COUNT" -gt "$LAST" ]; then
-                git add all_tenders_org_detailed.csv data/existing_id_detail_status.json || true
-                if ! git diff --cached --quiet; then
-                  git commit -m "Save evening detail checkpoint $COUNT [skip ci]"
-                  git push || true
-                fi
+                python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/existing_id_detail_status.json
                 LAST="$COUNT"
               fi
             fi
@@ -106,9 +104,7 @@ jobs:
           python backend/evening_verify.py || true
           git config user.name "mp-tenders-bot"
           git config user.email "actions@github.com"
-          git add all_tenders_org_detailed.csv data/existing_id_detail_status.json data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json || true
-          git diff --cached --quiet || git commit -m "Publish final evening tender verification [skip ci]"
-          git push || true
+          python backend/publish_data_checkpoint.py all_tenders_org_detailed.csv data/existing_id_detail_status.json data/evening_verification.json data/live_count_verification.json data/inventory_counts.json data/inventory_summary.json
 
       - name: Show final detail log
         if: always()

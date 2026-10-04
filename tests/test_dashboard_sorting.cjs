@@ -11,7 +11,7 @@ function source(name){
   return html.slice(start,end);
 }
 const controls = new Proxy({}, {get:(o,k)=>o[k] ||= {value:''}});
-const context = vm.createContext({console,Date,Set,Map,requestAnimationFrame:fn=>fn(),document:{querySelectorAll:()=>[]},
+const context = vm.createContext({window:{},console,Date,Set,Map,requestAnimationFrame:fn=>fn(),document:{querySelectorAll:()=>[]},
   $:id=>controls[id], getDistrictInfo:r=>({name:r.District||''}),
   renderCurrentView(){},applyColumnVisibility(){},updateVirtualPager(){},updateCounts(){},
   normalizeSearchText:s=>s, archivedMode:false, quickFilterMode:'',tableSortKey:'',tableSortDesc:false,
@@ -74,7 +74,7 @@ assert(countdowns.every(x=>x.textContent==='—'&&!x.classList.contains('countdo
 assert(html.includes('.countdown-deadline-blink{animation:tender-deadline-blink 2s'));
 assert(!/\.tender-card\.closing-final-minutes\{[^}]*animation/.test(html));
 assert(!html.includes('setInterval(updateVisibleTimeLeft,20000)'));
-assert(/setInterval\(\(\) => \{\s*updateCardDeadlineAlerts\(\);\s*updateVisibleTimeLeft\(\);[\s\S]*?\},1000\);/.test(html));
+assert(html.includes('if(document.hidden)return;'));assert(html.includes('updateCardDeadlineAlerts();updateVisibleTimeLeft();'));assert(html.includes('function scheduleTenderExpiry()'));
 console.log('PASS: both view countdowns update every second, display seconds beyond a day, blink only the timer for final ten minutes and stop after expiry.');
 context.Date=Date;
 context.document.querySelectorAll=()=>[];
@@ -257,7 +257,7 @@ const placeholder={classList:classList(),style:{},colSpan:24};
 const menu={style:{},classList:classList(),querySelectorAll:()=>checkboxes,contains:()=>false};
 const buttons={columnBtn:{getBoundingClientRect:()=>({left:100,bottom:300})},orgDisplayBtn:{},userPrefMenu:menu,resetColumnsBtn:{},viewToggleBtn:{},tenderTable:{style:{}},tableWrap:{clientWidth:1100,scrollWidth:0},tableScrollTopInner:{style:{}}};
 let prefRenders=0;
-const prefContext=vm.createContext({console,Map,Set,Number,JSON,Math,
+const prefContext=vm.createContext({window:{},console,Map,Set,Number,JSON,Math,
  $:id=>buttons[id],localStorage:{getItem:k=>prefs.get(k)??null,setItem:(k,v)=>prefs.set(k,v),removeItem:k=>prefs.delete(k)},
  document:{body:{classList:bodyClasses},addEventListener(){},querySelectorAll:()=>[{children:cells},{children:[placeholder]}]},
  window:{innerWidth:1200,innerHeight:900,addEventListener(){}},escapeHtml:s=>s,
@@ -297,7 +297,7 @@ console.log('PASS: advanced column widths survive selection changes, scrollbars 
 // Alert placements count tenders, including across the 100-row page boundary.
 const cardNodes={tenderCardGrid:{innerHTML:''},recordCount:{}};
 const cardRows=Array.from({length:130},(_,i)=>({'Tender ID':'T'+(i+1),Location:i===0?'Nemawar':'','Contract Type':'Contract must not appear'}));
-const cardContext=vm.createContext({virtualRows:cardRows,virtualStart:0,virtualEnd:100,CARD_AD_INTERVAL:12,CARD_ALERT_INTERVAL:20,VIRTUAL_CHUNK_SIZE:100,currentLanguage:'en',
+const cardContext=vm.createContext({window:{},virtualRows:cardRows,virtualStart:0,virtualEnd:100,CARD_AD_INTERVAL:12,CARD_ALERT_INTERVAL:20,VIRTUAL_CHUNK_SIZE:100,currentLanguage:'en',
  $:id=>cardNodes[id],escapeHtml:s=>String(s||''),displayTenderValue:(r,k)=>r[k],getDistrictInfo:()=>({name:'Dewas'}),
  cardClosingClass:()=>'',isDeadlineAlertActive:()=>false,parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>'',requestAnimationFrame:fn=>fn()});
 for(const name of ['tenderAlertsCard','sarAdCard','fitCardTitles','renderCardWindow'])vm.runInContext(source(name),cardContext);

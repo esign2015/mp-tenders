@@ -19,7 +19,7 @@ from scraper import scrape_mp_tenders
 import google_sheet_store as sheet_store
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, expose_headers=["Server-Timing"])
 
 @app.errorhandler(sheet_store.SheetStoreError)
 def sheet_store_error(error):
@@ -36,11 +36,22 @@ FIELDS = [
 ]
 
 
+_runtime_rows_cache={'at':0,'rows':None,'snapshot_at':None}
+_runtime_rows_lock=threading.Lock()
 def read_rows():
-    if not CSV_FILE.exists():
-        return []
-    with CSV_FILE.open("r", encoding="utf-8-sig", newline="") as f:
-        return list(csv.DictReader(f))
+    if os.getenv('GOOGLE_SHEETS_WEBAPP_URL'):
+        with _runtime_rows_lock:
+            if _runtime_rows_cache['rows'] is not None and time.monotonic()-_runtime_rows_cache['at']<60:return _runtime_rows_cache['rows']
+            try:
+                import io,requests
+                response=requests.get('https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/all_tenders_org_detailed.csv',timeout=20);response.raise_for_status()
+                rows=list(csv.DictReader(io.StringIO(response.content.decode('utf-8-sig'))))
+                _runtime_rows_cache.update(rows=rows,at=time.monotonic())
+                return rows
+            except Exception:
+                if _runtime_rows_cache['rows'] is not None:return _runtime_rows_cache['rows']
+    if not CSV_FILE.exists():return []
+    with CSV_FILE.open('r',encoding='utf-8-sig',newline='') as f:return list(csv.DictReader(f))
 
 
 @app.get("/")
@@ -472,109 +483,6 @@ def visitor_db():
     return conn
 
 
-def make_visitor_session(visitor_id):
-    import base64
-    secret = clean(os.getenv("VISITOR_SESSION_SECRET")) or admin_session_secret()
-    if not secret:
-        raise RuntimeError("Visitor session signing unavailable")
-    payload = {"visitor_id": visitor_id, "exp": int((now_ist()+timedelta(days=365)).timestamp())}
-    body = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip("=")
-    signature = hmac.new(secret.encode(), ("visitor:"+body).encode(), hashlib.sha256).hexdigest()
-    return body+"."+signature
-
-
-def read_visitor_session(token):
-    import base64
-    try:
-        body, signature = clean(token).split(".", 1)
-        secret = clean(os.getenv("VISITOR_SESSION_SECRET")) or admin_session_secret()
-        if not secret or len(body)>1024:
-            return None
-        expected = hmac.new(secret.encode(), ("visitor:"+body).encode(), hashlib.sha256).hexdigest()
-        if not hmac.compare_digest(signature, expected):
-            return None
-        payload = json.loads(base64.urlsafe_b64decode(body+"="*((-len(body))%4)))
-        if int(payload["exp"])<=int(now_ist().timestamp()):
-            return None
-        return str(payload["visitor_id"])
-    except (ValueError, KeyError, TypeError):
-        return None
-
-
-def visitor_response(row, affidavit_profile=None):
-    response = jsonify({"ok": True, "registered": True, "visitor_id": row["visitor_id"],
-                        "session_token": make_visitor_session(row["visitor_id"]),
-                        "storage": "google_sheets" if sheet_store.enabled() else user_db_backend(),
-                        "affidavit_profile": affidavit_profile or {},
-                        "profile": {key:row[key] for key in ("name", "mobile", "district")}})
-    response.headers["Cache-Control"] = "no-store"
-    return response
-
-
-@app.post("/api/visitors/register")
-def visitors_register():
-    if os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
-        return jsonify({'ok':False,'message':'Please use Sign up with a password.'}),410
-    import uuid
-    payload = request.get_json(silent=True) or {}
-    name, district = clean(payload.get("name")), clean(payload.get("district"))
-    mobile = normalise_mobile(payload.get("mobile"))
-    if not 2<=len(name)<=120 or not mobile or not 2<=len(district)<=100:
-        return jsonify({"ok":False,"message":"सही Name, 10-digit Mobile Number और District भरें।"}),400
-    try:
-        visitor_id = str(uuid.UUID(clean(payload.get("registration_id"))))
-    except (ValueError, AttributeError):
-        return jsonify({"ok":False,"message":"Registration request invalid. Reload and retry."}),400
-    # A visitor token grants public profile access only; never admin privileges.
-    make_visitor_session(visitor_id)
-    if sheet_store.enabled():
-        result=sheet_store.call('register',visitor_id=visitor_id,name=name,mobile=mobile,district=district)
-        return visitor_response(result['visitor'],result.get('affidavit_profile'))
-    conn = visitor_db()
-    try:
-        now = now_ist().isoformat()
-        inserted = conn.execute("""INSERT INTO visitor_registrations
-            (visitor_id,name,mobile,district,signup_at,last_visit_at,visit_count)
-            VALUES (?,?,?,?,?,?,1) ON CONFLICT (visitor_id) DO NOTHING""",
-            (visitor_id,name,mobile,district,now,now))
-        if inserted.cursor.rowcount == 1:
-            conn.execute("INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)",(str(uuid.uuid4()),visitor_id,now))
-        row = dict(conn.execute("SELECT * FROM visitor_registrations WHERE visitor_id=?",(visitor_id,)).fetchone())
-        if (row["name"],row["mobile"],row["district"])!=(name,mobile,district):
-            return jsonify({"ok":False,"message":"Registration request already used. Reload and retry."}),409
-        conn.commit()
-        return visitor_response(row)
-    finally:
-        conn.close()
-
-
-@app.post("/api/visitors/session")
-def visitors_session():
-    if os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
-        return jsonify({'ok':False,'message':'Please use mobile/password Sign in.'}),401
-    import uuid
-    payload = request.get_json(silent=True) or {}
-    visitor_id = read_visitor_session(payload.get("session_token"))
-    if not visitor_id:
-        return jsonify({"ok":False,"message":"Please save your profile again."}),401
-    if sheet_store.enabled():
-        result=sheet_store.call('session',visitor_id=visitor_id)
-        return visitor_response(result['visitor'],result.get('affidavit_profile'))
-    conn = visitor_db()
-    try:
-        row = conn.execute("SELECT * FROM visitor_registrations WHERE visitor_id=?",(visitor_id,)).fetchone()
-        if not row:
-            return jsonify({"ok":False,"message":"Profile not found. Please save again."}),401
-        now = now_ist().isoformat()
-        conn.execute("UPDATE visitor_registrations SET last_visit_at=?,visit_count=visit_count+1 WHERE visitor_id=?",(now,visitor_id))
-        conn.execute("INSERT INTO visitor_events (event_id,visitor_id,visited_at) VALUES (?,?,?)",(str(uuid.uuid4()),visitor_id,now))
-        conn.commit()
-        profile=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
-        return visitor_response(dict(row),json.loads(profile['profile_json']) if profile else {})
-    finally:
-        conn.close()
-
-
 @app.get("/api/admin/visitor-registrations")
 def admin_visitor_registrations():
     email, _ = require_admin()
@@ -598,10 +506,8 @@ def admin_visitor_registrations():
 def visitor_affidavit():
     payload=request.get_json(silent=True) or {}
     token=payload.get('session_token')
-    if not (isinstance(token,str) and token.startswith('acct_')) and os.getenv('VISITOR_PROFILE_LEGACY_ALLOWED','0')!='1':
-        return jsonify({'ok':False,'message':'Mobile/password account session required.'}),401
-    account=account_service.authenticate(token) if isinstance(token,str) and token.startswith('acct_') else None
-    visitor_id=account['user_id'] if account else read_visitor_session(token)
+    account=account_service.authenticate(token)
+    visitor_id=account['user_id']
     if not visitor_id:
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
@@ -656,44 +562,43 @@ def visitor_affidavit():
             or profile['relative'] not in ('yes','no')
             or (profile['relative']=='yes' and not all(profile[key] for key in ('relativeName','relativePost','relativePosting')))):
             return jsonify({'ok':False,'message':'Required affidavit basic details are missing or invalid.'}),400
-    if sheet_store.enabled():
-        # The account JSON preserves every field even with an older deployed
-        # Apps Script that only recognises the original affidavit columns.
-        if account and profile is not None:
-            for attempt in range(3):
-                if attempt:account=account_service.authenticate(token)
-                revision=account['revision']
-                account['affidavit_profile']=profile
-                account['affidavit_profile_updated_at']=now_ist().isoformat()
-                if account_service.update(account,revision):break
-            else:return jsonify({'ok':False,'message':'Profile changed during save. Please retry.'}),409
+    remote=sheet_store.enabled()
+    if profile is not None:
+        from bidder_tools import keep_backup
+        for attempt in range(3):
+            if attempt:account=account_service.authenticate(token)
+            revision=account['revision'];keep_backup(account)
+            account['affidavit_profile']=profile;account['affidavit_profile_updated_at']=now_ist().isoformat()
+            if account_service.update(account,revision):break
+        else:return jsonify({'ok':False,'message':'Profile changed during save. Please retry.'}),409
+        if remote:
             from account_access import queue_affidavit_mirror
             mirrored=queue_affidavit_mirror(visitor_id,profile)
-            response=jsonify({'ok':True,'profile':profile,'canonical':True,'storage':'google_sheets','affidavit_sheet_sync_pending':mirrored})
-            response.headers['Cache-Control']='no-store';return response
-        if account and isinstance(account.get('affidavit_profile'),dict):
-            response=jsonify({'ok':True,'profile':account['affidavit_profile'],'canonical':True,'storage':'google_sheets'})
-            response.headers['Cache-Control']='no-store';return response
-        result=sheet_store.call('read_affidavit' if profile is None else 'save_affidavit',visitor_id=visitor_id,**({} if profile is None else {'profile':profile}))
+        else:
+            mirrored=False
+            conn=visitor_db()
+            try:
+                conn.execute('INSERT INTO visitor_affidavit_profiles (visitor_id,profile_json,updated_at) VALUES (?,?,?) ON CONFLICT(visitor_id) DO UPDATE SET profile_json=excluded.profile_json,updated_at=excluded.updated_at',(visitor_id,json.dumps(profile,ensure_ascii=False),now_ist().isoformat()));conn.commit()
+            finally:conn.close()
+        response=jsonify({'ok':True,'profile':profile,'canonical':True,'storage':'google_sheets' if remote else user_db_backend(),'affidavit_sheet_sync_pending':mirrored})
+    elif isinstance(account.get('affidavit_profile'),dict):
+        response=jsonify({'ok':True,'profile':account['affidavit_profile'],'canonical':True,'storage':'google_sheets' if remote else user_db_backend()})
+    elif remote:
+        result=sheet_store.call('read_affidavit',visitor_id=visitor_id)
         response=jsonify({'ok':True,'profile':result['profile'],'storage':'google_sheets'})
-        response.headers['Cache-Control']='no-store'
-        return response
-    conn=visitor_db()
-    try:
-        if not conn.execute('SELECT visitor_id FROM visitor_registrations WHERE visitor_id=?',(visitor_id,)).fetchone():
-            return jsonify({'ok':False,'message':'Profile not found. Please save again.'}),401
-        if profile is not None:
-            conn.execute('''INSERT INTO visitor_affidavit_profiles (visitor_id,profile_json,updated_at)
-                VALUES (?,?,?) ON CONFLICT(visitor_id) DO UPDATE SET
-                profile_json=excluded.profile_json,updated_at=excluded.updated_at''',
-                (visitor_id,json.dumps(profile,ensure_ascii=False),now_ist().isoformat()))
-            conn.commit()
-        row=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
+    else:
+        conn=visitor_db()
+        try:row=conn.execute('SELECT profile_json FROM visitor_affidavit_profiles WHERE visitor_id=?',(visitor_id,)).fetchone()
+        finally:conn.close()
         response=jsonify({'ok':True,'profile':json.loads(row['profile_json']) if row else {},'storage':user_db_backend()})
-        response.headers['Cache-Control']='no-store'
-        return response
-    finally:
-        conn.close()
+    response.headers['Cache-Control']='no-store';return response
+
+
+@app.post('/api/users/export')
+def users_export():
+    email,_=require_admin()
+    if not email:return jsonify({'ok':False,'message':'Admin access required.'}),403
+    return Response(build_user_excel(),mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',headers={'Content-Disposition':'attachment; filename="MP_Tender_Users_Report.xlsx"','Cache-Control':'no-store'})
 
 
 @app.get('/api/admin/profile-storage')
@@ -705,402 +610,6 @@ def admin_profile_storage():
     response=jsonify({'ok':True,'storage':'google_sheets' if sheet_store.enabled() else user_db_backend(),**result})
     response.headers['Cache-Control']='no-store'
     return response
-
-
-def telegram_user_from_session(payload):
-    token = clean((payload or {}).get("session_token"))
-    return read_telegram_session(token)
-
-
-TELEGRAM_SESSION_TTL = int(os.getenv("TELEGRAM_SESSION_TTL", "604800"))  # 7 days
-
-def make_telegram_session(user_id):
-    import base64, time
-    payload = {"uid": int(user_id), "exp": int(time.time()) + TELEGRAM_SESSION_TTL}
-    raw = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
-    body = base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
-    secret = clean(os.getenv("TELEGRAM_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    sig = hmac.new(secret.encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
-    return body + "." + sig
-
-def read_telegram_session(token):
-    import base64, time
-    if not token or "." not in token: return None
-    body, received_sig = token.rsplit(".", 1)
-    secret = clean(os.getenv("TELEGRAM_SESSION_SECRET")) or clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    expected_sig = hmac.new(secret.encode("utf-8"), body.encode("ascii"), hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(expected_sig, received_sig): return None
-    try:
-        padded = body + "=" * (-len(body) % 4)
-        payload = json.loads(base64.urlsafe_b64decode(padded.encode("ascii")).decode("utf-8"))
-        if int(payload.get("exp", 0)) < int(time.time()): return None
-        user_id = int(payload.get("uid", 0))
-        return user_id or None
-    except Exception:
-        return None
-
-
-def telegram_profile_photo_url(user_id):
-    """
-    Telegram Login's photo_url is not guaranteed to be present on every
-    successful widget response. When it is missing, ask the Bot API for the
-    user's latest profile photo and convert its file_id into a short-lived
-    HTTPS file URL. The bot token never leaves the server.
-    """
-    try:
-        photos = telegram_api("getUserProfilePhotos", {
-            "user_id": int(user_id),
-            "offset": 0,
-            "limit": 1,
-        })
-        if not photos.get("ok"):
-            return ""
-
-        photo_sets = photos.get("result", {}).get("photos", [])
-        if not photo_sets:
-            return ""
-
-        sizes = photo_sets[0]
-        if not sizes:
-            return ""
-
-        # Prefer the largest available size.
-        photo = max(
-            sizes,
-            key=lambda item: int(item.get("width", 0)) * int(item.get("height", 0))
-        )
-        file_id = clean(photo.get("file_id"))
-        if not file_id:
-            return ""
-
-        file_info = telegram_api("getFile", {"file_id": file_id})
-        if not file_info.get("ok"):
-            return ""
-
-        file_path = clean(file_info.get("result", {}).get("file_path"))
-        if not file_path:
-            return ""
-
-        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-        return f"https://api.telegram.org/file/bot{token}/{file_path}"
-    except Exception as exc:
-        print(f"Telegram profile photo lookup failed: {exc}")
-        return ""
-
-
-def telegram_api(method, params):
-    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    if not token:
-        raise RuntimeError("TELEGRAM_BOT_TOKEN is not configured.")
-    url = f"https://api.telegram.org/bot{token}/{method}"
-    data = urllib_parse.urlencode(params).encode("utf-8")
-    with urllib_request.urlopen(urllib_request.Request(url, data=data), timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
-
-
-@app.get("/api/telegram/photo/<int:user_id>")
-def telegram_photo(user_id):
-    """Return the user's current Telegram profile photo through the server.
-
-    Telegram file URLs are temporary, so the browser must not store the
-    Bot-API file URL directly. This endpoint resolves a fresh URL each time.
-    """
-    try:
-        photos = telegram_api("getUserProfilePhotos", {
-            "user_id": int(user_id),
-            "offset": 0,
-            "limit": 1,
-        })
-        if not photos.get("ok"):
-            return Response(status=404)
-        photo_sets = photos.get("result", {}).get("photos", [])
-        if not photo_sets or not photo_sets[0]:
-            return Response(status=404)
-        photo = max(photo_sets[0], key=lambda item: int(item.get("width", 0)) * int(item.get("height", 0)))
-        file_id = clean(photo.get("file_id"))
-        if not file_id:
-            return Response(status=404)
-        file_info = telegram_api("getFile", {"file_id": file_id})
-        if not file_info.get("ok"):
-            return Response(status=404)
-        file_path = clean(file_info.get("result", {}).get("file_path"))
-        if not file_path:
-            return Response(status=404)
-        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-        url = f"https://api.telegram.org/file/bot{token}/{file_path}"
-        with urllib_request.urlopen(url, timeout=20) as response:
-            image = response.read()
-            content_type = response.headers.get("Content-Type", "image/jpeg")
-        return Response(image, mimetype=content_type.split(";")[0], headers={"Cache-Control": "private, max-age=300"})
-    except Exception as exc:
-        print(f"Telegram profile photo proxy failed: {exc}")
-        return Response(status=404)
-
-
-@app.get("/api/telegram/config")
-def telegram_config():
-    result = telegram_api("getMe", {})
-    if not result.get("ok"):
-        return jsonify({"ok": False, "message": "Telegram bot configuration failed."}), 500
-    return jsonify({"ok": True, "username": result["result"].get("username", "")})
-
-
-@app.post("/api/telegram/verify")
-def telegram_verify():
-    payload = request.get_json(silent=True) or {}
-    received_hash = clean(payload.get("hash"))
-    if not received_hash:
-        return jsonify({"verified": False, "message": "Telegram authentication data is missing."}), 400
-
-    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    if not token:
-        return jsonify({"verified": False, "message": "Telegram bot is not configured."}), 500
-
-    auth_date = int(payload.get("auth_date", 0) or 0)
-    now = int(datetime.now(timezone.utc).timestamp())
-    if not auth_date or now - auth_date > 86400:
-        return jsonify({"verified": False, "message": "Telegram verification expired. Please verify again."}), 401
-
-    check_fields = {k: str(v) for k, v in payload.items() if k != "hash" and v is not None}
-    data_check_string = "\n".join(f"{k}={check_fields[k]}" for k in sorted(check_fields))
-    secret_key = hashlib.sha256(token.encode("utf-8")).digest()
-    expected_hash = hmac.new(secret_key, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()
-
-    if not hmac.compare_digest(expected_hash, received_hash):
-        return jsonify({"verified": False, "message": "Telegram verification could not be validated."}), 401
-
-    user_id = int(payload.get("id", 0) or 0)
-    if not user_id:
-        return jsonify({"verified": False, "message": "Telegram user ID is missing."}), 400
-
-    channel = clean(os.getenv("TELEGRAM_CHANNEL", "@mptendersalert"))
-    try:
-        member = telegram_api("getChatMember", {"chat_id": channel, "user_id": user_id})
-    except Exception as exc:
-        return jsonify({"verified": False, "message": "Membership check unavailable. Bot must be administrator of the channel.", "error": str(exc)}), 503
-
-    if not member.get("ok"):
-        return jsonify({"verified": False, "message": "Membership check failed. Please join the Telegram channel first."}), 403
-
-    status = member.get("result", {}).get("status", "")
-    is_member = bool(member.get("result", {}).get("is_member", False))
-    allowed = status in {"creator", "administrator", "member"} or (status == "restricted" and is_member)
-
-    if not allowed:
-        return jsonify({"verified": False, "message": "You are not a member of the Telegram channel. Please join it first."}), 403
-
-    # Create/update the user record and record this login event.
-    user_record = touch_user_login(user_id, payload)
-
-    # Use the Login Widget photo when available; otherwise fetch the
-    # latest Telegram profile photo through the Bot API.
-    photo_url = clean(payload.get("photo_url"))
-    if not photo_url:
-        photo_url = telegram_profile_photo_url(user_id)
-
-    session_token = make_telegram_session(user_id)
-    return jsonify({
-        "verified": True,
-        "session_token": session_token,
-        "id": user_id,
-        "username": payload.get("username", ""),
-        "first_name": payload.get("first_name", ""),
-        "last_name": payload.get("last_name", ""),
-        "photo_url": photo_url,
-        "profile_registered": bool(user_record.get("name") and user_record.get("mobile") and user_record.get("email") and user_record.get("state") and user_record.get("district")),
-        "message": "Telegram membership verified."
-    })
-
-
-@app.post("/api/telegram/session")
-def telegram_session():
-    payload = request.get_json(silent=True) or {}
-    user_id = read_telegram_session(clean(payload.get("session_token")))
-    if not user_id:
-        return jsonify({"verified": False, "message": "Telegram session expired. Please login again."}), 401
-    channel = clean(os.getenv("TELEGRAM_CHANNEL", "@mptendersalert"))
-    try:
-        member = telegram_api("getChatMember", {"chat_id": channel, "user_id": user_id})
-    except Exception as exc:
-        return jsonify({"verified": False, "message": "Membership check unavailable.", "error": str(exc)}), 503
-    if not member.get("ok"):
-        return jsonify({"verified": False, "message": "Membership check failed."}), 403
-    status = member.get("result", {}).get("status", "")
-    is_member = bool(member.get("result", {}).get("is_member", False))
-    allowed = status in {"creator", "administrator", "member"} or (status == "restricted" and is_member)
-    if not allowed:
-        return jsonify({"verified": False, "message": "Telegram channel membership is no longer active."}), 403
-    user_record = touch_user_login(user_id)
-    return jsonify({"verified": True, "id": user_id, "session_token": make_telegram_session(user_id), "profile_registered": bool(user_record.get("name") and user_record.get("mobile") and user_record.get("email") and user_record.get("state") and user_record.get("district")), "is_admin": is_user_admin(user_id), "message": "Telegram session verified."})
-
-
-@app.get("/api/users/profile")
-def users_profile():
-    user_id = telegram_user_from_session(request.args)
-    if not user_id:
-        return jsonify({"ok": False, "message": "Valid Telegram session required."}), 401
-    row = get_user(user_id)
-    if not row:
-        return jsonify({"ok": True, "registered": False, "is_admin": is_user_admin(user_id)})
-    return jsonify({
-        "ok": True,
-        "registered": bool(row.get("name") and row.get("mobile") and row.get("email") and row.get("state") and row.get("district")),
-        "is_admin": is_user_admin(user_id),
-        "user": {
-            "name": row.get("name", ""),
-            "mobile": row.get("mobile", ""),
-            "email": row.get("email", ""),
-            "state": row.get("state", ""),
-            "district": row.get("district", ""),
-            "username": row.get("username", ""),
-            "telegram_id": row.get("telegram_id"),
-        }
-    })
-
-@app.post("/api/users/register")
-def users_register():
-    payload = request.get_json(silent=True) or {}
-    user_id = telegram_user_from_session(payload)
-    if not user_id:
-        return jsonify({"ok": False, "message": "Valid Telegram session required."}), 401
-    try:
-        row = update_user_profile(user_id, payload.get("name", ""), payload.get("mobile", ""), payload.get("email", ""), payload.get("state", ""), payload.get("district", ""))
-    except ValueError as exc:
-        return jsonify({"ok": False, "message": str(exc)}), 400
-    if not row:
-        return jsonify({"ok": False, "message": "User record was not found. Please login again."}), 404
-    return jsonify({
-        "ok": True,
-        "registered": True,
-        "message": "Profile saved successfully.",
-        "user": {
-            "name": row.get("name", ""),
-            "mobile": row.get("mobile", ""),
-        }
-    })
-
-@app.get("/api/users/list")
-def users_list():
-    user_id = telegram_user_from_session(request.args)
-    if not user_id or not is_user_admin(user_id):
-        return jsonify({"ok": False, "message": "Admin access required."}), 403
-    conn = user_db()
-    try:
-        rows = conn.execute("""
-            SELECT name, mobile, email, state, district, username, telegram_id, signup_at, last_login_at, login_count
-            FROM users ORDER BY signup_at DESC
-        """).fetchall()
-        return jsonify({"ok": True, "users": [dict(row) for row in rows]})
-    finally:
-        conn.close()
-
-@app.get("/api/users/stats")
-def users_stats():
-    user_id = telegram_user_from_session(request.args)
-    if not user_id or not is_user_admin(user_id):
-        return jsonify({"ok": False, "message": "Admin access required."}), 403
-    return jsonify({"ok": True, **user_stats()})
-
-@app.post("/api/users/export")
-def users_export():
-    # /admin uses the verified Google admin session; retain Telegram admin
-    # access for the dashboard's existing export option.
-    email, _ = require_admin()
-    payload = request.get_json(silent=True) or {}
-    user_id = telegram_user_from_session(payload) if not email else None
-    if not email and (not user_id or not is_user_admin(user_id)):
-        return jsonify({"ok": False, "message": "Admin access required."}), 403
-    data = build_user_excel()
-    filename = "MP_Tender_Users_Report.xlsx"
-    return Response(
-        data,
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
-    )
-
-def telegram_auth_valid(payload):
-    received_hash = clean(payload.get("hash"))
-    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    if not received_hash or not token:
-        return None, "Telegram authentication data is missing."
-    try:
-        auth_date = int(payload.get("auth_date", 0) or 0)
-    except Exception:
-        return None, "Invalid Telegram authentication date."
-    now = int(datetime.now(timezone.utc).timestamp())
-    if not auth_date or now - auth_date > 86400:
-        return None, "Telegram verification expired. Please login again."
-    check_fields = {k: str(v) for k, v in payload.items() if k != "hash" and v is not None}
-    data_check_string = "\n".join(f"{k}={check_fields[k]}" for k in sorted(check_fields))
-    secret_key = hashlib.sha256(token.encode("utf-8")).digest()
-    expected_hash = hmac.new(secret_key, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(expected_hash, received_hash):
-        return None, "Telegram authentication could not be validated."
-    try:
-        user_id = int(payload.get("id", 0) or 0)
-    except Exception:
-        user_id = 0
-    if not user_id:
-        return None, "Telegram user ID is missing."
-    return user_id, ""
-
-@app.post("/api/telegram/send-pdf")
-def telegram_send_pdf():
-    """Send a dashboard-generated PDF to the currently logged-in Telegram user."""
-    payload = request.get_json(silent=True) or {}
-    auth = payload.get("auth") or {}
-    user_id, error = telegram_auth_valid(auth)
-    if not user_id:
-        return jsonify({"ok": False, "message": error or "Telegram login required."}), 401
-
-    pdf_b64 = clean(payload.get("pdf_base64"))
-    filename = clean(payload.get("filename")) or "MP_Tender_Dashboard.pdf"
-    if not pdf_b64:
-        return jsonify({"ok": False, "message": "PDF data is missing."}), 400
-    try:
-        import base64, requests
-        pdf_bytes = base64.b64decode(pdf_b64, validate=True)
-        if len(pdf_bytes) > 45 * 1024 * 1024:
-            return jsonify({"ok": False, "message": "PDF is too large for this Telegram delivery."}), 413
-
-        token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-        # The user must have opened/started the bot at least once; Telegram
-        # does not allow a bot to initiate a brand-new private conversation.
-        response = requests.post(
-            f"https://api.telegram.org/bot{token}/sendDocument",
-            data={
-                "chat_id": str(user_id),
-                "caption": "📄 MP Tender Dashboard PDF\nयह PDF आपके Telegram private chat में भेजी गई है।",
-            },
-            files={
-                "document": (filename, pdf_bytes, "application/pdf"),
-            },
-            timeout=45,
-        )
-        result = response.json()
-        if not result.get("ok"):
-            description = clean(result.get("description")) or "Telegram PDF delivery failed."
-            # Telegram cannot send the first private message until the user
-            # has opened the bot and pressed START once.
-            lower_description = description.lower()
-            bot_not_started = any(text in lower_description for text in (
-                "chat not found",
-                "bot can't initiate conversation",
-                "bot cannot initiate conversation",
-                "user is deactivated",
-                "forbidden"
-            ))
-            if bot_not_started:
-                return jsonify({
-                    "ok": False,
-                    "bot_not_started": True,
-                    "message": "Telegram bot को पहले START करना जरूरी है।"
-                }), 409
-            return jsonify({"ok": False, "message": description}), 502
-        return jsonify({"ok": True, "message": "PDF Telegram पर भेज दी गई है।"})
-    except Exception as exc:
-        print(f"Telegram PDF send failed: {exc}")
-        return jsonify({"ok": False, "message": "PDF Telegram पर भेजने में समस्या हुई। कृपया Telegram bot chat खोलकर Start दबाएँ।"}), 502
 
 
 # ================= GOOGLE ADMIN CONTROL PANEL =================
@@ -1403,42 +912,6 @@ def admin_logout():
     # sufficient; this endpoint exists for a clean client-side logout flow.
     return jsonify({"ok": True})
 
-def run_manual_telegram_pdf(report, view="table"):
-    """Send an admin PDF directly from Render using the latest committed live snapshot.
-
-    This intentionally does not depend on GitHub workflow dispatch/PAT. The admin
-    PDF buttons therefore keep working even when GITHUB_ACTIONS_TOKEN is absent.
-    """
-    token = clean(os.getenv("TELEGRAM_BOT_TOKEN"))
-    chat_id = clean(os.getenv("TELEGRAM_CHAT_ID"))
-    if not token or not chat_id:
-        raise RuntimeError("Telegram configuration missing: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID.")
-    owner = clean(os.getenv("GITHUB_REPO_OWNER", "esign2015"))
-    repo = clean(os.getenv("GITHUB_REPO_NAME", "mp-tenders"))
-    branch = clean(os.getenv("GITHUB_REPO_BRANCH", "main"))
-    source_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/organisation_tenders.csv"
-    try:
-        with urllib_request.urlopen(source_url, timeout=45) as response:
-            csv_bytes = response.read()
-    except Exception as exc:
-        raise RuntimeError(f"Latest tender snapshot download failed: {type(exc).__name__}: {exc}") from exc
-    if not csv_bytes or b"Tender ID" not in csv_bytes[:4096]:
-        raise RuntimeError("Latest tender snapshot is empty or invalid; PDF was not sent.")
-    with tempfile.TemporaryDirectory(prefix="mptender_admin_") as tmp:
-        csv_path = Path(tmp) / "organisation_tenders.csv"
-        csv_path.write_bytes(csv_bytes)
-        env = os.environ.copy()
-        env.update({"NOTIFY_MODE":"manual", "MANUAL_REPORT":report, "MANUAL_VIEW":view, "TENDER_CSV_PATH":str(csv_path)})
-        proc = subprocess.run(
-            [os.getenv("PYTHON", "python"), str(ROOT / "backend" / "telegram_alerts.py")],
-            cwd=str(ROOT), env=env, capture_output=True, text=True, timeout=240,
-        )
-        if proc.returncode != 0:
-            detail = clean(proc.stderr) or clean(proc.stdout) or f"exit code {proc.returncode}"
-            raise RuntimeError("Telegram PDF failed: " + detail[-1200:])
-    return "Latest GitHub tender snapshot से Telegram PDF भेज दी गई है।"
-
-
 def github_dispatch(workflow, inputs=None):
     token = clean(os.getenv("GITHUB_ACTIONS_TOKEN"))
     if not token:
@@ -1554,6 +1027,8 @@ def admin_action():
             message = "Telegram test workflow started."
         else:
             return jsonify({"ok": False, "message": "Unknown admin command."}), 400
+        from bidder_tools import queue_system_audit
+        queue_system_audit(sys.modules[__name__],email,action,report=payload.get("report",""))
         return jsonify({"ok": True, "message": message, "requested_by": email})
     except Exception as exc:
         print(f"Admin action failed: {exc}")
@@ -1572,10 +1047,15 @@ def health():
 
 @app.get("/api/tenders")
 def tenders():
+    rows=read_rows()
+    try:
+        from bidder_tools import public_json
+        metadata=public_json("inventory_counts.json")
+    except Exception:metadata={}
     return jsonify({
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "count": len(read_rows()),
-        "tenders": read_rows(),
+        "updated_at": metadata.get("snapshot_at"),
+        "count": len(rows),
+        "tenders": rows,
     })
 
 
@@ -1587,6 +1067,8 @@ def fetch():
 import sys
 from account_access import install as install_account_access
 account_service=install_account_access(sys.modules[__name__])
+from bidder_tools import install as install_bidder_tools
+install_bidder_tools(sys.modules[__name__])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "10000")))

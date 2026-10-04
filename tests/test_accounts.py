@@ -376,8 +376,8 @@ class AccountsTests(unittest.TestCase):
         self.assertFalse(server.USER_DB_PATH.exists())
     def test_anonymous_profile_cannot_bypass_password_account(self):
         account=self.signup()
-        self.assertEqual(self.client.post('/api/visitors/register',json={'registration_id':account['visitor_id'],'name':'Bidder Test','mobile':self.data['mobile'],'district':self.data['district']}).status_code,410)
-        legacy=server.make_visitor_session(account['visitor_id'])
+        self.assertEqual(self.client.post('/api/visitors/register',json={'registration_id':account['visitor_id'],'name':'Bidder Test','mobile':self.data['mobile'],'district':self.data['district']}).status_code,404)
+        legacy='legacy_'+account['visitor_id']
         self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':legacy}).status_code,401)
     def test_unconnected_ephemeral_storage_cannot_accept_password_accounts(self):
         with patch.dict(os.environ,{'ALLOW_EPHEMERAL_ACCOUNTS':'0'}):

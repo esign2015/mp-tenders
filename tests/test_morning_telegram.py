@@ -129,21 +129,19 @@ class MorningTelegramTests(unittest.TestCase):
             path=Path(tmp)/'all_tenders_org_detailed.csv';path.write_text('Tender ID\n')
             (Path(tmp)/'organisation_tenders.csv').write_text('Tender ID\ntoday\ntomorrow\n')
             rows=[{'Tender ID':'today','Closing Date':'01-Oct-2026 05:00 PM'},{'Tender ID':'tomorrow','Closing Date':'02-Oct-2026 05:00 PM'},{'Tender ID':'old-master-only','Closing Date':'01-Oct-2026 05:00 PM'}]
-            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'morning','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')) as pdf,patch('telegram_card_pdf.make_card_pdf',return_value=Path('cardpdf')) as card_pdf:
+            with patch.dict(os.environ,{'TELEGRAM_BOT_TOKEN':'test','TELEGRAM_CHAT_ID':'test','NOTIFY_MODE':'morning','MORNING_EXTRACTION_RESULT':'failure'}),patch.object(alerts,'CSV_PATH',path),patch.object(alerts,'datetime',Clock),patch.object(alerts,'load_report_rows',return_value=rows),patch.object(alerts,'telegram_message') as message,patch.object(alerts,'telegram_document') as document,patch.object(alerts,'make_pdf',return_value=Path('pdf')) as pdf:
                 self.assertEqual(alerts.main(),0)
                 self.assertIn('उपलब्ध पिछले डेटा',document.call_args.args[3])
                 message.assert_not_called()
                 self.assertEqual([r['Tender ID'] for r in pdf.call_args.args[0]],['today'])
                 self.assertEqual(document.call_count,1)
-                card_pdf.assert_not_called()
 
     def test_morning_alert_is_independent_of_extraction(self):
         root=Path(__file__).resolve().parents[1]
         workflow=(root/'.github/workflows/scrape.yml').read_text()
         scrape=workflow.split('  scrape_full:',1)[1].split('  morning_telegram_after_extraction:',1)[0]
         self.assertIn("github.event.schedule == '25 3 * * *'",scrape)
-        after=workflow.split('  morning_telegram_after_extraction:',1)[1].split('  corrigendum_watch:',1)[0]
-        self.assertIn('if: false',after)
+        self.assertNotIn('  morning_telegram_after_extraction:',workflow)
         config=json.loads((root/'data/schedule_config.json').read_text())
         self.assertEqual(config['morning_telegram_ist'],'08:00')
         self.assertFalse(config['morning_send_after_extraction'])
