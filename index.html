@@ -4761,6 +4761,7 @@ async function loadDistrictMaster(){
 
 function applyFilters(refreshHeader=true, preservePage=false){
   const general = clean($("generalSearch").value).toLowerCase();
+  const generalTerms = general.split(/\s+/).filter(Boolean);
 
   const organisation = clean($("organisationSearch").value).toLowerCase();
   const districtSearch = clean($("districtSearch").value).toLowerCase();
@@ -4799,7 +4800,8 @@ function applyFilters(refreshHeader=true, preservePage=false){
       row["Pincode"],districtInfo.name,
       row["Product Category"],row["Sub Category"],row["Work Description"]
     ].join(" ").toLowerCase();
-    if(general && !combined.includes(general)) return false;
+    // Every space-separated term must match, in any field and any order.
+    if(!generalTerms.every(term => combined.includes(term))) return false;
 
     if(organisation){
       const rowOrganisation = clean(row["Organisation"]).toLowerCase();

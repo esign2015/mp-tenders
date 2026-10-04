@@ -150,6 +150,29 @@ context.portalSnapshot={verified:true,snapshot_at:'2026-10-01T10:00:00+05:30'};c
 context.portalSnapshot=null;
 console.log('PASS: verified inventory remains authoritative through midnight and 09:00; only new verified IDs enter Live.');
 
+// Main search accepts independently placed words, in any order, across fields.
+const rowsBeforeSearch=context.allTenders;
+context.allTenders=[
+ {'Tender ID':'2026_TEST_THANA_1',Title:'Construction of thana building',Location:'Harda',Organisation:'PWD','Closing Date':'01-Jan-2099 06:00 PM'},
+ {'Tender ID':'2026_TEST_THANA_2',Title:'Thana renovation',Location:'Dewas',Organisation:'PWD','Closing Date':'01-Jan-2099 06:00 PM'},
+ {'Tender ID':'2026_TEST_HINDI_1',Title:'थाना निर्माण',Location:'हरदा','Closing Date':'01-Jan-2099 06:00 PM'},
+ {'Tender ID':'2026_TEST_EXPIRED_1',Title:'Construction of thana building',Location:'Harda','Closing Date':'01-Jan-2000 06:00 PM'}
+];
+for(const [query,expected] of [
+ ['thana h',['2026_TEST_THANA_1','2026_TEST_THANA_2']],
+ ['THANA  HARDA',['2026_TEST_THANA_1']],
+ ['  harda\tthana\nPWD  ',['2026_TEST_THANA_1']],
+ ['thana unrelated',[]],
+ ['हरदा थाना',['2026_TEST_HINDI_1']],
+ ['2026_TEST_THANA_2',['2026_TEST_THANA_2']],
+ ['   ',['2026_TEST_HINDI_1','2026_TEST_THANA_1','2026_TEST_THANA_2']]
+]){
+ controls.generalSearch.value=query;context.applyFilters();
+ assert.deepEqual(Array.from(context.filteredTenders,r=>r['Tender ID']).sort(),expected,query);
+}
+controls.generalSearch.value='';context.allTenders=rowsBeforeSearch;
+console.log('PASS: main search matches every word across fields in any order, handles repeated whitespace/case/Hindi, preserves Tender ID search and excludes expired records.');
+
 for(const value of ['1000','1000.0','1000.00']){
  assert.equal(context.formatMoney(value),'₹ 1,000.00');
  assert.equal(context.formatPdfAmount(value),'1,000.00');
