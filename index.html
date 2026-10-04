@@ -5246,10 +5246,33 @@ function drawPdfPromotionCard(doc,kind,x,y,width,height){
   }
 }
 
-function drawPdfTablePromotions(doc,pageWidth){
-  const width=(pageWidth-24)/2;
-  drawPdfPromotionCard(doc,'services',10,40,width,54);
-  drawPdfPromotionCard(doc,'community',14+width,40,width,54);
+function drawPdfTablePromotions(doc,pageWidth,pageHeight){
+  const width=(pageWidth-24)/2,height=22,y=pageHeight-39;
+  const links=[['WhatsApp','https://wa.me/919893610244'],['Telegram','https://t.me/rdgyan'],['Email','mailto:imriteshdhoot@gmail.com'],['Buy DSC','https://secure.certificate.digital/web/dsc/referral/?bp=fVNSQNJt@@@@@@L0=']];
+  for(const [kind,x] of [['services',10],['community',14+width]]){
+    const services=kind==='services';
+    doc.setFillColor(...(services?[23,61,112]:[239,246,255]));
+    doc.setDrawColor(...(services?[212,165,20]:[191,219,254]));
+    doc.roundedRect(x,y,width,height,2,2,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(9);
+    doc.setTextColor(...(services?[255,255,255]:[23,61,112]));
+    doc.text(services?'SAR Digital Services, Kannod':'MP Tender Alerts',x+4,y+5);
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+    doc.text(services?'DSC Sale | PWD Registration | E-Tender Submission Assistance':'Today closing: 8 AM | Tomorrow closing: 4 PM | New tenders: evening',x+4,y+10);
+    if(services){
+      doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(253,230,138);
+      doc.text('Rs 1,000.00 per tender',x+width-4,y+5,{align:'right'});
+    }
+    const buttons=services?links:[['Join Telegram Channel','https://t.me/mptendersalert'],['Join WhatsApp Group','https://chat.whatsapp.com/BuKI6bxZGHVBIHA6KZt7Vy']];
+    const buttonWidth=(width-8-2*(buttons.length-1))/buttons.length;
+    buttons.forEach(([label,url],i)=>{
+      const bx=x+4+i*(buttonWidth+2),by=y+14;
+      doc.setFillColor(...(services?[37,99,235]:i===0?[2,132,199]:[22,163,74]));
+      doc.roundedRect(bx,by,buttonWidth,5.5,1,1,'F');
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+      doc.text(label,bx+buttonWidth/2,by+3.5,{align:'center'});doc.link(bx,by,buttonWidth,5.5,{url});
+    });
+  }
 }
 
 function appendPdfPromotionPage(doc){
@@ -5420,7 +5443,7 @@ async function exportPdf(){
       top:39,
       left:10,
       right:10,
-      bottom:22
+      bottom:44
     },
     head:[[
       "S.No.","Tender ID","Closing Date","Title","Ref.No.",
@@ -5683,10 +5706,6 @@ async function exportPdf(){
       if(doc.setGState && doc.GState){
         doc.restoreGraphicsState();
       }
-      if(doc.internal.getNumberOfPages()===2){
-        drawPdfTablePromotions(doc,pageWidth);
-        if(data?.cursor)data.cursor.y=Math.max(data.cursor.y,100);
-      }
     },
 
     didDrawPage:function(){
@@ -5754,11 +5773,14 @@ async function exportPdf(){
     ...pdfTableOptions,
     body: body
   });
-  if(doc.internal.getNumberOfPages()===1){
-    doc.addPage();
-    pdfTableOptions.willDrawPage();
-    pdfTableOptions.didDrawPage();
+  const pageCount=doc.internal.getNumberOfPages();
+  for(let page=1;page<=pageCount;page++){
+    if(page%2===1 || page===pageCount){
+      doc.setPage(page);
+      drawPdfTablePromotions(doc,pageWidth,pageHeight);
+    }
   }
+  doc.setPage(pageCount);
 
   const stamp = now.toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});
   const filename="MP_Tender_Table_View_" + stamp + ".pdf";

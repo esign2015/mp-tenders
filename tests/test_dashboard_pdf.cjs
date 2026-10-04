@@ -8,10 +8,10 @@ assert(html.includes('>▤ Table View PDF</button>'));
 assert(!html.includes('filteredTenders.length ? filteredTenders : allTenders'));
 const calls=[],docs=[],links=[];
 class Pdf{
- constructor(options={}){this.options=options;this.pages=1;this.width=options.orientation==='landscape'?297:210;this.height=options.orientation==='landscape'?210:297;this.cards=[];this.internal={getPageSize:()=>({width:this.width,height:this.height}),pageSize:{getWidth:()=>this.width,getHeight:()=>this.height},getNumberOfPages:()=>this.pages};docs.push(this);}
- setFont(){}setFontSize(){}setTextColor(){}setFillColor(){}setDrawColor(){}roundedRect(x,y,w,h){if(h===80)this.cards.push({page:this.pages,x,y,w,h});}rect(){}link(x,y,w,h,a){links.push(a.url)}
+ constructor(options={}){this.options=options;this.promotions=[];this.pages=1;this.currentPage=1;this.width=options.orientation==='landscape'?297:210;this.height=options.orientation==='landscape'?210:297;this.cards=[];this.internal={getPageSize:()=>({width:this.width,height:this.height}),pageSize:{getWidth:()=>this.width,getHeight:()=>this.height},getNumberOfPages:()=>this.pages};docs.push(this);}
+ setFont(){}setFontSize(){}setTextColor(){}setFillColor(){}setDrawColor(){}roundedRect(x,y,w,h){if(h===80)this.cards.push({page:this.currentPage,x,y,w,h});if(h===22)this.promotions.push({page:this.currentPage,x,y,w,h});}rect(){}link(x,y,w,h,a){links.push(a.url)}
  splitTextToSize(v){return[String(v)];}getTextWidth(v){return String(v).length;}
- text(v,x,y){calls.push({v:Array.isArray(v)?v.join(' '):v,x,y});}
+ text(v,x,y){calls.push({v:Array.isArray(v)?v.join(' '):v,x,y,page:this.currentPage});}
  textWithLink(v,x,y,a){links.push(a.url);this.text(v,x,y);}
  autoTable(options){
   this.tableCursors=[];
@@ -20,7 +20,7 @@ class Pdf{
    const data={cursor:{y:39}};options.willDrawPage(data);this.tableCursors.push(data.cursor.y);options.didDrawPage();
   }
  }
- addPage(){this.pages++;}save(name){this.saved=name;}
+ addPage(){this.pages++;this.currentPage=this.pages;}setPage(page){this.currentPage=page;}save(name){this.saved=name;}
 }
 const context=vm.createContext({window:{jspdf:{jsPDF:Pdf}},clean:v=>String(v??'').trim(),
  cleanDisplayTitle:v=>String(v??''),formatClosingDateTime:v=>v,
@@ -61,12 +61,18 @@ for(const [count,pages] of [[1,1],[6,1],[12,2],[13,3]]){
  assert.equal(docs.at(-1).pages,1);
  Pdf.tablePageCount=3;
  await context.exportPdf();
- assert.equal(docs.at(-1).pages,3);assert.deepEqual(docs.at(-1).tableCursors,[39,100,39]);
+ assert.equal(docs.at(-1).pages,3);assert.deepEqual(docs.at(-1).tableCursors,[39,39,39]);
+ assert.deepEqual(docs.at(-1).promotions.map(x=>x.page),[1,1,3,3]);
+ assert(docs.at(-1).promotions.every(x=>x.y===docs.at(-1).height-39&&x.y+x.h<docs.at(-1).height-13));
  Pdf.tablePageCount=1;
  const groupBefore=links.filter(x=>x.includes('chat.whatsapp.com/')).length;
- await context.exportPdf();assert.equal(docs.at(-1).pages,2);
- assert.equal(links.filter(x=>x.includes('chat.whatsapp.com/')).length,groupBefore+1);
+ await context.exportPdf();assert.equal(docs.at(-1).pages,1);
+ assert.equal(docs.at(-1).promotions.length,2);
+ Pdf.tablePageCount=4;await context.exportPdf();
+ assert.equal(docs.at(-1).pages,4);assert.deepEqual(docs.at(-1).promotions.map(x=>x.page),[1,1,3,3,4,4]);
+ Pdf.tablePageCount=1;
+ assert.equal(links.filter(x=>x.includes('chat.whatsapp.com/')).length,groupBefore+4);
  const pages=docs.at(-1).pages;context.appendPdfPromotionPage(docs.at(-1));assert.equal(docs.at(-1).pages,pages+1);
  assert(html.includes('appendPdfPromotionPage(doc);\n      const pdfName=fileBase(d)+".pdf";'));
- console.log('PASS: landscape Card PDF with four columns, two rows, six tenders plus two clickable promotional cards, exact pagination and unchanged Table PDF');
+ console.log('PASS: landscape Card PDF with four columns, two rows, six tenders plus two clickable promotional cards, exact pagination; compact Table PDF adverts on odd and final pages with no extra ad-only page');
 })().catch(e=>{console.error(e);process.exitCode=1;});
