@@ -131,6 +131,7 @@ function accountSetupControls(data){
     const aff=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
     for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
       let value=aff[key]||({bidderName:profile.name,parentRelation:'S/o',status:'Proprietor',place:profile.tehsil||profile.district,relative:'no',email:profile.email||''}[key]||'');
+      if(key==='registrationClass'&&!['Not Applicable','Class A','Class B','Class C'].includes(value))value='Not Applicable';
       if(key==='bidderName'&&value===profile.first_name)value=profile.name;
       const field=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1));if(field)field.value=value;
     }
