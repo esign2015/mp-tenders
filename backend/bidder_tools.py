@@ -117,7 +117,7 @@ def process_alerts(server,call=None):
         def bind(current):
             state=current.setdefault('bidder_tools',{});fresh=state.get('telegram_link') or {}
             if fresh.get('hash')!=link['hash'] or fresh.get('expires',0)<time.time():raise AccountError('Link expired.')
-            state['telegram']={'chat_id':chat['id'],'enabled':True,'connected_at':time.time(),'cursor':time.time()};state.pop('telegram_link',None)
+            state['telegram']={'chat_id':chat['id'],'enabled':True,'connected_at':time.time(),'cursor':time.time(),'cursor_key':'~'};state.pop('telegram_link',None)
         mutate(accounts,user_id,bind);bound+=1
         call('sendMessage',chat_id=chat['id'],text='✅ आपकी My Shortlist के private alerts शुरू हैं। अंतिम तिथि, शुल्क और शुद्धिपत्र के बदलाव यहीं आएँगे। बंद करने के लिए dashboard में Private Alerts खोलें।',disable_web_page_preview=True)
     update_ids=[item['update_id'] for item in updates if isinstance(item.get('update_id'),int)]
@@ -137,18 +137,20 @@ def process_alerts(server,call=None):
         if record.get('blocked') or not alert.get('enabled') or not alert.get('chat_id'):continue
         events=[]
         for tid in state.get('shortlist',[]):
-            events.extend({**event,'tender_id':tid} for event in history.get(tid,[]) if event.get('at',0)>alert.get('cursor',0))
-        events.sort(key=lambda item:item['at']);events=events[:12]
+            for event in history.get(tid,[]):
+                event_key=hashlib.sha256(json.dumps([tid,event],sort_keys=True).encode()).hexdigest()[:16]
+                if (event.get('at',0),event_key)>(alert.get('cursor',0),alert.get('cursor_key','~')):events.append({**event,'tender_id':tid,'event_key':event_key})
+        events.sort(key=lambda item:(item['at'],item['event_key']));events=events[:12]
         if not events:continue
         digest=hashlib.sha256(json.dumps(events,sort_keys=True).encode()).hexdigest()
         pending=alert.get('outbox') or {}
         # An uncertain send is held for admin review; do not resend blindly.
         if pending.get('state')=='sending':uncertain+=1;continue
-        chat_id=alert['chat_id'];cursor=max(event['at'] for event in events)
+        chat_id=alert['chat_id'];cursor=events[-1]['at'];cursor_key=events[-1]['event_key']
         def reserve(current):
             fresh=current.get('bidder_tools',{}).get('telegram',{})
-            if not fresh.get('enabled') or fresh.get('chat_id')!=chat_id or fresh.get('cursor',0)>=cursor or fresh.get('outbox',{}).get('state')=='sending':raise AccountError('Alert state changed.',409)
-            fresh['outbox']={'state':'sending','digest':digest,'cursor':cursor,'at':time.time()}
+            if not fresh.get('enabled') or fresh.get('chat_id')!=chat_id or (fresh.get('cursor',0),fresh.get('cursor_key','~'))>=(cursor,cursor_key) or fresh.get('outbox',{}).get('state')=='sending':raise AccountError('Alert state changed.',409)
+            fresh['outbox']={'state':'sending','digest':digest,'cursor':cursor,'cursor_key':cursor_key,'at':time.time()}
         try:mutate(accounts,record['user_id'],reserve)
         except AccountError:continue
         lines=['🔔 आपकी Shortlist में बदलाव']
@@ -162,7 +164,7 @@ def process_alerts(server,call=None):
         def complete(current):
             fresh=current.get('bidder_tools',{}).get('telegram',{})
             if fresh.get('outbox',{}).get('digest')==digest:
-                fresh.update(cursor=cursor,outbox={'state':'sent','digest':digest,'message_id':result['message_id'],'at':time.time()})
+                fresh.update(cursor=cursor,cursor_key=cursor_key,outbox={'state':'sent','digest':digest,'message_id':result['message_id'],'at':time.time()})
         mutate(accounts,record['user_id'],complete);sent+=1
     return {'bound':bound,'sent':sent,'uncertain':uncertain}
 

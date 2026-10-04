@@ -78,6 +78,19 @@ class BidderToolsTests(unittest.TestCase):
         with patch.object(tools,'public_json',return_value=history):
             self.assertEqual(tools.process_alerts(server,failed)['uncertain'],1);self.assertEqual(tools.process_alerts(server,call)['uncertain'],1)
         self.assertEqual(len(calls),1)
+    def test_same_checkpoint_with_many_changes_does_not_drop_next_batch(self):
+        ids=['2026_UAD_'+str(index)+'_1' for index in range(33)]
+        record=server.account_service.get(user_id=self.account['visitor_id']);record['bidder_tools']={'shortlist':ids,'telegram':{'chat_id':123,'enabled':True,'cursor':1799999990}};server.account_service.update(record,record['revision'])
+        history={'tenders':{tid:[{'at':1799999999,'field':'शुल्क','before':'100','after':'500'}] for tid in ids}}
+        texts=[]
+        def call(method,**params):
+            if method=='getUpdates':return []
+            texts.append(params['text']);return {'message_id':len(texts)}
+        with patch.object(tools,'public_json',return_value=history):
+            for _ in range(3):self.assertEqual(tools.process_alerts(server,call)['sent'],1)
+            self.assertEqual(tools.process_alerts(server,call)['sent'],0)
+        for tid in ids:self.assertEqual(sum(text.count(tid+'\n') for text in texts),1)
+
     def test_unsigned_worker_and_backup_cannot_access_records(self):
         with patch.object(tools,'all_records',side_effect=AssertionError('No reads')):
             self.assertEqual(self.client.post('/api/internal/bidder-alerts',json={}).status_code,401)
