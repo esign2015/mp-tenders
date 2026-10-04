@@ -1,7 +1,0 @@
-node_modules/
-.wrangler/
-.dev.vars
-migration-data*
-*.private.sql
-
-__pycache__/
