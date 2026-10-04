@@ -4209,7 +4209,6 @@ function renderCardWindow(){
         <div class="tender-card-actions">
           <a class="share" href="${escapeHtml(whatsappShareUrl(row))}" target="_blank" rel="noopener noreferrer">💬 Share on WhatsApp</a>
           <button class="affidavit-btn" type="button" data-affidavit-id="${escapeHtml(row["Tender ID"])}">📄 Affidavit</button>
-          <a href="${escapeHtml(stableTenderUrl(row))}" target="_blank" rel="noopener noreferrer">Open</a>
         </div>
       </article>`);
     if(n===3 || n%CARD_ALERT_INTERVAL===0) blocks.push(tenderAlertsCard());
