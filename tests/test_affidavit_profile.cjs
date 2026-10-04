@@ -46,6 +46,16 @@ assert(node('affidavitPreview').innerHTML.includes('Annexure - H'));
 assert(!node('affidavitPreview').innerHTML.includes('DECLARATION / UNDERTAKING'));
 assert(!node('affidavitPreview').innerHTML.includes('EPF'));
 assert(!node('affidavitPreview').innerHTML.includes('ESIC'));
+// Representative rows always reuse the bidder, even when an older profile has separate representative data.
+ctx.window.dashboardVisitorProfile.mobile='+919876543210';
+ctx.window.dashboardAffidavitProfile={...complete,address:'Updated Address',telephone:'07273-222333',fax:'07273-222334',representativeName:'Old Representative',representativeDesignation:'Old Role',representativeAddress:'Old Address',representativeTelephone:'011-0000000',representativeFax:'011-0000001',representativeMobile:'+919000000000',representativeEmail:'old@example.test'};
+ctx.window.openAffidavitForTender('TENDER-1');
+for(const [number,label,value] of [['12.','Name','Full Name'],['13.','Designation','Proprietor'],['14.','Postal Address','Updated Address'],['15.','Telephone Number with STD Code','07273-222333'],['16.','Fax Number with STD Code','07273-222334'],['17.','Mobile Number','+919876543210'],['18.','E-mail Address','bidder@example.test']]){
+ assert(node('affidavitPreview').innerHTML.includes('<tr><td>'+number+'</td><td>'+label+'</td><td>'+value+'</td></tr>'),number);
+}
+assert(!node('affidavitPreview').innerHTML.includes('Old Representative'));
+assert(!node('affidavitPreview').innerHTML.includes('old@example.test'));
+assert(!html.includes('id="accountAffRepresentative'));
 ctx.window.openAffidavitForTender('TENDER-1');
 assert.equal(node('affSelectAffidavit').checked,false);
 node('affSelectNoRelation').checked=false;node('affSelectAnnexureH').checked=false;node('affSelectAnnexureH').change();

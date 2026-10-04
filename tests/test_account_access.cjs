@@ -81,6 +81,7 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  ctx.window.pendingAffidavitTenderId='TENDER-1';node('accountAffAddress').value='Updated Address';
  await node('accountEditAffidavitForm').onsubmit({preventDefault(){},currentTarget:node('accountEditAffidavitForm')});
  assert.equal(savedAff.email,'bidder@example.test');assert.equal(savedAff.pan,'ABCDE1234F');assert.equal(savedAff.registrationNumber,'REG-42');assert.equal(savedAff.address,'Updated Address');assert.equal(savedAff.parentName,'Parent User');assert.equal(savedAff.parentRelation,'W/o');assert.equal(resumedTender,'TENDER-1');assert.equal(ctx.window.pendingAffidavitTenderId,null);
+ assert(!Object.keys(savedAff).some(key=>key.startsWith('representative')));
  // Restoring a session keeps its view; a real login starts in card view.
  local.set('mpTenderViewMode','table');
  const viewProfile={name:'Test',mobile:'9876543210',district:'Dewas'};

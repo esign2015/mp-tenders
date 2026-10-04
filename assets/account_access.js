@@ -129,7 +129,7 @@ function accountSetupControls(data){
     const profile=window.dashboardVisitorProfile||data.profile;
     visitorNode('accountEditName').value=profile.first_name||profile.name.split(' ')[0];visitorNode('accountEditMiddleName').value=profile.middle_name||(profile.first_name?'':profile.name.split(' ').slice(1,-1).join(' '));visitorNode('accountEditLastName').value=profile.last_name||(profile.first_name||!profile.name.includes(' ')?'':profile.name.split(' ').at(-1)); visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;accountTehsilOptions('accountEditDistrict','accountEditTehsil',profile.tehsil);
     const aff=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
-    for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','representativeName','representativeDesignation','representativeAddress','representativeTelephone','representativeFax','representativeMobile','representativeEmail','organisationType']){
+    for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
       let value=aff[key]||({bidderName:profile.name,parentRelation:'S/o',status:'Proprietor',place:profile.tehsil||profile.district,relative:'no',email:profile.email||''}[key]||'');
       if(key==='bidderName'&&value===profile.first_name)value=profile.name;
       const field=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1));if(field)field.value=value;
@@ -148,7 +148,7 @@ function accountSetupControls(data){
   if(visitorNode('accountEditAffidavitForm'))visitorNode('accountEditAffidavitForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
     const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Affidavit की basic details save हो रही हैं…';
-    const aff={};for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','representativeName','representativeDesignation','representativeAddress','representativeTelephone','representativeFax','representativeMobile','representativeEmail','organisationType'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
+    const aff={};for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
     try{
       window.dashboardAffidavitProfileEdited=true;
       await window.saveDashboardAffidavitProfile(aff);
