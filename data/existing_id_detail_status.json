@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "37197399965",
-  "github_run_number": "885",
-  "github_commit_sha": "25cf42bb23806b1bcc16f2f79682c28003e2537b",
+  "status": "running",
+  "github_run_id": "37205925761",
+  "github_run_number": "47",
+  "github_commit_sha": "a72a71d8ce099ba61b1e4e7fcfbd23d4d51704d7",
   "batch_size": 500,
   "total_csv_ids": 5320,
-  "current_portal_ids": 5320,
-  "initial_incomplete": 355,
-  "batch_targets": 355,
-  "batch_attempted": 355,
-  "batch_complete": 355,
-  "started_at": "2026-10-04T11:23:57.927608+00:00",
-  "success": 5276,
+  "current_portal_ids": 5319,
+  "initial_incomplete": 327,
+  "batch_targets": 327,
+  "batch_attempted": 13,
+  "batch_complete": 12,
+  "started_at": "2026-10-04T13:32:05.085016+00:00",
+  "success": 5275,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -2272,7 +2272,6 @@
     "2026_TAD_538471_1",
     "2026_TMPYP_537611_1",
     "2026_UAD_473279_4",
-    "2026_UAD_474581_3",
     "2026_UAD_474585_3",
     "2026_UAD_474589_3",
     "2026_UAD_474591_3",
@@ -5339,7 +5338,7 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_530881_3",
+  "last_successful_tender_id": "2026_MKVVC_535593_1",
   "errors": [],
-  "updated_at": "2026-10-04T11:55:20.970759+00:00"
+  "updated_at": "2026-10-04T13:34:03.714028+00:00"
 }
