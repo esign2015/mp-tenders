@@ -16,7 +16,7 @@ class SheetStoreTests(unittest.TestCase):
     def tearDown(self):
         self.pg.stop();self.db.stop();self.env.stop();self.tmp.cleanup()
     def data(self):return {'registration_id':str(uuid.uuid4()),'name':'Test user','mobile':'9876543210','district':'Dewas'}
-    def affidavit(self):return {'bidderName':'Test user','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','relativeName':'','relativePost':'','relativePosting':''}
+    def affidavit(self):return {'bidderName':'Test user','firmName':'Firm','status':'Proprietor','place':'Dewas','email':'office@example.test','relative':'no','relativeName':'','relativePost':'','relativePosting':''}
     def test_remote_requests_are_signed_and_retry_uses_same_request_id(self):
         import requests
         response=Mock(ok=True);response.json.return_value={'ok':True,'profile':{}}
