@@ -1197,7 +1197,8 @@ td.title-cell{
 .tender-card-id{font-weight:800;color:#0f4c81;font-size:14px;word-break:break-word}
 .tender-card-time{font-size:11px;font-weight:800;background:#eef6ff;color:#0f4c81;border-radius:999px;padding:4px 7px;white-space:nowrap}
 .tender-card.closing-today .tender-card-time{background:#b91c1c;color:#fff}
-.tender-card-title{font-weight:800;line-height:1.25;font-size:14px;margin:4px 0 3px}
+.tender-card-title{font-weight:800;line-height:1.25;font-size:14px;margin:4px 0 3px;height:105px;flex:0 0 105px;overflow:hidden}
+.tender-card-title-text{display:block;overflow-wrap:anywhere}
 .tender-card-ref{font-size:11px;color:#64748b;margin-bottom:4px}
 .tender-card-org{font-size:12px;font-weight:700;color:#0f4c81;margin-bottom:7px}
 .tender-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:auto}
@@ -4169,6 +4170,45 @@ function whatsappShareUrl(row){
   return "https://api.whatsapp.com/send/?text="+encodeURIComponent(lines.join("\n"))+"&type=custom_url&app_absent=0";
 }
 
+function fitCardTitles(){
+  const grid=$("tenderCardGrid");
+  if(!grid?.querySelectorAll) return;
+  for(const text of grid.querySelectorAll('.tender-card-title-text')){
+    if(!text.getBoundingClientRect().width) continue;
+    text.style.fontSize='';
+    const base=parseFloat(window.getComputedStyle(text).fontSize)||14;
+    const fits=()=>{
+      const lineHeight=parseFloat(window.getComputedStyle(text).lineHeight);
+      return text.getBoundingClientRect().height<=lineHeight*6+0.5;
+    };
+    if(fits()) continue;
+    let low=0.5,high=base;
+    for(let step=0;step<8;step++){
+      const size=(low+high)/2;text.style.fontSize=size+'px';
+      if(fits()) low=size;else high=size;
+    }
+    text.style.fontSize=(Math.floor(low*10)/10)+'px';
+  }
+}
+
+function setupCardTitleSizing(){
+  let frame=0;
+  const fit=()=>{
+    if(frame) cancelAnimationFrame(frame);
+    frame=requestAnimationFrame(()=>{frame=0;fitCardTitles();});
+  };
+  window.addEventListener('resize',fit);
+  const grid=$("tenderCardGrid");
+  if(window.ResizeObserver && grid){
+    let width=-1;
+    new ResizeObserver(entries=>{
+      const next=entries[0]?.contentRect.width;
+      if(next!==width){width=next;fit();}
+    }).observe(grid);
+  }
+  document.fonts?.ready.then(fit);
+}
+
 function renderCardWindow(){
   const grid=$("tenderCardGrid");
   if(!grid) return;
@@ -4185,7 +4225,7 @@ function renderCardWindow(){
     const org=escapeHtml(displayTenderValue(row,"Organisation"))||"—";
     const district=escapeHtml(getDistrictInfo(row).name||"—");
     const category=escapeHtml(displayTenderValue(row,"Product Category"))||"—";
-    const contract=escapeHtml(displayTenderValue(row,"Contract Type"))||"—";
+    const location=escapeHtml(displayTenderValue(row,"Location"))||district;
     const corr=escapeHtml(displayTenderValue(row,"Corrigendum"))||"—";
     blocks.push(`
       <article class="tender-card ${cardClosingClass(row)}" data-closing-time="${parseDate(row["Closing Date"])?.getTime()||0}">
@@ -4194,11 +4234,11 @@ function renderCardWindow(){
           <div class="tender-card-time${isDeadlineAlertActive(parseDate(row["Closing Date"])?.getTime()||0)?' countdown-deadline-blink':''}" data-time-left="${escapeHtml(row["Closing Date"])}">${escapeHtml(formatTimeLeft(row["Closing Date"]))}</div>
         </div>
         <div class="tender-card-ref">#${n} • Ref: ${escapeHtml(displayTenderValue(row,"Reference Number"))||"—"}</div>
-        <div class="tender-card-title">${title}</div>
+        <div class="tender-card-title" title="${title}"><span class="tender-card-title-text">${title}</span></div>
         <div class="tender-card-org">${org} • ${district}</div>
         <div class="tender-card-metrics">
           <div class="tender-card-metric"><span>Category</span><b>${category}</b></div>
-          <div class="tender-card-metric"><span>Contract</span><b>${contract}</b></div>
+          <div class="tender-card-metric"><span>Location</span><b title="${location}">${location}</b></div>
           <div class="tender-card-metric"><span>PAC / Estimate</span><b>${formatMoney(row["PAC Amount"])}</b></div>
           <div class="tender-card-metric"><span>EMD</span><b>${formatMoney(row["EMD Fee"])}</b></div>
           <div class="tender-card-metric"><span>Tender Fee + Portal</span><b>${verifiedTenderFeeText(row)}</b></div>
@@ -4215,6 +4255,7 @@ function renderCardWindow(){
     if((index+1)%CARD_AD_INTERVAL===0 && index<visibleRows.length-1) blocks.push(sarAdCard());
   });
   grid.innerHTML=blocks.join("");
+  requestAnimationFrame(fitCardTitles);
   $("recordCount").textContent=
     virtualRows.length>virtualEnd
       ? (currentLanguage==="hi"?virtualRows.length+" परिणाम • पेज "+(Math.floor(virtualStart/VIRTUAL_CHUNK_SIZE)+1):virtualRows.length+" matched • page "+(Math.floor(virtualStart/VIRTUAL_CHUNK_SIZE)+1))
@@ -6076,6 +6117,7 @@ setInterval(() => {
 },1000);
 
 setupVirtualTable();
+setupCardTitleSizing();
 updateVirtualPager();
 /*
    Start data loading in parallel with the Telegram access check.

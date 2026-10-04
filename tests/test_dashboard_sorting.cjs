@@ -296,14 +296,18 @@ console.log('PASS: advanced column widths survive selection changes, scrollbars 
 
 // Alert placements count tenders, including across the 100-row page boundary.
 const cardNodes={tenderCardGrid:{innerHTML:''},recordCount:{}};
-const cardRows=Array.from({length:130},(_,i)=>({'Tender ID':'T'+(i+1)}));
+const cardRows=Array.from({length:130},(_,i)=>({'Tender ID':'T'+(i+1),Location:i===0?'Nemawar':'','Contract Type':'Contract must not appear'}));
 const cardContext=vm.createContext({virtualRows:cardRows,virtualStart:0,virtualEnd:100,CARD_AD_INTERVAL:12,CARD_ALERT_INTERVAL:20,VIRTUAL_CHUNK_SIZE:100,currentLanguage:'en',
  $:id=>cardNodes[id],escapeHtml:s=>String(s||''),displayTenderValue:(r,k)=>r[k],getDistrictInfo:()=>({name:'Dewas'}),
- cardClosingClass:()=>'',isDeadlineAlertActive:()=>false,parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>''});
-for(const name of ['tenderAlertsCard','sarAdCard','renderCardWindow'])vm.runInContext(source(name),cardContext);
+ cardClosingClass:()=>'',isDeadlineAlertActive:()=>false,parseDate:()=>null,formatTimeLeft:()=>'',formatMoney:()=>'',verifiedTenderFeeText:()=>'',verifiedTotalFeeText:()=>'',formatClosingDateTime:()=>'',whatsappShareUrl:()=>'',stableTenderUrl:()=>'',requestAnimationFrame:fn=>fn()});
+for(const name of ['tenderAlertsCard','sarAdCard','fitCardTitles','renderCardWindow'])vm.runInContext(source(name),cardContext);
 function cardOrder(){return [...cardNodes.tenderCardGrid.innerHTML.matchAll(/<article class="tender-card [^"]*"|<aside class="(tender-alert-card|sar-ad-card)"/g)].map(m=>m[1]||'tender')}
 function alertAfter(){let tenders=cardContext.virtualStart;return cardOrder().flatMap(type=>{if(type==='tender')tenders++;return type==='tender-alert-card'?[tenders]:[]})}
 cardContext.renderCardWindow();
+assert(cardNodes.tenderCardGrid.innerHTML.includes('<span>Location</span><b title="Nemawar">Nemawar</b>'));
+assert(cardNodes.tenderCardGrid.innerHTML.includes('<span>Location</span><b title="Dewas">Dewas</b>'));
+assert(!cardNodes.tenderCardGrid.innerHTML.includes('<span>Contract</span>'));
+assert(!cardNodes.tenderCardGrid.innerHTML.includes('Contract must not appear'));
 assert.equal(cardOrder()[3],'tender-alert-card');assert.equal(cardOrder().filter(x=>x==='tender').length,100);
 assert.deepEqual(alertAfter(),[3,20,40,60,80,100]);assert.equal(cardOrder().filter(x=>x==='sar-ad-card').length,8);
 assert(cardNodes.tenderCardGrid.innerHTML.includes('href="https://t.me/mptendersalert"'));
