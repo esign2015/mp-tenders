@@ -122,19 +122,41 @@ function accountSetupControls(data){
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)accountCheckSession()});
   window.addEventListener('storage',event=>{if(event.key===VISITOR_SESSION_KEY&&!event.newValue)location.reload()});
   const modal=visitorNode('accountSettingsModal'),status=visitorNode('accountSettingsStatus');
+  const addressKeys=['houseNumber','roadStreet','locality','landmark'];
+  const profileNode=key=>visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1));
+  let previousGstPan='';
+  function syncTaxFields(fromGst=false){
+    const gst=profileNode('gst'),pan=profileNode('pan');
+    gst.value=gst.value.toUpperCase();pan.value=pan.value.toUpperCase();
+    const derived=/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]{3}$/.test(gst.value)?gst.value.slice(2,12):'';
+    if(derived&&(!pan.value||(fromGst&&pan.value===previousGstPan)))pan.value=derived;
+    previousGstPan=derived;
+    const hint=visitorNode('accountTaxHint');if(hint){hint.hidden=!derived||!pan.value||pan.value===derived;hint.textContent=hint.hidden?'':'GST में PAN '+derived+' है। अलग PAN दर्ज किया है तो उसकी पुष्टि करें।';}
+  }
+  function syncAddress(){
+    const address=addressKeys.map(key=>profileNode(key).value.trim()).filter(Boolean).join(', ');
+    profileNode('address').value=address;profileNode('roadStreet').setCustomValidity?.(address?'':'Firm Address भरें।');return address;
+  }
+  profileNode('gst').oninput=()=>syncTaxFields(true);profileNode('pan').oninput=()=>syncTaxFields(false);
+  for(const key of addressKeys)profileNode(key).oninput=()=>{syncAddress();const hint=visitorNode('accountAddressHint');if(hint)hint.hidden=true;};
   function open(view){
+    modal.classList.toggle('password-view',view==='password');
     visitorNode('accountEditProfileForm').hidden=view!=='profile';visitorNode('accountChangePasswordForm').hidden=view!=='password';
     if(visitorNode('accountEditAffidavitForm'))visitorNode('accountEditAffidavitForm').hidden=view!=='profile';
     visitorNode('accountSettingsTitle').textContent=view==='profile'?'My Profile / मेरा प्रोफाइल':'Change Password / पासवर्ड बदलें';
     const profile=window.dashboardVisitorProfile||data.profile;
     visitorNode('accountEditName').value=profile.first_name||profile.name.split(' ')[0];visitorNode('accountEditMiddleName').value=profile.middle_name||(profile.first_name?'':profile.name.split(' ').slice(1,-1).join(' '));visitorNode('accountEditLastName').value=profile.last_name||(profile.first_name||!profile.name.includes(' ')?'':profile.name.split(' ').at(-1)); visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;accountTehsilOptions('accountEditDistrict','accountEditTehsil',profile.tehsil);
     const aff=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
-    for(const key of ['bidderName','parentRelation','parentName','address','pincode','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
+    for(const key of ['bidderName','parentRelation','parentName','address','houseNumber','roadStreet','locality','landmark','pincode','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
       let value=aff[key]||({bidderName:profile.name,parentRelation:'S/o',status:'Proprietor',place:profile.tehsil||profile.district,relative:'no',email:profile.email||''}[key]||'');
       if(key==='registrationClass'&&!['Not Applicable','Class A','Class B','Class C'].includes(value))value='Not Applicable';
       if(key==='bidderName'&&value===profile.first_name)value=profile.name;
       const field=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1));if(field)field.value=value;
     }
+    const structured=addressKeys.some(key=>Object.hasOwn(aff,key));
+    if(!structured)profileNode('roadStreet').value=aff.address||'';
+    const addressHint=visitorNode('accountAddressHint');if(addressHint)addressHint.hidden=structured||!aff.address;
+    previousGstPan='';syncTaxFields();syncAddress();
     accountAffRelativeFields();
     status.textContent='';modal.classList.add('open');modal.setAttribute('aria-hidden','false');visitorNode('telegramProfileMenu').classList.remove('open');
   }
@@ -147,11 +169,12 @@ function accountSetupControls(data){
   }
   if(visitorNode('accountAffRelative'))visitorNode('accountAffRelative').onchange=accountAffRelativeFields;
   visitorNode('accountEditProfileForm').onsubmit=async event=>{
-    event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
+    event.preventDefault();syncTaxFields();const address=syncAddress();const form=event.currentTarget;if(!form.reportValidity())return;
+    if(address.length>240){status.textContent='पूरा Firm Address 240 characters तक रखें।';return;}
     const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Profile save हो रहा है…';
     const token=localStorage.getItem(VISITOR_SESSION_KEY),previous=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
     const aff={fax:previous.fax||'',organisationType:previous.organisationType||''};
-    for(const key of ['parentRelation','parentName','address','pincode','firmName','status','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
+    for(const key of ['parentRelation','parentName','address','houseNumber','roadStreet','locality','landmark','pincode','firmName','status','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
     let accountSaved=false;
     try{
       const result=await accountPost('/profile',{session_token:token,first_name:visitorNode('accountEditName').value.trim(),middle_name:visitorNode('accountEditMiddleName').value.trim(),last_name:visitorNode('accountEditLastName').value.trim(),tehsil:visitorNode('accountEditTehsil').value,district:visitorNode('accountEditDistrict').value.trim()});

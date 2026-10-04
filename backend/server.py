@@ -606,7 +606,7 @@ def visitor_affidavit():
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
     if profile is not None:
-        keys=('bidderName', 'parentRelation', 'parentName', 'address', 'pincode', 'district', 'tehsil', 'firmName', 'status', 'place', 'relative', 'relativeName', 'relativePost', 'relativePosting', 'email', 'registrationNumber', 'registrationClass', 'registrationDate', 'registrationValidTill', 'pan', 'gst', 'telephone', 'fax', 'representativeName', 'representativeDesignation', 'representativeAddress', 'representativeTelephone', 'representativeFax', 'representativeMobile', 'representativeEmail', 'organisationType')
+        keys=('bidderName', 'parentRelation', 'parentName', 'address', 'houseNumber', 'roadStreet', 'locality', 'landmark', 'pincode', 'district', 'tehsil', 'firmName', 'status', 'place', 'relative', 'relativeName', 'relativePost', 'relativePosting', 'email', 'registrationNumber', 'registrationClass', 'registrationDate', 'registrationValidTill', 'pan', 'gst', 'telephone', 'fax', 'representativeName', 'representativeDesignation', 'representativeAddress', 'representativeTelephone', 'representativeFax', 'representativeMobile', 'representativeEmail', 'organisationType')
         if not isinstance(profile,dict):
             return jsonify({'ok':False,'message':'Invalid affidavit profile.'}),400
         saved_profile=(account or {}).get('affidavit_profile') or {}
@@ -617,9 +617,25 @@ def visitor_affidavit():
                 saved_profile=json.loads(row['profile_json']) if row else {}
             finally:
                 existing.close()
+        address_keys=('houseNumber','roadStreet','locality','landmark')
+        structured_address=any(key in profile for key in address_keys)
+        old_client_address=profile.get('address')
         profile={key:clean(profile.get(key,saved_profile.get(key))) for key in keys}
+        if structured_address:
+            profile['address']=', '.join(profile[key] for key in address_keys if profile[key])
+            if not profile['address']:
+                return jsonify({'ok':False,'message':'Firm Address भरें.'}),400
+        elif old_client_address is not None and clean(old_client_address)!=clean(saved_profile.get('address')):
+            for key in address_keys:profile[key]=''
+            profile['roadStreet']=profile['address']
         profile['parentRelation']=profile['parentRelation'] or 'S/o'
         import re
+        profile['gst']=profile['gst'].upper();profile['pan']=profile['pan'].upper()
+        if profile['gst'] and not re.fullmatch(r'[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]{3}',profile['gst']):
+            return jsonify({'ok':False,'message':'GST में सही क्रम के 15 characters भरें.'}),400
+        if profile['gst'] and not profile['pan']:profile['pan']=profile['gst'][2:12]
+        if profile['pan'] and not re.fullmatch(r'[A-Z]{5}[0-9]{4}[A-Z]',profile['pan']):
+            return jsonify({'ok':False,'message':'PAN में 5 अक्षर, 4 अंक और 1 अक्षर (कुल 10) भरें.'}),400
         if profile['pincode'] and not re.fullmatch(r'[1-9][0-9]{5}',profile['pincode']):
             return jsonify({'ok':False,'message':'Pincode में सही 6 अंक भरें.'}),400
         if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',profile['email']):

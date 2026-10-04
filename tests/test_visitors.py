@@ -61,6 +61,25 @@ class VisitorTests(unittest.TestCase):
         restored=self.client.post('/api/visitors/affidavit',json={'session_token':token}).json['profile']
         for key in profile:self.assertEqual(restored[key],profile[key])
 
+    def test_structured_address_and_gst_pan_validation(self):
+        token=self.client.post('/api/visitors/register',json=self.payload()).json['session_token']
+        profile={'bidderName':'Bidder','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','email':'bidder@example.test','houseNumber':'12','roadStreet':'Main Road','locality':'Pipla','landmark':'Near Temple','gst':'23abcde1234f1z5','pan':''}
+        saved=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile})
+        self.assertEqual(saved.status_code,200)
+        self.assertEqual(saved.json['profile']['address'],'12, Main Road, Pipla, Near Temple')
+        self.assertEqual(saved.json['profile']['gst'],'23ABCDE1234F1Z5')
+        self.assertEqual(saved.json['profile']['pan'],'ABCDE1234F')
+        restored=self.client.post('/api/visitors/affidavit',json={'session_token':token}).json['profile']
+        for key in ('houseNumber','roadStreet','locality','landmark'):self.assertEqual(restored[key],profile[key])
+        for change in ({'gst':'23ABCDE1234F1Z'},{'gst':'AAABCDE1234F1Z5'},{'gst':'231BCDE1234F1Z5'},{'pan':'ABCDE12345'},{'pan':'ABCD11234F'},{'houseNumber':'','roadStreet':'','locality':'','landmark':''}):
+            self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{**profile,**change}}).status_code,400)
+        # Valid exceptions can keep a different PAN; old cached clients may still edit the full address.
+        self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{**profile,'pan':'PQRST6789Z'}}).status_code,200)
+        old_client={k:v for k,v in profile.items() if k not in ('houseNumber','roadStreet','locality','landmark')}
+        changed=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{**old_client,'address':'Updated legacy address'}})
+        self.assertEqual(changed.status_code,200);self.assertEqual(changed.json['profile']['roadStreet'],'Updated legacy address')
+        self.assertEqual(changed.json['profile']['houseNumber'],'')
+
     def test_affidavit_profile_restores_only_in_its_signed_session(self):
         first=self.client.post('/api/visitors/register',json=self.payload()).json
         second=self.client.post('/api/visitors/register',json=self.payload()).json
