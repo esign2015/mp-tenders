@@ -21,4 +21,14 @@ node('affidavitEditProfile').click();assert.equal(profileOpens,2);assert(!node('
 // A deliberate edit saved on the server overrides an older browser value.
 ctx.window.dashboardAffidavitProfileCanonical=true;ctx.window.dashboardAffidavitProfile={...complete,address:'Updated Address'};ctx.window.openAffidavitForTender('TENDER-1');assert.equal(node('affAddress').value,'Updated Address');
 assert.equal((source.match(/if\(!validateDoc\(d\)\)return;saveNoticeDate\(\);/g)||[]).length,2);
+// Letterhead uses the currently saved profile and omits absent contact fields.
+ctx.window.dashboardVisitorProfile.mobile='+919876543210';ctx.window.dashboardVisitorProfile.email='bidder@example.test';
+ctx.window.openAffidavitForTender('TENDER-1');
+for(const text of ['Firm','Full Name | Proprietor','Updated Address','Mobile: +919876543210','Email: bidder@example.test'])assert(node('affidavitPreview').innerHTML.includes(text),text);
+assert(node('affidavitSavedDetails').textContent.includes('letterhead'));
+delete ctx.window.dashboardVisitorProfile.mobile;delete ctx.window.dashboardVisitorProfile.email;
+ctx.window.openAffidavitForTender('TENDER-1');
+assert(!node('affidavitPreview').innerHTML.includes('Mobile:'));
+assert(!node('affidavitPreview').innerHTML.includes('Email:'));
 console.log('PASS: incomplete profiles route to My Profile, saved profiles open Word/PDF options, parent/address survive legacy responses, editing resumes the selected tender and downloads do not resave basic details.');
+console.log('PASS: certificate preview includes the saved profile letterhead and only available contact details.');

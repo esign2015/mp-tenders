@@ -6371,8 +6371,11 @@ enforceAccountAccess().then(async () => {
     return m?m[3]+"/"+m[2]+"/"+m[1]:safe(v);
   }
   function documentData(){
+    const general=getSavedGeneralProfile();
     return {
       ...readProfile(),
+      mobile:safe(general.mobile),
+      email:safe(general.email),
       parentName:safe(byId("affParentName")?.value),
       parentRelation:["S/o","D/o","W/o"].includes(byId("affParentRelation")?.value)?byId("affParentRelation").value:"S/o",
       address:safe(byId("affAddress")?.value),
@@ -6438,9 +6441,19 @@ enforceAccountAccess().then(async () => {
       [text("If the information provided by me is found to be false or incorrect during the tender process or at any time after award of the tender, the department shall be entitled to cancel my tender or contract, forfeit my Earnest Money Deposit / Security Deposit, and take action against me / my firm in accordance with the applicable rules.")]];
   }
   const relationTitle=d=>d.relative==="yes"?"Declaration of Close Relationship":"No Relation Certificate";
+  function letterheadDetails(d){
+    return [
+      [d.bidderName,d.status].filter(Boolean).join(' | '),
+      d.address,
+      [d.mobile?'Mobile: '+d.mobile:'',d.email?'Email: '+d.email:''].filter(Boolean).join(' | ')
+    ].filter(Boolean);
+  }
+  function letterheadPreview(d){
+    return '<div style="text-align:center;padding:16px 0 12px;margin:16px 0 24px;border-bottom:2px solid #243b53;font-family:Arial,sans-serif;color:#243b53"><div style="font-size:24px;font-weight:700;line-height:1.25;overflow-wrap:anywhere">'+escapeHtml(d.firmName)+'</div>'+letterheadDetails(d).map(line=>'<div style="font-size:12px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere">'+escapeHtml(line)+'</div>').join('')+'</div>';
+  }
   function noRelationPreview(d){
     const field=value=>'<strong><u>'+escapeHtml(value)+'</u></strong>';
-    return '<hr><div style="height:32mm"></div><p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationSegments(d).map(segments=>'<p class="aff-prev-justify">'+segments.map(s=>s.bold?field(s.text):escapeHtml(s.text)).join('')+'</p>').join('')+'<div class="aff-sign-space"></div><p style="display:flex;justify-content:space-between;gap:20px"><span>Date: '+field(d.verifyDate)+'</span><span>Signature ____________________</span></p><p style="display:flex;justify-content:space-between;gap:20px"><span>Place: '+field(d.place)+'</span><span>'+field(d.bidderName)+'</span></p>';
+    return '<hr>'+letterheadPreview(d)+'<p class="aff-prev-center"><strong>Page 2 · '+relationTitle(d)+'</strong></p>'+noRelationSegments(d).map(segments=>'<p class="aff-prev-justify">'+segments.map(s=>s.bold?field(s.text):escapeHtml(s.text)).join('')+'</p>').join('')+'<div class="aff-sign-space"></div><p style="display:flex;justify-content:space-between;gap:20px"><span>Date: '+field(d.verifyDate)+'</span><span>Signature ____________________</span></p><p style="display:flex;justify-content:space-between;gap:20px"><span>Place: '+field(d.place)+'</span><span>'+field(d.bidderName)+'</span></p>';
   }
   function updatePreview(){
     const d=documentData();
@@ -6517,7 +6530,7 @@ enforceAccountAccess().then(async () => {
     const modal=byId("affidavitModal");modal.classList.add('download-mode');modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
     byId('affidavitTitle').textContent='📄 Download Affidavit / No Relation';
     byId('affidavitDownloadSummary').hidden=false;
-    byId('affidavitSavedDetails').textContent=saved.bidderName+' • '+saved.firmName+' • '+saved.place+' — Saved Profile';
+    byId('affidavitSavedDetails').textContent=saved.bidderName+' • '+saved.firmName+' • '+saved.place+' — Certificate में profile से letterhead भी छपेगा।';
   };
   function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
   function fileBase(d){return ("Affidavit_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
@@ -6563,7 +6576,7 @@ enforceAccountAccess().then(async () => {
     byId("affidavitStatus").textContent="⏳ Word affidavit तैयार हो रही है…";
     try{
       if(!(window.docx && window.docx.Document)) throw new Error("Word library load नहीं हुई");
-      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink,TabStopType}=window.docx;
+      const {Document,Packer,Paragraph,TextRun,AlignmentType,LineRuleType,Footer,ExternalHyperlink,TabStopType,BorderStyle}=window.docx;
       const run=(text,bold=false,italic=false,size=20,underline=false,strike=false)=>new TextRun({text,bold,italics:italic,size,font:"Times New Roman",underline:underline?{}:undefined,strike});
       const para=(children,opts={})=>new Paragraph({
         alignment:opts.alignment,
@@ -6571,6 +6584,8 @@ enforceAccountAccess().then(async () => {
         tabStops:opts.tabStops,
         indent:opts.indent,
         spacing:opts.spacing,
+        keepNext:opts.keepNext,
+        border:opts.border,
         children
       });
       const normal={before:100,after:100};
@@ -6628,8 +6643,11 @@ enforceAccountAccess().then(async () => {
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
       paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
-      // Keep page settings unchanged; reserve the top 50 mm for printed letterhead.
-      paragraphs.push(para([run(" ")],{pageBreakBefore:true,spacing:{before:0,after:0,line:2200,lineRule:LineRuleType.EXACT}}));
+      // Print the saved profile's letterhead on the certificate's own page.
+      const headerRun=(text,size,bold=false)=>new TextRun({text,font:"Arial",size,bold,color:"243B53"});
+      paragraphs.push(para([headerRun(d.firmName,d.firmName.length>70?32:44,true)],{pageBreakBefore:true,alignment:AlignmentType.CENTER,keepNext:true,spacing:{before:160,after:100}}));
+      const details=letterheadDetails(d);
+      details.forEach((line,index)=>paragraphs.push(para([headerRun(line,18)],{alignment:AlignmentType.CENTER,keepNext:true,spacing:{before:0,after:index===details.length-1?360:60},border:index===details.length-1?{bottom:{style:BorderStyle.SINGLE,size:12,color:"243B53",space:12}}:undefined})));
       paragraphs.push(para([run(relationTitle(d),true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       for(const segments of noRelationSegments(d))paragraphs.push(para(segments.map(s=>run(s.text,!!s.bold,false,20,!!s.underline)),{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
@@ -6830,7 +6848,17 @@ enforceAccountAccess().then(async () => {
       ],{firstIndent:12.7,after:5});
       y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
 
-      doc.addPage();y=50;
+      doc.addPage();y=22;
+      doc.setTextColor(36,59,83);doc.setFont("helvetica","bold");doc.setFontSize(d.firmName.length>70?16:22);
+      const firmLines=doc.splitTextToSize(d.firmName,width);
+      doc.text(firmLines,105,y,{align:"center"});y+=firmLines.length*8+2;
+      doc.setFont("helvetica","normal");doc.setFontSize(9);
+      for(const detail of letterheadDetails(d)){
+        const lines=doc.splitTextToSize(detail,width);
+        doc.text(lines,105,y,{align:"center"});y+=lines.length*4.5+1;
+      }
+      doc.setDrawColor(36,59,83);doc.setLineWidth(0.6);doc.line(left,y+1,right,y+1);
+      y+=12;doc.setTextColor(0);doc.setDrawColor(0);
       center(relationTitle(d),true,false,14,5);
       for(const segments of noRelationSegments(d))richParagraph(segments,{leading:5.7,after:4});
       y+=18;
