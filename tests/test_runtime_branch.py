@@ -29,5 +29,5 @@ class RuntimeBranchTests(unittest.TestCase):
         closed=raw('1000','2026-10-04T13:00:00Z','01-Jan-2000 05:30 PM');self.assertEqual(json.loads(changes(new,closed,json.dumps(data),now=1800000000))['tenders'],{})
         self.assertEqual(json.loads(changes(new,old,b'',now=1800000000))['tenders'],{})
     def test_protected_and_private_paths_cannot_be_published(self):
-        for path in ('index.html','../data/status.json','/tmp/backup.json','data/schedule_config.json','users.csv','data/users.db','data/private_backup.json','data/accounts.json'):
+        for path in ('index.html','../data/status.json','/tmp/backup.json','data/schedule_config.json','users.csv','data/users.db','data/private_backup.json','data/accounts.json',''):
             self.assertFalse(runtime_path(path),path)

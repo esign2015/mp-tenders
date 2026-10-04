@@ -13,6 +13,8 @@ jobs:
 
       - name: Load current tender data
         run: python3 backend/prepare_data.py
+        env:
+          TENDER_RUNTIME_READ_ONLY: "1"
 
       - name: Setup Python
         uses: actions/setup-python@v5

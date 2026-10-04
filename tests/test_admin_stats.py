@@ -60,7 +60,7 @@ class AdminStatsTests(unittest.TestCase):
     def test_sqlite_and_telegram_profiles_merge_by_mobile(self):
         now = datetime.fromisoformat('2026-10-02T17:00:00+05:30')
         with tempfile.TemporaryDirectory() as tmp, patch.object(server, 'DATABASE_URL', ''), patch.object(server, 'USER_DB_PATH', Path(tmp)/'users.db'), patch.object(server, 'read_admin_session', return_value='admin@example.test'), patch.object(server.sheet_store, 'enabled', return_value=False), patch.object(server, 'now_ist', return_value=now):
-            server.touch_user_login(100, {'first_name': 'Test'})
+            conn=server.user_db();conn.execute('INSERT INTO users (telegram_id,name,signup_at,last_login_at,login_count) VALUES (?,?,?,?,?)',(100,'Test',now.isoformat(),now.isoformat(),1));conn.commit();conn.close()
             conn = server.visitor_db()
             conn.execute('UPDATE users SET mobile=? WHERE telegram_id=?', ('+919876543210',100))
             conn.execute('INSERT INTO visitor_registrations (visitor_id,name,mobile,district,signup_at,last_visit_at,visit_count) VALUES (?,?,?,?,?,?,?)', ('one','Test','9876543210','Dewas',now.isoformat(),now.isoformat(),80))

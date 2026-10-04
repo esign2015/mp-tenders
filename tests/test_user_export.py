@@ -19,7 +19,7 @@ class UserExportTests(unittest.TestCase):
             connect.assert_not_called()
         import sqlite3,tempfile
         with tempfile.TemporaryDirectory() as temporary, patch.object(server,"DATABASE_URL",""), patch.object(server,"USER_DB_PATH",Path(temporary)/'users.db'):
-            server.touch_user_login(123,{"first_name":"Test"})
+            conn=server.user_db();stamp=server.now_ist().isoformat();conn.execute('INSERT INTO users (telegram_id,name,signup_at,last_login_at,login_count) VALUES (?,?,?,?,?)',(123,'Test',stamp,stamp,1));conn.execute('INSERT INTO login_events (telegram_id,login_at) VALUES (?,?)',(123,stamp));conn.commit();conn.close()
             with patch.object(server,"read_admin_session",return_value="allowed@example.test"):
                 response=client.get('/api/admin/users-migration',headers={"Authorization":"Bearer valid"})
             self.assertEqual(response.status_code,200)
