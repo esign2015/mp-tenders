@@ -1,25 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-04T15:52:26.889029+05:30",
+  "snapshot_at": "2026-10-04T16:53:00.802856+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
-  "previous_tender_count": 5317,
+  "previous_tender_count": 5320,
   "current_tender_count": 5320,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 3,
-  "changes": [
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 26,
-      "Current Tender Count": 29,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_DTCP_532039_1",
-        "2026_DTCP_532040_1",
-        "2026_DTCP_532041_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
