@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "37193753286",
-  "github_run_number": "881",
-  "github_commit_sha": "495bcdab71c1a9447e5e26c96a434c2834137368",
+  "github_run_id": "37197399965",
+  "github_run_number": "885",
+  "github_commit_sha": "25cf42bb23806b1bcc16f2f79682c28003e2537b",
   "batch_size": 500,
   "total_csv_ids": 5320,
   "current_portal_ids": 5320,
-  "initial_incomplete": 430,
-  "batch_targets": 430,
-  "batch_attempted": 430,
-  "batch_complete": 430,
-  "started_at": "2026-10-04T10:23:39.344410+00:00",
+  "initial_incomplete": 355,
+  "batch_targets": 355,
+  "batch_attempted": 355,
+  "batch_complete": 355,
+  "started_at": "2026-10-04T11:23:57.927608+00:00",
   "success": 5276,
   "failed": 0,
   "success_ids": [
@@ -5339,23 +5339,7 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_MKVVC_519826_1",
-  "errors": [
-    {
-      "Tender ID": "2026_MKVVC_519826_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=S4mrV90syR9fa%2FC7AA1%2FFaA%3D%3D\">[Running of PCC Pole factory on as is where is ba\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPRDC_534687_2",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPRDC_534687_3",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    }
-  ],
-  "updated_at": "2026-10-04T10:57:08.613307+00:00"
+  "last_successful_tender_id": "2026_UAD_530881_3",
+  "errors": [],
+  "updated_at": "2026-10-04T11:55:20.970759+00:00"
 }
