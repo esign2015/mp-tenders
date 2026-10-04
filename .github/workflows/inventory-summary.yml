@@ -8,6 +8,11 @@ on:
     paths:
       - backend/inventory_summary.py
       - backend/publish_data_checkpoint.py
+      - backend/prepare_data.py
+      - backend/data_branch.py
+      - backend/runtime_cutover.py
+      - backend/tender_history.py
+      - tests/test_runtime_branch.py
       - org/index.html
       - data/index.html
       - tests/test_org_counts.cjs
@@ -42,6 +47,7 @@ jobs:
           node tests/test_org_counts.cjs
           node tests/test_data_monitor.cjs
           python -m unittest discover -s tests -p test_data_pipeline.py -q
+          python -m unittest discover -s tests -p test_runtime_branch.py -q
       - name: Publish counts from the latest merged checkpoint
         run: |
           git config user.name "mp-tenders-bot"

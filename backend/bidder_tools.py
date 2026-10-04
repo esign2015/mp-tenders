@@ -166,6 +166,14 @@ def process_alerts(server,call=None):
         mutate(accounts,record['user_id'],complete);sent+=1
     return {'bound':bound,'sent':sent,'uncertain':uncertain}
 
+def safe_process_alerts(server):
+    try:return process_alerts(server)
+    except AccountError:raise
+    except Exception:
+        # Upstream HTTP exceptions may contain the bot token in their URL.
+        raise AccountError('Private Telegram worker अभी उपलब्ध नहीं है। अगला run फिर प्रयास करेगा।',503) from None
+
+
 def queue_system_audit(server,actor,action,**details):
     def save():
         records=all_records(server)
@@ -297,7 +305,7 @@ def install(server):
         global _alert_current
         slot=int(time.time())//300
         with _jobs_lock:
-            if _alert_current is None or (_alert_current[0].done() and _alert_current[1]!=slot):_alert_current=(_pool.submit(lambda:process_alerts(server)),slot)
+            if _alert_current is None or (_alert_current[0].done() and _alert_current[1]!=slot):_alert_current=(_pool.submit(lambda:safe_process_alerts(server)),slot)
             future=_alert_current[0]
         if not future.done():return jsonify({'ok':True,'pending':True}),202
         return jsonify({'ok':True,**future.result()})
