@@ -606,7 +606,7 @@ def visitor_affidavit():
         return jsonify({'ok':False,'message':'Saved profile session required.'}),401
     profile=payload.get('profile')
     if profile is not None:
-        keys=('bidderName', 'parentRelation', 'parentName', 'address', 'firmName', 'status', 'place', 'relative', 'relativeName', 'relativePost', 'relativePosting', 'email', 'registrationNumber', 'registrationClass', 'registrationDate', 'registrationValidTill', 'pan', 'gst', 'telephone', 'fax', 'representativeName', 'representativeDesignation', 'representativeAddress', 'representativeTelephone', 'representativeFax', 'representativeMobile', 'representativeEmail', 'organisationType')
+        keys=('bidderName', 'parentRelation', 'parentName', 'address', 'pincode', 'district', 'tehsil', 'firmName', 'status', 'place', 'relative', 'relativeName', 'relativePost', 'relativePosting', 'email', 'registrationNumber', 'registrationClass', 'registrationDate', 'registrationValidTill', 'pan', 'gst', 'telephone', 'fax', 'representativeName', 'representativeDesignation', 'representativeAddress', 'representativeTelephone', 'representativeFax', 'representativeMobile', 'representativeEmail', 'organisationType')
         if not isinstance(profile,dict):
             return jsonify({'ok':False,'message':'Invalid affidavit profile.'}),400
         saved_profile=(account or {}).get('affidavit_profile') or {}
@@ -620,6 +620,8 @@ def visitor_affidavit():
         profile={key:clean(profile.get(key,saved_profile.get(key))) for key in keys}
         profile['parentRelation']=profile['parentRelation'] or 'S/o'
         import re
+        if profile['pincode'] and not re.fullmatch(r'[1-9][0-9]{5}',profile['pincode']):
+            return jsonify({'ok':False,'message':'Pincode में सही 6 अंक भरें.'}),400
         if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',profile['email']):
             return jsonify({'ok':False,'message':'Letterhead के लिए सही email अनिवार्य है.'}),400
         if profile['representativeEmail'] and not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',profile['representativeEmail']):

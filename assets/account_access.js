@@ -129,7 +129,7 @@ function accountSetupControls(data){
     const profile=window.dashboardVisitorProfile||data.profile;
     visitorNode('accountEditName').value=profile.first_name||profile.name.split(' ')[0];visitorNode('accountEditMiddleName').value=profile.middle_name||(profile.first_name?'':profile.name.split(' ').slice(1,-1).join(' '));visitorNode('accountEditLastName').value=profile.last_name||(profile.first_name||!profile.name.includes(' ')?'':profile.name.split(' ').at(-1)); visitorNode('accountEditDistrict').value=profile.district;visitorNode('accountEditMobile').value=profile.mobile;accountTehsilOptions('accountEditDistrict','accountEditTehsil',profile.tehsil);
     const aff=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
-    for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
+    for(const key of ['bidderName','parentRelation','parentName','address','pincode','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType']){
       let value=aff[key]||({bidderName:profile.name,parentRelation:'S/o',status:'Proprietor',place:profile.tehsil||profile.district,relative:'no',email:profile.email||''}[key]||'');
       if(key==='registrationClass'&&!['Not Applicable','Class A','Class B','Class C'].includes(value))value='Not Applicable';
       if(key==='bidderName'&&value===profile.first_name)value=profile.name;
@@ -146,26 +146,25 @@ function accountSetupControls(data){
     for(const id of ['accountAffRelativeName','accountAffRelativePost','accountAffRelativePosting']){const field=visitorNode(id);if(field){field.required=yes;field.disabled=!yes;}}
   }
   if(visitorNode('accountAffRelative'))visitorNode('accountAffRelative').onchange=accountAffRelativeFields;
-  if(visitorNode('accountEditAffidavitForm'))visitorNode('accountEditAffidavitForm').onsubmit=async event=>{
+  visitorNode('accountEditProfileForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;
-    const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Affidavit की basic details save हो रही हैं…';
-    const aff={};for(const key of ['bidderName','parentRelation','parentName','address','firmName','status','place','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone','fax','organisationType'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
+    const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Profile save हो रहा है…';
+    const token=localStorage.getItem(VISITOR_SESSION_KEY),previous=window.getDashboardAffidavitProfile?.()||window.dashboardAffidavitProfile||{};
+    const aff={fax:previous.fax||'',organisationType:previous.organisationType||''};
+    for(const key of ['parentRelation','parentName','address','pincode','firmName','status','relative','relativeName','relativePost','relativePosting','email','registrationNumber','registrationClass','registrationDate','registrationValidTill','pan','gst','telephone'])aff[key]=visitorNode('accountAff'+key[0].toUpperCase()+key.slice(1)).value.trim();
+    let accountSaved=false;
     try{
+      const result=await accountPost('/profile',{session_token:token,first_name:visitorNode('accountEditName').value.trim(),middle_name:visitorNode('accountEditMiddleName').value.trim(),last_name:visitorNode('accountEditLastName').value.trim(),tehsil:visitorNode('accountEditTehsil').value,district:visitorNode('accountEditDistrict').value.trim()});
+      if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)return;
+      window.dashboardVisitorProfile={...window.dashboardVisitorProfile,...result.profile};localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));accountSaved=true;
+      for(const id of ['telegramProfileName','telegramMenuName'])visitorNode(id).textContent=result.profile.name;visitorNode('telegramMenuUsername').textContent=result.profile.district;
+      aff.bidderName=result.profile.name;aff.district=result.profile.district;aff.tehsil=result.profile.tehsil;aff.place=result.profile.tehsil||result.profile.district;
       window.dashboardAffidavitProfileEdited=true;
       await window.saveDashboardAffidavitProfile(aff);
-      status.textContent='✓ Affidavit Profile save हो गई।';
+      status.textContent='✓ पूरी Profile save हो गई।';
       const id=window.pendingAffidavitTenderId;
       if(id){window.pendingAffidavitTenderId=null;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');window.openAffidavitForTender(id);}
-    }catch(error){status.textContent=error.message;if(error.status===401)accountLogout(error.message)}finally{button.disabled=false}
-  };
-  visitorNode('accountEditProfileForm').onsubmit=async event=>{
-    event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const button=form.querySelector('button');button.disabled=true;status.textContent='Profile save हो रहा है…';
-    const token=localStorage.getItem(VISITOR_SESSION_KEY);
-    try{const result=await accountPost('/profile',{session_token:token,first_name:visitorNode('accountEditName').value.trim(),middle_name:visitorNode('accountEditMiddleName').value.trim(),last_name:visitorNode('accountEditLastName').value.trim(),tehsil:visitorNode('accountEditTehsil').value,district:visitorNode('accountEditDistrict').value.trim()});
-      if(localStorage.getItem(VISITOR_SESSION_KEY)!==token)return;
-      window.dashboardVisitorProfile={...window.dashboardVisitorProfile,...result.profile};localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(window.dashboardVisitorProfile));
-      for(const id of ['telegramProfileName','telegramMenuName'])visitorNode(id).textContent=result.profile.name;visitorNode('telegramMenuUsername').textContent=result.profile.district;status.textContent='✓ Profile save हो गया।';
-    }catch(error){status.textContent=error.message;if(error.status===401)accountLogout(error.message)}finally{button.disabled=false}
+    }catch(error){status.textContent=(accountSaved?'नाम और location save हो गए; document details save नहीं हुईं। फिर Save Profile करें। ':'')+error.message;if(error.status===401)accountLogout(error.message)}finally{button.disabled=false}
   };
   visitorNode('accountChangePasswordForm').onsubmit=async event=>{
     event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const button=form.querySelector('button');button.disabled=true;status.textContent='Password बदल रहा है…';

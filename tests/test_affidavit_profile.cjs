@@ -56,6 +56,8 @@ for(const [number,label,value] of [['12.','Name','Full Name'],['13.','Designatio
 assert(!node('affidavitPreview').innerHTML.includes('Old Representative'));
 assert(!node('affidavitPreview').innerHTML.includes('old@example.test'));
 assert(!html.includes('id="accountAffRepresentative'));
+ctx.window.dashboardAffidavitProfile={...complete,address:'Ward 2',district:'Dewas',tehsil:'Kannod',pincode:'455332'};ctx.window.openAffidavitForTender('TENDER-1');assert.equal(node('affAddress').value,'Ward 2, Kannod, Dewas, 455332');
+ctx.window.dashboardAffidavitProfile.address='Ward 2, Kannod';ctx.window.openAffidavitForTender('TENDER-1');assert.equal(node('affAddress').value,'Ward 2, Kannod, Dewas, 455332');
 ctx.window.openAffidavitForTender('TENDER-1');
 assert.equal(node('affSelectAffidavit').checked,false);
 node('affSelectNoRelation').checked=false;node('affSelectAnnexureH').checked=false;node('affSelectAnnexureH').change();

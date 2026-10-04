@@ -1476,8 +1476,9 @@ td.title-cell{
   box-shadow:0 24px 70px rgba(0,0,0,.40);
 }
 #accountSettingsModal .user-profile-card{width:min(880px,100%)}
-.account-profile-sections{display:grid;grid-template-columns:1fr 1fr;gap:24px}.account-profile-sections form{min-width:0}.account-profile-section-title{font-size:16px;font-weight:800;margin:18px 0 8px;color:#173d70}#accountChangePasswordForm{max-width:440px;margin:auto}
-@media(max-width:700px){.account-profile-sections{grid-template-columns:1fr}}
+.account-profile-sections form{min-width:0}.profile-row{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}.profile-row-2{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-row-3{grid-template-columns:repeat(3,minmax(0,1fr))}.profile-row-4{grid-template-columns:repeat(4,minmax(0,1fr))}.profile-field{min-width:0}.profile-field input[readonly]{background:#f1f5f9;color:#64748b}#accountChangePasswordForm{max-width:440px;margin:auto}
+@media(max-width:700px){.profile-row-3,.profile-row-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){#accountSettingsModal{padding:10px}#accountSettingsModal .user-profile-card{padding:16px}.profile-row-2,.profile-row-3,.profile-row-4{grid-template-columns:minmax(0,1fr)}.profile-row{gap:0}}
 .user-profile-title{font-size:22px;font-weight:900;color:#14376e}
 .user-profile-sub{margin:6px 0 16px;color:#64748b;font-size:13px;line-height:1.5}
 .user-profile-label{display:block;margin:12px 0 5px;font-size:12px;font-weight:800;color:#334155}
@@ -2073,8 +2074,8 @@ body.telegram-locked .site-footer{visibility:hidden}
 .account-form button[type="submit"][aria-busy="true"]{background:#dbeafe;color:#1d4ed8;cursor:wait}
 #visitorStatus{margin-top:12px;color:#475569;font-size:14px;line-height:1.5}
 </style>
-<script src="assets/visitor_access.js?v=5"></script>
-<script src="assets/account_access.js?v=20"></script>
+<script src="assets/visitor_access.js?v=6"></script>
+<script src="assets/account_access.js?v=21"></script>
 
 <div class="admin-user-panel" id="adminUserPanel" aria-hidden="true">
   <div class="admin-user-panel-card">
@@ -2105,37 +2106,22 @@ body.telegram-locked .site-footer{visibility:hidden}
 <div class="user-profile-modal" id="accountSettingsModal" aria-hidden="true">
   <div class="user-profile-card" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle" style="max-height:90vh;overflow:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="user-profile-title" id="accountSettingsTitle">My Profile</div><button type="button" id="accountSettingsClose" aria-label="Close account settings">✕</button></div>
-    <div class="account-profile-sections">
-    <form id="accountEditProfileForm">
-      <div class="account-profile-section-title">Account details</div>
-      <label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="15" autocomplete="given-name" required>
-      <label class="user-profile-label" for="accountEditMobile">Registered Mobile</label><input class="user-profile-input" id="accountEditMobile" readonly>
-      <label class="user-profile-label" for="accountEditMiddleName">Middle Name</label><input class="user-profile-input" id="accountEditMiddleName" placeholder="Middle Name (वैकल्पिक)" maxlength="10" autocomplete="additional-name">
-      <label class="user-profile-label" for="accountEditLastName">Surname</label><input class="user-profile-input" id="accountEditLastName" maxlength="15" autocomplete="family-name" required>
-      <label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required>
-      <datalist id="accountDistrictList"></datalist><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select><button class="user-profile-save" type="submit">Save Profile</button>
-    </form>
-    <form id="accountEditAffidavitForm">
-      <div class="account-profile-section-title">Documents / Letterhead Profile</div>
-      <div class="user-profile-sub">यह basic जानकारी एक बार save करें। अगले tender पर फिर भरने की जरूरत नहीं होगी।</div>
-      <label class="user-profile-label" for="accountAffBidderName">Bidder / Deponent का पूरा नाम</label><input class="user-profile-input" id="accountAffBidderName" maxlength="120" required>
-      <label class="user-profile-label" for="accountAffParentRelation">Relationship</label><select class="user-profile-input" id="accountAffParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select>
-      <label class="user-profile-label" for="accountAffParentName">Father / Parent / Spouse Name</label><input class="user-profile-input" id="accountAffParentName" maxlength="120" required>
-      <label class="user-profile-label" for="accountAffAddress">Residential Address / पता</label><textarea class="user-profile-input" id="accountAffAddress" maxlength="240" rows="3" required></textarea>
-      <label class="user-profile-label" for="accountAffFirmName">Firm / Company Name</label><input class="user-profile-input" id="accountAffFirmName" maxlength="160" required>
-      <label class="user-profile-label" for="accountAffEmail">Email for letterhead / लेटरहेड के लिए ईमेल *</label><input class="user-profile-input" id="accountAffEmail" type="email" maxlength="240" required>
-      <label class="user-profile-label" for="accountAffStatus">Status in Firm / Company</label><select class="user-profile-input" id="accountAffStatus"><option>Proprietor</option><option>Partner</option><option>Director</option><option>Authorized Signatory</option><option>Other</option></select>
-      <label class="user-profile-label" for="accountAffPlace">Verification Place</label><input class="user-profile-input" id="accountAffPlace" maxlength="100" required>
-      <label class="user-profile-label" for="accountAffRelative">Close relative working in department?</label><select class="user-profile-input" id="accountAffRelative"><option value="no">No</option><option value="yes">Yes</option></select>
-      <div id="accountAffRelativeFields" hidden>
-        <label class="user-profile-label" for="accountAffRelativeName">Relative Name</label><input class="user-profile-input" id="accountAffRelativeName" maxlength="120">
-        <label class="user-profile-label" for="accountAffRelativePost">Post</label><input class="user-profile-input" id="accountAffRelativePost" maxlength="120">
-        <label class="user-profile-label" for="accountAffRelativePosting">Present Posting</label><input class="user-profile-input" id="accountAffRelativePosting" maxlength="160">
-      </div>
-      <details class="annexure-profile-details"><summary>Annexure H की अतिरिक्त जानकारी (वैकल्पिक)</summary><p class="user-profile-sub">Bidder का नाम, status, पता, mobile और email saved profile से अपने आप भरेंगे। Telephone और Fax भी नीचे दी गई उसी जानकारी से भरेंगे। केवल अतिरिक्त जानकारी भरें; खाली fields document में खाली रहेंगी।</p><label class="user-profile-label" for="accountAffOrganisationType">Entity of Organization (खाली रहने पर status से)</label><select class="user-profile-input" id="accountAffOrganisationType"><option value="">Profile status से</option><option>Individual</option><option>Proprietary Firm</option><option>Partnership Firm</option><option>Limited Company</option><option>Corporation</option><option>Joint Venture</option></select><label class="user-profile-label" for="accountAffRegistrationNumber">Centralized Registration / Application No.</label><input class="user-profile-input" id="accountAffRegistrationNumber" type="text" maxlength="240"><label class="user-profile-label" for="accountAffRegistrationClass">Registration Class</label><select class="user-profile-input" id="accountAffRegistrationClass"><option selected>Not Applicable</option><option>Class A</option><option>Class B</option><option>Class C</option></select><label class="user-profile-label" for="accountAffRegistrationDate">Registration Date</label><input class="user-profile-input" id="accountAffRegistrationDate" type="date" maxlength="240"><label class="user-profile-label" for="accountAffRegistrationValidTill">Registration Valid Till</label><input class="user-profile-input" id="accountAffRegistrationValidTill" type="date" maxlength="240"><label class="user-profile-label" for="accountAffPan">PAN Number</label><input class="user-profile-input" id="accountAffPan" type="text" maxlength="240"><label class="user-profile-label" for="accountAffGst">GST Registration</label><input class="user-profile-input" id="accountAffGst" type="text" maxlength="240"><label class="user-profile-label" for="accountAffTelephone">Telephone with STD Code</label><input class="user-profile-input" id="accountAffTelephone" type="text" maxlength="240"><label class="user-profile-label" for="accountAffFax">Fax with STD Code</label><input class="user-profile-input" id="accountAffFax" type="text" maxlength="240"></details>
-      <button class="user-profile-save" type="submit">Save Document Profile</button>
-    </form>
-    </div>
+    <div class="account-profile-sections"><form id="accountEditProfileForm"><div id="accountEditAffidavitForm"><p class="user-profile-sub">यह जानकारी एक बार save करें। Affidavit, No Relation और Annexure H में इसी profile का उपयोग होगा।</p>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffFirmName">Firm / Company Name</label><input class="user-profile-input" id="accountAffFirmName" maxlength="160" required></div></div>
+      <div class="profile-row profile-row-2"><div class="profile-field"><label class="user-profile-label" for="accountAffGst">GST</label><input class="user-profile-input" id="accountAffGst" maxlength="240"></div><div class="profile-field"><label class="user-profile-label" for="accountAffPan">PAN</label><input class="user-profile-input" id="accountAffPan" maxlength="240"></div></div>
+      <div class="profile-row profile-row-4"><div class="profile-field"><label class="user-profile-label" for="accountEditName">Name / नाम</label><input class="user-profile-input" id="accountEditName" minlength="2" maxlength="15" autocomplete="given-name" required></div><div class="profile-field"><label class="user-profile-label" for="accountEditMiddleName">Middle Name (वैकल्पिक)</label><input class="user-profile-input" id="accountEditMiddleName" maxlength="10" autocomplete="additional-name"></div><div class="profile-field"><label class="user-profile-label" for="accountEditLastName">Surname</label><input class="user-profile-input" id="accountEditLastName" maxlength="15" autocomplete="family-name" required></div><div class="profile-field"><label class="user-profile-label" for="accountAffStatus">Status in Firm / Company</label><select class="user-profile-input" id="accountAffStatus" ><option>Proprietor</option><option>Partner</option><option>Director</option><option>Authorized Signatory</option><option>Other</option></select></div></div>
+      <div class="profile-row profile-row-2"><div class="profile-field"><label class="user-profile-label" for="accountAffParentRelation">Relationship</label><select class="user-profile-input" id="accountAffParentRelation" ><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select></div><div class="profile-field"><label class="user-profile-label" for="accountAffParentName">Father / Parent / Spouse Name</label><input class="user-profile-input" id="accountAffParentName" maxlength="120" required></div></div>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffAddress">Firm Address / पता</label><textarea class="user-profile-input" id="accountAffAddress" maxlength="240" rows="2" required></textarea></div></div>
+      <div class="profile-row profile-row-2"><div class="profile-field"><label class="user-profile-label" for="accountEditDistrict">District / जिला</label><input class="user-profile-input" id="accountEditDistrict" minlength="2" maxlength="100" list="accountDistrictList" required></div><div class="profile-field"><label class="user-profile-label" for="accountEditTehsil">Tehsil / तहसील</label><select class="user-profile-input" id="accountEditTehsil" required></select></div></div>
+      <datalist id="accountDistrictList"></datalist>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffPincode">Pincode</label><input class="user-profile-input" id="accountAffPincode" type="text" inputmode="numeric" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="6 अंक"></div></div>
+      <div class="profile-row profile-row-2"><div class="profile-field"><label class="user-profile-label" for="accountEditMobile">Mobile Number (Registered)</label><input class="user-profile-input" id="accountEditMobile" type="tel" readonly></div><div class="profile-field"><label class="user-profile-label" for="accountAffTelephone">Landline Number with STD Code</label><input class="user-profile-input" id="accountAffTelephone" type="tel" maxlength="30"></div></div>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffEmail">Email ID *</label><input class="user-profile-input" id="accountAffEmail" type="email" maxlength="240" required></div></div>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffRelative">Close relative working in department?</label><select class="user-profile-input" id="accountAffRelative" ><option value="no">No</option><option value="yes">Yes</option></select></div></div>
+      <div id="accountAffRelativeFields" hidden><div class="profile-row profile-row-3"><div class="profile-field"><label class="user-profile-label" for="accountAffRelativeName">Relative Name</label><input class="user-profile-input" id="accountAffRelativeName" maxlength="120"></div><div class="profile-field"><label class="user-profile-label" for="accountAffRelativePost">Post</label><input class="user-profile-input" id="accountAffRelativePost" maxlength="120"></div><div class="profile-field"><label class="user-profile-label" for="accountAffRelativePosting">Present Posting</label><input class="user-profile-input" id="accountAffRelativePosting" maxlength="160"></div></div></div>
+      <div class="profile-row profile-row-3"><div class="profile-field"><label class="user-profile-label" for="accountAffRegistrationNumber">Centralized Registration / Application No.</label><input class="user-profile-input" id="accountAffRegistrationNumber" maxlength="240"></div><div class="profile-field"><label class="user-profile-label" for="accountAffRegistrationDate">Registration Date</label><input class="user-profile-input" id="accountAffRegistrationDate" type="date"></div><div class="profile-field"><label class="user-profile-label" for="accountAffRegistrationValidTill">Registration Expiry</label><input class="user-profile-input" id="accountAffRegistrationValidTill" type="date"></div></div>
+      <div class="profile-row profile-row-1"><div class="profile-field"><label class="user-profile-label" for="accountAffRegistrationClass">Registration Class</label><select class="user-profile-input" id="accountAffRegistrationClass" ><option selected>Not Applicable</option><option>Class A</option><option>Class B</option><option>Class C</option></select></div></div>
+      </div><button class="user-profile-save" type="submit">Save Profile / प्रोफाइल सेव करें</button></form></div>
     <form id="accountChangePasswordForm" hidden>
       <label class="user-profile-label" for="accountCurrentPassword">Current Password</label><input class="user-profile-input" id="accountCurrentPassword" type="password" autocomplete="current-password" maxlength="128" required>
       <label class="user-profile-label" for="accountChangeNew">New Password</label><input class="user-profile-input" id="accountChangeNew" type="password" autocomplete="new-password" minlength="8" maxlength="128" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).{8,128}" required>
@@ -6361,6 +6347,13 @@ enforceAccountAccess().then(async () => {
   }
   window.getDashboardAffidavitProfile=getSavedProfile;
   window.cacheDashboardAffidavitProfile=function(profile){localStorage.setItem(profileKey(),JSON.stringify(profile));window.dashboardAffidavitProfile=profile;window.dashboardAffidavitProfileEdited=true;};
+  function profileAddress(profile){
+    let address=safe(profile.address);
+    for(const part of [profile.tehsil,profile.district,profile.pincode]){
+      const value=safe(part);if(value&&!address.toLowerCase().includes(value.toLowerCase()))address+=(address?', ':'')+value;
+    }
+    return address;
+  }
   function profileComplete(profile){
     return validLetterheadEmail(profile.email||getSavedGeneralProfile().email)&&['bidderName','parentName','address','firmName','status','place'].every(key=>safe(profile[key]))&&['S/o','D/o','W/o'].includes(profile.parentRelation)&&['yes','no'].includes(profile.relative)&&
       (profile.relative!=='yes'||['relativeName','relativePost','relativePosting'].every(key=>safe(profile[key])));
@@ -6597,7 +6590,7 @@ enforceAccountAccess().then(async () => {
     const telegramName=(typeof telegramAuthData!=="undefined"&&telegramAuthData)?safe([telegramAuthData.first_name,telegramAuthData.last_name].filter(Boolean).join(" ")):"";
     byId("affBidderName").value=saved.bidderName||general.name||safe(byId("userProfileName")?.value)||telegramName;
     byId("affParentName").value=saved.parentName||"";
-    byId("affAddress").value=saved.address||"";
+    byId("affAddress").value=profileAddress(saved);
     byId("affParentRelation").value=["S/o","D/o","W/o"].includes(saved.parentRelation)?saved.parentRelation:"S/o";
     byId("affFirmName").value=saved.firmName||general.firmName||"";
     byId("affStatus").value=saved.status||general.bidderStatus||"Proprietor";
@@ -6626,7 +6619,7 @@ enforceAccountAccess().then(async () => {
     if(!profileComplete(saved)){
       window.pendingAffidavitTenderId=id;
       byId('accountProfileBtn')?.onclick?.();
-      byId('accountSettingsStatus').textContent='पहले Document Profile में नाम, पिता/संबंधित व्यक्ति का नाम, address, firm और सही email save करें।';
+      byId('accountSettingsStatus').textContent='पहले My Profile में नाम, पिता/संबंधित व्यक्ति का नाम, firm address, firm और सही email save करें।';
       byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});
       return;
     }

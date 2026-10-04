@@ -78,10 +78,15 @@ assert(html.indexOf('id="visitorMobile"')<html.indexOf('id="visitorName"'));
  assert(node('accountAffRelativeFields').hidden);node('accountAffRelative').value='yes';node('accountAffRelative').onchange();assert(!node('accountAffRelativeFields').hidden);assert.equal(node('accountAffRelativeName').required,true);
  node('accountAffRelative').value='no';node('accountAffRelative').onchange();
  let savedAff=null,resumedTender='';ctx.window.saveDashboardAffidavitProfile=async p=>{savedAff=p;return {profile:p}};ctx.window.openAffidavitForTender=id=>resumedTender=id;
- ctx.window.pendingAffidavitTenderId='TENDER-1';node('accountAffAddress').value='Updated Address';
- await node('accountEditAffidavitForm').onsubmit({preventDefault(){},currentTarget:node('accountEditAffidavitForm')});
- assert.equal(savedAff.email,'bidder@example.test');assert.equal(savedAff.pan,'ABCDE1234F');assert.equal(savedAff.registrationNumber,'REG-42');assert.equal(savedAff.address,'Updated Address');assert.equal(savedAff.parentName,'Parent User');assert.equal(savedAff.parentRelation,'W/o');assert.equal(resumedTender,'TENDER-1');assert.equal(ctx.window.pendingAffidavitTenderId,null);
+ ctx.window.pendingAffidavitTenderId='TENDER-1';node('accountAffAddress').value='Updated Address';node('accountAffPincode').value='455332';
+ await node('accountEditProfileForm').onsubmit({preventDefault(){},currentTarget:node('accountEditProfileForm')});
+ assert.equal(savedAff.pincode,'455332');assert.equal(savedAff.bidderName,ctx.window.dashboardVisitorProfile.name);assert.equal(savedAff.email,'bidder@example.test');assert.equal(savedAff.pan,'ABCDE1234F');assert.equal(savedAff.registrationNumber,'REG-42');assert.equal(savedAff.address,'Updated Address');assert.equal(savedAff.parentName,'Parent User');assert.equal(savedAff.parentRelation,'W/o');assert.equal(resumedTender,'TENDER-1');assert.equal(ctx.window.pendingAffidavitTenderId,null);
  assert(!Object.keys(savedAff).some(key=>key.startsWith('representative')));
+ // A failed document save must not claim the whole profile was saved or resume the download.
+ ctx.window.pendingAffidavitTenderId='TENDER-2';resumedTender='';ctx.window.saveDashboardAffidavitProfile=async()=>{throw new Error('Document storage unavailable')};
+ await node('accountEditProfileForm').onsubmit({preventDefault(){},currentTarget:node('accountEditProfileForm')});
+ assert(node('accountSettingsStatus').textContent.includes('document details save नहीं हुईं'));
+ assert.equal(ctx.window.pendingAffidavitTenderId,'TENDER-2');assert.equal(resumedTender,'');assert.equal(node('accountEditProfileForm').querySelector().disabled,false);
  // Restoring a session keeps its view; a real login starts in card view.
  local.set('mpTenderViewMode','table');
  const viewProfile={name:'Test',mobile:'9876543210',district:'Dewas'};

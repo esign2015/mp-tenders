@@ -53,10 +53,10 @@ class VisitorTests(unittest.TestCase):
     def test_document_profile_requires_email_and_validates_registration_dates(self):
         token=self.client.post('/api/visitors/register',json=self.payload()).json['session_token']
         profile={'bidderName':'Bidder','firmName':'Firm','status':'Proprietor','place':'Dewas','relative':'no','email':'bidder@example.test'}
-        for change in ({'email':''},{'email':'invalid'},{'representativeEmail':'bad address'},{'registrationDate':'2026-02-30'}):
+        for change in ({'email':''},{'email':'invalid'},{'representativeEmail':'bad address'},{'registrationDate':'2026-02-30'},{'pincode':'12345'},{'pincode':'000000'}):
             response=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':{**profile,**change}})
             self.assertEqual(response.status_code,400)
-        profile.update(pan='ABCDE1234F',gst='23ABCDE1234F1Z5',registrationNumber='REG-42',registrationDate='2025-01-01',registrationValidTill='2030-01-01',representativeName='Different Person',representativeEmail='rep@example.test')
+        profile.update(pincode='455332',district='Dewas',tehsil='Kannod',pan='ABCDE1234F',gst='23ABCDE1234F1Z5',registrationNumber='REG-42',registrationDate='2025-01-01',registrationValidTill='2030-01-01',representativeName='Different Person',representativeEmail='rep@example.test')
         self.assertEqual(self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile}).status_code,200)
         restored=self.client.post('/api/visitors/affidavit',json={'session_token':token}).json['profile']
         for key in profile:self.assertEqual(restored[key],profile[key])

@@ -8,14 +8,14 @@ for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Scri
 const local=new Map(),session=new Map(),nodes={};
 const storage=map=>({getItem:k=>map.get(k)||null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)});
 const node=id=>nodes[id]??={value:'',textContent:'',style:{},classList:{add(){},remove(){},toggle(){}},remove(){this.removed=true},setAttribute(){},appendChild(){},addEventListener(e,handler){this[e]=handler},reportValidity(){return true},contains(){return false}};
-let locked=true,fail=false,dropSavedEmail=false;
+let locked=true,fail=false,dropSavedEmail=false,dropSavedLocation=false;
 const document={getElementById:node,createElement:()=>({}),addEventListener(){},querySelector:()=>({textContent:'',removeAttribute(){}}),body:{classList:{remove(c){if(c==='telegram-locked')locked=false}}}};
 const ctx=vm.createContext({window:{},document,localStorage:storage(local),sessionStorage:storage(session),crypto:{randomUUID:()=> 'de930213-1646-4daa-b9e2-7055c5c294a8'},location:{reload(){}},fetch:async(url,options)=>{
  assert(!url.includes('/telegram/'));
  if(url.includes('mp_districts'))return{json:async()=>({districts:[{name:'Dewas'}]})};
  if(fail)return{ok:false,status:503,json:async()=>({message:'retry'})};
  const body=JSON.parse(options.body);assert(body.name||body.session_token);
- if(url.endsWith('/affidavit'))return{ok:true,json:async()=>({ok:true,storage:'google_sheets',profile:dropSavedEmail?{firmName:body.profile.firmName}:body.profile})};
+ if(url.endsWith('/affidavit'))return{ok:true,json:async()=>({ok:true,storage:'google_sheets',profile:dropSavedEmail?{firmName:body.profile.firmName}:dropSavedLocation?{firmName:body.profile.firmName,email:body.profile.email}:body.profile})};
  return{ok:true,json:async()=>({ok:true,visitor_id:'visitor-test',session_token:'saved-token',affidavit_profile:{firmName:'Restored firm'},profile:{name:'Visitor',mobile:'+919876543210',district:'Dewas'}})};
 }});
 vm.runInContext(source,ctx);
@@ -31,5 +31,8 @@ vm.runInContext(source,ctx);
  await ctx.window.saveDashboardAffidavitProfile({firmName:'Saved firm',email:'bidder@example.test'});
  dropSavedEmail=true;await assert.rejects(ctx.window.saveDashboardAffidavitProfile({firmName:'Different firm',email:'other@example.test'}));
  assert.equal(ctx.window.dashboardAffidavitProfile.email,'bidder@example.test');assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Saved firm');
+ dropSavedEmail=false;dropSavedLocation=true;
+ await assert.rejects(ctx.window.saveDashboardAffidavitProfile({firmName:'Different firm',email:'bidder@example.test',pincode:'455332',district:'Dewas',tehsil:'Kannod'}));
+ assert.equal(ctx.window.dashboardAffidavitProfile.firmName,'Saved firm');
  console.log('PASS: no Telegram calls, save failure stays locked, save success and session refresh open dashboard.');
 })().catch(e=>{console.error(e);process.exitCode=1});

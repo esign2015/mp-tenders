@@ -17,7 +17,7 @@ class AccountsTests(unittest.TestCase):
             if old['revision']!=fields['expected_revision']:return {'updated':False}
             record['revision']=old['revision']+1;records[record['user_id']]=deepcopy(record)
             return {'updated':True}
-        profile={'bidderName':'Bidder Test','email':'bidder@example.test','pan':'ABCDE1234F','registrationNumber':'REG-42','registrationDate':'2025-01-01','registrationValidTill':'2030-01-01','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','parentRelation':'D/o','parentName':'Parent Test','address':'Ward 2, Kannod'}
+        profile={'pincode':'455332','district':'Dewas','tehsil':'Kannod','bidderName':'Bidder Test','email':'bidder@example.test','pan':'ABCDE1234F','registrationNumber':'REG-42','registrationDate':'2025-01-01','registrationValidTill':'2030-01-01','firmName':'Firm','status':'Proprietor','place':'Kannod','relative':'no','parentRelation':'D/o','parentName':'Parent Test','address':'Ward 2, Kannod'}
         legacy={k:v for k,v in profile.items() if k not in ('parentRelation','parentName','address')}
         with patch.object(sheets,'enabled',return_value=True),patch.object(server.account_service,'operation',side_effect=operation),patch.object(sheets,'call',return_value={'profile':legacy}) as call,patch('account_access._detail_pool.submit',side_effect=lambda fn:fn()):
             saved=self.client.post('/api/visitors/affidavit',json={'session_token':token,'profile':profile})
