@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "37214687466",
-  "github_run_number": "891",
-  "github_commit_sha": "3a60bbbe5d34da596cddfe5d4da2b90ba931b795",
+  "github_run_id": "37218578479",
+  "github_run_number": "896",
+  "github_commit_sha": "9a4645330b9a64f408d50f3c4072b074bafc704f",
   "batch_size": 500,
   "total_csv_ids": 5322,
   "current_portal_ids": 5322,
-  "initial_incomplete": 246,
-  "batch_targets": 246,
-  "batch_attempted": 246,
-  "batch_complete": 246,
-  "started_at": "2026-10-04T16:48:28.050484+00:00",
+  "initial_incomplete": 109,
+  "batch_targets": 109,
+  "batch_attempted": 109,
+  "batch_complete": 109,
+  "started_at": "2026-10-04T17:17:13.956829+00:00",
   "success": 5278,
   "failed": 0,
   "success_ids": [
@@ -5341,7 +5341,98 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_530881_3",
-  "errors": [],
-  "updated_at": "2026-10-04T17:05:13.076167+00:00"
+  "last_successful_tender_id": "2026_UAD_516231_2",
+  "errors": [
+    {
+      "Tender ID": "2026_MPFD_536496_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_NVDA_538104_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_538853_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_HED_533084_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MKVVC_529518_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536110_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536113_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536111_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536114_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536119_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536121_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_536118_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535400_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_536201_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MKVVC_534577_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRDC_477836_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_516193_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_516231_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-04T17:29:21.738355+00:00"
 }
