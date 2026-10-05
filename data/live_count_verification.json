@@ -1,12 +1,12 @@
 {
   "status": "verified",
-  "checked_at": "2026-10-05T16:59:58.251727+05:30",
+  "checked_at": "2026-10-05T17:02:04.933171+05:30",
   "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 5484,
   "verified_unique_ids": 5484,
-  "dashboard_live_count": 5482,
-  "closed_or_cancelled_count": 2,
+  "dashboard_live_count": 5454,
+  "closed_or_cancelled_count": 30,
   "excluded_master_only_live_count": 1,
   "excluded_master_only_live_ids": [
     "2026_GADR_537736_1"
