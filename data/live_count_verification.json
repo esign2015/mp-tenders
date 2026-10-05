@@ -1,19 +1,28 @@
 {
-  "status": "verified",
-  "checked_at": "2026-10-05T21:51:40.002489+05:30",
-  "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
-  "inventory_source": "copied-list",
+  "status": "mismatch",
+  "checked_at": "2026-10-05T21:58:57.886459+05:30",
+  "snapshot_at": "2026-10-05T21:58:41.973737+05:30",
+  "inventory_source": "cached-snapshot",
   "portal_tender_count": 5245,
-  "verified_unique_ids": 5245,
+  "verified_unique_ids": 5149,
   "dashboard_live_count": 5146,
-  "closed_or_cancelled_count": 99,
-  "excluded_master_only_live_count": 1,
-  "excluded_master_only_live_ids": [
-    "2026_GADR_537736_1"
-  ],
+  "closed_or_cancelled_count": 0,
+  "excluded_master_only_live_count": 0,
+  "excluded_master_only_live_ids": [],
   "missing_ids": [],
-  "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "invalid_closing_ids": [
+    "2026_RDVJ_537099_1",
+    "2026_RDVJ_537224_1",
+    "2026_RDVJ_537231_1"
+  ],
+  "errors": [
+    "Organisation count mismatch: Department of Higher Education",
+    "Organisation count mismatch: Directorate of Town And Country Planning",
+    "Organisation count mismatch: Directorate Urban Administration and Development",
+    "Organisation count mismatch: MP State Agricultural Marketing Board",
+    "Portal total and unique Tender IDs differ",
+    "Verified Tender IDs have missing or invalid closing dates"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }

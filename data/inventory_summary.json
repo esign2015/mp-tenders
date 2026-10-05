@@ -1,33 +1,42 @@
 {
   "policy_version": "official-portal-v1",
   "live_verification": {
-    "status": "verified",
-    "checked_at": "2026-10-05T21:51:40.002489+05:30",
-    "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
-    "inventory_source": "copied-list",
+    "status": "mismatch",
+    "checked_at": "2026-10-05T21:58:57.886459+05:30",
+    "snapshot_at": "2026-10-05T21:58:41.973737+05:30",
+    "inventory_source": "cached-snapshot",
     "portal_tender_count": 5245,
-    "verified_unique_ids": 5245,
+    "verified_unique_ids": 5149,
     "dashboard_live_count": 5146,
-    "closed_or_cancelled_count": 99,
-    "excluded_master_only_live_count": 1,
-    "excluded_master_only_live_ids": [
-      "2026_GADR_537736_1"
-    ],
+    "closed_or_cancelled_count": 0,
+    "excluded_master_only_live_count": 0,
+    "excluded_master_only_live_ids": [],
     "missing_ids": [],
-    "invalid_closing_ids": [],
-    "errors": [],
-    "counts_match": true,
+    "invalid_closing_ids": [
+      "2026_RDVJ_537099_1",
+      "2026_RDVJ_537224_1",
+      "2026_RDVJ_537231_1"
+    ],
+    "errors": [
+      "Organisation count mismatch: Department of Higher Education",
+      "Organisation count mismatch: Directorate of Town And Country Planning",
+      "Organisation count mismatch: Directorate Urban Administration and Development",
+      "Organisation count mismatch: MP State Agricultural Marketing Board",
+      "Portal total and unique Tender IDs differ",
+      "Verified Tender IDs have missing or invalid closing dates"
+    ],
+    "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-05T16:21:41.504578+00:00",
+  "updated_at": "2026-10-05T16:28:59.281466+00:00",
   "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5245,
-  "copied_tenders": 5245,
-  "detail_complete": 5204,
+  "copied_tenders": 5149,
+  "detail_complete": 5105,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 40,
+  "detail_pending": 43,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -78,8 +87,8 @@
       "serial": "5",
       "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
       "portal_tender_count": 32,
-      "copied_tenders": 32,
-      "detail_complete": 32,
+      "copied_tenders": 31,
+      "detail_complete": 31,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 0
@@ -243,8 +252,8 @@
       "serial": "20",
       "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
       "portal_tender_count": 28,
-      "copied_tenders": 28,
-      "detail_complete": 28,
+      "copied_tenders": 25,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 0
@@ -276,8 +285,8 @@
       "serial": "23",
       "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
       "portal_tender_count": 3023,
-      "copied_tenders": 3023,
-      "detail_complete": 3023,
+      "copied_tenders": 2935,
+      "detail_complete": 2935,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 0
@@ -705,8 +714,8 @@
       "serial": "62",
       "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
       "portal_tender_count": 88,
-      "copied_tenders": 88,
-      "detail_complete": 88,
+      "copied_tenders": 84,
+      "detail_complete": 84,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 0
@@ -1003,10 +1012,10 @@
       "snapshot_at": "2026-10-05T12:12:47.833094+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 3,
+      "detail_complete": 0,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 3
     },
     {
       "organisation": "Rewa Ultra Mega Solar Limited",
@@ -1075,14 +1084,21 @@
       "detail_pending": 0
     }
   ],
-  "organisation_count_mismatches": 0,
+  "organisation_count_mismatches": 4,
   "legacy_verification_pending": 39,
-  "missing_district_count": 0,
-  "missing_district_ids": [],
-  "known_pincode_count": 370,
-  "department_count": 320,
-  "missing_pincode_count": 1,
+  "missing_district_count": 3,
+  "missing_district_ids": [
+    "2026_RDVJ_537099_1",
+    "2026_RDVJ_537224_1",
+    "2026_RDVJ_537231_1"
+  ],
+  "known_pincode_count": 369,
+  "department_count": 319,
+  "missing_pincode_count": 4,
   "missing_pincode_ids": [
-    "2026_DHS_538872_1"
+    "2026_DHS_538872_1",
+    "2026_RDVJ_537099_1",
+    "2026_RDVJ_537224_1",
+    "2026_RDVJ_537231_1"
   ]
 }
