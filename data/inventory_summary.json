@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-06T00:40:58.139395+05:30",
+    "checked_at": "2026-10-06T00:43:05.132530+05:30",
     "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5217,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-05T19:10:59.473818+00:00",
+  "updated_at": "2026-10-05T19:13:06.307488+00:00",
   "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5217,
   "copied_tenders": 5217,
-  "detail_complete": 5157,
-  "detail_failed": 0,
+  "detail_complete": 5176,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 60,
+  "detail_pending": 40,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -275,10 +275,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 2964,
       "copied_tenders": 2964,
-      "detail_complete": 2961,
+      "detail_complete": 2964,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -319,10 +319,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 20,
       "copied_tenders": 20,
-      "detail_complete": 15,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 2
     },
     {
       "organisation": "Excise Department",
@@ -473,10 +473,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -484,10 +484,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 235,
       "copied_tenders": 235,
-      "detail_complete": 208,
+      "detail_complete": 213,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 22
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -506,10 +506,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
-      "detail_complete": 5,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Road Development Corporation Limited",
@@ -605,10 +605,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 83,
       "copied_tenders": 83,
-      "detail_complete": 82,
+      "detail_complete": 83,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -693,10 +693,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 27,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -803,10 +803,10 @@
       "snapshot_at": "2026-10-05T18:43:11.067077+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Tourism Development Corporation Ltd.",
@@ -936,9 +936,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1064,51 +1064,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 39,
-  "missing_district_count": 19,
-  "missing_district_ids": [
-    "2026_MPFD_540820_1",
-    "2026_MPPGC_524875_1",
-    "2026_MPPGC_525548_1",
-    "2026_MPPGC_525827_1",
-    "2026_MPPGC_527565_1",
-    "2026_MPPGC_529822_1",
-    "2026_MPPTC_540991_1",
-    "2026_MPPTC_540992_1",
-    "2026_PHSCL_531242_1",
-    "2026_PHSCL_531268_1",
-    "2026_PHSCL_531459_1",
-    "2026_PKVVC_538266_1",
-    "2026_SSCA_540907_1",
-    "2026_UAD_534486_1",
-    "2026_UAD_534487_1",
-    "2026_UAD_534510_1",
-    "2026_WRD_520925_1",
-    "2026_WRD_525957_1",
-    "2026_WRD_528866_1"
-  ],
-  "known_pincode_count": 369,
+  "missing_district_count": 0,
+  "missing_district_ids": [],
+  "known_pincode_count": 370,
   "department_count": 320,
-  "missing_pincode_count": 20,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_DHS_538872_1",
-    "2026_MPFD_540820_1",
-    "2026_MPPGC_524875_1",
-    "2026_MPPGC_525548_1",
-    "2026_MPPGC_525827_1",
-    "2026_MPPGC_527565_1",
-    "2026_MPPGC_529822_1",
-    "2026_MPPTC_540991_1",
-    "2026_MPPTC_540992_1",
-    "2026_PHSCL_531242_1",
-    "2026_PHSCL_531268_1",
-    "2026_PHSCL_531459_1",
-    "2026_PKVVC_538266_1",
-    "2026_SSCA_540907_1",
-    "2026_UAD_534486_1",
-    "2026_UAD_534487_1",
-    "2026_UAD_534510_1",
-    "2026_WRD_520925_1",
-    "2026_WRD_525957_1",
-    "2026_WRD_528866_1"
+    "2026_DHS_538872_1"
   ]
 }
