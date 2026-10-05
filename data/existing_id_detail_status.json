@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "37297971349",
   "github_run_number": "904",
   "github_commit_sha": "9a4645330b9a64f408d50f3c4072b074bafc704f",
@@ -9,9 +9,9 @@
   "initial_incomplete": 285,
   "batch_targets": 285,
   "batch_attempted": 285,
-  "batch_complete": 271,
+  "batch_complete": 283,
   "started_at": "2026-10-05T11:09:32.217223+00:00",
-  "success": 5431,
+  "success": 5443,
   "failed": 2,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -363,7 +363,19 @@
     "2026_DoPR_538455_1",
     "2026_DoPR_538458_1",
     "2026_DoPR_540455_1",
+    "2026_DoPR_540456_1",
     "2026_DoPR_540481_1",
+    "2026_DoPR_540482_1",
+    "2026_DoPR_540483_1",
+    "2026_DoPR_540484_1",
+    "2026_DoPR_540485_1",
+    "2026_DoPR_540486_1",
+    "2026_DoPR_540487_1",
+    "2026_DoPR_540488_1",
+    "2026_DoPR_540489_1",
+    "2026_DoPR_540490_1",
+    "2026_DoPR_540491_1",
+    "2026_DoPR_540492_1",
     "2026_DoPR_540493_1",
     "2026_DoPR_540494_1",
     "2026_DoPR_540495_1",
@@ -5459,18 +5471,6 @@
     "2026_DGPCS_534157_1",
     "2026_DGPCS_534165_1",
     "2026_DHS_533396_1",
-    "2026_DoPR_540456_1",
-    "2026_DoPR_540482_1",
-    "2026_DoPR_540483_1",
-    "2026_DoPR_540484_1",
-    "2026_DoPR_540485_1",
-    "2026_DoPR_540486_1",
-    "2026_DoPR_540487_1",
-    "2026_DoPR_540488_1",
-    "2026_DoPR_540489_1",
-    "2026_DoPR_540490_1",
-    "2026_DoPR_540491_1",
-    "2026_DoPR_540492_1",
     "2026_MPB_523044_2",
     "2026_MPJNM_533547_1",
     "2026_MPPGC_506201_1",
@@ -5504,17 +5504,17 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_DoPR_540481_1",
+  "last_successful_tender_id": "2026_DoPR_540492_1",
   "errors": [
     {
       "Tender ID": "2026_DHS_538872_1",
       "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_UAD_528651_2",
@@ -5665,17 +5665,7 @@
       "Tender ID": "2026_DoPR_540492_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PSNSU_540805_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_DHS_538872_1",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-05T11:38:18.573222+00:00"
+  "updated_at": "2026-10-05T11:39:14.915302+00:00"
 }

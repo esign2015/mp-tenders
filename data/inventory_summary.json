@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-05T17:08:23.394113+05:30",
+    "checked_at": "2026-10-05T17:10:29.430792+05:30",
     "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5484,
     "verified_unique_ids": 5484,
-    "dashboard_live_count": 5454,
-    "closed_or_cancelled_count": 30,
+    "dashboard_live_count": 5452,
+    "closed_or_cancelled_count": 32,
     "excluded_master_only_live_count": 1,
     "excluded_master_only_live_ids": [
       "2026_GADR_537736_1"
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-05T11:38:24.417040+00:00",
+  "updated_at": "2026-10-05T11:40:30.452888+00:00",
   "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5484,
   "copied_tenders": 5484,
-  "detail_complete": 5431,
+  "detail_complete": 5443,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 51,
+  "detail_pending": 39,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -200,10 +200,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 18,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -1077,38 +1077,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 39,
-  "missing_district_count": 13,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_DHS_538872_1",
-    "2026_DoPR_540456_1",
-    "2026_DoPR_540482_1",
-    "2026_DoPR_540483_1",
-    "2026_DoPR_540484_1",
-    "2026_DoPR_540485_1",
-    "2026_DoPR_540486_1",
-    "2026_DoPR_540487_1",
-    "2026_DoPR_540488_1",
-    "2026_DoPR_540489_1",
-    "2026_DoPR_540490_1",
-    "2026_DoPR_540491_1",
-    "2026_DoPR_540492_1"
+    "2026_DHS_538872_1"
   ],
   "known_pincode_count": 377,
   "department_count": 327,
-  "missing_pincode_count": 13,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_DHS_538872_1",
-    "2026_DoPR_540456_1",
-    "2026_DoPR_540482_1",
-    "2026_DoPR_540483_1",
-    "2026_DoPR_540484_1",
-    "2026_DoPR_540485_1",
-    "2026_DoPR_540486_1",
-    "2026_DoPR_540487_1",
-    "2026_DoPR_540488_1",
-    "2026_DoPR_540489_1",
-    "2026_DoPR_540490_1",
-    "2026_DoPR_540491_1",
-    "2026_DoPR_540492_1"
+    "2026_DHS_538872_1"
   ]
 }
