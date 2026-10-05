@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-05T16:55:42.564053+05:30",
+    "checked_at": "2026-10-05T16:57:50.113873+05:30",
     "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5484,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-05T11:25:44.086644+00:00",
+  "updated_at": "2026-10-05T11:27:51.582059+00:00",
   "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5484,
   "copied_tenders": 5484,
-  "detail_complete": 5316,
+  "detail_complete": 5319,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 168,
+  "detail_pending": 165,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -200,10 +200,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 11,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 16
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -1077,7 +1077,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 39,
-  "missing_district_count": 128,
+  "missing_district_count": 125,
   "missing_district_ids": [
     "2025_UAD_467144_3",
     "2025_UAD_467145_3",
@@ -1103,9 +1103,6 @@
     "2026_DoPR_540490_1",
     "2026_DoPR_540491_1",
     "2026_DoPR_540492_1",
-    "2026_DoPR_540493_1",
-    "2026_DoPR_540495_1",
-    "2026_DoPR_540496_1",
     "2026_DoPR_540497_1",
     "2026_DoPR_540498_1",
     "2026_DoPR_540499_1",
@@ -1210,7 +1207,7 @@
   ],
   "known_pincode_count": 375,
   "department_count": 327,
-  "missing_pincode_count": 128,
+  "missing_pincode_count": 125,
   "missing_pincode_ids": [
     "2025_UAD_467144_3",
     "2025_UAD_467145_3",
@@ -1236,9 +1233,6 @@
     "2026_DoPR_540490_1",
     "2026_DoPR_540491_1",
     "2026_DoPR_540492_1",
-    "2026_DoPR_540493_1",
-    "2026_DoPR_540495_1",
-    "2026_DoPR_540496_1",
     "2026_DoPR_540497_1",
     "2026_DoPR_540498_1",
     "2026_DoPR_540499_1",
