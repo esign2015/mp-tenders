@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-05T17:06:16.936816+05:30",
+    "checked_at": "2026-10-05T17:08:23.394113+05:30",
     "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5484,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-05T11:36:18.425292+00:00",
+  "updated_at": "2026-10-05T11:38:24.417040+00:00",
   "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5484,
   "copied_tenders": 5484,
-  "detail_complete": 5412,
-  "detail_failed": 0,
+  "detail_complete": 5431,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 72,
+  "detail_pending": 51,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -168,9 +168,9 @@
       "portal_tender_count": 64,
       "copied_tenders": 64,
       "detail_complete": 62,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Industries",
@@ -200,10 +200,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 17,
+      "detail_complete": 18,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -288,10 +288,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 3197,
       "copied_tenders": 3197,
-      "detail_complete": 3187,
+      "detail_complete": 3197,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -310,10 +310,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 50,
+      "detail_complete": 55,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "District Education Officer Office Neemuch",
@@ -618,10 +618,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 90,
       "copied_tenders": 90,
-      "detail_complete": 89,
+      "detail_complete": 90,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -761,10 +761,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Coperative Marketing Federation Ltd.",
@@ -838,10 +838,10 @@
       "snapshot_at": "2026-10-05T10:40:50.417603+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M P Vidhan Sabha",
@@ -938,9 +938,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1077,19 +1077,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 39,
-  "missing_district_count": 32,
+  "missing_district_count": 13,
   "missing_district_ids": [
-    "2025_UAD_467144_3",
-    "2025_UAD_467145_3",
-    "2025_UAD_468059_3",
-    "2026_DC_540151_1",
-    "2026_DC_540431_1",
-    "2026_DC_540437_1",
-    "2026_DC_540445_1",
-    "2026_DC_540448_1",
     "2026_DHS_538872_1",
     "2026_DoPR_540456_1",
-    "2026_DoPR_540481_1",
     "2026_DoPR_540482_1",
     "2026_DoPR_540483_1",
     "2026_DoPR_540484_1",
@@ -1100,33 +1091,14 @@
     "2026_DoPR_540489_1",
     "2026_DoPR_540490_1",
     "2026_DoPR_540491_1",
-    "2026_DoPR_540492_1",
-    "2026_MPFD_540444_1",
-    "2026_MPSCU_536474_2",
-    "2026_MPTB_540426_9",
-    "2026_UAD_528629_2",
-    "2026_UAD_528651_2",
-    "2026_UAD_535848_1",
-    "2026_UAD_535848_2",
-    "2026_UAD_535848_3",
-    "2026_UAD_540438_1",
-    "2026_UAD_540441_1"
+    "2026_DoPR_540492_1"
   ],
-  "known_pincode_count": 376,
+  "known_pincode_count": 377,
   "department_count": 327,
-  "missing_pincode_count": 32,
+  "missing_pincode_count": 13,
   "missing_pincode_ids": [
-    "2025_UAD_467144_3",
-    "2025_UAD_467145_3",
-    "2025_UAD_468059_3",
-    "2026_DC_540151_1",
-    "2026_DC_540431_1",
-    "2026_DC_540437_1",
-    "2026_DC_540445_1",
-    "2026_DC_540448_1",
     "2026_DHS_538872_1",
     "2026_DoPR_540456_1",
-    "2026_DoPR_540481_1",
     "2026_DoPR_540482_1",
     "2026_DoPR_540483_1",
     "2026_DoPR_540484_1",
@@ -1137,16 +1109,6 @@
     "2026_DoPR_540489_1",
     "2026_DoPR_540490_1",
     "2026_DoPR_540491_1",
-    "2026_DoPR_540492_1",
-    "2026_MPFD_540444_1",
-    "2026_MPSCU_536474_2",
-    "2026_MPTB_540426_9",
-    "2026_UAD_528629_2",
-    "2026_UAD_528651_2",
-    "2026_UAD_535848_1",
-    "2026_UAD_535848_2",
-    "2026_UAD_535848_3",
-    "2026_UAD_540438_1",
-    "2026_UAD_540441_1"
+    "2026_DoPR_540492_1"
   ]
 }
