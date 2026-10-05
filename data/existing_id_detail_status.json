@@ -8,10 +8,10 @@
   "current_portal_ids": 5484,
   "initial_incomplete": 285,
   "batch_targets": 285,
-  "batch_attempted": 148,
-  "batch_complete": 146,
+  "batch_attempted": 173,
+  "batch_complete": 156,
   "started_at": "2026-10-05T11:09:32.217223+00:00",
-  "success": 5306,
+  "success": 5316,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -43,6 +43,7 @@
     "2025_UAD_447651_3",
     "2025_UAD_452564_2",
     "2025_UAD_453002_7",
+    "2025_UAD_454960_8",
     "2025_UAD_456427_4",
     "2025_UAD_460215_7",
     "2025_UAD_462789_2",
@@ -2270,7 +2271,10 @@
     "2026_UAD_477235_9",
     "2026_UAD_478234_5",
     "2026_UAD_480837_6",
+    "2026_UAD_481168_4",
+    "2026_UAD_481202_4",
     "2026_UAD_484028_2",
+    "2026_UAD_485263_5",
     "2026_UAD_486550_4",
     "2026_UAD_487241_4",
     "2026_UAD_488634_2",
@@ -2329,7 +2333,9 @@
     "2026_UAD_508730_1",
     "2026_UAD_509188_4",
     "2026_UAD_509409_3",
+    "2026_UAD_510784_3",
     "2026_UAD_510787_4",
+    "2026_UAD_510807_3",
     "2026_UAD_511414_3",
     "2026_UAD_512209_2",
     "2026_UAD_512238_2",
@@ -2340,6 +2346,8 @@
     "2026_UAD_512418_5",
     "2026_UAD_512907_2",
     "2026_UAD_512927_3",
+    "2026_UAD_512998_3",
+    "2026_UAD_513096_3",
     "2026_UAD_513785_2",
     "2026_UAD_513923_4",
     "2026_UAD_515971_2",
@@ -2435,6 +2443,7 @@
     "2026_UAD_528449_1",
     "2026_UAD_528477_1",
     "2026_UAD_528553_1",
+    "2026_UAD_528567_2",
     "2026_UAD_528647_1",
     "2026_UAD_528649_1",
     "2026_UAD_528650_1",
@@ -5293,6 +5302,7 @@
     "2026_UAD_540709_1",
     "2026_UAD_540710_1",
     "2026_UAD_540711_1",
+    "2026_UAD_540712_1",
     "2026_UAD_540713_1",
     "2026_UAD_540723_1",
     "2026_UAD_540725_1",
@@ -5326,7 +5336,6 @@
   "pending_ids": [
     "2025_MPPGC_454244_1",
     "2025_MPPGC_463842_2",
-    "2025_UAD_454960_8",
     "2025_UAD_467144_3",
     "2025_UAD_467145_3",
     "2025_UAD_468059_3",
@@ -5416,14 +5425,6 @@
     "2026_RSK_540671_1",
     "2026_RSK_540676_1",
     "2026_STDC_531278_1",
-    "2026_UAD_481168_4",
-    "2026_UAD_481202_4",
-    "2026_UAD_485263_5",
-    "2026_UAD_510784_3",
-    "2026_UAD_510807_3",
-    "2026_UAD_512998_3",
-    "2026_UAD_513096_3",
-    "2026_UAD_528567_2",
     "2026_UAD_528629_2",
     "2026_UAD_528651_2",
     "2026_UAD_535848_1",
@@ -5499,11 +5500,10 @@
     "2026_UAD_540701_1",
     "2026_UAD_540707_1",
     "2026_UAD_540708_1",
-    "2026_UAD_540712_1",
     "2026_UAD_540726_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_540711_1",
+  "last_successful_tender_id": "2026_UAD_528567_2",
   "errors": [
     {
       "Tender ID": "2026_DHS_538872_1",
@@ -5514,7 +5514,82 @@
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_528651_2",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SUMj%2BCmxZ5hJyZG%2B05k1Lyg%3D%3D\">[REGARDING GETTING NECESSARY WORK DONE AT SHRI KS\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_528629_2",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SCVKYWifzgW2xENZqh1yUkw%3D%3D\">[CONSTRUCTION OF A CEMENT CONCRETE ROAD FROM KESA\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCU_536474_2",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=StcV%2BZnMS5HxavUA1nKTxvw%3D%3D\">[Arrangements for tea, breakfast, lunch, and dinn\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535848_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535848_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_535848_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_UAD_467144_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_UAD_467145_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_UAD_468059_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_540438_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_540441_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_540151_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_540431_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_540437_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DC_540445_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-05T11:23:30.756901+00:00"
+  "updated_at": "2026-10-05T11:25:34.800466+00:00"
 }
