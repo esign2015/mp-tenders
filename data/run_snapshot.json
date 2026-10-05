@@ -1,14 +1,30 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-05T16:38:31.020015+05:30",
+  "snapshot_at": "2026-10-05T18:04:37.610615+05:30",
   "portal_organisation_count": 95,
-  "portal_tender_count": 5484,
-  "copied_unique_tender_ids": 5484,
+  "portal_tender_count": 5245,
+  "copied_unique_tender_ids": 5245,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 3,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_RDVJ_537099_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_537224_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_537231_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
