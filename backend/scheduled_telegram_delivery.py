@@ -21,6 +21,17 @@ def deliver(root, mode, key, extraction_result='', alert_module=None):
     root = Path(root)
     ledger_path = root / 'data/telegram_delivery' / (key.replace(':', '_') + '.json')
     ledger = read_json(ledger_path)
+    # Preserve the premature morning receipt, but do not let it suppress the
+    # actual evening report or resume against the wrong day's documents.
+    if mode == 'evening_new' and ledger.get('operations'):
+        try:
+            receipt = datetime.fromisoformat(ledger.get('completed_at') or next(iter(ledger['operations'].values()))['sent_at']).astimezone(IST)
+            report_date = key.split(':')[0]
+            if receipt.date().isoformat() != report_date or receipt.hour < 19:
+                ledger_path = ledger_path.with_name(ledger_path.stem + '_evening.json')
+                ledger = read_json(ledger_path)
+        except (KeyError, TypeError, ValueError, StopIteration):
+            pass
     operations = ledger.setdefault('operations', {})
     ledger.update(mode=mode, key=key, extraction_result=extraction_result or 'scheduled-catch-up')
     counters = {'text': 0, 'document': 0}
