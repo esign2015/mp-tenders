@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "37406208055",
   "github_run_number": "33",
   "github_commit_sha": "73d209597c9fc3791f577141b3b332f2c307c55a",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5217,
   "initial_incomplete": 17,
   "batch_targets": 17,
-  "batch_attempted": 15,
-  "batch_complete": 14,
+  "batch_attempted": 17,
+  "batch_complete": 16,
   "started_at": "2026-10-06T02:52:35.045060+00:00",
   "success": 5176,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_255290_15",
     "2024_UAD_352876_3",
@@ -5191,7 +5191,9 @@
     "2026_WRD_537376_1",
     "2026_WRD_537377_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_DHS_538872_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_454244_1",
@@ -5201,7 +5203,6 @@
     "2026_DGPCS_534157_1",
     "2026_DGPCS_534165_1",
     "2026_DHS_533396_1",
-    "2026_DHS_538872_1",
     "2026_MPB_523044_2",
     "2026_MPJNM_533547_1",
     "2026_MPPGC_506201_1",
@@ -5236,7 +5237,13 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_AVOMT_539493_1",
-  "errors": [],
-  "updated_at": "2026-10-06T02:54:28.472373+00:00"
+  "last_successful_tender_id": "2026_MPSAM_539777_1",
+  "errors": [
+    {
+      "Tender ID": "2026_DHS_538872_1",
+      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
+      "retry_pass": true
+    }
+  ],
+  "updated_at": "2026-10-06T02:55:00.815010+00:00"
 }
