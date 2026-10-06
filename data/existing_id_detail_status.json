@@ -8,8 +8,8 @@
   "current_portal_ids": 5227,
   "initial_incomplete": 94,
   "batch_targets": 94,
-  "batch_attempted": 14,
-  "batch_complete": 12,
+  "batch_attempted": 30,
+  "batch_complete": 28,
   "started_at": "2026-10-06T06:38:02.389078+00:00",
   "success": 5186,
   "failed": 0,
@@ -5246,13 +5246,18 @@
     "2026_STDC_531278_1",
     "2026_WRD_508900_2"
   ],
-  "last_successful_tender_id": "2026_UAD_540768_1",
+  "last_successful_tender_id": "2026_MPFD_540458_1",
   "errors": [
     {
       "Tender ID": "2026_DHS_538872_1",
       "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PSNSU_540805_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-06T06:39:57.479058+00:00"
+  "updated_at": "2026-10-06T06:42:07.763451+00:00"
 }
