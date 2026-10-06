@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "37519401512",
   "github_run_number": "27",
   "github_commit_sha": "1575495a9f18270a85074be65db56f653f984c73",
@@ -8,7 +8,7 @@
   "current_portal_ids": 5305,
   "initial_incomplete": 2,
   "batch_targets": 2,
-  "batch_attempted": 1,
+  "batch_attempted": 2,
   "batch_complete": 1,
   "started_at": "2026-10-06T19:30:50.346149+00:00",
   "success": 5276,
@@ -5325,6 +5325,12 @@
     "2026_PSNSU_540805_1"
   ],
   "last_successful_tender_id": "2026_DHS_538872_1",
-  "errors": [],
-  "updated_at": "2026-10-06T19:31:03.199602+00:00"
+  "errors": [
+    {
+      "Tender ID": "2026_PSNSU_540805_1",
+      "error": "RSPStyle: RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-06T19:32:08.112265+00:00"
 }
