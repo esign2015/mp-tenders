@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-06T18:30:27.138722+05:30",
+    "checked_at": "2026-10-06T19:16:11.035915+05:30",
     "snapshot_at": "2026-10-06T11:57:08.491050+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5294,
     "verified_unique_ids": 5294,
-    "dashboard_live_count": 5224,
-    "closed_or_cancelled_count": 70,
+    "dashboard_live_count": 5223,
+    "closed_or_cancelled_count": 71,
     "excluded_master_only_live_count": 3,
     "excluded_master_only_live_ids": [
       "2026_DHS_536416_1",
@@ -21,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-06T13:00:28.526674+00:00",
+  "updated_at": "2026-10-06T13:46:12.398474+00:00",
   "snapshot_at": "2026-10-06T11:57:08.491050+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5294,
   "copied_tenders": 5294,
   "detail_complete": 5264,
-  "detail_failed": 2,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 28,
+  "detail_pending": 30,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -159,9 +159,9 @@
       "portal_tender_count": 56,
       "copied_tenders": 56,
       "detail_complete": 54,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate of Industries",
@@ -918,9 +918,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
