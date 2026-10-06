@@ -31,6 +31,16 @@ def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_a
     # These are the only daily channel reports. Legacy All-Tender settings
     # cannot re-enable a fourth report, including during delayed retries.
     for mode, field in (('morning','morning_telegram_ist'), ('afternoon','afternoon_telegram_ist'), ('evening_new','evening_new_telegram_ist')):
+        sent_key = state.get(mode)
+        if mode == 'evening_new':
+            if current < hm('19:00'):
+                continue
+            try:
+                sent_at = datetime.fromisoformat(state.get(mode + '_sent_at', '')).astimezone(IST)
+                if sent_at.date() != now.date() or sent_at.hour < 19:
+                    sent_key = None
+            except (ValueError, TypeError):
+                sent_key = None
         delay=cfg.get(mode+'_after_detail_minutes')
         if mode != 'morning' and delay is not None:
             if (completion or {}).get('result') == 'in_progress':
@@ -39,7 +49,7 @@ def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_a
                 stamp=datetime.fromisoformat((completion or {})['completed_at']).astimezone(IST)
             except (KeyError,ValueError,TypeError):
                 stamp = None
-            if stamp is not None and (stamp.date()!=now.date() or not (completion or {}).get('run_id')):
+            if stamp is not None and (stamp.date()!=now.date() or not (completion or {}).get('run_id') or (mode == 'evening_new' and stamp.hour < 19)):
                 stamp = None
             fallback = cfg.get('evening_fallback_ist')
             if stamp is None and not fallback:
@@ -54,7 +64,7 @@ def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_a
             if now<deadline:continue
             target=deadline.hour*60+deadline.minute
             key=f'{now.date().isoformat()}:{mode}'
-            if state.get(mode)!=key:due.append((target,mode,key))
+            if sent_key!=key:due.append((target,mode,key))
             continue
         if not cfg.get(field):
             continue
@@ -64,7 +74,7 @@ def due_alert(cfg, state, now, extraction_result='', completion=None, new_sent_a
             target = hm(cfg.get('morning_snapshot_ist', '08:55'))
         key = f'{now.date().isoformat()}:{mode}'
         # A delayed Actions run must not lose today's notification.
-        if current >= target and state.get(mode) != key:
+        if current >= target and sent_key != key:
             due.append((target, mode, key))
     return min(due) if due else None
 
