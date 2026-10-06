@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "37478620052",
-  "github_run_number": "922",
+  "github_run_id": "37493033363",
+  "github_run_number": "923",
   "github_commit_sha": "ee04ce2c9ac01e571e68188cb1a4e8cf2aa80755",
   "batch_size": 500,
   "total_csv_ids": 5305,
   "current_portal_ids": 5305,
-  "initial_incomplete": 79,
-  "batch_targets": 79,
-  "batch_attempted": 79,
-  "batch_complete": 77,
-  "started_at": "2026-10-06T14:48:36.812028+00:00",
+  "initial_incomplete": 3,
+  "batch_targets": 3,
+  "batch_attempted": 3,
+  "batch_complete": 1,
+  "started_at": "2026-10-06T16:34:53.456612+00:00",
   "success": 5275,
   "failed": 2,
   "success_ids": [
@@ -5325,23 +5325,18 @@
     "2026_PKVVC_523309_1",
     "2026_PKVVC_534255_1"
   ],
-  "last_successful_tender_id": "2026_UAD_541286_1",
+  "last_successful_tender_id": "2026_UAD_533227_1",
   "errors": [
-    {
-      "Tender ID": "2026_DHS_538872_1",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": true
-    },
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_UAD_541286_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
+      "Tender ID": "2026_DHS_538872_1",
+      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-06T14:58:46.933672+00:00"
+  "updated_at": "2026-10-06T16:35:49.865070+00:00"
 }
