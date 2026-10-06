@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-06T16:49:21.421491+05:30",
+    "checked_at": "2026-10-06T16:51:26.627853+05:30",
     "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5402,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-06T11:19:22.510909+00:00",
+  "updated_at": "2026-10-06T11:21:27.412588+00:00",
   "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5402,
   "copied_tenders": 5402,
-  "detail_complete": 5315,
+  "detail_complete": 5341,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 87,
+  "detail_pending": 61,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -278,10 +278,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 3110,
       "copied_tenders": 3110,
-      "detail_complete": 3071,
+      "detail_complete": 3080,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 39
+      "detail_pending": 30
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -432,10 +432,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 37,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -454,10 +454,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 62,
       "copied_tenders": 62,
-      "detail_complete": 60,
+      "detail_complete": 61,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -663,10 +663,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 41,
+      "detail_complete": 43,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -696,10 +696,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 88,
       "copied_tenders": 88,
-      "detail_complete": 85,
+      "detail_complete": 88,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -718,10 +718,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 47,
       "copied_tenders": 47,
-      "detail_complete": 46,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Cooperative Dairy Federation",
@@ -938,10 +938,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 61,
       "copied_tenders": 61,
-      "detail_complete": 58,
+      "detail_complete": 60,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "PWD-PIU",
@@ -949,10 +949,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 45,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -960,10 +960,10 @@
       "snapshot_at": "2026-10-06T10:33:53.054622+00:00",
       "portal_tender_count": 410,
       "copied_tenders": 410,
-      "detail_complete": 407,
+      "detail_complete": 410,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1056,33 +1056,9 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 29,
-  "missing_district_count": 56,
+  "missing_district_count": 30,
   "missing_district_ids": [
-    "2026_MKVVC_540941_1",
-    "2026_MKVVC_540943_1",
-    "2026_MKVVC_540944_1",
-    "2026_MKVVC_540946_1",
-    "2026_MPPKV_540983_1",
-    "2026_MPP_541024_1",
-    "2026_MPP_541083_1",
-    "2026_MPSAM_540206_1",
-    "2026_MPSAM_540673_1",
-    "2026_MPSAM_540674_1",
-    "2026_MPSCS_541123_1",
-    "2026_PHED_540933_1",
-    "2026_PHED_540934_1",
-    "2026_PWDRB_539800_1",
-    "2026_PWDRB_539801_1",
-    "2026_PWDRB_539802_1",
-    "2026_PWPIU_533239_1",
-    "2026_UAD_529566_2",
-    "2026_UAD_538315_1",
-    "2026_UAD_539699_1",
-    "2026_UAD_539701_1",
-    "2026_UAD_539703_1",
-    "2026_UAD_539704_1",
     "2026_UAD_539705_1",
-    "2026_UAD_539706_1",
     "2026_UAD_539708_1",
     "2026_UAD_539712_1",
     "2026_UAD_539714_1",
@@ -1097,8 +1073,6 @@
     "2026_UAD_539724_1",
     "2026_UAD_539726_1",
     "2026_UAD_539727_1",
-    "2026_UAD_539963_1",
-    "2026_UAD_539964_1",
     "2026_UAD_540737_1",
     "2026_UAD_540744_1",
     "2026_UAD_540765_1",
@@ -1115,36 +1089,12 @@
     "2026_UAD_541060_1",
     "2026_UAD_541066_1"
   ],
-  "known_pincode_count": 373,
+  "known_pincode_count": 376,
   "department_count": 321,
-  "missing_pincode_count": 57,
+  "missing_pincode_count": 31,
   "missing_pincode_ids": [
     "2026_DHS_538872_1",
-    "2026_MKVVC_540941_1",
-    "2026_MKVVC_540943_1",
-    "2026_MKVVC_540944_1",
-    "2026_MKVVC_540946_1",
-    "2026_MPPKV_540983_1",
-    "2026_MPP_541024_1",
-    "2026_MPP_541083_1",
-    "2026_MPSAM_540206_1",
-    "2026_MPSAM_540673_1",
-    "2026_MPSAM_540674_1",
-    "2026_MPSCS_541123_1",
-    "2026_PHED_540933_1",
-    "2026_PHED_540934_1",
-    "2026_PWDRB_539800_1",
-    "2026_PWDRB_539801_1",
-    "2026_PWDRB_539802_1",
-    "2026_PWPIU_533239_1",
-    "2026_UAD_529566_2",
-    "2026_UAD_538315_1",
-    "2026_UAD_539699_1",
-    "2026_UAD_539701_1",
-    "2026_UAD_539703_1",
-    "2026_UAD_539704_1",
     "2026_UAD_539705_1",
-    "2026_UAD_539706_1",
     "2026_UAD_539708_1",
     "2026_UAD_539712_1",
     "2026_UAD_539714_1",
@@ -1159,8 +1109,6 @@
     "2026_UAD_539724_1",
     "2026_UAD_539726_1",
     "2026_UAD_539727_1",
-    "2026_UAD_539963_1",
-    "2026_UAD_539964_1",
     "2026_UAD_540737_1",
     "2026_UAD_540744_1",
     "2026_UAD_540765_1",
