@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "37447192787",
   "github_run_number": "34",
   "github_commit_sha": "ee04ce2c9ac01e571e68188cb1a4e8cf2aa80755",
@@ -5273,13 +5273,8 @@
     {
       "Tender ID": "2026_DHS_538872_1",
       "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_DHS_538872_1",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-06T10:05:57.819600+00:00"
+  "updated_at": "2026-10-06T10:06:00.287703+00:00"
 }
