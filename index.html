@@ -6035,26 +6035,37 @@ enforceAccountAccess().then(async () => {
       return w;
     }catch(_e){return null;}
   }
+  let affidavitDownloadUrl=null;
   function downloadBlob(blob,name,reservedWindow=null){
+    if(affidavitDownloadUrl) URL.revokeObjectURL(affidavitDownloadUrl);
     const u=URL.createObjectURL(blob);
+    affidavitDownloadUrl=u;
+    const status=byId("affidavitStatus");
+    const oldLink=byId("affidavitReadyDownload");
+    if(oldLink)oldLink.remove();
+    const ready=document.createElement("a");
+    ready.id="affidavitReadyDownload";
+    ready.href=u;ready.download=name;ready.textContent="⬇ "+name+" डाउनलोड करें";
+    ready.style.cssText="display:block;padding:12px;margin-top:8px;background:#203b91;color:white;border-radius:6px;font-weight:bold;overflow-wrap:anywhere";
+    status.insertAdjacentElement("afterend",ready);
+    // Keep a real download link available after asynchronous document generation.
+    // Android Chrome may decline an automatic click without a fresh user gesture.
+    ready.click();
     if(reservedWindow && !reservedWindow.closed){
       try{
-        reservedWindow.location.replace(u);
-        setTimeout(()=>URL.revokeObjectURL(u),60000);
-        return;
+        const body=reservedWindow.document.body;
+        body.textContent="फ़ाइल तैयार है। डाउनलोड शुरू न हो तो नीचे दबाएँ।";
+        const link=reservedWindow.document.createElement("a");
+        link.href=u;link.download=name;link.textContent="⬇ "+name+" डाउनलोड करें";
+        link.style.cssText="display:block;margin-top:20px;padding:16px;background:#203b91;color:white;border-radius:6px";
+        body.appendChild(link);
+        const close=reservedWindow.document.createElement("button");
+        close.textContent="Dashboard पर वापस जाएँ";
+        close.style.cssText="display:block;margin-top:20px;padding:12px";
+        close.onclick=()=>reservedWindow.close();
+        body.appendChild(close);
       }catch(_e){}
     }
-    const a=document.createElement("a");
-    a.href=u;
-    a.download=name;
-    a.rel="noopener";
-    a.style.display="none";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{
-      a.remove();
-      URL.revokeObjectURL(u);
-    },60000);
   }
   async function downloadWord(){
     const d=documentData();if(!validateDoc(d))return;saveNoticeDate();
@@ -6461,7 +6472,7 @@ enforceAccountAccess().then(async () => {
         if(mobileWindow && !mobileWindow.closed) mobileWindow.close();
         doc.save(pdfName);
       }
-      byId("affidavitStatus").textContent="✓ चुने हुए PDF documents तैयार हैं। Mobile Chrome में file नए tab/download viewer में खुलेगी।";
+      byId("affidavitStatus").textContent="✓ PDF तैयार है। डाउनलोड शुरू न हो तो नीचे दिए डाउनलोड लिंक पर दबाएँ।";
     }catch(e){try{if(mobileWindow && !mobileWindow.closed)mobileWindow.close();}catch(_e){} byId("affidavitStatus").textContent="PDF file बनाते समय error: "+e.message;}
   }
   function init(){
