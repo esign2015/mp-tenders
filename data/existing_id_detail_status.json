@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "37644162971",
   "github_run_number": "39",
   "github_commit_sha": "3775bd23d0ab587c846ef0c452745c494cc87c2e",
@@ -9,7 +9,7 @@
   "initial_incomplete": 18,
   "batch_targets": 18,
   "batch_attempted": 18,
-  "batch_complete": 17,
+  "batch_complete": 18,
   "started_at": "2026-10-07T15:29:03.777476+00:00",
   "success": 5524,
   "failed": 0,
@@ -5656,7 +5656,7 @@
     "2026_UAD_541611_1",
     "2026_UAD_541623_1"
   ],
-  "last_successful_tender_id": "2026_NVDA_541455_1",
+  "last_successful_tender_id": "2026_AVOMT_540762_1",
   "errors": [],
-  "updated_at": "2026-10-07T15:30:56.576367+00:00"
+  "updated_at": "2026-10-07T15:31:01.690616+00:00"
 }
