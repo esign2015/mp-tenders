@@ -1,21 +1,17 @@
 {
-  "status": "mismatch",
-  "checked_at": "2026-10-08T00:48:57.073974+05:30",
-  "snapshot_at": "2026-10-07T17:53:56.557710+00:00",
+  "status": "verified",
+  "checked_at": "2026-10-08T00:52:56.920739+05:30",
+  "snapshot_at": "2026-10-07T19:02:30.280952+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 5223,
   "verified_unique_ids": 5223,
-  "dashboard_live_count": 5222,
+  "dashboard_live_count": 5223,
   "closed_or_cancelled_count": 0,
   "excluded_master_only_live_count": 0,
   "excluded_master_only_live_ids": [],
   "missing_ids": [],
-  "invalid_closing_ids": [
-    "2026_DHS_536775_1"
-  ],
-  "errors": [
-    "Verified Tender IDs have missing or invalid closing dates"
-  ],
-  "counts_match": false,
+  "invalid_closing_ids": [],
+  "errors": [],
+  "counts_match": true,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
