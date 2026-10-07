@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-07T16:35:19.984390+05:30",
+    "checked_at": "2026-10-07T16:37:27.864677+05:30",
     "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5462,
@@ -26,15 +26,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-07T11:05:21.523039+00:00",
+  "updated_at": "2026-10-07T11:07:29.449125+00:00",
   "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5462,
   "copied_tenders": 5462,
-  "detail_complete": 5341,
+  "detail_complete": 5355,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 121,
+  "detail_pending": 107,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -284,10 +284,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 3188,
       "copied_tenders": 3188,
-      "detail_complete": 3112,
+      "detail_complete": 3122,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 76
+      "detail_pending": 66
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -482,10 +482,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 221,
       "copied_tenders": 221,
-      "detail_complete": 204,
+      "detail_complete": 205,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 17
+      "detail_pending": 16
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -999,10 +999,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 78,
       "copied_tenders": 78,
-      "detail_complete": 73,
+      "detail_complete": 76,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 2
     },
     {
       "organisation": "SANT SHIROMANI RAVIDAS GLOBAL SKILLS PARK - BHOPAL",
@@ -1062,13 +1062,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 25,
-  "missing_district_count": 95,
+  "missing_district_count": 81,
   "missing_district_ids": [
     "2025_UAD_467955_6",
     "2026_DTCP_541417_1",
     "2026_MIDCL_541309_1",
     "2026_MPFD_540312_1",
-    "2026_MPPGC_526437_1",
     "2026_MPPGC_529341_1",
     "2026_MPP_541355_1",
     "2026_MPSAM_541216_1",
@@ -1080,18 +1079,7 @@
     "2026_PWPIU_541361_1",
     "2026_PWPIU_541382_1",
     "2026_RES_537827_1",
-    "2026_RES_538115_1",
-    "2026_RES_539169_1",
     "2026_RES_539233_1",
-    "2026_RES_540777_1",
-    "2026_UAD_527253_2",
-    "2026_UAD_539857_1",
-    "2026_UAD_539858_1",
-    "2026_UAD_539859_1",
-    "2026_UAD_539860_1",
-    "2026_UAD_539862_1",
-    "2026_UAD_539864_1",
-    "2026_UAD_539865_1",
     "2026_UAD_539929_1",
     "2026_UAD_539966_1",
     "2026_UAD_540463_1",
@@ -1156,19 +1144,16 @@
     "2026_UAD_541336_1",
     "2026_UAD_541337_1",
     "2026_UAD_541338_1",
-    "2026_UAD_541364_1",
-    "2026_UAD_541383_1",
-    "2026_UAD_541422_1"
+    "2026_UAD_541364_1"
   ],
   "known_pincode_count": 374,
   "department_count": 315,
-  "missing_pincode_count": 95,
+  "missing_pincode_count": 81,
   "missing_pincode_ids": [
     "2025_UAD_467955_6",
     "2026_DTCP_541417_1",
     "2026_MIDCL_541309_1",
     "2026_MPFD_540312_1",
-    "2026_MPPGC_526437_1",
     "2026_MPPGC_529341_1",
     "2026_MPP_541355_1",
     "2026_MPSAM_541216_1",
@@ -1180,18 +1165,7 @@
     "2026_PWPIU_541361_1",
     "2026_PWPIU_541382_1",
     "2026_RES_537827_1",
-    "2026_RES_538115_1",
-    "2026_RES_539169_1",
     "2026_RES_539233_1",
-    "2026_RES_540777_1",
-    "2026_UAD_527253_2",
-    "2026_UAD_539857_1",
-    "2026_UAD_539858_1",
-    "2026_UAD_539859_1",
-    "2026_UAD_539860_1",
-    "2026_UAD_539862_1",
-    "2026_UAD_539864_1",
-    "2026_UAD_539865_1",
     "2026_UAD_539929_1",
     "2026_UAD_539966_1",
     "2026_UAD_540463_1",
@@ -1256,8 +1230,6 @@
     "2026_UAD_541336_1",
     "2026_UAD_541337_1",
     "2026_UAD_541338_1",
-    "2026_UAD_541364_1",
-    "2026_UAD_541383_1",
-    "2026_UAD_541422_1"
+    "2026_UAD_541364_1"
   ]
 }
