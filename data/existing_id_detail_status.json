@@ -8,10 +8,10 @@
   "current_portal_ids": 5637,
   "initial_incomplete": 112,
   "batch_targets": 112,
-  "batch_attempted": 22,
-  "batch_complete": 21,
+  "batch_attempted": 30,
+  "batch_complete": 26,
   "started_at": "2026-10-07T16:45:09.018905+00:00",
-  "success": 5543,
+  "success": 5548,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -2505,7 +2505,12 @@
     "2026_UAD_521148_1",
     "2026_UAD_521560_2",
     "2026_UAD_521562_2",
+    "2026_UAD_521563_2",
+    "2026_UAD_521565_2",
     "2026_UAD_521566_2",
+    "2026_UAD_521569_2",
+    "2026_UAD_521570_2",
+    "2026_UAD_521572_2",
     "2026_UAD_521591_1",
     "2026_UAD_521606_1",
     "2026_UAD_521613_1",
@@ -5631,11 +5636,6 @@
     "2026_PWDRB_540181_1",
     "2026_PWDRB_540182_1",
     "2026_UAD_497003_2",
-    "2026_UAD_521563_2",
-    "2026_UAD_521565_2",
-    "2026_UAD_521569_2",
-    "2026_UAD_521570_2",
-    "2026_UAD_521572_2",
     "2026_UAD_521573_2",
     "2026_UAD_528563_2",
     "2026_UAD_531386_2",
@@ -5656,13 +5656,28 @@
     "2026_UAD_541611_1",
     "2026_UAD_541623_1"
   ],
-  "last_successful_tender_id": "2026_UAD_521566_2",
+  "last_successful_tender_id": "2026_UAD_521569_2",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_521573_2",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SFsPqloClp%2FRpmCs4K9lcCQ%3D%3D\">[SECOND CALL FOR ONLINE SHOP NO. 10 FOR ALL CATEG\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPHC_540846_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPHC_540847_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-07T16:47:06.467911+00:00"
+  "updated_at": "2026-10-07T16:48:47.566265+00:00"
 }
