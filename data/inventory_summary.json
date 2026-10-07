@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-07T16:39:34.773163+05:30",
+    "checked_at": "2026-10-07T16:41:42.123803+05:30",
     "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5462,
@@ -26,15 +26,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-07T11:09:36.076112+00:00",
+  "updated_at": "2026-10-07T11:11:43.457997+00:00",
   "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5462,
   "copied_tenders": 5462,
-  "detail_complete": 5375,
+  "detail_complete": 5390,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 87,
+  "detail_pending": 72,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -251,10 +251,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 28,
       "copied_tenders": 28,
-      "detail_complete": 27,
+      "detail_complete": 28,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -284,10 +284,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 3188,
       "copied_tenders": 3188,
-      "detail_complete": 3135,
+      "detail_complete": 3142,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 53
+      "detail_pending": 46
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -592,10 +592,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 80,
       "copied_tenders": 80,
-      "detail_complete": 79,
+      "detail_complete": 80,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -658,10 +658,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 45,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -955,10 +955,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 369,
       "copied_tenders": 369,
-      "detail_complete": 365,
+      "detail_complete": 369,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -999,10 +999,10 @@
       "snapshot_at": "2026-10-07T10:25:59.024671+00:00",
       "portal_tender_count": 78,
       "copied_tenders": 78,
-      "detail_complete": 77,
+      "detail_complete": 78,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "SANT SHIROMANI RAVIDAS GLOBAL SKILLS PARK - BHOPAL",
@@ -1062,17 +1062,8 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 25,
-  "missing_district_count": 61,
+  "missing_district_count": 46,
   "missing_district_ids": [
-    "2025_UAD_467955_6",
-    "2026_DTCP_541417_1",
-    "2026_MPFD_540312_1",
-    "2026_MPP_541355_1",
-    "2026_PWDRB_541252_1",
-    "2026_PWDRB_541253_1",
-    "2026_PWDRB_541257_1",
-    "2026_PWDRB_541310_1",
-    "2026_RES_539233_1",
     "2026_UAD_539929_1",
     "2026_UAD_539966_1",
     "2026_UAD_540463_1",
@@ -1099,10 +1090,6 @@
     "2026_UAD_540998_1",
     "2026_UAD_541025_1",
     "2026_UAD_541045_1",
-    "2026_UAD_541047_1",
-    "2026_UAD_541048_1",
-    "2026_UAD_541049_1",
-    "2026_UAD_541053_1",
     "2026_UAD_541098_1",
     "2026_UAD_541098_10",
     "2026_UAD_541098_11",
@@ -1114,8 +1101,6 @@
     "2026_UAD_541098_7",
     "2026_UAD_541098_8",
     "2026_UAD_541098_9",
-    "2026_UAD_541101_1",
-    "2026_UAD_541102_1",
     "2026_UAD_541104_1",
     "2026_UAD_541107_1",
     "2026_UAD_541108_1",
@@ -1128,17 +1113,8 @@
   ],
   "known_pincode_count": 375,
   "department_count": 315,
-  "missing_pincode_count": 61,
+  "missing_pincode_count": 46,
   "missing_pincode_ids": [
-    "2025_UAD_467955_6",
-    "2026_DTCP_541417_1",
-    "2026_MPFD_540312_1",
-    "2026_MPP_541355_1",
-    "2026_PWDRB_541252_1",
-    "2026_PWDRB_541253_1",
-    "2026_PWDRB_541257_1",
-    "2026_PWDRB_541310_1",
-    "2026_RES_539233_1",
     "2026_UAD_539929_1",
     "2026_UAD_539966_1",
     "2026_UAD_540463_1",
@@ -1165,10 +1141,6 @@
     "2026_UAD_540998_1",
     "2026_UAD_541025_1",
     "2026_UAD_541045_1",
-    "2026_UAD_541047_1",
-    "2026_UAD_541048_1",
-    "2026_UAD_541049_1",
-    "2026_UAD_541053_1",
     "2026_UAD_541098_1",
     "2026_UAD_541098_10",
     "2026_UAD_541098_11",
@@ -1180,8 +1152,6 @@
     "2026_UAD_541098_7",
     "2026_UAD_541098_8",
     "2026_UAD_541098_9",
-    "2026_UAD_541101_1",
-    "2026_UAD_541102_1",
     "2026_UAD_541104_1",
     "2026_UAD_541107_1",
     "2026_UAD_541108_1",
