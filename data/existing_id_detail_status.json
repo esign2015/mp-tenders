@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "37556798025",
-  "github_run_number": "37",
+  "github_run_id": "37562324583",
+  "github_run_number": "60",
   "github_commit_sha": "1575495a9f18270a85074be65db56f653f984c73",
-  "batch_size": 0,
+  "batch_size": 500,
   "total_csv_ids": 5305,
   "current_portal_ids": 5305,
-  "initial_incomplete": 17,
-  "batch_targets": 17,
-  "batch_attempted": 17,
-  "batch_complete": 17,
-  "started_at": "2026-10-07T01:29:34.904209+00:00",
+  "initial_incomplete": 1,
+  "batch_targets": 1,
+  "batch_attempted": 1,
+  "batch_complete": 0,
+  "started_at": "2026-10-07T02:31:16.636894+00:00",
   "success": 5276,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_255290_15",
     "2024_UAD_352876_3",
@@ -5291,7 +5291,9 @@
     "2026_WRD_537376_1",
     "2026_WRD_537377_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PSNSU_540805_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_454244_1",
@@ -5321,10 +5323,15 @@
     "2026_PHED_534480_1",
     "2026_PKVVC_488814_1",
     "2026_PKVVC_523309_1",
-    "2026_PKVVC_534255_1",
-    "2026_PSNSU_540805_1"
+    "2026_PKVVC_534255_1"
   ],
-  "last_successful_tender_id": "2026_UAD_540440_1",
-  "errors": [],
-  "updated_at": "2026-10-07T01:31:44.084962+00:00"
+  "last_successful_tender_id": "",
+  "errors": [
+    {
+      "Tender ID": "2026_PSNSU_540805_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    }
+  ],
+  "updated_at": "2026-10-07T02:31:43.838211+00:00"
 }
