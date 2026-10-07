@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "37662455680",
-  "github_run_number": "943",
+  "status": "running",
+  "github_run_id": "37678369139",
+  "github_run_number": "29",
   "github_commit_sha": "3775bd23d0ab587c846ef0c452745c494cc87c2e",
-  "batch_size": 500,
+  "batch_size": 5000,
   "total_csv_ids": 5223,
   "current_portal_ids": 5223,
-  "initial_incomplete": 91,
-  "batch_targets": 91,
-  "batch_attempted": 91,
-  "batch_complete": 89,
-  "started_at": "2026-10-07T18:27:21.191476+00:00",
-  "success": 5198,
-  "failed": 2,
+  "initial_incomplete": 2,
+  "batch_targets": 2,
+  "batch_attempted": 1,
+  "batch_complete": 1,
+  "started_at": "2026-10-07T19:59:38.026043+00:00",
+  "success": 5199,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
     "2024_UAD_352876_3",
@@ -185,6 +185,7 @@
     "2026_DGPCS_541027_1",
     "2026_DGPCS_541028_1",
     "2026_DGPCS_541067_1",
+    "2026_DHS_520852_2",
     "2026_DHS_535680_1",
     "2026_DHS_535997_1",
     "2026_DHS_536591_1",
@@ -5213,10 +5214,7 @@
     "2026_WRD_537376_1",
     "2026_WRD_537377_1"
   ],
-  "failed_ids": [
-    "2026_DHS_536775_1",
-    "2026_PSNSU_540805_1"
-  ],
+  "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_454244_1",
@@ -5241,20 +5239,10 @@
     "2026_MPPGC_535182_1",
     "2026_MPPKV_533742_1",
     "2026_MPPTC_529679_1",
-    "2026_PKVVC_523309_1"
+    "2026_PKVVC_523309_1",
+    "2026_PSNSU_540805_1"
   ],
-  "last_successful_tender_id": "2026_DTCP_541006_1",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_540805_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_DHS_536775_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_DHS_536775_1",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-10-07T18:33:20.887949+00:00"
+  "last_successful_tender_id": "2026_DHS_520852_2",
+  "errors": [],
+  "updated_at": "2026-10-07T19:59:57.582959+00:00"
 }
