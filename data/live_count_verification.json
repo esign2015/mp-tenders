@@ -1,13 +1,13 @@
 {
   "status": "verified",
-  "checked_at": "2026-10-07T16:04:22.302343+05:30",
+  "checked_at": "2026-10-07T16:06:28.974434+05:30",
   "snapshot_at": "2026-10-06T19:18:40.094513+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 5305,
   "verified_unique_ids": 5305,
   "dashboard_live_count": 5255,
   "closed_or_cancelled_count": 50,
-  "excluded_master_only_live_count": 158,
+  "excluded_master_only_live_count": 159,
   "excluded_master_only_live_ids": [
     "2025_UAD_467955_6",
     "2026_AGRO_541427_1",
@@ -19,6 +19,7 @@
     "2026_EXCIS_541373_1",
     "2026_MKVVC_541185_1",
     "2026_MKVVC_541246_1",
+    "2026_MKVVC_541246_2",
     "2026_MKVVC_541289_1",
     "2026_MPFD_541353_1",
     "2026_MPPGC_537286_1",
