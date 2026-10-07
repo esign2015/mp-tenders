@@ -1,23 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-08T00:50:50.300658+05:30",
+  "snapshot_at": "2026-10-08T01:17:06.252538+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
   "previous_tender_count": 5223,
   "current_tender_count": 5223,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 1,
-  "changes": [
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 50,
-      "Current Tender Count": 50,
-      "Count Difference": 0,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DHS_520852_2"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
