@@ -5853,8 +5853,8 @@ enforceAccountAccess().then(async () => {
   }
   function affidavitLines(d){
     const strikeText=s=>"~~"+s+"~~";
-    const point3="3. No close relative of the undersigned and our firm/company is working in the department.";
-    const point4="4. Following close relatives are working in the department:";
+    const point3="3. No close relative of the undersigned or our firm / company is working in the department.";
+    const point4="The following close relative(s) of the undersigned or our firm / company are working in the department:";
     const details=d.relative==="yes" ? ("Name "+d.relativeName+"    Post "+d.relativePost+"    Present Posting "+d.relativePosting) : "Name NA    Post NA    Present Posting NA";
     const rel=d.relative==="yes"
       ? [strikeText(point3),"OR",point4+" ✓",details]
@@ -5862,27 +5862,30 @@ enforceAccountAccess().then(async () => {
     return [
       "AFFIDAVIT",
       "(To be contained in Envelope A)",
-      "(On Non Judicial Stamp of Rs. 200.00)",
+      "(On Non-Judicial Stamp of Rs. 200.00)",
       "",
-      "I am "+d.bidderName+" who is "+d.status+" (status in the firm/ company) and competent for submission of the affidavit on behalf of M/S "+d.firmName+" (contractor) do solemnly affirm an oath and state that:",
+      "I, "+d.bidderName+", who am "+d.status+" and competent to submit this affidavit on behalf of M/S "+d.firmName+" do solemnly affirm on oath and state that:",
       "",
-      "I am "+d.bidderName+" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "+noticeTenderNumber(d)+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
+      "I am fully satisfied with the correctness of the certificates / records submitted in support of the information contained in the bid documents submitted in response to Notice Inviting e-Tender No. "+noticeTenderNumber(d)+" for "+d.workName+" (name of work) dated "+(d.noticeDate||"____________________________")+" issued by the "+d.department+" (name of the department).",
       "",
-      "I am "+d.bidderName+" fully responsible for the correctness of following self-certified information/ documents and certificates:",
-      "1. That the self-certified information given in the bid document is fully true and authentic.",
+      "I am fully responsible for the correctness and authenticity of the following self-certified information, documents, digitally signed documents and certificates:",
+      "1. That the self-certified information and digitally signed documents submitted in the bid are fully true and authentic.",
       "2. That:",
-      "a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",
-      "b. Information regarding financial qualification and annual turnover is correct.",
-      "c. Information regarding various technical qualifications is correct.",
+      "a. The Term Deposit Receipt deposited as earnest money, Demand Draft for the cost of the bid document, and other relevant documents provided by the Bank, wherever applicable and submitted with the bid, are authentic.",
+      "b. The information regarding financial qualification and annual turnover submitted online is correct.",
+      "c. The information regarding various technical qualifications submitted online is correct.",
       ...rel,
+      "(Retain the applicable declaration under paragraph 3 and strike out the other.)",
       "",
-      "Signature with Seal of the Deponent (bidder)",
+      "Signature with Seal of the Deponent (Bidder)",
       "",
-      "I, "+d.bidderName+" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.",
+      "VERIFICATION",
+      "I, "+d.bidderName+" do hereby certify that the facts stated in paragraphs 1 to 3 above are true and correct to the best of my knowledge and belief.",
       "",
-      "Verified today "+d.verifyDate+" (dated) at "+d.place+" (place).",
+      "In the event that any information or document submitted is found to be incorrect, untrue or in violation of the tender conditions, our bid shall be liable to rejection or the contract to termination, without prior notice, without prejudice to any other rights or remedies available to the department, including forfeiture of the bid security / performance security, as applicable under the tender conditions.",
+      "Verified on "+d.verifyDate+" at "+d.place+".",
       "",
-      "Signature with Seal of the Deponent (bidder)"
+      "Signature with Seal of the Deponent (Bidder)"
     ];
   }
   function noRelationSegments(d){
@@ -5942,33 +5945,36 @@ enforceAccountAccess().then(async () => {
     const d=documentData();
     for(const id of ['affidavitWord','affidavitPdf'])byId(id).disabled=!d.documents.length;
     const point3=d.relative==="yes"
-      ? '<p class="aff-prev-list aff-strike">3. No close relative of the undersigned and our firm/company is working in the department.</p>'
-      : '<p class="aff-prev-list">3. No close relative of the undersigned and our firm/company is working in the department. <strong>✓</strong></p>';
+      ? '<p class="aff-prev-list aff-strike">3. No close relative of the undersigned or our firm / company is working in the department.</p>'
+      : '<p class="aff-prev-list">3. No close relative of the undersigned or our firm / company is working in the department. <strong>✓</strong></p>';
     const orLine='<p class="aff-prev-or"><strong>OR</strong></p>';
     const point4=d.relative==="yes"
-      ? '<p class="aff-prev-list">4. Following close relatives are working in the department: <strong>✓</strong></p>'
-      : '<p class="aff-prev-list aff-strike">4. Following close relatives are working in the department:</p>';
+      ? '<p class="aff-prev-list">The following close relative(s) of the undersigned or our firm / company are working in the department: <strong>✓</strong></p>'
+      : '<p class="aff-prev-list aff-strike">The following close relative(s) of the undersigned or our firm / company are working in the department:</p>';
     const relativeDetails=d.relative==="yes"
       ? '<p class="aff-prev-relative-detail">Name <strong><u>'+escapeHtml(d.relativeName)+'</u></strong> &nbsp;&nbsp; Post <strong><u>'+escapeHtml(d.relativePost)+'</u></strong> &nbsp;&nbsp; Present Posting <strong><u>'+escapeHtml(d.relativePosting)+'</u></strong></p>'
       : '<p class="aff-prev-relative-detail aff-strike-inline">Name <strong><u>NA</u></strong> &nbsp;&nbsp; Post <strong><u>NA</u></strong> &nbsp;&nbsp; Present Posting <strong><u>NA</u></strong></p>';
-    const relHtml=point3+orLine+point4+relativeDetails;
+    const relHtml=point3+orLine+point4+relativeDetails+'<p>(Retain the applicable declaration under paragraph 3 and strike out the other.)</p>';
     const affidavitHtml=
       '<p class="aff-prev-center"><strong>|| AFFIDAVIT ||</strong></p>'+
       '<p class="aff-prev-center"><strong>(To be contained in Envelope A)</strong></p>'+
-      '<p class="aff-prev-center"><em>(On Non Judicial Stamp of Rs. 200.00)</em></p>'+
-      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> who is <strong><u>'+escapeHtml(d.status)+'</u></strong> (status in the firm/ company) and competent for submission of the affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> (contractor) do solemnly affirm an oath and state that:</p>'+
-      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. <strong><u>'+escapeHtml(noticeTenderNumber(d))+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
-      '<p class="aff-prev-justify">I am <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> fully responsible for the correctness of following self-certified information/ documents and certificates:</p>'+
-      '<p class="aff-prev-list">1. That the self-certified information given in the bid document is fully true and authentic.</p>'+
+      '<p class="aff-prev-center"><em>(On Non-Judicial Stamp of Rs. 200.00)</em></p>'+
+      '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong>, who am <strong><u>'+escapeHtml(d.status)+'</u></strong> and competent to submit this affidavit on behalf of <strong><u>M/S '+escapeHtml(d.firmName)+'</u></strong> do solemnly affirm on oath and state that:</p>'+
+      '<p class="aff-prev-justify">I am fully satisfied with the correctness of the certificates / records submitted in support of the information contained in the bid documents submitted in response to Notice Inviting e-Tender No. <strong><u>'+escapeHtml(noticeTenderNumber(d))+'</u></strong> for <strong><u>'+escapeHtml(d.workName)+'</u></strong> (name of work) dated <strong><u>'+escapeHtml(d.noticeDate||"____________________________")+'</u></strong> issued by the <strong><u>'+escapeHtml(d.department)+'</u></strong> (name of the department).</p>'+
+      '<p class="aff-prev-justify">I am fully responsible for the correctness and authenticity of the following self-certified information, documents, digitally signed documents and certificates:</p>'+
+      '<p class="aff-prev-list">1. That the self-certified information and digitally signed documents submitted in the bid are fully true and authentic.</p>'+
       '<p class="aff-prev-list">2. That:</p>'+
-      '<p class="aff-prev-sublist">a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.</p>'+
-      '<p class="aff-prev-sublist">b. Information regarding financial qualification and annual turnover is correct.</p>'+
-      '<p class="aff-prev-sublist">c. Information regarding various technical qualifications is correct.</p>'+
+      '<p class="aff-prev-sublist">a. The Term Deposit Receipt deposited as earnest money, Demand Draft for the cost of the bid document, and other relevant documents provided by the Bank, wherever applicable and submitted with the bid, are authentic.</p>'+
+      '<p class="aff-prev-sublist">b. The information regarding financial qualification and annual turnover submitted online is correct.</p>'+
+      '<p class="aff-prev-sublist">c. The information regarding various technical qualifications submitted online is correct.</p>'+
       relHtml+
-      '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>'+
-      '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.</p>'+
-      '<p class="aff-prev-left">Verified today <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> (dated) at <strong><u>'+escapeHtml(d.place)+'</u></strong> (place).</p>'+
-      '<p class="aff-prev-right"><strong>Signature with Seal of the Deponent (bidder)</strong></p>';
+      '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (Bidder)</strong></p>'+
+      '<p class="aff-prev-center"><strong>VERIFICATION</strong></p>'+
+      '<p class="aff-prev-justify">I, <strong><u>'+escapeHtml(d.bidderName)+'</u></strong> do hereby certify that the facts stated in paragraphs 1 to 3 above are true and correct to the best of my knowledge and belief.</p>'+
+      '<p class="aff-prev-justify">In the event that any information or document submitted is found to be incorrect, untrue or in violation of the tender conditions, our bid shall be liable to rejection or the contract to termination, without prior notice, without prejudice to any other rights or remedies available to the department, including forfeiture of the bid security / performance security, as applicable under the tender conditions.</p>'+
+      '<p class="aff-prev-left">Verified on <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> at <strong><u>'+escapeHtml(d.place)+'</u></strong>.</p>'+
+      '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (Bidder)</strong></p>'+
+      '<p class="aff-prev-right">Name: <strong><u>'+escapeHtml(d.bidderName)+'</u></strong></p>';
     byId('affidavitPreview').innerHTML=(d.documents.includes('affidavit')?affidavitHtml:'')+(d.documents.includes('noRelation')?noRelationPreview(d):'')+(d.documents.includes('annexureH')?annexurePreview(d):'');
   }
   function fillFromTender(row){
@@ -6092,35 +6098,35 @@ enforceAccountAccess().then(async () => {
       // These first three lines are centered in the supplied affidavit.
       paragraphs.push(para([run("|| AFFIDAVIT ||",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       paragraphs.push(para([run("(To be contained in Envelope A)",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
-      paragraphs.push(para([run("(On Non Judicial Stamp of Rs. 200.00)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("(On Non-Judicial Stamp of Rs. 200.00)",false,true,20)],{alignment:AlignmentType.CENTER,spacing:{before:100,after:100,line:312,lineRule:LineRuleType.AUTO}}));
       // Main declaration paragraphs: justified, 0.5" first-line indent.
       paragraphs.push(para([
-        run("I am "),run(d.bidderName,true,false,20,true),run(" who is "),run(d.status,true,false,20,true),
-        run(" (status in the firm/ company) and competent for submission of the affidavit on behalf of "),
-        run("M/S "+d.firmName,true,false,20,true),run(" (contractor) do solemnly affirm an oath and state that:")
+        run("I, "),run(d.bidderName,true,false,20,true),run(", who am "),run(d.status,true,false,20,true),
+        run(" and competent to submit this affidavit on behalf of "),
+        run("M/S "+d.firmName,true,false,20,true),run(" do solemnly affirm on oath and state that:")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
       paragraphs.push(para([
         run("I am "),run(d.bidderName,true,false,20,true),
-        run(" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "),
+        run(" fully satisfied with the correctness of the certificates / records submitted in support of the information contained in the bid documents submitted in response to Notice Inviting e-Tender No. "),
         run(noticeTenderNumber(d),true,false,20,true),run(" for "),run(d.workName,true,false,20,true),
         run(" (name of work) dated "),run(d.noticeDate||"____________________________",true,false,20,true),
         run(" issued by the "),run(d.department,true,false,20,true),run(" (name of the department).")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{before:100,after:100,line:360,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run("I am "),run(d.bidderName,true,false,20,true),run(" fully responsible for the correctness of following self-certified information/ documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
+      paragraphs.push(para([run("I am fully responsible for the correctness and authenticity of the following self-certified information, documents, digitally signed documents and certificates:")],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:normal}));
       // Numbered/list section follows the left/hanging positions in the supplied file.
-      paragraphs.push(para([run("1. That the self-certified information given in the bid document is fully true and authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
+      paragraphs.push(para([run("1. That the self-certified information and digitally signed documents submitted in the bid are fully true and authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
       paragraphs.push(para([run("2. That:")],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0}}));
-      paragraphs.push(para([run("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0}}));
-      paragraphs.push(para([run("b. Information regarding financial qualification and annual turnover is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
-      paragraphs.push(para([run("c. Information regarding various technical qualifications is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("a. The Term Deposit Receipt deposited as earnest money, Demand Draft for the cost of the bid document, and other relevant documents provided by the Bank, wherever applicable and submitted with the bid, are authentic.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0}}));
+      paragraphs.push(para([run("b. The information regarding financial qualification and annual turnover submitted online is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("c. The information regarding various technical qualifications submitted online is correct.")],{alignment:AlignmentType.JUSTIFIED,indent:{left:1080},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       const relYes=d.relative==="yes";
       paragraphs.push(para([
-        run("3. No close relative of the undersigned and our firm/company is working in the department.",false,false,20,false,relYes),
+        run("3. No close relative of the undersigned or our firm / company is working in the department.",false,false,20,false,relYes),
         ...(relYes?[]:[run("  ✓",true)])
       ],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run("OR",true)],{alignment:AlignmentType.CENTER,spacing:{after:0,line:240,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([
-        run("4. Following close relatives are working in the department:",false,false,20,false,!relYes),
+        run("The following close relative(s) of the undersigned or our firm / company are working in the department:",false,false,20,false,!relYes),
         ...(relYes?[run("  ✓",true)]:[])
       ],{alignment:AlignmentType.JUSTIFIED,indent:{left:720,hanging:720},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([
@@ -6133,14 +6139,17 @@ enforceAccountAccess().then(async () => {
       ],{alignment:AlignmentType.LEFT,indent:{left:900},spacing:{after:0,line:288,lineRule:LineRuleType.AUTO}}));
       // Leave physical space for seal/signature before the right-aligned signature label.
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
-      paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([run("Signature with Seal of the Deponent (Bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([run("VERIFICATION",true)],{alignment:AlignmentType.CENTER,spacing:normal}));
       paragraphs.push(para([
-        run("I, "),run(d.bidderName,true,false,20,true),run(" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief.")
+        run("I, "),run(d.bidderName,true,false,20,true),run(" do hereby certify that the facts stated in paragraphs 1 to 3 above are true and correct to the best of my knowledge and belief.")
       ],{alignment:AlignmentType.JUSTIFIED,indent:{firstLine:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("In the event that any information or document submitted is found to be incorrect, untrue or in violation of the tender conditions, our bid shall be liable to rejection or the contract to termination, without prior notice, without prejudice to any other rights or remedies available to the department, including forfeiture of the bid security / performance security, as applicable under the tender conditions.")],{alignment:AlignmentType.JUSTIFIED,spacing:normal}));
       // Verification line is left-positioned with 0.5" left indent, not centered/right.
-      paragraphs.push(para([run("Verified today "),run(d.verifyDate,true,false,20,true),run(" (dated) at "),run(d.place,true,false,20,true),run(" (place).")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
+      paragraphs.push(para([run("Verified on "),run(d.verifyDate,true,false,20,true),run(" at "),run(d.place,true,false,20,true),run(".")],{alignment:AlignmentType.LEFT,indent:{left:720},spacing:{line:288,lineRule:LineRuleType.AUTO}}));
       paragraphs.push(para([run(" ")],{spacing:{before:720,after:720}}));
-      paragraphs.push(para([run("Signature with Seal of the Deponent (bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([run("Signature with Seal of the Deponent (Bidder)",true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
+      paragraphs.push(para([run("Name: "),run(d.bidderName,true,false,20,true)],{alignment:AlignmentType.RIGHT,spacing:normal}));
 
       }
       // Print the saved profile's letterhead on each selected certificate.
@@ -6297,20 +6306,18 @@ enforceAccountAccess().then(async () => {
       if(d.documents.includes('affidavit')){
       center("|| AFFIDAVIT ||",true,false,14,3);
       center("(To be contained in Envelope A)",true,false,14,3);
-      center("(On Non Judicial Stamp of Rs. 200.00)",false,true,10,4);
+      center("(On Non-Judicial Stamp of Rs. 200.00)",false,true,10,4);
       richParagraph([
-        {text:"I am "},
+        {text:"I, "},
         {text:d.bidderName,bold:true,underline:true},
-        {text:" who is "},
+        {text:", who am "},
         {text:d.status,bold:true,underline:true},
-        {text:" (status in the firm/ company) and competent for submission of the affidavit on behalf of "},
+        {text:" and competent to submit this affidavit on behalf of "},
         {text:"M/S "+d.firmName,bold:true,underline:true},
-        {text:" (contractor) do solemnly affirm an oath and state that:"}
+        {text:" do solemnly affirm on oath and state that:"}
       ],{firstIndent:12.7,after:3});
       richParagraph([
-        {text:"I am "},
-        {text:d.bidderName,bold:true,underline:true},
-        {text:" fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. "},
+        {text:"I am fully satisfied with the correctness of the certificates / records submitted in support of the information contained in the bid documents submitted in response to Notice Inviting e-Tender No. "},
         {text:noticeTenderNumber(d),bold:true,underline:true},
         {text:" for "},
         {text:d.workName,bold:true,underline:true},
@@ -6321,23 +6328,21 @@ enforceAccountAccess().then(async () => {
         {text:" (name of the department)."}
       ],{firstIndent:12.7,leading:5.7,after:3});
       richParagraph([
-        {text:"I am "},
-        {text:d.bidderName,bold:true,underline:true},
-        {text:" fully responsible for the correctness of following self-certified information/ documents and certificates:"}
+        {text:"I am fully responsible for the correctness and authenticity of the following self-certified information, documents, digitally signed documents and certificates:"}
       ],{firstIndent:12.7,after:2});
-      textBlock("1. That the self-certified information given in the bid document is fully true and authentic.",{indent:12.7,align:"justify",after:1});
+      textBlock("1. That the self-certified information and digitally signed documents submitted in the bid are fully true and authentic.",{indent:12.7,align:"justify",after:1});
       textBlock("2. That:",{indent:12.7,after:1});
-      textBlock("a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.",{indent:19.05,align:"justify",after:1});
-      textBlock("b. Information regarding financial qualification and annual turnover is correct.",{indent:19.05,align:"justify",after:1});
-      textBlock("c. Information regarding various technical qualifications is correct.",{indent:19.05,align:"justify",after:1});
+      textBlock("a. The Term Deposit Receipt deposited as earnest money, Demand Draft for the cost of the bid document, and other relevant documents provided by the Bank, wherever applicable and submitted with the bid, are authentic.",{indent:19.05,align:"justify",after:1});
+      textBlock("b. The information regarding financial qualification and annual turnover submitted online is correct.",{indent:19.05,align:"justify",after:1});
+      textBlock("c. The information regarding various technical qualifications submitted online is correct.",{indent:19.05,align:"justify",after:1});
       const relYes=d.relative==="yes";
       const drawCheck=(x,yy)=>{
         doc.setLineWidth(0.45);
         doc.line(x,yy-1.0,x+1.3,yy+0.2);
         doc.line(x+1.3,yy+0.2,x+3.6,yy-2.6);
       };
-      const p3="3. No close relative of the undersigned and our firm/company is working in the department.";
-      const p4="4. Following close relatives are working in the department:";
+      const p3="3. No close relative of the undersigned or our firm / company is working in the department.";
+      const p4="The following close relative(s) of the undersigned or our firm / company are working in the department:";
       const p3Y=y;
       strikeTextBlock(p3,{indent:12.7,strike:relYes,after:1});
       if(!relYes){
@@ -6359,20 +6364,24 @@ enforceAccountAccess().then(async () => {
         {text:" Present Posting ",strike:!relYes},
         {text:relYes?d.relativePosting:"NA",bold:true,underline:true,strike:!relYes}
       ],{firstIndent:15.5,after:2});
-      y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
+      textBlock("(Retain the applicable declaration under paragraph 3 and strike out the other.)",{size:8,after:2});
+      y+=18; rightText("Signature with Seal of the Deponent (Bidder)",true);
+      center("VERIFICATION",true,false,11,3);
       richParagraph([
         {text:"I, "},
         {text:d.bidderName,bold:true,underline:true},
-        {text:" above deponent do hereby certify that the facts mentioned in above paras 1 to 4 are correct to the best of my knowledge and belief."}
+        {text:" do hereby certify that the facts stated in paragraphs 1 to 3 above are true and correct to the best of my knowledge and belief."}
       ],{firstIndent:12.7,after:4});
+      richParagraph([{text:"In the event that any information or document submitted is found to be incorrect, untrue or in violation of the tender conditions, our bid shall be liable to rejection or the contract to termination, without prior notice, without prejudice to any other rights or remedies available to the department, including forfeiture of the bid security / performance security, as applicable under the tender conditions."}],{leading:5.2,after:4});
       richParagraph([
-        {text:"Verified today "},
+        {text:"Verified on "},
         {text:d.verifyDate,bold:true,underline:true},
-        {text:" (dated) at "},
+        {text:" at "},
         {text:d.place,bold:true,underline:true},
-        {text:" (place)."}
+        {text:"."}
       ],{firstIndent:12.7,after:5});
-      y+=18; rightText("Signature with Seal of the Deponent (bidder)",true);
+      y+=18; rightText("Signature with Seal of the Deponent (Bidder)",true);
+      rightText("Name: "+d.bidderName,true);
 
       }
       let documentsStarted=d.documents.includes('affidavit');
