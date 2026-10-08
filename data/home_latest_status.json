@@ -1,34 +1,48 @@
 {
-  "status": "completed",
-  "started_at": "2026-10-08T11:51:19.719077+00:00",
+  "status": "partial",
+  "started_at": "2026-10-08T18:37:54.465159+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_MPPKV_527845_3",
-    "2026_MPPHC_541170_1",
-    "2026_MPPHC_541167_1",
-    "2026_MPPKV_527742_2",
-    "2026_DSYW_541901_1",
-    "2026_MPFF_541885_1",
-    "2026_UAD_541897_1",
-    "2026_MPPHC_541169_1",
-    "2026_MPPHC_541178_1",
-    "2026_MPPHC_541166_1",
-    "2026_MKVVC_535593_1",
-    "2026_UAD_534170_1",
-    "2026_DC_541381_1",
-    "2026_UAD_508730_1",
-    "2026_MKVVC_535987_1",
-    "2026_UAD_540347_1",
-    "2026_MKVVC_535931_1",
-    "2026_RES_536485_1",
-    "2026_STDC_535489_1",
-    "2026_DTCP_532039_1"
+    "2026_UAD_540366_1",
+    "2026_UAD_540390_1",
+    "2026_UAD_540386_1",
+    "2026_UAD_540382_1",
+    "2026_UAD_540371_1",
+    "2026_UAD_540349_1",
+    "2026_PWPIU_541382_1",
+    "2026_MPPGC_512591_1",
+    "2026_PKVVC_541003_1",
+    "2026_MPPGC_526033_1"
   ],
-  "unchanged_ids": [],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-10-08T11:51:22.410800+00:00",
+  "unchanged_ids": [
+    "2026_UAD_541659_1",
+    "2026_UAD_541872_1",
+    "2026_UAD_541869_1",
+    "2026_UAD_541867_1",
+    "2026_UAD_541939_1",
+    "2026_MPPGC_540993_1",
+    "2026_MPPGC_541698_1",
+    "2026_UAD_541658_1",
+    "2026_MKVVC_541942_1"
+  ],
+  "errors": [
+    {
+      "reference": "2026_MPSAM_541475_1",
+      "kind": "tender",
+      "error": "Detail reference differs from Home reference"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "tender",
+      "reference": "2026_MPSAM_541475_1",
+      "title": "10. ANNUNAL MAINTENNACE WORK FOR 57 NOS EXISTING CAMERAS AT MANDI YARD JABALPUR DIST JABALPUR ANNUAL RATE TO BE QUOTED",
+      "closing": "29-Oct-2026 03:30 PM",
+      "opening": "30-Oct-2026 03:30 PM"
+    }
+  ],
+  "copied_at": "2026-10-08T18:37:56.435718+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-08T11:52:05.847101+00:00"
+  "updated_at": "2026-10-08T18:38:24.785659+00:00"
 }
