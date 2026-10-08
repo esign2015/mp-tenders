@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-08T20:46:04.533056+05:30",
+    "checked_at": "2026-10-08T20:53:01.116270+05:30",
     "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5266,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-08T15:16:05.859528+00:00",
+  "updated_at": "2026-10-08T15:23:02.323149+00:00",
   "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5266,
   "copied_tenders": 5266,
-  "detail_complete": 5209,
+  "detail_complete": 5245,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 56,
+  "detail_pending": 20,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 50,
       "copied_tenders": 50,
-      "detail_complete": 48,
+      "detail_complete": 50,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -462,10 +462,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 80,
       "copied_tenders": 80,
-      "detail_complete": 64,
+      "detail_complete": 79,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 16
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -473,10 +473,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
-      "detail_complete": 32,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -484,10 +484,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 239,
       "copied_tenders": 239,
-      "detail_complete": 221,
+      "detail_complete": 226,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 13
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -660,10 +660,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police",
@@ -671,10 +671,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 43,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -682,10 +682,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 106,
       "copied_tenders": 106,
-      "detail_complete": 105,
+      "detail_complete": 106,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -693,10 +693,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 25,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -704,10 +704,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
-      "detail_complete": 84,
+      "detail_complete": 86,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -946,10 +946,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 56,
       "copied_tenders": 56,
-      "detail_complete": 54,
+      "detail_complete": 56,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "PWD-PIU",
@@ -968,10 +968,10 @@
       "snapshot_at": "2026-10-08T14:48:37.451867+00:00",
       "portal_tender_count": 382,
       "copied_tenders": 382,
-      "detail_complete": 381,
+      "detail_complete": 382,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1075,84 +1075,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 20,
-  "missing_district_count": 36,
-  "missing_district_ids": [
-    "2025_MPPGC_470272_2",
-    "2026_MKVVC_541896_1",
-    "2026_MKVVC_541942_1",
-    "2026_MPLUN_541934_1",
-    "2026_MPPGC_512591_1",
-    "2026_MPPGC_539368_1",
-    "2026_MPPGC_540993_1",
-    "2026_MPPGC_541698_1",
-    "2026_MPPHC_541183_1",
-    "2026_MPPKV_527693_3",
-    "2026_MPPKV_527759_3",
-    "2026_MPPKV_527820_3",
-    "2026_MPPKV_527826_3",
-    "2026_MPPKV_528037_2",
-    "2026_MPPKV_541715_1",
-    "2026_MPPKV_541722_1",
-    "2026_MPPKV_541733_1",
-    "2026_MPPKV_541775_1",
-    "2026_MPPKV_541800_1",
-    "2026_MPPKV_541827_1",
-    "2026_MPPKV_541847_1",
-    "2026_MPPKV_541871_1",
-    "2026_MPPKV_541900_1",
-    "2026_MPPKV_541910_1",
-    "2026_MPPTC_541440_1",
-    "2026_MPPTC_541463_1",
-    "2026_MPPTC_541850_1",
-    "2026_MPPTC_541874_1",
-    "2026_MPP_541640_1",
-    "2026_MPSAM_541475_1",
-    "2026_MPSAM_541936_1",
-    "2026_PHED_541711_1",
-    "2026_PHED_541727_1",
-    "2026_PKVVC_541923_1",
-    "2026_PKVVC_541925_1",
-    "2026_PWDRB_541799_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 367,
   "department_count": 314,
-  "missing_pincode_count": 36,
-  "missing_pincode_ids": [
-    "2025_MPPGC_470272_2",
-    "2026_MKVVC_541896_1",
-    "2026_MKVVC_541942_1",
-    "2026_MPLUN_541934_1",
-    "2026_MPPGC_512591_1",
-    "2026_MPPGC_539368_1",
-    "2026_MPPGC_540993_1",
-    "2026_MPPGC_541698_1",
-    "2026_MPPHC_541183_1",
-    "2026_MPPKV_527693_3",
-    "2026_MPPKV_527759_3",
-    "2026_MPPKV_527820_3",
-    "2026_MPPKV_527826_3",
-    "2026_MPPKV_528037_2",
-    "2026_MPPKV_541715_1",
-    "2026_MPPKV_541722_1",
-    "2026_MPPKV_541733_1",
-    "2026_MPPKV_541775_1",
-    "2026_MPPKV_541800_1",
-    "2026_MPPKV_541827_1",
-    "2026_MPPKV_541847_1",
-    "2026_MPPKV_541871_1",
-    "2026_MPPKV_541900_1",
-    "2026_MPPKV_541910_1",
-    "2026_MPPTC_541440_1",
-    "2026_MPPTC_541463_1",
-    "2026_MPPTC_541850_1",
-    "2026_MPPTC_541874_1",
-    "2026_MPP_541640_1",
-    "2026_MPSAM_541475_1",
-    "2026_MPSAM_541936_1",
-    "2026_PHED_541711_1",
-    "2026_PHED_541727_1",
-    "2026_PKVVC_541923_1",
-    "2026_PKVVC_541925_1",
-    "2026_PWDRB_541799_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
