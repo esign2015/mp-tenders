@@ -1,12 +1,12 @@
 {
   "status": "verified",
-  "checked_at": "2026-10-08T11:27:44.922573+05:30",
+  "checked_at": "2026-10-08T12:46:41.395103+05:30",
   "snapshot_at": "2026-10-07T19:30:01.647609+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 5223,
   "verified_unique_ids": 5223,
-  "dashboard_live_count": 5221,
-  "closed_or_cancelled_count": 2,
+  "dashboard_live_count": 5208,
+  "closed_or_cancelled_count": 15,
   "excluded_master_only_live_count": 10,
   "excluded_master_only_live_ids": [
     "2026_UAD_537148_1",
