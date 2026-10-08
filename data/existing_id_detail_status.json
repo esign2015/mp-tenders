@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "37742180042",
-  "github_run_number": "42",
+  "status": "running",
+  "github_run_id": "37744501929",
+  "github_run_number": "65",
   "github_commit_sha": "2c10868dbb0fcc903551dcf4ebaa8080827bac34",
-  "batch_size": 0,
-  "total_csv_ids": 5233,
-  "current_portal_ids": 5233,
-  "initial_incomplete": 18,
-  "batch_targets": 18,
-  "batch_attempted": 18,
-  "batch_complete": 18,
-  "started_at": "2026-10-08T07:14:43.536376+00:00",
-  "success": 5209,
+  "batch_size": 500,
+  "total_csv_ids": 5240,
+  "current_portal_ids": 5240,
+  "initial_incomplete": 32,
+  "batch_targets": 32,
+  "batch_attempted": 14,
+  "batch_complete": 13,
+  "started_at": "2026-10-08T07:37:17.847303+00:00",
+  "success": 5216,
   "failed": 0,
   "success_ids": [
     "2023_UAD_255290_15",
@@ -342,6 +342,7 @@
     "2026_GADR_538617_1",
     "2026_GADR_540077_1",
     "2026_GADR_540087_1",
+    "2026_GADR_541343_1",
     "2026_GVMP_538751_1",
     "2026_GVMP_538792_1",
     "2026_GVMP_539216_1",
@@ -5056,6 +5057,10 @@
     "2026_UAD_541086_1",
     "2026_UAD_541088_1",
     "2026_UAD_541089_1",
+    "2026_UAD_541091_1",
+    "2026_UAD_541092_1",
+    "2026_UAD_541093_1",
+    "2026_UAD_541094_1",
     "2026_UAD_541097_1",
     "2026_UAD_541098_1",
     "2026_UAD_541098_10",
@@ -5205,6 +5210,8 @@
     "2026_UAD_541652_1",
     "2026_UAD_541653_1",
     "2026_UAD_541654_1",
+    "2026_UAD_541675_1",
+    "2026_UAD_541680_1",
     "2026_WRD_485735_1",
     "2026_WRD_513243_1",
     "2026_WRD_513245_1",
@@ -5252,7 +5259,13 @@
     "2026_PKVVC_523309_1",
     "2026_PSNSU_540805_1"
   ],
-  "last_successful_tender_id": "2026_AVOMT_540762_1",
-  "errors": [],
-  "updated_at": "2026-10-08T07:16:57.331730+00:00"
+  "last_successful_tender_id": "2026_UAD_541091_1",
+  "errors": [
+    {
+      "Tender ID": "2026_PSNSU_540805_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-08T07:39:15.310598+00:00"
 }
