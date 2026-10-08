@@ -1,10 +1,10 @@
 {
-  "run_id": "37674793640",
-  "completed_at": "2026-10-07T21:40:40.591438+00:00",
-  "result": "failure",
+  "run_id": "37831594301",
+  "completed_at": "2026-10-08T20:03:14.364869+00:00",
+  "result": "success",
   "copy_result": "success",
-  "detail_result": "cancelled",
-  "pending_count": 24,
-  "failed_count": 0,
-  "detail_updated_at": "2026-10-07T20:47:34.234478+00:00"
+  "detail_result": "success",
+  "pending_count": 20,
+  "failed_count": 1,
+  "detail_updated_at": "2026-10-08T20:02:21.692074+00:00"
 }
