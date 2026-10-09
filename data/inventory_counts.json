@@ -2,21 +2,26 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-09T16:46:51.760669+05:30",
+    "checked_at": "2026-10-09T16:48:51.222274+05:30",
     "snapshot_at": "2026-10-09T10:45:13.584584+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5450,
     "verified_unique_ids": 5450,
     "dashboard_live_count": 5449,
     "closed_or_cancelled_count": 1,
-    "excluded_master_only_live_count": 6,
+    "excluded_master_only_live_count": 11,
     "excluded_master_only_live_ids": [
       "2026_PWPIU_541510_1",
       "2026_PWPIU_541542_1",
       "2026_PWPIU_541544_1",
       "2026_UAD_540223_1",
+      "2026_UAD_540789_1",
       "2026_UAD_541683_1",
-      "2026_UAD_541732_1"
+      "2026_UAD_541732_1",
+      "2026_UAD_542024_13",
+      "2026_UAD_542024_14",
+      "2026_UAD_542024_15",
+      "2026_WRD_535054_1"
     ],
     "missing_ids": [],
     "invalid_closing_ids": [],
@@ -24,15 +29,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-09T11:16:52.676476+00:00",
+  "updated_at": "2026-10-09T11:18:52.016322+00:00",
   "snapshot_at": "2026-10-09T10:45:13.584584+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5450,
   "copied_tenders": 5450,
-  "detail_complete": 5294,
+  "detail_complete": 5297,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 156,
+  "detail_pending": 153,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -271,10 +276,10 @@
       "snapshot_at": "2026-10-09T10:45:13.584584+00:00",
       "portal_tender_count": 3096,
       "copied_tenders": 3096,
-      "detail_complete": 3028,
+      "detail_complete": 3030,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 68
+      "detail_pending": 66
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -865,10 +870,10 @@
       "snapshot_at": "2026-10-09T10:45:13.584584+00:00",
       "portal_tender_count": 10,
       "copied_tenders": 10,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 7
     },
     {
       "organisation": "Narmada Valley Development Authority",
@@ -1093,7 +1098,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 18,
-  "missing_district_count": 137,
+  "missing_district_count": 134,
   "missing_district_ids": [
     "2025_UAD_455352_6",
     "2025_UAD_455353_6",
@@ -1145,7 +1150,6 @@
     "2026_NDVSU_541990_1",
     "2026_NDVSU_542093_1",
     "2026_NDVSU_542120_1",
-    "2026_NDVSU_542173_1",
     "2026_PKVVC_541996_1",
     "2026_PWDRB_539242_1",
     "2026_PWDRB_540974_1",
@@ -1214,7 +1218,6 @@
     "2026_UAD_542024_1",
     "2026_UAD_542024_10",
     "2026_UAD_542024_11",
-    "2026_UAD_542024_12",
     "2026_UAD_542024_2",
     "2026_UAD_542024_3",
     "2026_UAD_542024_5",
@@ -1230,12 +1233,11 @@
     "2026_UAD_542133_1",
     "2026_UAD_542134_1",
     "2026_UAD_542137_1",
-    "2026_UAD_542141_1",
     "2026_UAD_542172_1"
   ],
   "known_pincode_count": 367,
   "department_count": 321,
-  "missing_pincode_count": 137,
+  "missing_pincode_count": 134,
   "missing_pincode_ids": [
     "2025_UAD_455352_6",
     "2025_UAD_455353_6",
@@ -1287,7 +1289,6 @@
     "2026_NDVSU_541990_1",
     "2026_NDVSU_542093_1",
     "2026_NDVSU_542120_1",
-    "2026_NDVSU_542173_1",
     "2026_PKVVC_541996_1",
     "2026_PWDRB_539242_1",
     "2026_PWDRB_540974_1",
@@ -1356,7 +1357,6 @@
     "2026_UAD_542024_1",
     "2026_UAD_542024_10",
     "2026_UAD_542024_11",
-    "2026_UAD_542024_12",
     "2026_UAD_542024_2",
     "2026_UAD_542024_3",
     "2026_UAD_542024_5",
@@ -1372,7 +1372,6 @@
     "2026_UAD_542133_1",
     "2026_UAD_542134_1",
     "2026_UAD_542137_1",
-    "2026_UAD_542141_1",
     "2026_UAD_542172_1"
   ]
 }
