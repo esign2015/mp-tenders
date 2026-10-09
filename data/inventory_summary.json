@@ -2,23 +2,34 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-09T12:30:27.984459+05:30",
+    "checked_at": "2026-10-09T12:50:37.445084+05:30",
     "snapshot_at": "2026-10-08T19:30:05.333865+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5266,
     "verified_unique_ids": 5266,
     "dashboard_live_count": 5243,
     "closed_or_cancelled_count": 23,
-    "excluded_master_only_live_count": 8,
+    "excluded_master_only_live_count": 19,
     "excluded_master_only_live_ids": [
       "2026_JIWAJ_539732_1",
+      "2026_MMPSU_541020_1",
+      "2026_MMPSU_541712_1",
+      "2026_MPCDF_541506_1",
       "2026_MPFD_541951_1",
+      "2026_PWDRB_539244_1",
       "2026_PWDRB_541498_1",
       "2026_PWDRB_541499_1",
       "2026_PWDRB_541501_1",
       "2026_RES_540038_1",
+      "2026_UAD_541465_1",
+      "2026_UAD_541466_1",
+      "2026_UAD_541467_1",
+      "2026_UAD_541485_1",
+      "2026_UAD_541977_1",
       "2026_UAD_541989_1",
-      "2026_UAD_541991_1"
+      "2026_UAD_541991_1",
+      "2026_UAD_542028_1",
+      "2026_UAD_542029_1"
     ],
     "missing_ids": [],
     "invalid_closing_ids": [],
@@ -26,15 +37,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-09T07:00:29.308224+00:00",
+  "updated_at": "2026-10-09T07:20:38.789807+00:00",
   "snapshot_at": "2026-10-08T19:30:05.333865+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5266,
   "copied_tenders": 5266,
-  "detail_complete": 5245,
+  "detail_complete": 5246,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 20,
+  "detail_pending": 19,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -493,10 +504,10 @@
       "snapshot_at": "2026-10-08T19:30:05.333865+00:00",
       "portal_tender_count": 239,
       "copied_tenders": 239,
-      "detail_complete": 226,
+      "detail_complete": 227,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 13
+      "detail_pending": 12
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1083,7 +1094,7 @@
     }
   ],
   "organisation_count_mismatches": 0,
-  "legacy_verification_pending": 20,
+  "legacy_verification_pending": 19,
   "missing_district_count": 0,
   "missing_district_ids": [],
   "known_pincode_count": 367,
