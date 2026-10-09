@@ -1,34 +1,224 @@
 {
-  "status": "completed",
-  "started_at": "2026-10-09T11:50:32.856282+00:00",
+  "status": "partial",
+  "started_at": "2026-10-09T12:29:56.105873+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_542024_19",
-    "2026_UAD_542024_18",
-    "2026_MPRRD_540968_31",
-    "2026_PWDRB_542136_1",
-    "2026_MPPGC_527679_2",
-    "2026_MPPGC_517687_2",
-    "2026_DTCP_535401_1",
-    "2026_MPPGC_536240_1",
-    "2026_MPLUN_536837_1",
-    "2026_UAD_539665_1",
-    "2026_MPP_535637_1",
-    "2026_MPPGC_527629_1",
-    "2026_DPI_535302_1"
+    "2026_UAD_542024_23"
   ],
   "unchanged_ids": [
-    "2026_PWPIU_541504_1",
-    "2026_PWPIU_541510_1",
-    "2026_PWPIU_541544_1",
-    "2026_MPRRD_540968_31",
-    "2026_MPRRD_540968_31",
-    "2026_MPRRD_540968_31"
+    "2026_PWDRB_542007_1",
+    "2026_PWDRB_542008_1"
   ],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-10-09T11:50:34.786191+00:00",
+  "errors": [
+    {
+      "reference": "3338",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "300/Zone 5/E-tender/2026",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "741/02.09.2026 wn 12 const of sardar patel chauraha development with red sand stone",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "354/ZONE5/E-TENDER/2026",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "MPGMC/183/26x3/3/Jan/2026-27",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "341/Zone 5/E-tender/2026",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "MPGMC/68/26x2/10/Sport/26-27",
+      "kind": "tender",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "SFSGR/2026/1837",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "MPSEDC/Tech/2026/713",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "MPSEDC/Tech/2026/713",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "527679",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "517687",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "IDA/ETENDER/2026-27/183",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "07-10/R M Bargi/T-37/517",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "MPLUN/EandC/Div01Bhopal/NIT_63",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "1245 Dated 29-09-2026",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "SB/STORE/2026-25 (719) BHOPAL DATED 10.09.2026",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "tender",
+      "reference": "3338",
+      "title": "2. Sabjimandi Shopping Complex, Shop No. 08 (First Floor)",
+      "closing": "10-Nov-2026 05:30 PM",
+      "opening": "12-Nov-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "300/Zone 5/E-tender/2026",
+      "title": "3. Construction Of Drain Work Behind lalit Varma Disk Vali Gali In W-43",
+      "closing": "27-Oct-2026 05:30 PM",
+      "opening": "29-Oct-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "741/02.09.2026 wn 12 const of sardar patel chauraha development with red sand stone",
+      "title": "4. wn 12 const of sardar patel chauraha development with red sand stone",
+      "closing": "19-Oct-2026 05:30 PM",
+      "opening": "21-Oct-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "354/ZONE5/E-TENDER/2026",
+      "title": "5. Empanelment Work Of Back Line Repairing And Beautification Work At Various Places In W-43",
+      "closing": "10-Nov-2026 05:30 PM",
+      "opening": "12-Nov-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "MPGMC/183/26x3/3/Jan/2026-27",
+      "title": "6. (Parshad Nidhi) Construction of Community Hall at Suresh Nagar Dudi ki Bagiya Ward No. 24 Zone No.11.File No.183/26X3/3.",
+      "closing": "10-Nov-2026 05:30 PM",
+      "opening": "12-Nov-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "341/Zone 5/E-tender/2026",
+      "title": "7. Instalation Of Rcc Pipe In Kesarbag Clolony Near Garoth Highway In W- 40",
+      "closing": "27-Oct-2026 05:30 PM",
+      "opening": "29-Oct-2026 11:00 AM"
+    },
+    {
+      "kind": "tender",
+      "reference": "MPGMC/68/26x2/10/Sport/26-27",
+      "title": "9. Purchase of Various open GYM Equipments for Indra stadium file No. 68/26X2/10",
+      "closing": "27-Oct-2026 05:30 PM",
+      "opening": "29-Oct-2026 11:00 AM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "SFSGR/2026/1837",
+      "title": "1. E Tender date increase",
+      "closing": "13-Oct-2026 06:00 PM",
+      "opening": "14-Oct-2026 04:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "MPSEDC/Tech/2026/713",
+      "title": "2. Corrigendum 2 Revised Clauses",
+      "closing": "27-Oct-2026 03:00 PM",
+      "opening": "28-Oct-2026 03:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "MPSEDC/Tech/2026/713",
+      "title": "3. Corrigendum 2 Revised BOQ",
+      "closing": "27-Oct-2026 03:00 PM",
+      "opening": "28-Oct-2026 03:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "527679",
+      "title": "4. 1st due date extension",
+      "closing": "14-Oct-2026 03:00 PM",
+      "opening": "16-Oct-2026 03:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "517687",
+      "title": "5. 1st due date extension",
+      "closing": "14-Oct-2026 03:00 PM",
+      "opening": "16-Oct-2026 03:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "IDA/ETENDER/2026-27/183",
+      "title": "6. Amendment No.2 Key Dates Extend",
+      "closing": "14-Oct-2026 06:00 PM",
+      "opening": "16-Oct-2026 11:30 AM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "07-10/R M Bargi/T-37/517",
+      "title": "7. Corrigendum-III",
+      "closing": "05-Nov-2026 03:00 PM",
+      "opening": "06-Nov-2026 04:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "MPLUN/EandC/Div01Bhopal/NIT_63",
+      "title": "8. Date Corrigendum",
+      "closing": "16-Oct-2026 05:30 PM",
+      "opening": "21-Oct-2026 10:30 AM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "1245 Dated 29-09-2026",
+      "title": "9. Financial Bid",
+      "closing": "14-Oct-2026 05:30 PM",
+      "opening": "16-Oct-2026 10:30 AM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "SB/STORE/2026-25 (719) BHOPAL DATED 10.09.2026",
+      "title": "10. Date Corrigendum719",
+      "closing": "19-Oct-2026 04:00 PM",
+      "opening": "21-Oct-2026 04:00 PM"
+    }
+  ],
+  "copied_at": "2026-10-09T12:29:58.224840+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-09T11:51:07.840871+00:00"
+  "updated_at": "2026-10-09T12:30:09.140127+00:00"
 }
