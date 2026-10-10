@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "38043326900",
   "github_run_number": "979",
   "github_commit_sha": "d66e1e0fc8efd93d13b9a95d823f2fbded53f245",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5399,
   "initial_incomplete": 115,
   "batch_targets": 115,
-  "batch_attempted": 111,
-  "batch_complete": 110,
+  "batch_attempted": 115,
+  "batch_complete": 114,
   "started_at": "2026-10-10T10:28:16.017866+00:00",
-  "success": 5375,
-  "failed": 0,
+  "success": 5379,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_291118_2",
     "2023_UAD_305223_2",
@@ -4152,6 +4152,7 @@
     "2026_UAD_539337_1",
     "2026_UAD_539338_1",
     "2026_UAD_539345_1",
+    "2026_UAD_539347_1",
     "2026_UAD_539349_1",
     "2026_UAD_539350_1",
     "2026_UAD_539351_1",
@@ -5032,6 +5033,8 @@
     "2026_UAD_541160_1",
     "2026_UAD_541186_1",
     "2026_UAD_541187_1",
+    "2026_UAD_541188_1",
+    "2026_UAD_541189_1",
     "2026_UAD_541190_1",
     "2026_UAD_541199_1",
     "2026_UAD_541202_1",
@@ -5321,6 +5324,7 @@
     "2026_UAD_542099_1",
     "2026_UAD_542100_1",
     "2026_UAD_542101_1",
+    "2026_UAD_542102_1",
     "2026_UAD_542103_1",
     "2026_UAD_542108_1",
     "2026_UAD_542110_1",
@@ -5390,7 +5394,9 @@
     "2026_WRD_539778_1",
     "2026_WRD_541492_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PSNSU_540805_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_454244_1",
@@ -5411,20 +5417,15 @@
     "2026_MPPGC_533370_1",
     "2026_MPPKV_533742_1",
     "2026_MPPTC_529679_1",
-    "2026_PKVVC_523309_1",
-    "2026_PSNSU_540805_1",
-    "2026_UAD_539347_1",
-    "2026_UAD_541188_1",
-    "2026_UAD_541189_1",
-    "2026_UAD_542102_1"
+    "2026_PKVVC_523309_1"
   ],
-  "last_successful_tender_id": "2026_UAD_541187_1",
+  "last_successful_tender_id": "2026_UAD_539347_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-10T10:38:47.075856+00:00"
+  "updated_at": "2026-10-10T10:39:20.972808+00:00"
 }
