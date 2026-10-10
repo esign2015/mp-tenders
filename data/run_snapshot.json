@@ -1,14 +1,55 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-10T21:10:37.383548+05:30",
+  "snapshot_at": "2026-10-10T22:21:57.135991+05:30",
   "portal_organisation_count": 97,
   "portal_tender_count": 5329,
   "copied_unique_tender_ids": 5329,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 8,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_GADR_537701_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_538617_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_540077_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_540087_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_541343_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_539987_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_540350_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_541506_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
