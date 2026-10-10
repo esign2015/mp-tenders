@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-10T17:03:14.304577+05:30",
+    "checked_at": "2026-10-10T17:05:20.830640+05:30",
     "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5405,
@@ -24,15 +24,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-10T11:33:15.699920+00:00",
+  "updated_at": "2026-10-10T11:35:22.206035+00:00",
   "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5405,
   "copied_tenders": 5405,
-  "detail_complete": 5382,
-  "detail_failed": 0,
+  "detail_complete": 5385,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 23,
+  "detail_pending": 19,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -932,9 +932,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -964,10 +964,10 @@
       "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 432,
       "copied_tenders": 432,
-      "detail_complete": 429,
+      "detail_complete": 432,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1082,18 +1082,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 19,
-  "missing_district_count": 3,
-  "missing_district_ids": [
-    "2026_PWDRB_540281_1",
-    "2026_PWDRB_540284_1",
-    "2026_PWDRB_540286_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 362,
   "department_count": 314,
-  "missing_pincode_count": 3,
-  "missing_pincode_ids": [
-    "2026_PWDRB_540281_1",
-    "2026_PWDRB_540284_1",
-    "2026_PWDRB_540286_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
