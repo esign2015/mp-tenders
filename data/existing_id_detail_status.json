@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "38073171556",
   "github_run_number": "52",
   "github_commit_sha": "d66e1e0fc8efd93d13b9a95d823f2fbded53f245",
@@ -8,8 +8,8 @@
   "current_portal_ids": 5329,
   "initial_incomplete": 19,
   "batch_targets": 19,
-  "batch_attempted": 9,
-  "batch_complete": 9,
+  "batch_attempted": 19,
+  "batch_complete": 19,
   "started_at": "2026-10-10T17:48:06.660887+00:00",
   "success": 5312,
   "failed": 0,
@@ -5348,7 +5348,13 @@
     "2026_PKVVC_523309_1",
     "2026_PSNSU_540805_1"
   ],
-  "last_successful_tender_id": "2026_MPPGC_536969_1",
-  "errors": [],
-  "updated_at": "2026-10-10T17:50:01.854158+00:00"
+  "last_successful_tender_id": "2026_MPSAM_539121_1",
+  "errors": [
+    {
+      "Tender ID": "2026_MPSAM_539121_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-10T17:51:26.742791+00:00"
 }
