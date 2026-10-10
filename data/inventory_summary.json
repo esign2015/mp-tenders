@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-10T16:02:25.839871+05:30",
+    "checked_at": "2026-10-10T16:04:30.292183+05:30",
     "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5399,
@@ -24,15 +24,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-10T10:32:27.239812+00:00",
+  "updated_at": "2026-10-10T10:34:31.275230+00:00",
   "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5399,
   "copied_tenders": 5399,
-  "detail_complete": 5303,
+  "detail_complete": 5306,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 96,
+  "detail_pending": 93,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -480,10 +480,10 @@
       "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
       "portal_tender_count": 247,
       "copied_tenders": 247,
-      "detail_complete": 232,
+      "detail_complete": 233,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 14
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -964,10 +964,10 @@
       "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
       "portal_tender_count": 429,
       "copied_tenders": 429,
-      "detail_complete": 403,
+      "detail_complete": 405,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 26
+      "detail_pending": 24
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1082,14 +1082,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 19,
-  "missing_district_count": 76,
+  "missing_district_count": 73,
   "missing_district_ids": [
     "2026_DHS_539797_1",
     "2026_DME_541329_1",
     "2026_DME_541363_1",
     "2026_DME_542251_1",
     "2026_MIDCL_541509_1",
-    "2026_MPPGC_526184_1",
     "2026_MPPGC_536215_1",
     "2026_MPPGC_536246_1",
     "2026_MPSAM_542166_1",
@@ -1118,8 +1117,6 @@
     "2026_PWDRB_541350_1",
     "2026_PWDRB_541351_1",
     "2026_PWDRB_541821_1",
-    "2026_PWDRB_542090_1",
-    "2026_PWDRB_542091_1",
     "2026_UAD_488166_6",
     "2026_UAD_539347_1",
     "2026_UAD_540514_1",
@@ -1163,14 +1160,13 @@
   ],
   "known_pincode_count": 360,
   "department_count": 314,
-  "missing_pincode_count": 76,
+  "missing_pincode_count": 73,
   "missing_pincode_ids": [
     "2026_DHS_539797_1",
     "2026_DME_541329_1",
     "2026_DME_541363_1",
     "2026_DME_542251_1",
     "2026_MIDCL_541509_1",
-    "2026_MPPGC_526184_1",
     "2026_MPPGC_536215_1",
     "2026_MPPGC_536246_1",
     "2026_MPSAM_542166_1",
@@ -1199,8 +1195,6 @@
     "2026_PWDRB_541350_1",
     "2026_PWDRB_541351_1",
     "2026_PWDRB_541821_1",
-    "2026_PWDRB_542090_1",
-    "2026_PWDRB_542091_1",
     "2026_UAD_488166_6",
     "2026_UAD_539347_1",
     "2026_UAD_540514_1",
