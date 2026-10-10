@@ -1,13 +1,13 @@
 {
-  "status": "verified",
-  "checked_at": "2026-10-10T15:53:34.059365+05:30",
-  "snapshot_at": "2026-10-09T18:57:58.273419+00:00",
-  "inventory_source": "copied-list",
-  "portal_tender_count": 5290,
+  "status": "mismatch",
+  "checked_at": "2026-10-10T15:55:40.285774+05:30",
+  "snapshot_at": "2026-10-10T00:54:17.503022+05:30",
+  "inventory_source": "cached-snapshot",
+  "portal_tender_count": 5399,
   "verified_unique_ids": 5290,
   "dashboard_live_count": 5284,
   "closed_or_cancelled_count": 6,
-  "excluded_master_only_live_count": 111,
+  "excluded_master_only_live_count": 114,
   "excluded_master_only_live_ids": [
     "2026_DHS_539797_1",
     "2026_DME_541329_1",
@@ -65,6 +65,9 @@
     "2026_PWDRB_542280_1",
     "2026_PWDRB_542281_1",
     "2026_RES_541756_1",
+    "2026_RES_541758_1",
+    "2026_RES_541759_1",
+    "2026_RES_541761_1",
     "2026_UAD_487998_6",
     "2026_UAD_488004_6",
     "2026_UAD_488006_6",
@@ -123,7 +126,12 @@
   ],
   "missing_ids": [],
   "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "errors": [
+    "Organisation count mismatch: Madhya Pradesh Power Generating Company Limited",
+    "Organisation count mismatch: Public Health Engineering- O/o Engineer In Chief",
+    "Verified inventory and copied Tender IDs differ",
+    "Portal total and unique Tender IDs differ"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
