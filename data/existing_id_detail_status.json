@@ -1,7 +1,7 @@
 {
   "status": "completed",
-  "github_run_id": "38071657475",
-  "github_run_number": "987",
+  "github_run_id": "38073838273",
+  "github_run_number": "988",
   "github_commit_sha": "d66e1e0fc8efd93d13b9a95d823f2fbded53f245",
   "batch_size": 500,
   "total_csv_ids": 5329,
@@ -10,7 +10,7 @@
   "batch_targets": 1,
   "batch_attempted": 1,
   "batch_complete": 0,
-  "started_at": "2026-10-10T18:01:40.831070+00:00",
+  "started_at": "2026-10-10T18:27:29.390714+00:00",
   "success": 5312,
   "failed": 1,
   "success_ids": [
@@ -5357,5 +5357,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-10T18:02:13.373201+00:00"
+  "updated_at": "2026-10-10T18:27:56.106034+00:00"
 }
