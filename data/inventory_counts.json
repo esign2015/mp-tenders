@@ -2,29 +2,21 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-10T16:58:28.025234+05:30",
-    "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+    "checked_at": "2026-10-10T17:00:33.861789+05:30",
+    "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
     "inventory_source": "copied-list",
-    "portal_tender_count": 5399,
-    "verified_unique_ids": 5399,
-    "dashboard_live_count": 5397,
-    "closed_or_cancelled_count": 2,
-    "excluded_master_only_live_count": 14,
+    "portal_tender_count": 5405,
+    "verified_unique_ids": 5405,
+    "dashboard_live_count": 5390,
+    "closed_or_cancelled_count": 15,
+    "excluded_master_only_live_count": 6,
     "excluded_master_only_live_ids": [
-      "2026_DGPCS_542339_1",
-      "2026_PWDRB_540281_1",
-      "2026_PWDRB_540284_1",
-      "2026_PWDRB_540286_1",
       "2026_PWDRB_540975_1",
       "2026_PWDRB_540976_1",
-      "2026_UAD_541339_1",
       "2026_UAD_542009_1",
       "2026_UAD_542057_1",
       "2026_UAD_542088_1",
-      "2026_UAD_542117_1",
-      "2026_UAD_542330_2",
-      "2026_UAD_542330_3",
-      "2026_UAD_542335_1"
+      "2026_UAD_542117_1"
     ],
     "missing_ids": [],
     "invalid_closing_ids": [],
@@ -32,20 +24,20 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-10T11:28:29.626562+00:00",
-  "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+  "updated_at": "2026-10-10T11:30:35.239621+00:00",
+  "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
   "organisation_count": 95,
-  "portal_tender_count": 5399,
-  "copied_tenders": 5399,
-  "detail_complete": 5379,
+  "portal_tender_count": 5405,
+  "copied_tenders": 5405,
+  "detail_complete": 5380,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 19,
+  "detail_pending": 24,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
       "serial": "1",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
       "detail_complete": 16,
@@ -56,7 +48,7 @@
     {
       "organisation": "Board of Secondary Education",
       "serial": "2",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -67,7 +59,7 @@
     {
       "organisation": "Department of Higher Education",
       "serial": "3",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
       "detail_complete": 36,
@@ -78,7 +70,7 @@
     {
       "organisation": "Devi Ahilya Vishwavidyalaya - Indore",
       "serial": "4",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -89,7 +81,7 @@
     {
       "organisation": "DIRECTORATE AYUSH",
       "serial": "5",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -100,7 +92,7 @@
     {
       "organisation": "Directorate Farmer Welfare And Agriculture Development",
       "serial": "6",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -111,7 +103,7 @@
     {
       "organisation": "Directorate of Animal Husbandry",
       "serial": "7",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -122,7 +114,7 @@
     {
       "organisation": "Directorate of Economics and Statistics",
       "serial": "8",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -133,7 +125,7 @@
     {
       "organisation": "Directorate of Food Civil Supplies and Consumer Protection",
       "serial": "9",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -144,7 +136,7 @@
     {
       "organisation": "Directorate of Health Services",
       "serial": "10",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
       "detail_complete": 43,
@@ -155,7 +147,7 @@
     {
       "organisation": "Directorate of Industries",
       "serial": "11",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -166,7 +158,7 @@
     {
       "organisation": "Directorate of Medical Education",
       "serial": "12",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 19,
       "copied_tenders": 19,
       "detail_complete": 19,
@@ -177,7 +169,7 @@
     {
       "organisation": "Directorate of Panchayati Raj",
       "serial": "13",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
       "detail_complete": 29,
@@ -188,7 +180,7 @@
     {
       "organisation": "Directorate of Public Instruction",
       "serial": "14",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
       "detail_complete": 6,
@@ -199,7 +191,7 @@
     {
       "organisation": "Directorate of Religious Trust and Endowments-Ujjain",
       "serial": "15",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -210,7 +202,7 @@
     {
       "organisation": "Directorate of Social Justice and Welfare",
       "serial": "16",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -221,7 +213,7 @@
     {
       "organisation": "Directorate of Technical Education",
       "serial": "17",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -232,7 +224,7 @@
     {
       "organisation": "Directorate of Town And Country Planning",
       "serial": "18",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 32,
       "copied_tenders": 32,
       "detail_complete": 32,
@@ -243,7 +235,7 @@
     {
       "organisation": "Directorate Of Women and Child Development",
       "serial": "19",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -254,7 +246,7 @@
     {
       "organisation": "Directorate Sports and Youth Welfare",
       "serial": "20",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
       "detail_complete": 6,
@@ -265,21 +257,21 @@
     {
       "organisation": "Directorate Urban Administration and Development",
       "serial": "21",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
-      "portal_tender_count": 2990,
-      "copied_tenders": 2990,
-      "detail_complete": 2990,
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
+      "portal_tender_count": 2994,
+      "copied_tenders": 2994,
+      "detail_complete": 2992,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
       "serial": "22",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
-      "portal_tender_count": 36,
-      "copied_tenders": 36,
-      "detail_complete": 33,
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
+      "portal_tender_count": 37,
+      "copied_tenders": 37,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 3
@@ -287,7 +279,7 @@
     {
       "organisation": "District Collectorate",
       "serial": "23",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 54,
       "copied_tenders": 54,
       "detail_complete": 54,
@@ -298,7 +290,7 @@
     {
       "organisation": "Engineer-in-Chief - Water Resources Department",
       "serial": "24",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 27,
       "copied_tenders": 27,
       "detail_complete": 26,
@@ -309,7 +301,7 @@
     {
       "organisation": "Excise Department",
       "serial": "25",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 5,
@@ -320,7 +312,7 @@
     {
       "organisation": "Food and Drugs Administration MP",
       "serial": "26",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -331,7 +323,7 @@
     {
       "organisation": "General Administration Department - Registrar",
       "serial": "27",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 5,
@@ -342,7 +334,7 @@
     {
       "organisation": "Gwalior Vyapar Mela Pradhikaran - GVMP",
       "serial": "28",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 21,
       "copied_tenders": 21,
       "detail_complete": 21,
@@ -353,7 +345,7 @@
     {
       "organisation": "High Court of Madhya Pradesh",
       "serial": "29",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
       "detail_complete": 6,
@@ -364,7 +356,7 @@
     {
       "organisation": "H.S.Z.H. Govt.(Auto) Unani Medical College-Bhopal",
       "serial": "30",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
       "detail_complete": 6,
@@ -375,7 +367,7 @@
     {
       "organisation": "Jawaharlal Nehru Krishi Vishwa Vidyalaya",
       "serial": "31",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -386,7 +378,7 @@
     {
       "organisation": "Jiwaji University - Gwalior",
       "serial": "32",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
       "detail_complete": 9,
@@ -397,7 +389,7 @@
     {
       "organisation": "Krantivir Tatya Tope Vishwavidyalaya - Guna M P",
       "serial": "33",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -408,7 +400,7 @@
     {
       "organisation": "Madhya Pradesh Bhawan",
       "serial": "34",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -419,7 +411,7 @@
     {
       "organisation": "Madhya Pradesh Industrial Development Corporation Limited",
       "serial": "35",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -430,7 +422,7 @@
     {
       "organisation": "Madhya Pradesh Jal Nigam Maryadit",
       "serial": "36",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -441,7 +433,7 @@
     {
       "organisation": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
       "serial": "37",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
       "detail_complete": 52,
@@ -452,7 +444,7 @@
     {
       "organisation": "Madhya Pradesh Madhyam",
       "serial": "38",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -463,7 +455,7 @@
     {
       "organisation": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
       "serial": "39",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 79,
       "copied_tenders": 79,
       "detail_complete": 78,
@@ -474,10 +466,10 @@
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
       "serial": "40",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
-      "portal_tender_count": 36,
-      "copied_tenders": 36,
-      "detail_complete": 35,
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
+      "portal_tender_count": 35,
+      "copied_tenders": 35,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 1
@@ -485,7 +477,7 @@
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
       "serial": "41",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 247,
       "copied_tenders": 247,
       "detail_complete": 235,
@@ -496,7 +488,7 @@
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
       "serial": "42",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 5,
@@ -507,7 +499,7 @@
     {
       "organisation": "Madhya Pradesh Public Health Services Corporation Ltd.",
       "serial": "43",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 16,
       "copied_tenders": 16,
       "detail_complete": 16,
@@ -518,7 +510,7 @@
     {
       "organisation": "Madhya Pradesh Road Development Corporation Limited",
       "serial": "44",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
       "detail_complete": 35,
@@ -529,7 +521,7 @@
     {
       "organisation": "Madhya Pradesh Rural Road Development Authority",
       "serial": "45",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 288,
       "copied_tenders": 288,
       "detail_complete": 288,
@@ -540,7 +532,7 @@
     {
       "organisation": "Madhya Pradesh State Disaster Management Authority",
       "serial": "46",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -551,7 +543,7 @@
     {
       "organisation": "Madhya Pradesh State Electronics Development Corporation Ltd.",
       "serial": "47",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -562,7 +554,7 @@
     {
       "organisation": "Madhya Pradesh State Mining Corporation Ltd",
       "serial": "48",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -573,7 +565,7 @@
     {
       "organisation": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
       "serial": "49",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 8,
       "copied_tenders": 8,
       "detail_complete": 8,
@@ -584,7 +576,7 @@
     {
       "organisation": "Minor Forest Produce Processing and Research Center",
       "serial": "50",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -595,7 +587,7 @@
     {
       "organisation": "M.P. Building Development Corporation Ltd. Bhopal",
       "serial": "51",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 12,
       "copied_tenders": 12,
       "detail_complete": 12,
@@ -606,7 +598,7 @@
     {
       "organisation": "M.P. Fisheries Federation - Bhopal",
       "serial": "52",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -617,7 +609,7 @@
     {
       "organisation": "MP Forest Department",
       "serial": "53",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 78,
       "copied_tenders": 78,
       "detail_complete": 78,
@@ -628,7 +620,7 @@
     {
       "organisation": "MP Housing and Infrastructure Development Board",
       "serial": "54",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 5,
@@ -639,7 +631,7 @@
     {
       "organisation": "MP Industrial Development Corporation Limited",
       "serial": "55",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 15,
       "copied_tenders": 15,
       "detail_complete": 15,
@@ -650,7 +642,7 @@
     {
       "organisation": "MP Khadi Tatha Gramodyog Board - Bhopal",
       "serial": "56",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -661,7 +653,7 @@
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
       "serial": "57",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -672,10 +664,10 @@
     {
       "organisation": "MP Police",
       "serial": "58",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
-      "portal_tender_count": 47,
-      "copied_tenders": 47,
-      "detail_complete": 47,
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
+      "portal_tender_count": 46,
+      "copied_tenders": 46,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
       "detail_pending": 0
@@ -683,7 +675,7 @@
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
       "serial": "59",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 112,
       "copied_tenders": 112,
       "detail_complete": 112,
@@ -694,7 +686,7 @@
     {
       "organisation": "MP Power Transmission Co. Ltd.",
       "serial": "60",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 31,
       "copied_tenders": 31,
       "detail_complete": 30,
@@ -705,7 +697,7 @@
     {
       "organisation": "MP State Agricultural Marketing Board",
       "serial": "61",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 75,
       "copied_tenders": 75,
       "detail_complete": 75,
@@ -716,7 +708,7 @@
     {
       "organisation": "MP State Agro Industries Corporation Limited",
       "serial": "62",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -727,7 +719,7 @@
     {
       "organisation": "MP State Civil Supplies Corporation Limited",
       "serial": "63",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -738,7 +730,7 @@
     {
       "organisation": "MP State Cooperative Dairy Federation",
       "serial": "64",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -749,7 +741,7 @@
     {
       "organisation": "M. P. State Cooperative Union Ltd.- Bhopal",
       "serial": "65",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -760,7 +752,7 @@
     {
       "organisation": "MP State Coperative Marketing Federation Ltd.",
       "serial": "66",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
       "detail_complete": 33,
@@ -771,7 +763,7 @@
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
       "serial": "67",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -782,7 +774,7 @@
     {
       "organisation": "M.P.State Minor Forest Produce Cooperative Federation Limited",
       "serial": "68",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -793,7 +785,7 @@
     {
       "organisation": "M.P. State Open School Education Board",
       "serial": "69",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -804,7 +796,7 @@
     {
       "organisation": "M.P. State Seed Certification Agency",
       "serial": "70",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -815,7 +807,7 @@
     {
       "organisation": "MP State Tourism Development Corporation Ltd.",
       "serial": "71",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 18,
       "copied_tenders": 18,
       "detail_complete": 18,
@@ -826,7 +818,7 @@
     {
       "organisation": "M.P. Textbook Corporation - Bhopal",
       "serial": "72",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -837,7 +829,7 @@
     {
       "organisation": "M.P. Tourism Board",
       "serial": "73",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
       "detail_complete": 11,
@@ -848,7 +840,7 @@
     {
       "organisation": "M P Vidhan Sabha",
       "serial": "74",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -859,7 +851,7 @@
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
       "serial": "75",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 12,
       "copied_tenders": 12,
       "detail_complete": 12,
@@ -870,7 +862,7 @@
     {
       "organisation": "Narmada Valley Development Authority",
       "serial": "76",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
       "detail_complete": 35,
@@ -881,7 +873,7 @@
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
       "serial": "77",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -892,7 +884,7 @@
     {
       "organisation": "Office of the Labour Commissioner Indore M P",
       "serial": "78",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -903,7 +895,7 @@
     {
       "organisation": "Principal Revenue Commissioner",
       "serial": "79",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -914,7 +906,7 @@
     {
       "organisation": "Professional Examination Board",
       "serial": "80",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -925,7 +917,7 @@
     {
       "organisation": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
       "serial": "81",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -936,7 +928,7 @@
     {
       "organisation": "PT. S.N. Shukla Unverversity Shehdol",
       "serial": "82",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
@@ -947,7 +939,7 @@
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
       "serial": "83",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 63,
       "copied_tenders": 63,
       "detail_complete": 63,
@@ -958,7 +950,7 @@
     {
       "organisation": "PWD-PIU",
       "serial": "84",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 56,
       "copied_tenders": 56,
       "detail_complete": 56,
@@ -969,18 +961,18 @@
     {
       "organisation": "PWD- Roads and Bridges",
       "serial": "85",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
-      "portal_tender_count": 429,
-      "copied_tenders": 429,
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
+      "portal_tender_count": 432,
+      "copied_tenders": 432,
       "detail_complete": 429,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 3
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
       "serial": "86",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
       "detail_complete": 5,
@@ -991,7 +983,7 @@
     {
       "organisation": "Rajya Shiksha Kendra M.P",
       "serial": "87",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
       "detail_complete": 30,
@@ -1002,7 +994,7 @@
     {
       "organisation": "Rewa Ultra Mega Solar Limited",
       "serial": "88",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -1013,7 +1005,7 @@
     {
       "organisation": "Rural Engineering Service",
       "serial": "89",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 86,
       "copied_tenders": 86,
       "detail_complete": 86,
@@ -1024,7 +1016,7 @@
     {
       "organisation": "SANT SHIROMANI RAVIDAS GLOBAL SKILLS PARK - BHOPAL",
       "serial": "90",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 1,
@@ -1035,7 +1027,7 @@
     {
       "organisation": "Shree Mahakaleshwar Mandir Prabandh Samiti Ujjain",
       "serial": "91",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -1046,7 +1038,7 @@
     {
       "organisation": "Shri Omkareshwar Mandir Trust- Omkareshwar",
       "serial": "92",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
       "detail_complete": 4,
@@ -1057,7 +1049,7 @@
     {
       "organisation": "State Level Employment and Training Center",
       "serial": "93",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 2,
@@ -1068,7 +1060,7 @@
     {
       "organisation": "THE CHIEF ELECTORAL OFFICER",
       "serial": "94",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 3,
@@ -1079,7 +1071,7 @@
     {
       "organisation": "Tribal Affairs Department-MP",
       "serial": "95",
-      "snapshot_at": "2026-10-10T10:00:31.308875+00:00",
+      "snapshot_at": "2026-10-10T11:05:33.475051+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
       "detail_complete": 36,
@@ -1090,10 +1082,22 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 19,
-  "missing_district_count": 0,
-  "missing_district_ids": [],
+  "missing_district_count": 5,
+  "missing_district_ids": [
+    "2026_PWDRB_540281_1",
+    "2026_PWDRB_540284_1",
+    "2026_PWDRB_540286_1",
+    "2026_UAD_542330_2",
+    "2026_UAD_542330_3"
+  ],
   "known_pincode_count": 362,
   "department_count": 314,
-  "missing_pincode_count": 0,
-  "missing_pincode_ids": []
+  "missing_pincode_count": 5,
+  "missing_pincode_ids": [
+    "2026_PWDRB_540281_1",
+    "2026_PWDRB_540284_1",
+    "2026_PWDRB_540286_1",
+    "2026_UAD_542330_2",
+    "2026_UAD_542330_3"
+  ]
 }
