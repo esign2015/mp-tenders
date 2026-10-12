@@ -1,59 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-12T22:45:06.191336+05:30",
+  "snapshot_at": "2026-10-13T01:10:43.418473+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
-  "previous_tender_count": 4961,
+  "previous_tender_count": 4969,
   "current_tender_count": 4969,
-  "organisations_with_changes": 4,
-  "organisations_with_new_tenders": 4,
-  "new_tender_count": 10,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 204,
-      "Current Tender Count": 208,
-      "Count Difference": 4,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2026_MPPGC_521483_1",
-        "2026_MPPGC_532678_1",
-        "2026_MPPGC_537452_1",
-        "2026_MPPGC_542098_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2691,
-      "Current Tender Count": 2693,
-      "Count Difference": 2,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2026_UAD_540654_1",
-        "2026_UAD_540655_1",
-        "2026_UAD_542364_1",
-        "2026_UAD_542670_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 31,
-      "Current Tender Count": 32,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DTCP_542543_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 87,
-      "Current Tender Count": 88,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPKV_537743_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
