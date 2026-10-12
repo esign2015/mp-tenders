@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-12T22:45:30.645508+05:30",
+    "checked_at": "2026-10-12T22:48:22.419522+05:30",
     "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4969,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-12T17:15:31.456057+00:00",
+  "updated_at": "2026-10-12T17:18:23.345814+00:00",
   "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
   "organisation_count": 99,
   "portal_tender_count": 4969,
   "copied_tenders": 4969,
-  "detail_complete": 4948,
+  "detail_complete": 4958,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 20,
+  "detail_pending": 10,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
       "portal_tender_count": 32,
       "copied_tenders": 32,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -264,10 +264,10 @@
       "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
       "portal_tender_count": 2693,
       "copied_tenders": 2693,
-      "detail_complete": 2689,
+      "detail_complete": 2693,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -462,10 +462,10 @@
       "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
       "portal_tender_count": 88,
       "copied_tenders": 88,
-      "detail_complete": 86,
+      "detail_complete": 87,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -484,10 +484,10 @@
       "snapshot_at": "2026-10-12T16:56:03.531288+00:00",
       "portal_tender_count": 208,
       "copied_tenders": 208,
-      "detail_complete": 197,
+      "detail_complete": 201,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 7
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1119,32 +1119,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 10,
-  "missing_district_count": 10,
-  "missing_district_ids": [
-    "2026_DTCP_542543_1",
-    "2026_MPPGC_521483_1",
-    "2026_MPPGC_532678_1",
-    "2026_MPPGC_537452_1",
-    "2026_MPPGC_542098_1",
-    "2026_MPPKV_537743_1",
-    "2026_UAD_540654_1",
-    "2026_UAD_540655_1",
-    "2026_UAD_542364_1",
-    "2026_UAD_542670_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 341,
   "department_count": 301,
-  "missing_pincode_count": 10,
-  "missing_pincode_ids": [
-    "2026_DTCP_542543_1",
-    "2026_MPPGC_521483_1",
-    "2026_MPPGC_532678_1",
-    "2026_MPPGC_537452_1",
-    "2026_MPPGC_542098_1",
-    "2026_MPPKV_537743_1",
-    "2026_UAD_540654_1",
-    "2026_UAD_540655_1",
-    "2026_UAD_542364_1",
-    "2026_UAD_542670_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
