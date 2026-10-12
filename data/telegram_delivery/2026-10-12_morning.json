@@ -1,0 +1,13 @@
+{
+  "operations": {
+    "document:1": {
+      "message_id": 123,
+      "sent_at": "2026-10-12T02:30:58.124626+00:00",
+      "kind": "document"
+    }
+  },
+  "mode": "morning",
+  "key": "2026-10-12:morning",
+  "extraction_result": "not-refreshed",
+  "completed_at": "2026-10-12T02:30:58.131641+00:00"
+}
