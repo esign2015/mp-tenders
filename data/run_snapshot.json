@@ -1,20 +1,14 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-12T17:15:10.938174+05:30",
+  "snapshot_at": "2026-10-12T19:00:47.131156+05:30",
   "portal_organisation_count": 99,
-  "portal_tender_count": 5372,
-  "copied_unique_tender_ids": 5372,
+  "portal_tender_count": 4961,
+  "copied_unique_tender_ids": 4961,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 1,
-  "recovery_log": [
-    {
-      "Tender ID": "2026_MLPDC_539170_1",
-      "Organisation Name": "MP State Livestock and Poultry Development Corporation",
-      "Source": "RSP Tender ID recovery only"
-    }
-  ],
+  "recovered_from_rsp_id_only": 0,
+  "recovery_log": [],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": true
+  "rsp_fallback_used": false
 }
