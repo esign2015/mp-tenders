@@ -1,54 +1,35 @@
 {
-  "status": "partial",
-  "started_at": "2026-10-13T10:25:33.097800+00:00",
+  "status": "completed",
+  "started_at": "2026-10-13T11:40:28.652005+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_542538_1",
-    "2026_UAD_542573_1",
-    "2026_UAD_542540_1",
-    "2026_UAD_542569_1",
-    "2026_MPPKV_542803_1",
-    "2026_MPPKV_542764_1",
-    "2026_MPPHC_542348_1",
-    "2026_PKVVC_538845_1",
-    "2026_MPPGC_522062_1",
-    "2026_MPPGC_524169_1",
-    "2026_MPPGC_529896_1",
-    "2026_PWPIU_540947_1",
-    "2026_MPPGC_525019_2",
-    "2026_UAD_542253_1",
-    "2026_PWPIU_540898_1",
-    "2026_UAD_540730_2"
+    "2026_PHED_539532_1",
+    "2026_PHED_539535_1",
+    "2026_PHED_539543_1",
+    "2026_PHED_539538_1",
+    "2026_PHED_539542_1",
+    "2026_PHED_539544_1",
+    "2026_MPPGC_536529_1",
+    "2026_UAD_534353_1",
+    "2026_MPPGC_526084_1",
+    "2026_MPPGC_529493_1"
   ],
   "unchanged_ids": [
-    "2026_UAD_540680_3",
-    "2026_UAD_540680_3"
+    "2026_PKVVC_542846_1",
+    "2026_STDC_541608_1",
+    "2026_UAD_542702_1",
+    "2026_MPSAM_541784_1",
+    "2026_MPPGC_525765_1",
+    "2026_UAD_540680_6",
+    "2026_UAD_540680_5",
+    "2026_UAD_540680_4",
+    "2026_UAD_542539_1",
+    "2026_UAD_542569_1"
   ],
-  "errors": [
-    {
-      "reference": "15/02/Nirman/MC Satna/Dated 12/10/2026",
-      "kind": "tender",
-      "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
-    }
-  ],
-  "pending": [
-    {
-      "kind": "tender",
-      "reference": "15/02/Nirman/MC Satna/Dated 12/10/2026",
-      "title": "6. Construction of Nala at Talaiya to Nahar in Badkhar Ward No. 12",
-      "closing": "29-Oct-2026 05:30 PM",
-      "opening": "31-Oct-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "1739",
-      "title": "8. Third call for supply of geography lab equipment",
-      "closing": "26-Oct-2026 05:00 PM",
-      "opening": "28-Oct-2026 11:00 AM"
-    }
-  ],
-  "copied_at": "2026-10-13T10:25:35.306640+00:00",
+  "errors": [],
+  "pending": [],
+  "copied_at": "2026-10-13T11:40:30.795760+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-13T10:26:25.472697+00:00"
+  "updated_at": "2026-10-13T11:41:37.841787+00:00"
 }
