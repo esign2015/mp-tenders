@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-13T09:20:49.293629+00:00",
-  "status": "retry_needed",
+  "updated_at": "2026-10-13T17:05:57.591223+00:00",
+  "status": "running",
   "initial_missing_ids": [
     "2026_AVOMT_539493_1",
     "2026_AVOMT_540762_1",
@@ -18,11 +18,14 @@
     "2026_UAD_536145_1",
     "2026_UAD_536146_1",
     "2026_UAD_539507_1",
-    "2026_UAD_540440_1"
+    "2026_UAD_540440_1",
+    "2026_UAD_542401_1",
+    "2026_UAD_542403_1",
+    "2026_UAD_542404_1"
   ],
   "missing_pincode_count": 0,
   "missing_pincode_ids": [],
-  "unresolved_location_count": 17,
+  "unresolved_location_count": 20,
   "unresolved_location_ids": [
     "2026_AVOMT_539493_1",
     "2026_AVOMT_540762_1",
@@ -40,7 +43,10 @@
     "2026_UAD_536145_1",
     "2026_UAD_536146_1",
     "2026_UAD_539507_1",
-    "2026_UAD_540440_1"
+    "2026_UAD_540440_1",
+    "2026_UAD_542401_1",
+    "2026_UAD_542403_1",
+    "2026_UAD_542404_1"
   ],
   "source": "Official MP Tender detail pages"
 }
