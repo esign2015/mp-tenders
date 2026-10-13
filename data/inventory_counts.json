@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-13T22:52:53.407782+05:30",
+    "checked_at": "2026-10-13T22:55:39.366661+05:30",
     "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5030,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-13T17:22:54.151094+00:00",
+  "updated_at": "2026-10-13T17:25:40.331548+00:00",
   "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5030,
   "copied_tenders": 5030,
-  "detail_complete": 5000,
+  "detail_complete": 5019,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 30,
+  "detail_pending": 11,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -264,10 +264,10 @@
       "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
       "portal_tender_count": 2743,
       "copied_tenders": 2743,
-      "detail_complete": 2734,
+      "detail_complete": 2743,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -473,10 +473,10 @@
       "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
       "portal_tender_count": 99,
       "copied_tenders": 99,
-      "detail_complete": 97,
+      "detail_complete": 98,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -495,10 +495,10 @@
       "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
       "portal_tender_count": 209,
       "copied_tenders": 209,
-      "detail_complete": 198,
+      "detail_complete": 203,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 6
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -715,10 +715,10 @@
       "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
       "portal_tender_count": 101,
       "copied_tenders": 101,
-      "detail_complete": 99,
+      "detail_complete": 101,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -990,10 +990,10 @@
       "snapshot_at": "2026-10-13T17:03:22.855243+00:00",
       "portal_tender_count": 410,
       "copied_tenders": 410,
-      "detail_complete": 408,
+      "detail_complete": 410,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1108,50 +1108,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 9,
-  "missing_district_count": 19,
-  "missing_district_ids": [
-    "2026_MPPGC_525701_1",
-    "2026_MPPGC_526185_1",
-    "2026_MPPGC_536642_1",
-    "2026_MPPGC_542332_1",
-    "2026_MPPGC_542419_1",
-    "2026_MPPHC_542824_1",
-    "2026_MPPHC_542826_1",
-    "2026_MPPKV_537696_1",
-    "2026_PWDRB_539618_1",
-    "2026_PWDRB_539619_1",
-    "2026_UAD_522589_1",
-    "2026_UAD_534486_1",
-    "2026_UAD_534508_1",
-    "2026_UAD_534510_1",
-    "2026_UAD_538819_1",
-    "2026_UAD_541347_1",
-    "2026_UAD_542897_1",
-    "2026_UAD_542914_1",
-    "2026_UAD_542952_1"
-  ],
-  "known_pincode_count": 353,
+  "missing_district_count": 0,
+  "missing_district_ids": [],
+  "known_pincode_count": 354,
   "department_count": 295,
-  "missing_pincode_count": 19,
-  "missing_pincode_ids": [
-    "2026_MPPGC_525701_1",
-    "2026_MPPGC_526185_1",
-    "2026_MPPGC_536642_1",
-    "2026_MPPGC_542332_1",
-    "2026_MPPGC_542419_1",
-    "2026_MPPHC_542824_1",
-    "2026_MPPHC_542826_1",
-    "2026_MPPKV_537696_1",
-    "2026_PWDRB_539618_1",
-    "2026_PWDRB_539619_1",
-    "2026_UAD_522589_1",
-    "2026_UAD_534486_1",
-    "2026_UAD_534508_1",
-    "2026_UAD_534510_1",
-    "2026_UAD_538819_1",
-    "2026_UAD_541347_1",
-    "2026_UAD_542897_1",
-    "2026_UAD_542914_1",
-    "2026_UAD_542952_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
