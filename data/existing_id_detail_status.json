@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "38435455220",
   "github_run_number": "1027",
   "github_commit_sha": "8d8256e39e97842f8c937ebb7f911309144c236f",
@@ -12,7 +12,7 @@
   "batch_complete": 19,
   "started_at": "2026-10-13T17:23:37.518706+00:00",
   "success": 5019,
-  "failed": 0,
+  "failed": 2,
   "success_ids": [
     "2023_UAD_291118_2",
     "2023_UAD_305223_2",
@@ -5034,11 +5034,13 @@
     "2026_WRD_539778_1",
     "2026_WRD_541492_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2025_PSNSU_454220_3",
+    "2026_PSNSU_540805_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_463842_2",
-    "2025_PSNSU_454220_3",
     "2025_WRD_461722_1",
     "2026_MPPGC_516436_1",
     "2026_MPPGC_520386_1",
@@ -5046,21 +5048,20 @@
     "2026_MPPGC_529286_1",
     "2026_MPPGC_533370_1",
     "2026_MPPKV_533742_1",
-    "2026_MPPTC_529679_1",
-    "2026_PSNSU_540805_1"
+    "2026_MPPTC_529679_1"
   ],
   "last_successful_tender_id": "2026_UAD_522589_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2025_PSNSU_454220_3",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-13T17:25:30.327037+00:00"
+  "updated_at": "2026-10-13T17:25:53.425725+00:00"
 }
