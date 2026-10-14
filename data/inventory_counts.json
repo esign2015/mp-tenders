@@ -2,15 +2,17 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-14T14:58:04.708512+05:30",
+    "checked_at": "2026-10-14T14:58:36.094524+05:30",
     "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5171,
     "verified_unique_ids": 5171,
     "dashboard_live_count": 5171,
     "closed_or_cancelled_count": 0,
-    "excluded_master_only_live_count": 1,
+    "excluded_master_only_live_count": 3,
     "excluded_master_only_live_ids": [
+      "2026_UAD_522207_3",
+      "2026_UAD_522250_3",
       "2026_UAD_542656_1"
     ],
     "missing_ids": [],
@@ -19,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-14T09:28:06.666084+00:00",
+  "updated_at": "2026-10-14T09:28:37.052809+00:00",
   "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5171,
   "copied_tenders": 5171,
-  "detail_complete": 5066,
+  "detail_complete": 5068,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 105,
+  "detail_pending": 103,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -277,10 +279,10 @@
       "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 30,
+      "detail_complete": 31,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "District Collectorate",
@@ -871,10 +873,10 @@
       "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M P Vidhan Sabha",
@@ -1110,11 +1112,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 9,
-  "missing_district_count": 94,
+  "missing_district_count": 92,
   "missing_district_ids": [
     "2026_DGPCS_542746_1",
     "2026_DGPCS_543057_1",
-    "2026_DGPCS_543069_1",
     "2026_MKVVC_542965_1",
     "2026_MPFD_542421_1",
     "2026_MPPGC_526128_1",
@@ -1124,7 +1125,6 @@
     "2026_MPSAM_542096_1",
     "2026_MPSAM_542237_1",
     "2026_MPSAM_542238_1",
-    "2026_MPTB_536176_1",
     "2026_NDVSU_542754_1",
     "2026_NDVSU_542856_1",
     "2026_PWDRB_523842_1",
@@ -1209,11 +1209,10 @@
   ],
   "known_pincode_count": 360,
   "department_count": 296,
-  "missing_pincode_count": 94,
+  "missing_pincode_count": 92,
   "missing_pincode_ids": [
     "2026_DGPCS_542746_1",
     "2026_DGPCS_543057_1",
-    "2026_DGPCS_543069_1",
     "2026_MKVVC_542965_1",
     "2026_MPFD_542421_1",
     "2026_MPPGC_526128_1",
@@ -1223,7 +1222,6 @@
     "2026_MPSAM_542096_1",
     "2026_MPSAM_542237_1",
     "2026_MPSAM_542238_1",
-    "2026_MPTB_536176_1",
     "2026_NDVSU_542754_1",
     "2026_NDVSU_542856_1",
     "2026_PWDRB_523842_1",
