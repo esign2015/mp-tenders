@@ -1,5 +1,6 @@
 from portal_fee_exceptions import verified_fee_omission
 from telegram_text import HINDI_DISCLAIMER
+from district_mapping import resolve_district
 import csv
 import json
 import os
@@ -246,6 +247,25 @@ def closing_sort_key(row):
     return (0, dt)
 
 
+def report_location(row):
+    """Use saved geography, falling back to the dashboard's district mapping."""
+    missing = {"", "-", "na", "n/a", "none", "null", "checking"}
+    district = strip_brackets(row.get("District"))
+    if district.casefold() in missing:
+        district = resolve_district(row)
+    pin = strip_brackets(row.get("Pincode"))
+    if not re.fullmatch(r"[1-9]\d{5}", pin):
+        pin = ""
+    return district, pin
+
+
+def district_pincode_sort_key(row):
+    """District A-Z, PIN ascending, then exact closing time and Tender ID."""
+    district, pin = report_location(row)
+    return (not bool(district), district.casefold(), not bool(pin), pin,
+            closing_sort_key(row), clean(row.get("Tender ID")))
+
+
 def telegram_message(token, chat_id, text):
     data = parse.urlencode({
         "chat_id": chat_id,
@@ -292,7 +312,7 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
     path = Path(filename)
     if total_available is None:
         total_available = len(rows)
-    report_scope = f"Total Records: {len(rows)} out of {total_available} • Filter: {filter_detail}"
+    report_scope = f"Total Records: {len(rows)} out of {total_available} • Filter: {filter_detail} • Sort: District / PIN Code / Closing Time"
     styles = getSampleStyleSheet()
     cell = ParagraphStyle(
         "cell", parent=styles["Normal"], fontName="Helvetica",
@@ -330,19 +350,22 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
     header_style = ParagraphStyle("table_header", parent=center, fontName="Helvetica-Bold",
                                   fontSize=7.5, leading=9, textColor=colors.white)
     header = [Paragraph(label, header_style) for label in (
-        "S.No.", "Tender ID", "Closing Date", "Title", "Ref.No.", "PAC Amount",
+        "No.", "Tender ID", "District", "PIN Code", "Closing Date", "Title", "Ref.No.", "PAC Amount",
         "EMD Fee", "Form Fee", "Processing Fee", "Total Fee<br/>(EMD + Form + Processing)"
     )]
-    # Keep the PDF in exact Closing Date + Closing Time order.
+    # Group every report by District and PIN, with closing time within each PIN.
     # LongTable automatically fills each page with as many complete rows as
     # fit. There is deliberately NO fixed 15-row page limit.
-    rows = sorted(rows, key=closing_sort_key)
+    rows = sorted(rows, key=district_pincode_sort_key)
 
     data = [header]
     for offset, row in enumerate(rows, 1):
+        district, pin = report_location(row)
         data.append([
             Paragraph(str(offset), center),
             Paragraph(escape(strip_brackets(row.get("Tender ID"))), cell),
+            Paragraph(escape(district) or "-", cell),
+            Paragraph(pin or "-", center),
             Paragraph(clean(row.get("Closing Date")), center),
             Paragraph(escape(strip_brackets(row.get("Title"))), cell),
             Paragraph(escape(valid_reference(row.get("Reference Number"))) or "-", cell),
@@ -355,7 +378,7 @@ def make_pdf(rows, filename, report_title, total_available=None, filter_detail="
 
     table = LongTable(
         data,
-        colWidths=[30, 125, 105, 290, 175, 74, 74, 74, 80, 85],
+        colWidths=[28, 112, 80, 60, 98, 224, 140, 80, 70, 70, 78, 100],
         repeatRows=1,
         splitByRow=1,
         splitInRow=0,
@@ -501,7 +524,7 @@ def main():
     else:
         selected = [r for r in rows if is_on_date(r.get("Published Date"), today)]
         label, english = "आज प्रकाशित नए टेंडर", "New Published Today"
-    selected = sorted(selected, key=closing_sort_key)
+    selected = sorted(selected, key=district_pincode_sort_key)
     result = os.getenv("MORNING_EXTRACTION_RESULT", "")
     fallback_note = ""
     if mode != "manual" and result and result != "success":
