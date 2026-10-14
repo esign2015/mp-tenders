@@ -1,59 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-14T20:57:33.151531+05:30",
+  "snapshot_at": "2026-10-14T21:48:04.263475+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
-  "previous_tender_count": 4832,
+  "previous_tender_count": 4843,
   "current_tender_count": 4843,
-  "organisations_with_changes": 4,
-  "organisations_with_new_tenders": 3,
-  "new_tender_count": 11,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 193,
-      "Current Tender Count": 198,
-      "Count Difference": 5,
-      "New Tender Count": 5,
-      "New Tender IDs": [
-        "2026_MPPGC_520029_1",
-        "2026_MPPGC_522061_1",
-        "2026_MPPGC_532592_1",
-        "2026_MPPGC_533713_1",
-        "2026_MPPGC_539074_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 43,
-      "Current Tender Count": 46,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_MKVVC_529518_1",
-        "2026_MKVVC_537890_1",
-        "2026_MKVVC_543235_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2677,
-      "Current Tender Count": 2679,
-      "Count Difference": 2,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_UAD_509188_5",
-        "2026_UAD_543253_1",
-        "2026_UAD_543259_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Housing and Infrastructure Development Board",
-      "Previous Tender Count": 5,
-      "Current Tender Count": 6,
-      "Count Difference": 1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
