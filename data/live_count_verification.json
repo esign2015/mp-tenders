@@ -1,12 +1,12 @@
 {
   "status": "verified",
-  "checked_at": "2026-10-14T18:52:33.717532+05:30",
+  "checked_at": "2026-10-14T19:07:20.040416+05:30",
   "snapshot_at": "2026-10-14T13:00:44.044165+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 4832,
   "verified_unique_ids": 4832,
-  "dashboard_live_count": 4832,
-  "closed_or_cancelled_count": 0,
+  "dashboard_live_count": 4831,
+  "closed_or_cancelled_count": 1,
   "excluded_master_only_live_count": 6,
   "excluded_master_only_live_ids": [
     "2026_MPRDC_534687_2",
