@@ -1,9 +1,6 @@
 name: MP Tenders — Admin Manual Telegram PDF
 
 on:
-  push:
-    branches: [main]
-    paths: [.github/workflows/telegram_manual_pdf.yml]
   workflow_dispatch:
     inputs:
       report:
@@ -33,7 +30,6 @@ concurrency:
 
 jobs:
   send-manual-pdf:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[send-closing-tomorrow]')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -55,15 +51,15 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NOTIFY_MODE: manual
-          MANUAL_REPORT: ${{ inputs.report || 'closing_tomorrow' }}
-          MANUAL_VIEW: ${{ inputs.view || 'table' }}
+          MANUAL_REPORT: ${{ inputs.report }}
+          MANUAL_VIEW: ${{ inputs.view }}
         run: python backend/telegram_alerts.py
 
       - name: Record manual Telegram delivery
         if: always()
         env:
-          REPORT: ${{ inputs.report || 'closing_tomorrow' }}
-          VIEW: ${{ inputs.view || 'table' }}
+          REPORT: ${{ inputs.report }}
+          VIEW: ${{ inputs.view }}
           JOB_STATUS: ${{ job.status }}
         run: |
           python - <<'PY'
