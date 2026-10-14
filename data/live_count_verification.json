@@ -1,35 +1,21 @@
 {
-  "status": "verified",
-  "checked_at": "2026-10-14T20:57:07.957129+05:30",
-  "snapshot_at": "2026-10-14T13:00:44.044165+00:00",
+  "status": "mismatch",
+  "checked_at": "2026-10-14T20:58:53.808657+05:30",
+  "snapshot_at": "2026-10-14T14:36:55.663665+00:00",
   "inventory_source": "copied-list",
-  "portal_tender_count": 4832,
-  "verified_unique_ids": 4832,
-  "dashboard_live_count": 4831,
-  "closed_or_cancelled_count": 1,
-  "excluded_master_only_live_count": 17,
-  "excluded_master_only_live_ids": [
-    "2026_MKVVC_529518_1",
-    "2026_MKVVC_537890_1",
-    "2026_MKVVC_543235_1",
-    "2026_MPPGC_520029_1",
-    "2026_MPPGC_522061_1",
-    "2026_MPPGC_532592_1",
-    "2026_MPPGC_533713_1",
-    "2026_MPPGC_539074_1",
-    "2026_MPRDC_534687_2",
-    "2026_MPRDC_534687_4",
-    "2026_PHED_541663_1",
-    "2026_PWDRB_541433_1",
-    "2026_UAD_509188_5",
-    "2026_UAD_540773_1",
-    "2026_UAD_542656_1",
-    "2026_UAD_543253_1",
-    "2026_UAD_543259_1"
-  ],
+  "portal_tender_count": 4843,
+  "verified_unique_ids": 4843,
+  "dashboard_live_count": 4842,
+  "closed_or_cancelled_count": 0,
+  "excluded_master_only_live_count": 0,
+  "excluded_master_only_live_ids": [],
   "missing_ids": [],
-  "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "invalid_closing_ids": [
+    "2026_MPHID_542252_1"
+  ],
+  "errors": [
+    "Verified Tender IDs have missing or invalid closing dates"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
