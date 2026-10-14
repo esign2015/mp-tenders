@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-14T15:06:33.265704+05:30",
+    "checked_at": "2026-10-14T15:08:40.156441+05:30",
     "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5171,
@@ -21,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-14T09:36:34.595793+00:00",
+  "updated_at": "2026-10-14T09:38:41.651427+00:00",
   "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5171,
   "copied_tenders": 5171,
-  "detail_complete": 5138,
+  "detail_complete": 5160,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 33,
+  "detail_pending": 11,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -268,10 +268,10 @@
       "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
       "portal_tender_count": 2811,
       "copied_tenders": 2811,
-      "detail_complete": 2791,
+      "detail_complete": 2811,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 20
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -455,10 +455,10 @@
       "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 42,
+      "detail_complete": 43,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -994,10 +994,10 @@
       "snapshot_at": "2026-10-14T08:52:47.951080+00:00",
       "portal_tender_count": 448,
       "copied_tenders": 448,
-      "detail_complete": 447,
+      "detail_complete": 448,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1112,56 +1112,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 9,
-  "missing_district_count": 22,
-  "missing_district_ids": [
-    "2026_MKVVC_542965_1",
-    "2026_PWDRB_542059_1",
-    "2026_UAD_542040_1",
-    "2026_UAD_542041_1",
-    "2026_UAD_542042_1",
-    "2026_UAD_542043_1",
-    "2026_UAD_542472_1",
-    "2026_UAD_542474_1",
-    "2026_UAD_542777_1",
-    "2026_UAD_542778_1",
-    "2026_UAD_542780_1",
-    "2026_UAD_542781_1",
-    "2026_UAD_542842_1",
-    "2026_UAD_542848_1",
-    "2026_UAD_542855_1",
-    "2026_UAD_542867_1",
-    "2026_UAD_542870_1",
-    "2026_UAD_542877_1",
-    "2026_UAD_542932_1",
-    "2026_UAD_542971_1",
-    "2026_UAD_542972_1",
-    "2026_UAD_542995_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 362,
   "department_count": 296,
-  "missing_pincode_count": 22,
-  "missing_pincode_ids": [
-    "2026_MKVVC_542965_1",
-    "2026_PWDRB_542059_1",
-    "2026_UAD_542040_1",
-    "2026_UAD_542041_1",
-    "2026_UAD_542042_1",
-    "2026_UAD_542043_1",
-    "2026_UAD_542472_1",
-    "2026_UAD_542474_1",
-    "2026_UAD_542777_1",
-    "2026_UAD_542778_1",
-    "2026_UAD_542780_1",
-    "2026_UAD_542781_1",
-    "2026_UAD_542842_1",
-    "2026_UAD_542848_1",
-    "2026_UAD_542855_1",
-    "2026_UAD_542867_1",
-    "2026_UAD_542870_1",
-    "2026_UAD_542877_1",
-    "2026_UAD_542932_1",
-    "2026_UAD_542971_1",
-    "2026_UAD_542972_1",
-    "2026_UAD_542995_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
