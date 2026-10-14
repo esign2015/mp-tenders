@@ -23,6 +23,37 @@ def write_csv(path, rows):
 
 
 class TelegramPdfTests(unittest.TestCase):
+    def test_location_columns_and_order_in_all_three_reports(self):
+        rows = [
+            {'Tender ID': 'ujjain', 'District': 'Ujjain', 'Pincode': '456010'},
+            {'Tender ID': 'pin-high', 'District': 'Dewas', 'Pincode': '455221'},
+            {'Tender ID': 'close-late', 'District': 'dewas', 'Pincode': '455001', 'Closing Date': '02-Jan-2099 06:00 PM'},
+            {'Tender ID': 'unknown'},
+            {'Tender ID': 'dewas-early', 'District': 'Dewas', 'Pincode': '455001'},
+            {'Tender ID': 'dewas-no-pin', 'District': 'Dewas', 'Pincode': 'NA'},
+        ]
+        for row in rows:
+            row.setdefault('Closing Date', '01-Jan-2099 06:00 PM')
+            row['Title'] = 'Tender work with materials & installation'
+        expected = ['dewas-early', 'close-late', 'pin-high', 'dewas-no-pin', 'ujjain', 'unknown']
+        self.assertEqual([row['Tender ID'] for row in sorted(rows, key=alerts.district_pincode_sort_key)], expected)
+        with tempfile.TemporaryDirectory() as temporary:
+            for title in ('Closing Today', 'Closing Tomorrow', 'New Published Today'):
+                with self.subTest(report=title):
+                    path = alerts.make_pdf(rows, str(Path(temporary)/'report.pdf'), title, filter_live=False)
+                    reader = PdfReader(path)
+                    text = '\n'.join(page.extract_text() for page in reader.pages)
+                    self.assertIn('District', text)
+                    self.assertIn('PIN Code', text)
+                    self.assertIn('455001', text)
+                    self.assertIn('455221', text)
+                    self.assertIn('456010', text)
+                    positions = [text.index(tid) for tid in expected]
+                    self.assertEqual(positions, sorted(positions))
+                    for tid in expected:
+                        self.assertEqual(text.count(tid), 1)
+        self.assertEqual(alerts.report_location({'Pincode': '456010'}), ('Ujjain', '456010'))
+
     def test_compact_ads_on_odd_and_last_pages_without_extra_page(self):
         for count in (0,1,40,100):
             with self.subTest(count=count),tempfile.TemporaryDirectory() as temporary:
