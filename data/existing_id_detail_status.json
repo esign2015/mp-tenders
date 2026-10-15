@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "38663377684",
-  "github_run_number": "96",
-  "github_commit_sha": "c723f6ee95574b495c3e28226a785b2b8f9f1686",
-  "batch_size": 500,
-  "total_csv_ids": 4843,
-  "current_portal_ids": 4843,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
-  "batch_attempted": 2,
-  "batch_complete": 0,
-  "started_at": "2026-10-15T01:02:30.765068+00:00",
-  "success": 4834,
-  "failed": 2,
+  "status": "running",
+  "github_run_id": "38684768439",
+  "github_run_number": "72",
+  "github_commit_sha": "f79be3db1e3988fd37269ca9d04b83382fa79424",
+  "batch_size": 0,
+  "total_csv_ids": 4849,
+  "current_portal_ids": 4849,
+  "initial_incomplete": 27,
+  "batch_targets": 27,
+  "batch_attempted": 21,
+  "batch_complete": 21,
+  "started_at": "2026-10-15T05:04:33.266061+00:00",
+  "success": 4840,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_291118_2",
     "2023_UAD_305223_2",
@@ -354,6 +354,7 @@
     "2026_HED_541994_1",
     "2026_HED_542420_1",
     "2026_HED_542467_1",
+    "2026_HED_543107_1",
     "2026_HEKTT_535072_1",
     "2026_HEKTT_535194_1",
     "2026_HSZHC_540330_1",
@@ -833,6 +834,7 @@
     "2026_MPPHC_542950_1",
     "2026_MPPHC_542951_1",
     "2026_MPPHC_543232_1",
+    "2026_MPPHC_543250_1",
     "2026_MPPKV_527674_1",
     "2026_MPPKV_529178_1",
     "2026_MPPKV_532525_2",
@@ -1979,6 +1981,7 @@
     "2026_REDU_538886_1",
     "2026_RES_528740_1",
     "2026_RES_532094_1",
+    "2026_RES_532227_1",
     "2026_RES_536562_1",
     "2026_RES_537827_1",
     "2026_RES_538115_1",
@@ -2079,6 +2082,7 @@
     "2026_RSK_542894_1",
     "2026_RSK_542947_1",
     "2026_RUMSL_528528_1",
+    "2026_RUMSL_543282_1",
     "2026_RVSKV_538917_1",
     "2026_RVSKV_538918_1",
     "2026_RVSKV_538919_1",
@@ -4770,6 +4774,7 @@
     "2026_UAD_542902_1",
     "2026_UAD_542913_1",
     "2026_UAD_542914_1",
+    "2026_UAD_542920_1",
     "2026_UAD_542932_1",
     "2026_UAD_542933_1",
     "2026_UAD_542936_1",
@@ -4802,6 +4807,7 @@
     "2026_UAD_543100_1",
     "2026_UAD_543101_1",
     "2026_UAD_543119_1",
+    "2026_UAD_543121_1",
     "2026_UAD_543127_1",
     "2026_UAD_543131_1",
     "2026_UAD_543138_1",
@@ -4849,32 +4855,20 @@
     "2026_WRD_541492_1",
     "2026_WRD_541524_1"
   ],
-  "failed_ids": [
-    "2025_PSNSU_454220_3",
-    "2026_PSNSU_540805_1"
-  ],
+  "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [
     "2025_MPPGC_463842_2",
+    "2025_PSNSU_454220_3",
     "2025_WRD_461722_1",
     "2026_MPPGC_529001_1",
     "2026_MPPGC_529286_1",
     "2026_MPPGC_533370_1",
     "2026_MPPKV_533742_1",
-    "2026_MPPTC_529679_1"
+    "2026_MPPTC_529679_1",
+    "2026_PSNSU_540805_1"
   ],
-  "last_successful_tender_id": "",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_540805_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2025_PSNSU_454220_3",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-10-15T01:03:08.657895+00:00"
+  "last_successful_tender_id": "2026_UAD_542778_1",
+  "errors": [],
+  "updated_at": "2026-10-15T05:06:28.643554+00:00"
 }
