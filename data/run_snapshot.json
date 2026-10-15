@@ -1,20 +1,14 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-15T14:28:20.411494+05:30",
-  "portal_organisation_count": 100,
-  "portal_tender_count": 5066,
-  "copied_unique_tender_ids": 5066,
+  "snapshot_at": "2026-10-15T15:39:54.599489+05:30",
+  "portal_organisation_count": 98,
+  "portal_tender_count": 5053,
+  "copied_unique_tender_ids": 5053,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 1,
-  "recovery_log": [
-    {
-      "Tender ID": "2026_EXCIS_542806_1",
-      "Organisation Name": "Excise Department",
-      "Source": "RSP Tender ID recovery only"
-    }
-  ],
+  "recovered_from_rsp_id_only": 0,
+  "recovery_log": [],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": true
+  "rsp_fallback_used": false
 }
