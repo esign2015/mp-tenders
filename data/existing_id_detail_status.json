@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "38684768439",
-  "github_run_number": "72",
+  "status": "running",
+  "github_run_id": "38689817648",
+  "github_run_number": "97",
   "github_commit_sha": "f79be3db1e3988fd37269ca9d04b83382fa79424",
-  "batch_size": 0,
-  "total_csv_ids": 4849,
-  "current_portal_ids": 4849,
-  "initial_incomplete": 27,
-  "batch_targets": 27,
-  "batch_attempted": 27,
-  "batch_complete": 27,
-  "started_at": "2026-10-15T05:04:33.266061+00:00",
-  "success": 4840,
+  "batch_size": 500,
+  "total_csv_ids": 4859,
+  "current_portal_ids": 4859,
+  "initial_incomplete": 30,
+  "batch_targets": 30,
+  "batch_attempted": 13,
+  "batch_complete": 11,
+  "started_at": "2026-10-15T06:00:22.570128+00:00",
+  "success": 4850,
   "failed": 0,
   "success_ids": [
     "2023_UAD_291118_2",
@@ -4796,6 +4796,7 @@
     "2026_UAD_543003_1",
     "2026_UAD_543004_1",
     "2026_UAD_543018_1",
+    "2026_UAD_543043_1",
     "2026_UAD_543045_1",
     "2026_UAD_543053_1",
     "2026_UAD_543062_1",
@@ -4818,11 +4819,20 @@
     "2026_UAD_543170_1",
     "2026_UAD_543171_1",
     "2026_UAD_543187_1",
+    "2026_UAD_543189_1",
+    "2026_UAD_543191_1",
+    "2026_UAD_543194_1",
+    "2026_UAD_543195_1",
+    "2026_UAD_543197_1",
+    "2026_UAD_543199_1",
+    "2026_UAD_543200_1",
+    "2026_UAD_543201_1",
     "2026_UAD_543215_1",
     "2026_UAD_543223_1",
     "2026_UAD_543227_1",
     "2026_UAD_543253_1",
     "2026_UAD_543259_1",
+    "2026_UAD_543304_1",
     "2026_WRD_485735_1",
     "2026_WRD_517082_1",
     "2026_WRD_517083_1",
@@ -4868,7 +4878,18 @@
     "2026_MPPTC_529679_1",
     "2026_PSNSU_540805_1"
   ],
-  "last_successful_tender_id": "2026_MPPKV_543114_1",
-  "errors": [],
-  "updated_at": "2026-10-15T05:06:59.607888+00:00"
+  "last_successful_tender_id": "2026_UAD_523405_3",
+  "errors": [
+    {
+      "Tender ID": "2026_PSNSU_540805_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_PSNSU_454220_3",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-10-15T06:02:19.801020+00:00"
 }
