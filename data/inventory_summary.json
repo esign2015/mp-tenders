@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-15T20:14:35.837973+05:30",
+    "checked_at": "2026-10-15T20:17:21.361935+05:30",
     "snapshot_at": "2026-10-15T14:18:18.086771+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5128,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-15T14:44:37.262781+00:00",
+  "updated_at": "2026-10-15T14:47:22.828903+00:00",
   "snapshot_at": "2026-10-15T14:18:18.086771+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5128,
   "copied_tenders": 5128,
-  "detail_complete": 5099,
-  "detail_failed": 2,
+  "detail_complete": 5107,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 27,
+  "detail_pending": 21,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -264,10 +264,10 @@
       "snapshot_at": "2026-10-15T14:18:18.086771+00:00",
       "portal_tender_count": 2797,
       "copied_tenders": 2797,
-      "detail_complete": 2791,
+      "detail_complete": 2793,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 4
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -495,10 +495,10 @@
       "snapshot_at": "2026-10-15T14:18:18.086771+00:00",
       "portal_tender_count": 219,
       "copied_tenders": 219,
-      "detail_complete": 215,
+      "detail_complete": 216,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 3
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -715,10 +715,10 @@
       "snapshot_at": "2026-10-15T14:18:18.086771+00:00",
       "portal_tender_count": 98,
       "copied_tenders": 98,
-      "detail_complete": 93,
+      "detail_complete": 98,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -969,9 +969,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1108,17 +1108,11 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 5,
-  "missing_district_count": 22,
+  "missing_district_count": 14,
   "missing_district_ids": [
     "2026_DTCP_543606_1",
     "2026_DTCP_543650_1",
-    "2026_MPPGC_535346_1",
     "2026_MPPGC_542788_1",
-    "2026_MPPHC_542719_1",
-    "2026_MPPHC_542724_1",
-    "2026_MPPHC_542725_1",
-    "2026_MPPHC_542726_1",
-    "2026_MPPHC_542727_1",
     "2026_MPSID_543638_1",
     "2026_PWDRB_543414_1",
     "2026_PWDRB_543415_1",
@@ -1127,25 +1121,17 @@
     "2026_PWDRB_543579_1",
     "2026_PWDRB_543580_1",
     "2026_UAD_543404_1",
-    "2026_UAD_543547_1",
-    "2026_UAD_543577_1",
     "2026_UAD_543586_1",
     "2026_UAD_543608_1",
     "2026_UAD_543639_1"
   ],
   "known_pincode_count": 361,
   "department_count": 286,
-  "missing_pincode_count": 22,
+  "missing_pincode_count": 14,
   "missing_pincode_ids": [
     "2026_DTCP_543606_1",
     "2026_DTCP_543650_1",
-    "2026_MPPGC_535346_1",
     "2026_MPPGC_542788_1",
-    "2026_MPPHC_542719_1",
-    "2026_MPPHC_542724_1",
-    "2026_MPPHC_542725_1",
-    "2026_MPPHC_542726_1",
-    "2026_MPPHC_542727_1",
     "2026_MPSID_543638_1",
     "2026_PWDRB_543414_1",
     "2026_PWDRB_543415_1",
@@ -1154,8 +1140,6 @@
     "2026_PWDRB_543579_1",
     "2026_PWDRB_543580_1",
     "2026_UAD_543404_1",
-    "2026_UAD_543547_1",
-    "2026_UAD_543577_1",
     "2026_UAD_543586_1",
     "2026_UAD_543608_1",
     "2026_UAD_543639_1"
