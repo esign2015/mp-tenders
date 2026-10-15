@@ -1,89 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-15T20:14:01.743667+05:30",
+  "snapshot_at": "2026-10-15T23:12:55.377425+05:30",
   "previous_organisation_count": 98,
   "current_organisation_count": 98,
-  "previous_tender_count": 5108,
+  "previous_tender_count": 5128,
   "current_tender_count": 5128,
-  "organisations_with_changes": 6,
-  "organisations_with_new_tenders": 6,
-  "new_tender_count": 22,
-  "changes": [
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 422,
-      "Current Tender Count": 428,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_PWDRB_543414_1",
-        "2026_PWDRB_543415_1",
-        "2026_PWDRB_543416_1",
-        "2026_PWDRB_543417_1",
-        "2026_PWDRB_543579_1",
-        "2026_PWDRB_543580_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2793,
-      "Current Tender Count": 2797,
-      "Count Difference": 4,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_UAD_543404_1",
-        "2026_UAD_543547_1",
-        "2026_UAD_543577_1",
-        "2026_UAD_543586_1",
-        "2026_UAD_543608_1",
-        "2026_UAD_543639_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
-      "Previous Tender Count": 93,
-      "Current Tender Count": 98,
-      "Count Difference": 5,
-      "New Tender Count": 5,
-      "New Tender IDs": [
-        "2026_MPPHC_542719_1",
-        "2026_MPPHC_542724_1",
-        "2026_MPPHC_542725_1",
-        "2026_MPPHC_542726_1",
-        "2026_MPPHC_542727_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 25,
-      "Current Tender Count": 27,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_DTCP_543606_1",
-        "2026_DTCP_543650_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 217,
-      "Current Tender Count": 219,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_MPPGC_535346_1",
-        "2026_MPPGC_542788_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Industrial Development Corporation Limited",
-      "Previous Tender Count": 2,
-      "Current Tender Count": 3,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPSID_543638_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
