@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-15T14:41:47.382907+05:30",
+    "checked_at": "2026-10-15T14:43:52.341710+05:30",
     "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5066,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-15T09:11:48.359416+00:00",
+  "updated_at": "2026-10-15T09:13:53.087408+00:00",
   "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
   "organisation_count": 100,
   "portal_tender_count": 5066,
   "copied_tenders": 5066,
-  "detail_complete": 5012,
+  "detail_complete": 5040,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 54,
+  "detail_pending": 26,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -135,10 +135,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 50,
       "copied_tenders": 50,
-      "detail_complete": 47,
+      "detail_complete": 50,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -223,10 +223,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Town And Country Planning",
@@ -256,10 +256,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
-      "detail_complete": 5,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Urban Administration and Development",
@@ -267,10 +267,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 2811,
       "copied_tenders": 2811,
-      "detail_complete": 2784,
+      "detail_complete": 2795,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 16
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -509,10 +509,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 213,
       "copied_tenders": 213,
-      "detail_complete": 208,
+      "detail_complete": 209,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -729,10 +729,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 93,
       "copied_tenders": 93,
-      "detail_complete": 91,
+      "detail_complete": 93,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -817,10 +817,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P.State Minor Forest Produce Cooperative Federation Limited",
@@ -894,10 +894,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Warehousing and Logistics Corporation",
@@ -905,10 +905,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
@@ -916,10 +916,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 13,
       "copied_tenders": 13,
-      "detail_complete": 12,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Narmada Valley Development Authority",
@@ -1015,10 +1015,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 448,
       "copied_tenders": 448,
-      "detail_complete": 445,
+      "detail_complete": 448,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1037,10 +1037,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 34,
       "copied_tenders": 34,
-      "detail_complete": 33,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rani Awantibai Lodhi Vishwavidhyalaya -Sagar",
@@ -1059,10 +1059,10 @@
       "snapshot_at": "2026-10-15T08:27:57.568867+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rural Engineering Service",
@@ -1133,102 +1133,46 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 7,
-  "missing_district_count": 45,
+  "missing_district_count": 17,
   "missing_district_ids": [
-    "2026_DHS_538203_1",
-    "2026_DHS_541976_1",
-    "2026_DHS_542407_1",
-    "2026_DSYW_543283_1",
-    "2026_DTE_543080_1",
-    "2026_MLPDC_543160_1",
-    "2026_MPPGC_539366_1",
-    "2026_MPPHC_543251_1",
-    "2026_MPPHC_543252_1",
     "2026_MPUDC_542691_1",
-    "2026_MPVS_542825_1",
-    "2026_MPWLC_543281_1",
-    "2026_NDVSU_543313_1",
-    "2026_PWDRB_543075_1",
-    "2026_PWDRB_543176_1",
-    "2026_PWDRB_543178_1",
-    "2026_RSK_542038_1",
-    "2026_RUMSL_543263_1",
     "2026_UAD_542415_1",
     "2026_UAD_542415_2",
     "2026_UAD_542415_3",
-    "2026_UAD_542915_1",
-    "2026_UAD_542918_1",
-    "2026_UAD_542994_1",
     "2026_UAD_543066_1",
     "2026_UAD_543071_1",
-    "2026_UAD_543090_1",
     "2026_UAD_543093_1",
     "2026_UAD_543095_1",
     "2026_UAD_543104_1",
     "2026_UAD_543116_1",
     "2026_UAD_543117_1",
-    "2026_UAD_543123_1",
     "2026_UAD_543130_1",
     "2026_UAD_543133_1",
     "2026_UAD_543134_1",
     "2026_UAD_543135_1",
     "2026_UAD_543156_1",
-    "2026_UAD_543166_1",
-    "2026_UAD_543192_1",
-    "2026_UAD_543198_1",
-    "2026_UAD_543300_1",
-    "2026_UAD_543301_1",
-    "2026_UAD_543310_1",
-    "2026_UAD_543409_1"
+    "2026_UAD_543301_1"
   ],
-  "known_pincode_count": 364,
+  "known_pincode_count": 367,
   "department_count": 299,
-  "missing_pincode_count": 45,
+  "missing_pincode_count": 17,
   "missing_pincode_ids": [
-    "2026_DHS_538203_1",
-    "2026_DHS_541976_1",
-    "2026_DHS_542407_1",
-    "2026_DSYW_543283_1",
-    "2026_DTE_543080_1",
-    "2026_MLPDC_543160_1",
-    "2026_MPPGC_539366_1",
-    "2026_MPPHC_543251_1",
-    "2026_MPPHC_543252_1",
     "2026_MPUDC_542691_1",
-    "2026_MPVS_542825_1",
-    "2026_MPWLC_543281_1",
-    "2026_NDVSU_543313_1",
-    "2026_PWDRB_543075_1",
-    "2026_PWDRB_543176_1",
-    "2026_PWDRB_543178_1",
-    "2026_RSK_542038_1",
-    "2026_RUMSL_543263_1",
     "2026_UAD_542415_1",
     "2026_UAD_542415_2",
     "2026_UAD_542415_3",
-    "2026_UAD_542915_1",
-    "2026_UAD_542918_1",
-    "2026_UAD_542994_1",
     "2026_UAD_543066_1",
     "2026_UAD_543071_1",
-    "2026_UAD_543090_1",
     "2026_UAD_543093_1",
     "2026_UAD_543095_1",
     "2026_UAD_543104_1",
     "2026_UAD_543116_1",
     "2026_UAD_543117_1",
-    "2026_UAD_543123_1",
     "2026_UAD_543130_1",
     "2026_UAD_543133_1",
     "2026_UAD_543134_1",
     "2026_UAD_543135_1",
     "2026_UAD_543156_1",
-    "2026_UAD_543166_1",
-    "2026_UAD_543192_1",
-    "2026_UAD_543198_1",
-    "2026_UAD_543300_1",
-    "2026_UAD_543301_1",
-    "2026_UAD_543310_1",
-    "2026_UAD_543409_1"
+    "2026_UAD_543301_1"
   ]
 }
