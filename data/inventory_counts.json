@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-16T20:02:06.762542+05:30",
+    "checked_at": "2026-10-16T20:04:14.194828+05:30",
     "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5256,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-16T14:32:08.407008+00:00",
+  "updated_at": "2026-10-16T14:34:15.419242+00:00",
   "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5256,
   "copied_tenders": 5256,
-  "detail_complete": 5233,
+  "detail_complete": 5249,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 23,
+  "detail_pending": 7,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -253,10 +253,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 2760,
       "copied_tenders": 2760,
-      "detail_complete": 2748,
+      "detail_complete": 2759,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -484,10 +484,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 45,
       "copied_tenders": 45,
-      "detail_complete": 44,
+      "detail_complete": 45,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -495,10 +495,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 232,
       "copied_tenders": 232,
-      "detail_complete": 229,
+      "detail_complete": 230,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -715,10 +715,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 110,
       "copied_tenders": 110,
-      "detail_complete": 109,
+      "detail_complete": 110,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -726,10 +726,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 42,
       "copied_tenders": 42,
-      "detail_complete": 40,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -847,10 +847,10 @@
       "snapshot_at": "2026-10-16T14:07:44.504620+00:00",
       "portal_tender_count": 15,
       "copied_tenders": 15,
-      "detail_complete": 14,
+      "detail_complete": 15,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Textbook Corporation - Bhopal",
@@ -1086,46 +1086,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 17,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MPPGC_543658_1",
-    "2026_MPPHC_543869_1",
-    "2026_MPPTC_543673_1",
-    "2026_PKVVC_543410_1",
-    "2026_STDC_543595_1",
-    "2026_UAD_543582_1",
-    "2026_UAD_543585_1",
-    "2026_UAD_543619_1",
-    "2026_UAD_543852_1",
-    "2026_UAD_543857_1",
-    "2026_UAD_543868_1",
-    "2026_UAD_543871_1",
-    "2026_UAD_543878_1",
-    "2026_UAD_543887_1",
-    "2026_UAD_543902_1",
-    "2026_UAD_543904_1",
-    "2026_UAD_543928_1"
+    "2026_UAD_543585_1"
   ],
-  "known_pincode_count": 369,
+  "known_pincode_count": 370,
   "department_count": 291,
-  "missing_pincode_count": 17,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_MPPGC_543658_1",
-    "2026_MPPHC_543869_1",
-    "2026_MPPTC_543673_1",
-    "2026_PKVVC_543410_1",
-    "2026_STDC_543595_1",
-    "2026_UAD_543582_1",
-    "2026_UAD_543585_1",
-    "2026_UAD_543619_1",
-    "2026_UAD_543852_1",
-    "2026_UAD_543857_1",
-    "2026_UAD_543868_1",
-    "2026_UAD_543871_1",
-    "2026_UAD_543878_1",
-    "2026_UAD_543887_1",
-    "2026_UAD_543902_1",
-    "2026_UAD_543904_1",
-    "2026_UAD_543928_1"
+    "2026_UAD_543585_1"
   ]
 }
