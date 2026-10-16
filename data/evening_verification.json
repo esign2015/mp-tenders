@@ -1,6 +1,6 @@
 {
   "status": "verified",
-  "verified_at": "2026-10-16T23:29:30.769623+05:30",
+  "verified_at": "2026-10-16T23:31:42.948221+05:30",
   "portal_organisation_count": 96,
   "portal_tender_count": 5256,
   "copied_unique_tender_ids": 5256,
@@ -13,9 +13,9 @@
   "past_closing_tender_ids": [],
   "expired_candidates_not_in_portal": 0,
   "detail_success": 5250,
-  "detail_failed": 3,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 6,
   "organisation_count_mismatches": 0,
   "organisation_mismatches": [],
   "counts_match": true
