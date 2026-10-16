@@ -2,16 +2,17 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-16T14:30:06.831118+05:30",
+    "checked_at": "2026-10-16T14:30:52.298417+05:30",
     "snapshot_at": "2026-10-16T08:20:56.328639+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5342,
     "verified_unique_ids": 5342,
     "dashboard_live_count": 5342,
     "closed_or_cancelled_count": 0,
-    "excluded_master_only_live_count": 1,
+    "excluded_master_only_live_count": 2,
     "excluded_master_only_live_ids": [
-      "2026_UAD_542024_28"
+      "2026_UAD_542024_28",
+      "2026_UAD_543664_1"
     ],
     "missing_ids": [],
     "invalid_closing_ids": [],
@@ -19,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-16T09:00:08.374387+00:00",
+  "updated_at": "2026-10-16T09:00:53.674120+00:00",
   "snapshot_at": "2026-10-16T08:20:56.328639+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5342,
   "copied_tenders": 5342,
-  "detail_complete": 5218,
+  "detail_complete": 5221,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 124,
+  "detail_pending": 121,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -1058,10 +1059,10 @@
       "snapshot_at": "2026-10-16T08:20:56.328639+00:00",
       "portal_tender_count": 163,
       "copied_tenders": 163,
-      "detail_complete": 127,
+      "detail_complete": 130,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 36
+      "detail_pending": 33
     },
     {
       "organisation": "SANT SHIROMANI RAVIDAS GLOBAL SKILLS PARK - BHOPAL",
@@ -1110,7 +1111,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 4,
-  "missing_district_count": 118,
+  "missing_district_count": 115,
   "missing_district_ids": [
     "2026_DAVV_542426_1",
     "2026_DAVV_543047_1",
@@ -1152,12 +1153,9 @@
     "2026_RES_540127_1",
     "2026_RES_540129_1",
     "2026_RES_540131_1",
-    "2026_RES_540132_1",
     "2026_RES_540134_1",
     "2026_RES_540135_1",
     "2026_RES_540137_1",
-    "2026_RES_540138_1",
-    "2026_RES_540140_1",
     "2026_RES_540142_1",
     "2026_RES_540143_1",
     "2026_RES_540229_1",
@@ -1231,9 +1229,9 @@
     "2026_WRD_539758_1",
     "2026_WRD_539760_1"
   ],
-  "known_pincode_count": 366,
+  "known_pincode_count": 367,
   "department_count": 291,
-  "missing_pincode_count": 118,
+  "missing_pincode_count": 115,
   "missing_pincode_ids": [
     "2026_DAVV_542426_1",
     "2026_DAVV_543047_1",
@@ -1275,12 +1273,9 @@
     "2026_RES_540127_1",
     "2026_RES_540129_1",
     "2026_RES_540131_1",
-    "2026_RES_540132_1",
     "2026_RES_540134_1",
     "2026_RES_540135_1",
     "2026_RES_540137_1",
-    "2026_RES_540138_1",
-    "2026_RES_540140_1",
     "2026_RES_540142_1",
     "2026_RES_540143_1",
     "2026_RES_540229_1",
