@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-16T15:37:24.573069+05:30",
+    "checked_at": "2026-10-16T15:37:35.663365+05:30",
     "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5350,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-16T10:07:26.043672+00:00",
+  "updated_at": "2026-10-16T10:07:37.082248+00:00",
   "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5350,
   "copied_tenders": 5350,
-  "detail_complete": 5325,
-  "detail_failed": 0,
+  "detail_complete": 5332,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 25,
+  "detail_pending": 16,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -267,10 +267,10 @@
       "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
       "portal_tender_count": 2880,
       "copied_tenders": 2880,
-      "detail_complete": 2874,
+      "detail_complete": 2880,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -344,10 +344,10 @@
       "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
       "portal_tender_count": 22,
       "copied_tenders": 22,
-      "detail_complete": 21,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -972,9 +972,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1111,9 +1111,8 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 4,
-  "missing_district_count": 19,
+  "missing_district_count": 12,
   "missing_district_ids": [
-    "2026_GVMP_543720_1",
     "2026_MPPGC_529899_1",
     "2026_MPPGC_536597_1",
     "2026_PSNSU_543791_1",
@@ -1125,19 +1124,12 @@
     "2026_PWDRB_542572_1",
     "2026_PWDRB_542575_1",
     "2026_PWDRB_542576_1",
-    "2026_PWDRB_542577_1",
-    "2026_UAD_534365_1",
-    "2026_UAD_543314_1",
-    "2026_UAD_543357_1",
-    "2026_UAD_543436_1",
-    "2026_UAD_543663_1",
-    "2026_UAD_543744_1"
+    "2026_PWDRB_542577_1"
   ],
   "known_pincode_count": 367,
   "department_count": 291,
-  "missing_pincode_count": 19,
+  "missing_pincode_count": 12,
   "missing_pincode_ids": [
-    "2026_GVMP_543720_1",
     "2026_MPPGC_529899_1",
     "2026_MPPGC_536597_1",
     "2026_PSNSU_543791_1",
@@ -1149,12 +1141,6 @@
     "2026_PWDRB_542572_1",
     "2026_PWDRB_542575_1",
     "2026_PWDRB_542576_1",
-    "2026_PWDRB_542577_1",
-    "2026_UAD_534365_1",
-    "2026_UAD_543314_1",
-    "2026_UAD_543357_1",
-    "2026_UAD_543436_1",
-    "2026_UAD_543663_1",
-    "2026_UAD_543744_1"
+    "2026_PWDRB_542577_1"
   ]
 }
