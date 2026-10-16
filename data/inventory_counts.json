@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-16T15:37:35.663365+05:30",
+    "checked_at": "2026-10-16T15:42:26.787195+05:30",
     "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5350,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-16T10:07:37.082248+00:00",
+  "updated_at": "2026-10-16T10:12:28.206445+00:00",
   "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5350,
   "copied_tenders": 5350,
-  "detail_complete": 5332,
-  "detail_failed": 2,
+  "detail_complete": 5343,
+  "detail_failed": 3,
   "detail_skipped": 0,
-  "detail_pending": 16,
+  "detail_pending": 4,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -498,10 +498,10 @@
       "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
       "portal_tender_count": 217,
       "copied_tenders": 217,
-      "detail_complete": 213,
+      "detail_complete": 215,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -972,9 +972,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1004,10 +1004,10 @@
       "snapshot_at": "2026-10-16T09:39:17.005388+00:00",
       "portal_tender_count": 459,
       "copied_tenders": 459,
-      "detail_complete": 450,
+      "detail_complete": 459,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "Rajmata Vijayaraje Scindia Krishi Vishwa Vidyalaya - Gwalior",
@@ -1111,36 +1111,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 4,
-  "missing_district_count": 12,
-  "missing_district_ids": [
-    "2026_MPPGC_529899_1",
-    "2026_MPPGC_536597_1",
-    "2026_PSNSU_543791_1",
-    "2026_PWDRB_542566_1",
-    "2026_PWDRB_542567_1",
-    "2026_PWDRB_542568_1",
-    "2026_PWDRB_542570_1",
-    "2026_PWDRB_542571_1",
-    "2026_PWDRB_542572_1",
-    "2026_PWDRB_542575_1",
-    "2026_PWDRB_542576_1",
-    "2026_PWDRB_542577_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 367,
   "department_count": 291,
-  "missing_pincode_count": 12,
-  "missing_pincode_ids": [
-    "2026_MPPGC_529899_1",
-    "2026_MPPGC_536597_1",
-    "2026_PSNSU_543791_1",
-    "2026_PWDRB_542566_1",
-    "2026_PWDRB_542567_1",
-    "2026_PWDRB_542568_1",
-    "2026_PWDRB_542570_1",
-    "2026_PWDRB_542571_1",
-    "2026_PWDRB_542572_1",
-    "2026_PWDRB_542575_1",
-    "2026_PWDRB_542576_1",
-    "2026_PWDRB_542577_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
