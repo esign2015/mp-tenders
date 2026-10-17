@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-17T13:48:07.637150+05:30",
+    "checked_at": "2026-10-17T13:50:16.268844+05:30",
     "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5485,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-17T08:18:09.408555+00:00",
+  "updated_at": "2026-10-17T08:20:18.015956+00:00",
   "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5485,
   "copied_tenders": 5485,
-  "detail_complete": 5272,
+  "detail_complete": 5284,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 213,
+  "detail_pending": 201,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -255,10 +255,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 2920,
       "copied_tenders": 2920,
-      "detail_complete": 2773,
+      "detail_complete": 2775,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 147
+      "detail_pending": 145
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -266,10 +266,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 40,
       "copied_tenders": 40,
-      "detail_complete": 32,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 6
     },
     {
       "organisation": "District Collectorate",
@@ -299,10 +299,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 39,
       "copied_tenders": 39,
-      "detail_complete": 38,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -497,10 +497,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 236,
       "copied_tenders": 236,
-      "detail_complete": 231,
+      "detail_complete": 232,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -640,10 +640,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 73,
       "copied_tenders": 73,
-      "detail_complete": 72,
+      "detail_complete": 73,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1080,19 +1080,17 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 49,
       "copied_tenders": 49,
-      "detail_complete": 43,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 1
     }
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 207,
+  "missing_district_count": 195,
   "missing_district_ids": [
     "2025_UAD_438877_9",
-    "2026_DGPCS_543908_1",
-    "2026_DGPCS_543909_1",
     "2026_DGPCS_543922_1",
     "2026_DGPCS_543929_1",
     "2026_DGPCS_543933_1",
@@ -1119,9 +1117,7 @@
     "2026_HED_543759_1",
     "2026_MIDCL_543792_1",
     "2026_MPCDF_543901_1",
-    "2026_MPFD_537677_3",
     "2026_MPHC_543823_1",
-    "2026_MPPGC_487468_1",
     "2026_MPPGC_533714_1",
     "2026_MPPGC_543937_1",
     "2026_MPPKV_533742_2",
@@ -1144,12 +1140,7 @@
     "2026_RES_541607_1",
     "2026_RES_541610_1",
     "2026_RES_542911_1",
-    "2026_TAD_543859_1",
-    "2026_TAD_543873_1",
-    "2026_TAD_543895_1",
-    "2026_TAD_543936_1",
     "2026_TAD_543942_1",
-    "2026_TAD_543946_1",
     "2026_UAD_516193_2",
     "2026_UAD_516230_2",
     "2026_UAD_516231_2",
@@ -1274,7 +1265,6 @@
     "2026_UAD_531628_1",
     "2026_UAD_531629_1",
     "2026_UAD_531630_1",
-    "2026_UAD_541968_1",
     "2026_UAD_543442_1",
     "2026_UAD_543443_1",
     "2026_UAD_543590_1",
@@ -1291,20 +1281,16 @@
     "2026_UAD_543896_1",
     "2026_UAD_543918_1",
     "2026_UAD_543921_1",
-    "2026_UAD_543931_1",
     "2026_UAD_543940_1",
     "2026_UAD_543941_1",
     "2026_UAD_543944_1",
-    "2026_UAD_543945_1",
-    "2026_WRD_533392_1"
+    "2026_UAD_543945_1"
   ],
   "known_pincode_count": 371,
   "department_count": 298,
-  "missing_pincode_count": 207,
+  "missing_pincode_count": 195,
   "missing_pincode_ids": [
     "2025_UAD_438877_9",
-    "2026_DGPCS_543908_1",
-    "2026_DGPCS_543909_1",
     "2026_DGPCS_543922_1",
     "2026_DGPCS_543929_1",
     "2026_DGPCS_543933_1",
@@ -1331,9 +1317,7 @@
     "2026_HED_543759_1",
     "2026_MIDCL_543792_1",
     "2026_MPCDF_543901_1",
-    "2026_MPFD_537677_3",
     "2026_MPHC_543823_1",
-    "2026_MPPGC_487468_1",
     "2026_MPPGC_533714_1",
     "2026_MPPGC_543937_1",
     "2026_MPPKV_533742_2",
@@ -1356,12 +1340,7 @@
     "2026_RES_541607_1",
     "2026_RES_541610_1",
     "2026_RES_542911_1",
-    "2026_TAD_543859_1",
-    "2026_TAD_543873_1",
-    "2026_TAD_543895_1",
-    "2026_TAD_543936_1",
     "2026_TAD_543942_1",
-    "2026_TAD_543946_1",
     "2026_UAD_516193_2",
     "2026_UAD_516230_2",
     "2026_UAD_516231_2",
@@ -1486,7 +1465,6 @@
     "2026_UAD_531628_1",
     "2026_UAD_531629_1",
     "2026_UAD_531630_1",
-    "2026_UAD_541968_1",
     "2026_UAD_543442_1",
     "2026_UAD_543443_1",
     "2026_UAD_543590_1",
@@ -1503,11 +1481,9 @@
     "2026_UAD_543896_1",
     "2026_UAD_543918_1",
     "2026_UAD_543921_1",
-    "2026_UAD_543931_1",
     "2026_UAD_543940_1",
     "2026_UAD_543941_1",
     "2026_UAD_543944_1",
-    "2026_UAD_543945_1",
-    "2026_WRD_533392_1"
+    "2026_UAD_543945_1"
   ]
 }
