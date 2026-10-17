@@ -1,23 +1,21 @@
 {
-  "status": "completed",
-  "github_run_id": "39019082630",
-  "github_run_number": "110",
+  "status": "running",
+  "github_run_id": "39020099541",
+  "github_run_number": "1089",
   "github_commit_sha": "9a14ad2b1e741607b7b66fec1fd2ba0ba0726d9e",
   "batch_size": 500,
-  "total_csv_ids": 5489,
-  "current_portal_ids": 5489,
-  "initial_incomplete": 128,
-  "batch_targets": 128,
-  "batch_attempted": 128,
-  "batch_complete": 125,
-  "started_at": "2026-10-17T08:54:29.616367+00:00",
-  "success": 5483,
-  "failed": 3,
+  "total_csv_ids": 5505,
+  "current_portal_ids": 5502,
+  "initial_incomplete": 122,
+  "batch_targets": 122,
+  "batch_attempted": 25,
+  "batch_complete": 22,
+  "started_at": "2026-10-17T09:32:54.946509+00:00",
+  "success": 5491,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_305223_2",
     "2024_UAD_340278_5",
-    "2024_UAD_351774_3",
-    "2024_UAD_352874_3",
     "2024_UAD_353674_5",
     "2024_UAD_353770_5",
     "2024_UAD_353773_5",
@@ -571,6 +569,7 @@
     "2026_MPFD_543827_1",
     "2026_MPFD_543830_1",
     "2026_MPFD_543838_1",
+    "2026_MPFD_543864_1",
     "2026_MPHC_534812_1",
     "2026_MPHC_539565_1",
     "2026_MPHC_539818_1",
@@ -608,6 +607,7 @@
     "2026_MPPGC_507816_1",
     "2026_MPPGC_508027_1",
     "2026_MPPGC_508523_1",
+    "2026_MPPGC_509399_1",
     "2026_MPPGC_509983_1",
     "2026_MPPGC_510972_1",
     "2026_MPPGC_511173_2",
@@ -812,6 +812,7 @@
     "2026_MPPGC_542098_1",
     "2026_MPPGC_542331_1",
     "2026_MPPGC_542332_1",
+    "2026_MPPGC_542333_1",
     "2026_MPPGC_542393_1",
     "2026_MPPGC_542414_1",
     "2026_MPPGC_542419_1",
@@ -1558,6 +1559,7 @@
     "2026_MPSID_543638_1",
     "2026_MPSMC_541100_1",
     "2026_MPSMC_542823_1",
+    "2026_MPSMC_543955_1",
     "2026_MPTBC_536159_1",
     "2026_MPTBC_536238_1",
     "2026_MPTBC_536245_1",
@@ -2584,6 +2586,8 @@
     "2026_TAD_543936_1",
     "2026_TAD_543942_1",
     "2026_TAD_543946_1",
+    "2026_TAD_543953_1",
+    "2026_TAD_543961_1",
     "2026_UAD_472359_4",
     "2026_UAD_474326_7",
     "2026_UAD_475297_4",
@@ -5311,6 +5315,10 @@
     "2026_UAD_543441_1",
     "2026_UAD_543442_1",
     "2026_UAD_543443_1",
+    "2026_UAD_543444_1",
+    "2026_UAD_543445_1",
+    "2026_UAD_543447_1",
+    "2026_UAD_543448_1",
     "2026_UAD_543451_1",
     "2026_UAD_543454_1",
     "2026_UAD_543455_1",
@@ -5411,6 +5419,7 @@
     "2026_UAD_543691_1",
     "2026_UAD_543694_1",
     "2026_UAD_543699_1",
+    "2026_UAD_543701_1",
     "2026_UAD_543704_1",
     "2026_UAD_543706_1",
     "2026_UAD_543708_1",
@@ -5450,7 +5459,6 @@
     "2026_UAD_543902_1",
     "2026_UAD_543904_1",
     "2026_UAD_543907_1",
-    "2026_UAD_543913_1",
     "2026_UAD_543918_1",
     "2026_UAD_543921_1",
     "2026_UAD_543928_1",
@@ -5498,34 +5506,38 @@
     "2026_WRD_541524_1",
     "2026_WRD_541538_1"
   ],
-  "failed_ids": [
-    "2025_PSNSU_454220_3",
-    "2026_PSNSU_540805_1",
-    "2026_PSNSU_543791_1"
-  ],
+  "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [
+    "2025_PSNSU_454220_3",
     "2026_MPPGC_529286_1",
     "2026_MPPGC_533370_1",
-    "2026_MPPTC_529679_1"
+    "2026_MPPTC_529679_1",
+    "2026_PSNSU_540805_1",
+    "2026_PSNSU_543791_1",
+    "2026_UAD_516232_2",
+    "2026_UAD_516243_2",
+    "2026_UAD_516253_2",
+    "2026_UAD_516255_2",
+    "2026_UAD_516263_2"
   ],
-  "last_successful_tender_id": "2026_UAD_516230_2",
+  "last_successful_tender_id": "2026_UAD_529827_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     },
     {
       "Tender ID": "2025_PSNSU_454220_3",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     },
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-17T09:10:30.420643+00:00"
+  "updated_at": "2026-10-17T09:34:53.122706+00:00"
 }
