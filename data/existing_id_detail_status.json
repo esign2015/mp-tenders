@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "39057202054",
   "github_run_number": "113",
   "github_commit_sha": "ac9aadd62770d5f507f3d915e9f018e8ab3d63d9",
@@ -12,7 +12,7 @@
   "batch_complete": 0,
   "started_at": "2026-10-17T18:14:46.944738+00:00",
   "success": 5446,
-  "failed": 2,
+  "failed": 3,
   "success_ids": [
     "2023_UAD_305223_2",
     "2024_UAD_340278_5",
@@ -5462,12 +5462,12 @@
     "2026_WRD_541538_1"
   ],
   "failed_ids": [
+    "2025_PSNSU_454220_3",
     "2026_PSNSU_540805_1",
     "2026_PSNSU_543791_1"
   ],
   "skipped_ids": [],
   "pending_ids": [
-    "2025_PSNSU_454220_3",
     "2026_MPPGC_529286_1",
     "2026_MPPGC_533370_1",
     "2026_MPPTC_529679_1"
@@ -5477,28 +5477,18 @@
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2025_PSNSU_454220_3",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PSNSU_540805_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-17T18:16:43.808091+00:00"
+  "updated_at": "2026-10-17T18:16:51.615440+00:00"
 }
