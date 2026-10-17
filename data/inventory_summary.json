@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-17T17:38:32.885021+05:30",
+    "checked_at": "2026-10-17T17:38:40.128825+05:30",
     "snapshot_at": "2026-10-17T11:43:58.665192+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5517,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-17T12:08:34.362597+00:00",
+  "updated_at": "2026-10-17T12:08:41.483805+00:00",
   "snapshot_at": "2026-10-17T11:43:58.665192+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5517,
   "copied_tenders": 5517,
-  "detail_complete": 5498,
+  "detail_complete": 5501,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 19,
+  "detail_pending": 16,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -256,10 +256,10 @@
       "snapshot_at": "2026-10-17T11:43:58.665192+00:00",
       "portal_tender_count": 2933,
       "copied_tenders": 2933,
-      "detail_complete": 2931,
+      "detail_complete": 2932,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -476,10 +476,10 @@
       "snapshot_at": "2026-10-17T11:43:58.665192+00:00",
       "portal_tender_count": 98,
       "copied_tenders": 98,
-      "detail_complete": 97,
+      "detail_complete": 98,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -707,10 +707,10 @@
       "snapshot_at": "2026-10-17T11:43:58.665192+00:00",
       "portal_tender_count": 55,
       "copied_tenders": 55,
-      "detail_complete": 54,
+      "detail_complete": 55,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -1089,37 +1089,31 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 13,
+  "missing_district_count": 10,
   "missing_district_ids": [
     "2026_DHS_539577_1",
     "2026_MPFD_543959_1",
-    "2026_MPPKV_543962_1",
-    "2026_MPP_543943_1",
     "2026_PWDRB_543772_1",
     "2026_PWDRB_543773_1",
     "2026_PWDRB_543775_1",
     "2026_PWDRB_543776_1",
     "2026_PWDRB_543777_1",
     "2026_PWDRB_543778_1",
-    "2026_UAD_541967_2",
     "2026_UAD_541967_3",
     "2026_WRD_533389_1"
   ],
   "known_pincode_count": 372,
   "department_count": 298,
-  "missing_pincode_count": 13,
+  "missing_pincode_count": 10,
   "missing_pincode_ids": [
     "2026_DHS_539577_1",
     "2026_MPFD_543959_1",
-    "2026_MPPKV_543962_1",
-    "2026_MPP_543943_1",
     "2026_PWDRB_543772_1",
     "2026_PWDRB_543773_1",
     "2026_PWDRB_543775_1",
     "2026_PWDRB_543776_1",
     "2026_PWDRB_543777_1",
     "2026_PWDRB_543778_1",
-    "2026_UAD_541967_2",
     "2026_UAD_541967_3",
     "2026_WRD_533389_1"
   ]
