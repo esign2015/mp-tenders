@@ -12,7 +12,7 @@
   "batch_complete": 0,
   "started_at": "2026-10-17T17:30:08.352765+00:00",
   "success": 5446,
-  "failed": 20,
+  "failed": 26,
   "success_ids": [
     "2023_UAD_305223_2",
     "2024_UAD_340278_5",
@@ -5468,8 +5468,14 @@
     "2026_MPPKV_542458_1",
     "2026_MPPKV_542468_1",
     "2026_MPPKV_542613_1",
+    "2026_MPPKV_543114_1",
     "2026_MPP_543016_1",
     "2026_MPSAM_539777_1",
+    "2026_MPSCS_543040_1",
+    "2026_MPSCS_543040_2",
+    "2026_MPSCS_543040_3",
+    "2026_MPSCS_543040_4",
+    "2026_MPSCS_543040_5",
     "2026_NVDA_541455_1",
     "2026_UAD_526791_1",
     "2026_UAD_536145_1",
@@ -5728,7 +5734,37 @@
       "Tender ID": "2026_UAD_542778_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_5",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_3",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_2",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_4",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPKV_543114_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-17T17:48:24.424005+00:00"
+  "updated_at": "2026-10-17T17:50:39.439879+00:00"
 }
