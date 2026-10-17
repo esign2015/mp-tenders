@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-17T13:45:24.180332+05:30",
+    "checked_at": "2026-10-17T13:48:07.637150+05:30",
     "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5485,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-17T08:15:24.963021+00:00",
+  "updated_at": "2026-10-17T08:18:09.408555+00:00",
   "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5485,
   "copied_tenders": 5485,
-  "detail_complete": 5270,
+  "detail_complete": 5272,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 215,
+  "detail_pending": 213,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -255,10 +255,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 2920,
       "copied_tenders": 2920,
-      "detail_complete": 2772,
+      "detail_complete": 2773,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 148
+      "detail_pending": 147
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -497,10 +497,10 @@
       "snapshot_at": "2026-10-17T07:56:18.450659+00:00",
       "portal_tender_count": 236,
       "copied_tenders": 236,
-      "detail_complete": 230,
+      "detail_complete": 231,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 5
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1088,7 +1088,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 209,
+  "missing_district_count": 207,
   "missing_district_ids": [
     "2025_UAD_438877_9",
     "2026_DGPCS_543908_1",
@@ -1123,7 +1123,6 @@
     "2026_MPHC_543823_1",
     "2026_MPPGC_487468_1",
     "2026_MPPGC_533714_1",
-    "2026_MPPGC_542331_1",
     "2026_MPPGC_543937_1",
     "2026_MPPKV_533742_2",
     "2026_MPSAM_543405_1",
@@ -1276,7 +1275,6 @@
     "2026_UAD_531629_1",
     "2026_UAD_531630_1",
     "2026_UAD_541968_1",
-    "2026_UAD_542753_2",
     "2026_UAD_543442_1",
     "2026_UAD_543443_1",
     "2026_UAD_543590_1",
@@ -1302,7 +1300,7 @@
   ],
   "known_pincode_count": 371,
   "department_count": 298,
-  "missing_pincode_count": 209,
+  "missing_pincode_count": 207,
   "missing_pincode_ids": [
     "2025_UAD_438877_9",
     "2026_DGPCS_543908_1",
@@ -1337,7 +1335,6 @@
     "2026_MPHC_543823_1",
     "2026_MPPGC_487468_1",
     "2026_MPPGC_533714_1",
-    "2026_MPPGC_542331_1",
     "2026_MPPGC_543937_1",
     "2026_MPPKV_533742_2",
     "2026_MPSAM_543405_1",
@@ -1490,7 +1487,6 @@
     "2026_UAD_531629_1",
     "2026_UAD_531630_1",
     "2026_UAD_541968_1",
-    "2026_UAD_542753_2",
     "2026_UAD_543442_1",
     "2026_UAD_543443_1",
     "2026_UAD_543590_1",
