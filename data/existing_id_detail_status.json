@@ -1,21 +1,23 @@
 {
-  "status": "completed",
-  "github_run_id": "39015423263",
-  "github_run_number": "1087",
+  "status": "running",
+  "github_run_id": "39019082630",
+  "github_run_number": "110",
   "github_commit_sha": "9a14ad2b1e741607b7b66fec1fd2ba0ba0726d9e",
   "batch_size": 500,
-  "total_csv_ids": 5488,
-  "current_portal_ids": 5485,
-  "initial_incomplete": 233,
-  "batch_targets": 233,
-  "batch_attempted": 233,
-  "batch_complete": 230,
-  "started_at": "2026-10-17T08:16:05.043545+00:00",
-  "success": 5479,
-  "failed": 3,
+  "total_csv_ids": 5489,
+  "current_portal_ids": 5489,
+  "initial_incomplete": 128,
+  "batch_targets": 128,
+  "batch_attempted": 13,
+  "batch_complete": 9,
+  "started_at": "2026-10-17T08:54:29.616367+00:00",
+  "success": 5483,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_305223_2",
     "2024_UAD_340278_5",
+    "2024_UAD_351774_3",
+    "2024_UAD_352874_3",
     "2024_UAD_353674_5",
     "2024_UAD_353770_5",
     "2024_UAD_353773_5",
@@ -1795,6 +1797,7 @@
     "2026_PKVVC_543603_1",
     "2026_PKVVC_543611_1",
     "2026_PKVVC_543849_1",
+    "2026_PKVVC_543957_1",
     "2026_PWDRB_523834_1",
     "2026_PWDRB_523836_1",
     "2026_PWDRB_523837_1",
@@ -5447,6 +5450,7 @@
     "2026_UAD_543902_1",
     "2026_UAD_543904_1",
     "2026_UAD_543907_1",
+    "2026_UAD_543913_1",
     "2026_UAD_543918_1",
     "2026_UAD_543921_1",
     "2026_UAD_543928_1",
@@ -5494,34 +5498,33 @@
     "2026_WRD_541524_1",
     "2026_WRD_541538_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2025_PSNSU_454220_3",
+    "2026_MPPGC_529286_1",
+    "2026_MPPGC_533370_1",
+    "2026_MPPTC_529679_1",
     "2026_PSNSU_540805_1",
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [
-    "2026_MPPGC_529286_1",
-    "2026_MPPGC_533370_1",
-    "2026_MPPTC_529679_1"
-  ],
-  "last_successful_tender_id": "2026_UAD_543620_1",
+  "last_successful_tender_id": "2026_UAD_529736_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_540805_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     },
     {
       "Tender ID": "2025_PSNSU_454220_3",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     },
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-17T08:46:27.788615+00:00"
+  "updated_at": "2026-10-17T08:56:24.222788+00:00"
 }
