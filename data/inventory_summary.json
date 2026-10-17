@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-17T11:12:50.109505+05:30",
+    "checked_at": "2026-10-17T11:35:27.528598+05:30",
     "snapshot_at": "2026-10-16T17:41:03.891319+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5256,
@@ -28,15 +28,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-17T05:42:51.435258+00:00",
+  "updated_at": "2026-10-17T06:05:29.144846+00:00",
   "snapshot_at": "2026-10-16T17:41:03.891319+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5256,
   "copied_tenders": 5256,
   "detail_complete": 5250,
-  "detail_failed": 3,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 6,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -958,9 +958,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 3,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 3
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
