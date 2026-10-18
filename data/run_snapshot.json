@@ -1,14 +1,360 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-18T20:38:38.013887+05:30",
+  "snapshot_at": "2026-10-18T22:00:51.632082+05:30",
   "portal_organisation_count": 96,
   "portal_tender_count": 5451,
   "copied_unique_tender_ids": 5451,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 69,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_AGRO_540308_2",
+      "Organisation Name": "MP State Agro Industries Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_AGRO_541427_1",
+      "Organisation Name": "MP State Agro Industries Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_541123_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542145_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542164_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542167_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542443_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542627_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542692_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542699_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542705_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542711_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_2",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_3",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_4",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_5",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_6",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_7",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542797_8",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_2",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_3",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_4",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_5",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_6",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_542888_7",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_2",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_3",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_4",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_5",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_6",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_7",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543037_8",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_2",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_3",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_4",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_5",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCS_543684_1",
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_539987_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_540350_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_542774_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPCDF_543901_1",
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCU_536474_2",
+      "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPSCU_536899_2",
+      "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_1",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_10",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_12",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_13",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_14",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_15",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_16",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_17",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_18",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_19",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_2",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_20",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_25",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_5",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_6",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_7",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_8",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_507708_9",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_536250_1",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_539247_1",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_540446_1",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_SCMFL_541085_1",
+      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
