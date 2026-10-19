@@ -1,12 +1,14 @@
 {
-  "status": "completed",
-  "started_at": "2026-10-19T07:40:53.765937+00:00",
+  "status": "partial",
+  "started_at": "2026-10-19T08:44:28.415456+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_MFPCF_543014_1",
-    "2026_MPPGC_543716_1",
-    "2026_MPFD_544078_1",
-    "2026_UAD_543766_1",
+    "2026_MPPGC_482014_1",
+    "2026_PKVVC_544124_1",
+    "2026_UAD_544101_1",
+    "2026_PKVVC_544105_1",
+    "2026_UAD_544092_1",
+    "2026_RES_544088_1",
     "2026_MPPKV_537174_1",
     "2026_MPFD_536495_2",
     "2026_PWDRB_541299_1",
@@ -15,21 +17,32 @@
     "2026_PWDRB_541306_1",
     "2026_PWDRB_541312_1",
     "2026_PWDRB_541313_1",
-    "2026_PWDRB_541314_1",
-    "2026_PWDRB_541315_1"
+    "2026_PWDRB_541314_1"
   ],
   "unchanged_ids": [
-    "2026_PWDRB_542319_1",
-    "2026_PWDRB_542319_1",
-    "2026_PWDRB_542319_1",
-    "2026_UAD_544065_1",
-    "2026_UAD_544065_1",
-    "2026_UAD_544065_1"
+    "2026_MFPCF_543014_1",
+    "2026_MPFD_544078_1",
+    "2026_MPPGC_543716_1",
+    "2026_PWDRB_542319_1"
   ],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-10-19T07:40:55.843040+00:00",
+  "errors": [
+    {
+      "reference": "16 of 2026-27 dt. 06/10/2026/8",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "corrigendum",
+      "reference": "16 of 2026-27 dt. 06/10/2026/8",
+      "title": "10. Corrigendom-1",
+      "closing": "28-Oct-2026 05:30 PM",
+      "opening": "30-Oct-2026 10:30 AM"
+    }
+  ],
+  "copied_at": "2026-10-19T08:44:30.622037+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-19T07:41:33.604798+00:00"
+  "updated_at": "2026-10-19T08:45:02.739013+00:00"
 }
