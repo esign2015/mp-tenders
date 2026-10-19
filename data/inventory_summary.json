@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-19T15:16:42.430365+05:30",
+    "checked_at": "2026-10-19T15:18:44.275784+05:30",
     "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5551,
@@ -21,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-19T09:46:43.269777+00:00",
+  "updated_at": "2026-10-19T09:48:45.735432+00:00",
   "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5551,
   "copied_tenders": 5551,
-  "detail_complete": 5536,
-  "detail_failed": 0,
+  "detail_complete": 5545,
+  "detail_failed": 3,
   "detail_skipped": 0,
-  "detail_pending": 15,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -257,10 +257,10 @@
       "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
       "portal_tender_count": 2926,
       "copied_tenders": 2926,
-      "detail_complete": 2917,
+      "detail_complete": 2926,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -962,9 +962,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1101,30 +1101,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 9,
-  "missing_district_ids": [
-    "2026_UAD_543396_1",
-    "2026_UAD_543725_1",
-    "2026_UAD_543729_1",
-    "2026_UAD_543742_1",
-    "2026_UAD_543747_1",
-    "2026_UAD_543753_1",
-    "2026_UAD_544038_1",
-    "2026_UAD_544069_1",
-    "2026_UAD_544072_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 368,
   "department_count": 299,
-  "missing_pincode_count": 9,
-  "missing_pincode_ids": [
-    "2026_UAD_543396_1",
-    "2026_UAD_543725_1",
-    "2026_UAD_543729_1",
-    "2026_UAD_543742_1",
-    "2026_UAD_543747_1",
-    "2026_UAD_543753_1",
-    "2026_UAD_544038_1",
-    "2026_UAD_544069_1",
-    "2026_UAD_544072_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
