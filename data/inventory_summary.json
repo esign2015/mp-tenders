@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-19T21:13:03.478313+05:30",
+    "checked_at": "2026-10-19T21:27:39.367620+05:30",
     "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5284,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-19T15:43:04.782250+00:00",
+  "updated_at": "2026-10-19T15:57:40.685074+00:00",
   "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5284,
   "copied_tenders": 5284,
-  "detail_complete": 5268,
+  "detail_complete": 5279,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 14,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -660,10 +660,10 @@
       "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
       "portal_tender_count": 8,
       "copied_tenders": 8,
-      "detail_complete": 7,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Lokayukt Organisation",
@@ -715,10 +715,10 @@
       "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
       "portal_tender_count": 82,
       "copied_tenders": 82,
-      "detail_complete": 81,
+      "detail_complete": 82,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -891,10 +891,10 @@
       "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 35,
+      "detail_complete": 38,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
@@ -935,10 +935,10 @@
       "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
       "portal_tender_count": 70,
       "copied_tenders": 70,
-      "detail_complete": 67,
+      "detail_complete": 70,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "PWD-PIU",
@@ -957,10 +957,10 @@
       "snapshot_at": "2026-10-19T14:54:29.800200+00:00",
       "portal_tender_count": 404,
       "copied_tenders": 404,
-      "detail_complete": 401,
+      "detail_complete": 404,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajya Shiksha Kendra M.P",
@@ -1064,34 +1064,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 11,
-  "missing_district_ids": [
-    "2026_MPLUN_544204_1",
-    "2026_MPSAM_543789_1",
-    "2026_NVDA_544080_1",
-    "2026_NVDA_544081_1",
-    "2026_NVDA_544082_1",
-    "2026_PHED_544135_1",
-    "2026_PHED_544136_1",
-    "2026_PHED_544137_1",
-    "2026_PWDRB_543874_1",
-    "2026_PWDRB_543875_1",
-    "2026_PWDRB_543876_1"
-  ],
-  "known_pincode_count": 363,
+  "missing_district_count": 0,
+  "missing_district_ids": [],
+  "known_pincode_count": 364,
   "department_count": 287,
-  "missing_pincode_count": 11,
-  "missing_pincode_ids": [
-    "2026_MPLUN_544204_1",
-    "2026_MPSAM_543789_1",
-    "2026_NVDA_544080_1",
-    "2026_NVDA_544081_1",
-    "2026_NVDA_544082_1",
-    "2026_PHED_544135_1",
-    "2026_PHED_544136_1",
-    "2026_PHED_544137_1",
-    "2026_PWDRB_543874_1",
-    "2026_PWDRB_543875_1",
-    "2026_PWDRB_543876_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
