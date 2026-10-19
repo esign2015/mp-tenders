@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-19T15:05:16.104245+05:30",
+    "checked_at": "2026-10-19T15:08:05.412421+05:30",
     "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5551,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-19T09:35:17.527754+00:00",
+  "updated_at": "2026-10-19T09:38:07.104731+00:00",
   "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5551,
   "copied_tenders": 5551,
-  "detail_complete": 5460,
-  "detail_failed": 3,
+  "detail_complete": 5470,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 88,
+  "detail_pending": 81,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -649,10 +649,10 @@
       "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
       "portal_tender_count": 81,
       "copied_tenders": 81,
-      "detail_complete": 77,
+      "detail_complete": 80,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 1
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -958,9 +958,9 @@
       "portal_tender_count": 3,
       "copied_tenders": 3,
       "detail_complete": 0,
-      "detail_failed": 3,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 3
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -990,10 +990,10 @@
       "snapshot_at": "2026-10-19T09:07:07.021544+00:00",
       "portal_tender_count": 486,
       "copied_tenders": 486,
-      "detail_complete": 458,
+      "detail_complete": 465,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 28
+      "detail_pending": 21
     },
     {
       "organisation": "Rajya Shiksha Kendra M.P",
@@ -1097,7 +1097,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 85,
+  "missing_district_count": 75,
   "missing_district_ids": [
     "2026_DGPCS_543745_1",
     "2026_DGPCS_543779_1",
@@ -1106,9 +1106,6 @@
     "2026_HED_543976_1",
     "2026_MPBOU_543358_1",
     "2026_MPFD_543264_1",
-    "2026_MPFD_543800_1",
-    "2026_MPFD_543843_1",
-    "2026_MPFD_543865_1",
     "2026_MPP_544011_1",
     "2026_PWDRB_542067_1",
     "2026_PWDRB_542069_1",
@@ -1116,13 +1113,6 @@
     "2026_PWDRB_542074_1",
     "2026_PWDRB_542075_1",
     "2026_PWDRB_542315_1",
-    "2026_PWDRB_542316_1",
-    "2026_PWDRB_542317_1",
-    "2026_PWDRB_542318_1",
-    "2026_PWDRB_542320_1",
-    "2026_PWDRB_542321_1",
-    "2026_PWDRB_542322_1",
-    "2026_PWDRB_542323_1",
     "2026_PWDRB_542324_1",
     "2026_PWDRB_542325_1",
     "2026_PWDRB_542326_1",
@@ -1187,7 +1177,7 @@
   ],
   "known_pincode_count": 368,
   "department_count": 299,
-  "missing_pincode_count": 85,
+  "missing_pincode_count": 75,
   "missing_pincode_ids": [
     "2026_DGPCS_543745_1",
     "2026_DGPCS_543779_1",
@@ -1196,9 +1186,6 @@
     "2026_HED_543976_1",
     "2026_MPBOU_543358_1",
     "2026_MPFD_543264_1",
-    "2026_MPFD_543800_1",
-    "2026_MPFD_543843_1",
-    "2026_MPFD_543865_1",
     "2026_MPP_544011_1",
     "2026_PWDRB_542067_1",
     "2026_PWDRB_542069_1",
@@ -1206,13 +1193,6 @@
     "2026_PWDRB_542074_1",
     "2026_PWDRB_542075_1",
     "2026_PWDRB_542315_1",
-    "2026_PWDRB_542316_1",
-    "2026_PWDRB_542317_1",
-    "2026_PWDRB_542318_1",
-    "2026_PWDRB_542320_1",
-    "2026_PWDRB_542321_1",
-    "2026_PWDRB_542322_1",
-    "2026_PWDRB_542323_1",
     "2026_PWDRB_542324_1",
     "2026_PWDRB_542325_1",
     "2026_PWDRB_542326_1",
