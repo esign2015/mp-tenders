@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "39273008142",
-  "github_run_number": "1127",
+  "github_run_id": "39286521223",
+  "github_run_number": "1128",
   "github_commit_sha": "5eadc1f5682b64b45e9fc814487f8067b138b6b7",
   "batch_size": 500,
   "total_csv_ids": 5284,
   "current_portal_ids": 5284,
-  "initial_incomplete": 14,
-  "batch_targets": 14,
-  "batch_attempted": 14,
-  "batch_complete": 12,
-  "started_at": "2026-10-19T15:51:37.496745+00:00",
+  "initial_incomplete": 2,
+  "batch_targets": 2,
+  "batch_attempted": 2,
+  "batch_complete": 0,
+  "started_at": "2026-10-19T17:07:53.489109+00:00",
   "success": 5279,
   "failed": 2,
   "success_ids": [
@@ -5304,7 +5304,7 @@
     "2026_MPPGC_533370_1",
     "2026_MPPTC_529679_1"
   ],
-  "last_successful_tender_id": "2026_PWDRB_543875_1",
+  "last_successful_tender_id": "",
   "errors": [
     {
       "Tender ID": "2025_PSNSU_454220_3",
@@ -5312,45 +5312,10 @@
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_MPLUN_544204_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_MPSAM_543789_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PHED_544135_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PHED_544136_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PHED_544137_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PWDRB_543874_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PWDRB_543875_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-19T15:55:56.444999+00:00"
+  "updated_at": "2026-10-19T17:08:39.497441+00:00"
 }
