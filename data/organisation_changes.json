@@ -1,53 +1,84 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-20T15:44:56.405374+05:30",
-  "previous_organisation_count": 94,
-  "current_organisation_count": 95,
-  "previous_tender_count": 5291,
-  "current_tender_count": 5284,
-  "organisations_with_changes": 5,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 2,
+  "snapshot_at": "2026-10-20T18:41:14.832915+05:30",
+  "previous_organisation_count": 95,
+  "current_organisation_count": 94,
+  "previous_tender_count": 5284,
+  "current_tender_count": 5183,
+  "organisations_with_changes": 8,
+  "organisations_with_new_tenders": 3,
+  "new_tender_count": 7,
   "changes": [
     {
-      "Organisation Name": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
-      "Previous Tender Count": 0,
-      "Current Tender Count": 2,
-      "Count Difference": 2,
-      "New Tender Count": 2,
+      "Organisation Name": "Directorate Urban Administration and Development",
+      "Previous Tender Count": 2824,
+      "Current Tender Count": 2739,
+      "Count Difference": -85,
+      "New Tender Count": 3,
       "New Tender IDs": [
-        "2026_RGPV_544245_1",
-        "2026_RGPV_544246_1"
+        "2025_UAD_455914_4",
+        "2025_UAD_455918_4",
+        "2026_UAD_510854_2"
       ]
     },
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2828,
-      "Current Tender Count": 2824,
+      "Organisation Name": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
+      "Previous Tender Count": 2,
+      "Current Tender Count": 5,
+      "Count Difference": 3,
+      "New Tender Count": 3,
+      "New Tender IDs": [
+        "2026_RGPV_536995_1",
+        "2026_RGPV_537018_1",
+        "2026_RGPV_544242_1"
+      ]
+    },
+    {
+      "Organisation Name": "PWD- Roads and Bridges",
+      "Previous Tender Count": 409,
+      "Current Tender Count": 410,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_PWDRB_544235_1"
+      ]
+    },
+    {
+      "Organisation Name": "Director General of Prisons and Correctional Services",
+      "Previous Tender Count": 37,
+      "Current Tender Count": 33,
       "Count Difference": -4,
       "New Tender Count": 0,
       "New Tender IDs": []
     },
     {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 225,
-      "Current Tender Count": 222,
+      "Organisation Name": "Directorate Sports and Youth Welfare",
+      "Previous Tender Count": 6,
+      "Current Tender Count": 2,
+      "Count Difference": -4,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 45,
+      "Current Tender Count": 42,
       "Count Difference": -3,
       "New Tender Count": 0,
       "New Tender IDs": []
     },
     {
-      "Organisation Name": "M.P. Building Development Corporation Ltd. Bhopal",
-      "Previous Tender Count": 12,
-      "Current Tender Count": 11,
-      "Count Difference": -1,
+      "Organisation Name": "Directorate of Industries",
+      "Previous Tender Count": 3,
+      "Current Tender Count": 1,
+      "Count Difference": -2,
       "New Tender Count": 0,
       "New Tender IDs": []
     },
     {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 47,
-      "Current Tender Count": 46,
+      "Organisation Name": "Department of Higher Education",
+      "Previous Tender Count": 45,
+      "Current Tender Count": 44,
       "Count Difference": -1,
       "New Tender Count": 0,
       "New Tender IDs": []
