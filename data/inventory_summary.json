@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-20T18:41:38.816484+05:30",
+    "checked_at": "2026-10-20T18:44:21.199791+05:30",
     "snapshot_at": "2026-10-20T12:53:35.711435+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5183,
@@ -22,15 +22,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-20T13:11:39.502742+00:00",
+  "updated_at": "2026-10-20T13:14:22.195018+00:00",
   "snapshot_at": "2026-10-20T12:53:35.711435+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5183,
   "copied_tenders": 5183,
-  "detail_complete": 5177,
-  "detail_failed": 0,
+  "detail_complete": 5178,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 6,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-10-20T12:53:35.711435+00:00",
       "portal_tender_count": 2739,
       "copied_tenders": 2739,
-      "detail_complete": 2738,
+      "detail_complete": 2739,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -919,9 +919,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1069,14 +1069,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2025_UAD_455914_4"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 363,
   "department_count": 284,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2025_UAD_455914_4"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
