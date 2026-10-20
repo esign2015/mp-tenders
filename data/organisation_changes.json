@@ -1,12 +1,117 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-20T01:34:54.664574+05:30",
+  "snapshot_at": "2026-10-20T14:37:47.203140+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
   "previous_tender_count": 5284,
-  "current_tender_count": 5284,
-  "organisations_with_changes": 0,
-  "organisations_with_new_tenders": 0,
-  "new_tender_count": 0,
-  "changes": []
+  "current_tender_count": 5291,
+  "organisations_with_changes": 10,
+  "organisations_with_new_tenders": 6,
+  "new_tender_count": 18,
+  "changes": [
+    {
+      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Previous Tender Count": 219,
+      "Current Tender Count": 225,
+      "Count Difference": 6,
+      "New Tender Count": 6,
+      "New Tender IDs": [
+        "2025_MPPGC_434827_2",
+        "2025_MPPGC_470690_2",
+        "2026_MPPGC_519630_1",
+        "2026_MPPGC_523324_1",
+        "2026_MPPGC_523325_1",
+        "2026_MPPGC_533938_1"
+      ]
+    },
+    {
+      "Organisation Name": "PWD- Roads and Bridges",
+      "Previous Tender Count": 404,
+      "Current Tender Count": 409,
+      "Count Difference": 5,
+      "New Tender Count": 5,
+      "New Tender IDs": [
+        "2026_PWDRB_543911_1",
+        "2026_PWDRB_543912_1",
+        "2026_PWDRB_544178_1",
+        "2026_PWDRB_544179_1",
+        "2026_PWDRB_544180_1"
+      ]
+    },
+    {
+      "Organisation Name": "Directorate Urban Administration and Development",
+      "Previous Tender Count": 2826,
+      "Current Tender Count": 2828,
+      "Count Difference": 2,
+      "New Tender Count": 4,
+      "New Tender IDs": [
+        "2026_UAD_544079_1",
+        "2026_UAD_544121_1",
+        "2026_UAD_544212_1",
+        "2026_UAD_544213_1"
+      ]
+    },
+    {
+      "Organisation Name": "Directorate of Health Services",
+      "Previous Tender Count": 47,
+      "Current Tender Count": 46,
+      "Count Difference": -1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_DHS_543529_1"
+      ]
+    },
+    {
+      "Organisation Name": "Economic Offences Wing",
+      "Previous Tender Count": 1,
+      "Current Tender Count": 2,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_EOW_544193_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Police",
+      "Previous Tender Count": 50,
+      "Current Tender Count": 50,
+      "Count Difference": 0,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MPP_544214_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 47,
+      "Current Tender Count": 45,
+      "Count Difference": -2,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "MP Forest Department",
+      "Previous Tender Count": 78,
+      "Current Tender Count": 76,
+      "Count Difference": -2,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
+      "Previous Tender Count": 22,
+      "Current Tender Count": 21,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Rajya Shiksha Kendra M.P",
+      "Previous Tender Count": 26,
+      "Current Tender Count": 25,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    }
+  ]
 }
