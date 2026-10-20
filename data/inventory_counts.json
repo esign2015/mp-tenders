@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-20T14:39:11.201717+05:30",
+    "checked_at": "2026-10-20T14:42:01.287330+05:30",
     "snapshot_at": "2026-10-20T08:43:49.397125+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5291,
@@ -22,15 +22,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-20T09:09:12.575255+00:00",
+  "updated_at": "2026-10-20T09:12:02.331174+00:00",
   "snapshot_at": "2026-10-20T08:43:49.397125+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5291,
   "copied_tenders": 5291,
-  "detail_complete": 5278,
-  "detail_failed": 0,
+  "detail_complete": 5286,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 13,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -467,10 +467,10 @@
       "snapshot_at": "2026-10-20T08:43:49.397125+00:00",
       "portal_tender_count": 225,
       "copied_tenders": 225,
-      "detail_complete": 217,
+      "detail_complete": 223,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -930,9 +930,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -962,10 +962,10 @@
       "snapshot_at": "2026-10-20T08:43:49.397125+00:00",
       "portal_tender_count": 409,
       "copied_tenders": 409,
-      "detail_complete": 407,
+      "detail_complete": 409,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Rajya Shiksha Kendra M.P",
@@ -1069,28 +1069,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 8,
-  "missing_district_ids": [
-    "2025_MPPGC_434827_2",
-    "2025_MPPGC_470690_2",
-    "2026_MPPGC_519630_1",
-    "2026_MPPGC_523324_1",
-    "2026_MPPGC_523325_1",
-    "2026_MPPGC_533938_1",
-    "2026_PWDRB_544179_1",
-    "2026_PWDRB_544180_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 364,
   "department_count": 287,
-  "missing_pincode_count": 8,
-  "missing_pincode_ids": [
-    "2025_MPPGC_434827_2",
-    "2025_MPPGC_470690_2",
-    "2026_MPPGC_519630_1",
-    "2026_MPPGC_523324_1",
-    "2026_MPPGC_523325_1",
-    "2026_MPPGC_533938_1",
-    "2026_PWDRB_544179_1",
-    "2026_PWDRB_544180_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
