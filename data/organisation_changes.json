@@ -1,68 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-21T20:30:10.531020+05:30",
+  "snapshot_at": "2026-10-21T21:56:35.428328+05:30",
   "previous_organisation_count": 92,
   "current_organisation_count": 92,
-  "previous_tender_count": 4920,
+  "previous_tender_count": 4930,
   "current_tender_count": 4930,
-  "organisations_with_changes": 5,
-  "organisations_with_new_tenders": 5,
-  "new_tender_count": 10,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 189,
-      "Current Tender Count": 194,
-      "Count Difference": 5,
-      "New Tender Count": 5,
-      "New Tender IDs": [
-        "2026_MPPGC_521837_1",
-        "2026_MPPGC_532961_1",
-        "2026_MPPGC_533379_1",
-        "2026_MPPGC_537461_1",
-        "2026_MPPGC_541068_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 45,
-      "Current Tender Count": 47,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_DHS_538530_1",
-        "2026_DHS_538533_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2577,
-      "Current Tender Count": 2578,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_UAD_507351_4"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 40,
-      "Current Tender Count": 41,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MKVVC_544458_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
-      "Previous Tender Count": 13,
-      "Current Tender Count": 14,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPUDC_544513_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
