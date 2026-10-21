@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-21T15:03:26.239344+05:30",
+    "checked_at": "2026-10-21T15:03:31.545801+05:30",
     "snapshot_at": "2026-10-21T08:44:41.744369+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5293,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-21T09:33:27.579301+00:00",
+  "updated_at": "2026-10-21T09:33:32.530991+00:00",
   "snapshot_at": "2026-10-21T08:44:41.744369+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5293,
   "copied_tenders": 5293,
-  "detail_complete": 5274,
-  "detail_failed": 0,
+  "detail_complete": 5288,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 19,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -233,10 +233,10 @@
       "snapshot_at": "2026-10-21T08:44:41.744369+00:00",
       "portal_tender_count": 2830,
       "copied_tenders": 2830,
-      "detail_complete": 2819,
+      "detail_complete": 2830,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -905,9 +905,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -937,10 +937,10 @@
       "snapshot_at": "2026-10-21T08:44:41.744369+00:00",
       "portal_tender_count": 445,
       "copied_tenders": 445,
-      "detail_complete": 442,
+      "detail_complete": 445,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1066,43 +1066,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 17,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_PWDRB_544175_1",
-    "2026_PWDRB_544176_1",
-    "2026_PWDRB_544177_1",
-    "2026_UAD_544142_1",
-    "2026_UAD_544144_1",
-    "2026_UAD_544145_1",
-    "2026_UAD_544156_1",
-    "2026_UAD_544167_1",
-    "2026_UAD_544197_1",
-    "2026_UAD_544200_1",
-    "2026_UAD_544270_1",
-    "2026_UAD_544271_1",
-    "2026_UAD_544272_1",
-    "2026_UAD_544274_1"
+    "2026_DGPCS_544297_1"
   ],
   "known_pincode_count": 363,
   "department_count": 287,
-  "missing_pincode_count": 14,
-  "missing_pincode_ids": [
-    "2026_PWDRB_544175_1",
-    "2026_PWDRB_544176_1",
-    "2026_PWDRB_544177_1",
-    "2026_UAD_544142_1",
-    "2026_UAD_544144_1",
-    "2026_UAD_544145_1",
-    "2026_UAD_544156_1",
-    "2026_UAD_544167_1",
-    "2026_UAD_544197_1",
-    "2026_UAD_544200_1",
-    "2026_UAD_544270_1",
-    "2026_UAD_544271_1",
-    "2026_UAD_544272_1",
-    "2026_UAD_544274_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
