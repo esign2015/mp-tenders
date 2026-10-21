@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-21T04:27:23.833422+00:00",
-  "status": "running",
+  "updated_at": "2026-10-21T04:31:21.538676+00:00",
+  "status": "retry_needed",
   "initial_missing_ids": [
     "2025_PSNSU_454220_3",
     "2026_MPPGC_536969_1",
@@ -31,13 +31,10 @@
     "2026_UAD_542781_1",
     "2026_UAD_543431_1"
   ],
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2025_PSNSU_454220_3"
-  ],
-  "unresolved_location_count": 28,
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": [],
+  "unresolved_location_count": 27,
   "unresolved_location_ids": [
-    "2025_PSNSU_454220_3",
     "2026_MPPGC_536969_1",
     "2026_MPPKV_541827_1",
     "2026_MPPKV_541871_1",
