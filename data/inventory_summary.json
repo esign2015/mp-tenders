@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-21T20:34:02.853701+05:30",
+    "checked_at": "2026-10-21T20:35:39.183251+05:30",
     "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4930,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-21T15:04:04.191009+00:00",
+  "updated_at": "2026-10-21T15:05:40.372495+00:00",
   "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4930,
   "copied_tenders": 4930,
-  "detail_complete": 4923,
-  "detail_failed": 0,
+  "detail_complete": 4925,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 7,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -429,10 +429,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 194,
       "copied_tenders": 194,
-      "detail_complete": 191,
+      "detail_complete": 192,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -528,10 +528,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 14,
       "copied_tenders": 14,
-      "detail_complete": 13,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Urja Vikas Nigam Limitted",
@@ -892,9 +892,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1042,18 +1042,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 4,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_MPPGC_537461_1"
+    "2026_DGPCS_544297_1"
   ],
-  "known_pincode_count": 357,
+  "known_pincode_count": 358,
   "department_count": 278,
-  "missing_pincode_count": 2,
-  "missing_pincode_ids": [
-    "2026_MPPGC_537461_1",
-    "2026_MPUDC_544513_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
