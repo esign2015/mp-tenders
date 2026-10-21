@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-21T20:30:45.537538+05:30",
+    "checked_at": "2026-10-21T20:33:31.127144+05:30",
     "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4930,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-21T15:00:46.837709+00:00",
+  "updated_at": "2026-10-21T15:03:32.382378+00:00",
   "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4930,
   "copied_tenders": 4930,
-  "detail_complete": 4914,
-  "detail_failed": 2,
+  "detail_complete": 4923,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 14,
+  "detail_pending": 7,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -99,10 +99,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 47,
       "copied_tenders": 47,
-      "detail_complete": 45,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -209,10 +209,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 2578,
       "copied_tenders": 2578,
-      "detail_complete": 2576,
+      "detail_complete": 2578,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -385,10 +385,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 40,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -429,10 +429,10 @@
       "snapshot_at": "2026-10-21T14:35:01.934087+00:00",
       "portal_tender_count": 194,
       "copied_tenders": 194,
-      "detail_complete": 187,
+      "detail_complete": 191,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 3
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -892,9 +892,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1042,37 +1042,19 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 14,
+  "missing_district_count": 5,
   "missing_district_ids": [
-    "2024_UAD_339181_8",
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_DHS_538530_1",
-    "2026_DHS_538533_1",
-    "2026_MKVVC_544458_1",
-    "2026_MPPGC_521837_1",
-    "2026_MPPGC_532961_1",
-    "2026_MPPGC_533379_1",
     "2026_MPPGC_537461_1",
-    "2026_MPPGC_541068_1",
-    "2026_MPUDC_544513_1",
-    "2026_UAD_507351_4"
+    "2026_MPUDC_544513_1"
   ],
   "known_pincode_count": 357,
   "department_count": 278,
-  "missing_pincode_count": 11,
+  "missing_pincode_count": 2,
   "missing_pincode_ids": [
-    "2024_UAD_339181_8",
-    "2026_DHS_538530_1",
-    "2026_DHS_538533_1",
-    "2026_MKVVC_544458_1",
-    "2026_MPPGC_521837_1",
-    "2026_MPPGC_532961_1",
-    "2026_MPPGC_533379_1",
     "2026_MPPGC_537461_1",
-    "2026_MPPGC_541068_1",
-    "2026_MPUDC_544513_1",
-    "2026_UAD_507351_4"
+    "2026_MPUDC_544513_1"
   ]
 }
