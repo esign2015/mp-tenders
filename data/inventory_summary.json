@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-22T16:04:32.533469+05:30",
+    "checked_at": "2026-10-22T16:11:23.020905+05:30",
     "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4976,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-22T10:34:33.898905+00:00",
+  "updated_at": "2026-10-22T10:41:24.322875+00:00",
   "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
   "organisation_count": 93,
   "portal_tender_count": 4976,
   "copied_tenders": 4976,
-  "detail_complete": 4957,
+  "detail_complete": 4973,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 17,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -113,10 +113,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 49,
       "copied_tenders": 49,
-      "detail_complete": 47,
+      "detail_complete": 49,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -146,10 +146,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 25,
       "copied_tenders": 25,
-      "detail_complete": 24,
+      "detail_complete": 25,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -223,10 +223,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 2639,
       "copied_tenders": 2639,
-      "detail_complete": 2638,
+      "detail_complete": 2639,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -245,10 +245,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 45,
       "copied_tenders": 45,
-      "detail_complete": 35,
+      "detail_complete": 45,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -608,10 +608,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 73,
       "copied_tenders": 73,
-      "detail_complete": 72,
+      "detail_complete": 73,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -938,10 +938,10 @@
       "snapshot_at": "2026-10-22T10:02:47.667365+00:00",
       "portal_tender_count": 448,
       "copied_tenders": 448,
-      "detail_complete": 447,
+      "detail_complete": 448,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1056,47 +1056,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 19,
+  "missing_district_count": 3,
   "missing_district_ids": [
-    "2026_DC_544626_1",
-    "2026_DC_544649_1",
-    "2026_DC_544652_1",
-    "2026_DC_544657_1",
-    "2026_DC_544665_1",
-    "2026_DC_544724_1",
-    "2026_DC_544727_1",
-    "2026_DC_544729_1",
-    "2026_DC_544732_1",
-    "2026_DC_544735_1",
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_DHS_544709_1",
-    "2026_DHS_544709_2",
-    "2026_DoPR_538452_2",
-    "2026_MPFD_544639_1",
-    "2026_PWDRB_544354_1",
-    "2026_UAD_538819_1"
+    "2026_DGPCS_544297_1"
   ],
   "known_pincode_count": 364,
   "department_count": 279,
-  "missing_pincode_count": 16,
-  "missing_pincode_ids": [
-    "2026_DC_544626_1",
-    "2026_DC_544649_1",
-    "2026_DC_544652_1",
-    "2026_DC_544657_1",
-    "2026_DC_544665_1",
-    "2026_DC_544724_1",
-    "2026_DC_544727_1",
-    "2026_DC_544729_1",
-    "2026_DC_544732_1",
-    "2026_DC_544735_1",
-    "2026_DHS_544709_1",
-    "2026_DHS_544709_2",
-    "2026_DoPR_538452_2",
-    "2026_MPFD_544639_1",
-    "2026_PWDRB_544354_1",
-    "2026_UAD_538819_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
