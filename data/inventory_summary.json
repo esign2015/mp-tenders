@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-22T15:05:32.230780+05:30",
+    "checked_at": "2026-10-22T15:07:38.879516+05:30",
     "snapshot_at": "2026-10-22T08:48:44.143403+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5028,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-22T09:35:33.585328+00:00",
+  "updated_at": "2026-10-22T09:37:40.174019+00:00",
   "snapshot_at": "2026-10-22T08:48:44.143403+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5028,
   "copied_tenders": 5028,
-  "detail_complete": 5005,
-  "detail_failed": 0,
+  "detail_complete": 5023,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 23,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -222,10 +222,10 @@
       "snapshot_at": "2026-10-22T08:48:44.143403+00:00",
       "portal_tender_count": 2644,
       "copied_tenders": 2644,
-      "detail_complete": 2629,
+      "detail_complete": 2644,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 15
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -244,10 +244,10 @@
       "snapshot_at": "2026-10-22T08:48:44.143403+00:00",
       "portal_tender_count": 34,
       "copied_tenders": 34,
-      "detail_complete": 32,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -684,10 +684,10 @@
       "snapshot_at": "2026-10-22T08:48:44.143403+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
-      "detail_complete": 33,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -905,9 +905,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1055,51 +1055,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 3,
-  "missing_district_count": 21,
+  "missing_district_count": 3,
   "missing_district_ids": [
-    "2026_DC_544559_1",
-    "2026_DC_544561_1",
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_MPPTC_544525_1",
-    "2026_UAD_543305_1",
-    "2026_UAD_544313_2",
-    "2026_UAD_544313_3",
-    "2026_UAD_544379_1",
-    "2026_UAD_544405_1",
-    "2026_UAD_544417_1",
-    "2026_UAD_544447_1",
-    "2026_UAD_544533_1",
-    "2026_UAD_544535_1",
-    "2026_UAD_544546_1",
-    "2026_UAD_544548_1",
-    "2026_UAD_544549_1",
-    "2026_UAD_544550_1",
-    "2026_UAD_544555_1",
-    "2026_UAD_544562_1"
+    "2026_DGPCS_544297_1"
   ],
   "known_pincode_count": 365,
   "department_count": 278,
-  "missing_pincode_count": 18,
-  "missing_pincode_ids": [
-    "2026_DC_544559_1",
-    "2026_DC_544561_1",
-    "2026_MPPTC_544525_1",
-    "2026_UAD_543305_1",
-    "2026_UAD_544313_2",
-    "2026_UAD_544313_3",
-    "2026_UAD_544379_1",
-    "2026_UAD_544405_1",
-    "2026_UAD_544417_1",
-    "2026_UAD_544447_1",
-    "2026_UAD_544533_1",
-    "2026_UAD_544535_1",
-    "2026_UAD_544546_1",
-    "2026_UAD_544548_1",
-    "2026_UAD_544549_1",
-    "2026_UAD_544550_1",
-    "2026_UAD_544555_1",
-    "2026_UAD_544562_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
