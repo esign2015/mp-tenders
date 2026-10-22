@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-22T22:10:38.941480+05:30",
+    "checked_at": "2026-10-22T22:13:42.122343+05:30",
     "snapshot_at": "2026-10-22T15:57:24.768217+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4903,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-22T16:40:39.633958+00:00",
+  "updated_at": "2026-10-22T16:43:43.016931+00:00",
   "snapshot_at": "2026-10-22T15:57:24.768217+00:00",
   "organisation_count": 94,
   "portal_tender_count": 4903,
   "copied_tenders": 4903,
-  "detail_complete": 4899,
+  "detail_complete": 4900,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 2,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-10-22T15:57:24.768217+00:00",
       "portal_tender_count": 2523,
       "copied_tenders": 2523,
-      "detail_complete": 2522,
+      "detail_complete": 2523,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1064,17 +1064,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 4,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_UAD_544839_1"
+    "2026_DGPCS_544297_1"
   ],
   "known_pincode_count": 358,
   "department_count": 276,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_UAD_544839_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
