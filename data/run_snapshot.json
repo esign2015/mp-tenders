@@ -1,97 +1,212 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-23T00:10:28.733485+05:30",
+  "snapshot_at": "2026-10-23T01:08:04.137760+05:30",
   "portal_organisation_count": 94,
   "portal_tender_count": 4903,
   "copied_unique_tender_ids": 4903,
   "organisation_mismatches": [],
   "mismatch_count": 0,
-  "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 461,
+  "recovered_from_mptenders_closing_14_days": 3,
+  "recovered_from_rsp_id_only": 353,
   "recovery_log": [
     {
-      "Tender ID": "2026_MPSMC_542823_1",
-      "Organisation Name": "Madhya Pradesh State Mining Corporation Ltd",
+      "Tender ID": "2026_MPPHC_540845_1",
+      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
+      "Source": "MPTenders Closing within 14 days"
+    },
+    {
+      "Tender ID": "2026_MPSAM_539220_1",
+      "Organisation Name": "MP State Agricultural Marketing Board",
+      "Source": "MPTenders Closing within 14 days"
+    },
+    {
+      "Tender ID": "2026_MPSCU_536474_2",
+      "Organisation Name": "M. P. State Cooperative Union Ltd.- Bhopal",
+      "Source": "MPTenders Closing within 14 days"
+    },
+    {
+      "Tender ID": "2026_CPA_541476_1",
+      "Organisation Name": "Capital Project Administration",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPSMC_543955_1",
-      "Organisation Name": "Madhya Pradesh State Mining Corporation Ltd",
+      "Tender ID": "2026_CPA_541477_1",
+      "Organisation Name": "Capital Project Administration",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_536834_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_CPA_541478_1",
+      "Organisation Name": "Capital Project Administration",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_536887_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_532034_3",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_537534_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_537598_2",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_540218_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_539861_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_540427_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_541309_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_540429_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_541479_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_541848_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_541509_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_542191_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_541682_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_542550_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_542161_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_542691_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_542559_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_544459_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_542574_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_544492_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_543020_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_544513_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_543051_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUDC_544620_1",
-      "Organisation Name": "Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+      "Tender ID": "2026_MIDCL_543137_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
       "Source": "RSP Tender ID recovery only"
     },
     {
-      "Tender ID": "2026_MPUVN_543518_1",
-      "Organisation Name": "Madhya Pradesh Urja Vikas Nigam Limitted",
+      "Tender ID": "2026_MIDCL_543148_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543188_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543403_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543475_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543643_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543713_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543790_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543792_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543793_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MIDCL_543932_1",
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_541934_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543172_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543180_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543183_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543210_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543222_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_543473_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_544204_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLUN_544840_1",
+      "Organisation Name": "MP Laghu Udyog Nigam Ltd",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLO_539807_1",
+      "Organisation Name": "MP Lokayukt Organisation",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPLO_539887_1",
+      "Organisation Name": "MP Lokayukt Organisation",
       "Source": "RSP Tender ID recovery only"
     },
     {
@@ -681,11 +796,6 @@
     },
     {
       "Tender ID": "2026_MPPTC_532713_1",
-      "Organisation Name": "MP Power Transmission Co. Ltd.",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPPTC_532840_1",
       "Organisation Name": "MP Power Transmission Co. Ltd.",
       "Source": "RSP Tender ID recovery only"
     },
@@ -1677,641 +1787,6 @@
     {
       "Tender ID": "2026_MPVS_542825_1",
       "Organisation Name": "M P Vidhan Sabha",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543281_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543749_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543750_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543751_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543752_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543754_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543755_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543756_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_MPWLC_543758_1",
-      "Organisation Name": "MP Warehousing and Logistics Corporation",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_541983_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_541985_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_541986_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_541988_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_541990_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542093_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542120_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542173_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542189_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542270_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542754_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_542856_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_543313_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_543324_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_543437_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_543449_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NDVSU_543453_1",
-      "Organisation Name": "Nanaji Deshmukh Veterinary Science University",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_536093_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541435_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541438_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541439_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541441_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541446_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541455_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541624_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541818_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_541902_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_542066_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_542422_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_542476_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_542487_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543005_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543009_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543012_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543017_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543028_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543038_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543073_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543078_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543079_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543088_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543094_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543105_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543110_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543118_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543122_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543128_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543142_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543153_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_543736_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_544080_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_544081_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_544082_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_NVDA_544627_1",
-      "Organisation Name": "Narmada Valley Development Authority",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_COSK_539841_1",
-      "Organisation Name": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_CoTA_544825_1",
-      "Organisation Name": "Office of Commissioner of Treasury and Accounts",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_OLC_538321_1",
-      "Organisation Name": "Office of the Labour Commissioner Indore M P",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2025_PSNSU_454220_3",
-      "Organisation Name": "PT. S.N. Shukla Unverversity Shehdol",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "Organisation Name": "PT. S.N. Shukla Unverversity Shehdol",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_517453_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_539370_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540915_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540926_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540929_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540930_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540932_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540933_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540934_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540935_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_540936_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_541192_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_541195_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_541472_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542416_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542417_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542418_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542745_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542748_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542752_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542890_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542900_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542906_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542912_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542927_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542929_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542930_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_542931_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543044_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543096_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543098_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543355_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543507_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543513_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543825_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543835_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543837_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543844_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543846_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543851_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543854_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543862_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_543872_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544135_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544136_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544137_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544286_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544369_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544439_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544466_2",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544481_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544482_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544503_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544622_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544623_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544624_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544644_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544715_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_PHED_544722_1",
-      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
       "Source": "RSP Tender ID recovery only"
     }
   ],
