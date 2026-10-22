@@ -1,72 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-22T20:49:06.069847+05:30",
+  "snapshot_at": "2026-10-22T22:09:48.876487+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
-  "previous_tender_count": 4889,
+  "previous_tender_count": 4903,
   "current_tender_count": 4903,
-  "organisations_with_changes": 5,
-  "organisations_with_new_tenders": 5,
-  "new_tender_count": 14,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2514,
-      "Current Tender Count": 2523,
-      "Count Difference": 9,
-      "New Tender Count": 9,
-      "New Tender IDs": [
-        "2026_UAD_544773_1",
-        "2026_UAD_544786_1",
-        "2026_UAD_544791_1",
-        "2026_UAD_544815_1",
-        "2026_UAD_544818_1",
-        "2026_UAD_544827_1",
-        "2026_UAD_544832_1",
-        "2026_UAD_544839_1",
-        "2026_UAD_544847_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 49,
-      "Current Tender Count": 51,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_DHS_538531_1",
-        "2026_DHS_538534_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 23,
-      "Current Tender Count": 24,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DTCP_544654_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 40,
-      "Current Tender Count": 41,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PKVVC_544804_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 211,
-      "Current Tender Count": 212,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPGC_537253_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
