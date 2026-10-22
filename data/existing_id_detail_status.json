@@ -8,8 +8,8 @@
   "current_portal_ids": 4903,
   "initial_incomplete": 24,
   "batch_targets": 24,
-  "batch_attempted": 16,
-  "batch_complete": 0,
+  "batch_attempted": 24,
+  "batch_complete": 3,
   "started_at": "2026-10-22T18:19:52.176344+00:00",
   "success": 4900,
   "failed": 0,
@@ -4922,7 +4922,7 @@
     "2026_MPPTC_529679_1",
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_MPFD_544438_1",
   "errors": [
     {
       "Tender ID": "2026_MPPGC_536969_1",
@@ -5003,7 +5003,32 @@
       "Tender ID": "2026_MPSCS_543040_1",
       "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_4",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPKV_543114_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DGPCS_544297_1",
+      "error": "TimeoutError: Locator.is_visible: Timeout 12000ms exceeded.\nCall log:\n    - checking visibility of get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(9)\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_543431_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DGPCS_544291_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-22T18:25:23.793347+00:00"
+  "updated_at": "2026-10-22T18:27:52.168602+00:00"
 }
