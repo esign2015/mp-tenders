@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "39783930205",
-  "github_run_number": "1173",
+  "status": "running",
+  "github_run_id": "39796986098",
+  "github_run_number": "1174",
   "github_commit_sha": "1c74c2426d17b737a3255ad7617d09276ce7f38d",
   "batch_size": 500,
-  "total_csv_ids": 4889,
-  "current_portal_ids": 4889,
-  "initial_incomplete": 102,
-  "batch_targets": 102,
-  "batch_attempted": 102,
-  "batch_complete": 100,
-  "started_at": "2026-10-22T13:38:09.064832+00:00",
-  "success": 4886,
-  "failed": 2,
+  "total_csv_ids": 4903,
+  "current_portal_ids": 4903,
+  "initial_incomplete": 17,
+  "batch_targets": 17,
+  "batch_attempted": 17,
+  "batch_complete": 15,
+  "started_at": "2026-10-22T15:23:49.518840+00:00",
+  "success": 4900,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_305223_2",
     "2024_UAD_338797_8",
@@ -241,7 +241,9 @@
     "2026_DHS_537852_1",
     "2026_DHS_538203_1",
     "2026_DHS_538530_1",
+    "2026_DHS_538531_1",
     "2026_DHS_538533_1",
+    "2026_DHS_538534_1",
     "2026_DHS_538854_1",
     "2026_DHS_539577_1",
     "2026_DHS_539797_1",
@@ -335,6 +337,7 @@
     "2026_DTCP_543606_1",
     "2026_DTCP_543650_1",
     "2026_DTCP_544140_1",
+    "2026_DTCP_544654_1",
     "2026_DTE_536976_1",
     "2026_DTE_543080_1",
     "2026_DoPR_538450_2",
@@ -789,6 +792,7 @@
     "2026_MPPGC_536969_1",
     "2026_MPPGC_536987_1",
     "2026_MPPGC_537171_1",
+    "2026_MPPGC_537253_1",
     "2026_MPPGC_537461_1",
     "2026_MPPGC_537552_1",
     "2026_MPPGC_537650_1",
@@ -1719,6 +1723,7 @@
     "2026_PKVVC_544491_1",
     "2026_PKVVC_544796_1",
     "2026_PKVVC_544799_1",
+    "2026_PKVVC_544804_1",
     "2026_PWDRB_523834_1",
     "2026_PWDRB_523836_1",
     "2026_PWDRB_523837_1",
@@ -4865,9 +4870,18 @@
     "2026_UAD_544752_1",
     "2026_UAD_544760_1",
     "2026_UAD_544770_1",
+    "2026_UAD_544773_1",
     "2026_UAD_544783_1",
+    "2026_UAD_544786_1",
+    "2026_UAD_544791_1",
+    "2026_UAD_544815_1",
+    "2026_UAD_544818_1",
     "2026_UAD_544826_1",
+    "2026_UAD_544827_1",
     "2026_UAD_544829_1",
+    "2026_UAD_544832_1",
+    "2026_UAD_544839_1",
+    "2026_UAD_544847_1",
     "2026_WRD_518312_1",
     "2026_WRD_525962_1",
     "2026_WRD_525965_1",
@@ -4902,25 +4916,30 @@
     "2026_WRD_541538_1"
   ],
   "failed_ids": [
-    "2025_PSNSU_454220_3",
-    "2026_PSNSU_543791_1"
+    "2025_PSNSU_454220_3"
   ],
   "skipped_ids": [],
   "pending_ids": [
-    "2026_MPPTC_529679_1"
+    "2026_MPPTC_529679_1",
+    "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_UAD_543930_1",
+  "last_successful_tender_id": "2026_MPPGC_537253_1",
   "errors": [
-    {
-      "Tender ID": "2025_PSNSU_454220_3",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_PSNSU_454220_3",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2025_PSNSU_454220_3",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-22T13:49:18.775588+00:00"
+  "updated_at": "2026-10-22T15:25:46.013138+00:00"
 }
