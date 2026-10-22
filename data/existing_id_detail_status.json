@@ -8,7 +8,7 @@
   "current_portal_ids": 4903,
   "initial_incomplete": 24,
   "batch_targets": 24,
-  "batch_attempted": 4,
+  "batch_attempted": 10,
   "batch_complete": 0,
   "started_at": "2026-10-22T18:19:52.176344+00:00",
   "success": 4900,
@@ -4943,7 +4943,37 @@
       "Tender ID": "2026_MPPKV_542613_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542403_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542404_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPP_543016_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542401_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542780_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542781_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-22T18:21:32.814437+00:00"
+  "updated_at": "2026-10-22T18:23:23.158398+00:00"
 }
