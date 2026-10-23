@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-23T14:53:42.450067+05:30",
+    "checked_at": "2026-10-23T14:55:49.639072+05:30",
     "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5247,
@@ -22,15 +22,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-23T09:23:44.073127+00:00",
+  "updated_at": "2026-10-23T09:25:51.292454+00:00",
   "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5247,
   "copied_tenders": 5247,
-  "detail_complete": 4986,
+  "detail_complete": 4998,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 261,
+  "detail_pending": 249,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -137,10 +137,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 56,
+      "detail_complete": 57,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate of Industries",
@@ -159,10 +159,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 14,
       "copied_tenders": 14,
-      "detail_complete": 13,
+      "detail_complete": 14,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -269,10 +269,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 48,
       "copied_tenders": 48,
-      "detail_complete": 47,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -500,10 +500,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 15,
       "copied_tenders": 15,
-      "detail_complete": 12,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Road Development Corporation Limited",
@@ -588,10 +588,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 6,
       "copied_tenders": 6,
-      "detail_complete": 5,
+      "detail_complete": 6,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Bhoj (Open) University",
@@ -621,10 +621,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 75,
       "copied_tenders": 75,
-      "detail_complete": 73,
+      "detail_complete": 74,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -632,10 +632,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 6,
+      "detail_complete": 7,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Industrial Development Corporation Limited",
@@ -676,10 +676,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 51,
       "copied_tenders": 51,
-      "detail_complete": 50,
+      "detail_complete": 51,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -698,10 +698,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 37,
       "copied_tenders": 37,
-      "detail_complete": 35,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agricultural Marketing Board",
@@ -940,10 +940,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 70,
       "copied_tenders": 70,
-      "detail_complete": 68,
+      "detail_complete": 70,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "PWD-PIU",
@@ -995,10 +995,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 23,
       "copied_tenders": 23,
-      "detail_complete": 21,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Rani Awantibai Lodhi Vishwavidhyalaya -Sagar",
@@ -1080,38 +1080,27 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 261,
+  "missing_district_count": 249,
   "missing_district_ids": [
-    "2026_DC_544844_1",
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_DHS_543039_1",
     "2026_DHS_543041_1",
     "2026_DHS_543042_1",
-    "2026_DME_543858_1",
     "2026_HED_544848_1",
     "2026_HED_544869_1",
-    "2026_MFPPR_544741_1",
     "2026_MKVVC_541289_1",
     "2026_MPDSD_518842_2",
     "2026_MPDSD_518846_3",
     "2026_MPDSD_544821_1",
-    "2026_MPFD_544523_1",
     "2026_MPFD_544780_1",
-    "2026_MPHID_542841_1",
     "2026_MPPGC_534089_1",
     "2026_MPPGC_537012_1",
     "2026_MPPGC_538506_1",
     "2026_MPPGC_544572_1",
-    "2026_MPPTC_539478_1",
-    "2026_MPP_538652_2",
     "2026_MPSAM_542634_1",
-    "2026_MPVVN_544899_1",
     "2026_MPVVN_544900_1",
     "2026_MPVVN_544977_1",
-    "2026_PHED_544498_1",
-    "2026_PHED_544749_1",
     "2026_PRESS_544905_1",
     "2026_PRESS_544910_1",
     "2026_PWDRB_544308_1",
@@ -1133,7 +1122,6 @@
     "2026_PWDRB_544435_1",
     "2026_PWPIU_544935_1",
     "2026_RSK_543601_1",
-    "2026_RSK_543649_1",
     "2026_UAD_495085_4",
     "2026_UAD_540372_2",
     "2026_UAD_540381_2",
@@ -1346,35 +1334,24 @@
   ],
   "known_pincode_count": 360,
   "department_count": 306,
-  "missing_pincode_count": 258,
+  "missing_pincode_count": 246,
   "missing_pincode_ids": [
-    "2026_DC_544844_1",
-    "2026_DHS_543039_1",
     "2026_DHS_543041_1",
     "2026_DHS_543042_1",
-    "2026_DME_543858_1",
     "2026_HED_544848_1",
     "2026_HED_544869_1",
-    "2026_MFPPR_544741_1",
     "2026_MKVVC_541289_1",
     "2026_MPDSD_518842_2",
     "2026_MPDSD_518846_3",
     "2026_MPDSD_544821_1",
-    "2026_MPFD_544523_1",
     "2026_MPFD_544780_1",
-    "2026_MPHID_542841_1",
     "2026_MPPGC_534089_1",
     "2026_MPPGC_537012_1",
     "2026_MPPGC_538506_1",
     "2026_MPPGC_544572_1",
-    "2026_MPPTC_539478_1",
-    "2026_MPP_538652_2",
     "2026_MPSAM_542634_1",
-    "2026_MPVVN_544899_1",
     "2026_MPVVN_544900_1",
     "2026_MPVVN_544977_1",
-    "2026_PHED_544498_1",
-    "2026_PHED_544749_1",
     "2026_PRESS_544905_1",
     "2026_PRESS_544910_1",
     "2026_PWDRB_544308_1",
@@ -1396,7 +1373,6 @@
     "2026_PWDRB_544435_1",
     "2026_PWPIU_544935_1",
     "2026_RSK_543601_1",
-    "2026_RSK_543649_1",
     "2026_UAD_495085_4",
     "2026_UAD_540372_2",
     "2026_UAD_540381_2",
