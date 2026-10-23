@@ -8,10 +8,10 @@
   "current_portal_ids": 5329,
   "initial_incomplete": 29,
   "batch_targets": 29,
-  "batch_attempted": 2,
-  "batch_complete": 0,
+  "batch_attempted": 15,
+  "batch_complete": 5,
   "started_at": "2026-10-23T15:05:36.370167+00:00",
-  "success": 5302,
+  "success": 5307,
   "failed": 0,
   "success_ids": [
     "2023_UAD_309946_3",
@@ -3417,6 +3417,7 @@
     "2026_UAD_540309_1",
     "2026_UAD_540310_1",
     "2026_UAD_540322_1",
+    "2026_UAD_540327_2",
     "2026_UAD_540339_1",
     "2026_UAD_540341_1",
     "2026_UAD_540342_1",
@@ -5160,6 +5161,10 @@
     "2026_WRD_506016_1",
     "2026_WRD_507776_2",
     "2026_WRD_511259_1",
+    "2026_WRD_511908_1",
+    "2026_WRD_511909_1",
+    "2026_WRD_511911_1",
+    "2026_WRD_511914_1",
     "2026_WRD_513910_1",
     "2026_WRD_518082_1",
     "2026_WRD_518312_1",
@@ -5329,18 +5334,13 @@
     "2026_MPPTC_529679_1",
     "2026_MPP_544926_1",
     "2026_PSNSU_543791_1",
-    "2026_UAD_540327_2",
     "2026_UAD_545048_1",
     "2026_UAD_545188_1",
     "2026_UAD_545193_1",
     "2026_UAD_545219_1",
     "2026_UAD_545220_1",
-    "2026_WRD_511908_1",
-    "2026_WRD_511909_1",
-    "2026_WRD_511911_1",
     "2026_WRD_511912_1",
     "2026_WRD_511913_1",
-    "2026_WRD_511914_1",
     "2026_WRD_511915_1",
     "2026_WRD_511916_1",
     "2026_WRD_526720_1",
@@ -5348,7 +5348,7 @@
     "2026_WRD_526724_1",
     "2026_WRD_528849_1"
   ],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_WRD_511914_1",
   "errors": [
     {
       "Tender ID": "2025_PSNSU_454220_3",
@@ -5359,7 +5359,42 @@
       "Tender ID": "2026_DHS_542438_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DHS_542439_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_DHS_542440_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_KSGAC_545223_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_543710_83",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_545219_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PSNSU_543791_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_511912_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-23T15:06:57.680481+00:00"
+  "updated_at": "2026-10-23T15:09:37.860691+00:00"
 }
