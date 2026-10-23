@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-23T15:29:24.241404+05:30",
+    "checked_at": "2026-10-23T15:29:47.294516+05:30",
     "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5247,
@@ -32,15 +32,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-23T09:59:25.207517+00:00",
+  "updated_at": "2026-10-23T09:59:48.619642+00:00",
   "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5247,
   "copied_tenders": 5247,
-  "detail_complete": 5233,
-  "detail_failed": 2,
+  "detail_complete": 5239,
+  "detail_failed": 7,
   "detail_skipped": 0,
-  "detail_pending": 12,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -258,9 +258,9 @@
       "portal_tender_count": 2686,
       "copied_tenders": 2686,
       "detail_complete": 2681,
-      "detail_failed": 0,
+      "detail_failed": 5,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -301,10 +301,10 @@
       "snapshot_at": "2026-10-23T08:42:36.376911+00:00",
       "portal_tender_count": 126,
       "copied_tenders": 126,
-      "detail_complete": 120,
+      "detail_complete": 126,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -1090,7 +1090,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 14,
+  "missing_district_count": 8,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
@@ -1099,28 +1099,16 @@
     "2026_UAD_543924_1",
     "2026_UAD_543925_1",
     "2026_UAD_543926_1",
-    "2026_UAD_543927_1",
-    "2026_WRD_529596_1",
-    "2026_WRD_529753_1",
-    "2026_WRD_529754_1",
-    "2026_WRD_529755_1",
-    "2026_WRD_529756_1",
-    "2026_WRD_530316_1"
+    "2026_UAD_543927_1"
   ],
   "known_pincode_count": 368,
   "department_count": 306,
-  "missing_pincode_count": 11,
+  "missing_pincode_count": 5,
   "missing_pincode_ids": [
     "2026_UAD_543923_1",
     "2026_UAD_543924_1",
     "2026_UAD_543925_1",
     "2026_UAD_543926_1",
-    "2026_UAD_543927_1",
-    "2026_WRD_529596_1",
-    "2026_WRD_529753_1",
-    "2026_WRD_529754_1",
-    "2026_WRD_529755_1",
-    "2026_WRD_529756_1",
-    "2026_WRD_530316_1"
+    "2026_UAD_543927_1"
   ]
 }
