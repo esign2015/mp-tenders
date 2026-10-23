@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-23T16:02:15.814734+05:30",
+    "checked_at": "2026-10-23T16:04:23.264594+05:30",
     "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5269,
@@ -26,15 +26,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-23T10:32:17.208061+00:00",
+  "updated_at": "2026-10-23T10:34:24.629613+00:00",
   "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
   "organisation_count": 95,
   "portal_tender_count": 5269,
   "copied_tenders": 5269,
-  "detail_complete": 5249,
+  "detail_complete": 5266,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 20,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -251,10 +251,10 @@
       "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
       "portal_tender_count": 2708,
       "copied_tenders": 2708,
-      "detail_complete": 2699,
+      "detail_complete": 2708,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -295,10 +295,10 @@
       "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
       "portal_tender_count": 131,
       "copied_tenders": 131,
-      "detail_complete": 127,
+      "detail_complete": 131,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -471,10 +471,10 @@
       "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
       "portal_tender_count": 216,
       "copied_tenders": 216,
-      "detail_complete": 214,
+      "detail_complete": 216,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -647,10 +647,10 @@
       "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
       "portal_tender_count": 24,
       "copied_tenders": 24,
-      "detail_complete": 23,
+      "detail_complete": 24,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Laghu Udyog Nigam Ltd",
@@ -955,10 +955,10 @@
       "snapshot_at": "2026-10-23T09:56:20.097836+00:00",
       "portal_tender_count": 56,
       "copied_tenders": 56,
-      "detail_complete": 55,
+      "detail_complete": 56,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1084,49 +1084,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 20,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
-    "2026_DGPCS_544297_1",
-    "2026_MIDCL_544917_1",
-    "2026_MPPGC_536364_1",
-    "2026_MPPGC_538462_1",
-    "2026_PWPIU_545070_1",
-    "2026_UAD_509397_2",
-    "2026_UAD_544517_1",
-    "2026_UAD_544518_1",
-    "2026_UAD_544519_1",
-    "2026_UAD_544946_1",
-    "2026_UAD_545009_1",
-    "2026_UAD_545043_1",
-    "2026_UAD_545052_1",
-    "2026_UAD_545112_1",
-    "2026_WRD_528845_1",
-    "2026_WRD_533933_1",
-    "2026_WRD_533935_1",
-    "2026_WRD_533936_1"
+    "2026_DGPCS_544297_1"
   ],
-  "known_pincode_count": 368,
+  "known_pincode_count": 369,
   "department_count": 307,
-  "missing_pincode_count": 17,
-  "missing_pincode_ids": [
-    "2026_MIDCL_544917_1",
-    "2026_MPPGC_536364_1",
-    "2026_MPPGC_538462_1",
-    "2026_PWPIU_545070_1",
-    "2026_UAD_509397_2",
-    "2026_UAD_544517_1",
-    "2026_UAD_544518_1",
-    "2026_UAD_544519_1",
-    "2026_UAD_544946_1",
-    "2026_UAD_545009_1",
-    "2026_UAD_545043_1",
-    "2026_UAD_545052_1",
-    "2026_UAD_545112_1",
-    "2026_WRD_528845_1",
-    "2026_WRD_533933_1",
-    "2026_WRD_533935_1",
-    "2026_WRD_533936_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
