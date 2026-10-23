@@ -1,96 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-23T20:26:29.457704+05:30",
+  "snapshot_at": "2026-10-23T23:24:23.902976+05:30",
   "previous_organisation_count": 96,
   "current_organisation_count": 96,
-  "previous_tender_count": 5304,
+  "previous_tender_count": 5329,
   "current_tender_count": 5329,
-  "organisations_with_changes": 6,
-  "organisations_with_new_tenders": 6,
-  "new_tender_count": 29,
-  "changes": [
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 161,
-      "Current Tender Count": 173,
-      "Count Difference": 12,
-      "New Tender Count": 12,
-      "New Tender IDs": [
-        "2026_WRD_511908_1",
-        "2026_WRD_511909_1",
-        "2026_WRD_511911_1",
-        "2026_WRD_511912_1",
-        "2026_WRD_511913_1",
-        "2026_WRD_511914_1",
-        "2026_WRD_511915_1",
-        "2026_WRD_511916_1",
-        "2026_WRD_526720_1",
-        "2026_WRD_526722_1",
-        "2026_WRD_526724_1",
-        "2026_WRD_528849_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2645,
-      "Current Tender Count": 2648,
-      "Count Difference": 3,
-      "New Tender Count": 7,
-      "New Tender IDs": [
-        "2026_UAD_533607_1",
-        "2026_UAD_540327_2",
-        "2026_UAD_545048_1",
-        "2026_UAD_545188_1",
-        "2026_UAD_545193_1",
-        "2026_UAD_545219_1",
-        "2026_UAD_545220_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 227,
-      "Current Tender Count": 232,
-      "Count Difference": 5,
-      "New Tender Count": 5,
-      "New Tender IDs": [
-        "2026_MPPGC_520028_1",
-        "2026_MPPGC_522843_1",
-        "2026_MPPGC_526049_1",
-        "2026_MPPGC_537904_1",
-        "2026_MPPGC_543734_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 63,
-      "Current Tender Count": 66,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_DHS_542438_1",
-        "2026_DHS_542439_1",
-        "2026_DHS_542440_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police",
-      "Previous Tender Count": 51,
-      "Current Tender Count": 52,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPP_544926_1"
-      ]
-    },
-    {
-      "Organisation Name": "Pt. Khushilal Sharma Government (Autonomous) Ayurveda College and Institute",
-      "Previous Tender Count": 2,
-      "Current Tender Count": 3,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_KSGAC_545223_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
