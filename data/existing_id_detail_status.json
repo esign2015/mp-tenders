@@ -8,10 +8,10 @@
   "current_portal_ids": 5247,
   "initial_incomplete": 318,
   "batch_targets": 318,
-  "batch_attempted": 140,
-  "batch_complete": 129,
+  "batch_attempted": 156,
+  "batch_complete": 137,
   "started_at": "2026-10-23T09:17:22.949571+00:00",
-  "success": 5057,
+  "success": 5065,
   "failed": 0,
   "success_ids": [
     "2023_UAD_305223_2",
@@ -5038,6 +5038,14 @@
     "2026_WRD_528866_1",
     "2026_WRD_528876_1",
     "2026_WRD_528877_1",
+    "2026_WRD_530317_1",
+    "2026_WRD_530318_1",
+    "2026_WRD_530319_1",
+    "2026_WRD_530613_1",
+    "2026_WRD_530615_1",
+    "2026_WRD_530741_1",
+    "2026_WRD_530771_1",
+    "2026_WRD_530772_1",
     "2026_WRD_532622_1",
     "2026_WRD_533389_1",
     "2026_WRD_533390_1",
@@ -5224,14 +5232,6 @@
     "2026_WRD_529755_1",
     "2026_WRD_529756_1",
     "2026_WRD_530316_1",
-    "2026_WRD_530317_1",
-    "2026_WRD_530318_1",
-    "2026_WRD_530319_1",
-    "2026_WRD_530613_1",
-    "2026_WRD_530615_1",
-    "2026_WRD_530741_1",
-    "2026_WRD_530771_1",
-    "2026_WRD_530772_1",
     "2026_WRD_530773_1",
     "2026_WRD_530774_1",
     "2026_WRD_530777_1",
@@ -5266,7 +5266,7 @@
     "2026_WRD_540166_1",
     "2026_WRD_540168_1"
   ],
-  "last_successful_tender_id": "2026_WRD_528451_1",
+  "last_successful_tender_id": "2026_WRD_530772_1",
   "errors": [
     {
       "Tender ID": "2025_PSNSU_454220_3",
@@ -5317,7 +5317,52 @@
       "Tender ID": "2026_WRD_528679_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528681_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528691_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529022_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529753_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529596_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529754_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529756_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_529755_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_530316_1",
+      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-23T09:34:14.397774+00:00"
+  "updated_at": "2026-10-23T09:36:19.990664+00:00"
 }
