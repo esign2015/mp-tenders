@@ -8,8 +8,8 @@
   "current_portal_ids": 5329,
   "initial_incomplete": 39,
   "batch_targets": 39,
-  "batch_attempted": 10,
-  "batch_complete": 0,
+  "batch_attempted": 15,
+  "batch_complete": 1,
   "started_at": "2026-10-23T15:52:58.066489+00:00",
   "success": 5324,
   "failed": 0,
@@ -5348,7 +5348,7 @@
     "2026_UAD_545219_1",
     "2026_WRD_511912_1"
   ],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_MPSCS_543040_1",
   "errors": [
     {
       "Tender ID": "2026_MPPGC_536969_1",
@@ -5399,7 +5399,27 @@
       "Tender ID": "2026_UAD_542781_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542777_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542778_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_5",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_3",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-23T15:56:55.120380+00:00"
+  "updated_at": "2026-10-23T15:58:59.791884+00:00"
 }
