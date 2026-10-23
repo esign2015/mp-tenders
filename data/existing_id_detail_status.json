@@ -8,10 +8,10 @@
   "current_portal_ids": 5247,
   "initial_incomplete": 318,
   "batch_targets": 318,
-  "batch_attempted": 118,
-  "batch_complete": 115,
+  "batch_attempted": 140,
+  "batch_complete": 129,
   "started_at": "2026-10-23T09:17:22.949571+00:00",
-  "success": 5043,
+  "success": 5057,
   "failed": 0,
   "success_ids": [
     "2023_UAD_305223_2",
@@ -5017,10 +5017,24 @@
     "2026_WRD_523115_1",
     "2026_WRD_523117_1",
     "2026_WRD_523118_1",
+    "2026_WRD_523773_1",
     "2026_WRD_523780_1",
+    "2026_WRD_523983_1",
+    "2026_WRD_523988_1",
+    "2026_WRD_524736_1",
+    "2026_WRD_524738_1",
+    "2026_WRD_524739_1",
+    "2026_WRD_524843_1",
+    "2026_WRD_525534_1",
     "2026_WRD_525962_1",
     "2026_WRD_525965_1",
     "2026_WRD_525967_1",
+    "2026_WRD_527013_1",
+    "2026_WRD_527019_1",
+    "2026_WRD_527283_1",
+    "2026_WRD_527287_1",
+    "2026_WRD_528450_1",
+    "2026_WRD_528451_1",
     "2026_WRD_528866_1",
     "2026_WRD_528876_1",
     "2026_WRD_528877_1",
@@ -5193,20 +5207,6 @@
     "2026_UAD_544941_1",
     "2026_UAD_544963_1",
     "2026_UAD_544972_1",
-    "2026_WRD_523773_1",
-    "2026_WRD_523983_1",
-    "2026_WRD_523988_1",
-    "2026_WRD_524736_1",
-    "2026_WRD_524738_1",
-    "2026_WRD_524739_1",
-    "2026_WRD_524843_1",
-    "2026_WRD_525534_1",
-    "2026_WRD_527013_1",
-    "2026_WRD_527019_1",
-    "2026_WRD_527283_1",
-    "2026_WRD_527287_1",
-    "2026_WRD_528450_1",
-    "2026_WRD_528451_1",
     "2026_WRD_528452_1",
     "2026_WRD_528661_1",
     "2026_WRD_528669_1",
@@ -5266,7 +5266,7 @@
     "2026_WRD_540166_1",
     "2026_WRD_540168_1"
   ],
-  "last_successful_tender_id": "2026_WRD_523780_1",
+  "last_successful_tender_id": "2026_WRD_528451_1",
   "errors": [
     {
       "Tender ID": "2025_PSNSU_454220_3",
@@ -5277,7 +5277,47 @@
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528452_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SDIAX4soI0xf6mOWJUS26Yg%3D%3D\">[Annual Repair Maintenance and Earthwork of 22L d\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528661_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SONSA87KerleTIP8lg7ejSA%3D%3D\">[Repair and Maintenance]</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528669_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=S8WtTjNIDCNbuSCTX1lqhkw%3D%3D\">[Repair and Maintenance]</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528670_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528671_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528673_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528678_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_WRD_528679_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-23T09:32:07.737044+00:00"
+  "updated_at": "2026-10-23T09:34:14.397774+00:00"
 }
