@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-23T20:39:43.747662+05:30",
+    "checked_at": "2026-10-23T20:41:52.201457+05:30",
     "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5329,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-23T15:09:45.616752+00:00",
+  "updated_at": "2026-10-23T15:11:53.503007+00:00",
   "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5329,
   "copied_tenders": 5329,
-  "detail_complete": 5307,
-  "detail_failed": 0,
+  "detail_complete": 5322,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 22,
+  "detail_pending": 6,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -132,10 +132,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 66,
       "copied_tenders": 66,
-      "detail_complete": 63,
+      "detail_complete": 65,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Industries",
@@ -242,10 +242,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 2648,
       "copied_tenders": 2648,
-      "detail_complete": 2643,
+      "detail_complete": 2647,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -286,10 +286,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 173,
       "copied_tenders": 173,
-      "detail_complete": 165,
+      "detail_complete": 172,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 1
     },
     {
       "organisation": "Excise Department",
@@ -473,10 +473,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 232,
       "copied_tenders": 232,
-      "detail_complete": 231,
+      "detail_complete": 232,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -682,10 +682,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
-      "detail_complete": 51,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -936,9 +936,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1086,22 +1086,15 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 1,
-  "missing_district_count": 26,
+  "missing_district_count": 18,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_DHS_542438_1",
-    "2026_DHS_542439_1",
     "2026_DHS_542440_1",
     "2026_KSGAC_545223_1",
-    "2026_MPPGC_543734_1",
     "2026_MPP_544926_1",
-    "2026_UAD_545048_1",
-    "2026_UAD_545188_1",
-    "2026_UAD_545193_1",
     "2026_UAD_545219_1",
-    "2026_UAD_545220_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1112,31 +1105,15 @@
     "2026_WRD_511916_1",
     "2026_WRD_526720_1",
     "2026_WRD_526722_1",
-    "2026_WRD_526724_1",
-    "2026_WRD_528849_1"
+    "2026_WRD_526724_1"
   ],
-  "known_pincode_count": 368,
+  "known_pincode_count": 370,
   "department_count": 317,
-  "missing_pincode_count": 19,
+  "missing_pincode_count": 4,
   "missing_pincode_ids": [
-    "2026_DHS_542438_1",
-    "2026_DHS_542439_1",
     "2026_DHS_542440_1",
     "2026_KSGAC_545223_1",
-    "2026_MPPGC_543734_1",
-    "2026_MPP_544926_1",
-    "2026_UAD_545048_1",
-    "2026_UAD_545188_1",
-    "2026_UAD_545193_1",
     "2026_UAD_545219_1",
-    "2026_UAD_545220_1",
-    "2026_WRD_511912_1",
-    "2026_WRD_511913_1",
-    "2026_WRD_511915_1",
-    "2026_WRD_511916_1",
-    "2026_WRD_526720_1",
-    "2026_WRD_526722_1",
-    "2026_WRD_526724_1",
-    "2026_WRD_528849_1"
+    "2026_WRD_511912_1"
   ]
 }
