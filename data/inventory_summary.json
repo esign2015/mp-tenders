@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-23T21:29:16.016483+05:30",
+    "checked_at": "2026-10-23T21:31:15.055434+05:30",
     "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5329,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-23T15:59:17.261991+00:00",
+  "updated_at": "2026-10-23T16:01:16.471358+00:00",
   "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5329,
   "copied_tenders": 5329,
-  "detail_complete": 5322,
+  "detail_complete": 5323,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 7,
+  "detail_pending": 6,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -286,10 +286,10 @@
       "snapshot_at": "2026-10-23T14:21:15.399497+00:00",
       "portal_tender_count": 173,
       "copied_tenders": 173,
-      "detail_complete": 170,
+      "detail_complete": 171,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Excise Department",
@@ -1106,11 +1106,10 @@
   ],
   "known_pincode_count": 370,
   "department_count": 317,
-  "missing_pincode_count": 4,
+  "missing_pincode_count": 3,
   "missing_pincode_ids": [
     "2026_UAD_545219_1",
     "2026_WRD_511912_1",
-    "2026_WRD_511913_1",
-    "2026_WRD_511914_1"
+    "2026_WRD_511913_1"
   ]
 }
