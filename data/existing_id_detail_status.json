@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "39968735027",
   "github_run_number": "1190",
   "github_commit_sha": "710a66624d866ea6eef142706550460b9cc09589",
@@ -9,10 +9,10 @@
   "initial_incomplete": 29,
   "batch_targets": 29,
   "batch_attempted": 29,
-  "batch_complete": 22,
+  "batch_complete": 25,
   "started_at": "2026-10-23T15:05:36.370167+00:00",
-  "success": 5322,
-  "failed": 1,
+  "success": 5324,
+  "failed": 4,
   "success_ids": [
     "2023_UAD_309946_3",
     "2024_UAD_338797_8",
@@ -267,6 +267,7 @@
     "2026_DHS_542399_1",
     "2026_DHS_542438_1",
     "2026_DHS_542439_1",
+    "2026_DHS_542440_1",
     "2026_DHS_542552_1",
     "2026_DHS_542561_1",
     "2026_DHS_542735_1",
@@ -468,6 +469,7 @@
     "2026_JNKVV_543302_1",
     "2026_KSGAC_545169_1",
     "2026_KSGAC_545214_1",
+    "2026_KSGAC_545223_1",
     "2026_MADHY_537834_1",
     "2026_MFPCF_543014_1",
     "2026_MFPPR_541554_1",
@@ -5338,23 +5340,21 @@
     "2026_WRD_543273_1"
   ],
   "failed_ids": [
-    "2025_PSNSU_454220_3"
-  ],
-  "skipped_ids": [],
-  "pending_ids": [
-    "2026_DHS_542440_1",
-    "2026_KSGAC_545223_1",
-    "2026_MPPTC_529679_1",
+    "2025_PSNSU_454220_3",
     "2026_PSNSU_543791_1",
     "2026_UAD_545219_1",
     "2026_WRD_511912_1"
   ],
-  "last_successful_tender_id": "2026_DHS_542438_1",
+  "skipped_ids": [],
+  "pending_ids": [
+    "2026_MPPTC_529679_1"
+  ],
+  "last_successful_tender_id": "2026_MPRRD_543710_83",
   "errors": [
     {
       "Tender ID": "2025_PSNSU_454220_3",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_DHS_542438_1",
@@ -5383,24 +5383,19 @@
     },
     {
       "Tender ID": "2026_UAD_545219_1",
-      "error": "Error: Page.goto: Navigation to \"https://mptenders.gov.in/nicgep/app\" is interrupted by another navigation to \"https://mptenders.gov.in/nicgep/app\"\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_WRD_511912_1",
       "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2025_PSNSU_454220_3",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-23T15:11:47.366649+00:00"
+  "updated_at": "2026-10-23T15:12:38.188960+00:00"
 }
