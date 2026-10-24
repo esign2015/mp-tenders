@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-24T16:11:33.905978+00:00",
-  "status": "running",
+  "updated_at": "2026-10-24T16:16:53.005672+00:00",
+  "status": "retry_needed",
   "initial_missing_ids": [
     "2026_DC_544556_1",
     "2026_DGPCS_544290_1",
@@ -47,13 +47,9 @@
     "2026_WRD_526726_1",
     "2026_WRD_530741_1"
   ],
-  "missing_pincode_count": 3,
-  "missing_pincode_ids": [
-    "2026_UAD_487998_6",
-    "2026_UAD_488006_6",
-    "2026_UAD_488166_6"
-  ],
-  "unresolved_location_count": 44,
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": [],
+  "unresolved_location_count": 41,
   "unresolved_location_ids": [
     "2026_DC_544556_1",
     "2026_DGPCS_544290_1",
@@ -73,9 +69,6 @@
     "2026_MPSCS_543040_4",
     "2026_MPSCS_543040_5",
     "2026_NVDA_541455_1",
-    "2026_UAD_487998_6",
-    "2026_UAD_488006_6",
-    "2026_UAD_488166_6",
     "2026_UAD_542401_1",
     "2026_UAD_542403_1",
     "2026_UAD_542404_1",
