@@ -1,13 +1,13 @@
 {
-  "status": "verified",
-  "checked_at": "2026-10-24T14:10:34.390716+05:30",
-  "snapshot_at": "2026-10-23T18:05:45.614866+00:00",
-  "inventory_source": "copied-list",
-  "portal_tender_count": 5329,
+  "status": "mismatch",
+  "checked_at": "2026-10-24T14:12:40.919176+05:30",
+  "snapshot_at": "2026-10-24T00:11:42.110404+05:30",
+  "inventory_source": "cached-snapshot",
+  "portal_tender_count": 5447,
   "verified_unique_ids": 5329,
   "dashboard_live_count": 5329,
   "closed_or_cancelled_count": 0,
-  "excluded_master_only_live_count": 108,
+  "excluded_master_only_live_count": 109,
   "excluded_master_only_live_ids": [
     "2026_DGPCS_545244_1",
     "2026_DGPCS_545254_1",
@@ -62,6 +62,7 @@
     "2026_PWPIU_545215_1",
     "2026_PWPIU_545217_1",
     "2026_PWPIU_545245_1",
+    "2026_RSK_545024_1",
     "2026_UAD_528470_2",
     "2026_UAD_532945_5",
     "2026_UAD_533452_1",
@@ -120,7 +121,11 @@
   ],
   "missing_ids": [],
   "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "errors": [
+    "Organisation count mismatch: Directorate Urban Administration and Development",
+    "Verified inventory and copied Tender IDs differ",
+    "Portal total and unique Tender IDs differ"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
