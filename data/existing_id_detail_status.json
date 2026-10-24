@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "40122694886",
-  "github_run_number": "156",
+  "status": "running",
+  "github_run_id": "40123008416",
+  "github_run_number": "128",
   "github_commit_sha": "dae6a9262c63f6b26ffd34e5ee84ae6f35aee4ee",
-  "batch_size": 500,
+  "batch_size": 0,
   "total_csv_ids": 5422,
   "current_portal_ids": 5422,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
-  "batch_attempted": 2,
-  "batch_complete": 0,
-  "started_at": "2026-10-24T18:52:59.089021+00:00",
+  "initial_incomplete": 41,
+  "batch_targets": 41,
+  "batch_attempted": 17,
+  "batch_complete": 15,
+  "started_at": "2026-10-24T18:57:08.344975+00:00",
   "success": 5420,
-  "failed": 2,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_309946_3",
     "2024_UAD_338797_8",
@@ -5435,24 +5435,24 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2025_PSNSU_454220_3",
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_MPSCS_543040_4",
   "errors": [
     {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "Tender ID": "2026_UAD_542404_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SUd2o%2FhScmpc5WqkO5BRqlg%3D%3D\">[Construction of steps on the way to Meghasan Dev\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     },
     {
-      "Tender ID": "2025_PSNSU_454220_3",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "Tender ID": "2026_UAD_542403_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=S9OTPpCB6k57JzZdmf2ZtbA%3D%3D\">[Ward No. 05 Madera CC road construction work fro\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-24T18:53:45.008663+00:00"
+  "updated_at": "2026-10-24T18:59:03.177134+00:00"
 }
