@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "40072984339",
-  "github_run_number": "125",
+  "status": "running",
+  "github_run_id": "40074188726",
+  "github_run_number": "153",
   "github_commit_sha": "dc6bc746063add130fc3d4c70e862719090ac690",
-  "batch_size": 0,
-  "total_csv_ids": 5336,
-  "current_portal_ids": 5336,
-  "initial_incomplete": 38,
-  "batch_targets": 38,
-  "batch_attempted": 38,
-  "batch_complete": 38,
-  "started_at": "2026-10-24T07:09:31.441722+00:00",
-  "success": 5333,
+  "batch_size": 500,
+  "total_csv_ids": 5344,
+  "current_portal_ids": 5344,
+  "initial_incomplete": 129,
+  "batch_targets": 129,
+  "batch_attempted": 18,
+  "batch_complete": 16,
+  "started_at": "2026-10-24T07:28:18.165969+00:00",
+  "success": 5341,
   "failed": 0,
   "success_ids": [
     "2023_UAD_309946_3",
@@ -237,6 +237,8 @@
     "2026_DGPCS_544303_1",
     "2026_DGPCS_544437_1",
     "2026_DGPCS_544441_1",
+    "2026_DGPCS_545244_1",
+    "2026_DGPCS_545254_1",
     "2026_DHS_537222_1",
     "2026_DHS_537233_1",
     "2026_DHS_538203_1",
@@ -566,6 +568,7 @@
     "2026_MPB_529816_2",
     "2026_MPCDF_542774_1",
     "2026_MPCDF_543901_1",
+    "2026_MPCDF_544971_1",
     "2026_MPDAH_540911_1",
     "2026_MPDSD_518842_2",
     "2026_MPDSD_518846_3",
@@ -2181,6 +2184,7 @@
     "2026_PWDRB_543007_1",
     "2026_PWDRB_543008_1",
     "2026_PWDRB_543032_1",
+    "2026_PWDRB_543036_1",
     "2026_PWDRB_543075_1",
     "2026_PWDRB_543140_1",
     "2026_PWDRB_543158_1",
@@ -2386,6 +2390,7 @@
     "2026_PWPIU_545046_1",
     "2026_PWPIU_545070_1",
     "2026_PWPIU_545078_1",
+    "2026_PWPIU_545217_1",
     "2026_REDU_538886_1",
     "2026_RES_527180_1",
     "2026_RES_527181_1",
@@ -5200,6 +5205,9 @@
     "2026_WRD_522962_1",
     "2026_WRD_522964_1",
     "2026_WRD_522965_1",
+    "2026_WRD_522972_1",
+    "2026_WRD_522977_1",
+    "2026_WRD_522979_1",
     "2026_WRD_522983_1",
     "2026_WRD_522984_1",
     "2026_WRD_523115_1",
@@ -5355,18 +5363,18 @@
     "2026_MPPTC_529679_1",
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_MPPGC_536969_1",
+  "last_successful_tender_id": "2026_MPRRD_543710_12",
   "errors": [
     {
-      "Tender ID": "2026_MPPGC_536969_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "Tender ID": "2025_PSNSU_454220_3",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
     },
     {
-      "Tender ID": "2026_MPSAM_539777_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "Tender ID": "2026_PSNSU_543791_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-24T07:14:28.700585+00:00"
+  "updated_at": "2026-10-24T07:30:13.387019+00:00"
 }
