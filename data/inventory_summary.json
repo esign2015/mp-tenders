@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-24T20:40:37.854079+05:30",
+    "checked_at": "2026-10-24T20:45:15.161751+05:30",
     "snapshot_at": "2026-10-24T14:43:14.269999+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5422,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-24T15:10:39.357097+00:00",
+  "updated_at": "2026-10-24T15:15:15.968243+00:00",
   "snapshot_at": "2026-10-24T14:43:14.269999+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5422,
   "copied_tenders": 5422,
   "detail_complete": 5417,
-  "detail_failed": 2,
+  "detail_failed": 5,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -243,9 +243,9 @@
       "portal_tender_count": 2666,
       "copied_tenders": 2666,
       "detail_complete": 2663,
-      "detail_failed": 0,
+      "detail_failed": 3,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
