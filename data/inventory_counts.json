@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-24T15:18:39.613161+05:30",
+    "checked_at": "2026-10-24T15:21:26.892968+05:30",
     "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5471,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-24T09:48:40.701403+00:00",
+  "updated_at": "2026-10-24T09:51:28.251639+00:00",
   "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5471,
   "copied_tenders": 5471,
-  "detail_complete": 5451,
-  "detail_failed": 2,
+  "detail_complete": 5460,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 18,
+  "detail_pending": 11,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -244,10 +244,10 @@
       "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
       "portal_tender_count": 2699,
       "copied_tenders": 2699,
-      "detail_complete": 2697,
+      "detail_complete": 2698,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -288,10 +288,10 @@
       "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
       "portal_tender_count": 205,
       "copied_tenders": 205,
-      "detail_complete": 195,
+      "detail_complete": 199,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 6
     },
     {
       "organisation": "Excise Department",
@@ -475,10 +475,10 @@
       "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
       "portal_tender_count": 235,
       "copied_tenders": 235,
-      "detail_complete": 233,
+      "detail_complete": 235,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -629,10 +629,10 @@
       "snapshot_at": "2026-10-24T09:25:51.667481+00:00",
       "portal_tender_count": 78,
       "copied_tenders": 78,
-      "detail_complete": 75,
+      "detail_complete": 77,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -938,9 +938,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1088,19 +1088,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 35,
+  "missing_district_count": 26,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
     "2026_MPFD_545256_1",
-    "2026_MPFD_545281_1",
-    "2026_MPFD_545284_1",
-    "2026_MPPGC_527636_1",
-    "2026_MPPGC_544588_1",
     "2026_MPP_545262_2",
     "2026_UAD_545014_1",
-    "2026_UAD_545190_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1109,10 +1104,6 @@
     "2026_WRD_511914_1",
     "2026_WRD_511915_1",
     "2026_WRD_511916_1",
-    "2026_WRD_518016_1",
-    "2026_WRD_522190_1",
-    "2026_WRD_522192_1",
-    "2026_WRD_523265_1",
     "2026_WRD_526720_1",
     "2026_WRD_526722_1",
     "2026_WRD_526723_1",
@@ -1128,20 +1119,11 @@
   ],
   "known_pincode_count": 373,
   "department_count": 327,
-  "missing_pincode_count": 18,
+  "missing_pincode_count": 9,
   "missing_pincode_ids": [
     "2026_MPFD_545256_1",
-    "2026_MPFD_545281_1",
-    "2026_MPFD_545284_1",
-    "2026_MPPGC_527636_1",
-    "2026_MPPGC_544588_1",
     "2026_MPP_545262_2",
     "2026_UAD_545014_1",
-    "2026_UAD_545190_1",
-    "2026_WRD_518016_1",
-    "2026_WRD_522190_1",
-    "2026_WRD_522192_1",
-    "2026_WRD_523265_1",
     "2026_WRD_530728_1",
     "2026_WRD_530731_1",
     "2026_WRD_537948_1",
