@@ -1,20 +1,20 @@
 {
   "status": "completed",
   "policy": "expired-at-evening",
-  "cleaned_at": "2026-10-24T19:20:11.438110+05:30",
+  "cleaned_at": "2026-10-24T20:40:22.425143+05:30",
   "retention_hours": 0,
   "files": {
     "all_tenders_org_detailed.csv": {
-      "removed": 165
+      "removed": 0
     },
     "tender_details.csv": {
-      "removed": 165
+      "removed": 0
     },
     "organisation_tenders.csv": {
       "removed": 0
     }
   },
-  "removed": 165,
+  "removed": 0,
   "retired_tender_ids": [
     "2023_UAD_255290_15",
     "2023_UAD_291118_2",
@@ -2936,11 +2936,8 @@
     "2026_UAD_485263_5",
     "2026_UAD_486550_4",
     "2026_UAD_487241_4",
-    "2026_UAD_487998_6",
     "2026_UAD_488004_6",
-    "2026_UAD_488006_6",
     "2026_UAD_488135_6",
-    "2026_UAD_488166_6",
     "2026_UAD_488634_2",
     "2026_UAD_493766_5",
     "2026_UAD_496726_2",
