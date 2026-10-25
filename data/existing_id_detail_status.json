@@ -8,8 +8,8 @@
   "current_portal_ids": 5422,
   "initial_incomplete": 41,
   "batch_targets": 41,
-  "batch_attempted": 7,
-  "batch_complete": 1,
+  "batch_attempted": 15,
+  "batch_complete": 3,
   "started_at": "2026-10-25T17:34:05.802544+00:00",
   "success": 5420,
   "failed": 0,
@@ -5441,7 +5441,7 @@
     "2025_PSNSU_454220_3",
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_NVDA_541455_1",
+  "last_successful_tender_id": "2026_MPP_543016_1",
   "errors": [
     {
       "Tender ID": "2026_MPSAM_539777_1",
@@ -5472,7 +5472,32 @@
       "Tender ID": "2026_UAD_542404_1",
       "error": "TimeoutError: Locator.get_attribute: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input\").nth(17)\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542781_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SVOPnGuymb9UXKuT%2FiHfyXw%3D%3D\">[RCC drain construction work at various places fr\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542777_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SngvVtmA7Ao%2Fa36Y58d4Uug%3D%3D\">[CC road construction work at various places from\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542778_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_5",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSCS_543040_3",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-25T17:35:58.723419+00:00"
+  "updated_at": "2026-10-25T17:38:07.299527+00:00"
 }
