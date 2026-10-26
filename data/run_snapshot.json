@@ -1,14 +1,1380 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-27T00:49:38.364729+05:30",
+  "snapshot_at": "2026-10-27T01:45:42.504196+05:30",
   "portal_organisation_count": 96,
   "portal_tender_count": 5333,
   "copied_unique_tender_ids": 5333,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 273,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_DC_541381_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541863_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541914_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541919_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541931_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541940_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541946_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541950_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541954_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541956_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541958_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541963_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541964_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_541965_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_543141_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_543214_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544524_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544537_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544538_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544539_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544543_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544544_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544545_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544547_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544554_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544556_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544559_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544561_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544626_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544649_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544652_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544657_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544665_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544724_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544727_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544729_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544732_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544735_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544743_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544747_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544757_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DC_544844_1",
+      "Organisation Name": "District Collectorate",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_EOW_544193_1",
+      "Organisation Name": "Economic Offences Wing",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_EOW_544293_1",
+      "Organisation Name": "Economic Offences Wing",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2025_WRD_461722_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_503702_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_506016_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_507776_2",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511259_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511908_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511909_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511911_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511912_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511913_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511914_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511915_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_511916_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_513910_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_518016_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_518082_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_518312_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_519923_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_519925_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_519926_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_519927_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_519960_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_520548_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_520555_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522190_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522192_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522194_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522205_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522273_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522277_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522958_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522959_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522960_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522962_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522964_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522965_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522967_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522968_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522970_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522972_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522973_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522974_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522977_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522979_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522980_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522981_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522982_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522983_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522984_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522988_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522990_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522991_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_522993_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523115_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523117_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523118_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523219_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523265_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523773_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523780_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523983_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_523988_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_524577_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_524736_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_524738_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_524739_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_524843_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_525534_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_525962_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_525965_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_525967_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526720_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526722_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526723_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526724_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526725_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_526726_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_527013_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_527019_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_527283_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_527287_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528450_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528451_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528452_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528661_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528669_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528670_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528671_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528673_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528678_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528679_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528681_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528691_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528845_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528847_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528848_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528849_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528851_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528866_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528876_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_528877_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529022_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529596_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529753_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529754_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529755_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_529756_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530316_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530317_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530318_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530319_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530613_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530615_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530728_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530731_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530741_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530771_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530772_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530773_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530774_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530777_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530782_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530783_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_530784_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531431_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531433_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531434_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531435_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531524_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531525_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531526_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531527_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531528_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531529_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531530_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531532_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531533_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531534_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531535_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531537_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_531896_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532237_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532239_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532240_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532241_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532294_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532329_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532331_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532571_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532572_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532575_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532576_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_532622_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533389_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533390_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533392_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533393_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533850_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533933_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533935_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_533936_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534142_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534143_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534145_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534146_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534147_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534159_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534179_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534181_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534182_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534650_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534653_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534655_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534892_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_534894_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_535055_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_536428_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_537945_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_537946_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_537947_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_537948_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_537949_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_538612_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_538618_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539325_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539385_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539388_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539392_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539395_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539397_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539408_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539754_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539758_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539760_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539761_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539762_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539764_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539766_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539770_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539775_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539778_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_539873_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540162_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540166_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540168_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540171_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540173_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540175_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_540178_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541522_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541524_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541529_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541535_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541538_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541540_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_541546_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_542266_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_542267_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_542268_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_543271_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_543273_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_WRD_545295_1",
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_EXCIS_543468_1",
+      "Organisation Name": "Excise Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_EXCIS_545115_1",
+      "Organisation Name": "Excise Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_EXCIS_545115_2",
+      "Organisation Name": "Excise Department",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_FDAMP_540266_1",
+      "Organisation Name": "Food and Drugs Administration MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_540077_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_540087_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GADR_541343_1",
+      "Organisation Name": "General Administration Department - Registrar",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
