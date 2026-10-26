@@ -1,7 +1,7 @@
 {
   "status": "completed",
-  "github_run_id": "40380906249",
-  "github_run_number": "1244",
+  "github_run_id": "40388382126",
+  "github_run_number": "169",
   "github_commit_sha": "c8ca4b0539ab45bab4e0837da55e3f291fdaeba8",
   "batch_size": 500,
   "total_csv_ids": 5333,
@@ -10,7 +10,7 @@
   "batch_targets": 1,
   "batch_attempted": 1,
   "batch_complete": 0,
-  "started_at": "2026-10-26T19:20:39.358568+00:00",
+  "started_at": "2026-10-26T19:38:02.535753+00:00",
   "success": 5332,
   "failed": 1,
   "success_ids": [
@@ -5356,9 +5356,9 @@
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "error": "RuntimeError: Search Tender input not found",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-26T19:21:12.224852+00:00"
+  "updated_at": "2026-10-26T19:39:16.863320+00:00"
 }
