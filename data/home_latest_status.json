@@ -1,35 +1,48 @@
 {
-  "status": "completed",
-  "started_at": "2026-10-26T08:46:46.763305+00:00",
+  "status": "partial",
+  "started_at": "2026-10-26T09:58:08.074132+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_MPFD_545389_1",
+    "2026_UAD_542715_1",
+    "2026_UAD_542717_1",
+    "2026_UAD_542385_1",
+    "2026_UAD_542387_1",
+    "2026_UAD_541421_1",
+    "2026_UAD_542388_1",
+    "2026_DHS_540656_1",
     "2026_MPP_541655_1",
-    "2026_MPPMC_534368_1",
-    "2026_DTCP_541417_1",
-    "2026_UAD_487998_6",
-    "2026_UAD_488006_6",
-    "2026_UAD_488166_6",
-    "2025_UAD_455914_4",
-    "2025_UAD_455918_4",
-    "2026_UAD_539750_1",
-    "2026_UAD_543950_1"
+    "2026_MPPMC_534368_1"
   ],
   "unchanged_ids": [
+    "2026_MPFD_545389_1",
+    "2026_UAD_539573_2",
     "2026_UAD_541633_1",
     "2026_UAD_539573_3",
-    "2026_UAD_539573_3",
+    "2026_PHED_545321_1",
     "2026_PHED_545320_1",
     "2026_HED_545368_1",
-    "2026_PHED_545321_1",
-    "2026_UAD_545322_1",
+    "2026_PWDRB_545032_1",
     "2026_UAD_545308_1",
-    "2026_UAD_545328_1"
+    "2026_PWDRB_545033_1"
   ],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-10-26T08:46:48.776498+00:00",
+  "errors": [
+    {
+      "reference": "964 Date 05.10.2026",
+      "kind": "corrigendum",
+      "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "corrigendum",
+      "reference": "964 Date 05.10.2026",
+      "title": "1. Date Extand",
+      "closing": "28-Oct-2026 05:30 PM",
+      "opening": "30-Oct-2026 11:30 AM"
+    }
+  ],
+  "copied_at": "2026-10-26T09:58:10.378907+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-26T08:47:30.157813+00:00"
+  "updated_at": "2026-10-26T09:58:59.207343+00:00"
 }
