@@ -1920,6 +1920,7 @@ body.telegram-locked .site-footer{visibility:hidden}
 .affidavit-status{font-size:11px;font-weight:700;color:#475569;margin-top:8px}
 .affidavit-modal.download-mode .affidavit-card{width:min(620px,96vw)}
 .affidavit-modal.download-mode .affidavit-grid>.affidavit-field:not(.affidavit-date-field),.affidavit-modal.download-mode .affidavit-relative-box,.affidavit-modal.download-mode .affidavit-preview,.affidavit-modal.download-mode #affidavitSaveProfile,.affidavit-modal.download-mode #affidavitProfileSaveStatus{display:none!important}
+.affidavit-modal.download-mode .affidavit-format-preview .affidavit-preview{display:block!important}
 .document-choices{margin:0 0 14px;padding:12px;border:1px solid #cbd5e1;border-radius:8px}.document-choices legend{font-size:13px;font-weight:800}.document-choice-options{display:flex;flex-wrap:wrap;gap:12px 20px}.document-choice-options label{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;cursor:pointer}.document-choice-options input{width:18px;height:18px;accent-color:#1d4ed8}.annexure-profile-details{margin:12px 0}.annexure-profile-details summary{cursor:pointer;font-weight:700;color:#173d70}.annexure-preview-table{border-collapse:collapse;width:100%;font-size:10px;white-space:normal}.annexure-preview-table th,.annexure-preview-table td{border:1px solid #d9d9d9;padding:5px;overflow-wrap:anywhere}.affidavit-actions button:disabled{opacity:.5;cursor:not-allowed}
 .affidavit-download-summary{padding:14px;margin-bottom:14px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;font-size:13px;line-height:1.6;color:#173d70}.affidavit-download-summary button{margin-top:8px;padding:7px 12px;background:#173d70;color:white}
 @media(max-width:700px){.affidavit-card{padding:12px}.affidavit-head{margin:-12px -12px 10px;padding:10px 12px;top:-12px}.affidavit-actions{margin:10px -12px -12px;padding:9px 12px;bottom:-12px}.affidavit-grid{grid-template-columns:1fr}.affidavit-field.full,.affidavit-relative-box{grid-column:1}.affidavit-relative-fields{grid-template-columns:1fr}.affidavit-actions{justify-content:stretch}.affidavit-actions button{flex:1 1 140px}.affidavit-preview{font-size:12px;padding:12px}}
@@ -2144,6 +2145,16 @@ body.telegram-locked .site-footer{visibility:hidden}
     </div>
     <div class="affidavit-download-summary" id="affidavitDownloadSummary" hidden><div id="affidavitSavedDetails"></div><button type="button" id="affidavitEditProfile">👤 Profile में details बदलें</button></div>
     <fieldset class="document-choices"><legend>कौन से documents डाउनलोड करने हैं?</legend><div class="document-choice-options"><label><input type="checkbox" id="affSelectAffidavit" checked> Affidavit</label><label><input type="checkbox" id="affSelectNoRelation" checked> No Relation</label><label><input type="checkbox" id="affSelectAnnexureH"> Annexure H</label></div></fieldset>
+    <div class="document-choices" id="affidavitFormatChoice">
+      <label for="affidavitFormat"><strong>Affidavit का प्रारूप चुनें</strong></label>
+      <select id="affidavitFormat" style="display:block;width:100%;max-width:100%;margin-top:8px;padding:10px;font:inherit">
+        <option value="universal">मौजूदा संयुक्त प्रारूप · ₹200</option>
+        <option value="annexure_b_100">Annexure B · ₹100 · नया PDF पेज 16</option>
+        <option value="tandibagli_200">Tandibagli · ₹200 · पुराना प्रारूप</option>
+        <option value="hatpiplya_200">Hatpiplya · ₹200 · पुराना प्रारूप</option>
+      </select>
+      <p id="affidavitFormatDescription" style="margin:8px 0 0;font-size:13px;line-height:1.5" aria-live="polite"></p>
+    </div>
     <div class="affidavit-grid">
       <div class="affidavit-field"><label for="affBidderName">Bidder / Deponent Name</label><input id="affBidderName" type="text" maxlength="120" placeholder="Bidder / Deponent का पूरा नाम"></div>
       <div class="affidavit-field"><label for="affParentRelation">Relationship (Page 2)</label><select id="affParentRelation"><option value="S/o">S/o — Son of</option><option value="D/o">D/o — Daughter of</option><option value="W/o">W/o — Wife of</option></select></div>
@@ -2168,7 +2179,7 @@ body.telegram-locked .site-footer{visibility:hidden}
       </div>
     </div>
     <div class="affidavit-note">यह draft आपके चुने हुए tender और profile की जानकारी से बनता है। NIT/Notice Date जानबूझकर auto-fill नहीं की जाती क्योंकि वह Published Date से अलग हो सकती है; bidder सही NIT date स्वयं लिख/भर सकता है। Notary/submit करने से पहले सभी details verify करें।</div>
-    <div class="affidavit-preview" id="affidavitPreview"></div>
+    <details class="affidavit-format-preview"><summary style="cursor:pointer;font-weight:700;padding:10px 0">चुने हुए प्रारूप का Preview देखें</summary><div class="affidavit-preview" id="affidavitPreview"></div></details>
     <div class="affidavit-actions">
       <span id="affidavitProfileSaveStatus" role="status" style="font-size:12px;line-height:1.4;"></span>
       <button class="affidavit-word" id="affidavitWord" type="button">⬇ Word (.docx)</button>
@@ -3049,12 +3060,26 @@ function parseCsv(text){
   });
 }
 
+function runtimeDataUrls(path){
+  return [
+    "https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/"+path,
+    "https://api.github.com/repos/esign2015/mp-tenders/contents/"+path+"?ref=tender-data"
+  ];
+}
+async function loadRuntimeText(path){
+  let lastError;
+  for(const url of runtimeDataUrls(path)){
+    try{return await fetchCsvText(url);}catch(error){lastError=error;}
+  }
+  throw lastError||new Error("Current runtime data unavailable");
+}
 async function fetchCsvText(url, timeoutMs=15000){
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try{
     const response = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(),{
       cache:"no-store",
+      headers:url.startsWith("https://api.github.com/")?{Accept:"application/vnd.github.raw+json"}:undefined,
       signal:controller.signal
     });
     if(!response.ok) throw new Error("CSV HTTP " + response.status);
@@ -3071,10 +3096,7 @@ async function fetchCsvText(url, timeoutMs=15000){
 
 async function loadFromCsv(){
   let lastError = null;
-  for(const url of [
-    "https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/all_tenders_org_detailed.csv",
-    CSV_URL
-  ]){
+  for(const url of runtimeDataUrls("all_tenders_org_detailed.csv")){
     try{
       const text = await fetchCsvText(url);
       const data = parseCsv(text);
@@ -3089,9 +3111,7 @@ async function loadFromCsv(){
 
 async function loadLiveSnapshot(){
   try{
-    const response=await fetch(LIVE_SNAPSHOT_URL+"?t="+Date.now(),{cache:"no-store"});
-    if(!response.ok) throw new Error("Live snapshot HTTP "+response.status);
-    const snapshot=await response.json();
+    const snapshot=JSON.parse(await loadRuntimeText("data/live_snapshot.json"));
     if(!Array.isArray(snapshot.tender_ids)||!snapshot.tender_ids.length) throw new Error("Live snapshot is empty");
     return snapshot;
   }catch(error){
@@ -3102,10 +3122,7 @@ async function loadLiveSnapshot(){
 
 async function loadOrganisationTenderCsv(){
   let lastError = null;
-  for(const url of [
-    "https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/organisation_tenders.csv",
-    ORG_TENDER_CSV_URL
-  ]){
+  for(const url of runtimeDataUrls("organisation_tenders.csv")){
     try{
       const text = await fetchCsvText(url);
       const data = parseCsv(text);
@@ -3120,10 +3137,7 @@ async function loadOrganisationTenderCsv(){
 
 async function loadPortalTenderCountTotal(){
   let lastError=null;
-  for(const url of [
-    "https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/organisations.csv",
-    ORG_COUNT_CSV_URL
-  ]){
+  for(const url of runtimeDataUrls("organisations.csv")){
     try{
       const text=await fetchCsvText(url);
       const rows=parseCsv(text);
@@ -4648,8 +4662,7 @@ function applyDataTimes(meta,rows){
  lastDetailVerifiedAt=latest?new Date(latest):null;lastBrowserRefreshAt=new Date();updateRefreshBadge();
 }
 async function loadInventoryMetadata(){
- const r=await fetch("https://raw.githubusercontent.com/esign2015/mp-tenders/tender-data/data/inventory_counts.json?t="+Date.now(),{cache:"no-store"});
- if(!r.ok)throw new Error("Snapshot metadata unavailable");return r.json();
+ return JSON.parse(await loadRuntimeText("data/inventory_counts.json"));
 }
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;$("installAppBtn").disabled=false});window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;$("installAppBtn").disabled=true});function installDashboardApp(){if(!deferredInstallPrompt){alert(currentLanguage==="hi"?"Chrome के ⋮ मेनू से Install app चुनें।":"Use Chrome ⋮ menu → Install app.");return}deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>deferredInstallPrompt=null)}
 function updateDateTime(){
@@ -5760,6 +5773,60 @@ enforceAccountAccess().then(async () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safe(value)) && safe(value).length<=240;
   }
   const documentOptions=[['affidavit','affSelectAffidavit'],['noRelation','affSelectNoRelation'],['annexureH','affSelectAnnexureH']];
+  const affidavitFormats={
+    universal:{name:'मौजूदा संयुक्त प्रारूप · ₹200',note:'मौजूदा संयुक्त affidavit: बैंक दस्तावेज़, ऑनलाइन जानकारी और गलत घोषणा पर कार्रवाई वाला विस्तृत प्रारूप।'},
+    annexure_b_100:{name:'Annexure B · ₹100 · नया PDF पेज 16',note:'tenderdocfinal.pdf, पेज 16। बैंक दस्तावेज़ वाला बिंदु और notarized original एक दिन पहले पहुँचने का Note शामिल है। मूल verification में “paras 1 to 4” लिखा है; वही रखा गया है।'},
+    tandibagli_200:{name:'Tandibagli · ₹200 · पुराना प्रारूप',note:'afftandibagli.pdf वाला मूल प्रारूप। ऑनलाइन financial/technical जानकारी और गलत जानकारी पर कार्रवाई का प्रावधान। Hatpiplya की declaration सामग्री भी यही है।'},
+    hatpiplya_200:{name:'Hatpiplya · ₹200 · पुराना प्रारूप',note:'hatpiplyaaff.pdf वाला मूल प्रारूप। इसकी declaration सामग्री Tandibagli जैसी है; पहचान के लिए अलग विकल्प रखा गया है।'}
+  };
+  function selectedAffidavitFormat(){
+    const key=byId('affidavitFormat')?.value;
+    return Object.hasOwn(affidavitFormats,key)?key:'universal';
+  }
+  function restoreAffidavitFormat(){
+    let key='universal';try{key=localStorage.getItem(profileKey()+'_format')||key;}catch(_e){}
+    byId('affidavitFormat').value=Object.hasOwn(affidavitFormats,key)?key:'universal';
+  }
+  function sourceAffidavitParagraphs(d){
+    if(d.affidavitFormat==='universal')return [];
+    const is100=d.affidavitFormat==='annexure_b_100',yes=d.relative==='yes';
+    const text=value=>({text:value}),field=value=>({text:value||'____________________________',bold:true,underline:true});
+    const p=(parts,kind='body')=>({parts:typeof parts==='string'?[text(parts)]:parts,kind});
+    const entries=[
+      p('Annexure - B','rightHeading'),
+      p('(See clause 3 of Section 1 -NIT)','rightHeading'),
+      p('|| AFFIDAVIT ||','title')
+    ];
+    if(is100)entries.push(p('(To be Contained in Envelope A)','center'));
+    entries.push(p('(On Non Judicial Stamp of Rs. '+(is100?'100':'200')+')','center'));
+    entries.push(p([text('I/we '),field(d.bidderName),text(' who is/ are '),field(d.status),text(' (status in the firm/ company) and competent for submission of the affidavit on behalf of '+(is100?'M/S ':'')),field(d.firmName),text(' (contractor) do solemnly affirm an oath and state that:')]));
+    entries.push(p([text('I/we '+(is100?'am/are':'are')+' fully satisfied for the correctness of the certificates/records submitted in support of the following information in bid documents which are being submitted in response to notice inviting e-tender No. '),field(noticeTenderNumber(d)),text(' for '),field(d.workName),text(' (name of work) dated '),field(d.noticeDate),text(' issued by the '),field(d.department),text(' (name of the department).')]));
+    entries.push(p('I/we '+(is100?'am/ are':'are')+' fully responsible for the correctness of following '+(is100?'self-certified':'self certified')+' information/ documents and certificates:'));
+    entries.push(p(is100?'1. That the self-certified information given in the bid document is fully true and authentic.':"1. That the self-certified information’s/ digitally signed documents given in the bid document are fully true and authentic."));
+    entries.push(p('2. That:'));
+    if(is100)entries.push(p('a. Term deposit receipt deposited as earnest money, demand draft for cost of bid document and other relevant documents provided by the Bank are authentic.'));
+    entries.push(p((is100?'b.':'a.')+' Information regarding financial qualification and annual turnover'+(is100?'':', submitted online')+' is correct.'));
+    entries.push(p((is100?'c.':'b.')+' Information regarding various technical qualifications'+(is100?'':', submitted online')+' is correct.'));
+    entries.push(p([{text:'3. No close relative of the undersigned and our firm/company is working in the department.',strike:yes}]));
+    entries.push(p('OR','center'));
+    entries.push(p([{text:'Following close relatives are working in the department:',strike:!yes}]));
+    entries.push(p([{text:'Name ',strike:!yes},{...field(yes?d.relativeName:'NA'),strike:!yes},{text:' Post ',strike:!yes},{...field(yes?d.relativePost:'NA'),strike:!yes},{text:' Present Posting ',strike:!yes},{...field(yes?d.relativePosting:'NA'),strike:!yes}]));
+    entries.push(p('Signature with Seal of the Deponent (bidder)','signature'));
+    entries.push(p([text('I/ We, '),field(d.bidderName),text(' above deponent do hereby certify that the facts mentioned in above paras 1 to '+(is100?'4':'3')+' are correct to the best of my knowledge and belief.'+(is100?'':' in the event of any information is found to be incorrect/untrue or found violated then without giving any prior notice, our bid shall be liable for rejection or termination of contract, without prejudice to any other rights of remedy including in for future of the bid security/performance security.'))]));
+    entries.push(p([text('Verified today '),field(d.verifyDate),text(' (dated) at '),field(d.place),text(' (place).')]));
+    entries.push(p('Signature with Seal of the Deponent (bidder)','signature'));
+    if(is100)entries.push(p('Note: Affidavit duly notarized in original shall reach at least one calendar day before opening of the bid.','note'));
+    return entries;
+  }
+  function sourceAffidavitPreview(d){
+    return sourceAffidavitParagraphs(d).map(p=>{
+      const cls=['center','title'].includes(p.kind)?'aff-prev-center':['signature','rightHeading'].includes(p.kind)?'aff-prev-right':'aff-prev-justify';
+      return (p.kind==='signature'?'<div class="aff-sign-space"></div>':'')+'<p class="'+cls+'">'+p.parts.map(s=>{
+        let value=escapeHtml(s.text);if(s.underline)value='<u>'+value+'</u>';if(s.bold||['title','signature','rightHeading'].includes(p.kind))value='<strong>'+value+'</strong>';if(s.strike)value='<s>'+value+'</s>';return value;
+      }).join('')+'</p>';
+    }).join('');
+  }
+
   function selectedDocuments(){
     return documentOptions.filter(([,id])=>byId(id)?.checked).map(([key])=>key);
   }
@@ -5825,6 +5892,7 @@ enforceAccountAccess().then(async () => {
       mobile:safe(general.mobile),
       email:safe(getSavedProfile().email||general.email),
       documents:selectedDocuments(),
+      affidavitFormat:selectedAffidavitFormat(),
       annexure:getSavedProfile(),
       parentName:safe(byId("affParentName")?.value),
       parentRelation:["S/o","D/o","W/o"].includes(byId("affParentRelation")?.value)?byId("affParentRelation").value:"S/o",
@@ -5943,6 +6011,8 @@ enforceAccountAccess().then(async () => {
   }
   function updatePreview(){
     const d=documentData();
+    byId('affidavitFormat').disabled=!d.documents.includes('affidavit');
+    byId('affidavitFormatDescription').textContent=affidavitFormats[d.affidavitFormat].note;
     for(const id of ['affidavitWord','affidavitPdf'])byId(id).disabled=!d.documents.length;
     const point3=d.relative==="yes"
       ? '<p class="aff-prev-list aff-strike">3. No close relative of the undersigned or our firm / company is working in the department.</p>'
@@ -5975,11 +6045,12 @@ enforceAccountAccess().then(async () => {
       '<p class="aff-prev-left">Verified on <strong><u>'+escapeHtml(d.verifyDate)+'</u></strong> at <strong><u>'+escapeHtml(d.place)+'</u></strong>.</p>'+
       '<div class="aff-sign-space"></div><p class="aff-prev-right"><strong>Signature with Seal of the Deponent (Bidder)</strong></p>'+
       '<p class="aff-prev-right">Name: <strong><u>'+escapeHtml(d.bidderName)+'</u></strong></p>';
-    byId('affidavitPreview').innerHTML=(d.documents.includes('affidavit')?affidavitHtml:'')+(d.documents.includes('noRelation')?noRelationPreview(d):'')+(d.documents.includes('annexureH')?annexurePreview(d):'');
+    byId('affidavitPreview').innerHTML=(d.documents.includes('affidavit')?(d.affidavitFormat==='universal'?affidavitHtml:sourceAffidavitPreview(d)):'')+(d.documents.includes('noRelation')?noRelationPreview(d):'')+(d.documents.includes('annexureH')?annexurePreview(d):'');
   }
   function fillFromTender(row){
     selectedAffidavitTender=row;
     restoreDocumentChoices();
+    restoreAffidavitFormat();
     const saved=getSavedProfile();
     const general=getSavedGeneralProfile();
     const telegramName="";
@@ -6025,7 +6096,7 @@ enforceAccountAccess().then(async () => {
     byId('affidavitSavedDetails').textContent=saved.bidderName+' • '+saved.firmName+' • '+saved.place+' — Certificate में profile से letterhead भी छपेगा।';
   };
   function closeModal(){const m=byId("affidavitModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
-  function fileBase(d){return ((d.documents.length===1?({affidavit:"Affidavit",noRelation:"No_Relation",annexureH:"Annexure_H"}[d.documents[0]]):"Tender_Documents")+"_"+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
+  function fileBase(d){return ((d.documents.length===1?({affidavit:"Affidavit",noRelation:"No_Relation",annexureH:"Annexure_H"}[d.documents[0]]):"Tender_Documents")+"_"+(d.documents.includes("affidavit")?d.affidavitFormat+"_":"")+(d.tenderId||"Tender")+"_"+(d.firmName||"Bidder")).replace(/[^A-Za-z0-9._-]+/g,"_").replace(/_+/g,"_").slice(0,120);}
   function isMobileChrome(){
     const ua=navigator.userAgent||"";
     return /Android/i.test(ua) && /Chrome\//i.test(ua);
@@ -6094,7 +6165,17 @@ enforceAccountAccess().then(async () => {
       });
       const normal={before:100,after:100};
       const paragraphs=[];
-      if(d.documents.includes('affidavit')){
+      if(d.documents.includes('affidavit') && d.affidavitFormat!=='universal'){
+        for(const item of sourceAffidavitParagraphs(d)){
+          const heading=['title','rightHeading','signature'].includes(item.kind);
+          const align=['center','title'].includes(item.kind)?AlignmentType.CENTER:['rightHeading','signature'].includes(item.kind)?AlignmentType.RIGHT:AlignmentType.JUSTIFIED;
+          paragraphs.push(para(item.parts.map(part=>run(part.text,!!part.bold||heading,item.kind==='note',item.kind==='title'?28:20,!!part.underline,!!part.strike)),{
+            alignment:align,keepNext:['rightHeading','title','center'].includes(item.kind),
+            spacing:{before:item.kind==='signature'?480:0,after:100,line:260,lineRule:LineRuleType.AUTO}
+          }));
+        }
+      }
+      if(d.documents.includes('affidavit') && d.affidavitFormat==='universal'){
       // These first three lines are centered in the supplied affidavit.
       paragraphs.push(para([run("|| AFFIDAVIT ||",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
       paragraphs.push(para([run("(To be contained in Envelope A)",true,false,28)],{alignment:AlignmentType.CENTER,spacing:normal}));
@@ -6303,7 +6384,16 @@ enforceAccountAccess().then(async () => {
         doc.setFont("times",bold?"bold":"normal");doc.setFontSize(10);addPageIf(7);
         doc.text(text,right,y,{align:"right"});y+=7;
       };
-      if(d.documents.includes('affidavit')){
+      if(d.documents.includes('affidavit') && d.affidavitFormat!=='universal'){
+        for(const item of sourceAffidavitParagraphs(d)){
+          const text=item.parts.map(part=>part.text).join('');
+          if(item.kind==='signature'){y+=16;rightText(text,true);}
+          else if(item.kind==='rightHeading')rightText(text,true);
+          else if(['center','title'].includes(item.kind))center(text,item.kind==='title',false,item.kind==='title'?14:10,2);
+          else richParagraph(item.parts,{leading:4.7,after:2});
+        }
+      }
+      if(d.documents.includes('affidavit') && d.affidavitFormat==='universal'){
       center("|| AFFIDAVIT ||",true,false,14,3);
       center("(To be contained in Envelope A)",true,false,14,3);
       center("(On Non-Judicial Stamp of Rs. 200.00)",false,true,10,4);
@@ -6490,6 +6580,9 @@ enforceAccountAccess().then(async () => {
     byId("affRelative")?.addEventListener("change",()=>{setRelativeFieldsEnabled(byId("affRelative").value==="yes");updatePreview();});
     ["affParentRelation","affParentName","affAddress","affBidderName","affFirmName","affStatus","affPlace","affTenderRef","affNoticeDate","affWorkName","affDepartment","affVerifyDate","affRelativeName","affRelativePost","affRelativePosting"].forEach(id=>byId(id)?.addEventListener("input",updatePreview));
     byId('affNoticeDate')?.addEventListener('change',saveNoticeDate);
+    byId('affidavitFormat')?.addEventListener('change',()=>{
+      localStorage.setItem(profileKey()+'_format',selectedAffidavitFormat());updatePreview();
+    });
     byId('affidavitEditProfile')?.addEventListener('click',()=>{const id=safe(byId('affTenderId')?.value);closeModal();window.pendingAffidavitTenderId=id;byId('accountProfileBtn')?.onclick?.();byId('accountEditAffidavitForm')?.scrollIntoView?.({block:'start'});});
     documentOptions.forEach(([,id])=>byId(id)?.addEventListener('change',updateDocumentChoices));
     byId("affidavitWord")?.addEventListener("click",downloadWord);
@@ -6503,3 +6596,4 @@ enforceAccountAccess().then(async () => {
 
 </body>
 </html>
+

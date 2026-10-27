@@ -69,7 +69,7 @@ node('affSelectAffidavit').checked=true;node('affSelectNoRelation').checked=true
 const sample={'Tender ID':'2026_MPPHC_538538_1','Reference Number':'NIT_21/2026-27_1',Title:'Repair of police station',Organisation:'MP Police Housing'};
 ctx.allTenders.push(sample);
 ctx.window.openAffidavitForTender(sample['Tender ID']);
-assert(node('affidavitPreview').innerHTML.includes('notice inviting e-tender No. <strong><u>2026_MPPHC_538538_1 (ref no. NIT_21/2026-27_1)</u></strong>'));
+assert(node('affidavitPreview').innerHTML.toLowerCase().includes('notice inviting e-tender no. <strong><u>2026_mpphc_538538_1 (ref no. nit_21/2026-27_1)</u></strong>'));
 for(const missing of ['',sample['Tender ID'],'NA']){
  sample['Reference Number']=missing;ctx.window.openAffidavitForTender(sample['Tender ID']);
  assert(!node('affidavitPreview').innerHTML.includes('(ref no.'));
@@ -78,3 +78,42 @@ ctx.window.openAffidavitForTender('TENDER-1');assert(!node('affidavitPreview').i
 console.log('PASS: incomplete profiles route to My Profile, saved profiles open Word/PDF options, parent/address survive legacy responses, editing resumes the selected tender and downloads do not resave basic details.');
 console.log('PASS: certificate preview includes the saved profile letterhead and available mobile and required profile email; selected document previews and empty-choice protection work.');
 console.log('PASS: affidavit shows the selected tender reference in bold/underline, omits missing references and does not reuse another tender reference.');
+// The selected source changes the preview without mixing clauses from other formats.
+node('affSelectAffidavit').checked=true;node('affSelectNoRelation').checked=false;node('affSelectAnnexureH').checked=false;
+for(const format of ['annexure_b_100','tandibagli_200','hatpiplya_200']){
+ node('affidavitFormat').value=format;node('affidavitFormat').change();
+ const preview=node('affidavitPreview').innerHTML;
+ assert(preview.includes('Annexure - B'));
+ assert(preview.includes('Full Name'));
+ assert(preview.includes('Signature with Seal of the Deponent (bidder)'));
+ if(format==='annexure_b_100'){
+  assert(preview.includes('Stamp of Rs. 100'));
+  assert(preview.includes('Term deposit receipt'));
+  assert(preview.includes('one calendar day before'));
+  assert(preview.includes('paras 1 to 4'));
+  assert(!preview.includes('without giving any prior notice'));
+ }else{
+  assert(preview.includes('Stamp of Rs. 200'));
+  assert(preview.includes('submitted online'));
+  assert(preview.includes('without giving any prior notice'));
+  assert(!preview.includes('Term deposit receipt'));
+  assert(!preview.includes('one calendar day before'));
+ }
+ ctx.window.openAffidavitForTender('TENDER-1');
+ assert.equal(node('affidavitFormat').value,format);
+}
+ctx.window.dashboardAffidavitProfile={...complete,relative:'yes',relativeName:'Relative One',relativePost:'Engineer',relativePosting:'Dewas'};
+ctx.window.openAffidavitForTender('TENDER-1');
+node('affidavitFormat').value='annexure_b_100';node('affidavitFormat').change();
+assert(node('affidavitPreview').innerHTML.includes('<s>3. No close relative'));
+assert(node('affidavitPreview').innerHTML.includes('Relative One'));
+node('affSelectAffidavit').checked=false;node('affSelectNoRelation').checked=true;node('affSelectNoRelation').change();
+assert(node('affidavitFormat').disabled);
+assert(!node('affidavitPreview').innerHTML.includes('Stamp of Rs. 100'));
+node('affSelectAffidavit').checked=true;node('affSelectNoRelation').checked=false;node('affidavitFormat').value='universal';node('affidavitFormat').change();
+assert(node('affidavitPreview').innerHTML.includes('wherever applicable'));
+assert(node('affidavitPreview').innerHTML.includes('In the event that any information'));
+local.set('mp_tender_affidavit_profile_v1_visitor_USER-1_format','bad-value');
+ctx.window.openAffidavitForTender('TENDER-1');assert.equal(node('affidavitFormat').value,'universal');
+console.log('PASS: all source formats, saved selection, source-specific clauses and close-relative choices.');
+
