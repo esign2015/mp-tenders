@@ -1,5 +1,4 @@
 from portal_fee_exceptions import verified_fee_omission
-from telegram_text import HINDI_DISCLAIMER
 from district_mapping import resolve_district
 import csv
 import json
@@ -499,8 +498,7 @@ def main():
     today = now.date()
     d = today.strftime("%d-%m-%Y")
     rows = live_rows(load_report_rows())
-    warning = HINDI_DISCLAIMER
-    footer = f"🌐 वेबसाइट: {SITE_URL}\n\n📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n👤 व्यवस्थापक: https://t.me/rdgyan\n\n{warning}"
+    footer = f"🌐 वेबसाइट: {SITE_URL}\n\n📢 टेलीग्राम चैनल: {TELEGRAM_URL}\n\n👤 व्यवस्थापक: https://t.me/rdgyan"
     if mode == "morning":
         rows = morning_inventory_rows(rows, CSV_PATH.parent)
     if mode == "manual":
