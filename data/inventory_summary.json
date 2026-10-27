@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-27T16:37:19.042650+05:30",
+    "checked_at": "2026-10-27T16:39:26.451386+05:30",
     "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5381,
@@ -23,15 +23,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-27T11:07:20.457462+00:00",
+  "updated_at": "2026-10-27T11:09:27.769665+00:00",
   "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5381,
   "copied_tenders": 5381,
-  "detail_complete": 5380,
+  "detail_complete": 5379,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 2,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -248,10 +248,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 2798,
       "copied_tenders": 2798,
-      "detail_complete": 2798,
+      "detail_complete": 2797,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1059,12 +1059,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 18,
+  "missing_district_count": 19,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
     "2026_MPP_545262_2",
+    "2026_UAD_545507_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1082,6 +1083,8 @@
   ],
   "known_pincode_count": 369,
   "department_count": 317,
-  "missing_pincode_count": 0,
-  "missing_pincode_ids": []
+  "missing_pincode_count": 1,
+  "missing_pincode_ids": [
+    "2026_UAD_545507_1"
+  ]
 }
