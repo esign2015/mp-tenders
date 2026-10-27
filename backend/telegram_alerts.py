@@ -552,7 +552,7 @@ def main():
         + footer
     )
     title = f"{english} {d} • {len(selected)} tenders"
-    filename = f"{english.replace(' ', '_')}_{d}.pdf"
+    filename = f"एमपी टेंडर्स अलर्ट {heading.removeprefix('📋 ')}".replace("/", "-") + ".pdf"
     pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
     # One PDF message per report. The Hindi report accompanies the document
     # itself, keeping the daily channel total at three messages.
