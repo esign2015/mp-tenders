@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-28T00:07:35.006168+05:30",
+    "checked_at": "2026-10-28T00:10:11.462289+05:30",
     "snapshot_at": "2026-10-27T18:10:41.995216+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5057,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-27T18:37:36.260578+00:00",
+  "updated_at": "2026-10-27T18:40:12.115752+00:00",
   "snapshot_at": "2026-10-27T18:10:41.995216+00:00",
   "organisation_count": 89,
   "portal_tender_count": 5057,
   "copied_tenders": 5057,
-  "detail_complete": 5055,
+  "detail_complete": 5056,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -198,10 +198,10 @@
       "snapshot_at": "2026-10-27T18:10:41.995216+00:00",
       "portal_tender_count": 20,
       "copied_tenders": 20,
-      "detail_complete": 19,
+      "detail_complete": 20,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Sports and Youth Welfare",
@@ -1009,12 +1009,11 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 19,
+  "missing_district_count": 18,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_DTCP_532039_1",
     "2026_MPP_545262_2",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
@@ -1033,8 +1032,6 @@
   ],
   "known_pincode_count": 356,
   "department_count": 306,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_DTCP_532039_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
