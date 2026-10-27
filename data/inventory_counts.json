@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-27T16:22:00.505658+05:30",
+    "checked_at": "2026-10-27T16:26:45.949816+05:30",
     "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5381,
@@ -23,15 +23,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-27T10:52:01.828398+00:00",
+  "updated_at": "2026-10-27T10:56:47.289342+00:00",
   "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5381,
   "copied_tenders": 5381,
-  "detail_complete": 5371,
+  "detail_complete": 5380,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 9,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -248,10 +248,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 2798,
       "copied_tenders": 2798,
-      "detail_complete": 2796,
+      "detail_complete": 2798,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -380,10 +380,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Jiwaji University - Gwalior",
@@ -457,10 +457,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 35,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -468,10 +468,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 170,
       "copied_tenders": 170,
-      "detail_complete": 168,
+      "detail_complete": 170,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -567,10 +567,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 15,
       "copied_tenders": 15,
-      "detail_complete": 14,
+      "detail_complete": 15,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Urja Vikas Nigam Limitted",
@@ -622,10 +622,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 73,
       "copied_tenders": 73,
-      "detail_complete": 72,
+      "detail_complete": 73,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -809,10 +809,10 @@
       "snapshot_at": "2026-10-27T10:23:05.377873+00:00",
       "portal_tender_count": 13,
       "copied_tenders": 13,
-      "detail_complete": 12,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Tourism Board",
@@ -1059,21 +1059,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 27,
+  "missing_district_count": 18,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_JNKVV_541231_1",
-    "2026_MPFD_545240_1",
-    "2026_MPPGC_530247_1",
-    "2026_MPPGC_543350_1",
     "2026_MPP_545262_2",
-    "2026_MPUDC_545673_1",
-    "2026_PKVVC_545502_1",
-    "2026_STDC_545192_1",
-    "2026_UAD_545507_1",
-    "2026_UAD_545648_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1089,18 +1080,8 @@
     "2026_WRD_526725_1",
     "2026_WRD_526726_1"
   ],
-  "known_pincode_count": 367,
-  "department_count": 316,
-  "missing_pincode_count": 9,
-  "missing_pincode_ids": [
-    "2026_JNKVV_541231_1",
-    "2026_MPFD_545240_1",
-    "2026_MPPGC_530247_1",
-    "2026_MPPGC_543350_1",
-    "2026_MPUDC_545673_1",
-    "2026_PKVVC_545502_1",
-    "2026_STDC_545192_1",
-    "2026_UAD_545507_1",
-    "2026_UAD_545648_1"
-  ]
+  "known_pincode_count": 369,
+  "department_count": 317,
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
