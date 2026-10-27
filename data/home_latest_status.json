@@ -1,223 +1,32 @@
 {
-  "status": "partial",
-  "started_at": "2026-10-27T09:44:49.741496+00:00",
+  "status": "completed",
+  "started_at": "2026-10-27T10:12:33.867999+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_PHED_545621_1",
-    "2026_PHED_545615_1",
-    "2026_MPHC_545613_1"
+    "2026_WRD_532299_1",
+    "2026_WRD_532298_1",
+    "2026_UAD_545514_1",
+    "2026_WRD_532301_1",
+    "2026_EOW_545617_1",
+    "2026_WRD_532296_1",
+    "2026_WRD_539064_1",
+    "2026_MPWLC_543755_1",
+    "2026_MKVVC_543113_1",
+    "2026_MPWLC_543754_1",
+    "2026_MPHID_540784_1",
+    "2026_UAD_543597_1",
+    "2026_MPWLC_543752_1",
+    "2026_MPWLC_543751_1"
   ],
-  "unchanged_ids": [],
-  "errors": [
-    {
-      "reference": "NIT56EEPHE2026MORENADT27.10.26",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "NIT57EEPHE2026MORENADT27.10.26",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "2026/E-TENDER/760",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "8322_2",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "4011 / 27.10.2026",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "8320_1",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "8322_1",
-      "kind": "tender",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "4062/B/Dt. 15/10/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "MPFD_2026_SFRTM_07",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "319/G/CE/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "4062/A/Dt. 15/10/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "318/G/CE/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "4062/A/Dt. 15/10/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "317/G/CE/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "UDA/ET/168/26 DATE 13/10/2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "22/2026-27 Dt.12.10.2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    },
-    {
-      "reference": "22/2026-27 Dt.12.10.2026",
-      "kind": "corrigendum",
-      "error": "Entry moved off Home; retry next cycle"
-    }
+  "unchanged_ids": [
+    "2026_PHED_545596_1",
+    "2026_PHED_545603_1",
+    "2026_PHED_545615_1"
   ],
-  "pending": [
-    {
-      "kind": "tender",
-      "reference": "NIT56EEPHE2026MORENADT27.10.26",
-      "title": "4. Balance and Revised work in Piped Water Supply Scheme under JJM",
-      "closing": "11-Nov-2026 05:30 PM",
-      "opening": "13-Nov-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "NIT57EEPHE2026MORENADT27.10.26",
-      "title": "5. Balance and Revised work in Piped Water Supply Scheme under JJM",
-      "closing": "11-Nov-2026 05:30 PM",
-      "opening": "13-Nov-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "2026/E-TENDER/760",
-      "title": "6. 2026/E-Tender/760",
-      "closing": "02-Nov-2026 05:30 PM",
-      "opening": "04-Nov-2026 09:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "8322_2",
-      "title": "7. Const. Rcc Drain With Cover and Crossing Ward No 29 Muncipal Area Chhatarpur",
-      "closing": "01-Dec-2026 05:30 PM",
-      "opening": "03-Dec-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "4011 / 27.10.2026",
-      "title": "8. WARD 12 MAIN MUKHYA MANTRI MACHUA YOJNA HETU SMART FISH PARLOR NIRMAN WORKWARD 12 MAIN MUKHYA MANTRI MACHUA YOJNA HETU SMART FISH PARLOR NIRMAN WORK",
-      "closing": "30-Nov-2026 05:30 PM",
-      "opening": "02-Dec-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "8320_1",
-      "title": "9. Const. CC Road and Rcc Drain Ward No 05 Muncipal Area Chhatarpur",
-      "closing": "01-Dec-2026 05:30 PM",
-      "opening": "03-Dec-2026 11:00 AM"
-    },
-    {
-      "kind": "tender",
-      "reference": "8322_1",
-      "title": "10. Const. CC Road and Rcc Drain Ward No 09 Muncipal Area Chhatarpur",
-      "closing": "01-Dec-2026 05:30 PM",
-      "opening": "03-Dec-2026 11:00 AM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "4062/B/Dt. 15/10/2026",
-      "title": "1. Corrigendum As Per Circular Enclosed",
-      "closing": "10-Nov-2026 05:00 PM",
-      "opening": "12-Nov-2026 12:00 PM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "MPFD_2026_SFRTM_07",
-      "title": "2. Extension Bid date1",
-      "closing": "04-Nov-2026 12:35 PM",
-      "opening": "05-Nov-2026 12:30 PM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "319/G/CE/2026",
-      "title": "3. Corrigendum No. 2",
-      "closing": "04-Nov-2026 05:30 PM",
-      "opening": "06-Nov-2026 10:30 AM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "4062/A/Dt. 15/10/2026",
-      "title": "4. Corrigendum As Per Circular Enclosed",
-      "closing": "10-Nov-2026 05:00 PM",
-      "opening": "12-Nov-2026 12:00 PM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "318/G/CE/2026",
-      "title": "5. Corrigendum No. 2",
-      "closing": "04-Nov-2026 05:30 PM",
-      "opening": "06-Nov-2026 10:30 AM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "4062/A/Dt. 15/10/2026",
-      "title": "6. Corrigendum As Per Circular Enclosed",
-      "closing": "10-Nov-2026 05:00 PM",
-      "opening": "12-Nov-2026 12:00 PM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "317/G/CE/2026",
-      "title": "7. Corrigendum No. 2",
-      "closing": "04-Nov-2026 05:30 PM",
-      "opening": "06-Nov-2026 10:30 AM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "UDA/ET/168/26 DATE 13/10/2026",
-      "title": "8. PLEASE GO THROUGH CORRIGENDUM",
-      "closing": "02-Nov-2026 05:30 PM",
-      "opening": "03-Nov-2026 05:30 PM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "22/2026-27 Dt.12.10.2026",
-      "title": "9. date change",
-      "closing": "06-Nov-2026 05:30 PM",
-      "opening": "07-Nov-2026 10:00 AM"
-    },
-    {
-      "kind": "corrigendum",
-      "reference": "22/2026-27 Dt.12.10.2026",
-      "title": "10. date change",
-      "closing": "06-Nov-2026 05:30 PM",
-      "opening": "07-Nov-2026 10:00 AM"
-    }
-  ],
-  "copied_at": "2026-10-27T09:44:56.385183+00:00",
+  "errors": [],
+  "pending": [],
+  "copied_at": "2026-10-27T10:12:45.568937+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-27T09:45:08.022180+00:00"
+  "updated_at": "2026-10-27T10:13:22.165170+00:00"
 }
