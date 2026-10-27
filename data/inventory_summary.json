@@ -2,15 +2,16 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-27T15:11:19.042419+05:30",
+    "checked_at": "2026-10-27T15:15:09.834336+05:30",
     "snapshot_at": "2026-10-27T09:16:16.114933+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5458,
     "verified_unique_ids": 5458,
     "dashboard_live_count": 5402,
     "closed_or_cancelled_count": 56,
-    "excluded_master_only_live_count": 5,
+    "excluded_master_only_live_count": 6,
     "excluded_master_only_live_ids": [
+      "2026_MPHC_545613_1",
       "2026_MPRRD_543710_87",
       "2026_UAD_540004_1",
       "2026_UAD_541670_1",
@@ -23,15 +24,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-27T09:41:20.012486+00:00",
+  "updated_at": "2026-10-27T09:45:10.636781+00:00",
   "snapshot_at": "2026-10-27T09:16:16.114933+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5458,
   "copied_tenders": 5458,
-  "detail_complete": 5257,
+  "detail_complete": 5259,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 200,
+  "detail_pending": 198,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -941,10 +942,10 @@
       "snapshot_at": "2026-10-27T09:16:16.114933+00:00",
       "portal_tender_count": 72,
       "copied_tenders": 72,
-      "detail_complete": 68,
+      "detail_complete": 70,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "PWD-PIU",
@@ -1070,7 +1071,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 218,
+  "missing_district_count": 216,
   "missing_district_ids": [
     "2024_UAD_363866_9",
     "2024_UAD_371777_10",
@@ -1114,8 +1115,6 @@
     "2026_MPSAM_545011_1",
     "2026_PHED_545596_1",
     "2026_PHED_545603_1",
-    "2026_PHED_545615_1",
-    "2026_PHED_545621_1",
     "2026_PWDRB_544781_1",
     "2026_PWDRB_544787_1",
     "2026_PWDRB_544789_1",
@@ -1293,7 +1292,7 @@
   ],
   "known_pincode_count": 366,
   "department_count": 315,
-  "missing_pincode_count": 200,
+  "missing_pincode_count": 198,
   "missing_pincode_ids": [
     "2024_UAD_363866_9",
     "2024_UAD_371777_10",
@@ -1333,8 +1332,6 @@
     "2026_MPSAM_545011_1",
     "2026_PHED_545596_1",
     "2026_PHED_545603_1",
-    "2026_PHED_545615_1",
-    "2026_PHED_545621_1",
     "2026_PWDRB_544781_1",
     "2026_PWDRB_544787_1",
     "2026_PWDRB_544789_1",
