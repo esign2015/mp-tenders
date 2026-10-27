@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "40557321939",
-  "github_run_number": "1265",
+  "status": "running",
+  "github_run_id": "40568897325",
+  "github_run_number": "69",
   "github_commit_sha": "bea84f6c0b60cd82676093e4d69b9c298cd94267",
-  "batch_size": 500,
-  "total_csv_ids": 5057,
-  "current_portal_ids": 5057,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
+  "batch_size": 5000,
+  "total_csv_ids": 5059,
+  "current_portal_ids": 5059,
+  "initial_incomplete": 3,
+  "batch_targets": 3,
   "batch_attempted": 2,
-  "batch_complete": 1,
-  "started_at": "2026-10-27T18:38:10.031811+00:00",
-  "success": 5056,
-  "failed": 1,
+  "batch_complete": 2,
+  "started_at": "2026-10-27T19:26:12.015577+00:00",
+  "success": 5058,
+  "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_296329_3",
@@ -371,6 +371,8 @@
     "2026_DTCP_519708_1",
     "2026_DTCP_526182_1",
     "2026_DTCP_532039_1",
+    "2026_DTCP_532040_1",
+    "2026_DTCP_532041_1",
     "2026_DTCP_541006_1",
     "2026_DTCP_541417_1",
     "2026_DTCP_541823_1",
@@ -5071,18 +5073,12 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "2026_DTCP_532039_1",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-10-27T18:38:42.737026+00:00"
+  "last_successful_tender_id": "2026_DTCP_532041_1",
+  "errors": [],
+  "updated_at": "2026-10-27T19:26:29.617710+00:00"
 }

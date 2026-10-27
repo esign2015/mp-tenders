@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-28T00:55:13.195430+05:30",
+    "checked_at": "2026-10-28T00:56:33.038059+05:30",
     "snapshot_at": "2026-10-27T19:01:25.994119+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5059,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-27T19:25:14.209805+00:00",
+  "updated_at": "2026-10-27T19:26:34.280701+00:00",
   "snapshot_at": "2026-10-27T19:01:25.994119+00:00",
   "organisation_count": 89,
   "portal_tender_count": 5059,
   "copied_tenders": 5059,
-  "detail_complete": 5056,
-  "detail_failed": 1,
+  "detail_complete": 5058,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -198,10 +198,10 @@
       "snapshot_at": "2026-10-27T19:01:25.994119+00:00",
       "portal_tender_count": 22,
       "copied_tenders": 22,
-      "detail_complete": 20,
+      "detail_complete": 22,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Sports and Youth Welfare",
@@ -870,9 +870,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1009,13 +1009,11 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 20,
+  "missing_district_count": 18,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
-    "2026_DTCP_532040_1",
-    "2026_DTCP_532041_1",
     "2026_MPP_545262_2",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
@@ -1034,9 +1032,6 @@
   ],
   "known_pincode_count": 356,
   "department_count": 306,
-  "missing_pincode_count": 2,
-  "missing_pincode_ids": [
-    "2026_DTCP_532040_1",
-    "2026_DTCP_532041_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
