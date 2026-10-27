@@ -1,35 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-27T21:27:18.375092+05:30",
+  "snapshot_at": "2026-10-27T22:41:36.233644+05:30",
   "previous_organisation_count": 89,
   "current_organisation_count": 89,
-  "previous_tender_count": 5052,
+  "previous_tender_count": 5056,
   "current_tender_count": 5056,
-  "organisations_with_changes": 2,
-  "organisations_with_new_tenders": 2,
-  "new_tender_count": 4,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 188,
-      "Current Tender Count": 191,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_MPPGC_532005_1",
-        "2026_MPPGC_538125_1",
-        "2026_MPPGC_539344_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2653,
-      "Current Tender Count": 2654,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_UAD_534083_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
