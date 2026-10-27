@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "40437009708",
-  "github_run_number": "171",
-  "github_commit_sha": "c8ca4b0539ab45bab4e0837da55e3f291fdaeba8",
-  "batch_size": 500,
-  "total_csv_ids": 5333,
-  "current_portal_ids": 5333,
-  "initial_incomplete": 1,
-  "batch_targets": 1,
-  "batch_attempted": 1,
-  "batch_complete": 0,
-  "started_at": "2026-10-27T02:12:23.824958+00:00",
-  "success": 5332,
-  "failed": 1,
+  "status": "running",
+  "github_run_id": "40455529322",
+  "github_run_number": "142",
+  "github_commit_sha": "f2cf1eac1df0fbc910c878854c80ada3689c838b",
+  "batch_size": 0,
+  "total_csv_ids": 5343,
+  "current_portal_ids": 5343,
+  "initial_incomplete": 41,
+  "batch_targets": 41,
+  "batch_attempted": 13,
+  "batch_complete": 13,
+  "started_at": "2026-10-27T05:29:22.924270+00:00",
+  "success": 5342,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_309946_3",
     "2024_UAD_338797_8",
@@ -1587,6 +1587,7 @@
     "2026_MPSAM_544378_1",
     "2026_MPSAM_544636_1",
     "2026_MPSAM_544904_1",
+    "2026_MPSAM_545120_1",
     "2026_MPSAM_545267_1",
     "2026_MPSAM_545280_1",
     "2026_MPSCS_541123_1",
@@ -2307,6 +2308,11 @@
     "2026_PWDRB_544859_1",
     "2026_PWDRB_544929_1",
     "2026_PWDRB_544930_1",
+    "2026_PWDRB_544988_1",
+    "2026_PWDRB_544990_1",
+    "2026_PWDRB_544991_1",
+    "2026_PWDRB_544996_1",
+    "2026_PWDRB_544999_1",
     "2026_PWDRB_545032_1",
     "2026_PWDRB_545033_1",
     "2026_PWDRB_545034_1",
@@ -2651,8 +2657,11 @@
     "2026_UAD_507992_4",
     "2026_UAD_508874_4",
     "2026_UAD_509188_5",
+    "2026_UAD_509316_2",
     "2026_UAD_509397_2",
     "2026_UAD_509409_4",
+    "2026_UAD_510153_2",
+    "2026_UAD_510161_2",
     "2026_UAD_510854_2",
     "2026_UAD_510992_4",
     "2026_UAD_511257_4",
@@ -5109,6 +5118,7 @@
     "2026_UAD_545310_1",
     "2026_UAD_545311_1",
     "2026_UAD_545318_1",
+    "2026_UAD_545319_1",
     "2026_UAD_545322_1",
     "2026_UAD_545328_1",
     "2026_UAD_545329_1",
@@ -5347,18 +5357,12 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-10-27T02:12:58.378694+00:00"
+  "last_successful_tender_id": "2026_MPSCS_543040_3",
+  "errors": [],
+  "updated_at": "2026-10-27T05:31:14.621342+00:00"
 }
