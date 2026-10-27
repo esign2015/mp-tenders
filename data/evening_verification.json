@@ -1,25 +1,22 @@
 {
   "status": "verified",
-  "verified_at": "2026-10-28T00:55:08.582227+05:30",
+  "verified_at": "2026-10-28T00:57:32.349806+05:30",
   "portal_organisation_count": 89,
   "portal_tender_count": 5059,
   "copied_unique_tender_ids": 5059,
-  "master_total_tenders": 5057,
-  "portal_ids_present_in_master": 5057,
-  "portal_ids_missing_in_master": 2,
-  "missing_tender_ids": [
-    "2026_DTCP_532040_1",
-    "2026_DTCP_532041_1"
-  ],
-  "live_dashboard_equivalent_count": 5057,
+  "master_total_tenders": 5059,
+  "portal_ids_present_in_master": 5059,
+  "portal_ids_missing_in_master": 0,
+  "missing_tender_ids": [],
+  "live_dashboard_equivalent_count": 5059,
   "portal_listed_with_past_closing": 0,
   "past_closing_tender_ids": [],
   "expired_candidates_not_in_portal": 0,
-  "detail_success": 5056,
-  "detail_failed": 1,
+  "detail_success": 5058,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 2,
+  "detail_pending": 1,
   "organisation_count_mismatches": 0,
   "organisation_mismatches": [],
-  "counts_match": false
+  "counts_match": true
 }
