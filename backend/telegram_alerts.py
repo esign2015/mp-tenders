@@ -517,13 +517,16 @@ def main():
     if report == "closing_today":
         selected = [r for r in rows if is_on_date(r.get("Closing Date"), today)]
         label, english = "आज अंतिम तिथि वाले टेंडर", "Closing Today"
+        heading = f"📋 आज अंतिम तिथि ({today.strftime('%d/%m/%Y')}) वाले टेंडरों की सूची"
     elif report == "closing_tomorrow":
         tomorrow = today + timedelta(days=1)
         selected = [r for r in rows if is_on_date(r.get("Closing Date"), tomorrow)]
         label, english = f"कल अंतिम तिथि वाले टेंडर ({tomorrow.strftime('%d/%m/%Y')})", "Closing Tomorrow"
+        heading = f"📋 कल अंतिम तिथि ({tomorrow.strftime('%d/%m/%Y')}) वाले टेंडरों की सूची"
     else:
         selected = [r for r in rows if is_on_date(r.get("Published Date"), today)]
         label, english = "आज प्रकाशित नए टेंडर", "New Published Today"
+        heading = f"📋 आज ({today.strftime('%d/%m/%Y')}) प्रकाशित नए टेंडरों की सूची"
     selected = sorted(selected, key=district_pincode_sort_key)
     result = os.getenv("MORNING_EXTRACTION_RESULT", "")
     fallback_note = ""
@@ -538,7 +541,7 @@ def main():
     source_time = data_collection_time(CSV_PATH.parent)
     portal_count = summary.get('portal_tender_count', 'उपलब्ध नहीं')
     message = (
-        "🔔 एमपी टेंडर्स अलर्ट\n\n"
+        f"🔔 एमपी टेंडर्स अलर्ट {heading}\n\n"
         + f"📅 दिनांक: {today.strftime('%d/%m/%Y')}\n"
         + f"🕒 रिपोर्ट समय: {now.strftime('%d/%m/%Y %I:%M %p')} IST\n"
         + f"📥 डेटा संग्रह समय: {source_time}\n"
