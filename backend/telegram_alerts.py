@@ -542,11 +542,6 @@ def main():
     portal_count = summary.get('portal_tender_count', 'उपलब्ध नहीं')
     message = (
         f"🔔 एमपी टेंडर्स अलर्ट {heading}\n\n"
-        + f"📅 दिनांक: {today.strftime('%d/%m/%Y')}\n"
-        + f"🕒 रिपोर्ट समय: {now.strftime('%d/%m/%Y %I:%M %p')} IST\n"
-        + f"📥 डेटा संग्रह समय: {source_time}\n"
-        + f"📋 {label}: {len(selected)}\n"
-        + f"📊 PDF में {len(selected)} रिकॉर्ड, कुल उपलब्ध एक्टिव टेंडर: {len(rows)}, Mptender पोर्टल सूची का कुल टेंडर count: {portal_count}\n"
         + fallback_note
         + ("ℹ️ इस सूची में शून्य टेंडर हैं; शून्य रिकॉर्ड वाली PDF संलग्न है।\n" if not selected else "")
         + footer
