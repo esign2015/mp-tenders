@@ -1,34 +1,69 @@
 {
-  "status": "completed",
-  "started_at": "2026-10-27T06:11:00.833436+00:00",
+  "status": "partial",
+  "started_at": "2026-10-27T07:44:29.743660+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_545130_1",
-    "2026_UAD_545467_1",
-    "2026_MPHC_545297_1",
-    "2026_UAD_545216_1",
-    "2026_UAD_545126_1",
-    "2026_UAD_545422_1",
-    "2026_UAD_545134_1",
-    "2026_UAD_545131_1",
-    "2026_MPVVN_545294_1",
-    "2026_UAD_545444_1",
-    "2026_UAD_541671_1",
-    "2026_UAD_541670_1",
-    "2026_MPP_545433_1",
-    "2026_MPP_543850_1",
-    "2026_UAD_540310_1",
-    "2026_HED_532847_1",
-    "2026_MPSAM_540673_1",
-    "2026_MPSAM_540674_1",
-    "2026_UAD_542389_1",
-    "2026_UAD_542465_1"
+    "2026_UAD_545477_1",
+    "2026_UAD_545476_1",
+    "2026_UAD_545487_1",
+    "2026_UAD_545475_1",
+    "2026_UAD_545478_1",
+    "2026_UAD_545365_1",
+    "2026_UAD_545388_1",
+    "2026_UAD_545474_1",
+    "2026_UAD_545139_1",
+    "2026_UAD_479715_2",
+    "2026_MPPKV_540983_1",
+    "2026_MPP_540821_1",
+    "2026_MPP_516789_1",
+    "2026_MPP_543016_1",
+    "2026_MPFD_536495_2",
+    "2026_UAD_541662_1",
+    "2026_STDC_543642_1"
   ],
   "unchanged_ids": [],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-10-27T06:11:03.017315+00:00",
+  "errors": [
+    {
+      "reference": "DGM/EEC/AdmComp/M/Pur/T-355",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "EE(STC)/Dhar/26-27/TS-34",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "EE(STC)/Dhar/26-27/TS-33",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "corrigendum",
+      "reference": "DGM/EEC/AdmComp/M/Pur/T-355",
+      "title": "8. Date Extension",
+      "closing": "12-Nov-2026 03:00 PM",
+      "opening": "13-Nov-2026 03:30 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "EE(STC)/Dhar/26-27/TS-34",
+      "title": "9. Date extension2",
+      "closing": "29-Oct-2026 12:00 PM",
+      "opening": "30-Oct-2026 12:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "EE(STC)/Dhar/26-27/TS-33",
+      "title": "10. Date extension2",
+      "closing": "29-Oct-2026 12:00 PM",
+      "opening": "30-Oct-2026 12:00 PM"
+    }
+  ],
+  "copied_at": "2026-10-27T07:44:31.665009+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-27T06:11:46.276212+00:00"
+  "updated_at": "2026-10-27T07:45:03.589063+00:00"
 }
