@@ -1,13 +1,13 @@
 {
   "status": "verified",
-  "checked_at": "2026-10-28T15:33:20.923255+05:30",
+  "checked_at": "2026-10-28T15:35:27.223946+05:30",
   "snapshot_at": "2026-10-27T19:01:25.994119+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 5059,
   "verified_unique_ids": 5059,
   "dashboard_live_count": 4956,
   "closed_or_cancelled_count": 103,
-  "excluded_master_only_live_count": 191,
+  "excluded_master_only_live_count": 192,
   "excluded_master_only_live_ids": [
     "2025_UAD_426098_6",
     "2025_UAD_433201_6",
@@ -59,6 +59,7 @@
     "2026_MPPKV_545672_1",
     "2026_MPPKV_545675_1",
     "2026_MPPKV_545682_1",
+    "2026_MPSEG_545122_1",
     "2026_PWDRB_545448_1",
     "2026_PWDRB_545492_1",
     "2026_SCMFL_545865_1",
