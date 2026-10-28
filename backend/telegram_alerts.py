@@ -545,7 +545,8 @@ def main():
         + footer
     )
     title = f"{english} {d} • {len(selected)} tenders"
-    filename = heading.removeprefix("📋 ").replace("/", "-") + ".pdf"
+    report_date = today + timedelta(days=1) if report == "closing_tomorrow" else today
+    filename = f"MP_Tenders_{english.replace(' ', '_')}_{report_date.strftime('%d-%m-%Y')}.pdf"
     pdf = make_pdf(selected, filename, title, total_available=len(rows), filter_detail=english, filter_live=False)
     # One PDF message per report. The Hindi report accompanies the document
     # itself, keeping the daily channel total at three messages.
