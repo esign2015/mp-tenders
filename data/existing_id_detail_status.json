@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "40678136416",
   "github_run_number": "1275",
   "github_commit_sha": "e1f9d8d6cbac9ffd3d8e8252747101ea02a3c9fc",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5264,
   "initial_incomplete": 59,
   "batch_targets": 59,
-  "batch_attempted": 52,
-  "batch_complete": 51,
+  "batch_attempted": 59,
+  "batch_complete": 58,
   "started_at": "2026-10-28T11:40:45.725079+00:00",
-  "success": 5256,
-  "failed": 0,
+  "success": 5263,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_296329_3",
@@ -2354,6 +2354,12 @@
     "2026_SCMFL_507708_19",
     "2026_SCMFL_507708_2",
     "2026_SCMFL_507708_20",
+    "2026_SCMFL_507708_25",
+    "2026_SCMFL_507708_5",
+    "2026_SCMFL_507708_6",
+    "2026_SCMFL_507708_7",
+    "2026_SCMFL_507708_8",
+    "2026_SCMFL_507708_9",
     "2026_SCMFL_536250_1",
     "2026_SCMFL_541085_1",
     "2026_SCMFL_545312_1",
@@ -4983,6 +4989,7 @@
     "2026_UAD_545710_1",
     "2026_UAD_545711_1",
     "2026_UAD_545712_1",
+    "2026_UAD_545726_1",
     "2026_UAD_545729_1",
     "2026_UAD_545730_1",
     "2026_UAD_545731_1",
@@ -5271,25 +5278,18 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
-    "2026_PSNSU_543791_1",
-    "2026_SCMFL_507708_25",
-    "2026_SCMFL_507708_5",
-    "2026_SCMFL_507708_6",
-    "2026_SCMFL_507708_7",
-    "2026_SCMFL_507708_8",
-    "2026_SCMFL_507708_9",
-    "2026_UAD_545726_1"
+  "failed_ids": [
+    "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_SCMFL_507708_20",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "2026_UAD_545726_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-28T11:46:52.309543+00:00"
+  "updated_at": "2026-10-28T11:47:47.861368+00:00"
 }
