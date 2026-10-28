@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-28T23:04:51.837297+05:30",
+    "checked_at": "2026-10-28T23:07:37.773668+05:30",
     "snapshot_at": "2026-10-28T17:14:58.865905+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5098,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-28T17:34:52.741400+00:00",
+  "updated_at": "2026-10-28T17:37:38.736886+00:00",
   "snapshot_at": "2026-10-28T17:14:58.865905+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5098,
   "copied_tenders": 5098,
-  "detail_complete": 5094,
+  "detail_complete": 5097,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -220,10 +220,10 @@
       "snapshot_at": "2026-10-28T17:14:58.865905+00:00",
       "portal_tender_count": 2718,
       "copied_tenders": 2718,
-      "detail_complete": 2715,
+      "detail_complete": 2718,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1053,16 +1053,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 22,
+  "missing_district_count": 19,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
     "2026_DHS_544580_1",
     "2026_MPP_545262_2",
-    "2026_UAD_543762_1",
-    "2026_UAD_543780_1",
-    "2026_UAD_543807_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1080,10 +1077,6 @@
   ],
   "known_pincode_count": 364,
   "department_count": 317,
-  "missing_pincode_count": 3,
-  "missing_pincode_ids": [
-    "2026_UAD_543762_1",
-    "2026_UAD_543780_1",
-    "2026_UAD_543807_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
