@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-28T17:14:48.165844+05:30",
+    "checked_at": "2026-10-28T17:16:56.275659+05:30",
     "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5264,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-28T11:44:49.742334+00:00",
+  "updated_at": "2026-10-28T11:46:57.513746+00:00",
   "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5264,
   "copied_tenders": 5264,
-  "detail_complete": 5240,
+  "detail_complete": 5256,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 24,
+  "detail_pending": 8,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -223,10 +223,10 @@
       "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
       "portal_tender_count": 2790,
       "copied_tenders": 2790,
-      "detail_complete": 2787,
+      "detail_complete": 2789,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -619,10 +619,10 @@
       "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 6,
+      "detail_complete": 7,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Industrial Development Corporation Limited",
@@ -729,10 +729,10 @@
       "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
       "portal_tender_count": 23,
       "copied_tenders": 23,
-      "detail_complete": 5,
+      "detail_complete": 17,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 18
+      "detail_pending": 6
     },
     {
       "organisation": "MP State Livestock and Poultry Development Corporation",
@@ -905,10 +905,10 @@
       "snapshot_at": "2026-10-28T11:13:36.556986+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
-      "detail_complete": 34,
+      "detail_complete": 35,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1045,36 +1045,20 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 42,
+  "missing_district_count": 26,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
     "2026_DHS_544580_1",
-    "2026_MPHID_543120_1",
     "2026_MPP_545262_2",
-    "2026_PWPIU_546031_1",
-    "2026_SCMFL_507708_1",
-    "2026_SCMFL_507708_10",
-    "2026_SCMFL_507708_12",
-    "2026_SCMFL_507708_13",
-    "2026_SCMFL_507708_14",
-    "2026_SCMFL_507708_15",
-    "2026_SCMFL_507708_16",
-    "2026_SCMFL_507708_17",
-    "2026_SCMFL_507708_18",
-    "2026_SCMFL_507708_19",
-    "2026_SCMFL_507708_2",
-    "2026_SCMFL_507708_20",
     "2026_SCMFL_507708_25",
     "2026_SCMFL_507708_5",
     "2026_SCMFL_507708_6",
     "2026_SCMFL_507708_7",
     "2026_SCMFL_507708_8",
     "2026_SCMFL_507708_9",
-    "2026_UAD_532297_1",
     "2026_UAD_545726_1",
-    "2026_UAD_545793_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1092,30 +1076,14 @@
   ],
   "known_pincode_count": 365,
   "department_count": 319,
-  "missing_pincode_count": 23,
+  "missing_pincode_count": 7,
   "missing_pincode_ids": [
-    "2026_MPHID_543120_1",
-    "2026_PWPIU_546031_1",
-    "2026_SCMFL_507708_1",
-    "2026_SCMFL_507708_10",
-    "2026_SCMFL_507708_12",
-    "2026_SCMFL_507708_13",
-    "2026_SCMFL_507708_14",
-    "2026_SCMFL_507708_15",
-    "2026_SCMFL_507708_16",
-    "2026_SCMFL_507708_17",
-    "2026_SCMFL_507708_18",
-    "2026_SCMFL_507708_19",
-    "2026_SCMFL_507708_2",
-    "2026_SCMFL_507708_20",
     "2026_SCMFL_507708_25",
     "2026_SCMFL_507708_5",
     "2026_SCMFL_507708_6",
     "2026_SCMFL_507708_7",
     "2026_SCMFL_507708_8",
     "2026_SCMFL_507708_9",
-    "2026_UAD_532297_1",
-    "2026_UAD_545726_1",
-    "2026_UAD_545793_1"
+    "2026_UAD_545726_1"
   ]
 }
