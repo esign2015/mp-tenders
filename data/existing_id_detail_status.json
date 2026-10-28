@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "40667534077",
   "github_run_number": "1273",
   "github_commit_sha": "e1f9d8d6cbac9ffd3d8e8252747101ea02a3c9fc",
@@ -12,7 +12,7 @@
   "batch_complete": 232,
   "started_at": "2026-10-28T10:20:53.281110+00:00",
   "success": 5233,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_296329_3",
@@ -5248,18 +5248,18 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
+  "failed_ids": [
     "2026_PSNSU_543791_1"
   ],
+  "skipped_ids": [],
+  "pending_ids": [],
   "last_successful_tender_id": "2026_UAD_545834_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-28T10:41:22.969991+00:00"
+  "updated_at": "2026-10-28T10:41:37.664242+00:00"
 }
