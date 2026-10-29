@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-29T22:15:01.683270+05:30",
+    "checked_at": "2026-10-29T22:17:42.802252+05:30",
     "snapshot_at": "2026-10-29T16:19:32.309051+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5312,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-29T16:45:03.141634+00:00",
+  "updated_at": "2026-10-29T16:47:43.658920+00:00",
   "snapshot_at": "2026-10-29T16:19:32.309051+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5312,
   "copied_tenders": 5312,
-  "detail_complete": 5310,
+  "detail_complete": 5311,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -616,10 +616,10 @@
       "snapshot_at": "2026-10-29T16:19:32.309051+00:00",
       "portal_tender_count": 73,
       "copied_tenders": 73,
-      "detail_complete": 72,
+      "detail_complete": 73,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1053,10 +1053,9 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 17,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_MPFD_26422_1",
     "2026_MPP_545262_2",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
@@ -1075,8 +1074,6 @@
   ],
   "known_pincode_count": 368,
   "department_count": 337,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_MPFD_26422_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }

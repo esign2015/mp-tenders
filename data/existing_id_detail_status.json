@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "40892921797",
-  "github_run_number": "1292",
+  "github_run_id": "40910223666",
+  "github_run_number": "1293",
   "github_commit_sha": "786a25ff7f3b219d361b54b6c99fc09dfbb1481d",
   "batch_size": 500,
   "total_csv_ids": 5312,
   "current_portal_ids": 5312,
-  "initial_incomplete": 84,
-  "batch_targets": 84,
-  "batch_attempted": 84,
-  "batch_complete": 82,
-  "started_at": "2026-10-29T15:26:40.279069+00:00",
-  "success": 5310,
-  "failed": 2,
+  "initial_incomplete": 5,
+  "batch_targets": 5,
+  "batch_attempted": 5,
+  "batch_complete": 4,
+  "started_at": "2026-10-29T16:45:41.068578+00:00",
+  "success": 5311,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_296329_3",
@@ -601,6 +601,7 @@
     "2026_MPDSD_541409_1",
     "2026_MPDSD_543700_1",
     "2026_MPDSD_544821_1",
+    "2026_MPFD_26422_1",
     "2026_MPFD_518009_2",
     "2026_MPFD_536495_2",
     "2026_MPFD_537677_3",
@@ -5326,63 +5327,17 @@
     "2026_WRD_546207_1"
   ],
   "failed_ids": [
-    "2026_MPFD_546419_1",
     "2026_PSNSU_543791_1"
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_PWPIU_545988_1",
+  "last_successful_tender_id": "2026_UAD_545989_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_HCDDM_546509_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SnEKtxIQNI%2FYUQy6yntr4vw%3D%3D\">[TENT RELATED SERVICES]</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_546436_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(30)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SRdASl61%2B1CpCBj21Rn0A6g%3D%3D\">[WARD 05 NAGAR PARISHAD KE PAAS BHUKHAND No. 03]</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_497620_5",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_546120_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_DoPR_546510_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_535864_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PWDRB_546066_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PWPIU_545988_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPFD_546419_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_MPFD_546419_1",
-      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-29T15:38:18.899264+00:00"
+  "updated_at": "2026-10-29T16:46:29.427153+00:00"
 }
