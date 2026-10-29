@@ -8,11 +8,11 @@
   "current_portal_ids": 5106,
   "initial_incomplete": 35,
   "batch_targets": 35,
-  "batch_attempted": 15,
-  "batch_complete": 13,
+  "batch_attempted": 35,
+  "batch_complete": 34,
   "started_at": "2026-10-29T06:15:06.281489+00:00",
   "success": 5105,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_296329_3",
@@ -5120,18 +5120,23 @@
     "2026_WRD_543273_1",
     "2026_WRD_545295_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
+  "failed_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_UAD_532533_2",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "2026_UAD_545901_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PSNSU_543791_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-29T06:17:01.277763+00:00"
+  "updated_at": "2026-10-29T06:19:10.278996+00:00"
 }
