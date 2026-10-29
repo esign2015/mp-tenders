@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-29T17:16:47.916845+05:30",
+    "checked_at": "2026-10-29T17:19:49.331908+05:30",
     "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5404,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-29T11:46:48.672060+00:00",
+  "updated_at": "2026-10-29T11:49:50.823249+00:00",
   "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
   "organisation_count": 91,
   "portal_tender_count": 5404,
   "copied_tenders": 5404,
-  "detail_complete": 5386,
-  "detail_failed": 1,
+  "detail_complete": 5390,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 17,
+  "detail_pending": 14,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -264,10 +264,10 @@
       "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
       "portal_tender_count": 245,
       "copied_tenders": 245,
-      "detail_complete": 243,
+      "detail_complete": 244,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Excise Department",
@@ -396,10 +396,10 @@
       "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
       "portal_tender_count": 34,
       "copied_tenders": 34,
-      "detail_complete": 33,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
       "portal_tender_count": 196,
       "copied_tenders": 196,
-      "detail_complete": 194,
+      "detail_complete": 195,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -605,10 +605,10 @@
       "snapshot_at": "2026-10-29T11:26:23.899216+00:00",
       "portal_tender_count": 75,
       "copied_tenders": 75,
-      "detail_complete": 74,
+      "detail_complete": 75,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -892,9 +892,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1031,16 +1031,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 36,
+  "missing_district_count": 32,
   "missing_district_ids": [
     "2026_DGPCS_544290_1",
     "2026_DGPCS_544291_1",
     "2026_DGPCS_544297_1",
     "2026_DHS_544580_1",
-    "2026_MKVVC_546395_1",
-    "2026_MPFD_26422_1",
     "2026_MPHC_546417_1",
-    "2026_MPPGC_537904_1",
     "2026_MPPGC_546114_1",
     "2026_MPP_545262_2",
     "2026_MPP_546328_1",
@@ -1067,17 +1064,13 @@
     "2026_WRD_526724_1",
     "2026_WRD_526725_1",
     "2026_WRD_526726_1",
-    "2026_WRD_538554_1",
-    "2026_WRD_541851_1"
+    "2026_WRD_538554_1"
   ],
   "known_pincode_count": 367,
   "department_count": 334,
-  "missing_pincode_count": 17,
+  "missing_pincode_count": 13,
   "missing_pincode_ids": [
-    "2026_MKVVC_546395_1",
-    "2026_MPFD_26422_1",
     "2026_MPHC_546417_1",
-    "2026_MPPGC_537904_1",
     "2026_MPPGC_546114_1",
     "2026_MPP_546328_1",
     "2026_UAD_528647_1",
@@ -1089,7 +1082,6 @@
     "2026_UAD_528656_1",
     "2026_UAD_528657_1",
     "2026_UAD_528664_1",
-    "2026_WRD_538554_1",
-    "2026_WRD_541851_1"
+    "2026_WRD_538554_1"
   ]
 }
