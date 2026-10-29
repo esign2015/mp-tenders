@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "40852208010",
   "github_run_number": "152",
   "github_commit_sha": "786a25ff7f3b219d361b54b6c99fc09dfbb1481d",
@@ -8,8 +8,8 @@
   "current_portal_ids": 5123,
   "initial_incomplete": 34,
   "batch_targets": 34,
-  "batch_attempted": 15,
-  "batch_complete": 15,
+  "batch_attempted": 34,
+  "batch_complete": 34,
   "started_at": "2026-10-29T09:46:46.998396+00:00",
   "success": 5122,
   "failed": 0,
@@ -5142,7 +5142,7 @@
   "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_WRD_530741_1",
+  "last_successful_tender_id": "2026_MPPGC_536969_1",
   "errors": [],
-  "updated_at": "2026-10-29T09:48:41.868143+00:00"
+  "updated_at": "2026-10-29T09:50:48.594738+00:00"
 }
