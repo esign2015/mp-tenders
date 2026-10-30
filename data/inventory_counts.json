@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-30T20:51:31.559689+05:30",
+    "checked_at": "2026-10-30T20:53:40.390648+05:30",
     "snapshot_at": "2026-10-30T14:28:17.811419+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5273,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-30T15:21:33.588788+00:00",
+  "updated_at": "2026-10-30T15:23:41.725781+00:00",
   "snapshot_at": "2026-10-30T14:28:17.811419+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5273,
   "copied_tenders": 5273,
-  "detail_complete": 5270,
-  "detail_failed": 0,
+  "detail_complete": 5271,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -122,9 +122,9 @@
       "portal_tender_count": 80,
       "copied_tenders": 80,
       "detail_complete": 79,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Medical Education",
@@ -209,10 +209,10 @@
       "snapshot_at": "2026-10-30T14:28:17.811419+00:00",
       "portal_tender_count": 2756,
       "copied_tenders": 2756,
-      "detail_complete": 2755,
+      "detail_complete": 2756,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -1042,11 +1042,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 17,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
     "2026_MPP_545262_2",
-    "2026_UAD_546742_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1064,9 +1063,8 @@
   ],
   "known_pincode_count": 363,
   "department_count": 339,
-  "missing_pincode_count": 2,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_DHS_546705_1",
-    "2026_UAD_546742_1"
+    "2026_DHS_546705_1"
   ]
 }
