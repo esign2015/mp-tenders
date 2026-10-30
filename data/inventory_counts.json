@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-30T20:44:05.935388+05:30",
+    "checked_at": "2026-10-30T20:49:22.737787+05:30",
     "snapshot_at": "2026-10-30T14:28:17.811419+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5273,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-30T15:14:06.671671+00:00",
+  "updated_at": "2026-10-30T15:19:24.353354+00:00",
   "snapshot_at": "2026-10-30T14:28:17.811419+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5273,
   "copied_tenders": 5273,
   "detail_complete": 5270,
-  "detail_failed": 2,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 3,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -122,9 +122,9 @@
       "portal_tender_count": 80,
       "copied_tenders": 80,
       "detail_complete": 79,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Directorate of Medical Education",
@@ -892,9 +892,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1042,10 +1042,9 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 18,
+  "missing_district_count": 17,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_DHS_546705_1",
     "2026_MPP_545262_2",
     "2026_UAD_546742_1",
     "2026_WRD_511908_1",
