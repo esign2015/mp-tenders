@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "41046976039",
   "github_run_number": "1305",
   "github_commit_sha": "60da9bbd06f90b24ef49de6091b0a9fb379502a1",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5530,
   "initial_incomplete": 37,
   "batch_targets": 37,
-  "batch_attempted": 31,
-  "batch_complete": 29,
+  "batch_attempted": 37,
+  "batch_complete": 36,
   "started_at": "2026-10-30T11:47:25.317442+00:00",
-  "success": 5523,
-  "failed": 0,
+  "success": 5529,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_274357_4",
@@ -822,6 +822,7 @@
     "2026_MPPGC_535635_1",
     "2026_MPPGC_535642_1",
     "2026_MPPGC_535654_1",
+    "2026_MPPGC_535827_1",
     "2026_MPPGC_535839_1",
     "2026_MPPGC_535840_1",
     "2026_MPPGC_535843_1",
@@ -1122,6 +1123,7 @@
     "2026_MPP_546269_1",
     "2026_MPP_546328_1",
     "2026_MPP_546658_1",
+    "2026_MPP_546686_1",
     "2026_MPRDC_477836_1",
     "2026_MPRDC_527803_1",
     "2026_MPRDC_536411_1",
@@ -5270,10 +5272,14 @@
     "2026_UAD_546533_1",
     "2026_UAD_546542_1",
     "2026_UAD_546543_1",
+    "2026_UAD_546544_1",
+    "2026_UAD_546546_1",
     "2026_UAD_546547_1",
     "2026_UAD_546548_1",
     "2026_UAD_546549_1",
+    "2026_UAD_546551_1",
     "2026_UAD_546552_1",
+    "2026_UAD_546553_1",
     "2026_UAD_546560_1",
     "2026_UAD_546560_2",
     "2026_UAD_546560_3",
@@ -5538,24 +5544,18 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
-    "2026_MPPGC_535827_1",
-    "2026_MPP_546686_1",
-    "2026_PSNSU_543791_1",
-    "2026_UAD_546544_1",
-    "2026_UAD_546546_1",
-    "2026_UAD_546551_1",
-    "2026_UAD_546553_1"
+  "failed_ids": [
+    "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_PWDRB_546364_1",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "2026_UAD_546553_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-30T11:51:20.760822+00:00"
+  "updated_at": "2026-10-30T11:52:18.717005+00:00"
 }

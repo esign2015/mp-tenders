@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-30T17:21:27.619719+05:30",
+    "checked_at": "2026-10-30T17:23:34.870190+05:30",
     "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5530,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-30T11:51:29.067709+00:00",
+  "updated_at": "2026-10-30T11:53:36.222821+00:00",
   "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5530,
   "copied_tenders": 5530,
-  "detail_complete": 5524,
-  "detail_failed": 0,
+  "detail_complete": 5529,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 6,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -223,10 +223,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 2945,
       "copied_tenders": 2945,
-      "detail_complete": 2941,
+      "detail_complete": 2945,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -663,10 +663,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 66,
       "copied_tenders": 66,
-      "detail_complete": 65,
+      "detail_complete": 66,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police Housing and Infrastructure Development Corporation Ltd",
@@ -906,9 +906,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1056,15 +1056,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 21,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
     "2026_MPP_545262_2",
-    "2026_MPP_546686_1",
-    "2026_UAD_546544_1",
-    "2026_UAD_546546_1",
-    "2026_UAD_546551_1",
-    "2026_UAD_546553_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1082,12 +1077,6 @@
   ],
   "known_pincode_count": 374,
   "department_count": 340,
-  "missing_pincode_count": 5,
-  "missing_pincode_ids": [
-    "2026_MPP_546686_1",
-    "2026_UAD_546544_1",
-    "2026_UAD_546546_1",
-    "2026_UAD_546551_1",
-    "2026_UAD_546553_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
