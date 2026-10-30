@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-30T16:26:29.635525+05:30",
+    "checked_at": "2026-10-30T16:28:34.654668+05:30",
     "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5512,
@@ -29,15 +29,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-30T10:56:30.385599+00:00",
+  "updated_at": "2026-10-30T10:58:35.433113+00:00",
   "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5512,
   "copied_tenders": 5512,
-  "detail_complete": 5484,
-  "detail_failed": 0,
+  "detail_complete": 5511,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 28,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -232,10 +232,10 @@
       "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
       "portal_tender_count": 2930,
       "copied_tenders": 2930,
-      "detail_complete": 2911,
+      "detail_complete": 2930,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 19
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -463,10 +463,10 @@
       "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
       "portal_tender_count": 204,
       "copied_tenders": 204,
-      "detail_complete": 203,
+      "detail_complete": 204,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -507,10 +507,10 @@
       "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 31,
+      "detail_complete": 33,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Rural Road Development Authority",
@@ -683,10 +683,10 @@
       "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
-      "detail_complete": 49,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -716,10 +716,10 @@
       "snapshot_at": "2026-10-30T10:15:27.583502+00:00",
       "portal_tender_count": 69,
       "copied_tenders": 69,
-      "detail_complete": 67,
+      "detail_complete": 69,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -915,9 +915,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1065,37 +1065,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 43,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_MPPGC_535041_1",
-    "2026_MPPHC_546245_1",
-    "2026_MPPHC_546248_1",
-    "2026_MPPHC_546249_1",
     "2026_MPP_545262_2",
-    "2026_MPRDC_546217_1",
-    "2026_MPRDC_546435_1",
-    "2026_MPSAM_545632_1",
-    "2026_MPSAM_545634_1",
-    "2026_UAD_527917_3",
-    "2026_UAD_546085_1",
-    "2026_UAD_546139_1",
-    "2026_UAD_546382_1",
-    "2026_UAD_546404_1",
-    "2026_UAD_546408_1",
-    "2026_UAD_546418_1",
-    "2026_UAD_546423_1",
-    "2026_UAD_546423_2",
-    "2026_UAD_546423_3",
-    "2026_UAD_546437_1",
-    "2026_UAD_546474_2",
-    "2026_UAD_546496_1",
-    "2026_UAD_546497_1",
-    "2026_UAD_546501_1",
-    "2026_UAD_546523_1",
-    "2026_UAD_546533_1",
-    "2026_UAD_546626_1",
-    "2026_UAD_546627_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1111,36 +1084,8 @@
     "2026_WRD_526725_1",
     "2026_WRD_526726_1"
   ],
-  "known_pincode_count": 372,
+  "known_pincode_count": 374,
   "department_count": 341,
-  "missing_pincode_count": 27,
-  "missing_pincode_ids": [
-    "2026_MPPGC_535041_1",
-    "2026_MPPHC_546245_1",
-    "2026_MPPHC_546248_1",
-    "2026_MPPHC_546249_1",
-    "2026_MPRDC_546217_1",
-    "2026_MPRDC_546435_1",
-    "2026_MPSAM_545632_1",
-    "2026_MPSAM_545634_1",
-    "2026_UAD_527917_3",
-    "2026_UAD_546085_1",
-    "2026_UAD_546139_1",
-    "2026_UAD_546382_1",
-    "2026_UAD_546404_1",
-    "2026_UAD_546408_1",
-    "2026_UAD_546418_1",
-    "2026_UAD_546423_1",
-    "2026_UAD_546423_2",
-    "2026_UAD_546423_3",
-    "2026_UAD_546437_1",
-    "2026_UAD_546474_2",
-    "2026_UAD_546496_1",
-    "2026_UAD_546497_1",
-    "2026_UAD_546501_1",
-    "2026_UAD_546523_1",
-    "2026_UAD_546533_1",
-    "2026_UAD_546626_1",
-    "2026_UAD_546627_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
