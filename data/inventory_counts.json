@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-30T17:16:36.937762+05:30",
+    "checked_at": "2026-10-30T17:21:27.619719+05:30",
     "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5530,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-30T11:46:38.306924+00:00",
+  "updated_at": "2026-10-30T11:51:29.067709+00:00",
   "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
   "organisation_count": 93,
   "portal_tender_count": 5530,
   "copied_tenders": 5530,
-  "detail_complete": 5503,
-  "detail_failed": 1,
+  "detail_complete": 5524,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 26,
+  "detail_pending": 6,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -223,10 +223,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 2945,
       "copied_tenders": 2945,
-      "detail_complete": 2937,
+      "detail_complete": 2941,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 8
+      "detail_pending": 4
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -267,10 +267,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 253,
       "copied_tenders": 253,
-      "detail_complete": 252,
+      "detail_complete": 253,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -278,10 +278,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 45,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Food and Drugs Administration MP",
@@ -432,10 +432,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 58,
       "copied_tenders": 58,
-      "detail_complete": 57,
+      "detail_complete": 58,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -454,10 +454,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 208,
       "copied_tenders": 208,
-      "detail_complete": 205,
+      "detail_complete": 208,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -795,10 +795,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
-      "detail_complete": 8,
+      "detail_complete": 9,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Tourism Board",
@@ -906,9 +906,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -938,10 +938,10 @@
       "snapshot_at": "2026-10-30T11:18:14.357299+00:00",
       "portal_tender_count": 361,
       "copied_tenders": 361,
-      "detail_complete": 351,
+      "detail_complete": 361,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1056,33 +1056,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 42,
+  "missing_district_count": 21,
   "missing_district_ids": [
-    "2023_UAD_274357_4",
     "2026_DHS_544580_1",
-    "2026_EXCIS_546634_1",
-    "2026_MPPGC_531024_1",
-    "2026_MPPGC_535390_1",
-    "2026_MPPGC_535827_1",
-    "2026_MPPKV_528037_3",
     "2026_MPP_545262_2",
     "2026_MPP_546686_1",
-    "2026_PWDRB_539784_1",
-    "2026_PWDRB_544921_1",
-    "2026_PWDRB_546352_1",
-    "2026_PWDRB_546354_1",
-    "2026_PWDRB_546357_1",
-    "2026_PWDRB_546359_1",
-    "2026_PWDRB_546361_1",
-    "2026_PWDRB_546362_1",
-    "2026_PWDRB_546363_1",
-    "2026_PWDRB_546364_1",
-    "2026_STDC_546734_1",
-    "2026_UAD_539749_1",
-    "2026_UAD_546542_1",
     "2026_UAD_546544_1",
     "2026_UAD_546546_1",
-    "2026_UAD_546549_1",
     "2026_UAD_546551_1",
     "2026_UAD_546553_1",
     "2026_WRD_511908_1",
@@ -1098,38 +1078,16 @@
     "2026_WRD_526723_1",
     "2026_WRD_526724_1",
     "2026_WRD_526725_1",
-    "2026_WRD_526726_1",
-    "2026_WRD_539626_1"
+    "2026_WRD_526726_1"
   ],
   "known_pincode_count": 374,
   "department_count": 340,
-  "missing_pincode_count": 26,
+  "missing_pincode_count": 5,
   "missing_pincode_ids": [
-    "2023_UAD_274357_4",
-    "2026_EXCIS_546634_1",
-    "2026_MPPGC_531024_1",
-    "2026_MPPGC_535390_1",
-    "2026_MPPGC_535827_1",
-    "2026_MPPKV_528037_3",
     "2026_MPP_546686_1",
-    "2026_PWDRB_539784_1",
-    "2026_PWDRB_544921_1",
-    "2026_PWDRB_546352_1",
-    "2026_PWDRB_546354_1",
-    "2026_PWDRB_546357_1",
-    "2026_PWDRB_546359_1",
-    "2026_PWDRB_546361_1",
-    "2026_PWDRB_546362_1",
-    "2026_PWDRB_546363_1",
-    "2026_PWDRB_546364_1",
-    "2026_STDC_546734_1",
-    "2026_UAD_539749_1",
-    "2026_UAD_546542_1",
     "2026_UAD_546544_1",
     "2026_UAD_546546_1",
-    "2026_UAD_546549_1",
     "2026_UAD_546551_1",
-    "2026_UAD_546553_1",
-    "2026_WRD_539626_1"
+    "2026_UAD_546553_1"
   ]
 }
