@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "41223945252",
   "github_run_number": "1326",
   "github_commit_sha": "5b8bf26dd2411e003bf3948ad298b4b632161c95",
@@ -5275,13 +5275,8 @@
     {
       "Tender ID": "2026_PSNSU_543791_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-10-31T17:46:07.403000+00:00"
+  "updated_at": "2026-10-31T17:46:10.395747+00:00"
 }
