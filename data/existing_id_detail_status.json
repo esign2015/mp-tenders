@@ -8,8 +8,8 @@
   "current_portal_ids": 5272,
   "initial_incomplete": 60,
   "batch_targets": 60,
-  "batch_attempted": 13,
-  "batch_complete": 12,
+  "batch_attempted": 29,
+  "batch_complete": 27,
   "started_at": "2026-10-31T05:59:56.409090+00:00",
   "success": 5271,
   "failed": 0,
@@ -5291,7 +5291,7 @@
   "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_PWDRB_545399_1",
+  "last_successful_tender_id": "2026_RES_540833_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
@@ -5299,5 +5299,5 @@
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-31T06:01:53.151298+00:00"
+  "updated_at": "2026-10-31T06:04:02.630156+00:00"
 }
