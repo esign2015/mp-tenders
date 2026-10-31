@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-31T15:50:41.853350+05:30",
+    "checked_at": "2026-10-31T15:51:07.033486+05:30",
     "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5414,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-31T10:20:42.959064+00:00",
+  "updated_at": "2026-10-31T10:21:08.466678+00:00",
   "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5414,
   "copied_tenders": 5414,
-  "detail_complete": 5271,
+  "detail_complete": 5274,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 142,
+  "detail_pending": 139,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -212,10 +212,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 2847,
       "copied_tenders": 2847,
-      "detail_complete": 2762,
+      "detail_complete": 2763,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 85
+      "detail_pending": 84
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -421,10 +421,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 40,
       "copied_tenders": 40,
-      "detail_complete": 38,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -850,10 +850,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 1,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Office of Commissioner of Treasury and Accounts",
@@ -1045,10 +1045,9 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 158,
+  "missing_district_count": 155,
   "missing_district_ids": [
     "2023_UAD_312847_5",
-    "2026_COSK_542909_1",
     "2026_DGPCS_546580_2",
     "2026_DHS_544580_1",
     "2026_DSYW_546807_1",
@@ -1086,7 +1085,6 @@
     "2026_PHED_546034_2",
     "2026_PHED_546034_3",
     "2026_PKVVC_545213_1",
-    "2026_PKVVC_546790_1",
     "2026_PWDRB_546628_1",
     "2026_PWDRB_546629_1",
     "2026_PWDRB_546630_1",
@@ -1190,7 +1188,6 @@
     "2026_UAD_546820_1",
     "2026_UAD_546821_1",
     "2026_UAD_546822_1",
-    "2026_UAD_546893_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1208,10 +1205,9 @@
   ],
   "known_pincode_count": 365,
   "department_count": 340,
-  "missing_pincode_count": 142,
+  "missing_pincode_count": 139,
   "missing_pincode_ids": [
     "2023_UAD_312847_5",
-    "2026_COSK_542909_1",
     "2026_DGPCS_546580_2",
     "2026_DSYW_546807_1",
     "2026_DTCP_546816_1",
@@ -1247,7 +1243,6 @@
     "2026_PHED_546034_2",
     "2026_PHED_546034_3",
     "2026_PKVVC_545213_1",
-    "2026_PKVVC_546790_1",
     "2026_PWDRB_546628_1",
     "2026_PWDRB_546629_1",
     "2026_PWDRB_546630_1",
@@ -1350,7 +1345,6 @@
     "2026_UAD_546810_1",
     "2026_UAD_546820_1",
     "2026_UAD_546821_1",
-    "2026_UAD_546822_1",
-    "2026_UAD_546893_1"
+    "2026_UAD_546822_1"
   ]
 }
