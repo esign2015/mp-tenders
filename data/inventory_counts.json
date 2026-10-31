@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-31T16:08:15.660908+05:30",
+    "checked_at": "2026-10-31T16:10:22.820387+05:30",
     "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5414,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-31T10:38:17.025099+00:00",
+  "updated_at": "2026-10-31T10:40:24.143613+00:00",
   "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5414,
   "copied_tenders": 5414,
-  "detail_complete": 5358,
+  "detail_complete": 5378,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 56,
+  "detail_pending": 36,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -201,10 +201,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 5,
       "copied_tenders": 5,
-      "detail_complete": 4,
+      "detail_complete": 5,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Urban Administration and Development",
@@ -212,10 +212,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 2847,
       "copied_tenders": 2847,
-      "detail_complete": 2800,
+      "detail_complete": 2812,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 47
+      "detail_pending": 35
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -388,10 +388,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 43,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -432,10 +432,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 224,
       "copied_tenders": 224,
-      "detail_complete": 222,
+      "detail_complete": 224,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -564,10 +564,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Minor Forest Produce Processing and Research Center",
@@ -608,10 +608,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 87,
       "copied_tenders": 87,
-      "detail_complete": 86,
+      "detail_complete": 87,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -696,10 +696,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 62,
       "copied_tenders": 62,
-      "detail_complete": 61,
+      "detail_complete": 62,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -729,10 +729,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 13,
       "copied_tenders": 13,
-      "detail_complete": 12,
+      "detail_complete": 13,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Coperative Marketing Federation Ltd.",
@@ -1045,21 +1045,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 71,
+  "missing_district_count": 51,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_DSYW_546807_1",
-    "2026_MCBU_546724_1",
-    "2026_MKVVC_546789_1",
-    "2026_MPCDF_546327_1",
-    "2026_MPFD_546811_1",
-    "2026_MPPGC_525492_1",
-    "2026_MPPGC_545820_1",
     "2026_MPP_545262_2",
-    "2026_MPSAM_546308_1",
-    "2026_UAD_545111_1",
-    "2026_UAD_545113_1",
-    "2026_UAD_545530_1",
     "2026_UAD_545532_1",
     "2026_UAD_545534_1",
     "2026_UAD_545538_1",
@@ -1071,15 +1060,6 @@
     "2026_UAD_545552_1",
     "2026_UAD_545553_1",
     "2026_UAD_545782_1",
-    "2026_UAD_546642_7",
-    "2026_UAD_546642_8",
-    "2026_UAD_546642_9",
-    "2026_UAD_546644_1",
-    "2026_UAD_546644_2",
-    "2026_UAD_546644_3",
-    "2026_UAD_546644_4",
-    "2026_UAD_546644_5",
-    "2026_UAD_546644_6",
     "2026_UAD_546674_1",
     "2026_UAD_546755_1",
     "2026_UAD_546755_10",
@@ -1121,19 +1101,8 @@
   ],
   "known_pincode_count": 368,
   "department_count": 340,
-  "missing_pincode_count": 55,
+  "missing_pincode_count": 35,
   "missing_pincode_ids": [
-    "2026_DSYW_546807_1",
-    "2026_MCBU_546724_1",
-    "2026_MKVVC_546789_1",
-    "2026_MPCDF_546327_1",
-    "2026_MPFD_546811_1",
-    "2026_MPPGC_525492_1",
-    "2026_MPPGC_545820_1",
-    "2026_MPSAM_546308_1",
-    "2026_UAD_545111_1",
-    "2026_UAD_545113_1",
-    "2026_UAD_545530_1",
     "2026_UAD_545532_1",
     "2026_UAD_545534_1",
     "2026_UAD_545538_1",
@@ -1145,15 +1114,6 @@
     "2026_UAD_545552_1",
     "2026_UAD_545553_1",
     "2026_UAD_545782_1",
-    "2026_UAD_546642_7",
-    "2026_UAD_546642_8",
-    "2026_UAD_546642_9",
-    "2026_UAD_546644_1",
-    "2026_UAD_546644_2",
-    "2026_UAD_546644_3",
-    "2026_UAD_546644_4",
-    "2026_UAD_546644_5",
-    "2026_UAD_546644_6",
     "2026_UAD_546674_1",
     "2026_UAD_546755_1",
     "2026_UAD_546755_10",
