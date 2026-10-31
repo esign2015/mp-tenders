@@ -1,48 +1,35 @@
 {
-  "status": "partial",
-  "started_at": "2026-10-30T12:02:24.958304+00:00",
+  "status": "completed",
+  "started_at": "2026-10-31T03:27:22.759497+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_546692_1",
-    "2026_WRD_539624_1",
-    "2026_UAD_546765_1",
-    "2026_UAD_546758_1",
-    "2026_UAD_546633_1",
-    "2026_DoPR_545503_1",
-    "2026_UAD_546525_1",
-    "2026_UAD_533539_2",
-    "2026_UAD_510153_2",
-    "2026_UAD_510229_2",
-    "2026_STDC_543640_1",
-    "2026_MPSAM_541473_1",
-    "2026_UAD_540809_1",
-    "2026_UAD_542150_1",
-    "2026_UAD_510148_2",
-    "2026_UAD_510227_2",
-    "2026_UAD_509478_3",
-    "2026_MPDSD_543700_1"
+    "2026_DTCP_526182_1",
+    "2026_RUMSL_543263_1",
+    "2026_RUMSL_543282_1",
+    "2026_MPP_516789_1",
+    "2026_MPPGC_542788_1",
+    "2026_MPP_541895_1",
+    "2026_WRD_533393_1",
+    "2026_WRD_533392_1",
+    "2026_UAD_539585_2",
+    "2026_STDC_543595_1"
   ],
   "unchanged_ids": [
-    "2026_DoPR_545503_1"
+    "2026_MPP_546520_1",
+    "2026_UAD_546345_1",
+    "2026_MKVVC_546741_1",
+    "2026_UAD_546347_1",
+    "2026_UAD_546349_1",
+    "2026_UAD_546348_1",
+    "2026_MPPGC_541743_1",
+    "2026_UAD_546502_1",
+    "2026_UAD_546725_1",
+    "2026_EXCIS_546769_1"
   ],
-  "errors": [
-    {
-      "reference": "2026_MPSAM_546579_1",
-      "kind": "tender",
-      "error": "Detail reference differs from Home reference"
-    }
-  ],
-  "pending": [
-    {
-      "kind": "tender",
-      "reference": "2026_MPSAM_546579_1",
-      "title": "9. ESTABLISHMENT , INSTALLATION and OPERATING OF ELCETRONIC WEIGH BRIDGE 10 MT BASIS OF BUILD OPERATE AND TRANSFORM (BOT) SCHEME AT MANDI YARD BICHHIYA OFFICE OF APMC BICHHIYA DIST MANDLA ANNUAL RATE TO BE QUOTED 2ND CALL",
-      "closing": "16-Nov-2026 03:30 PM",
-      "opening": "17-Nov-2026 03:30 PM"
-    }
-  ],
-  "copied_at": "2026-10-30T12:02:27.152884+00:00",
+  "errors": [],
+  "pending": [],
+  "copied_at": "2026-10-31T03:27:24.829325+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-10-30T12:03:08.791750+00:00"
+  "updated_at": "2026-10-31T03:27:50.338778+00:00"
 }
