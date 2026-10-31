@@ -1,14 +1,45 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-10-31T00:44:52.846146+05:30",
+  "snapshot_at": "2026-10-31T15:50:24.592314+05:30",
   "portal_organisation_count": 92,
-  "portal_tender_count": 5272,
-  "copied_unique_tender_ids": 5272,
+  "portal_tender_count": 5414,
+  "copied_unique_tender_ids": 5414,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 6,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_DTE_540214_2",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_543080_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_544445_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_544785_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_545090_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_546824_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
