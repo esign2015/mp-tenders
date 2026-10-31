@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-10-31T15:51:07.033486+05:30",
+    "checked_at": "2026-10-31T15:53:28.857890+05:30",
     "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5414,
@@ -20,15 +20,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-10-31T10:21:08.466678+00:00",
+  "updated_at": "2026-10-31T10:23:30.677683+00:00",
   "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5414,
   "copied_tenders": 5414,
-  "detail_complete": 5274,
-  "detail_failed": 1,
+  "detail_complete": 5284,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 139,
+  "detail_pending": 130,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -267,10 +267,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 53,
       "copied_tenders": 53,
-      "detail_complete": 42,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 5
     },
     {
       "organisation": "Food and Drugs Administration MP",
@@ -608,10 +608,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 87,
       "copied_tenders": 87,
-      "detail_complete": 82,
+      "detail_complete": 83,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 4
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -729,10 +729,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 13,
       "copied_tenders": 13,
-      "detail_complete": 10,
+      "detail_complete": 12,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Coperative Marketing Federation Ltd.",
@@ -784,10 +784,10 @@
       "snapshot_at": "2026-10-31T09:49:57.044840+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M.P. Tourism Board",
@@ -895,9 +895,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1045,7 +1045,7 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 155,
+  "missing_district_count": 145,
   "missing_district_ids": [
     "2023_UAD_312847_5",
     "2026_DGPCS_546580_2",
@@ -1055,20 +1055,11 @@
     "2026_EXCIS_546653_1",
     "2026_EXCIS_546662_1",
     "2026_EXCIS_546672_1",
-    "2026_EXCIS_546729_1",
-    "2026_EXCIS_546743_1",
-    "2026_EXCIS_546748_1",
-    "2026_EXCIS_546780_1",
-    "2026_EXCIS_546780_2",
-    "2026_EXCIS_546780_3",
     "2026_EXCIS_546818_1",
     "2026_EXCIS_546818_2",
     "2026_MCBU_546724_1",
     "2026_MKVVC_546789_1",
-    "2026_MPCDF_546216_1",
-    "2026_MPCDF_546230_1",
     "2026_MPCDF_546327_1",
-    "2026_MPFD_543411_1",
     "2026_MPFD_546614_1",
     "2026_MPFD_546615_1",
     "2026_MPFD_546666_1",
@@ -1104,7 +1095,6 @@
     "2026_RES_540893_1",
     "2026_RES_540894_1",
     "2026_RSK_546665_1",
-    "2026_STDC_546812_1",
     "2026_UAD_509085_2",
     "2026_UAD_509086_2",
     "2026_UAD_509089_2",
@@ -1205,7 +1195,7 @@
   ],
   "known_pincode_count": 365,
   "department_count": 340,
-  "missing_pincode_count": 139,
+  "missing_pincode_count": 129,
   "missing_pincode_ids": [
     "2023_UAD_312847_5",
     "2026_DGPCS_546580_2",
@@ -1214,20 +1204,11 @@
     "2026_EXCIS_546653_1",
     "2026_EXCIS_546662_1",
     "2026_EXCIS_546672_1",
-    "2026_EXCIS_546729_1",
-    "2026_EXCIS_546743_1",
-    "2026_EXCIS_546748_1",
-    "2026_EXCIS_546780_1",
-    "2026_EXCIS_546780_2",
-    "2026_EXCIS_546780_3",
     "2026_EXCIS_546818_1",
     "2026_EXCIS_546818_2",
     "2026_MCBU_546724_1",
     "2026_MKVVC_546789_1",
-    "2026_MPCDF_546216_1",
-    "2026_MPCDF_546230_1",
     "2026_MPCDF_546327_1",
-    "2026_MPFD_543411_1",
     "2026_MPFD_546614_1",
     "2026_MPFD_546615_1",
     "2026_MPFD_546666_1",
@@ -1262,7 +1243,6 @@
     "2026_RES_540893_1",
     "2026_RES_540894_1",
     "2026_RSK_546665_1",
-    "2026_STDC_546812_1",
     "2026_UAD_509085_2",
     "2026_UAD_509086_2",
     "2026_UAD_509089_2",
