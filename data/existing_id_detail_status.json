@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "41226682649",
-  "github_run_number": "1327",
+  "github_run_id": "41229647710",
+  "github_run_number": "77",
   "github_commit_sha": "5b8bf26dd2411e003bf3948ad298b4b632161c95",
-  "batch_size": 500,
+  "batch_size": 5000,
   "total_csv_ids": 5251,
   "current_portal_ids": 5251,
   "initial_incomplete": 1,
   "batch_targets": 1,
   "batch_attempted": 1,
   "batch_complete": 0,
-  "started_at": "2026-10-31T18:12:52.549962+00:00",
+  "started_at": "2026-10-31T18:30:10.295002+00:00",
   "success": 5250,
-  "failed": 1,
+  "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_274357_4",
@@ -5265,18 +5265,18 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
   "last_successful_tender_id": "",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "error": "RSPStyle: RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-10-31T18:13:25.631414+00:00"
+  "updated_at": "2026-10-31T18:31:24.246682+00:00"
 }
