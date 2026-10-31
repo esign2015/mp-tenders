@@ -1,32 +1,31 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-31T22:09:33.708281+05:30",
+  "snapshot_at": "2026-10-31T23:12:58.880449+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 5243,
-  "current_tender_count": 5242,
-  "organisations_with_changes": 2,
+  "previous_tender_count": 5242,
+  "current_tender_count": 5251,
+  "organisations_with_changes": 1,
   "organisations_with_new_tenders": 1,
-  "new_tender_count": 2,
+  "new_tender_count": 9,
   "changes": [
     {
       "Organisation Name": "Directorate Urban Administration and Development",
       "Previous Tender Count": 2812,
-      "Current Tender Count": 2812,
-      "Count Difference": 0,
-      "New Tender Count": 2,
+      "Current Tender Count": 2821,
+      "Count Difference": 9,
+      "New Tender Count": 9,
       "New Tender IDs": [
-        "2026_UAD_543289_1",
-        "2026_UAD_543290_1"
+        "2026_UAD_543291_1",
+        "2026_UAD_543292_1",
+        "2026_UAD_543293_1",
+        "2026_UAD_543294_1",
+        "2026_UAD_543295_1",
+        "2026_UAD_543296_1",
+        "2026_UAD_543297_1",
+        "2026_UAD_543298_1",
+        "2026_UAD_543300_1"
       ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 23,
-      "Current Tender Count": 22,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
     }
   ]
 }
