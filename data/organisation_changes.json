@@ -1,12 +1,54 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-10-31T23:41:44.400791+05:30",
+  "snapshot_at": "2026-11-01T16:33:07.721397+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
   "previous_tender_count": 5251,
-  "current_tender_count": 5251,
-  "organisations_with_changes": 0,
-  "organisations_with_new_tenders": 0,
-  "new_tender_count": 0,
-  "changes": []
+  "current_tender_count": 5265,
+  "organisations_with_changes": 3,
+  "organisations_with_new_tenders": 3,
+  "new_tender_count": 14,
+  "changes": [
+    {
+      "Organisation Name": "Excise Department",
+      "Previous Tender Count": 54,
+      "Current Tender Count": 66,
+      "Count Difference": 12,
+      "New Tender Count": 12,
+      "New Tender IDs": [
+        "2026_EXCIS_546910_1",
+        "2026_EXCIS_546942_1",
+        "2026_EXCIS_546942_2",
+        "2026_EXCIS_546942_3",
+        "2026_EXCIS_546948_1",
+        "2026_EXCIS_546953_1",
+        "2026_EXCIS_546973_1",
+        "2026_EXCIS_546973_2",
+        "2026_EXCIS_546974_1",
+        "2026_EXCIS_546975_1",
+        "2026_EXCIS_546975_2",
+        "2026_EXCIS_546977_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Previous Tender Count": 229,
+      "Current Tender Count": 230,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2025_MPPGC_458982_1"
+      ]
+    },
+    {
+      "Organisation Name": "Rewa Ultra Mega Solar Limited",
+      "Previous Tender Count": 2,
+      "Current Tender Count": 3,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_RUMSL_528528_1"
+      ]
+    }
+  ]
 }
