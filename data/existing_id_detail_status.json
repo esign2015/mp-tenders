@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "41278189775",
-  "github_run_number": "165",
+  "status": "running",
+  "github_run_id": "41293294391",
+  "github_run_number": "196",
   "github_commit_sha": "afb0e7a0ed40365244ab1d9323e1acedf97b397f",
-  "batch_size": 0,
-  "total_csv_ids": 5254,
-  "current_portal_ids": 5254,
-  "initial_incomplete": 39,
-  "batch_targets": 39,
-  "batch_attempted": 39,
-  "batch_complete": 39,
-  "started_at": "2026-11-01T05:46:46.846141+00:00",
-  "success": 5253,
+  "batch_size": 500,
+  "total_csv_ids": 5261,
+  "current_portal_ids": 5261,
+  "initial_incomplete": 29,
+  "batch_targets": 29,
+  "batch_attempted": 15,
+  "batch_complete": 13,
+  "started_at": "2026-11-01T09:29:08.780135+00:00",
+  "success": 5260,
   "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
@@ -472,6 +472,13 @@
     "2026_EXCIS_546941_1",
     "2026_EXCIS_546942_3",
     "2026_EXCIS_546948_1",
+    "2026_EXCIS_546953_1",
+    "2026_EXCIS_546973_1",
+    "2026_EXCIS_546973_2",
+    "2026_EXCIS_546974_1",
+    "2026_EXCIS_546975_1",
+    "2026_EXCIS_546975_2",
+    "2026_EXCIS_546977_1",
     "2026_GADR_541343_1",
     "2026_GVMP_541915_1",
     "2026_GVMP_541918_1",
@@ -5273,18 +5280,13 @@
   "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "last_successful_tender_id": "2026_WRD_511908_1",
+  "last_successful_tender_id": "2026_PHED_545380_1",
   "errors": [
     {
-      "Tender ID": "2026_WRD_511914_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_WRD_511908_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "Tender ID": "2026_PSNSU_543791_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-01T05:51:56.953083+00:00"
+  "updated_at": "2026-11-01T09:31:07.221753+00:00"
 }
