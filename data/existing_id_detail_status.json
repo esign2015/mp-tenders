@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "41265265851",
-  "github_run_number": "195",
-  "github_commit_sha": "e635c868e2c039b8e4a266011afd4e21c56ae3a4",
-  "batch_size": 500,
-  "total_csv_ids": 5251,
-  "current_portal_ids": 5251,
-  "initial_incomplete": 1,
-  "batch_targets": 1,
-  "batch_attempted": 1,
-  "batch_complete": 0,
-  "started_at": "2026-11-01T02:27:57.891286+00:00",
-  "success": 5250,
-  "failed": 1,
+  "status": "running",
+  "github_run_id": "41278189775",
+  "github_run_number": "165",
+  "github_commit_sha": "afb0e7a0ed40365244ab1d9323e1acedf97b397f",
+  "batch_size": 0,
+  "total_csv_ids": 5254,
+  "current_portal_ids": 5254,
+  "initial_incomplete": 39,
+  "batch_targets": 39,
+  "batch_attempted": 16,
+  "batch_complete": 15,
+  "started_at": "2026-11-01T05:46:46.846141+00:00",
+  "success": 5253,
+  "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_274357_4",
@@ -468,7 +468,10 @@
     "2026_EXCIS_546780_3",
     "2026_EXCIS_546818_1",
     "2026_EXCIS_546818_2",
+    "2026_EXCIS_546910_1",
     "2026_EXCIS_546941_1",
+    "2026_EXCIS_546942_3",
+    "2026_EXCIS_546948_1",
     "2026_GADR_541343_1",
     "2026_GVMP_541915_1",
     "2026_GVMP_541918_1",
@@ -5265,18 +5268,12 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PSNSU_543791_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-11-01T02:28:30.435601+00:00"
+  "last_successful_tender_id": "2026_WRD_511912_1",
+  "errors": [],
+  "updated_at": "2026-11-01T05:48:41.463241+00:00"
 }
