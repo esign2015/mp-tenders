@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-01T16:33:38.995829+05:30",
+    "checked_at": "2026-11-01T16:36:19.055456+05:30",
     "snapshot_at": "2026-11-01T10:40:24.647378+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5265,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-01T11:03:40.246257+00:00",
+  "updated_at": "2026-11-01T11:06:20.106778+00:00",
   "snapshot_at": "2026-11-01T10:40:24.647378+00:00",
   "organisation_count": 91,
   "portal_tender_count": 5265,
   "copied_tenders": 5265,
-  "detail_complete": 5261,
+  "detail_complete": 5264,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 3,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Bhopal City Link Limited",
@@ -264,10 +264,10 @@
       "snapshot_at": "2026-11-01T10:40:24.647378+00:00",
       "portal_tender_count": 66,
       "copied_tenders": 66,
-      "detail_complete": 65,
+      "detail_complete": 66,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -418,10 +418,10 @@
       "snapshot_at": "2026-11-01T10:40:24.647378+00:00",
       "portal_tender_count": 230,
       "copied_tenders": 230,
-      "detail_complete": 229,
+      "detail_complete": 230,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -968,10 +968,10 @@
       "snapshot_at": "2026-11-01T10:40:24.647378+00:00",
       "portal_tender_count": 3,
       "copied_tenders": 3,
-      "detail_complete": 2,
+      "detail_complete": 3,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rural Engineering Service",
@@ -1031,13 +1031,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 19,
+  "missing_district_count": 16,
   "missing_district_ids": [
-    "2025_MPPGC_458982_1",
     "2026_DHS_544580_1",
-    "2026_EXCIS_546942_1",
     "2026_MPP_545262_2",
-    "2026_RUMSL_528528_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1055,10 +1052,6 @@
   ],
   "known_pincode_count": 364,
   "department_count": 344,
-  "missing_pincode_count": 3,
-  "missing_pincode_ids": [
-    "2025_MPPGC_458982_1",
-    "2026_EXCIS_546942_1",
-    "2026_RUMSL_528528_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }

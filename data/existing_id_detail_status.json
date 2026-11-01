@@ -1,17 +1,17 @@
 {
   "status": "completed",
-  "github_run_id": "41293294391",
-  "github_run_number": "196",
+  "github_run_id": "41298429247",
+  "github_run_number": "1333",
   "github_commit_sha": "afb0e7a0ed40365244ab1d9323e1acedf97b397f",
   "batch_size": 500,
-  "total_csv_ids": 5261,
-  "current_portal_ids": 5261,
-  "initial_incomplete": 29,
-  "batch_targets": 29,
-  "batch_attempted": 29,
-  "batch_complete": 28,
-  "started_at": "2026-11-01T09:29:08.780135+00:00",
-  "success": 5260,
+  "total_csv_ids": 5265,
+  "current_portal_ids": 5265,
+  "initial_incomplete": 5,
+  "batch_targets": 5,
+  "batch_attempted": 5,
+  "batch_complete": 4,
+  "started_at": "2026-11-01T11:04:17.261870+00:00",
+  "success": 5264,
   "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
@@ -78,6 +78,7 @@
     "2024_UAD_378341_10",
     "2024_UAD_378346_10",
     "2025_MPPGC_434827_2",
+    "2025_MPPGC_458982_1",
     "2025_MPPGC_465004_3",
     "2025_MPPGC_468118_1",
     "2025_MPPGC_470272_2",
@@ -470,6 +471,8 @@
     "2026_EXCIS_546818_2",
     "2026_EXCIS_546910_1",
     "2026_EXCIS_546941_1",
+    "2026_EXCIS_546942_1",
+    "2026_EXCIS_546942_2",
     "2026_EXCIS_546942_3",
     "2026_EXCIS_546948_1",
     "2026_EXCIS_546953_1",
@@ -2245,6 +2248,7 @@
     "2026_RSK_546582_1",
     "2026_RSK_546665_1",
     "2026_RSK_546726_1",
+    "2026_RUMSL_528528_1",
     "2026_RUMSL_543263_1",
     "2026_RUMSL_543282_1",
     "2026_RVSKV_543550_1",
@@ -5280,7 +5284,7 @@
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_MPPKV_529473_2",
+  "last_successful_tender_id": "2026_RUMSL_528528_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_543791_1",
@@ -5288,5 +5292,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-01T09:32:45.611364+00:00"
+  "updated_at": "2026-11-01T11:05:08.095090+00:00"
 }
