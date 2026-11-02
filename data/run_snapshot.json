@@ -1,25 +1,14 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-11-02T17:31:12.198609+05:30",
+  "snapshot_at": "2026-11-02T18:57:59.226509+05:30",
   "portal_organisation_count": 92,
   "portal_tender_count": 5314,
   "copied_unique_tender_ids": 5314,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 2,
-  "recovery_log": [
-    {
-      "Tender ID": "2026_PSNSU_543791_1",
-      "Organisation Name": "PT. S.N. Shukla Unverversity Shehdol",
-      "Source": "RSP Tender ID recovery only"
-    },
-    {
-      "Tender ID": "2026_REDU_538886_1",
-      "Organisation Name": "Rani Awantibai Lodhi Vishwavidhyalaya -Sagar",
-      "Source": "RSP Tender ID recovery only"
-    }
-  ],
+  "recovered_from_rsp_id_only": 0,
+  "recovery_log": [],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": true
+  "rsp_fallback_used": false
 }
