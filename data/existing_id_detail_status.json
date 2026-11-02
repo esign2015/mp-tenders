@@ -8,7 +8,7 @@
   "current_portal_ids": 5476,
   "initial_incomplete": 54,
   "batch_targets": 54,
-  "batch_attempted": 33,
+  "batch_attempted": 54,
   "batch_complete": 0,
   "started_at": "2026-11-02T12:56:13.967054+00:00",
   "success": 5423,
@@ -5661,7 +5661,112 @@
       "Tender ID": "2026_UAD_546959_1",
       "error": "RuntimeError: Search Tender input not found",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPSAM_546097_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_544607_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_544608_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_544610_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_544611_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PWDRB_544612_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_544853_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546930_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546930_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546930_4",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546930_5",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PHED_547124_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_544346_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546585_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546227_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546228_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546229_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546273_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546274_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_RGPV_544245_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPGC_546114_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-02T13:00:15.427356+00:00"
+  "updated_at": "2026-11-02T13:02:20.250535+00:00"
 }
