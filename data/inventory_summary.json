@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-02T18:32:25.444994+05:30",
+    "checked_at": "2026-11-02T18:34:34.674001+05:30",
     "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5314,
@@ -21,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-02T13:02:26.990086+00:00",
+  "updated_at": "2026-11-02T13:04:36.671535+00:00",
   "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5314,
   "copied_tenders": 5314,
-  "detail_complete": 5261,
+  "detail_complete": 5272,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 53,
+  "detail_pending": 42,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -37,10 +37,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 1,
       "copied_tenders": 1,
-      "detail_complete": 0,
+      "detail_complete": 1,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Bhopal City Link Limited",
@@ -136,10 +136,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 0,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Health Services",
@@ -235,10 +235,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 2946,
       "copied_tenders": 2946,
-      "detail_complete": 2919,
+      "detail_complete": 2922,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 27
+      "detail_pending": 24
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -279,10 +279,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 254,
       "copied_tenders": 254,
-      "detail_complete": 252,
+      "detail_complete": 254,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -620,10 +620,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 84,
       "copied_tenders": 84,
-      "detail_complete": 83,
+      "detail_complete": 84,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -818,10 +818,10 @@
       "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
       "portal_tender_count": 18,
       "copied_tenders": 18,
-      "detail_complete": 9,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 7
     },
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
@@ -1046,19 +1046,11 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 68,
+  "missing_district_count": 57,
   "missing_district_ids": [
-    "2024_UAD_378512_6",
-    "2024_UAD_378513_6",
-    "2026_APSU_546957_1",
-    "2026_DES_539552_2",
-    "2026_DES_547135_1",
     "2026_DHS_544580_1",
-    "2026_MPFD_545983_1",
     "2026_MPP_545262_2",
     "2026_MPSAM_546097_1",
-    "2026_MPWLC_546983_1",
-    "2026_MPWLC_546984_1",
     "2026_MPWLC_546985_1",
     "2026_MPWLC_546986_1",
     "2026_MPWLC_546987_1",
@@ -1098,7 +1090,6 @@
     "2026_UAD_546950_1",
     "2026_UAD_546954_1",
     "2026_UAD_546959_1",
-    "2026_UAD_546998_1",
     "2026_UAD_547035_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
@@ -1108,8 +1099,6 @@
     "2026_WRD_511914_1",
     "2026_WRD_511915_1",
     "2026_WRD_511916_1",
-    "2026_WRD_514891_1",
-    "2026_WRD_514892_1",
     "2026_WRD_526720_1",
     "2026_WRD_526722_1",
     "2026_WRD_526723_1",
@@ -1119,17 +1108,9 @@
   ],
   "known_pincode_count": 365,
   "department_count": 339,
-  "missing_pincode_count": 52,
+  "missing_pincode_count": 41,
   "missing_pincode_ids": [
-    "2024_UAD_378512_6",
-    "2024_UAD_378513_6",
-    "2026_APSU_546957_1",
-    "2026_DES_539552_2",
-    "2026_DES_547135_1",
-    "2026_MPFD_545983_1",
     "2026_MPSAM_546097_1",
-    "2026_MPWLC_546983_1",
-    "2026_MPWLC_546984_1",
     "2026_MPWLC_546985_1",
     "2026_MPWLC_546986_1",
     "2026_MPWLC_546987_1",
@@ -1169,9 +1150,6 @@
     "2026_UAD_546950_1",
     "2026_UAD_546954_1",
     "2026_UAD_546959_1",
-    "2026_UAD_546998_1",
-    "2026_UAD_547035_1",
-    "2026_WRD_514891_1",
-    "2026_WRD_514892_1"
+    "2026_UAD_547035_1"
   ]
 }
