@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-02T18:19:22.626535+05:30",
+    "checked_at": "2026-11-02T18:28:14.770802+05:30",
     "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5314,
     "verified_unique_ids": 5314,
-    "dashboard_live_count": 4949,
-    "closed_or_cancelled_count": 365,
+    "dashboard_live_count": 4948,
+    "closed_or_cancelled_count": 366,
     "excluded_master_only_live_count": 3,
     "excluded_master_only_live_ids": [
       "2026_DHS_540643_1",
@@ -21,15 +21,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-02T12:49:24.009146+00:00",
+  "updated_at": "2026-11-02T12:58:16.146177+00:00",
   "snapshot_at": "2026-11-02T11:28:05.329367+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5314,
   "copied_tenders": 5314,
   "detail_complete": 5261,
-  "detail_failed": 49,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 4,
+  "detail_pending": 53,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -38,9 +38,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Bhopal City Link Limited",
@@ -137,9 +137,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Directorate of Health Services",
@@ -236,9 +236,9 @@
       "portal_tender_count": 2946,
       "copied_tenders": 2946,
       "detail_complete": 2919,
-      "detail_failed": 27,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 27
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -280,9 +280,9 @@
       "portal_tender_count": 254,
       "copied_tenders": 254,
       "detail_complete": 252,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Excise Department",
@@ -621,9 +621,9 @@
       "portal_tender_count": 84,
       "copied_tenders": 84,
       "detail_complete": 83,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -709,9 +709,9 @@
       "portal_tender_count": 52,
       "copied_tenders": 52,
       "detail_complete": 51,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -819,9 +819,9 @@
       "portal_tender_count": 18,
       "copied_tenders": 18,
       "detail_complete": 9,
-      "detail_failed": 9,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 9
     },
     {
       "organisation": "Nanaji Deshmukh Veterinary Science University",
@@ -907,9 +907,9 @@
       "portal_tender_count": 88,
       "copied_tenders": 88,
       "detail_complete": 84,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 4
     },
     {
       "organisation": "PWD-PIU",
@@ -929,9 +929,9 @@
       "portal_tender_count": 373,
       "copied_tenders": 373,
       "detail_complete": 368,
-      "detail_failed": 5,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 5
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
