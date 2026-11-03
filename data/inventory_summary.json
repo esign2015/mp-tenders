@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-03T16:58:09.097128+05:30",
+    "checked_at": "2026-11-03T16:58:54.942471+05:30",
     "snapshot_at": "2026-11-03T04:19:26.970761+05:30",
     "inventory_source": "cached-snapshot",
     "portal_tender_count": 5202,
@@ -226,15 +226,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-03T11:28:10.367694+00:00",
+  "updated_at": "2026-11-03T11:28:56.513358+00:00",
   "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
   "organisation_count": 90,
   "portal_tender_count": 5202,
   "copied_tenders": 5180,
-  "detail_complete": 5016,
+  "detail_complete": 5018,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 164,
+  "detail_pending": 162,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -638,10 +638,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 30,
-      "detail_complete": 27,
+      "detail_complete": 28,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -649,10 +649,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 206,
       "copied_tenders": 192,
-      "detail_complete": 185,
+      "detail_complete": 186,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 6
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1229,7 +1229,7 @@
   ],
   "organisation_count_mismatches": 5,
   "legacy_verification_pending": 0,
-  "missing_district_count": 180,
+  "missing_district_count": 178,
   "missing_district_ids": [
     "2024_UAD_336868_7",
     "2024_UAD_366107_7",
@@ -1272,7 +1272,6 @@
     "2026_MPPGC_531025_1",
     "2026_MPPGC_538479_1",
     "2026_MPPGC_538485_1",
-    "2026_MPPGC_546212_1",
     "2026_MPPGC_546763_1",
     "2026_MPPGC_546832_1",
     "2026_MPP_545262_2",
@@ -1295,7 +1294,6 @@
     "2026_PHED_547244_1",
     "2026_PHED_547252_1",
     "2026_PHED_547253_1",
-    "2026_PKVVC_546750_1",
     "2026_PKVVC_547281_1",
     "2026_PKVVC_547319_1",
     "2026_PWDRB_546478_1",
@@ -1414,7 +1412,7 @@
   ],
   "known_pincode_count": 359,
   "department_count": 346,
-  "missing_pincode_count": 164,
+  "missing_pincode_count": 162,
   "missing_pincode_ids": [
     "2024_UAD_336868_7",
     "2024_UAD_366107_7",
@@ -1456,7 +1454,6 @@
     "2026_MPPGC_531025_1",
     "2026_MPPGC_538479_1",
     "2026_MPPGC_538485_1",
-    "2026_MPPGC_546212_1",
     "2026_MPPGC_546763_1",
     "2026_MPPGC_546832_1",
     "2026_MPSAM_546215_1",
@@ -1478,7 +1475,6 @@
     "2026_PHED_547244_1",
     "2026_PHED_547252_1",
     "2026_PHED_547253_1",
-    "2026_PKVVC_546750_1",
     "2026_PKVVC_547281_1",
     "2026_PKVVC_547319_1",
     "2026_PWDRB_546478_1",
