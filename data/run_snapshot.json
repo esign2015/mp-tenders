@@ -1,14 +1,205 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-11-04T01:38:31.782758+05:30",
+  "snapshot_at": "2026-11-04T02:23:35.544019+05:30",
   "portal_organisation_count": 88,
   "portal_tender_count": 5118,
   "copied_unique_tender_ids": 5118,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 0,
-  "recovery_log": [],
+  "recovered_from_rsp_id_only": 38,
+  "recovery_log": [
+    {
+      "Tender ID": "2026_NLIUB_545859_1",
+      "Organisation Name": "The National Law Instituite University - Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_NLIUB_546929_1",
+      "Organisation Name": "The National Law Instituite University - Bhopal",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_539823_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_539824_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_539825_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_539826_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_539827_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543859_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543873_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543895_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543936_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543942_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543946_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543953_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543961_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543966_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_543978_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546933_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546949_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546952_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546955_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546979_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546980_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546981_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546992_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546993_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546994_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546995_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546996_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546997_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_546999_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547005_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547006_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547010_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547011_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547012_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_TAD_547225_1",
+      "Organisation Name": "Tribal Affairs Department-MP",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_VU_542461_1",
+      "Organisation Name": "Vikram University",
+      "Source": "RSP Tender ID recovery only"
+    }
+  ],
   "mptenders_reconciliation_attempts": 3,
-  "rsp_fallback_used": false
+  "rsp_fallback_used": true
 }
