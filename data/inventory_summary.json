@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-03T17:22:17.052284+05:30",
+    "checked_at": "2026-11-03T17:26:59.572662+05:30",
     "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5202,
@@ -28,15 +28,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-03T11:52:18.294237+00:00",
+  "updated_at": "2026-11-03T11:57:00.814635+00:00",
   "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
   "organisation_count": 90,
   "portal_tender_count": 5202,
   "copied_tenders": 5202,
-  "detail_complete": 5180,
+  "detail_complete": 5202,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 22,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -286,10 +286,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 258,
       "copied_tenders": 258,
-      "detail_complete": 256,
+      "detail_complete": 258,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -407,10 +407,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 37,
       "copied_tenders": 37,
-      "detail_complete": 35,
+      "detail_complete": 37,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 30,
+      "detail_complete": 33,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -451,10 +451,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 206,
       "copied_tenders": 206,
-      "detail_complete": 192,
+      "detail_complete": 206,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -561,10 +561,10 @@
       "snapshot_at": "2026-11-03T11:05:00.818409+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Urja Vikas Nigam Limitted",
@@ -1031,30 +1031,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 38,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_MKVVC_541246_2",
-    "2026_MKVVC_542184_1",
-    "2026_MPPGC_511602_2",
-    "2026_MPPGC_514931_1",
-    "2026_MPPGC_524875_1",
-    "2026_MPPGC_526104_1",
-    "2026_MPPGC_529911_1",
-    "2026_MPPGC_533688_1",
-    "2026_MPPGC_533716_1",
-    "2026_MPPGC_534801_1",
-    "2026_MPPGC_535192_1",
-    "2026_MPPGC_535642_1",
-    "2026_MPPGC_539366_1",
-    "2026_MPPGC_539661_1",
-    "2026_MPPGC_541678_1",
-    "2026_MPPGC_544300_1",
     "2026_MPP_545262_2",
-    "2026_MPUDC_536834_1",
-    "2026_PKVVC_488814_1",
-    "2026_PKVVC_544105_1",
-    "2026_PKVVC_544124_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1063,40 +1043,15 @@
     "2026_WRD_511914_1",
     "2026_WRD_511915_1",
     "2026_WRD_511916_1",
-    "2026_WRD_525967_1",
     "2026_WRD_526720_1",
     "2026_WRD_526722_1",
     "2026_WRD_526723_1",
     "2026_WRD_526724_1",
     "2026_WRD_526725_1",
-    "2026_WRD_526726_1",
-    "2026_WRD_528877_1"
+    "2026_WRD_526726_1"
   ],
   "known_pincode_count": 364,
   "department_count": 346,
-  "missing_pincode_count": 22,
-  "missing_pincode_ids": [
-    "2026_MKVVC_541246_2",
-    "2026_MKVVC_542184_1",
-    "2026_MPPGC_511602_2",
-    "2026_MPPGC_514931_1",
-    "2026_MPPGC_524875_1",
-    "2026_MPPGC_526104_1",
-    "2026_MPPGC_529911_1",
-    "2026_MPPGC_533688_1",
-    "2026_MPPGC_533716_1",
-    "2026_MPPGC_534801_1",
-    "2026_MPPGC_535192_1",
-    "2026_MPPGC_535642_1",
-    "2026_MPPGC_539366_1",
-    "2026_MPPGC_539661_1",
-    "2026_MPPGC_541678_1",
-    "2026_MPPGC_544300_1",
-    "2026_MPUDC_536834_1",
-    "2026_PKVVC_488814_1",
-    "2026_PKVVC_544105_1",
-    "2026_PKVVC_544124_1",
-    "2026_WRD_525967_1",
-    "2026_WRD_528877_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
