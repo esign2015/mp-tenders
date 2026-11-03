@@ -1,12 +1,12 @@
 {
-  "status": "verified",
-  "checked_at": "2026-11-03T16:56:02.672928+05:30",
-  "snapshot_at": "2026-11-02T22:27:49.817534+00:00",
-  "inventory_source": "copied-list",
-  "portal_tender_count": 5064,
+  "status": "mismatch",
+  "checked_at": "2026-11-03T16:58:09.097128+05:30",
+  "snapshot_at": "2026-11-03T04:19:26.970761+05:30",
+  "inventory_source": "cached-snapshot",
+  "portal_tender_count": 5202,
   "verified_unique_ids": 5064,
-  "dashboard_live_count": 4967,
-  "closed_or_cancelled_count": 97,
+  "dashboard_live_count": 4981,
+  "closed_or_cancelled_count": 83,
   "excluded_master_only_live_count": 200,
   "excluded_master_only_live_ids": [
     "2024_UAD_336868_7",
@@ -212,7 +212,15 @@
   ],
   "missing_ids": [],
   "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "errors": [
+    "Organisation count mismatch: Engineer-in-Chief - Water Resources Department",
+    "Organisation count mismatch: Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
+    "Organisation count mismatch: Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+    "Organisation count mismatch: Madhya Pradesh Power Generating Company Limited",
+    "Organisation count mismatch: Madhya Pradesh Urban Development Company Limited - MDB Tenders",
+    "Verified inventory and copied Tender IDs differ",
+    "Portal total and unique Tender IDs differ"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
