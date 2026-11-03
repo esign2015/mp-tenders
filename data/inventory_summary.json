@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-03T21:20:15.093295+05:30",
+    "checked_at": "2026-11-03T21:22:20.690095+05:30",
     "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5118,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-03T15:50:16.023160+00:00",
+  "updated_at": "2026-11-03T15:52:21.423084+00:00",
   "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
   "organisation_count": 88,
   "portal_tender_count": 5118,
   "copied_tenders": 5118,
-  "detail_complete": 5108,
+  "detail_complete": 5118,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 10,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 2736,
       "copied_tenders": 2736,
-      "detail_complete": 2727,
+      "detail_complete": 2736,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 9
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -275,10 +275,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 259,
       "copied_tenders": 259,
-      "detail_complete": 258,
+      "detail_complete": 259,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -998,19 +998,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 26,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
     "2026_MPP_545262_2",
-    "2026_UAD_545287_1",
-    "2026_UAD_547126_1",
-    "2026_UAD_547302_1",
-    "2026_UAD_547334_1",
-    "2026_UAD_547336_1",
-    "2026_UAD_547339_1",
-    "2026_UAD_547345_1",
-    "2026_UAD_547392_1",
-    "2026_UAD_547451_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1024,22 +1015,10 @@
     "2026_WRD_526723_1",
     "2026_WRD_526724_1",
     "2026_WRD_526725_1",
-    "2026_WRD_526726_1",
-    "2026_WRD_539757_1"
+    "2026_WRD_526726_1"
   ],
   "known_pincode_count": 361,
   "department_count": 349,
-  "missing_pincode_count": 10,
-  "missing_pincode_ids": [
-    "2026_UAD_545287_1",
-    "2026_UAD_547126_1",
-    "2026_UAD_547302_1",
-    "2026_UAD_547334_1",
-    "2026_UAD_547336_1",
-    "2026_UAD_547339_1",
-    "2026_UAD_547345_1",
-    "2026_UAD_547392_1",
-    "2026_UAD_547451_1",
-    "2026_WRD_539757_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
