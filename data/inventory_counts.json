@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-03T21:17:34.526501+05:30",
+    "checked_at": "2026-11-03T21:20:15.093295+05:30",
     "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5118,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-03T15:47:35.709589+00:00",
+  "updated_at": "2026-11-03T15:50:16.023160+00:00",
   "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
   "organisation_count": 88,
   "portal_tender_count": 5118,
   "copied_tenders": 5118,
-  "detail_complete": 5101,
+  "detail_complete": 5108,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 17,
+  "detail_pending": 10,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -220,10 +220,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 8,
       "copied_tenders": 8,
-      "detail_complete": 6,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Urban Administration and Development",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 2736,
       "copied_tenders": 2736,
-      "detail_complete": 2725,
+      "detail_complete": 2727,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 11
+      "detail_pending": 9
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 210,
       "copied_tenders": 210,
-      "detail_complete": 209,
+      "detail_complete": 210,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -891,10 +891,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 40,
       "copied_tenders": 40,
-      "detail_complete": 39,
+      "detail_complete": 40,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -957,10 +957,10 @@
       "snapshot_at": "2026-11-03T15:26:00.929497+00:00",
       "portal_tender_count": 70,
       "copied_tenders": 70,
-      "detail_complete": 69,
+      "detail_complete": 70,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "The National Law Instituite University - Bhopal",
@@ -998,20 +998,13 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 33,
+  "missing_district_count": 26,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_DSYW_547482_1",
-    "2026_DSYW_547486_1",
-    "2026_MPPGC_483292_1",
     "2026_MPP_545262_2",
-    "2026_PWPIU_547480_1",
-    "2026_RES_543418_2",
     "2026_UAD_545287_1",
     "2026_UAD_547126_1",
-    "2026_UAD_547182_1",
     "2026_UAD_547302_1",
-    "2026_UAD_547312_1",
     "2026_UAD_547334_1",
     "2026_UAD_547336_1",
     "2026_UAD_547339_1",
@@ -1034,20 +1027,13 @@
     "2026_WRD_526726_1",
     "2026_WRD_539757_1"
   ],
-  "known_pincode_count": 360,
+  "known_pincode_count": 361,
   "department_count": 349,
-  "missing_pincode_count": 17,
+  "missing_pincode_count": 10,
   "missing_pincode_ids": [
-    "2026_DSYW_547482_1",
-    "2026_DSYW_547486_1",
-    "2026_MPPGC_483292_1",
-    "2026_PWPIU_547480_1",
-    "2026_RES_543418_2",
     "2026_UAD_545287_1",
     "2026_UAD_547126_1",
-    "2026_UAD_547182_1",
     "2026_UAD_547302_1",
-    "2026_UAD_547312_1",
     "2026_UAD_547334_1",
     "2026_UAD_547336_1",
     "2026_UAD_547339_1",
