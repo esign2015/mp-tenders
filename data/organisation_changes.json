@@ -1,102 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-03T21:16:55.428012+05:30",
+  "snapshot_at": "2026-11-03T23:03:08.985208+05:30",
   "previous_organisation_count": 88,
   "current_organisation_count": 88,
-  "previous_tender_count": 5094,
+  "previous_tender_count": 5118,
   "current_tender_count": 5118,
-  "organisations_with_changes": 7,
-  "organisations_with_new_tenders": 7,
-  "new_tender_count": 26,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2726,
-      "Current Tender Count": 2736,
-      "Count Difference": 10,
-      "New Tender Count": 11,
-      "New Tender IDs": [
-        "2026_UAD_545287_1",
-        "2026_UAD_547126_1",
-        "2026_UAD_547182_1",
-        "2026_UAD_547302_1",
-        "2026_UAD_547312_1",
-        "2026_UAD_547334_1",
-        "2026_UAD_547336_1",
-        "2026_UAD_547339_1",
-        "2026_UAD_547345_1",
-        "2026_UAD_547392_1",
-        "2026_UAD_547451_1"
-      ]
-    },
-    {
-      "Organisation Name": "Bhopal City Link Limited",
-      "Previous Tender Count": 8,
-      "Current Tender Count": 16,
-      "Count Difference": 8,
-      "New Tender Count": 8,
-      "New Tender IDs": [
-        "2026_BCLL_534106_1",
-        "2026_BCLL_534107_1",
-        "2026_BCLL_534108_1",
-        "2026_BCLL_534109_1",
-        "2026_BCLL_534110_1",
-        "2026_BCLL_534111_1",
-        "2026_BCLL_534112_1",
-        "2026_BCLL_534113_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 208,
-      "Current Tender Count": 210,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_MPPGC_483292_1",
-        "2026_MPPGC_536987_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Sports and Youth Welfare",
-      "Previous Tender Count": 7,
-      "Current Tender Count": 8,
-      "Count Difference": 1,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_DSYW_547482_1",
-        "2026_DSYW_547486_1"
-      ]
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 258,
-      "Current Tender Count": 259,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_WRD_539757_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD-PIU",
-      "Previous Tender Count": 39,
-      "Current Tender Count": 40,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PWPIU_547480_1"
-      ]
-    },
-    {
-      "Organisation Name": "Rural Engineering Service",
-      "Previous Tender Count": 69,
-      "Current Tender Count": 70,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_RES_543418_2"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
