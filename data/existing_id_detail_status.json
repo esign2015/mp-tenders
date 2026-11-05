@@ -1,16 +1,16 @@
 {
-  "status": "completed",
-  "github_run_id": "41938580643",
-  "github_run_number": "210",
+  "status": "running",
+  "github_run_id": "41948346277",
+  "github_run_number": "179",
   "github_commit_sha": "884cee6c243ce3bce6b888f4bdacfb7345e9d449",
-  "batch_size": 500,
+  "batch_size": 0,
   "total_csv_ids": 5122,
   "current_portal_ids": 5122,
-  "initial_incomplete": 0,
-  "batch_targets": 0,
-  "batch_attempted": 0,
-  "batch_complete": 0,
-  "started_at": "2026-11-05T00:05:51.194689+00:00",
+  "initial_incomplete": 51,
+  "batch_targets": 51,
+  "batch_attempted": 15,
+  "batch_complete": 15,
+  "started_at": "2026-11-05T01:25:47.627531+00:00",
   "success": 5122,
   "failed": 0,
   "success_ids": [
@@ -5140,7 +5140,7 @@
   "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_WRD_511915_1",
   "errors": [],
-  "updated_at": "2026-11-05T00:05:53.042101+00:00"
+  "updated_at": "2026-11-05T01:27:39.349776+00:00"
 }
