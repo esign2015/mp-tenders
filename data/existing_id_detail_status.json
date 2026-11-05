@@ -8,8 +8,8 @@
   "current_portal_ids": 5131,
   "initial_incomplete": 115,
   "batch_targets": 115,
-  "batch_attempted": 24,
-  "batch_complete": 24,
+  "batch_attempted": 52,
+  "batch_complete": 49,
   "started_at": "2026-11-05T07:05:42.640051+00:00",
   "success": 5131,
   "failed": 0,
@@ -5149,7 +5149,18 @@
   "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_MPRRD_545888_13",
-  "errors": [],
-  "updated_at": "2026-11-05T07:07:40.378983+00:00"
+  "last_successful_tender_id": "2026_MPRRD_545888_38",
+  "errors": [
+    {
+      "Tender ID": "2026_MPRRD_545888_33",
+      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_545888_32",
+      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-11-05T07:09:43.914461+00:00"
 }
