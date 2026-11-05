@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-05T21:50:14.457419+05:30",
+    "checked_at": "2026-11-05T21:52:54.880256+05:30",
     "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5378,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-05T16:20:15.897241+00:00",
+  "updated_at": "2026-11-05T16:22:55.770627+00:00",
   "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5378,
   "copied_tenders": 5378,
-  "detail_complete": 5360,
+  "detail_complete": 5377,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 17,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -198,10 +198,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 27,
       "copied_tenders": 27,
-      "detail_complete": 26,
+      "detail_complete": 27,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Sports and Youth Welfare",
@@ -220,10 +220,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 2925,
       "copied_tenders": 2925,
-      "detail_complete": 2922,
+      "detail_complete": 2925,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -308,10 +308,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 7,
       "copied_tenders": 7,
-      "detail_complete": 6,
+      "detail_complete": 7,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "High Court of Madhya Pradesh",
@@ -429,10 +429,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 54,
       "copied_tenders": 54,
-      "detail_complete": 51,
+      "detail_complete": 54,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -451,10 +451,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 233,
       "copied_tenders": 233,
-      "detail_complete": 228,
+      "detail_complete": 233,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -682,10 +682,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 39,
       "copied_tenders": 39,
-      "detail_complete": 38,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M P Rajya Sahakari Bank Maryadit - Bhopal",
@@ -924,10 +924,10 @@
       "snapshot_at": "2026-11-05T15:53:21.510332+00:00",
       "portal_tender_count": 351,
       "copied_tenders": 351,
-      "detail_complete": 348,
+      "detail_complete": 351,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1064,27 +1064,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 33,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_DTCP_548150_1",
-    "2026_GVMP_548136_1",
-    "2026_MPPGC_490148_2",
-    "2026_MPPGC_520027_2",
-    "2026_MPPGC_520306_1",
-    "2026_MPPGC_542092_1",
-    "2026_MPPGC_546137_1",
-    "2026_MPPKV_545278_2",
-    "2026_MPPKV_548092_1",
-    "2026_MPPKV_548149_1",
-    "2026_MPPTC_548106_1",
     "2026_MPP_545262_2",
-    "2026_PWDRB_547961_1",
-    "2026_PWDRB_547964_1",
-    "2026_PWDRB_547965_1",
-    "2026_UAD_534352_2",
-    "2026_UAD_547676_1",
-    "2026_UAD_547677_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1100,26 +1083,8 @@
     "2026_WRD_526725_1",
     "2026_WRD_526726_1"
   ],
-  "known_pincode_count": 363,
+  "known_pincode_count": 364,
   "department_count": 345,
-  "missing_pincode_count": 17,
-  "missing_pincode_ids": [
-    "2026_DTCP_548150_1",
-    "2026_GVMP_548136_1",
-    "2026_MPPGC_490148_2",
-    "2026_MPPGC_520027_2",
-    "2026_MPPGC_520306_1",
-    "2026_MPPGC_542092_1",
-    "2026_MPPGC_546137_1",
-    "2026_MPPKV_545278_2",
-    "2026_MPPKV_548092_1",
-    "2026_MPPKV_548149_1",
-    "2026_MPPTC_548106_1",
-    "2026_PWDRB_547961_1",
-    "2026_PWDRB_547964_1",
-    "2026_PWDRB_547965_1",
-    "2026_UAD_534352_2",
-    "2026_UAD_547676_1",
-    "2026_UAD_547677_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
