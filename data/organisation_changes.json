@@ -1,104 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-05T21:49:43.308139+05:30",
+  "snapshot_at": "2026-11-05T23:27:01.062803+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
-  "previous_tender_count": 5359,
+  "previous_tender_count": 5378,
   "current_tender_count": 5378,
-  "organisations_with_changes": 8,
-  "organisations_with_new_tenders": 7,
-  "new_tender_count": 20,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 226,
-      "Current Tender Count": 233,
-      "Count Difference": 7,
-      "New Tender Count": 7,
-      "New Tender IDs": [
-        "2026_MPPGC_490148_2",
-        "2026_MPPGC_506693_2",
-        "2026_MPPGC_520027_2",
-        "2026_MPPGC_520306_1",
-        "2026_MPPGC_538125_1",
-        "2026_MPPGC_542092_1",
-        "2026_MPPGC_546137_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 50,
-      "Current Tender Count": 54,
-      "Count Difference": 4,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2026_MPPKV_527674_1",
-        "2026_MPPKV_545278_2",
-        "2026_MPPKV_548092_1",
-        "2026_MPPKV_548149_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2922,
-      "Current Tender Count": 2925,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_UAD_534352_2",
-        "2026_UAD_547676_1",
-        "2026_UAD_547677_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 348,
-      "Current Tender Count": 351,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_PWDRB_547961_1",
-        "2026_PWDRB_547964_1",
-        "2026_PWDRB_547965_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Town And Country Planning",
-      "Previous Tender Count": 26,
-      "Current Tender Count": 27,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DTCP_548150_1"
-      ]
-    },
-    {
-      "Organisation Name": "Gwalior Vyapar Mela Pradhikaran - GVMP",
-      "Previous Tender Count": 6,
-      "Current Tender Count": 7,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_GVMP_548136_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Power Transmission Co. Ltd.",
-      "Previous Tender Count": 38,
-      "Current Tender Count": 39,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPTC_548106_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Sports and Youth Welfare",
-      "Previous Tender Count": 12,
-      "Current Tender Count": 11,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
