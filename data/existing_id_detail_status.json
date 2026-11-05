@@ -1,17 +1,17 @@
 {
-  "status": "completed",
-  "github_run_id": "41984680378",
-  "github_run_number": "211",
+  "status": "running",
+  "github_run_id": "41994225201",
+  "github_run_number": "180",
   "github_commit_sha": "8a5028634de0630991b7a6364eb9339bcc08e821",
-  "batch_size": 500,
-  "total_csv_ids": 5131,
-  "current_portal_ids": 5131,
-  "initial_incomplete": 115,
-  "batch_targets": 115,
-  "batch_attempted": 115,
-  "batch_complete": 115,
-  "started_at": "2026-11-05T07:05:42.640051+00:00",
-  "success": 5131,
+  "batch_size": 0,
+  "total_csv_ids": 5141,
+  "current_portal_ids": 5141,
+  "initial_incomplete": 51,
+  "batch_targets": 51,
+  "batch_attempted": 11,
+  "batch_complete": 11,
+  "started_at": "2026-11-05T08:25:15.267796+00:00",
+  "success": 5141,
   "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
@@ -4338,6 +4338,8 @@
     "2026_UAD_546553_1",
     "2026_UAD_546554_1",
     "2026_UAD_546555_1",
+    "2026_UAD_546563_1",
+    "2026_UAD_546564_1",
     "2026_UAD_546565_1",
     "2026_UAD_546569_1",
     "2026_UAD_546571_1",
@@ -4350,7 +4352,9 @@
     "2026_UAD_546585_1",
     "2026_UAD_546587_1",
     "2026_UAD_546588_1",
+    "2026_UAD_546590_1",
     "2026_UAD_546591_1",
+    "2026_UAD_546592_1",
     "2026_UAD_546595_1",
     "2026_UAD_546597_1",
     "2026_UAD_546601_1",
@@ -4847,6 +4851,12 @@
     "2026_UAD_547557_1",
     "2026_UAD_547558_1",
     "2026_UAD_547559_1",
+    "2026_UAD_547572_1",
+    "2026_UAD_547584_1",
+    "2026_UAD_547585_1",
+    "2026_UAD_547586_1",
+    "2026_UAD_547587_1",
+    "2026_UAD_547588_1",
     "2026_UAD_547593_3",
     "2026_UAD_547635_1",
     "2026_UAD_547638_2",
@@ -5149,18 +5159,7 @@
   "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_MPRRD_545888_33",
-  "errors": [
-    {
-      "Tender ID": "2026_MPRRD_545888_33",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPRRD_545888_32",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": false
-    }
-  ],
-  "updated_at": "2026-11-05T07:14:49.553157+00:00"
+  "last_successful_tender_id": "2026_WRD_526724_1",
+  "errors": [],
+  "updated_at": "2026-11-05T08:27:09.467798+00:00"
 }
