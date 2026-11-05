@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-06T02:12:41.621847+05:30",
+    "checked_at": "2026-11-06T02:15:23.569317+05:30",
     "snapshot_at": "2026-11-05T20:12:38.732482+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5378,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-05T20:42:43.113248+00:00",
+  "updated_at": "2026-11-05T20:45:24.298505+00:00",
   "snapshot_at": "2026-11-05T20:12:38.732482+00:00",
   "organisation_count": 94,
   "portal_tender_count": 5378,
   "copied_tenders": 5378,
-  "detail_complete": 5376,
+  "detail_complete": 5377,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -627,10 +627,10 @@
       "snapshot_at": "2026-11-05T20:12:38.732482+00:00",
       "portal_tender_count": 77,
       "copied_tenders": 77,
-      "detail_complete": 76,
+      "detail_complete": 77,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -1064,10 +1064,9 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 17,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_MPFD_26422_1",
     "2026_MPP_545262_2",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
@@ -1086,8 +1085,6 @@
   ],
   "known_pincode_count": 364,
   "department_count": 345,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_MPFD_26422_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
