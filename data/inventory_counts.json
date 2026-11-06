@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-06T17:17:18.519351+05:30",
+    "checked_at": "2026-11-06T17:19:24.598487+05:30",
     "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5556,
@@ -23,15 +23,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-06T11:47:19.749698+00:00",
+  "updated_at": "2026-11-06T11:49:25.466939+00:00",
   "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5556,
   "copied_tenders": 5556,
-  "detail_complete": 5442,
+  "detail_complete": 5467,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 114,
+  "detail_pending": 89,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -237,10 +237,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 3031,
       "copied_tenders": 3031,
-      "detail_complete": 2967,
+      "detail_complete": 2976,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 64
+      "detail_pending": 55
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -446,10 +446,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 56,
       "copied_tenders": 56,
-      "detail_complete": 54,
+      "detail_complete": 56,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -457,10 +457,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 43,
+      "detail_complete": 45,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -468,10 +468,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 238,
       "copied_tenders": 238,
-      "detail_complete": 236,
+      "detail_complete": 238,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -688,10 +688,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 48,
       "copied_tenders": 48,
-      "detail_complete": 43,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -721,10 +721,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 68,
       "copied_tenders": 68,
-      "detail_complete": 47,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 21
+      "detail_pending": 16
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -1092,18 +1092,11 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 57,
+  "missing_district_count": 43,
   "missing_district_ids": [
     "2026_DHS_544580_1",
     "2026_MPFD_547304_1",
     "2026_MPFD_547995_1",
-    "2026_MPPGC_533710_1",
-    "2026_MPPGC_536682_1",
-    "2026_MPPHC_547970_1",
-    "2026_MPPHC_547971_1",
-    "2026_MPPHC_547972_1",
-    "2026_MPPHC_547973_1",
-    "2026_MPPHC_547976_1",
     "2026_MPP_545262_2",
     "2026_MPSAM_546333_1",
     "2026_MPSAM_546334_1",
@@ -1115,11 +1108,6 @@
     "2026_MPSAM_546340_1",
     "2026_MPSAM_546341_1",
     "2026_MPSAM_546342_1",
-    "2026_MPSAM_547203_1",
-    "2026_MPSAM_547204_1",
-    "2026_MPSAM_547206_1",
-    "2026_MPSAM_547207_1",
-    "2026_MPSAM_547208_1",
     "2026_MPSAM_547561_1",
     "2026_MPSAM_547563_1",
     "2026_MPSAM_547564_1",
@@ -1128,8 +1116,6 @@
     "2026_MPSAM_547567_1",
     "2026_MPSCU_548119_1",
     "2026_MPUDC_548300_1",
-    "2026_PKVVC_547212_1",
-    "2026_PKVVC_547768_1",
     "2026_PKVVC_548235_1",
     "2026_PWDRB_547673_1",
     "2026_PWDRB_547674_1",
@@ -1152,9 +1138,9 @@
     "2026_WRD_526725_1",
     "2026_WRD_526726_1"
   ],
-  "known_pincode_count": 363,
+  "known_pincode_count": 367,
   "department_count": 356,
-  "missing_pincode_count": 113,
+  "missing_pincode_count": 88,
   "missing_pincode_ids": [
     "2026_DGPCS_548218_1",
     "2026_DGPCS_548220_1",
@@ -1164,15 +1150,6 @@
     "2026_DoF_548190_1",
     "2026_MPFD_547304_1",
     "2026_MPFD_547995_1",
-    "2026_MPPGC_533710_1",
-    "2026_MPPGC_536682_1",
-    "2026_MPPHC_547970_1",
-    "2026_MPPHC_547971_1",
-    "2026_MPPHC_547972_1",
-    "2026_MPPHC_547973_1",
-    "2026_MPPHC_547976_1",
-    "2026_MPPKV_545268_1",
-    "2026_MPPKV_545272_1",
     "2026_MPSAM_546333_1",
     "2026_MPSAM_546334_1",
     "2026_MPSAM_546335_1",
@@ -1183,11 +1160,6 @@
     "2026_MPSAM_546340_1",
     "2026_MPSAM_546341_1",
     "2026_MPSAM_546342_1",
-    "2026_MPSAM_547203_1",
-    "2026_MPSAM_547204_1",
-    "2026_MPSAM_547206_1",
-    "2026_MPSAM_547207_1",
-    "2026_MPSAM_547208_1",
     "2026_MPSAM_547561_1",
     "2026_MPSAM_547563_1",
     "2026_MPSAM_547564_1",
@@ -1196,8 +1168,6 @@
     "2026_MPSAM_547567_1",
     "2026_MPSCU_548119_1",
     "2026_MPUDC_548300_1",
-    "2026_PKVVC_547212_1",
-    "2026_PKVVC_547768_1",
     "2026_PKVVC_548235_1",
     "2026_PWDRB_547673_1",
     "2026_PWDRB_547674_1",
@@ -1236,15 +1206,10 @@
     "2026_UAD_547362_1",
     "2026_UAD_547613_1",
     "2026_UAD_547614_1",
-    "2026_UAD_547618_1",
     "2026_UAD_547619_1",
-    "2026_UAD_547620_1",
-    "2026_UAD_547622_1",
     "2026_UAD_547874_1",
     "2026_UAD_547910_1",
     "2026_UAD_547911_1",
-    "2026_UAD_547912_1",
-    "2026_UAD_547913_1",
     "2026_UAD_547989_1",
     "2026_UAD_547989_2",
     "2026_UAD_547989_3",
@@ -1263,11 +1228,7 @@
     "2026_UAD_548057_1",
     "2026_UAD_548084_1",
     "2026_UAD_548109_1",
-    "2026_UAD_548111_1",
-    "2026_UAD_548137_1",
     "2026_UAD_548172_1",
-    "2026_UAD_548185_1",
-    "2026_UAD_548187_1",
-    "2026_UAD_548278_1"
+    "2026_UAD_548185_1"
   ]
 }
