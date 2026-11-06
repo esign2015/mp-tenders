@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-06T17:23:36.043475+05:30",
+    "checked_at": "2026-11-06T17:25:41.637630+05:30",
     "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5556,
@@ -23,15 +23,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-06T11:53:36.861481+00:00",
+  "updated_at": "2026-11-06T11:55:42.493107+00:00",
   "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
   "organisation_count": 96,
   "portal_tender_count": 5556,
   "copied_tenders": 5556,
-  "detail_complete": 5522,
+  "detail_complete": 5555,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 34,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -237,10 +237,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 3031,
       "copied_tenders": 3031,
-      "detail_complete": 2999,
+      "detail_complete": 3031,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 32
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -578,10 +578,10 @@
       "snapshot_at": "2026-11-06T11:11:48.655193+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Urja Vikas Nigam Limitted",
@@ -1092,11 +1092,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 17,
+  "missing_district_count": 16,
   "missing_district_ids": [
     "2026_DHS_544580_1",
     "2026_MPP_545262_2",
-    "2026_MPUDC_548300_1",
     "2026_WRD_511908_1",
     "2026_WRD_511909_1",
     "2026_WRD_511911_1",
@@ -1112,42 +1111,8 @@
     "2026_WRD_526725_1",
     "2026_WRD_526726_1"
   ],
-  "known_pincode_count": 371,
+  "known_pincode_count": 373,
   "department_count": 356,
-  "missing_pincode_count": 33,
-  "missing_pincode_ids": [
-    "2026_MPUDC_548300_1",
-    "2026_UAD_545679_1",
-    "2026_UAD_547354_1",
-    "2026_UAD_547355_1",
-    "2026_UAD_547358_1",
-    "2026_UAD_547359_1",
-    "2026_UAD_547361_1",
-    "2026_UAD_547362_1",
-    "2026_UAD_547613_1",
-    "2026_UAD_547614_1",
-    "2026_UAD_547619_1",
-    "2026_UAD_547874_1",
-    "2026_UAD_547910_1",
-    "2026_UAD_547911_1",
-    "2026_UAD_547989_1",
-    "2026_UAD_547989_2",
-    "2026_UAD_547989_3",
-    "2026_UAD_548016_1",
-    "2026_UAD_548023_1",
-    "2026_UAD_548024_1",
-    "2026_UAD_548026_1",
-    "2026_UAD_548028_1",
-    "2026_UAD_548030_1",
-    "2026_UAD_548031_1",
-    "2026_UAD_548033_1",
-    "2026_UAD_548036_1",
-    "2026_UAD_548037_1",
-    "2026_UAD_548049_1",
-    "2026_UAD_548053_1",
-    "2026_UAD_548057_1",
-    "2026_UAD_548109_1",
-    "2026_UAD_548172_1",
-    "2026_UAD_548185_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
