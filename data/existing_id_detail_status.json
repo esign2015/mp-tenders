@@ -9,7 +9,7 @@
   "initial_incomplete": 40,
   "batch_targets": 40,
   "batch_attempted": 40,
-  "batch_complete": 14,
+  "batch_complete": 31,
   "started_at": "2026-11-06T18:19:51.612017+00:00",
   "success": 5245,
   "failed": 0,
@@ -5266,7 +5266,7 @@
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "2026_UAD_542404_1",
+  "last_successful_tender_id": "2026_UAD_546423_6",
   "errors": [
     {
       "Tender ID": "2026_UAD_542404_1",
@@ -5404,5 +5404,5 @@
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-06T18:32:10.398754+00:00"
+  "updated_at": "2026-11-06T18:34:15.926109+00:00"
 }
