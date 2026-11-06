@@ -1,70 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-06T22:49:42.519454+05:30",
+  "snapshot_at": "2026-11-07T01:41:52.983590+05:30",
   "previous_organisation_count": 97,
   "current_organisation_count": 97,
-  "previous_tender_count": 5235,
+  "previous_tender_count": 5247,
   "current_tender_count": 5247,
-  "organisations_with_changes": 5,
-  "organisations_with_new_tenders": 5,
-  "new_tender_count": 12,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2958,
-      "Current Tender Count": 2964,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_UAD_543269_3",
-        "2026_UAD_547412_1",
-        "2026_UAD_547413_1",
-        "2026_UAD_547414_1",
-        "2026_UAD_547825_1",
-        "2026_UAD_548409_1"
-      ]
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 97,
-      "Current Tender Count": 100,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_WRD_528845_1",
-        "2026_WRD_528847_1",
-        "2026_WRD_528851_1"
-      ]
-    },
-    {
-      "Organisation Name": "Excise Department",
-      "Previous Tender Count": 67,
-      "Current Tender Count": 68,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_EXCIS_548412_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 59,
-      "Current Tender Count": 60,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPKV_548302_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 251,
-      "Current Tender Count": 252,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPGC_543937_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
