@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-06T22:50:48.674015+05:30",
+    "checked_at": "2026-11-06T23:04:38.352655+05:30",
     "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5247,
@@ -21,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-06T17:20:50.024375+00:00",
+  "updated_at": "2026-11-06T17:34:39.392081+00:00",
   "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
   "organisation_count": 97,
   "portal_tender_count": 5247,
   "copied_tenders": 5247,
-  "detail_complete": 5233,
+  "detail_complete": 5245,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 12,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -235,10 +235,10 @@
       "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
       "portal_tender_count": 2964,
       "copied_tenders": 2964,
-      "detail_complete": 2958,
+      "detail_complete": 2964,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -279,10 +279,10 @@
       "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
       "portal_tender_count": 100,
       "copied_tenders": 100,
-      "detail_complete": 97,
+      "detail_complete": 100,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -290,10 +290,10 @@
       "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
       "portal_tender_count": 68,
       "copied_tenders": 68,
-      "detail_complete": 67,
+      "detail_complete": 68,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -444,10 +444,10 @@
       "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
       "portal_tender_count": 60,
       "copied_tenders": 60,
-      "detail_complete": 59,
+      "detail_complete": 60,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -466,10 +466,10 @@
       "snapshot_at": "2026-11-06T16:52:55.214115+00:00",
       "portal_tender_count": 252,
       "copied_tenders": 252,
-      "detail_complete": 251,
+      "detail_complete": 252,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1101,40 +1101,16 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 15,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_EXCIS_548412_1",
-    "2026_MPPGC_543937_1",
-    "2026_MPPKV_548302_1",
     "2026_MPP_545262_2",
-    "2026_PKVVC_548375_1",
-    "2026_UAD_543269_3",
-    "2026_UAD_547412_1",
-    "2026_UAD_547413_1",
-    "2026_UAD_547414_1",
-    "2026_UAD_547825_1",
-    "2026_UAD_548409_1",
-    "2026_WRD_528845_1",
-    "2026_WRD_528847_1",
-    "2026_WRD_528851_1"
+    "2026_PKVVC_548375_1"
   ],
   "known_pincode_count": 368,
-  "department_count": 328,
-  "missing_pincode_count": 13,
+  "department_count": 329,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_EXCIS_548412_1",
-    "2026_MPPGC_543937_1",
-    "2026_MPPKV_548302_1",
-    "2026_PKVVC_548375_1",
-    "2026_UAD_543269_3",
-    "2026_UAD_547412_1",
-    "2026_UAD_547413_1",
-    "2026_UAD_547414_1",
-    "2026_UAD_547825_1",
-    "2026_UAD_548409_1",
-    "2026_WRD_528845_1",
-    "2026_WRD_528847_1",
-    "2026_WRD_528851_1"
+    "2026_PKVVC_548375_1"
   ]
 }
