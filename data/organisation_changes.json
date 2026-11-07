@@ -1,23 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-07T23:44:35.155355+05:30",
+  "snapshot_at": "2026-11-08T00:13:02.790397+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
   "previous_tender_count": 5264,
   "current_tender_count": 5264,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 1,
-  "changes": [
-    {
-      "Organisation Name": "MP Forest Department",
-      "Previous Tender Count": 84,
-      "Current Tender Count": 84,
-      "Count Difference": 0,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPFD_26422_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
