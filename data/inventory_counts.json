@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-07T16:32:55.782017+05:30",
+    "checked_at": "2026-11-07T16:35:01.505938+05:30",
     "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5342,
@@ -23,15 +23,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-07T11:02:56.745890+00:00",
+  "updated_at": "2026-11-07T11:05:02.458474+00:00",
   "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5342,
   "copied_tenders": 5342,
-  "detail_complete": 5330,
-  "detail_failed": 0,
+  "detail_complete": 5340,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 12,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -259,10 +259,10 @@
       "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
       "portal_tender_count": 3009,
       "copied_tenders": 3009,
-      "detail_complete": 2999,
+      "detail_complete": 3009,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -480,9 +480,9 @@
       "portal_tender_count": 46,
       "copied_tenders": 46,
       "detail_complete": 45,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -953,9 +953,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1131,20 +1131,10 @@
     "2026_MPP_545262_2",
     "2026_PKVVC_548375_1"
   ],
-  "known_pincode_count": 378,
+  "known_pincode_count": 380,
   "department_count": 331,
-  "missing_pincode_count": 11,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_PKVVC_548375_1",
-    "2026_UAD_548161_1",
-    "2026_UAD_548291_1",
-    "2026_UAD_548345_1",
-    "2026_UAD_548346_1",
-    "2026_UAD_548350_1",
-    "2026_UAD_548351_1",
-    "2026_UAD_548377_1",
-    "2026_UAD_548387_1",
-    "2026_UAD_548410_1",
-    "2026_UAD_548420_1"
+    "2026_PKVVC_548375_1"
   ]
 }
