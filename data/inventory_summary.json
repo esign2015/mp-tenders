@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-07T17:32:09.936199+05:30",
+    "checked_at": "2026-11-07T17:34:15.559382+05:30",
     "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5342,
@@ -29,7 +29,7 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-07T12:02:11.420741+00:00",
+  "updated_at": "2026-11-07T12:04:17.155151+00:00",
   "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5342,
