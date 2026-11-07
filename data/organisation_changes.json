@@ -1,121 +1,19 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-07T20:13:44.920582+05:30",
+  "snapshot_at": "2026-11-07T21:41:11.534392+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
-  "previous_tender_count": 5330,
-  "current_tender_count": 5266,
-  "organisations_with_changes": 11,
-  "organisations_with_new_tenders": 6,
-  "new_tender_count": 16,
+  "previous_tender_count": 5266,
+  "current_tender_count": 5264,
+  "organisations_with_changes": 1,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
   "changes": [
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3008,
-      "Current Tender Count": 2971,
-      "Count Difference": -37,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_UAD_548236_1",
-        "2026_UAD_548241_1",
-        "2026_UAD_548250_1",
-        "2026_UAD_548256_1",
-        "2026_UAD_548268_1",
-        "2026_UAD_548281_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 256,
-      "Current Tender Count": 259,
-      "Count Difference": 3,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_MPPGC_547863_1",
-        "2026_MPPGC_548129_1",
-        "2026_MPPGC_548207_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP State Agricultural Marketing Board",
-      "Previous Tender Count": 67,
-      "Current Tender Count": 68,
-      "Count Difference": 1,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_MPSAM_546557_1",
-        "2026_MPSAM_546558_1",
-        "2026_MPSAM_546559_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
-      "Previous Tender Count": 22,
-      "Current Tender Count": 24,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_SCMFL_548447_1",
-        "2026_SCMFL_548455_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Housing and Infrastructure Development Board",
-      "Previous Tender Count": 4,
-      "Current Tender Count": 5,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPHID_546613_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police",
-      "Previous Tender Count": 49,
-      "Current Tender Count": 50,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPP_548422_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 351,
-      "Current Tender Count": 335,
-      "Count Difference": -16,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 60,
-      "Current Tender Count": 51,
-      "Count Difference": -9,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 100,
-      "Current Tender Count": 93,
-      "Count Difference": -7,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "MP Forest Department",
-      "Previous Tender Count": 86,
-      "Current Tender Count": 84,
+      "Organisation Name": "Excise Department",
+      "Previous Tender Count": 66,
+      "Current Tender Count": 64,
       "Count Difference": -2,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Department of Higher Education",
-      "Previous Tender Count": 39,
-      "Current Tender Count": 38,
-      "Count Difference": -1,
       "New Tender Count": 0,
       "New Tender IDs": []
     }
