@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "42364735539",
   "github_run_number": "188",
   "github_commit_sha": "5bcaaa633cdc14d282c6603f83e820f8b651806a",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5313,
   "initial_incomplete": 40,
   "batch_targets": 40,
-  "batch_attempted": 21,
-  "batch_complete": 21,
+  "batch_attempted": 40,
+  "batch_complete": 39,
   "started_at": "2026-11-07T10:38:00.395450+00:00",
   "success": 5269,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -5284,12 +5284,13 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PKVVC_548375_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2026_DGPCS_548445_1",
     "2026_DHS_544117_1",
-    "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2",
     "2026_UAD_488004_7",
     "2026_UAD_488006_7",
@@ -5332,7 +5333,13 @@
     "2026_UAD_548457_1",
     "2026_UAD_548458_1"
   ],
-  "last_successful_tender_id": "2026_UAD_546423_4",
-  "errors": [],
-  "updated_at": "2026-11-07T10:39:55.912539+00:00"
+  "last_successful_tender_id": "2026_MPSAM_546338_1",
+  "errors": [
+    {
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
+      "retry_pass": true
+    }
+  ],
+  "updated_at": "2026-11-07T10:41:47.491990+00:00"
 }
