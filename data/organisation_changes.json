@@ -1,21 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-07T21:41:11.534392+05:30",
+  "snapshot_at": "2026-11-07T23:15:58.911733+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
-  "previous_tender_count": 5266,
+  "previous_tender_count": 5264,
   "current_tender_count": 5264,
-  "organisations_with_changes": 1,
+  "organisations_with_changes": 0,
   "organisations_with_new_tenders": 0,
   "new_tender_count": 0,
-  "changes": [
-    {
-      "Organisation Name": "Excise Department",
-      "Previous Tender Count": 66,
-      "Current Tender Count": 64,
-      "Count Difference": -2,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "changes": []
 }
