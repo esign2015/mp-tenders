@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-07T20:14:52.071113+05:30",
+    "checked_at": "2026-11-07T20:17:36.676918+05:30",
     "snapshot_at": "2026-11-07T14:17:34.136892+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5266,
@@ -21,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-07T14:44:53.491767+00:00",
+  "updated_at": "2026-11-07T14:47:38.136157+00:00",
   "snapshot_at": "2026-11-07T14:17:34.136892+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5266,
   "copied_tenders": 5266,
-  "detail_complete": 5258,
+  "detail_complete": 5264,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 6,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -257,10 +257,10 @@
       "snapshot_at": "2026-11-07T14:17:34.136892+00:00",
       "portal_tender_count": 2971,
       "copied_tenders": 2971,
-      "detail_complete": 2968,
+      "detail_complete": 2971,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -741,10 +741,10 @@
       "snapshot_at": "2026-11-07T14:17:34.136892+00:00",
       "portal_tender_count": 68,
       "copied_tenders": 68,
-      "detail_complete": 65,
+      "detail_complete": 68,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "MP State Agro Industries Corporation Limited",
@@ -1123,27 +1123,15 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 8,
+  "missing_district_count": 2,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_MPSAM_546557_1",
-    "2026_MPSAM_546558_1",
-    "2026_MPSAM_546559_1",
-    "2026_PKVVC_548375_1",
-    "2026_UAD_548236_1",
-    "2026_UAD_548241_1",
-    "2026_UAD_548250_1"
+    "2026_PKVVC_548375_1"
   ],
   "known_pincode_count": 375,
   "department_count": 328,
-  "missing_pincode_count": 7,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_MPSAM_546557_1",
-    "2026_MPSAM_546558_1",
-    "2026_MPSAM_546559_1",
-    "2026_PKVVC_548375_1",
-    "2026_UAD_548236_1",
-    "2026_UAD_548241_1",
-    "2026_UAD_548250_1"
+    "2026_PKVVC_548375_1"
   ]
 }
