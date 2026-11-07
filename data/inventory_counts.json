@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-07T17:27:58.908284+05:30",
+    "checked_at": "2026-11-07T17:30:04.227578+05:30",
     "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5342,
     "verified_unique_ids": 5342,
-    "dashboard_live_count": 5334,
-    "closed_or_cancelled_count": 7,
+    "dashboard_live_count": 5273,
+    "closed_or_cancelled_count": 68,
     "excluded_master_only_live_count": 6,
     "excluded_master_only_live_ids": [
       "2026_PWPIU_548048_1",
@@ -28,7 +28,7 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-07T11:58:00.362711+00:00",
+  "updated_at": "2026-11-07T12:00:05.638195+00:00",
   "snapshot_at": "2026-11-07T10:29:10.397433+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5342,
