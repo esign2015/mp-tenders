@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-07T17:36:30.215790+05:30",
+    "checked_at": "2026-11-07T17:39:06.049628+05:30",
     "snapshot_at": "2026-11-07T11:39:12.501866+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5330,
@@ -23,15 +23,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-07T12:06:31.586909+00:00",
+  "updated_at": "2026-11-07T12:09:06.808411+00:00",
   "snapshot_at": "2026-11-07T11:39:12.501866+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5330,
   "copied_tenders": 5330,
-  "detail_complete": 5327,
+  "detail_complete": 5328,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -974,10 +974,10 @@
       "snapshot_at": "2026-11-07T11:39:12.501866+00:00",
       "portal_tender_count": 47,
       "copied_tenders": 47,
-      "detail_complete": 46,
+      "detail_complete": 47,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1125,17 +1125,15 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 3,
+  "missing_district_count": 2,
   "missing_district_ids": [
     "2026_DHS_544580_1",
-    "2026_PKVVC_548375_1",
-    "2026_PWPIU_548467_1"
+    "2026_PKVVC_548375_1"
   ],
   "known_pincode_count": 379,
   "department_count": 331,
-  "missing_pincode_count": 2,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_PKVVC_548375_1",
-    "2026_PWPIU_548467_1"
+    "2026_PKVVC_548375_1"
   ]
 }
