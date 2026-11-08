@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "42498418664",
-  "github_run_number": "1436",
+  "github_run_id": "42511835108",
+  "github_run_number": "93",
   "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
-  "batch_size": 500,
+  "batch_size": 5000,
   "total_csv_ids": 5270,
   "current_portal_ids": 5270,
   "initial_incomplete": 3,
   "batch_targets": 3,
-  "batch_attempted": 3,
+  "batch_attempted": 1,
   "batch_complete": 0,
-  "started_at": "2026-11-08T17:12:22.801334+00:00",
+  "started_at": "2026-11-08T18:49:30.178545+00:00",
   "success": 5267,
-  "failed": 3,
+  "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -5282,30 +5282,20 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_MPFD_546419_1",
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
   "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_MPFD_546419_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_548375_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": true
-    },
-    {
       "Tender ID": "2026_PSNSU_519252_2",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": true
+      "error": "RSPStyle: RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-08T17:13:33.213368+00:00"
+  "updated_at": "2026-11-08T18:56:53.902875+00:00"
 }
