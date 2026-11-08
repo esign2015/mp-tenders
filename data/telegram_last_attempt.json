@@ -1,10 +1,10 @@
 {
-  "attempted_at": "2026-11-07T14:48:07.975048+00:00",
-  "mode": "evening_new",
-  "key": "2026-11-07:evening_new",
-  "extraction_result": "success",
+  "attempted_at": "2026-11-08T02:30:27.425588+00:00",
+  "mode": "morning",
+  "key": "2026-11-08:morning",
+  "extraction_result": "not-refreshed",
   "send_outcome": "success",
   "message_ids": [
-    205
+    206
   ]
 }
