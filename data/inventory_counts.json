@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-08T20:29:18.700164+05:30",
+    "checked_at": "2026-11-08T20:32:09.216711+05:30",
     "snapshot_at": "2026-11-08T14:28:23.814203+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5270,
@@ -21,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-08T14:59:20.216364+00:00",
+  "updated_at": "2026-11-08T15:02:10.218318+00:00",
   "snapshot_at": "2026-11-08T14:28:23.814203+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5270,
   "copied_tenders": 5270,
   "detail_complete": 5268,
-  "detail_failed": 1,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -951,9 +951,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
