@@ -8,8 +8,8 @@
   "current_portal_ids": 5270,
   "initial_incomplete": 42,
   "batch_targets": 42,
-  "batch_attempted": 13,
-  "batch_complete": 13,
+  "batch_attempted": 27,
+  "batch_complete": 26,
   "started_at": "2026-11-08T19:00:22.829319+00:00",
   "success": 5267,
   "failed": 0,
@@ -5289,7 +5289,13 @@
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "2026_PWDRB_474498_4",
-  "errors": [],
-  "updated_at": "2026-11-08T19:02:13.101604+00:00"
+  "last_successful_tender_id": "2026_UAD_545307_1",
+  "errors": [
+    {
+      "Tender ID": "2026_UAD_546423_3",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SPMRKOwhXL3LJfcR1eWf0Wg%3D%3D\">[CONSTRUCTION OF CC ROAD FROM ANU LOHAR HOUSE TO \u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
+    }
+  ],
+  "updated_at": "2026-11-08T19:04:24.028314+00:00"
 }
