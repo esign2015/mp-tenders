@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-08T13:36:06.795455+05:30",
+    "checked_at": "2026-11-08T13:44:54.898419+05:30",
     "snapshot_at": "2026-11-07T18:17:00.468229+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5264,
@@ -26,15 +26,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-08T08:06:07.796471+00:00",
+  "updated_at": "2026-11-08T08:14:56.385997+00:00",
   "snapshot_at": "2026-11-07T18:17:00.468229+00:00",
   "organisation_count": 99,
   "portal_tender_count": 5264,
   "copied_tenders": 5264,
   "detail_complete": 5262,
-  "detail_failed": 1,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 2,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -483,9 +483,9 @@
       "portal_tender_count": 46,
       "copied_tenders": 46,
       "detail_complete": 45,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
