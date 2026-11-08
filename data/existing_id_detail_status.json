@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "42494687894",
-  "github_run_number": "225",
+  "github_run_id": "42498418664",
+  "github_run_number": "1436",
   "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
   "batch_size": 500,
   "total_csv_ids": 5270,
   "current_portal_ids": 5270,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
-  "batch_attempted": 2,
+  "initial_incomplete": 3,
+  "batch_targets": 3,
+  "batch_attempted": 3,
   "batch_complete": 0,
-  "started_at": "2026-11-08T15:25:35.450113+00:00",
-  "success": 5268,
-  "failed": 2,
+  "started_at": "2026-11-08T17:12:22.801334+00:00",
+  "success": 5267,
+  "failed": 3,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -633,7 +633,6 @@
     "2026_MPDSD_518846_3",
     "2026_MPDSD_543700_1",
     "2026_MPDSD_544821_1",
-    "2026_MPFD_26422_1",
     "2026_MPFD_526127_2",
     "2026_MPFD_532815_3",
     "2026_MPFD_536495_2",
@@ -5284,6 +5283,7 @@
     "2026_WRD_546207_1"
   ],
   "failed_ids": [
+    "2026_MPFD_546419_1",
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
@@ -5291,6 +5291,11 @@
   "pending_ids": [],
   "last_successful_tender_id": "",
   "errors": [
+    {
+      "Tender ID": "2026_MPFD_546419_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": true
+    },
     {
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "RuntimeError: Search Tender input not found",
@@ -5302,5 +5307,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-08T15:26:49.537718+00:00"
+  "updated_at": "2026-11-08T17:13:33.213368+00:00"
 }
