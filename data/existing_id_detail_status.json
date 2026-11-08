@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "42461914152",
   "github_run_number": "224",
   "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
@@ -12,7 +12,7 @@
   "batch_complete": 12,
   "started_at": "2026-11-08T08:12:52.308908+00:00",
   "success": 5266,
-  "failed": 0,
+  "failed": 2,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -5281,24 +5281,24 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
+  "failed_ids": [
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
+  "skipped_ids": [],
+  "pending_ids": [],
   "last_successful_tender_id": "2026_RSK_548225_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_519252_2",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-08T08:14:42.707944+00:00"
+  "updated_at": "2026-11-08T08:15:09.120913+00:00"
 }
