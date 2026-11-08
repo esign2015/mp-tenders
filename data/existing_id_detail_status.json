@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "42434967258",
-  "github_run_number": "223",
-  "github_commit_sha": "8f7c9ed1ebbdad2dd367e5061c5ad0800cc291a4",
-  "batch_size": 500,
-  "total_csv_ids": 5264,
-  "current_portal_ids": 5264,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
-  "batch_attempted": 2,
-  "batch_complete": 0,
-  "started_at": "2026-11-08T01:37:04.048476+00:00",
-  "success": 5262,
-  "failed": 2,
+  "status": "running",
+  "github_run_id": "42455367332",
+  "github_run_number": "192",
+  "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
+  "batch_size": 0,
+  "total_csv_ids": 5268,
+  "current_portal_ids": 5268,
+  "initial_incomplete": 41,
+  "batch_targets": 41,
+  "batch_attempted": 18,
+  "batch_complete": 17,
+  "started_at": "2026-11-08T06:36:02.296021+00:00",
+  "success": 5266,
+  "failed": 0,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -493,6 +493,10 @@
     "2026_EXCIS_548243_7",
     "2026_EXCIS_548392_1",
     "2026_EXCIS_548412_1",
+    "2026_EXCIS_548473_1",
+    "2026_EXCIS_548474_1",
+    "2026_EXCIS_548477_1",
+    "2026_EXCIS_548478_1",
     "2026_GADR_547118_1",
     "2026_GADR_547363_1",
     "2026_GDACU_547241_1",
@@ -5277,24 +5281,13 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "",
-  "errors": [
-    {
-      "Tender ID": "2026_PSNSU_519252_2",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_548375_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-11-08T01:37:43.680830+00:00"
+  "last_successful_tender_id": "2026_UAD_546423_6",
+  "errors": [],
+  "updated_at": "2026-11-08T06:37:55.476599+00:00"
 }
