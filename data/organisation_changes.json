@@ -1,41 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-09T19:50:17.988980+05:30",
+  "snapshot_at": "2026-11-09T23:48:18.325457+05:30",
   "previous_organisation_count": 99,
   "current_organisation_count": 99,
-  "previous_tender_count": 5278,
+  "previous_tender_count": 5247,
   "current_tender_count": 5247,
-  "organisations_with_changes": 3,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 3,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2990,
-      "Current Tender Count": 2962,
-      "Count Difference": -28,
-      "New Tender Count": 3,
-      "New Tender IDs": [
-        "2026_UAD_544350_1",
-        "2026_UAD_544350_2",
-        "2026_UAD_548476_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 49,
-      "Current Tender Count": 47,
-      "Count Difference": -2,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Economic Offences Wing",
-      "Previous Tender Count": 4,
-      "Current Tender Count": 3,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
