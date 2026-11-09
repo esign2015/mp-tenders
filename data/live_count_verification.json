@@ -1,18 +1,14 @@
 {
   "status": "mismatch",
-  "checked_at": "2026-11-09T19:50:06.631444+05:30",
-  "snapshot_at": "2026-11-09T11:51:21.164845+00:00",
+  "checked_at": "2026-11-09T19:51:33.151210+05:30",
+  "snapshot_at": "2026-11-09T13:46:46.163697+00:00",
   "inventory_source": "copied-list",
-  "portal_tender_count": 5278,
-  "verified_unique_ids": 5278,
-  "dashboard_live_count": 5243,
-  "closed_or_cancelled_count": 34,
-  "excluded_master_only_live_count": 3,
-  "excluded_master_only_live_ids": [
-    "2026_UAD_544350_1",
-    "2026_UAD_544350_2",
-    "2026_UAD_548476_1"
-  ],
+  "portal_tender_count": 5247,
+  "verified_unique_ids": 5247,
+  "dashboard_live_count": 5246,
+  "closed_or_cancelled_count": 0,
+  "excluded_master_only_live_count": 0,
+  "excluded_master_only_live_ids": [],
   "missing_ids": [],
   "invalid_closing_ids": [
     "2026_PKVVC_548375_1"
