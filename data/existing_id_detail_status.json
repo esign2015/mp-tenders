@@ -1,17 +1,17 @@
 {
   "status": "completed",
-  "github_run_id": "42552857351",
-  "github_run_number": "228",
+  "github_run_id": "42601349465",
+  "github_run_number": "229",
   "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
   "batch_size": 500,
-  "total_csv_ids": 5270,
-  "current_portal_ids": 5270,
-  "initial_incomplete": 2,
-  "batch_targets": 2,
-  "batch_attempted": 2,
-  "batch_complete": 0,
-  "started_at": "2026-11-09T02:48:11.844250+00:00",
-  "success": 5268,
+  "total_csv_ids": 5272,
+  "current_portal_ids": 5272,
+  "initial_incomplete": 5,
+  "batch_targets": 5,
+  "batch_attempted": 5,
+  "batch_complete": 3,
+  "started_at": "2026-11-09T10:31:04.503880+00:00",
+  "success": 5270,
   "failed": 2,
   "success_ids": [
     "2022_UAD_213025_2",
@@ -2039,6 +2039,7 @@
     "2026_PWDRB_547224_1",
     "2026_PWDRB_547228_1",
     "2026_PWDRB_547229_1",
+    "2026_PWDRB_547234_1",
     "2026_PWDRB_547315_1",
     "2026_PWDRB_547316_1",
     "2026_PWDRB_547365_1",
@@ -2528,6 +2529,7 @@
     "2026_UAD_539073_1",
     "2026_UAD_539087_1",
     "2026_UAD_539279_1",
+    "2026_UAD_539318_1",
     "2026_UAD_539346_1",
     "2026_UAD_539347_1",
     "2026_UAD_539447_1",
@@ -5289,7 +5291,7 @@
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_DGPCS_548220_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_519252_2",
@@ -5302,5 +5304,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-09T02:49:01.466323+00:00"
+  "updated_at": "2026-11-09T10:32:12.260458+00:00"
 }
