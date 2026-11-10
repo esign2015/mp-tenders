@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-10T21:31:40.234564+05:30",
+    "checked_at": "2026-11-10T21:34:24.379629+05:30",
     "snapshot_at": "2026-11-10T15:44:03.869011+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4823,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-10T16:01:40.974026+00:00",
+  "updated_at": "2026-11-10T16:04:25.190719+00:00",
   "snapshot_at": "2026-11-10T15:44:03.869011+00:00",
   "organisation_count": 94,
   "portal_tender_count": 4823,
   "copied_tenders": 4823,
-  "detail_complete": 4821,
+  "detail_complete": 4822,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -462,10 +462,10 @@
       "snapshot_at": "2026-11-10T15:44:03.869011+00:00",
       "portal_tender_count": 230,
       "copied_tenders": 230,
-      "detail_complete": 229,
+      "detail_complete": 230,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1064,14 +1064,10 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 1,
-  "missing_district_ids": [
-    "2026_MPPGC_539344_1"
-  ],
+  "missing_district_count": 0,
+  "missing_district_ids": [],
   "known_pincode_count": 367,
   "department_count": 315,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_MPPGC_539344_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
