@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-10T17:21:56.160547+05:30",
+    "checked_at": "2026-11-10T17:31:20.362394+05:30",
     "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5211,
     "verified_unique_ids": 5211,
-    "dashboard_live_count": 5211,
-    "closed_or_cancelled_count": 0,
+    "dashboard_live_count": 4939,
+    "closed_or_cancelled_count": 272,
     "excluded_master_only_live_count": 0,
     "excluded_master_only_live_ids": [],
     "missing_ids": [],
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-10T11:51:57.159920+00:00",
+  "updated_at": "2026-11-10T12:01:21.126173+00:00",
   "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
   "organisation_count": 98,
   "portal_tender_count": 5211,
   "copied_tenders": 5211,
-  "detail_complete": 5150,
-  "detail_failed": 0,
+  "detail_complete": 5210,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 61,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Awadhesh Pratap Singh University - Rewa",
@@ -143,10 +143,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 48,
       "copied_tenders": 48,
-      "detail_complete": 46,
+      "detail_complete": 48,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -165,10 +165,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 23,
       "copied_tenders": 23,
-      "detail_complete": 21,
+      "detail_complete": 23,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Panchayati Raj",
@@ -209,10 +209,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 30,
       "copied_tenders": 30,
-      "detail_complete": 29,
+      "detail_complete": 30,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -242,10 +242,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 2988,
       "copied_tenders": 2988,
-      "detail_complete": 2959,
+      "detail_complete": 2988,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 29
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -462,10 +462,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 44,
       "copied_tenders": 44,
-      "detail_complete": 43,
+      "detail_complete": 44,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -473,10 +473,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 216,
       "copied_tenders": 216,
-      "detail_complete": 215,
+      "detail_complete": 216,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -484,10 +484,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 4,
       "copied_tenders": 4,
-      "detail_complete": 3,
+      "detail_complete": 4,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Public Health Services Corporation Ltd.",
@@ -638,10 +638,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 85,
       "copied_tenders": 85,
-      "detail_complete": 79,
+      "detail_complete": 85,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -671,10 +671,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 2,
       "copied_tenders": 2,
-      "detail_complete": 0,
+      "detail_complete": 2,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "MP Police",
@@ -936,9 +936,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -957,10 +957,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 53,
       "copied_tenders": 53,
-      "detail_complete": 48,
+      "detail_complete": 53,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -968,10 +968,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 347,
       "copied_tenders": 347,
-      "detail_complete": 343,
+      "detail_complete": 347,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1001,10 +1001,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 34,
       "copied_tenders": 34,
-      "detail_complete": 33,
+      "detail_complete": 34,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Rani Durgavati Vishwavidyalaya - Jabalpur",
@@ -1034,10 +1034,10 @@
       "snapshot_at": "2026-11-10T11:26:01.045892+00:00",
       "portal_tender_count": 91,
       "copied_tenders": 91,
-      "detail_complete": 86,
+      "detail_complete": 91,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "SANT SHIROMANI RAVIDAS GLOBAL SKILLS PARK - BHOPAL",
@@ -1108,133 +1108,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 61,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_DHS_544580_1",
-    "2026_DHS_547771_1",
-    "2026_DHS_548094_1",
-    "2026_DME_530583_3",
-    "2026_DME_541329_2",
-    "2026_DTCP_548475_1",
-    "2026_MPFD_547625_1",
-    "2026_MPFD_547655_1",
-    "2026_MPFD_548583_1",
-    "2026_MPFD_548584_1",
-    "2026_MPFD_548586_1",
-    "2026_MPFD_548588_1",
-    "2026_MPLO_547467_1",
-    "2026_MPLO_547468_1",
-    "2026_MPPGC_520028_1",
-    "2026_MPPMC_543951_1",
-    "2026_PKVVC_548568_1",
-    "2026_PWDRB_547500_1",
-    "2026_PWDRB_548463_1",
-    "2026_PWDRB_548464_1",
-    "2026_PWDRB_548466_1",
-    "2026_PWPIU_547696_1",
-    "2026_PWPIU_547701_1",
-    "2026_PWPIU_547703_1",
-    "2026_PWPIU_547704_1",
-    "2026_PWPIU_547705_1",
-    "2026_RES_546711_1",
-    "2026_RES_546712_1",
-    "2026_RES_546713_1",
-    "2026_RES_546714_1",
-    "2026_RES_546715_1",
-    "2026_RSK_548491_1",
-    "2026_UAD_505423_3",
-    "2026_UAD_505425_3",
-    "2026_UAD_505427_3",
-    "2026_UAD_505432_3",
-    "2026_UAD_505434_3",
-    "2026_UAD_505474_3",
-    "2026_UAD_536104_2",
-    "2026_UAD_548431_1",
-    "2026_UAD_548432_1",
-    "2026_UAD_548433_1",
-    "2026_UAD_548434_1",
-    "2026_UAD_548435_1",
-    "2026_UAD_548436_1",
-    "2026_UAD_548437_1",
-    "2026_UAD_548438_1",
-    "2026_UAD_548439_1",
-    "2026_UAD_548440_1",
-    "2026_UAD_548441_1",
-    "2026_UAD_548442_1",
-    "2026_UAD_548443_1",
-    "2026_UAD_548444_1",
-    "2026_UAD_548481_1",
-    "2026_UAD_548482_1",
-    "2026_UAD_548483_1",
-    "2026_UAD_548546_1",
-    "2026_UAD_548555_1",
-    "2026_UAD_548558_1",
-    "2026_UAD_548573_1",
-    "2026_UAD_548578_1"
+    "2026_DHS_544580_1"
   ],
-  "known_pincode_count": 373,
+  "known_pincode_count": 376,
   "department_count": 320,
-  "missing_pincode_count": 60,
-  "missing_pincode_ids": [
-    "2026_DHS_547771_1",
-    "2026_DHS_548094_1",
-    "2026_DME_530583_3",
-    "2026_DME_541329_2",
-    "2026_DTCP_548475_1",
-    "2026_MPFD_547625_1",
-    "2026_MPFD_547655_1",
-    "2026_MPFD_548583_1",
-    "2026_MPFD_548584_1",
-    "2026_MPFD_548586_1",
-    "2026_MPFD_548588_1",
-    "2026_MPLO_547467_1",
-    "2026_MPLO_547468_1",
-    "2026_MPPGC_520028_1",
-    "2026_MPPMC_543951_1",
-    "2026_PKVVC_548568_1",
-    "2026_PWDRB_547500_1",
-    "2026_PWDRB_548463_1",
-    "2026_PWDRB_548464_1",
-    "2026_PWDRB_548466_1",
-    "2026_PWPIU_547696_1",
-    "2026_PWPIU_547701_1",
-    "2026_PWPIU_547703_1",
-    "2026_PWPIU_547704_1",
-    "2026_PWPIU_547705_1",
-    "2026_RES_546711_1",
-    "2026_RES_546712_1",
-    "2026_RES_546713_1",
-    "2026_RES_546714_1",
-    "2026_RES_546715_1",
-    "2026_RSK_548491_1",
-    "2026_UAD_505423_3",
-    "2026_UAD_505425_3",
-    "2026_UAD_505427_3",
-    "2026_UAD_505432_3",
-    "2026_UAD_505434_3",
-    "2026_UAD_505474_3",
-    "2026_UAD_536104_2",
-    "2026_UAD_548431_1",
-    "2026_UAD_548432_1",
-    "2026_UAD_548433_1",
-    "2026_UAD_548434_1",
-    "2026_UAD_548435_1",
-    "2026_UAD_548436_1",
-    "2026_UAD_548437_1",
-    "2026_UAD_548438_1",
-    "2026_UAD_548439_1",
-    "2026_UAD_548440_1",
-    "2026_UAD_548441_1",
-    "2026_UAD_548442_1",
-    "2026_UAD_548443_1",
-    "2026_UAD_548444_1",
-    "2026_UAD_548481_1",
-    "2026_UAD_548482_1",
-    "2026_UAD_548483_1",
-    "2026_UAD_548546_1",
-    "2026_UAD_548555_1",
-    "2026_UAD_548558_1",
-    "2026_UAD_548573_1",
-    "2026_UAD_548578_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
