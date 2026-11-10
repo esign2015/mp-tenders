@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "42753186133",
   "github_run_number": "199",
   "github_commit_sha": "6793570d9bdf5469d7e6bf810f4252f2e67293a2",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5247,
   "initial_incomplete": 40,
   "batch_targets": 40,
-  "batch_attempted": 19,
-  "batch_complete": 19,
+  "batch_attempted": 40,
+  "batch_complete": 39,
   "started_at": "2026-11-10T04:02:22.107377+00:00",
   "success": 5245,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2022_UAD_213025_2",
     "2023_UAD_312847_5",
@@ -5260,13 +5260,20 @@
     "2026_WRD_546204_1",
     "2026_WRD_546207_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PKVVC_548375_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
-    "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "2026_UAD_546423_4",
-  "errors": [],
-  "updated_at": "2026-11-10T04:04:17.389502+00:00"
+  "last_successful_tender_id": "2026_RSK_548208_1",
+  "errors": [
+    {
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
+      "retry_pass": true
+    }
+  ],
+  "updated_at": "2026-11-10T04:06:20.135469+00:00"
 }
