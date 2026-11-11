@@ -1,75 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-11T23:10:54.688624+05:30",
+  "snapshot_at": "2026-11-12T00:37:09.408744+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 4451,
+  "previous_tender_count": 4466,
   "current_tender_count": 4466,
-  "organisations_with_changes": 5,
-  "organisations_with_new_tenders": 5,
-  "new_tender_count": 17,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2490,
-      "Current Tender Count": 2496,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_UAD_548638_1",
-        "2026_UAD_548676_1",
-        "2026_UAD_548688_1",
-        "2026_UAD_548693_1",
-        "2026_UAD_548698_1",
-        "2026_UAD_548728_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 212,
-      "Current Tender Count": 216,
-      "Count Difference": 4,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2025_MPPGC_465004_3",
-        "2026_MPPGC_520029_1",
-        "2026_MPPGC_531375_2",
-        "2026_MPPGC_535192_1"
-      ]
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 81,
-      "Current Tender Count": 84,
-      "Count Difference": 3,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2026_WRD_525049_1",
-        "2026_WRD_525052_1",
-        "2026_WRD_539761_1",
-        "2026_WRD_539769_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD- Roads and Bridges",
-      "Previous Tender Count": 263,
-      "Current Tender Count": 264,
-      "Count Difference": 1,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_PWDRB_548707_1",
-        "2026_PWDRB_548708_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 36,
-      "Current Tender Count": 37,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MKVVC_548715_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
