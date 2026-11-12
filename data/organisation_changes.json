@@ -1,12 +1,588 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-12T01:38:26.723933+05:30",
+  "snapshot_at": "2026-11-12T17:21:58.818186+05:30",
   "previous_organisation_count": 91,
-  "current_organisation_count": 91,
+  "current_organisation_count": 89,
   "previous_tender_count": 4466,
-  "current_tender_count": 4466,
-  "organisations_with_changes": 0,
-  "organisations_with_new_tenders": 0,
-  "new_tender_count": 0,
-  "changes": []
+  "current_tender_count": 4525,
+  "organisations_with_changes": 39,
+  "organisations_with_new_tenders": 26,
+  "new_tender_count": 237,
+  "changes": [
+    {
+      "Organisation Name": "Directorate Urban Administration and Development",
+      "Previous Tender Count": 2496,
+      "Current Tender Count": 2618,
+      "Count Difference": 122,
+      "New Tender Count": 143,
+      "New Tender IDs": [
+        "2026_UAD_518526_1",
+        "2026_UAD_518526_2",
+        "2026_UAD_518526_3",
+        "2026_UAD_529696_1",
+        "2026_UAD_529698_1",
+        "2026_UAD_529703_1",
+        "2026_UAD_529707_1",
+        "2026_UAD_529734_1",
+        "2026_UAD_529736_1",
+        "2026_UAD_529737_1",
+        "2026_UAD_529738_1",
+        "2026_UAD_529741_1",
+        "2026_UAD_529742_1",
+        "2026_UAD_529744_1",
+        "2026_UAD_529750_1",
+        "2026_UAD_529759_1",
+        "2026_UAD_529929_1",
+        "2026_UAD_529932_1",
+        "2026_UAD_529935_1",
+        "2026_UAD_529938_1",
+        "2026_UAD_529941_1",
+        "2026_UAD_530005_1",
+        "2026_UAD_530006_1",
+        "2026_UAD_530007_1",
+        "2026_UAD_530008_1",
+        "2026_UAD_530012_1",
+        "2026_UAD_530013_1",
+        "2026_UAD_530014_1",
+        "2026_UAD_530015_1",
+        "2026_UAD_530016_1",
+        "2026_UAD_530017_1",
+        "2026_UAD_530018_1",
+        "2026_UAD_530019_1",
+        "2026_UAD_530053_1",
+        "2026_UAD_530054_1",
+        "2026_UAD_530055_1",
+        "2026_UAD_530056_1",
+        "2026_UAD_530057_1",
+        "2026_UAD_530058_1",
+        "2026_UAD_530097_1",
+        "2026_UAD_530098_1",
+        "2026_UAD_530100_1",
+        "2026_UAD_530101_1",
+        "2026_UAD_531034_1",
+        "2026_UAD_531138_1",
+        "2026_UAD_531145_1",
+        "2026_UAD_531156_1",
+        "2026_UAD_531303_1",
+        "2026_UAD_531307_1",
+        "2026_UAD_531320_1",
+        "2026_UAD_531322_1",
+        "2026_UAD_531327_1",
+        "2026_UAD_531334_1",
+        "2026_UAD_531335_1",
+        "2026_UAD_531398_1",
+        "2026_UAD_531402_1",
+        "2026_UAD_531414_1",
+        "2026_UAD_531428_1",
+        "2026_UAD_531550_1",
+        "2026_UAD_531551_1",
+        "2026_UAD_531555_1",
+        "2026_UAD_531556_1",
+        "2026_UAD_531557_1",
+        "2026_UAD_531558_1",
+        "2026_UAD_531559_1",
+        "2026_UAD_531561_1",
+        "2026_UAD_531562_1",
+        "2026_UAD_531563_1",
+        "2026_UAD_531564_1",
+        "2026_UAD_531565_1",
+        "2026_UAD_531566_1",
+        "2026_UAD_531567_1",
+        "2026_UAD_531568_1",
+        "2026_UAD_531610_1",
+        "2026_UAD_531612_1",
+        "2026_UAD_531614_1",
+        "2026_UAD_531615_1",
+        "2026_UAD_531616_1",
+        "2026_UAD_531618_1",
+        "2026_UAD_531620_1",
+        "2026_UAD_531621_1",
+        "2026_UAD_531622_1",
+        "2026_UAD_531626_1",
+        "2026_UAD_531628_1",
+        "2026_UAD_531629_1",
+        "2026_UAD_531630_1",
+        "2026_UAD_532945_7",
+        "2026_UAD_539434_2",
+        "2026_UAD_540504_1",
+        "2026_UAD_545201_2",
+        "2026_UAD_545434_1",
+        "2026_UAD_545438_1",
+        "2026_UAD_545645_1",
+        "2026_UAD_545645_2",
+        "2026_UAD_545645_3",
+        "2026_UAD_545645_4",
+        "2026_UAD_545645_5",
+        "2026_UAD_546374_1",
+        "2026_UAD_548608_1",
+        "2026_UAD_548612_1",
+        "2026_UAD_548622_1",
+        "2026_UAD_548655_1",
+        "2026_UAD_548656_1",
+        "2026_UAD_548669_1",
+        "2026_UAD_548678_1",
+        "2026_UAD_548684_1",
+        "2026_UAD_548717_1",
+        "2026_UAD_548721_1",
+        "2026_UAD_548726_1",
+        "2026_UAD_548729_1",
+        "2026_UAD_548750_1",
+        "2026_UAD_548751_1",
+        "2026_UAD_548754_1",
+        "2026_UAD_548755_1",
+        "2026_UAD_548756_1",
+        "2026_UAD_548766_1",
+        "2026_UAD_548775_1",
+        "2026_UAD_548777_1",
+        "2026_UAD_548779_1",
+        "2026_UAD_548782_1",
+        "2026_UAD_548787_1",
+        "2026_UAD_548805_1",
+        "2026_UAD_548807_1",
+        "2026_UAD_548813_1",
+        "2026_UAD_548821_1",
+        "2026_UAD_548826_1",
+        "2026_UAD_548830_1",
+        "2026_UAD_548831_1",
+        "2026_UAD_548835_1",
+        "2026_UAD_548838_1",
+        "2026_UAD_548848_1",
+        "2026_UAD_548851_1",
+        "2026_UAD_548854_1",
+        "2026_UAD_548865_1",
+        "2026_UAD_548867_1",
+        "2026_UAD_548903_1",
+        "2026_UAD_548906_1",
+        "2026_UAD_548907_1",
+        "2026_UAD_548910_1",
+        "2026_UAD_548918_1",
+        "2026_UAD_548933_1",
+        "2026_UAD_548937_1",
+        "2026_UAD_548949_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
+      "Previous Tender Count": 216,
+      "Current Tender Count": 198,
+      "Count Difference": -18,
+      "New Tender Count": 17,
+      "New Tender IDs": [
+        "2026_MPPGC_515500_2",
+        "2026_MPPGC_523536_1",
+        "2026_MPPGC_525760_1",
+        "2026_MPPGC_529286_1",
+        "2026_MPPGC_529936_1",
+        "2026_MPPGC_530247_1",
+        "2026_MPPGC_530611_1",
+        "2026_MPPGC_531418_1",
+        "2026_MPPGC_539331_1",
+        "2026_MPPGC_539366_1",
+        "2026_MPPGC_539661_1",
+        "2026_MPPGC_539702_1",
+        "2026_MPPGC_540088_1",
+        "2026_MPPGC_543255_1",
+        "2026_MPPGC_543256_1",
+        "2026_MPPGC_543350_1",
+        "2026_MPPGC_546874_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
+      "Previous Tender Count": 23,
+      "Current Tender Count": 34,
+      "Count Difference": 11,
+      "New Tender Count": 11,
+      "New Tender IDs": [
+        "2026_MPPHC_547937_1",
+        "2026_MPPHC_547938_1",
+        "2026_MPPHC_547939_1",
+        "2026_MPPHC_547940_1",
+        "2026_MPPHC_547941_1",
+        "2026_MPPHC_547942_1",
+        "2026_MPPHC_548117_1",
+        "2026_MPPHC_548118_1",
+        "2026_MPPHC_548553_1",
+        "2026_MPPHC_548554_1",
+        "2026_MPPHC_548556_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Police",
+      "Previous Tender Count": 44,
+      "Current Tender Count": 46,
+      "Count Difference": 2,
+      "New Tender Count": 9,
+      "New Tender IDs": [
+        "2026_MPP_516789_1",
+        "2026_MPP_548059_1",
+        "2026_MPP_548061_1",
+        "2026_MPP_548063_1",
+        "2026_MPP_548065_1",
+        "2026_MPP_548066_1",
+        "2026_MPP_548067_1",
+        "2026_MPP_548068_1",
+        "2026_MPP_548069_1"
+      ]
+    },
+    {
+      "Organisation Name": "Excise Department",
+      "Previous Tender Count": 59,
+      "Current Tender Count": 37,
+      "Count Difference": -22,
+      "New Tender Count": 7,
+      "New Tender IDs": [
+        "2026_EXCIS_548705_1",
+        "2026_EXCIS_548709_1",
+        "2026_EXCIS_548713_1",
+        "2026_EXCIS_548738_1",
+        "2026_EXCIS_548739_1",
+        "2026_EXCIS_548819_1",
+        "2026_EXCIS_548828_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Forest Department",
+      "Previous Tender Count": 86,
+      "Current Tender Count": 89,
+      "Count Difference": 3,
+      "New Tender Count": 7,
+      "New Tender IDs": [
+        "2026_MPFD_536495_3",
+        "2026_MPFD_548228_1",
+        "2026_MPFD_548295_1",
+        "2026_MPFD_548634_1",
+        "2026_MPFD_548727_1",
+        "2026_MPFD_548852_1",
+        "2026_MPFD_548863_1"
+      ]
+    },
+    {
+      "Organisation Name": "PWD- Roads and Bridges",
+      "Previous Tender Count": 264,
+      "Current Tender Count": 269,
+      "Count Difference": 5,
+      "New Tender Count": 5,
+      "New Tender IDs": [
+        "2026_PWDRB_534983_3",
+        "2026_PWDRB_535003_3",
+        "2026_PWDRB_547648_1",
+        "2026_PWDRB_548878_1",
+        "2026_PWDRB_548879_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 37,
+      "Current Tender Count": 36,
+      "Count Difference": -1,
+      "New Tender Count": 5,
+      "New Tender IDs": [
+        "2026_MKVVC_534577_1",
+        "2026_MKVVC_547311_1",
+        "2026_MKVVC_548824_1",
+        "2026_MKVVC_548905_1",
+        "2026_MKVVC_548908_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 45,
+      "Current Tender Count": 40,
+      "Count Difference": -5,
+      "New Tender Count": 4,
+      "New Tender IDs": [
+        "2026_PKVVC_544436_1",
+        "2026_PKVVC_547404_1",
+        "2026_PKVVC_548549_1",
+        "2026_PKVVC_548839_1"
+      ]
+    },
+    {
+      "Organisation Name": "Public Health Engineering- O/o Engineer In Chief",
+      "Previous Tender Count": 62,
+      "Current Tender Count": 66,
+      "Count Difference": 4,
+      "New Tender Count": 4,
+      "New Tender IDs": [
+        "2026_PHED_541955_1",
+        "2026_PHED_548579_1",
+        "2026_PHED_548837_1",
+        "2026_PHED_548942_1"
+      ]
+    },
+    {
+      "Organisation Name": "Directorate of Health Services",
+      "Previous Tender Count": 29,
+      "Current Tender Count": 31,
+      "Count Difference": 2,
+      "New Tender Count": 4,
+      "New Tender IDs": [
+        "2026_DHS_548254_1",
+        "2026_DHS_548736_1",
+        "2026_DHS_548817_1",
+        "2026_DHS_548855_1"
+      ]
+    },
+    {
+      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
+      "Previous Tender Count": 84,
+      "Current Tender Count": 87,
+      "Count Difference": 3,
+      "New Tender Count": 3,
+      "New Tender IDs": [
+        "2026_WRD_525536_1",
+        "2026_WRD_541541_1",
+        "2026_WRD_541543_1"
+      ]
+    },
+    {
+      "Organisation Name": "PWD-PIU",
+      "Previous Tender Count": 53,
+      "Current Tender Count": 56,
+      "Count Difference": 3,
+      "New Tender Count": 3,
+      "New Tender IDs": [
+        "2026_PWPIU_548780_1",
+        "2026_PWPIU_548840_1",
+        "2026_PWPIU_548945_1"
+      ]
+    },
+    {
+      "Organisation Name": "Directorate of Town And Country Planning",
+      "Previous Tender Count": 28,
+      "Current Tender Count": 30,
+      "Count Difference": 2,
+      "New Tender Count": 2,
+      "New Tender IDs": [
+        "2026_DTCP_548737_1",
+        "2026_DTCP_548740_1"
+      ]
+    },
+    {
+      "Organisation Name": "High Court of Madhya Pradesh",
+      "Previous Tender Count": 8,
+      "Current Tender Count": 9,
+      "Count Difference": 1,
+      "New Tender Count": 2,
+      "New Tender IDs": [
+        "2026_MPHC_539549_1",
+        "2026_MPHC_548662_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
+      "Previous Tender Count": 62,
+      "Current Tender Count": 48,
+      "Count Difference": -14,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MPPKV_548969_1"
+      ]
+    },
+    {
+      "Organisation Name": "Director General of Prisons and Correctional Services",
+      "Previous Tender Count": 31,
+      "Current Tender Count": 23,
+      "Count Difference": -8,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_DGPCS_548976_1"
+      ]
+    },
+    {
+      "Organisation Name": "Directorate of Panchayati Raj",
+      "Previous Tender Count": 23,
+      "Current Tender Count": 24,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_DoPR_538452_3"
+      ]
+    },
+    {
+      "Organisation Name": "Inspector General of Registration and Stamps",
+      "Previous Tender Count": 1,
+      "Current Tender Count": 2,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_IGRS_548338_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Madhyam",
+      "Previous Tender Count": 2,
+      "Current Tender Count": 3,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MADHY_537834_1"
+      ]
+    },
+    {
+      "Organisation Name": "Madhya Pradesh State Disaster Management Authority",
+      "Previous Tender Count": 0,
+      "Current Tender Count": 1,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_DMA_542243_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Housing and Infrastructure Development Board",
+      "Previous Tender Count": 7,
+      "Current Tender Count": 8,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MPHID_548095_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP State Agricultural Marketing Board",
+      "Previous Tender Count": 65,
+      "Current Tender Count": 66,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MPSAM_548560_1"
+      ]
+    },
+    {
+      "Organisation Name": "NAVAL SINGH SAHAKARI SHAKKAR KARKHANA MARYADIT-BURHANPUR",
+      "Previous Tender Count": 0,
+      "Current Tender Count": 1,
+      "Count Difference": 1,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_COSK_545302_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Industrial Development Corporation Limited",
+      "Previous Tender Count": 6,
+      "Current Tender Count": 6,
+      "Count Difference": 0,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_MIDCL_548911_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP State Tourism Development Corporation Ltd.",
+      "Previous Tender Count": 12,
+      "Current Tender Count": 12,
+      "Count Difference": 0,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_STDC_548875_1"
+      ]
+    },
+    {
+      "Organisation Name": "MP Power Transmission Co. Ltd.",
+      "Previous Tender Count": 42,
+      "Current Tender Count": 35,
+      "Count Difference": -7,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Public Health Services Corporation Ltd.",
+      "Previous Tender Count": 7,
+      "Current Tender Count": 2,
+      "Count Difference": -5,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "District Collectorate",
+      "Previous Tender Count": 41,
+      "Current Tender Count": 37,
+      "Count Difference": -4,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Rajya Shiksha Kendra M.P",
+      "Previous Tender Count": 32,
+      "Current Tender Count": 29,
+      "Count Difference": -3,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Department of Higher Education",
+      "Previous Tender Count": 27,
+      "Current Tender Count": 25,
+      "Count Difference": -2,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Madhya Pradesh Power Management Company Limited-Jabalpur",
+      "Previous Tender Count": 4,
+      "Current Tender Count": 2,
+      "Count Difference": -2,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Rural Engineering Service",
+      "Previous Tender Count": 89,
+      "Current Tender Count": 87,
+      "Count Difference": -2,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Directorate of Animal Husbandry",
+      "Previous Tender Count": 3,
+      "Current Tender Count": 2,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Directorate of Technical Education",
+      "Previous Tender Count": 10,
+      "Current Tender Count": 9,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "M P Vidhan Sabha",
+      "Previous Tender Count": 2,
+      "Current Tender Count": 1,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "Madhya Pradesh State Electronics Development Corporation Ltd.",
+      "Previous Tender Count": 5,
+      "Current Tender Count": 4,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "MP State Civil Supplies Corporation Limited",
+      "Previous Tender Count": 44,
+      "Current Tender Count": 43,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    },
+    {
+      "Organisation Name": "MP State Cooperative Dairy Federation",
+      "Previous Tender Count": 5,
+      "Current Tender Count": 4,
+      "Count Difference": -1,
+      "New Tender Count": 0,
+      "New Tender IDs": []
+    }
+  ]
 }
