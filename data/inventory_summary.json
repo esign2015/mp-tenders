@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-13T01:00:21.770965+05:30",
+    "checked_at": "2026-11-13T01:02:28.064767+05:30",
     "snapshot_at": "2026-11-12T19:01:12.172061+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4477,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-12T19:30:22.921861+00:00",
+  "updated_at": "2026-11-12T19:32:29.148261+00:00",
   "snapshot_at": "2026-11-12T19:01:12.172061+00:00",
   "organisation_count": 89,
   "portal_tender_count": 4477,
   "copied_tenders": 4477,
-  "detail_complete": 4462,
-  "detail_failed": 0,
+  "detail_complete": 4476,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 15,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-11-12T19:01:12.172061+00:00",
       "portal_tender_count": 2582,
       "copied_tenders": 2582,
-      "detail_complete": 2568,
+      "detail_complete": 2582,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 14
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -837,9 +837,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1009,41 +1009,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 15,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MADHY_548716_1",
-    "2026_UAD_545468_1",
-    "2026_UAD_545469_1",
-    "2026_UAD_545470_1",
-    "2026_UAD_545471_1",
-    "2026_UAD_545472_1",
-    "2026_UAD_545785_1",
-    "2026_UAD_545787_1",
-    "2026_UAD_545791_1",
-    "2026_UAD_545796_1",
-    "2026_UAD_545800_1",
-    "2026_UAD_545810_1",
-    "2026_UAD_545828_1",
-    "2026_UAD_545830_1",
-    "2026_UAD_545833_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 351,
   "department_count": 289,
-  "missing_pincode_count": 14,
-  "missing_pincode_ids": [
-    "2026_UAD_545468_1",
-    "2026_UAD_545469_1",
-    "2026_UAD_545470_1",
-    "2026_UAD_545471_1",
-    "2026_UAD_545472_1",
-    "2026_UAD_545785_1",
-    "2026_UAD_545787_1",
-    "2026_UAD_545791_1",
-    "2026_UAD_545796_1",
-    "2026_UAD_545800_1",
-    "2026_UAD_545810_1",
-    "2026_UAD_545828_1",
-    "2026_UAD_545830_1",
-    "2026_UAD_545833_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
