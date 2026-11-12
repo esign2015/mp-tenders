@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-12T23:28:47.283189+05:30",
+    "checked_at": "2026-11-12T23:31:35.726057+05:30",
     "snapshot_at": "2026-11-12T17:41:24.545066+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4448,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-12T17:58:47.985104+00:00",
+  "updated_at": "2026-11-12T18:01:36.608073+00:00",
   "snapshot_at": "2026-11-12T17:41:24.545066+00:00",
   "organisation_count": 89,
   "portal_tender_count": 4448,
   "copied_tenders": 4448,
-  "detail_complete": 4436,
-  "detail_failed": 1,
+  "detail_complete": 4447,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 11,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -132,10 +132,10 @@
       "snapshot_at": "2026-11-12T17:41:24.545066+00:00",
       "portal_tender_count": 32,
       "copied_tenders": 32,
-      "detail_complete": 31,
+      "detail_complete": 32,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-11-12T17:41:24.545066+00:00",
       "portal_tender_count": 2553,
       "copied_tenders": 2553,
-      "detail_complete": 2543,
+      "detail_complete": 2553,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 10
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -837,9 +837,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1009,35 +1009,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 12,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_DHS_544301_1",
-    "2026_MADHY_548716_1",
-    "2026_UAD_545414_1",
-    "2026_UAD_545415_1",
-    "2026_UAD_545431_1",
-    "2026_UAD_545445_1",
-    "2026_UAD_545446_1",
-    "2026_UAD_545451_1",
-    "2026_UAD_545452_1",
-    "2026_UAD_545453_1",
-    "2026_UAD_545454_1",
-    "2026_UAD_545455_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 351,
-  "department_count": 288,
-  "missing_pincode_count": 11,
-  "missing_pincode_ids": [
-    "2026_DHS_544301_1",
-    "2026_UAD_545414_1",
-    "2026_UAD_545415_1",
-    "2026_UAD_545431_1",
-    "2026_UAD_545445_1",
-    "2026_UAD_545446_1",
-    "2026_UAD_545451_1",
-    "2026_UAD_545452_1",
-    "2026_UAD_545453_1",
-    "2026_UAD_545454_1",
-    "2026_UAD_545455_1"
-  ]
+  "department_count": 289,
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
