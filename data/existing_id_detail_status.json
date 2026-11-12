@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "43229320737",
-  "github_run_number": "1489",
+  "github_run_id": "43255316730",
+  "github_run_number": "1490",
   "github_commit_sha": "a6f3b2fade2ea14642e57b495646f9bfe1333db3",
   "batch_size": 500,
   "total_csv_ids": 4437,
   "current_portal_ids": 4437,
-  "initial_incomplete": 142,
-  "batch_targets": 142,
-  "batch_attempted": 142,
-  "batch_complete": 141,
-  "started_at": "2026-11-12T14:01:47.812692+00:00",
+  "initial_incomplete": 63,
+  "batch_targets": 63,
+  "batch_attempted": 63,
+  "batch_complete": 62,
+  "started_at": "2026-11-12T16:28:30.224747+00:00",
   "success": 4436,
   "failed": 1,
   "success_ids": [
@@ -4456,7 +4456,7 @@
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_UAD_548956_1",
+  "last_successful_tender_id": "2026_UAD_531630_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_519252_2",
@@ -4464,5 +4464,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-12T14:10:04.038179+00:00"
+  "updated_at": "2026-11-12T16:35:10.727804+00:00"
 }
