@@ -8,8 +8,8 @@
   "current_portal_ids": 4479,
   "initial_incomplete": 37,
   "batch_targets": 37,
-  "batch_attempted": 19,
-  "batch_complete": 12,
+  "batch_attempted": 37,
+  "batch_complete": 30,
   "started_at": "2026-11-13T17:20:48.429459+00:00",
   "success": 4478,
   "failed": 0,
@@ -4498,7 +4498,7 @@
   "pending_ids": [
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "2026_RES_540889_1",
+  "last_successful_tender_id": "2026_UAD_546423_2",
   "errors": [
     {
       "Tender ID": "2026_UAD_542404_1",
@@ -4529,7 +4529,12 @@
       "Tender ID": "2026_UAD_542778_1",
       "error": "RuntimeError: Search Tender input not found",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542783_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SJ9hQW2dxYgRk7FPlgvGCCA%3D%3D\">[RCC drain construction work at various places fr\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-13T17:24:45.806381+00:00"
+  "updated_at": "2026-11-13T17:26:55.714319+00:00"
 }
