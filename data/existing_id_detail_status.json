@@ -8,8 +8,8 @@
   "current_portal_ids": 4479,
   "initial_incomplete": 37,
   "batch_targets": 37,
-  "batch_attempted": 5,
-  "batch_complete": 0,
+  "batch_attempted": 19,
+  "batch_complete": 12,
   "started_at": "2026-11-13T17:20:48.429459+00:00",
   "success": 4478,
   "failed": 0,
@@ -4498,7 +4498,7 @@
   "pending_ids": [
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "",
+  "last_successful_tender_id": "2026_RES_540889_1",
   "errors": [
     {
       "Tender ID": "2026_UAD_542404_1",
@@ -4519,7 +4519,17 @@
       "Tender ID": "2026_UAD_542781_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542777_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542778_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-13T17:22:43.610192+00:00"
+  "updated_at": "2026-11-13T17:24:45.806381+00:00"
 }
