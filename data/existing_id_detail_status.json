@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "43471731564",
-  "github_run_number": "211",
+  "status": "running",
+  "github_run_id": "43471456426",
+  "github_run_number": "1505",
   "github_commit_sha": "b01b8405b8e2cdd2b77486fdbd035308ad45b570",
-  "batch_size": 0,
-  "total_csv_ids": 4479,
-  "current_portal_ids": 4479,
-  "initial_incomplete": 37,
-  "batch_targets": 37,
-  "batch_attempted": 37,
-  "batch_complete": 37,
-  "started_at": "2026-11-13T17:20:48.429459+00:00",
-  "success": 4478,
-  "failed": 0,
+  "batch_size": 500,
+  "total_csv_ids": 4499,
+  "current_portal_ids": 4499,
+  "initial_incomplete": 22,
+  "batch_targets": 22,
+  "batch_attempted": 22,
+  "batch_complete": 20,
+  "started_at": "2026-11-13T18:04:50.549553+00:00",
+  "success": 4497,
+  "failed": 2,
   "success_ids": [
     "2024_UAD_336868_7",
     "2024_UAD_361767_10",
@@ -293,6 +293,7 @@
     "2026_DoPR_546510_1",
     "2026_DoPR_548623_1",
     "2026_DoPR_549010_1",
+    "2026_DoPR_549307_1",
     "2026_EOW_548252_1",
     "2026_EXCIS_546581_1",
     "2026_EXCIS_546818_1",
@@ -328,6 +329,9 @@
     "2026_EXCIS_549259_1",
     "2026_EXCIS_549273_1",
     "2026_EXCIS_549286_1",
+    "2026_EXCIS_549315_1",
+    "2026_EXCIS_549315_2",
+    "2026_EXCIS_549315_3",
     "2026_GADR_547118_1",
     "2026_GADR_547363_1",
     "2026_GDACU_547241_1",
@@ -679,6 +683,7 @@
     "2026_MPPGC_540237_1",
     "2026_MPPGC_541068_1",
     "2026_MPPGC_541425_1",
+    "2026_MPPGC_541588_1",
     "2026_MPPGC_541677_1",
     "2026_MPPGC_541678_1",
     "2026_MPPGC_541724_1",
@@ -695,6 +700,7 @@
     "2026_MPPGC_542277_1",
     "2026_MPPGC_542788_1",
     "2026_MPPGC_542852_1",
+    "2026_MPPGC_542889_1",
     "2026_MPPGC_542916_1",
     "2026_MPPGC_543186_1",
     "2026_MPPGC_543220_1",
@@ -751,7 +757,10 @@
     "2026_MPPGC_548167_1",
     "2026_MPPGC_548207_1",
     "2026_MPPGC_548284_1",
+    "2026_MPPGC_548286_1",
+    "2026_MPPGC_548289_1",
     "2026_MPPGC_548368_1",
+    "2026_MPPGC_548542_1",
     "2026_MPPGC_548836_1",
     "2026_MPPGC_548994_1",
     "2026_MPPHC_546023_1",
@@ -789,6 +798,7 @@
     "2026_MPPHC_548556_1",
     "2026_MPPHC_549292_1",
     "2026_MPPHC_549305_1",
+    "2026_MPPHC_549314_1",
     "2026_MPPKV_527674_1",
     "2026_MPPKV_529178_1",
     "2026_MPPKV_533742_2",
@@ -1347,7 +1357,6 @@
     "2026_PKVVC_533787_1",
     "2026_PKVVC_538098_1",
     "2026_PKVVC_541448_1",
-    "2026_PKVVC_543159_1",
     "2026_PKVVC_543387_1",
     "2026_PKVVC_543957_2",
     "2026_PKVVC_544124_1",
@@ -1356,6 +1365,7 @@
     "2026_PKVVC_544491_2",
     "2026_PKVVC_545041_2",
     "2026_PKVVC_545449_1",
+    "2026_PKVVC_546749_1",
     "2026_PKVVC_546790_1",
     "2026_PKVVC_547019_1",
     "2026_PKVVC_547212_1",
@@ -1748,6 +1758,7 @@
     "2026_PWPIU_548945_1",
     "2026_PWPIU_549117_1",
     "2026_PWPIU_549212_1",
+    "2026_PWPIU_549266_1",
     "2026_RDVJ_547479_1",
     "2026_RDVJ_547698_1",
     "2026_RDVJ_547719_1",
@@ -2509,6 +2520,9 @@
     "2026_UAD_543766_1",
     "2026_UAD_543769_1",
     "2026_UAD_543798_1",
+    "2026_UAD_543803_1",
+    "2026_UAD_543804_1",
+    "2026_UAD_543805_1",
     "2026_UAD_543814_1",
     "2026_UAD_543815_1",
     "2026_UAD_543828_1",
@@ -3127,6 +3141,7 @@
     "2026_UAD_546127_2",
     "2026_UAD_546131_1",
     "2026_UAD_546131_2",
+    "2026_UAD_546131_3",
     "2026_UAD_546135_1",
     "2026_UAD_546139_1",
     "2026_UAD_546140_1",
@@ -4428,10 +4443,13 @@
     "2026_UAD_549059_1",
     "2026_UAD_549079_1",
     "2026_UAD_549080_1",
+    "2026_UAD_549081_1",
+    "2026_UAD_549082_1",
     "2026_UAD_549084_1",
     "2026_UAD_549085_1",
     "2026_UAD_549087_1",
     "2026_UAD_549099_1",
+    "2026_UAD_549107_1",
     "2026_UAD_549109_1",
     "2026_UAD_549118_1",
     "2026_UAD_549138_1",
@@ -4483,6 +4501,7 @@
     "2026_WRD_539757_1",
     "2026_WRD_539761_1",
     "2026_WRD_539769_1",
+    "2026_WRD_539775_1",
     "2026_WRD_541523_1",
     "2026_WRD_541525_1",
     "2026_WRD_541527_1",
@@ -4493,48 +4512,34 @@
     "2026_WRD_543271_1",
     "2026_WRD_543273_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
+  "failed_ids": [
+    "2026_PKVVC_548375_1",
     "2026_PSNSU_519252_2"
   ],
-  "last_successful_tender_id": "2026_UAD_542783_1",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "2026_WRD_539775_1",
   "errors": [
     {
-      "Tender ID": "2026_UAD_542404_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "Tender ID": "2026_PSNSU_519252_2",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": false
     },
     {
-      "Tender ID": "2026_MPP_543016_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
       "retry_pass": false
     },
     {
-      "Tender ID": "2026_UAD_542780_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
+      "Tender ID": "2026_PSNSU_519252_2",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
     },
     {
-      "Tender ID": "2026_UAD_542781_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_542777_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_542778_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_UAD_542783_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SJ9hQW2dxYgRk7FPlgvGCCA%3D%3D\">[RCC drain construction work at various places fr\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-13T17:27:36.088554+00:00"
+  "updated_at": "2026-11-13T18:06:49.588263+00:00"
 }

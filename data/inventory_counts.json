@@ -2,28 +2,18 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-13T23:34:08.128776+05:30",
+    "checked_at": "2026-11-13T23:36:52.193730+05:30",
     "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4499,
     "verified_unique_ids": 4499,
-    "dashboard_live_count": 4488,
+    "dashboard_live_count": 4498,
     "closed_or_cancelled_count": 0,
     "excluded_master_only_live_count": 0,
     "excluded_master_only_live_ids": [],
     "missing_ids": [],
     "invalid_closing_ids": [
-      "2026_EXCIS_549315_1",
-      "2026_EXCIS_549315_2",
-      "2026_EXCIS_549315_3",
-      "2026_MPPGC_541588_1",
-      "2026_MPPGC_542889_1",
-      "2026_MPPGC_548286_1",
-      "2026_MPPGC_548289_1",
-      "2026_MPPGC_548542_1",
-      "2026_PKVVC_546749_1",
-      "2026_PKVVC_548375_1",
-      "2026_WRD_539775_1"
+      "2026_PKVVC_548375_1"
     ],
     "errors": [
       "Verified Tender IDs have missing or invalid closing dates"
@@ -31,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-13T18:04:08.858011+00:00",
+  "updated_at": "2026-11-13T18:06:52.988475+00:00",
   "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4499,
   "copied_tenders": 4499,
-  "detail_complete": 4477,
-  "detail_failed": 0,
+  "detail_complete": 4497,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 22,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -190,10 +180,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 26,
       "copied_tenders": 26,
-      "detail_complete": 25,
+      "detail_complete": 26,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Public Instruction",
@@ -267,10 +257,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 2561,
       "copied_tenders": 2561,
-      "detail_complete": 2554,
+      "detail_complete": 2561,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -311,10 +301,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 39,
       "copied_tenders": 39,
-      "detail_complete": 38,
+      "detail_complete": 39,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -322,10 +312,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 37,
       "copied_tenders": 37,
-      "detail_complete": 34,
+      "detail_complete": 37,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -465,10 +455,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 63,
       "copied_tenders": 63,
-      "detail_complete": 61,
-      "detail_failed": 0,
+      "detail_complete": 62,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -476,10 +466,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 226,
       "copied_tenders": 226,
-      "detail_complete": 221,
+      "detail_complete": 226,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -674,10 +664,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 36,
       "copied_tenders": 36,
-      "detail_complete": 35,
+      "detail_complete": 36,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Power Transmission Co. Ltd.",
@@ -884,9 +874,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -905,10 +895,10 @@
       "snapshot_at": "2026-11-13T17:19:32.456986+00:00",
       "portal_tender_count": 62,
       "copied_tenders": 62,
-      "detail_complete": 61,
+      "detail_complete": 62,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1056,55 +1046,15 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 22,
+  "missing_district_count": 2,
   "missing_district_ids": [
-    "2026_DoPR_549307_1",
-    "2026_EXCIS_549315_1",
-    "2026_EXCIS_549315_2",
-    "2026_EXCIS_549315_3",
     "2026_MADHY_548716_1",
-    "2026_MPPGC_541588_1",
-    "2026_MPPGC_542889_1",
-    "2026_MPPGC_548286_1",
-    "2026_MPPGC_548289_1",
-    "2026_MPPGC_548542_1",
-    "2026_MPPHC_549314_1",
-    "2026_PKVVC_546749_1",
-    "2026_PKVVC_548375_1",
-    "2026_PWPIU_549266_1",
-    "2026_UAD_543803_1",
-    "2026_UAD_543804_1",
-    "2026_UAD_543805_1",
-    "2026_UAD_546131_3",
-    "2026_UAD_549081_1",
-    "2026_UAD_549082_1",
-    "2026_UAD_549107_1",
-    "2026_WRD_539775_1"
+    "2026_PKVVC_548375_1"
   ],
-  "known_pincode_count": 354,
-  "department_count": 283,
-  "missing_pincode_count": 21,
+  "known_pincode_count": 355,
+  "department_count": 284,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_DoPR_549307_1",
-    "2026_EXCIS_549315_1",
-    "2026_EXCIS_549315_2",
-    "2026_EXCIS_549315_3",
-    "2026_MPPGC_541588_1",
-    "2026_MPPGC_542889_1",
-    "2026_MPPGC_548286_1",
-    "2026_MPPGC_548289_1",
-    "2026_MPPGC_548542_1",
-    "2026_MPPHC_549314_1",
-    "2026_PKVVC_546749_1",
-    "2026_PKVVC_548375_1",
-    "2026_PWPIU_549266_1",
-    "2026_UAD_543803_1",
-    "2026_UAD_543804_1",
-    "2026_UAD_543805_1",
-    "2026_UAD_546131_3",
-    "2026_UAD_549081_1",
-    "2026_UAD_549082_1",
-    "2026_UAD_549107_1",
-    "2026_WRD_539775_1"
+    "2026_PKVVC_548375_1"
   ]
 }
