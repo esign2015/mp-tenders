@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "43429567715",
-  "github_run_number": "1502",
+  "status": "running",
+  "github_run_id": "43471731564",
+  "github_run_number": "211",
   "github_commit_sha": "b01b8405b8e2cdd2b77486fdbd035308ad45b570",
-  "batch_size": 500,
-  "total_csv_ids": 4842,
-  "current_portal_ids": 4486,
-  "initial_incomplete": 130,
-  "batch_targets": 130,
-  "batch_attempted": 130,
-  "batch_complete": 129,
-  "started_at": "2026-11-13T13:25:27.333358+00:00",
-  "success": 4485,
-  "failed": 1,
+  "batch_size": 0,
+  "total_csv_ids": 4479,
+  "current_portal_ids": 4479,
+  "initial_incomplete": 37,
+  "batch_targets": 37,
+  "batch_attempted": 5,
+  "batch_complete": 0,
+  "started_at": "2026-11-13T17:20:48.429459+00:00",
+  "success": 4478,
+  "failed": 0,
   "success_ids": [
     "2024_UAD_336868_7",
     "2024_UAD_361767_10",
@@ -4457,13 +4457,6 @@
     "2026_VU_542461_1",
     "2026_WRD_489112_1",
     "2026_WRD_489113_1",
-    "2026_WRD_514893_1",
-    "2026_WRD_514895_1",
-    "2026_WRD_514897_1",
-    "2026_WRD_514898_1",
-    "2026_WRD_514900_1",
-    "2026_WRD_514902_1",
-    "2026_WRD_514903_1",
     "2026_WRD_522275_1",
     "2026_WRD_524577_2",
     "2026_WRD_525049_1",
@@ -4500,28 +4493,33 @@
     "2026_WRD_543271_1",
     "2026_WRD_543273_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_PSNSU_519252_2"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "2026_MKVVC_549264_1",
+  "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_PSNSU_519252_2",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_MPVVN_549260_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=S11mXOz0KyWIq8iEo2Os9nw%3D%3D\">[Chainlink Fencing and Barbed Wire]</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "Tender ID": "2026_UAD_542404_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
     },
     {
-      "Tender ID": "2026_MKVVC_549264_1",
+      "Tender ID": "2026_MPP_543016_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542780_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_542781_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-13T13:36:42.675105+00:00"
+  "updated_at": "2026-11-13T17:22:43.610192+00:00"
 }
