@@ -1,23 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-14T00:32:30.805415+05:30",
+  "snapshot_at": "2026-11-14T01:43:17.822705+05:30",
   "previous_organisation_count": 92,
   "current_organisation_count": 92,
   "previous_tender_count": 4499,
   "current_tender_count": 4499,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 1,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 63,
-      "Current Tender Count": 63,
-      "Count Difference": 0,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PKVVC_543159_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
