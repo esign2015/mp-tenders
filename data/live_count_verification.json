@@ -1,22 +1,20 @@
 {
-  "status": "verified",
-  "checked_at": "2026-11-13T21:09:49.952455+05:30",
-  "snapshot_at": "2026-11-13T12:59:02.242360+00:00",
-  "inventory_source": "copied-list",
+  "status": "mismatch",
+  "checked_at": "2026-11-13T21:17:16.157746+05:30",
+  "snapshot_at": "2026-11-13T21:17:03.873099+05:30",
+  "inventory_source": "cached-snapshot",
   "portal_tender_count": 4486,
-  "verified_unique_ids": 4486,
+  "verified_unique_ids": 4479,
   "dashboard_live_count": 4479,
-  "closed_or_cancelled_count": 7,
-  "excluded_master_only_live_count": 4,
-  "excluded_master_only_live_ids": [
-    "2025_UAD_439145_4",
-    "2026_UAD_547016_1",
-    "2026_UAD_547678_1",
-    "2026_UAD_547706_1"
-  ],
+  "closed_or_cancelled_count": 0,
+  "excluded_master_only_live_count": 0,
+  "excluded_master_only_live_ids": [],
   "missing_ids": [],
   "invalid_closing_ids": [],
-  "errors": [],
-  "counts_match": true,
+  "errors": [
+    "Organisation count mismatch: Engineer-in-Chief - Water Resources Department",
+    "Portal total and unique Tender IDs differ"
+  ],
+  "counts_match": false,
   "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
 }
