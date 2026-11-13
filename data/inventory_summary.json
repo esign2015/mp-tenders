@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-13T17:27:47.357159+05:30",
+    "checked_at": "2026-11-13T17:29:52.590837+05:30",
     "snapshot_at": "2026-11-13T11:16:27.798291+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4657,
@@ -19,15 +19,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-13T11:57:48.225005+00:00",
+  "updated_at": "2026-11-13T11:59:53.423801+00:00",
   "snapshot_at": "2026-11-13T11:16:27.798291+00:00",
   "organisation_count": 90,
   "portal_tender_count": 4657,
   "copied_tenders": 4657,
-  "detail_complete": 4650,
-  "detail_failed": 0,
+  "detail_complete": 4655,
+  "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 7,
+  "detail_pending": 1,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -233,10 +233,10 @@
       "snapshot_at": "2026-11-13T11:16:27.798291+00:00",
       "portal_tender_count": 2697,
       "copied_tenders": 2697,
-      "detail_complete": 2692,
+      "detail_complete": 2697,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 5
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -850,9 +850,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1022,25 +1022,15 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 7,
+  "missing_district_count": 2,
   "missing_district_ids": [
     "2026_MADHY_548716_1",
-    "2026_PKVVC_546749_1",
-    "2026_UAD_548972_1",
-    "2026_UAD_548973_1",
-    "2026_UAD_548974_1",
-    "2026_UAD_548987_1",
-    "2026_UAD_549033_1"
+    "2026_PKVVC_546749_1"
   ],
   "known_pincode_count": 356,
   "department_count": 288,
-  "missing_pincode_count": 6,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_PKVVC_546749_1",
-    "2026_UAD_548972_1",
-    "2026_UAD_548973_1",
-    "2026_UAD_548974_1",
-    "2026_UAD_548987_1",
-    "2026_UAD_549033_1"
+    "2026_PKVVC_546749_1"
   ]
 }
