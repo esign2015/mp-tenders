@@ -1,91 +1,23 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-13T23:33:12.708747+05:30",
+  "snapshot_at": "2026-11-14T00:32:30.805415+05:30",
   "previous_organisation_count": 92,
   "current_organisation_count": 92,
-  "previous_tender_count": 4486,
+  "previous_tender_count": 4499,
   "current_tender_count": 4499,
-  "organisations_with_changes": 8,
-  "organisations_with_new_tenders": 4,
-  "new_tender_count": 10,
+  "organisations_with_changes": 1,
+  "organisations_with_new_tenders": 1,
+  "new_tender_count": 1,
   "changes": [
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2554,
-      "Current Tender Count": 2561,
-      "Count Difference": 7,
-      "New Tender Count": 7,
-      "New Tender IDs": [
-        "2026_UAD_543803_1",
-        "2026_UAD_543804_1",
-        "2026_UAD_543805_1",
-        "2026_UAD_546131_3",
-        "2026_UAD_549081_1",
-        "2026_UAD_549082_1",
-        "2026_UAD_549107_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Panchayati Raj",
-      "Previous Tender Count": 25,
-      "Current Tender Count": 26,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DoPR_549307_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
-      "Previous Tender Count": 35,
-      "Current Tender Count": 36,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPHC_549314_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD-PIU",
-      "Previous Tender Count": 61,
-      "Current Tender Count": 62,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PWPIU_549266_1"
-      ]
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 45,
-      "Current Tender Count": 39,
-      "Count Difference": -6,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 221,
-      "Current Tender Count": 226,
-      "Count Difference": 5,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Excise Department",
-      "Previous Tender Count": 34,
-      "Current Tender Count": 37,
-      "Count Difference": 3,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
       "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 62,
+      "Previous Tender Count": 63,
       "Current Tender Count": 63,
-      "Count Difference": 1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
+      "Count Difference": 0,
+      "New Tender Count": 1,
+      "New Tender IDs": [
+        "2026_PKVVC_543159_1"
+      ]
     }
   ]
 }
