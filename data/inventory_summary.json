@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-14T16:38:51.444852+05:30",
+    "checked_at": "2026-11-14T16:40:57.830431+05:30",
     "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4646,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-14T11:08:52.914783+00:00",
+  "updated_at": "2026-11-14T11:10:58.879957+00:00",
   "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4646,
   "copied_tenders": 4646,
-  "detail_complete": 4565,
+  "detail_complete": 4574,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 81,
+  "detail_pending": 72,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -253,10 +253,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 2671,
       "copied_tenders": 2671,
-      "detail_complete": 2599,
+      "detail_complete": 2605,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 72
+      "detail_pending": 66
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -902,10 +902,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 291,
       "copied_tenders": 291,
-      "detail_complete": 288,
+      "detail_complete": 291,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1042,30 +1042,23 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 8,
+  "missing_district_count": 5,
   "missing_district_ids": [
     "2026_MADHY_548716_1",
     "2026_MKVVC_549297_1",
     "2026_MKVVC_549322_1",
     "2026_MPPGC_535346_1",
-    "2026_MPP_549323_1",
-    "2026_PWDRB_548884_1",
-    "2026_PWDRB_548886_1",
-    "2026_PWDRB_548889_1"
+    "2026_MPP_549323_1"
   ],
   "known_pincode_count": 357,
   "department_count": 290,
-  "missing_pincode_count": 80,
+  "missing_pincode_count": 71,
   "missing_pincode_ids": [
     "2026_DHS_549231_1",
     "2026_MKVVC_549297_1",
     "2026_MKVVC_549322_1",
     "2026_MPPGC_535346_1",
     "2026_MPP_549323_1",
-    "2026_PWDRB_548884_1",
-    "2026_PWDRB_548886_1",
-    "2026_PWDRB_548889_1",
-    "2026_UAD_539767_2",
     "2026_UAD_546406_1",
     "2026_UAD_546636_1",
     "2026_UAD_546636_2",
@@ -1083,11 +1076,6 @@
     "2026_UAD_547932_1",
     "2026_UAD_547933_1",
     "2026_UAD_547934_1",
-    "2026_UAD_548355_1",
-    "2026_UAD_548356_1",
-    "2026_UAD_548357_1",
-    "2026_UAD_548358_1",
-    "2026_UAD_548360_1",
     "2026_UAD_548668_20",
     "2026_UAD_548668_21",
     "2026_UAD_548668_22",
