@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-14T16:47:15.912148+05:30",
+    "checked_at": "2026-11-14T16:50:03.581899+05:30",
     "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4646,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-14T11:17:16.926857+00:00",
+  "updated_at": "2026-11-14T11:20:04.460362+00:00",
   "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4646,
   "copied_tenders": 4646,
-  "detail_complete": 4644,
+  "detail_complete": 4645,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -462,10 +462,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 231,
       "copied_tenders": 231,
-      "detail_complete": 230,
+      "detail_complete": 231,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -1042,15 +1042,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 2,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MADHY_548716_1",
-    "2026_MPPGC_535346_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 357,
   "department_count": 290,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_MPPGC_535346_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }

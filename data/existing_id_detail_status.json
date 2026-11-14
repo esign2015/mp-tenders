@@ -1,17 +1,17 @@
 {
   "status": "completed",
-  "github_run_id": "43588047167",
-  "github_run_number": "247",
+  "github_run_id": "43586421835",
+  "github_run_number": "1514",
   "github_commit_sha": "65fe3a6762e23b7f202ad6d88a9aa0168421bd6c",
   "batch_size": 500,
-  "total_csv_ids": 4654,
-  "current_portal_ids": 4654,
-  "initial_incomplete": 157,
-  "batch_targets": 157,
-  "batch_attempted": 157,
-  "batch_complete": 156,
-  "started_at": "2026-11-14T11:02:33.370923+00:00",
-  "success": 4653,
+  "total_csv_ids": 4655,
+  "current_portal_ids": 4646,
+  "initial_incomplete": 3,
+  "batch_targets": 3,
+  "batch_attempted": 3,
+  "batch_complete": 2,
+  "started_at": "2026-11-14T11:18:02.023564+00:00",
+  "success": 4645,
   "failed": 1,
   "success_ids": [
     "2023_UAD_312847_6",
@@ -21,7 +21,6 @@
     "2024_UAD_366354_2",
     "2024_UAD_371777_10",
     "2025_MPPGC_408425_3",
-    "2025_MPPGC_458982_1",
     "2025_MPPGC_465004_3",
     "2025_MPPGC_468118_1",
     "2025_PWDRB_457553_12",
@@ -298,7 +297,6 @@
     "2026_DoPR_549010_1",
     "2026_DoPR_549307_1",
     "2026_EOW_548252_1",
-    "2026_EXCIS_546581_1",
     "2026_EXCIS_546818_1",
     "2026_EXCIS_546818_2",
     "2026_EXCIS_547049_1",
@@ -647,6 +645,7 @@
     "2026_MPPGC_535041_1",
     "2026_MPPGC_535192_1",
     "2026_MPPGC_535209_1",
+    "2026_MPPGC_535346_1",
     "2026_MPPGC_535390_1",
     "2026_MPPGC_535551_1",
     "2026_MPPGC_535642_1",
@@ -1879,14 +1878,7 @@
     "2026_RES_547691_1",
     "2026_RES_547707_1",
     "2026_RES_547721_1",
-    "2026_RGPV_536995_1",
-    "2026_RGPV_537018_1",
-    "2026_RGPV_544242_1",
     "2026_RGPV_544245_1",
-    "2026_RGPV_544246_1",
-    "2026_RGPV_544250_1",
-    "2026_RGPV_544383_1",
-    "2026_RGPV_544471_1",
     "2026_RGPV_546827_1",
     "2026_RGPV_547978_1",
     "2026_RSK_542495_1",
@@ -4673,7 +4665,7 @@
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_UAD_549207_1",
+  "last_successful_tender_id": "2026_MPPGC_535346_1",
   "errors": [
     {
       "Tender ID": "2026_PSNSU_519252_2",
@@ -4681,5 +4673,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-14T11:17:06.092183+00:00"
+  "updated_at": "2026-11-14T11:18:37.273372+00:00"
 }
