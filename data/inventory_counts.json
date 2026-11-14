@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-14T16:36:43.675731+05:30",
+    "checked_at": "2026-11-14T16:38:51.444852+05:30",
     "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4646,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-14T11:06:45.186815+00:00",
+  "updated_at": "2026-11-14T11:08:52.914783+00:00",
   "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
   "organisation_count": 92,
   "portal_tender_count": 4646,
   "copied_tenders": 4646,
-  "detail_complete": 4548,
+  "detail_complete": 4565,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 98,
+  "detail_pending": 81,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -253,10 +253,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 2671,
       "copied_tenders": 2671,
-      "detail_complete": 2596,
+      "detail_complete": 2599,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 75
+      "detail_pending": 72
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -297,10 +297,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 39,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -308,10 +308,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
-      "detail_complete": 49,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -418,10 +418,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 39,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 52,
       "copied_tenders": 52,
-      "detail_complete": 51,
+      "detail_complete": 52,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -605,10 +605,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 94,
       "copied_tenders": 94,
-      "detail_complete": 93,
+      "detail_complete": 94,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "MP Housing and Infrastructure Development Board",
@@ -880,10 +880,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 63,
       "copied_tenders": 63,
-      "detail_complete": 61,
+      "detail_complete": 63,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "PWD-PIU",
@@ -902,10 +902,10 @@
       "snapshot_at": "2026-11-14T10:41:58.969549+00:00",
       "portal_tender_count": 291,
       "copied_tenders": 291,
-      "detail_complete": 285,
+      "detail_complete": 288,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 3
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1042,50 +1042,29 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 17,
+  "missing_district_count": 8,
   "missing_district_ids": [
     "2026_MADHY_548716_1",
     "2026_MKVVC_549297_1",
-    "2026_MKVVC_549316_1",
     "2026_MKVVC_549322_1",
-    "2026_MKVVC_549329_1",
-    "2026_MPFD_549295_1",
     "2026_MPPGC_535346_1",
-    "2026_MPPKV_545274_2",
     "2026_MPP_549323_1",
-    "2026_PHED_549105_1",
-    "2026_PHED_549110_1",
-    "2026_PWDRB_548849_1",
-    "2026_PWDRB_548850_1",
     "2026_PWDRB_548884_1",
     "2026_PWDRB_548886_1",
-    "2026_PWDRB_548889_1",
-    "2026_PWDRB_549185_1"
+    "2026_PWDRB_548889_1"
   ],
-  "known_pincode_count": 356,
+  "known_pincode_count": 357,
   "department_count": 290,
-  "missing_pincode_count": 97,
+  "missing_pincode_count": 80,
   "missing_pincode_ids": [
     "2026_DHS_549231_1",
-    "2026_EXCIS_549294_1",
-    "2026_EXCIS_549303_1",
-    "2026_EXCIS_549309_1",
     "2026_MKVVC_549297_1",
-    "2026_MKVVC_549316_1",
     "2026_MKVVC_549322_1",
-    "2026_MKVVC_549329_1",
-    "2026_MPFD_549295_1",
     "2026_MPPGC_535346_1",
-    "2026_MPPKV_545274_2",
     "2026_MPP_549323_1",
-    "2026_PHED_549105_1",
-    "2026_PHED_549110_1",
-    "2026_PWDRB_548849_1",
-    "2026_PWDRB_548850_1",
     "2026_PWDRB_548884_1",
     "2026_PWDRB_548886_1",
     "2026_PWDRB_548889_1",
-    "2026_PWDRB_549185_1",
     "2026_UAD_539767_2",
     "2026_UAD_546406_1",
     "2026_UAD_546636_1",
@@ -1125,10 +1104,7 @@
     "2026_UAD_548962_1",
     "2026_UAD_549012_1",
     "2026_UAD_549013_1",
-    "2026_UAD_549116_1",
     "2026_UAD_549119_1",
-    "2026_UAD_549129_1",
-    "2026_UAD_549166_1",
     "2026_UAD_549177_1",
     "2026_UAD_549177_2",
     "2026_UAD_549177_3",
@@ -1160,8 +1136,6 @@
     "2026_UAD_549335_1",
     "2026_UAD_549338_1",
     "2026_UAD_549349_1",
-    "2026_UAD_549350_1",
-    "2026_WRD_519960_2",
-    "2026_WRD_530741_2"
+    "2026_UAD_549350_1"
   ]
 }
