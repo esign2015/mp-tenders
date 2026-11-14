@@ -1,35 +1,70 @@
 {
-  "status": "completed",
-  "started_at": "2026-11-14T08:54:35.904122+00:00",
+  "status": "partial",
+  "started_at": "2026-11-14T09:59:28.426799+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_548923_1",
-    "2026_PKVVC_549270_1",
-    "2026_UAD_548743_1",
-    "2026_UAD_548742_1",
+    "2026_MPPGC_547917_1",
+    "2026_DPI_549376_1",
+    "2026_MPPGC_529342_1",
+    "2026_UAD_549369_1",
+    "2026_MPPGC_547894_1",
+    "2026_UAD_548744_1",
+    "2026_UAD_548920_1",
+    "2026_UAD_548921_1",
+    "2026_UAD_548622_1",
+    "2026_UAD_548612_1",
+    "2026_UAD_543430_1",
     "2026_MPPGC_535346_1",
     "2026_UAD_539279_1",
     "2026_RSK_547839_1",
-    "2026_MPFD_547466_1",
-    "2026_PKVVC_546749_1",
-    "2026_WRD_539775_1",
-    "2026_MPP_541895_1",
-    "2026_PWDRB_549120_1",
-    "2026_PWDRB_549125_1",
-    "2026_UAD_546516_1"
+    "2026_MPFD_547466_1"
   ],
   "unchanged_ids": [
-    "2026_UAD_549368_1",
-    "2026_UAD_549351_1",
-    "2026_UAD_548353_1",
-    "2026_UAD_548354_1",
-    "2026_UAD_548352_1",
-    "2026_UAD_548887_1"
+    "2026_PKVVC_549270_1",
+    "2026_UAD_548742_1"
   ],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-11-14T08:54:38.072875+00:00",
+  "errors": [
+    {
+      "reference": "TS 2025 dt 29-10-2026",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "1241/2026-27/Einc/Etendering/ dt.07-10-2026",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    },
+    {
+      "reference": "1573",
+      "kind": "corrigendum",
+      "error": "Entry moved off Home; retry next cycle"
+    }
+  ],
+  "pending": [
+    {
+      "kind": "corrigendum",
+      "reference": "TS 2025 dt 29-10-2026",
+      "title": "8. date extension 1",
+      "closing": "16-Nov-2026 05:00 PM",
+      "opening": "17-Nov-2026 02:00 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "1241/2026-27/Einc/Etendering/ dt.07-10-2026",
+      "title": "9. DATE EXTENDED AS PER ATTACHED DOCUMENT",
+      "closing": "20-Nov-2026 05:30 PM",
+      "opening": "23-Nov-2026 12:30 PM"
+    },
+    {
+      "kind": "corrigendum",
+      "reference": "1573",
+      "title": "10. Technical Bid Corrigendum1",
+      "closing": "17-Nov-2026 05:00 PM",
+      "opening": "18-Nov-2026 05:00 PM"
+    }
+  ],
+  "copied_at": "2026-11-14T09:59:30.976285+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-11-14T08:55:07.726378+00:00"
+  "updated_at": "2026-11-14T10:00:04.323799+00:00"
 }
