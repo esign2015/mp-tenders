@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-14T20:11:04.827209+05:30",
+    "checked_at": "2026-11-14T20:13:51.960939+05:30",
     "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4540,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-14T14:41:05.393338+00:00",
+  "updated_at": "2026-11-14T14:43:52.770947+00:00",
   "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
   "organisation_count": 91,
   "portal_tender_count": 4540,
   "copied_tenders": 4540,
-  "detail_complete": 4530,
+  "detail_complete": 4539,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 9,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -242,10 +242,10 @@
       "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
       "portal_tender_count": 2576,
       "copied_tenders": 2576,
-      "detail_complete": 2575,
+      "detail_complete": 2576,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -330,10 +330,10 @@
       "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
       "portal_tender_count": 11,
       "copied_tenders": 11,
-      "detail_complete": 10,
+      "detail_complete": 11,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Homeguard Civil Defence and Disaster Management",
@@ -748,10 +748,10 @@
       "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
       "portal_tender_count": 29,
       "copied_tenders": 29,
-      "detail_complete": 23,
+      "detail_complete": 29,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "M.P.State Minor Forest Produce Cooperative Federation Limited",
@@ -880,10 +880,10 @@
       "snapshot_at": "2026-11-14T14:25:26.548928+00:00",
       "portal_tender_count": 63,
       "copied_tenders": 63,
-      "detail_complete": 62,
+      "detail_complete": 63,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -1031,31 +1031,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 10,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MADHY_548716_1",
-    "2026_MPHC_543823_1",
-    "2026_PWPIU_549373_1",
-    "2026_SCMFL_549377_1",
-    "2026_SCMFL_549417_1",
-    "2026_SCMFL_549438_1",
-    "2026_SCMFL_549443_1",
-    "2026_SCMFL_549452_1",
-    "2026_SCMFL_549466_1",
-    "2026_UAD_549468_1"
+    "2026_MADHY_548716_1"
   ],
-  "known_pincode_count": 352,
+  "known_pincode_count": 353,
   "department_count": 289,
-  "missing_pincode_count": 9,
-  "missing_pincode_ids": [
-    "2026_MPHC_543823_1",
-    "2026_PWPIU_549373_1",
-    "2026_SCMFL_549377_1",
-    "2026_SCMFL_549417_1",
-    "2026_SCMFL_549438_1",
-    "2026_SCMFL_549443_1",
-    "2026_SCMFL_549452_1",
-    "2026_SCMFL_549466_1",
-    "2026_UAD_549468_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
