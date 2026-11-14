@@ -1,90 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-14T20:10:41.567986+05:30",
+  "snapshot_at": "2026-11-14T21:44:20.163916+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 4552,
+  "previous_tender_count": 4540,
   "current_tender_count": 4540,
-  "organisations_with_changes": 8,
-  "organisations_with_new_tenders": 4,
-  "new_tender_count": 9,
-  "changes": [
-    {
-      "Organisation Name": "MP State Coperative Marketing Federation Ltd.",
-      "Previous Tender Count": 23,
-      "Current Tender Count": 29,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_SCMFL_549377_1",
-        "2026_SCMFL_549417_1",
-        "2026_SCMFL_549438_1",
-        "2026_SCMFL_549443_1",
-        "2026_SCMFL_549452_1",
-        "2026_SCMFL_549466_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2588,
-      "Current Tender Count": 2576,
-      "Count Difference": -12,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_UAD_549468_1"
-      ]
-    },
-    {
-      "Organisation Name": "High Court of Madhya Pradesh",
-      "Previous Tender Count": 10,
-      "Current Tender Count": 11,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPHC_543823_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD-PIU",
-      "Previous Tender Count": 62,
-      "Current Tender Count": 63,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PWPIU_549373_1"
-      ]
-    },
-    {
-      "Organisation Name": "Department of Higher Education",
-      "Previous Tender Count": 21,
-      "Current Tender Count": 18,
-      "Count Difference": -3,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "MP Forest Department",
-      "Previous Tender Count": 94,
-      "Current Tender Count": 91,
-      "Count Difference": -3,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Directorate of Panchayati Raj",
-      "Previous Tender Count": 26,
-      "Current Tender Count": 25,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 63,
-      "Current Tender Count": 62,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
