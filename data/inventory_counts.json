@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-15T23:39:37.029846+05:30",
+    "checked_at": "2026-11-15T23:42:26.894311+05:30",
     "snapshot_at": "2026-11-15T17:54:44.550533+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4542,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-15T18:09:37.620456+00:00",
+  "updated_at": "2026-11-15T18:12:27.560571+00:00",
   "snapshot_at": "2026-11-15T17:54:44.550533+00:00",
   "organisation_count": 91,
   "portal_tender_count": 4542,
   "copied_tenders": 4542,
-  "detail_complete": 4539,
+  "detail_complete": 4541,
   "detail_failed": 1,
   "detail_skipped": 0,
-  "detail_pending": 2,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -242,10 +242,10 @@
       "snapshot_at": "2026-11-15T17:54:44.550533+00:00",
       "portal_tender_count": 2578,
       "copied_tenders": 2578,
-      "detail_complete": 2577,
+      "detail_complete": 2578,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -440,10 +440,10 @@
       "snapshot_at": "2026-11-15T17:54:44.550533+00:00",
       "portal_tender_count": 62,
       "copied_tenders": 62,
-      "detail_complete": 61,
+      "detail_complete": 62,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -1031,17 +1031,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 3,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MADHY_548716_1",
-    "2026_PKVVC_543159_1",
-    "2026_UAD_542870_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 353,
   "department_count": 289,
-  "missing_pincode_count": 2,
-  "missing_pincode_ids": [
-    "2026_PKVVC_543159_1",
-    "2026_UAD_542870_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
