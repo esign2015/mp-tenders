@@ -1,33 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-15T23:39:23.025941+05:30",
+  "snapshot_at": "2026-11-16T00:53:53.782136+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 4541,
+  "previous_tender_count": 4542,
   "current_tender_count": 4542,
-  "organisations_with_changes": 2,
-  "organisations_with_new_tenders": 2,
-  "new_tender_count": 2,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2577,
-      "Current Tender Count": 2578,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_UAD_542870_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 62,
-      "Current Tender Count": 62,
-      "Count Difference": 0,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_PKVVC_543159_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
