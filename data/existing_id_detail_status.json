@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "43908770847",
-  "github_run_number": "256",
+  "github_run_id": "43917086569",
+  "github_run_number": "1546",
   "github_commit_sha": "b92926ab476ecd5da8ede00a913eccea8d85552b",
   "batch_size": 500,
-  "total_csv_ids": 4293,
-  "current_portal_ids": 4293,
-  "initial_incomplete": 1,
-  "batch_targets": 1,
-  "batch_attempted": 1,
+  "total_csv_ids": 4297,
+  "current_portal_ids": 4297,
+  "initial_incomplete": 5,
+  "batch_targets": 5,
+  "batch_attempted": 5,
   "batch_complete": 0,
-  "started_at": "2026-11-16T16:33:52.618650+00:00",
+  "started_at": "2026-11-16T17:41:07.497734+00:00",
   "success": 4293,
-  "failed": 1,
+  "failed": 5,
   "success_ids": [
     "2023_UAD_312847_6",
     "2024_UAD_336868_7",
@@ -4309,17 +4309,41 @@
     "2026_WRD_541546_1"
   ],
   "failed_ids": [
-    "2026_MPPGC_537461_1"
+    "2026_DSYW_547763_1",
+    "2026_MPPGC_483292_1",
+    "2026_MPPGC_537461_1",
+    "2026_MPPGC_544588_1",
+    "2026_MPPGC_544663_1"
   ],
   "skipped_ids": [],
   "pending_ids": [],
   "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_MPPGC_537461_1",
+      "Tender ID": "2026_MPPGC_544663_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_DSYW_547763_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_544588_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_483292_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_MPPGC_537461_1",
+      "error": "RuntimeError: Search Tender input not found",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-16T16:35:35.729218+00:00"
+  "updated_at": "2026-11-16T17:43:40.440720+00:00"
 }
