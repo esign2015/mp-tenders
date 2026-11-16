@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-16T23:51:13.826475+05:30",
+    "checked_at": "2026-11-16T23:53:19.018881+05:30",
     "snapshot_at": "2026-11-16T17:20:18.532621+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4297,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-16T18:21:14.639943+00:00",
+  "updated_at": "2026-11-16T18:23:19.769522+00:00",
   "snapshot_at": "2026-11-16T17:20:18.532621+00:00",
   "organisation_count": 87,
   "portal_tender_count": 4297,
   "copied_tenders": 4297,
-  "detail_complete": 4293,
+  "detail_complete": 4297,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 4,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -209,10 +209,10 @@
       "snapshot_at": "2026-11-16T17:20:18.532621+00:00",
       "portal_tender_count": 8,
       "copied_tenders": 8,
-      "detail_complete": 7,
+      "detail_complete": 8,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Urban Administration and Development",
@@ -418,10 +418,10 @@
       "snapshot_at": "2026-11-16T17:20:18.532621+00:00",
       "portal_tender_count": 216,
       "copied_tenders": 216,
-      "detail_complete": 213,
+      "detail_complete": 216,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 3
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -987,20 +987,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 4,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_DSYW_547763_1",
-    "2026_MADHY_548716_1",
-    "2026_MPPGC_483292_1",
-    "2026_MPPGC_544588_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 345,
   "department_count": 270,
-  "missing_pincode_count": 4,
-  "missing_pincode_ids": [
-    "2026_DSYW_547763_1",
-    "2026_MPPGC_483292_1",
-    "2026_MPPGC_544588_1",
-    "2026_MPPGC_544663_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
