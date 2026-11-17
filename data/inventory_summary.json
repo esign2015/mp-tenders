@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-17T20:13:08.353330+05:30",
+    "checked_at": "2026-11-17T20:15:14.087110+05:30",
     "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4355,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-17T14:43:09.341822+00:00",
+  "updated_at": "2026-11-17T14:45:15.047570+00:00",
   "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
   "organisation_count": 88,
   "portal_tender_count": 4355,
   "copied_tenders": 4355,
-  "detail_complete": 4333,
+  "detail_complete": 4355,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 22,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -231,10 +231,10 @@
       "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
       "portal_tender_count": 2519,
       "copied_tenders": 2519,
-      "detail_complete": 2507,
+      "detail_complete": 2519,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 12
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -253,10 +253,10 @@
       "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
       "portal_tender_count": 59,
       "copied_tenders": 59,
-      "detail_complete": 52,
+      "detail_complete": 59,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 0
     },
     {
       "organisation": "Economic Offences Wing",
@@ -418,10 +418,10 @@
       "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
       "portal_tender_count": 223,
       "copied_tenders": 223,
-      "detail_complete": 221,
+      "detail_complete": 223,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -649,10 +649,10 @@
       "snapshot_at": "2026-11-17T14:16:37.623766+00:00",
       "portal_tender_count": 35,
       "copied_tenders": 35,
-      "detail_complete": 34,
+      "detail_complete": 35,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "M P Rajya Sahakari Bank Maryadit - Bhopal",
@@ -998,57 +998,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 23,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_DC_549979_1",
-    "2026_DC_550008_1",
-    "2026_DC_550025_1",
-    "2026_DC_550065_1",
-    "2026_DC_550090_1",
-    "2026_DC_550135_1",
-    "2026_DC_550138_1",
-    "2026_MADHY_548716_1",
-    "2026_MPPGC_543903_1",
-    "2026_MPPGC_543914_1",
-    "2026_MPPTC_549904_1",
-    "2026_UAD_549832_1",
-    "2026_UAD_549833_1",
-    "2026_UAD_549834_1",
-    "2026_UAD_549835_1",
-    "2026_UAD_549836_1",
-    "2026_UAD_549837_1",
-    "2026_UAD_549838_1",
-    "2026_UAD_549961_1",
-    "2026_UAD_549978_1",
-    "2026_UAD_549991_1",
-    "2026_UAD_550003_1",
-    "2026_UAD_550100_1"
+    "2026_MADHY_548716_1"
   ],
-  "known_pincode_count": 353,
+  "known_pincode_count": 356,
   "department_count": 277,
-  "missing_pincode_count": 22,
-  "missing_pincode_ids": [
-    "2026_DC_549979_1",
-    "2026_DC_550008_1",
-    "2026_DC_550025_1",
-    "2026_DC_550065_1",
-    "2026_DC_550090_1",
-    "2026_DC_550135_1",
-    "2026_DC_550138_1",
-    "2026_MPPGC_543903_1",
-    "2026_MPPGC_543914_1",
-    "2026_MPPTC_549904_1",
-    "2026_UAD_549832_1",
-    "2026_UAD_549833_1",
-    "2026_UAD_549834_1",
-    "2026_UAD_549835_1",
-    "2026_UAD_549836_1",
-    "2026_UAD_549837_1",
-    "2026_UAD_549838_1",
-    "2026_UAD_549961_1",
-    "2026_UAD_549978_1",
-    "2026_UAD_549991_1",
-    "2026_UAD_550003_1",
-    "2026_UAD_550100_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
