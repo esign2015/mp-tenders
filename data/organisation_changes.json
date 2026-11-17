@@ -1,23 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-17T22:53:02.368845+05:30",
+  "snapshot_at": "2026-11-18T00:30:20.011814+05:30",
   "previous_organisation_count": 88,
   "current_organisation_count": 88,
-  "previous_tender_count": 4355,
+  "previous_tender_count": 4356,
   "current_tender_count": 4356,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 1,
-  "changes": [
-    {
-      "Organisation Name": "Madhya Pradesh Madhya Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 48,
-      "Current Tender Count": 49,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MKVVC_545231_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
