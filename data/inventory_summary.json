@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-17T22:53:24.553773+05:30",
+    "checked_at": "2026-11-17T22:56:19.441612+05:30",
     "snapshot_at": "2026-11-17T17:01:15.269549+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4356,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-17T17:23:25.559922+00:00",
+  "updated_at": "2026-11-17T17:26:20.050529+00:00",
   "snapshot_at": "2026-11-17T17:01:15.269549+00:00",
   "organisation_count": 88,
   "portal_tender_count": 4356,
   "copied_tenders": 4356,
-  "detail_complete": 4355,
+  "detail_complete": 4356,
   "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -374,10 +374,10 @@
       "snapshot_at": "2026-11-17T17:01:15.269549+00:00",
       "portal_tender_count": 49,
       "copied_tenders": 49,
-      "detail_complete": 48,
+      "detail_complete": 49,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -998,15 +998,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 2,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_MADHY_548716_1",
-    "2026_MKVVC_545231_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 356,
   "department_count": 277,
-  "missing_pincode_count": 1,
-  "missing_pincode_ids": [
-    "2026_MKVVC_545231_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
