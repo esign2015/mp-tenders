@@ -1,12 +1,12 @@
 {
   "status": "verified",
-  "checked_at": "2026-11-18T17:46:01.526986+05:30",
+  "checked_at": "2026-11-18T18:08:40.546626+05:30",
   "snapshot_at": "2026-11-18T11:57:55.455580+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 4300,
   "verified_unique_ids": 4300,
-  "dashboard_live_count": 4300,
-  "closed_or_cancelled_count": 0,
+  "dashboard_live_count": 4237,
+  "closed_or_cancelled_count": 63,
   "excluded_master_only_live_count": 6,
   "excluded_master_only_live_ids": [
     "2026_PWDRB_547240_1",
