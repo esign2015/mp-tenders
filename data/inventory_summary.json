@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "verified",
-    "checked_at": "2026-11-18T19:38:04.437157+05:30",
+    "checked_at": "2026-11-18T19:44:44.188648+05:30",
     "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4285,
@@ -17,15 +17,15 @@
     "counts_match": true,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-18T14:08:05.170099+00:00",
+  "updated_at": "2026-11-18T14:14:45.163593+00:00",
   "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
   "organisation_count": 91,
   "portal_tender_count": 4285,
   "copied_tenders": 4285,
-  "detail_complete": 4241,
+  "detail_complete": 4283,
   "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 42,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -55,10 +55,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 10,
       "copied_tenders": 10,
-      "detail_complete": 6,
+      "detail_complete": 10,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Chhindwara University - Chhindwara",
@@ -132,10 +132,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 43,
       "copied_tenders": 43,
-      "detail_complete": 42,
+      "detail_complete": 43,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Industries",
@@ -220,10 +220,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 21,
       "copied_tenders": 21,
-      "detail_complete": 20,
+      "detail_complete": 21,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate Of Women and Child Development",
@@ -253,10 +253,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 2582,
       "copied_tenders": 2582,
-      "detail_complete": 2558,
+      "detail_complete": 2582,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 24
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -308,10 +308,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 46,
       "copied_tenders": 46,
-      "detail_complete": 44,
+      "detail_complete": 46,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "General Administration Department - Registrar",
@@ -385,10 +385,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 50,
       "copied_tenders": 50,
-      "detail_complete": 49,
+      "detail_complete": 50,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Madhyam",
@@ -429,10 +429,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 227,
       "copied_tenders": 227,
-      "detail_complete": 223,
+      "detail_complete": 227,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -847,10 +847,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 38,
       "copied_tenders": 38,
-      "detail_complete": 37,
+      "detail_complete": 38,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "PWD-PIU",
@@ -869,10 +869,10 @@
       "snapshot_at": "2026-11-18T13:48:05.259275+00:00",
       "portal_tender_count": 160,
       "copied_tenders": 160,
-      "detail_complete": 156,
+      "detail_complete": 160,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Rajiv Gandhi Proudyogiki Vishwavidyalaya",
@@ -1031,97 +1031,12 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 43,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_CPA_548386_1",
-    "2026_CPA_548388_1",
-    "2026_CPA_548390_1",
-    "2026_CPA_548393_1",
-    "2026_DHS_550449_1",
-    "2026_DTCP_550376_1",
-    "2026_EXCIS_550420_1",
-    "2026_EXCIS_550502_1",
-    "2026_MADHY_548716_1",
-    "2026_MKVVC_550330_1",
-    "2026_MPPGC_526188_1",
-    "2026_MPPGC_526443_2",
-    "2026_MPPGC_546060_1",
-    "2026_MPPGC_549902_1",
-    "2026_PHED_542579_1",
-    "2026_PWDRB_539899_1",
-    "2026_PWDRB_549620_1",
-    "2026_PWDRB_549621_1",
-    "2026_PWDRB_549622_1",
-    "2026_UAD_525634_1",
-    "2026_UAD_537908_2",
-    "2026_UAD_549449_1",
-    "2026_UAD_549450_1",
-    "2026_UAD_549451_1",
-    "2026_UAD_549453_1",
-    "2026_UAD_549454_1",
-    "2026_UAD_549455_1",
-    "2026_UAD_549456_1",
-    "2026_UAD_549457_1",
-    "2026_UAD_549458_1",
-    "2026_UAD_549459_1",
-    "2026_UAD_549460_1",
-    "2026_UAD_549461_1",
-    "2026_UAD_549462_1",
-    "2026_UAD_549463_1",
-    "2026_UAD_549799_1",
-    "2026_UAD_550048_1",
-    "2026_UAD_550279_1",
-    "2026_UAD_550379_1",
-    "2026_UAD_550401_1",
-    "2026_UAD_550407_1",
-    "2026_UAD_550457_1",
-    "2026_UAD_550485_1"
+    "2026_MADHY_548716_1"
   ],
   "known_pincode_count": 340,
   "department_count": 277,
-  "missing_pincode_count": 42,
-  "missing_pincode_ids": [
-    "2026_CPA_548386_1",
-    "2026_CPA_548388_1",
-    "2026_CPA_548390_1",
-    "2026_CPA_548393_1",
-    "2026_DHS_550449_1",
-    "2026_DTCP_550376_1",
-    "2026_EXCIS_550420_1",
-    "2026_EXCIS_550502_1",
-    "2026_MKVVC_550330_1",
-    "2026_MPPGC_526188_1",
-    "2026_MPPGC_526443_2",
-    "2026_MPPGC_546060_1",
-    "2026_MPPGC_549902_1",
-    "2026_PHED_542579_1",
-    "2026_PWDRB_539899_1",
-    "2026_PWDRB_549620_1",
-    "2026_PWDRB_549621_1",
-    "2026_PWDRB_549622_1",
-    "2026_UAD_525634_1",
-    "2026_UAD_537908_2",
-    "2026_UAD_549449_1",
-    "2026_UAD_549450_1",
-    "2026_UAD_549451_1",
-    "2026_UAD_549453_1",
-    "2026_UAD_549454_1",
-    "2026_UAD_549455_1",
-    "2026_UAD_549456_1",
-    "2026_UAD_549457_1",
-    "2026_UAD_549458_1",
-    "2026_UAD_549459_1",
-    "2026_UAD_549460_1",
-    "2026_UAD_549461_1",
-    "2026_UAD_549462_1",
-    "2026_UAD_549463_1",
-    "2026_UAD_549799_1",
-    "2026_UAD_550048_1",
-    "2026_UAD_550279_1",
-    "2026_UAD_550379_1",
-    "2026_UAD_550401_1",
-    "2026_UAD_550407_1",
-    "2026_UAD_550457_1",
-    "2026_UAD_550485_1"
-  ]
+  "missing_pincode_count": 0,
+  "missing_pincode_ids": []
 }
