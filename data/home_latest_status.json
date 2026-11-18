@@ -1,35 +1,14 @@
 {
-  "status": "completed",
-  "started_at": "2026-11-18T07:15:38.365941+00:00",
+  "status": "failed",
+  "started_at": "2026-11-18T08:18:37.965722+00:00",
   "budget_seconds": 720,
-  "success_ids": [
-    "2026_EXCIS_550222_1",
-    "2026_UAD_549473_1",
-    "2026_PHED_549198_1",
-    "2026_MMPSU_548099_1",
-    "2026_PHED_549195_1",
-    "2026_DOI_549526_1",
-    "2026_DOI_549525_1",
-    "2026_DOI_549795_1",
-    "2026_UAD_528173_1",
-    "2026_UAD_530992_2",
-    "2026_UAD_528172_1",
-    "2026_UAD_528171_1",
-    "2026_UAD_528165_1",
-    "2026_UAD_530982_2",
-    "2026_UAD_530968_2",
-    "2026_UAD_528164_1",
-    "2026_UAD_528163_1",
-    "2026_UAD_528162_1"
+  "success_ids": [],
+  "unchanged_ids": [],
+  "errors": [
+    {
+      "error": "503 Server Error: Service Unavailable for url: https://mptenders.gov.in/nicgep/app"
+    }
   ],
-  "unchanged_ids": [
-    "2026_EXCIS_550222_1",
-    "2026_UAD_549473_1"
-  ],
-  "errors": [],
   "pending": [],
-  "copied_at": "2026-11-18T07:15:40.575964+00:00",
-  "latest_tenders": 10,
-  "latest_corrigenda": 10,
-  "updated_at": "2026-11-18T07:16:27.810052+00:00"
+  "updated_at": "2026-11-18T08:18:39.960013+00:00"
 }
