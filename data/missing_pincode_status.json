@@ -1,8 +1,7 @@
 {
-  "updated_at": "2026-11-18T02:21:25.353939+00:00",
-  "status": "retry_needed",
+  "updated_at": "2026-11-18T10:37:43.453988+00:00",
+  "status": "running",
   "initial_missing_ids": [
-    "2026_DC_544556_1",
     "2026_DC_550008_1",
     "2026_DGPCS_548446_1",
     "2026_MADHY_548716_1",
@@ -32,9 +31,8 @@
   ],
   "missing_pincode_count": 0,
   "missing_pincode_ids": [],
-  "unresolved_location_count": 27,
+  "unresolved_location_count": 26,
   "unresolved_location_ids": [
-    "2026_DC_544556_1",
     "2026_DC_550008_1",
     "2026_DGPCS_548446_1",
     "2026_MADHY_548716_1",
