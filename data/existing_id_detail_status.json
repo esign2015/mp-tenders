@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "44771869370",
-  "github_run_number": "1599",
+  "status": "running",
+  "github_run_id": "44788240336",
+  "github_run_number": "235",
   "github_commit_sha": "609dcb512c85384331560a8a0106b43101e02e77",
-  "batch_size": 500,
+  "batch_size": 0,
   "total_csv_ids": 4608,
   "current_portal_ids": 4608,
-  "initial_incomplete": 3,
-  "batch_targets": 3,
-  "batch_attempted": 3,
+  "initial_incomplete": 24,
+  "batch_targets": 24,
+  "batch_attempted": 4,
   "batch_complete": 0,
-  "started_at": "2026-11-20T17:26:57.608513+00:00",
+  "started_at": "2026-11-20T17:58:15.920201+00:00",
   "success": 4605,
-  "failed": 3,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_312847_6",
     "2024_UAD_335448_6",
@@ -4620,30 +4620,35 @@
     "2026_WRD_549244_1",
     "2026_WRD_549251_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_CU_546825_1",
     "2026_PKVVC_548375_1",
     "2026_PSNSU_550377_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
   "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_CU_546825_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "Tender ID": "2026_MPP_543016_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     },
     {
-      "Tender ID": "2026_PSNSU_550377_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
+      "Tender ID": "2026_MPPGC_534089_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
     },
     {
-      "Tender ID": "2026_PKVVC_548375_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
-      "retry_pass": true
+      "Tender ID": "2026_UAD_546423_3",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_546423_1",
+      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-20T17:27:48.146845+00:00"
+  "updated_at": "2026-11-20T18:00:01.353234+00:00"
 }
