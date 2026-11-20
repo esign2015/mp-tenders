@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-21T03:26:54.606001+05:30",
+    "checked_at": "2026-11-21T03:29:45.263597+05:30",
     "snapshot_at": "2026-11-20T21:29:10.580885+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4608,
@@ -21,7 +21,7 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-20T21:56:55.515027+00:00",
+  "updated_at": "2026-11-20T21:59:46.361965+00:00",
   "snapshot_at": "2026-11-20T21:29:10.580885+00:00",
   "organisation_count": 94,
   "portal_tender_count": 4608,
@@ -1068,16 +1068,14 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 2,
+  "missing_district_count": 1,
   "missing_district_ids": [
-    "2026_CU_546825_1",
     "2026_PKVVC_548375_1"
   ],
   "known_pincode_count": 357,
   "department_count": 282,
-  "missing_pincode_count": 2,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_CU_546825_1",
     "2026_PKVVC_548375_1"
   ]
 }
