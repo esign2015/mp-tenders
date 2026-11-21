@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-21T21:36:02.098667+05:30",
+    "checked_at": "2026-11-21T21:40:47.087624+05:30",
     "snapshot_at": "2026-11-21T15:32:21.022774+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4612,
@@ -22,15 +22,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-21T16:06:03.222028+00:00",
+  "updated_at": "2026-11-21T16:10:47.793737+00:00",
   "snapshot_at": "2026-11-21T15:32:21.022774+00:00",
   "organisation_count": 94,
   "portal_tender_count": 4612,
   "copied_tenders": 4612,
   "detail_complete": 4607,
-  "detail_failed": 4,
+  "detail_failed": 5,
   "detail_skipped": 0,
-  "detail_pending": 1,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -248,9 +248,9 @@
       "portal_tender_count": 2817,
       "copied_tenders": 2817,
       "detail_complete": 2816,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
