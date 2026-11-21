@@ -2,16 +2,17 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-21T15:32:20.248671+05:30",
+    "checked_at": "2026-11-21T16:20:19.503695+05:30",
     "snapshot_at": "2026-11-20T21:29:10.580885+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4608,
     "verified_unique_ids": 4608,
-    "dashboard_live_count": 4590,
-    "closed_or_cancelled_count": 17,
-    "excluded_master_only_live_count": 27,
+    "dashboard_live_count": 4583,
+    "closed_or_cancelled_count": 24,
+    "excluded_master_only_live_count": 33,
     "excluded_master_only_live_ids": [
       "2026_DGPCS_551156_1",
+      "2026_DHS_548649_1",
       "2026_DPI_551162_1",
       "2026_DTE_546868_2",
       "2026_DTE_551157_1",
@@ -28,6 +29,8 @@
       "2026_PHED_551014_1",
       "2026_PHED_551015_1",
       "2026_PKVVC_551128_1",
+      "2026_PKVVC_551148_1",
+      "2026_PWDRB_551048_1",
       "2026_UAD_550131_1",
       "2026_UAD_550800_1",
       "2026_UAD_550802_1",
@@ -36,8 +39,11 @@
       "2026_UAD_550948_1",
       "2026_UAD_550995_1",
       "2026_UAD_551147_1",
+      "2026_UAD_551172_1",
       "2026_UAD_551173_1",
-      "2026_UAD_551179_1"
+      "2026_UAD_551179_1",
+      "2026_UAD_551189_1",
+      "2026_WRD_543964_1"
     ],
     "missing_ids": [],
     "invalid_closing_ids": [
@@ -49,7 +55,7 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-21T10:02:21.361180+00:00",
+  "updated_at": "2026-11-21T10:50:20.304753+00:00",
   "snapshot_at": "2026-11-20T21:29:10.580885+00:00",
   "organisation_count": 94,
   "portal_tender_count": 4608,
