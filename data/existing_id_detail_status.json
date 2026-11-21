@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "44880406521",
   "github_run_number": "271",
   "github_commit_sha": "8737e9855bd538884a6f2039ccf1f81de4722201",
@@ -12,7 +12,7 @@
   "batch_complete": 26,
   "started_at": "2026-11-21T07:29:22.283639+00:00",
   "success": 4613,
-  "failed": 0,
+  "failed": 3,
   "success_ids": [
     "2023_UAD_312847_6",
     "2024_UAD_335448_6",
@@ -4628,25 +4628,30 @@
     "2026_WRD_549244_1",
     "2026_WRD_549251_1"
   ],
-  "failed_ids": [],
-  "skipped_ids": [],
-  "pending_ids": [
+  "failed_ids": [
     "2026_CU_546825_1",
     "2026_PKVVC_548375_1",
     "2026_PSNSU_550377_1"
   ],
+  "skipped_ids": [],
+  "pending_ids": [],
   "last_successful_tender_id": "2026_UAD_551057_1",
   "errors": [
     {
       "Tender ID": "2026_CU_546825_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
     },
     {
       "Tender ID": "2026_PSNSU_550377_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-21T07:31:19.939867+00:00"
+  "updated_at": "2026-11-21T07:31:41.724192+00:00"
 }
