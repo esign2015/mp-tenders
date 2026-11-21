@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "44949140045",
-  "github_run_number": "273",
+  "status": "running",
+  "github_run_id": "44949357236",
+  "github_run_number": "239",
   "github_commit_sha": "8737e9855bd538884a6f2039ccf1f81de4722201",
-  "batch_size": 500,
+  "batch_size": 0,
   "total_csv_ids": 4612,
   "current_portal_ids": 4612,
-  "initial_incomplete": 4,
-  "batch_targets": 4,
-  "batch_attempted": 4,
-  "batch_complete": 0,
-  "started_at": "2026-11-21T21:00:14.773205+00:00",
+  "initial_incomplete": 23,
+  "batch_targets": 23,
+  "batch_attempted": 17,
+  "batch_complete": 17,
+  "started_at": "2026-11-21T21:02:19.051193+00:00",
   "success": 4608,
-  "failed": 4,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_312847_6",
     "2024_UAD_335448_6",
@@ -4623,36 +4623,15 @@
     "2026_WRD_549244_1",
     "2026_WRD_549251_1"
   ],
-  "failed_ids": [
+  "failed_ids": [],
+  "skipped_ids": [],
+  "pending_ids": [
     "2026_CU_546825_1",
     "2026_PKVVC_548375_1",
     "2026_PKVVC_549984_1",
     "2026_PSNSU_550377_1"
   ],
-  "skipped_ids": [],
-  "pending_ids": [],
-  "last_successful_tender_id": "",
-  "errors": [
-    {
-      "Tender ID": "2026_CU_546825_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PSNSU_550377_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_548375_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_549984_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
-      "retry_pass": true
-    }
-  ],
-  "updated_at": "2026-11-21T21:01:06.864440+00:00"
+  "last_successful_tender_id": "2026_DC_550008_1",
+  "errors": [],
+  "updated_at": "2026-11-21T21:04:12.194239+00:00"
 }
