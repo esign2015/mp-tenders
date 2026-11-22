@@ -1,12 +1,42 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-22T02:05:41.890730+05:30",
+  "snapshot_at": "2026-11-22T17:37:41.934800+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
   "previous_tender_count": 4612,
-  "current_tender_count": 4612,
-  "organisations_with_changes": 0,
-  "organisations_with_new_tenders": 0,
-  "new_tender_count": 0,
-  "changes": []
+  "current_tender_count": 4623,
+  "organisations_with_changes": 2,
+  "organisations_with_new_tenders": 2,
+  "new_tender_count": 11,
+  "changes": [
+    {
+      "Organisation Name": "Directorate Urban Administration and Development",
+      "Previous Tender Count": 2817,
+      "Current Tender Count": 2826,
+      "Count Difference": 9,
+      "New Tender Count": 9,
+      "New Tender IDs": [
+        "2026_UAD_528647_1",
+        "2026_UAD_528649_1",
+        "2026_UAD_528650_1",
+        "2026_UAD_528652_1",
+        "2026_UAD_528654_1",
+        "2026_UAD_528655_1",
+        "2026_UAD_528656_1",
+        "2026_UAD_528657_1",
+        "2026_UAD_528664_1"
+      ]
+    },
+    {
+      "Organisation Name": "Excise Department",
+      "Previous Tender Count": 36,
+      "Current Tender Count": 38,
+      "Count Difference": 2,
+      "New Tender Count": 2,
+      "New Tender IDs": [
+        "2026_EXCIS_551227_1",
+        "2026_EXCIS_551228_1"
+      ]
+    }
+  ]
 }
