@@ -1,21 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-22T19:06:51.011474+05:30",
+  "snapshot_at": "2026-11-22T21:29:42.702160+05:30",
   "previous_organisation_count": 94,
   "current_organisation_count": 94,
-  "previous_tender_count": 4623,
+  "previous_tender_count": 4622,
   "current_tender_count": 4622,
-  "organisations_with_changes": 1,
+  "organisations_with_changes": 0,
   "organisations_with_new_tenders": 0,
   "new_tender_count": 0,
-  "changes": [
-    {
-      "Organisation Name": "Director General of Prisons and Correctional Services",
-      "Previous Tender Count": 27,
-      "Current Tender Count": 26,
-      "Count Difference": -1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    }
-  ]
+  "changes": []
 }
