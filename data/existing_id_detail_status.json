@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "44971844945",
-  "github_run_number": "240",
-  "github_commit_sha": "8737e9855bd538884a6f2039ccf1f81de4722201",
-  "batch_size": 0,
-  "total_csv_ids": 4612,
-  "current_portal_ids": 4612,
-  "initial_incomplete": 23,
-  "batch_targets": 23,
-  "batch_attempted": 23,
-  "batch_complete": 21,
-  "started_at": "2026-11-22T01:32:03.167273+00:00",
-  "success": 4608,
-  "failed": 2,
+  "github_run_id": "44999645061",
+  "github_run_number": "275",
+  "github_commit_sha": "8ae4427673fc23ae20cb264db7825dc9cc510762",
+  "batch_size": 500,
+  "total_csv_ids": 4614,
+  "current_portal_ids": 4614,
+  "initial_incomplete": 9,
+  "batch_targets": 9,
+  "batch_attempted": 9,
+  "batch_complete": 5,
+  "started_at": "2026-11-22T07:45:41.507504+00:00",
+  "success": 4610,
+  "failed": 4,
   "success_ids": [
     "2023_UAD_312847_6",
     "2024_UAD_335448_6",
@@ -373,6 +373,8 @@
     "2026_EXCIS_551067_6",
     "2026_EXCIS_551067_7",
     "2026_EXCIS_551117_1",
+    "2026_EXCIS_551227_1",
+    "2026_EXCIS_551228_1",
     "2026_GADR_547118_1",
     "2026_GADR_547363_1",
     "2026_GDACU_547241_1",
@@ -4624,16 +4626,25 @@
     "2026_WRD_549251_1"
   ],
   "failed_ids": [
-    "2026_PKVVC_548375_1",
-    "2026_PKVVC_549984_1"
-  ],
-  "skipped_ids": [],
-  "pending_ids": [
     "2026_CU_546825_1",
+    "2026_PKVVC_548375_1",
+    "2026_PKVVC_549984_1",
     "2026_PSNSU_550377_1"
   ],
-  "last_successful_tender_id": "2026_DGPCS_551156_1",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "2026_DHS_540123_1",
   "errors": [
+    {
+      "Tender ID": "2026_CU_546825_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PSNSU_550377_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    },
     {
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
@@ -4645,5 +4656,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-22T01:34:48.484303+00:00"
+  "updated_at": "2026-11-22T07:47:12.864808+00:00"
 }
