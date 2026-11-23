@@ -1,13 +1,13 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-11-23T02:48:13.357251+05:30",
+  "snapshot_at": "2026-11-23T19:10:51.198875+05:30",
   "portal_organisation_count": 94,
-  "portal_tender_count": 4622,
-  "copied_unique_tender_ids": 4622,
+  "portal_tender_count": 4643,
+  "copied_unique_tender_ids": 4643,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 2,
+  "recovered_from_rsp_id_only": 3,
   "recovery_log": [
     {
       "Tender ID": "2026_PKVVC_548375_1",
@@ -16,6 +16,11 @@
     },
     {
       "Tender ID": "2026_PKVVC_549984_1",
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_PKVVC_550273_1",
       "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
       "Source": "RSP Tender ID recovery only"
     }
