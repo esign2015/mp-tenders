@@ -8,7 +8,7 @@
   "current_portal_ids": 4655,
   "initial_incomplete": 26,
   "batch_targets": 26,
-  "batch_attempted": 21,
+  "batch_attempted": 26,
   "batch_complete": 0,
   "started_at": "2026-11-23T19:26:28.545417+00:00",
   "success": 4647,
@@ -4780,7 +4780,32 @@
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
       "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_549984_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_550273_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_550911_1",
+      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_551174_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_551392_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-23T19:34:35.842669+00:00"
+  "updated_at": "2026-11-23T19:35:57.444767+00:00"
 }
