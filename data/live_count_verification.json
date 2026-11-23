@@ -1,22 +1,18 @@
 {
   "status": "mismatch",
-  "checked_at": "2026-11-24T03:27:13.488093+05:30",
-  "snapshot_at": "2026-11-23T15:51:25.982165+00:00",
+  "checked_at": "2026-11-24T03:30:19.368505+05:30",
+  "snapshot_at": "2026-11-23T21:36:33.259562+00:00",
   "inventory_source": "copied-list",
   "portal_tender_count": 4655,
   "verified_unique_ids": 4655,
-  "dashboard_live_count": 4649,
+  "dashboard_live_count": 4653,
   "closed_or_cancelled_count": 0,
   "excluded_master_only_live_count": 0,
   "excluded_master_only_live_ids": [],
   "missing_ids": [],
   "invalid_closing_ids": [
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_549984_1",
-    "2026_PKVVC_550273_1",
-    "2026_PKVVC_550911_1",
-    "2026_PKVVC_551174_1",
-    "2026_PKVVC_551392_1"
+    "2026_PKVVC_550273_1"
   ],
   "errors": [
     "Verified Tender IDs have missing or invalid closing dates"
