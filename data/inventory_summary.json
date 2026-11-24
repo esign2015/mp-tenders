@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-24T21:35:50.957063+05:30",
+    "checked_at": "2026-11-24T21:38:30.948659+05:30",
     "snapshot_at": "2026-11-24T15:42:55.660035+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4764,
@@ -22,15 +22,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-24T16:05:51.679987+00:00",
+  "updated_at": "2026-11-24T16:08:31.637997+00:00",
   "snapshot_at": "2026-11-24T15:42:55.660035+00:00",
   "organisation_count": 95,
   "portal_tender_count": 4764,
   "copied_tenders": 4764,
-  "detail_complete": 4758,
-  "detail_failed": 2,
+  "detail_complete": 4760,
+  "detail_failed": 4,
   "detail_skipped": 0,
-  "detail_pending": 4,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -72,9 +72,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Department of Higher Education",
@@ -247,10 +247,10 @@
       "snapshot_at": "2026-11-24T15:42:55.660035+00:00",
       "portal_tender_count": 2962,
       "copied_tenders": 2962,
-      "detail_complete": 2960,
+      "detail_complete": 2962,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -886,9 +886,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1080,21 +1080,17 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 5,
+  "missing_district_count": 3,
   "missing_district_ids": [
     "2026_PKVVC_548375_1",
     "2026_PKVVC_550273_1",
-    "2026_UAD_488004_7",
-    "2026_UAD_488006_7",
     "2026_UAD_550995_1"
   ],
   "known_pincode_count": 361,
   "department_count": 282,
-  "missing_pincode_count": 4,
+  "missing_pincode_count": 2,
   "missing_pincode_ids": [
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_550273_1",
-    "2026_UAD_488004_7",
-    "2026_UAD_488006_7"
+    "2026_PKVVC_550273_1"
   ]
 }
