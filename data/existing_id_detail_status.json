@@ -1,16 +1,16 @@
 {
   "status": "completed",
-  "github_run_id": "45428426819",
-  "github_run_number": "1651",
+  "github_run_id": "45439270637",
+  "github_run_number": "282",
   "github_commit_sha": "870a66b5ae3b612a8d2b53287816e7637a44fae4",
   "batch_size": 500,
   "total_csv_ids": 4764,
   "current_portal_ids": 4764,
-  "initial_incomplete": 6,
-  "batch_targets": 6,
-  "batch_attempted": 6,
-  "batch_complete": 2,
-  "started_at": "2026-11-24T16:06:29.824426+00:00",
+  "initial_incomplete": 4,
+  "batch_targets": 4,
+  "batch_attempted": 4,
+  "batch_complete": 0,
+  "started_at": "2026-11-24T16:38:11.448931+00:00",
   "success": 4760,
   "failed": 4,
   "success_ids": [
@@ -4783,15 +4783,15 @@
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_UAD_488004_7",
+  "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_CU_546825_1",
+      "Tender ID": "2026_PSNSU_550377_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PSNSU_550377_1",
+      "Tender ID": "2026_CU_546825_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
@@ -4802,9 +4802,9 @@
     },
     {
       "Tender ID": "2026_PKVVC_550273_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-24T16:07:35.489969+00:00"
+  "updated_at": "2026-11-24T16:39:13.005346+00:00"
 }
