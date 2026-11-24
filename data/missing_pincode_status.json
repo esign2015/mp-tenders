@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-24T04:27:19.468142+00:00",
-  "status": "retry_needed",
+  "updated_at": "2026-11-24T15:11:28.084787+00:00",
+  "status": "running",
   "initial_missing_ids": [
     "2026_DC_550008_1",
     "2026_DGPCS_548446_1",
@@ -10,7 +10,6 @@
     "2026_MPSAM_546338_1",
     "2026_MPTB_547378_1",
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_549984_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551389_1",
     "2026_PWDRB_474498_5",
@@ -26,13 +25,12 @@
     "2026_UAD_546423_3",
     "2026_UAD_550995_1"
   ],
-  "missing_pincode_count": 3,
+  "missing_pincode_count": 2,
   "missing_pincode_ids": [
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_549984_1",
     "2026_PKVVC_550273_1"
   ],
-  "unresolved_location_count": 23,
+  "unresolved_location_count": 22,
   "unresolved_location_ids": [
     "2026_DC_550008_1",
     "2026_DGPCS_548446_1",
@@ -42,7 +40,6 @@
     "2026_MPSAM_546338_1",
     "2026_MPTB_547378_1",
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_549984_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551389_1",
     "2026_PWDRB_474498_5",
