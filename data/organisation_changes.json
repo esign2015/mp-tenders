@@ -1,24 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-24T21:35:06.110016+05:30",
+  "snapshot_at": "2026-11-25T00:56:03.439435+05:30",
   "previous_organisation_count": 95,
   "current_organisation_count": 95,
-  "previous_tender_count": 4762,
+  "previous_tender_count": 4764,
   "current_tender_count": 4764,
-  "organisations_with_changes": 1,
-  "organisations_with_new_tenders": 1,
-  "new_tender_count": 2,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 2960,
-      "Current Tender Count": 2962,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_UAD_488004_7",
-        "2026_UAD_488006_7"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
