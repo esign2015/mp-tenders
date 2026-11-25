@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-25T05:35:44.228446+05:30",
+    "checked_at": "2026-11-25T05:37:48.864501+05:30",
     "snapshot_at": "2026-11-24T23:17:20.435603+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4764,
@@ -21,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-25T00:05:45.199214+00:00",
+  "updated_at": "2026-11-25T00:07:49.815682+00:00",
   "snapshot_at": "2026-11-24T23:17:20.435603+00:00",
   "organisation_count": 95,
   "portal_tender_count": 4764,
   "copied_tenders": 4764,
   "detail_complete": 4760,
-  "detail_failed": 0,
+  "detail_failed": 2,
   "detail_skipped": 0,
-  "detail_pending": 4,
+  "detail_pending": 2,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -489,9 +489,9 @@
       "portal_tender_count": 45,
       "copied_tenders": 45,
       "detail_complete": 43,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
