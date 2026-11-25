@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "45621227641",
-  "github_run_number": "1662",
+  "status": "running",
+  "github_run_id": "45645081194",
+  "github_run_number": "1664",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
   "batch_size": 500,
-  "total_csv_ids": 4835,
-  "current_portal_ids": 4835,
-  "initial_incomplete": 456,
-  "batch_targets": 456,
-  "batch_attempted": 456,
-  "batch_complete": 446,
-  "started_at": "2026-11-25T13:34:49.641424+00:00",
-  "success": 4825,
-  "failed": 10,
+  "total_csv_ids": 4840,
+  "current_portal_ids": 4840,
+  "initial_incomplete": 35,
+  "batch_targets": 35,
+  "batch_attempted": 35,
+  "batch_complete": 28,
+  "started_at": "2026-11-25T16:09:36.462616+00:00",
+  "success": 4833,
+  "failed": 7,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -661,6 +661,7 @@
     "2026_MPPGC_534338_1",
     "2026_MPPGC_534804_1",
     "2026_MPPGC_535041_1",
+    "2026_MPPGC_535192_1",
     "2026_MPPGC_535209_1",
     "2026_MPPGC_535551_1",
     "2026_MPPGC_535635_1",
@@ -724,6 +725,7 @@
     "2026_MPPGC_541743_1",
     "2026_MPPGC_541866_1",
     "2026_MPPGC_541898_1",
+    "2026_MPPGC_541911_1",
     "2026_MPPGC_542092_1",
     "2026_MPPGC_542180_1",
     "2026_MPPGC_542605_1",
@@ -774,6 +776,7 @@
     "2026_MPPGC_547893_1",
     "2026_MPPGC_547894_1",
     "2026_MPPGC_547917_1",
+    "2026_MPPGC_547984_1",
     "2026_MPPGC_547987_1",
     "2026_MPPGC_547988_1",
     "2026_MPPGC_547990_1",
@@ -790,6 +793,7 @@
     "2026_MPPGC_548771_1",
     "2026_MPPGC_548829_1",
     "2026_MPPGC_548836_1",
+    "2026_MPPGC_548964_1",
     "2026_MPPGC_548994_1",
     "2026_MPPGC_549009_1",
     "2026_MPPGC_549272_1",
@@ -1247,12 +1251,10 @@
     "2026_PHSCL_534028_1",
     "2026_PHSCL_534065_1",
     "2026_PHSCL_534079_1",
-    "2026_PKVVC_501832_1",
     "2026_PKVVC_533787_1",
     "2026_PKVVC_543387_1",
     "2026_PKVVC_547212_1",
     "2026_PKVVC_547404_1",
-    "2026_PKVVC_547693_1",
     "2026_PKVVC_547738_1",
     "2026_PKVVC_547768_1",
     "2026_PKVVC_547945_1",
@@ -3756,6 +3758,7 @@
     "2026_UAD_550093_1",
     "2026_UAD_550096_1",
     "2026_UAD_550097_1",
+    "2026_UAD_550098_1",
     "2026_UAD_550100_1",
     "2026_UAD_550103_1",
     "2026_UAD_550105_1",
@@ -4771,10 +4774,15 @@
     "2026_UAD_551935_1",
     "2026_UAD_551939_1",
     "2026_UAD_551942_1",
+    "2026_UAD_551945_1",
     "2026_UAD_551948_1",
     "2026_UAD_551949_1",
     "2026_UAD_551952_1",
     "2026_UAD_551954_1",
+    "2026_UAD_551957_1",
+    "2026_UAD_551961_1",
+    "2026_UAD_551962_1",
+    "2026_UAD_551964_1",
     "2026_WRD_511442_1",
     "2026_WRD_511718_1",
     "2026_WRD_519926_2",
@@ -4845,17 +4853,54 @@
     "2026_PKVVC_549984_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_550911_1",
-    "2026_PSNSU_550377_1",
-    "2026_RDVJ_547479_1",
-    "2026_RDVJ_547698_1",
-    "2026_RDVJ_547719_1",
-    "2026_RDVJ_547753_1",
-    "2026_RDVJ_547828_1"
+    "2026_PKVVC_551174_1",
+    "2026_PKVVC_551392_1",
+    "2026_PSNSU_550377_1"
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_MPRDC_551551_5",
+  "last_successful_tender_id": "2026_MPPGC_548964_1",
   "errors": [
+    {
+      "Tender ID": "2026_CU_546825_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PSNSU_550377_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_549984_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_550911_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550911_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_550273_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_551174_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_551392_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551392_1",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_PKVVC_549984_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
+      "retry_pass": true
+    },
     {
       "Tender ID": "2026_CU_546825_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
@@ -4867,8 +4912,13 @@
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PKVVC_549984_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
+      "Tender ID": "2026_PKVVC_550911_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550911_1",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PKVVC_551174_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
       "retry_pass": true
     },
     {
@@ -4877,35 +4927,10 @@
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PKVVC_550911_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550911_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_RDVJ_547479_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_RDVJ_547479_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_RDVJ_547698_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_RDVJ_547698_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_RDVJ_547719_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_RDVJ_547719_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_RDVJ_547753_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_RDVJ_547753_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_RDVJ_547828_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_RDVJ_547828_1",
+      "Tender ID": "2026_PKVVC_551392_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551392_1",
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-25T14:09:55.348768+00:00"
+  "updated_at": "2026-11-25T16:13:34.775235+00:00"
 }
