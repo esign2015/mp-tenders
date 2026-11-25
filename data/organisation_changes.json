@@ -1,36 +1,24 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-25T21:37:34.251506+05:30",
-  "previous_organisation_count": 91,
+  "snapshot_at": "2026-11-26T01:20:00.009611+05:30",
+  "previous_organisation_count": 90,
   "current_organisation_count": 90,
-  "previous_tender_count": 4835,
+  "previous_tender_count": 4840,
   "current_tender_count": 4840,
-  "organisations_with_changes": 2,
+  "organisations_with_changes": 1,
   "organisations_with_new_tenders": 1,
-  "new_tender_count": 6,
+  "new_tender_count": 2,
   "changes": [
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3059,
-      "Current Tender Count": 3065,
-      "Count Difference": 6,
-      "New Tender Count": 6,
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Previous Tender Count": 38,
+      "Current Tender Count": 38,
+      "Count Difference": 0,
+      "New Tender Count": 2,
       "New Tender IDs": [
-        "2026_UAD_550098_1",
-        "2026_UAD_551945_1",
-        "2026_UAD_551957_1",
-        "2026_UAD_551961_1",
-        "2026_UAD_551962_1",
-        "2026_UAD_551964_1"
+        "2026_PKVVC_501832_1",
+        "2026_PKVVC_547693_1"
       ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 210,
-      "Current Tender Count": 214,
-      "Count Difference": 4,
-      "New Tender Count": 0,
-      "New Tender IDs": []
     }
   ]
 }

@@ -1,6 +1,35 @@
 {
-  "status": "match",
+  "status": "mismatch",
   "retry_limit": 3,
-  "snapshot_at": "2026-11-25T21:37:34.252022+05:30",
-  "mismatches": []
+  "snapshot_at": "2026-11-26T01:20:00.010007+05:30",
+  "mismatches": [
+    {
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Portal Count": 38,
+      "Copied Count": 35,
+      "Difference": 3,
+      "Attempts": [
+        {
+          "attempt": 1,
+          "copied": 35,
+          "expected": 38
+        },
+        {
+          "attempt": 2,
+          "copied": 35,
+          "expected": 38
+        },
+        {
+          "attempt": 3,
+          "copied": 35,
+          "expected": 38
+        },
+        {
+          "attempt": 3,
+          "copied": 35,
+          "expected": 38
+        }
+      ]
+    }
+  ]
 }
