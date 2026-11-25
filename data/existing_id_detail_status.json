@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "45645081194",
   "github_run_number": "1664",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
@@ -4864,46 +4864,6 @@
     {
       "Tender ID": "2026_CU_546825_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PSNSU_550377_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_549984_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_550911_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550911_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_550273_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_551174_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_551392_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551392_1",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_PKVVC_549984_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_CU_546825_1",
-      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
@@ -4912,18 +4872,23 @@
       "retry_pass": true
     },
     {
+      "Tender ID": "2026_PKVVC_549984_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
+      "retry_pass": true
+    },
+    {
       "Tender ID": "2026_PKVVC_550911_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550911_1",
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PKVVC_551174_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
+      "Tender ID": "2026_PKVVC_550273_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PKVVC_550273_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
+      "Tender ID": "2026_PKVVC_551174_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
       "retry_pass": true
     },
     {
@@ -4932,5 +4897,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-25T16:13:34.775235+00:00"
+  "updated_at": "2026-11-25T16:13:36.823263+00:00"
 }
