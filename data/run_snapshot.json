@@ -1,17 +1,52 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-11-25T05:25:50.783557+05:30",
-  "portal_organisation_count": 95,
-  "portal_tender_count": 4764,
-  "copied_unique_tender_ids": 4764,
+  "snapshot_at": "2026-11-25T19:04:01.629681+05:30",
+  "portal_organisation_count": 91,
+  "portal_tender_count": 4835,
+  "copied_unique_tender_ids": 4835,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 1,
+  "recovered_from_rsp_id_only": 8,
   "recovery_log": [
+    {
+      "Tender ID": "2026_PKVVC_549984_1",
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
     {
       "Tender ID": "2026_PKVVC_550273_1",
       "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_PKVVC_550911_1",
+      "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_547479_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_547698_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_547719_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_547753_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_RDVJ_547828_1",
+      "Organisation Name": "Rani Durgavati Vishwavidyalaya - Jabalpur",
       "Source": "RSP Tender ID recovery only"
     }
   ],
