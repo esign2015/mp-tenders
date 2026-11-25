@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "45514983320",
-  "github_run_number": "248",
+  "github_run_id": "45523713240",
+  "github_run_number": "283",
   "github_commit_sha": "870a66b5ae3b612a8d2b53287816e7637a44fae4",
-  "batch_size": 0,
+  "batch_size": 500,
   "total_csv_ids": 4764,
   "current_portal_ids": 4764,
-  "initial_incomplete": 22,
-  "batch_targets": 22,
-  "batch_attempted": 22,
-  "batch_complete": 20,
-  "started_at": "2026-11-25T00:03:45.570502+00:00",
+  "initial_incomplete": 4,
+  "batch_targets": 4,
+  "batch_attempted": 4,
+  "batch_complete": 0,
+  "started_at": "2026-11-25T01:10:44.744168+00:00",
   "success": 4760,
-  "failed": 2,
+  "failed": 4,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -4776,26 +4776,35 @@
     "2026_WRD_550544_1"
   ],
   "failed_ids": [
-    "2026_PKVVC_548375_1",
-    "2026_PKVVC_550273_1"
-  ],
-  "skipped_ids": [],
-  "pending_ids": [
     "2026_CU_546825_1",
+    "2026_PKVVC_548375_1",
+    "2026_PKVVC_550273_1",
     "2026_PSNSU_550377_1"
   ],
-  "last_successful_tender_id": "2026_UAD_550995_1",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_PKVVC_550273_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
+      "Tender ID": "2026_PSNSU_550377_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_CU_546825_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
       "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PKVVC_550273_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-25T00:06:10.661546+00:00"
+  "updated_at": "2026-11-25T01:11:41.177729+00:00"
 }
