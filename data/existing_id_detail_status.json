@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "45686076590",
-  "github_run_number": "250",
+  "github_run_id": "45687924562",
+  "github_run_number": "285",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
-  "batch_size": 0,
+  "batch_size": 500,
   "total_csv_ids": 4840,
   "current_portal_ids": 4840,
-  "initial_incomplete": 25,
-  "batch_targets": 25,
-  "batch_attempted": 25,
-  "batch_complete": 20,
-  "started_at": "2026-11-25T19:32:15.038286+00:00",
+  "initial_incomplete": 7,
+  "batch_targets": 7,
+  "batch_attempted": 7,
+  "batch_complete": 0,
+  "started_at": "2026-11-25T19:43:33.787346+00:00",
   "success": 4833,
-  "failed": 5,
+  "failed": 7,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -4849,27 +4849,36 @@
     "2026_WRD_550544_1"
   ],
   "failed_ids": [
+    "2026_CU_546825_1",
     "2026_PKVVC_549984_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_550911_1",
     "2026_PKVVC_551174_1",
-    "2026_PKVVC_551392_1"
-  ],
-  "skipped_ids": [],
-  "pending_ids": [
-    "2026_CU_546825_1",
+    "2026_PKVVC_551392_1",
     "2026_PSNSU_550377_1"
   ],
-  "last_successful_tender_id": "2026_PKVVC_551389_1",
+  "skipped_ids": [],
+  "pending_ids": [],
+  "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_PKVVC_550273_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
+      "Tender ID": "2026_CU_546825_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PSNSU_550377_1",
+      "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
       "Tender ID": "2026_PKVVC_549984_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_549984_1",
+      "retry_pass": true
+    },
+    {
+      "Tender ID": "2026_PKVVC_550273_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
       "retry_pass": true
     },
     {
@@ -4888,5 +4897,5 @@
       "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-25T19:35:06.114407+00:00"
+  "updated_at": "2026-11-25T19:45:10.425435+00:00"
 }
