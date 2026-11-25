@@ -2,13 +2,13 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-25T14:26:47.713291+05:30",
+    "checked_at": "2026-11-25T14:34:02.578618+05:30",
     "snapshot_at": "2026-11-24T23:17:20.435603+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4764,
     "verified_unique_ids": 4764,
-    "dashboard_live_count": 4736,
-    "closed_or_cancelled_count": 27,
+    "dashboard_live_count": 4735,
+    "closed_or_cancelled_count": 28,
     "excluded_master_only_live_count": 10,
     "excluded_master_only_live_ids": [
       "2026_DHS_549892_1",
@@ -32,15 +32,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-25T08:56:48.358750+00:00",
+  "updated_at": "2026-11-25T09:04:03.315482+00:00",
   "snapshot_at": "2026-11-24T23:17:20.435603+00:00",
   "organisation_count": 95,
   "portal_tender_count": 4764,
   "copied_tenders": 4764,
   "detail_complete": 4760,
-  "detail_failed": 4,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 0,
+  "detail_pending": 4,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -82,9 +82,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Department of Higher Education",
@@ -500,9 +500,9 @@
       "portal_tender_count": 45,
       "copied_tenders": 45,
       "detail_complete": 43,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -896,9 +896,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
