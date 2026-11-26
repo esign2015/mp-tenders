@@ -1,14 +1,99 @@
 {
   "status": "verified",
-  "snapshot_at": "2026-11-27T01:15:18.226448+05:30",
+  "snapshot_at": "2026-11-27T02:38:38.129971+05:30",
   "portal_organisation_count": 92,
   "portal_tender_count": 5033,
   "copied_unique_tender_ids": 5033,
   "organisation_mismatches": [],
   "mismatch_count": 0,
   "recovered_from_mptenders_closing_14_days": 0,
-  "recovered_from_rsp_id_only": 1,
+  "recovered_from_rsp_id_only": 18,
   "recovery_log": [
+    {
+      "Tender ID": "2026_DPI_548675_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_548677_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_548679_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_548681_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_548682_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_548834_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_549376_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPI_552233_1",
+      "Organisation Name": "Directorate of Public Instruction",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DPP_551344_1",
+      "Organisation Name": "Directorate of Public Prosecution",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_MPDSD_518842_2",
+      "Organisation Name": "Directorate of Skill Development",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DSJW_549990_1",
+      "Organisation Name": "Directorate of Social Justice and Welfare",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_546099_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_546868_2",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_551157_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_DTE_551216_1",
+      "Organisation Name": "Directorate of Technical Education",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GAACH_551372_1",
+      "Organisation Name": "Govt. Autonomous Ayurved College and Hospital- Gwalior M.P",
+      "Source": "RSP Tender ID recovery only"
+    },
+    {
+      "Tender ID": "2026_GAACH_551384_1",
+      "Organisation Name": "Govt. Autonomous Ayurved College and Hospital- Gwalior M.P",
+      "Source": "RSP Tender ID recovery only"
+    },
     {
       "Tender ID": "2026_PKVVC_548375_1",
       "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
