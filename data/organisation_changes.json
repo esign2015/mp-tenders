@@ -1,83 +1,25 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-26T21:15:31.924757+05:30",
+  "snapshot_at": "2026-11-26T23:47:44.780386+05:30",
   "previous_organisation_count": 92,
   "current_organisation_count": 92,
-  "previous_tender_count": 5013,
+  "previous_tender_count": 5033,
   "current_tender_count": 5033,
-  "organisations_with_changes": 7,
-  "organisations_with_new_tenders": 4,
-  "new_tender_count": 10,
+  "organisations_with_changes": 1,
+  "organisations_with_new_tenders": 1,
+  "new_tender_count": 3,
   "changes": [
     {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3187,
-      "Current Tender Count": 3194,
-      "Count Difference": 7,
-      "New Tender Count": 7,
-      "New Tender IDs": [
-        "2026_UAD_543265_2",
-        "2026_UAD_552157_1",
-        "2026_UAD_552220_1",
-        "2026_UAD_552223_1",
-        "2026_UAD_552237_1",
-        "2026_UAD_552242_1",
-        "2026_UAD_552243_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Health Services",
-      "Previous Tender Count": 55,
-      "Current Tender Count": 56,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DHS_551516_1"
-      ]
-    },
-    {
-      "Organisation Name": "Directorate of Public Instruction",
-      "Previous Tender Count": 8,
-      "Current Tender Count": 9,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_DPI_552233_1"
-      ]
-    },
-    {
-      "Organisation Name": "MP Police Housing and Infrastructure Development Corporation Ltd",
-      "Previous Tender Count": 13,
-      "Current Tender Count": 14,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_MPPHC_548118_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 236,
-      "Current Tender Count": 243,
-      "Count Difference": 7,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 54,
-      "Current Tender Count": 56,
-      "Count Difference": 2,
-      "New Tender Count": 0,
-      "New Tender IDs": []
-    },
-    {
       "Organisation Name": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
-      "Previous Tender Count": 44,
+      "Previous Tender Count": 45,
       "Current Tender Count": 45,
-      "Count Difference": 1,
-      "New Tender Count": 0,
-      "New Tender IDs": []
+      "Count Difference": 0,
+      "New Tender Count": 3,
+      "New Tender IDs": [
+        "2026_PKVVC_501832_1",
+        "2026_PKVVC_543159_1",
+        "2026_PKVVC_547693_1"
+      ]
     }
   ]
 }
