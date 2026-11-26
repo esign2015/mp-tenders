@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-26T21:25:42.006115+05:30",
+    "checked_at": "2026-11-26T21:27:48.967634+05:30",
     "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5033,
@@ -24,15 +24,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-26T15:55:43.687668+00:00",
+  "updated_at": "2026-11-26T15:57:50.176006+00:00",
   "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5033,
   "copied_tenders": 5033,
-  "detail_complete": 5025,
-  "detail_failed": 3,
+  "detail_complete": 5026,
+  "detail_failed": 7,
   "detail_skipped": 0,
-  "detail_pending": 5,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -194,10 +194,10 @@
       "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
       "portal_tender_count": 9,
       "copied_tenders": 9,
-      "detail_complete": 8,
+      "detail_complete": 9,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Public Prosecution",
@@ -492,9 +492,9 @@
       "portal_tender_count": 45,
       "copied_tenders": 45,
       "detail_complete": 41,
-      "detail_failed": 0,
+      "detail_failed": 4,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -1049,9 +1049,8 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 6,
+  "missing_district_count": 5,
   "missing_district_ids": [
-    "2026_DPI_552233_1",
     "2026_PKVVC_548375_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551174_1",
@@ -1060,9 +1059,8 @@
   ],
   "known_pincode_count": 355,
   "department_count": 272,
-  "missing_pincode_count": 5,
+  "missing_pincode_count": 4,
   "missing_pincode_ids": [
-    "2026_DPI_552233_1",
     "2026_PKVVC_548375_1",
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551174_1",
