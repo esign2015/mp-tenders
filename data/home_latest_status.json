@@ -1,35 +1,46 @@
 {
-  "status": "completed",
-  "started_at": "2026-11-26T09:27:28.499028+00:00",
+  "status": "partial",
+  "started_at": "2026-11-26T10:43:40.941097+00:00",
   "budget_seconds": 720,
   "success_ids": [
-    "2026_UAD_552040_1",
-    "2026_UAD_552063_1",
-    "2026_MPPGC_549220_1",
-    "2026_MPHID_548095_2",
-    "2026_UAD_552060_1",
-    "2026_PWDRB_551505_1",
-    "2026_UAD_551417_1",
-    "2026_PKVVC_546125_2",
-    "2026_MPPGC_521837_1",
-    "2026_MKVVC_541289_1",
-    "2026_SIAET_547431_1",
-    "2026_MPPTC_548106_1",
-    "2026_MPPGC_546447_1",
-    "2026_MPPGC_545737_1",
-    "2026_MPPKV_537783_1",
-    "2026_MPPGC_537455_1",
-    "2026_MPPGC_540089_1"
+    "2026_UAD_552141_1",
+    "2026_MPPGC_536909_1",
+    "2026_PKVVC_551997_1",
+    "2026_UAD_552135_1",
+    "2026_UAD_552077_1",
+    "2026_UAD_552147_1",
+    "2026_PKVVC_551998_1",
+    "2026_UAD_552036_1",
+    "2026_UAD_550320_3",
+    "2026_UAD_551843_1",
+    "2026_MPPGC_550270_1",
+    "2026_MPPMC_543951_1",
+    "2026_PHED_548942_1",
+    "2026_MPPGC_520027_2",
+    "2026_WRD_537036_1",
+    "2026_CPA_549543_1",
+    "2026_CPA_549542_1",
+    "2026_CPA_549541_1"
   ],
-  "unchanged_ids": [
-    "2026_UAD_549043_1",
-    "2026_UAD_549043_1",
-    "2026_DoA_552076_1"
+  "unchanged_ids": [],
+  "errors": [
+    {
+      "reference": "2026_PKVVC_543159_1",
+      "kind": "corrigendum",
+      "error": "Detail reference differs from Home reference"
+    }
   ],
-  "errors": [],
-  "pending": [],
-  "copied_at": "2026-11-26T09:27:31.104056+00:00",
+  "pending": [
+    {
+      "kind": "corrigendum",
+      "reference": "2026_PKVVC_543159_1",
+      "title": "7. corrigendum for date extension",
+      "closing": "03-Dec-2026 03:00 PM",
+      "opening": "04-Dec-2026 03:30 PM"
+    }
+  ],
+  "copied_at": "2026-11-26T10:43:43.493490+00:00",
   "latest_tenders": 10,
   "latest_corrigenda": 10,
-  "updated_at": "2026-11-26T09:28:16.132497+00:00"
+  "updated_at": "2026-11-26T10:44:46.335825+00:00"
 }
