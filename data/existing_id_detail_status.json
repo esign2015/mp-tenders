@@ -1,18 +1,18 @@
 {
   "status": "completed",
-  "github_run_id": "45844090965",
-  "github_run_number": "1677",
+  "github_run_id": "45871125394",
+  "github_run_number": "1678",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
   "batch_size": 500,
   "total_csv_ids": 5033,
   "current_portal_ids": 5033,
-  "initial_incomplete": 56,
-  "batch_targets": 56,
-  "batch_attempted": 56,
-  "batch_complete": 49,
-  "started_at": "2026-11-26T15:47:32.232799+00:00",
-  "success": 5026,
-  "failed": 7,
+  "initial_incomplete": 12,
+  "batch_targets": 12,
+  "batch_attempted": 12,
+  "batch_complete": 8,
+  "started_at": "2026-11-26T18:19:26.240593+00:00",
+  "success": 5029,
+  "failed": 4,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -1302,12 +1302,15 @@
     "2026_PHSCL_534028_1",
     "2026_PHSCL_534079_1",
     "2026_PKVVC_488814_1",
+    "2026_PKVVC_501832_1",
     "2026_PKVVC_533787_1",
     "2026_PKVVC_541731_1",
+    "2026_PKVVC_543159_1",
     "2026_PKVVC_543387_1",
     "2026_PKVVC_546125_2",
     "2026_PKVVC_547212_1",
     "2026_PKVVC_547404_1",
+    "2026_PKVVC_547693_1",
     "2026_PKVVC_547738_1",
     "2026_PKVVC_547768_1",
     "2026_PKVVC_547781_2",
@@ -5045,22 +5048,19 @@
     "2026_CU_546825_1",
     "2026_CU_550168_1",
     "2026_PKVVC_548375_1",
-    "2026_PKVVC_550273_1",
-    "2026_PKVVC_551174_1",
-    "2026_PKVVC_551392_1",
     "2026_PSNSU_550377_1"
   ],
   "skipped_ids": [],
   "pending_ids": [],
-  "last_successful_tender_id": "2026_MPPGC_544902_1",
+  "last_successful_tender_id": "2026_MPPGC_544588_1",
   "errors": [
     {
-      "Tender ID": "2026_PSNSU_550377_1",
+      "Tender ID": "2026_CU_546825_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_CU_546825_1",
+      "Tender ID": "2026_PSNSU_550377_1",
       "error": "RuntimeError: Processing Fee missing/zero after detail extraction",
       "retry_pass": true
     },
@@ -5070,85 +5070,10 @@
       "retry_pass": true
     },
     {
-      "Tender ID": "2026_PKVVC_488814_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SXu1W%2F4qlPtcf5SbLl1kiWQ%3D%3D\">[Supply, Installation and Commissioning of Testin\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_DPI_552233_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_WRD_525962_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPKV_527674_1",
-      "error": "RuntimeError: Search Tender input not found",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_WRD_525967_1",
-      "error": "TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://mptenders.gov.in/nicgep/app\", waiting until \"domcontentloaded\"\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_546447_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_545737_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MKVVC_541289_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_542275_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_542277_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Search with ID/Title/Reference no\").first.locator(\"xpath=/../..\").locator(\"input,button,a\").nth(22)\n    - locator resolved to <input id=\"Go\" name=\"Go\" border=\"0\" value=\"Go\" type=\"submit\" autocomplete=\"off\" class=\"customButton\" title=\"Min. 3 chars. required for Tender Ref.no/Tender ID/Title\"/>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_536665_1",
-      "error": "TimeoutError: Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a\").nth(28)\n    - locator resolved to <a id=\"DirectLink_0\" title=\"View Tender Information\" href=\"/nicgep/app?component=%24DirectLink_0&page=FrontEndAdvancedSearchResult&service=direct&session=T&sp=SnOIA7WDNfn%2FSnQjm1PM2jQ%3D%3D\">[Procurement of pneumatic control valves with act\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n    - click action done\n    - waiting for scheduled navigations to finish\n",
-      "retry_pass": false
-    },
-    {
-      "Tender ID": "2026_MPPGC_544902_1",
-      "error": "RuntimeError: Detail page does not contain requested Tender ID; got=",
-      "retry_pass": false
-    },
-    {
       "Tender ID": "2026_PKVVC_548375_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
       "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_550273_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_551174_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551174_1",
-      "retry_pass": true
-    },
-    {
-      "Tender ID": "2026_PKVVC_551392_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_551392_1",
-      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-26T15:56:57.185801+00:00"
+  "updated_at": "2026-11-26T18:21:02.774204+00:00"
 }
