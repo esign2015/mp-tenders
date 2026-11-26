@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "45817230282",
   "github_run_number": "252",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
@@ -12,7 +12,7 @@
   "batch_complete": 19,
   "started_at": "2026-11-26T12:12:54.673498+00:00",
   "success": 4862,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -4877,12 +4877,13 @@
     "2026_WRD_549251_1",
     "2026_WRD_550544_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PKVVC_550273_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2026_CU_546825_1",
     "2026_PKVVC_549984_1",
-    "2026_PKVVC_550273_1",
     "2026_PKVVC_550911_1",
     "2026_PSNSU_550377_1"
   ],
@@ -4891,8 +4892,8 @@
     {
       "Tender ID": "2026_PKVVC_550273_1",
       "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_550273_1",
-      "retry_pass": false
+      "retry_pass": true
     }
   ],
-  "updated_at": "2026-11-26T12:14:39.272249+00:00"
+  "updated_at": "2026-11-26T12:14:55.885178+00:00"
 }
