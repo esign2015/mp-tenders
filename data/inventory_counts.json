@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-26T21:16:51.701888+05:30",
+    "checked_at": "2026-11-26T21:23:33.948090+05:30",
     "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5033,
@@ -34,15 +34,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-26T15:46:52.876153+00:00",
+  "updated_at": "2026-11-26T15:53:35.159073+00:00",
   "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
   "organisation_count": 92,
   "portal_tender_count": 5033,
   "copied_tenders": 5033,
-  "detail_complete": 5007,
-  "detail_failed": 4,
+  "detail_complete": 5013,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 22,
+  "detail_pending": 20,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -95,9 +95,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Department of Higher Education",
@@ -171,10 +171,10 @@
       "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
       "portal_tender_count": 56,
       "copied_tenders": 56,
-      "detail_complete": 55,
+      "detail_complete": 56,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Directorate of Medical Education",
@@ -281,10 +281,10 @@
       "snapshot_at": "2026-11-26T14:58:07.854632+00:00",
       "portal_tender_count": 3194,
       "copied_tenders": 3194,
-      "detail_complete": 3187,
+      "detail_complete": 3192,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 2
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -502,9 +502,9 @@
       "portal_tender_count": 45,
       "copied_tenders": 45,
       "detail_complete": 40,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 5
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -909,9 +909,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -1059,9 +1059,8 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 24,
+  "missing_district_count": 18,
   "missing_district_ids": [
-    "2026_DHS_551516_1",
     "2026_DPI_552233_1",
     "2026_MPPGC_490148_2",
     "2026_MPPGC_509411_1",
@@ -1077,20 +1076,14 @@
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551174_1",
     "2026_PKVVC_551392_1",
-    "2026_UAD_543265_2",
     "2026_UAD_550995_1",
-    "2026_UAD_552157_1",
-    "2026_UAD_552220_1",
     "2026_UAD_552223_1",
-    "2026_UAD_552237_1",
-    "2026_UAD_552242_1",
-    "2026_UAD_552243_1"
+    "2026_UAD_552237_1"
   ],
   "known_pincode_count": 355,
   "department_count": 272,
-  "missing_pincode_count": 23,
+  "missing_pincode_count": 17,
   "missing_pincode_ids": [
-    "2026_DHS_551516_1",
     "2026_DPI_552233_1",
     "2026_MPPGC_490148_2",
     "2026_MPPGC_509411_1",
@@ -1106,12 +1099,7 @@
     "2026_PKVVC_550273_1",
     "2026_PKVVC_551174_1",
     "2026_PKVVC_551392_1",
-    "2026_UAD_543265_2",
-    "2026_UAD_552157_1",
-    "2026_UAD_552220_1",
     "2026_UAD_552223_1",
-    "2026_UAD_552237_1",
-    "2026_UAD_552242_1",
-    "2026_UAD_552243_1"
+    "2026_UAD_552237_1"
   ]
 }
