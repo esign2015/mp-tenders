@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-27T20:54:50.623169+05:30",
+    "checked_at": "2026-11-27T20:59:46.670706+05:30",
     "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 5006,
@@ -21,15 +21,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-27T15:24:51.830044+00:00",
+  "updated_at": "2026-11-27T15:29:47.559325+00:00",
   "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
   "organisation_count": 91,
   "portal_tender_count": 5006,
   "copied_tenders": 5006,
-  "detail_complete": 4978,
-  "detail_failed": 1,
+  "detail_complete": 5002,
+  "detail_failed": 4,
   "detail_skipped": 0,
-  "detail_pending": 27,
+  "detail_pending": 0,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -82,9 +82,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 2,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Department of Higher Education",
@@ -257,10 +257,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 3154,
       "copied_tenders": 3154,
-      "detail_complete": 3147,
+      "detail_complete": 3154,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 7
+      "detail_pending": 0
     },
     {
       "organisation": "Director General of Prisons and Correctional Services",
@@ -301,10 +301,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 69,
       "copied_tenders": 69,
-      "detail_complete": 67,
+      "detail_complete": 69,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Excise Department",
@@ -312,10 +312,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 33,
       "copied_tenders": 33,
-      "detail_complete": 29,
+      "detail_complete": 33,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 4
+      "detail_pending": 0
     },
     {
       "organisation": "Government Homeopathy Medical College and Hospital - Bhopal -M P",
@@ -477,10 +477,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 62,
       "copied_tenders": 62,
-      "detail_complete": 60,
+      "detail_complete": 62,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Poorv Kshetra Vidyut Vitaran Company Limited",
@@ -499,10 +499,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 257,
       "copied_tenders": 257,
-      "detail_complete": 251,
+      "detail_complete": 257,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 6
+      "detail_pending": 0
     },
     {
       "organisation": "Madhya Pradesh Power Management Company Limited-Jabalpur",
@@ -885,9 +885,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 0,
+      "detail_failed": 1,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
@@ -906,10 +906,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 41,
       "copied_tenders": 41,
-      "detail_complete": 39,
+      "detail_complete": 41,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 2
+      "detail_pending": 0
     },
     {
       "organisation": "PWD- Roads and Bridges",
@@ -972,10 +972,10 @@
       "snapshot_at": "2026-11-27T14:54:43.317876+00:00",
       "portal_tender_count": 90,
       "copied_tenders": 90,
-      "detail_complete": 89,
+      "detail_complete": 90,
       "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 1
+      "detail_pending": 0
     },
     {
       "organisation": "Shree Mahakaleshwar Mandir Prabandh Samiti Ujjain",
@@ -1035,64 +1035,16 @@
   ],
   "organisation_count_mismatches": 0,
   "legacy_verification_pending": 0,
-  "missing_district_count": 27,
+  "missing_district_count": 3,
   "missing_district_ids": [
-    "2026_EXCIS_552443_1",
-    "2026_EXCIS_552443_2",
-    "2026_EXCIS_552443_3",
-    "2026_EXCIS_552571_1",
-    "2026_MPPGC_540288_1",
-    "2026_MPPGC_543548_1",
-    "2026_MPPGC_544558_1",
-    "2026_MPPGC_546621_1",
-    "2026_MPPGC_547191_1",
-    "2026_MPPGC_552024_1",
-    "2026_MPPKV_552569_1",
-    "2026_MPPKV_552599_1",
     "2026_PKVVC_548375_1",
-    "2026_PWPIU_552460_1",
-    "2026_PWPIU_552576_1",
-    "2026_RES_548895_1",
     "2026_STDC_552210_1",
-    "2026_UAD_521562_3",
-    "2026_UAD_521563_3",
-    "2026_UAD_550995_1",
-    "2026_UAD_552022_1",
-    "2026_UAD_552446_1",
-    "2026_UAD_552540_1",
-    "2026_UAD_552590_1",
-    "2026_UAD_552594_1",
-    "2026_WRD_528875_1",
-    "2026_WRD_545181_1"
+    "2026_UAD_550995_1"
   ],
-  "known_pincode_count": 348,
+  "known_pincode_count": 350,
   "department_count": 270,
-  "missing_pincode_count": 25,
+  "missing_pincode_count": 1,
   "missing_pincode_ids": [
-    "2026_EXCIS_552443_1",
-    "2026_EXCIS_552443_2",
-    "2026_EXCIS_552443_3",
-    "2026_EXCIS_552571_1",
-    "2026_MPPGC_540288_1",
-    "2026_MPPGC_543548_1",
-    "2026_MPPGC_544558_1",
-    "2026_MPPGC_546621_1",
-    "2026_MPPGC_547191_1",
-    "2026_MPPGC_552024_1",
-    "2026_MPPKV_552569_1",
-    "2026_MPPKV_552599_1",
-    "2026_PKVVC_548375_1",
-    "2026_PWPIU_552460_1",
-    "2026_PWPIU_552576_1",
-    "2026_RES_548895_1",
-    "2026_UAD_521562_3",
-    "2026_UAD_521563_3",
-    "2026_UAD_552022_1",
-    "2026_UAD_552446_1",
-    "2026_UAD_552540_1",
-    "2026_UAD_552590_1",
-    "2026_UAD_552594_1",
-    "2026_WRD_528875_1",
-    "2026_WRD_545181_1"
+    "2026_PKVVC_548375_1"
   ]
 }
