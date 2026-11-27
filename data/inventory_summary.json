@@ -2,7 +2,7 @@
   "policy_version": "official-portal-v1",
   "live_verification": {
     "status": "mismatch",
-    "checked_at": "2026-11-27T19:10:43.162772+05:30",
+    "checked_at": "2026-11-27T19:44:40.915268+05:30",
     "snapshot_at": "2026-11-27T12:49:17.457889+00:00",
     "inventory_source": "copied-list",
     "portal_tender_count": 4984,
@@ -25,15 +25,15 @@
     "counts_match": false,
     "overnight_policy": "Keep verified inventory from 19:00 through 09:00; replace only with a new verified copy"
   },
-  "updated_at": "2026-11-27T13:40:44.009085+00:00",
+  "updated_at": "2026-11-27T14:14:42.412322+00:00",
   "snapshot_at": "2026-11-27T12:49:17.457889+00:00",
   "organisation_count": 91,
   "portal_tender_count": 4984,
   "copied_tenders": 4984,
   "detail_complete": 4980,
-  "detail_failed": 4,
+  "detail_failed": 0,
   "detail_skipped": 0,
-  "detail_pending": 0,
+  "detail_pending": 4,
   "organisations": [
     {
       "organisation": "Atal Indore City Transport Services Ltd - Indore",
@@ -86,9 +86,9 @@
       "portal_tender_count": 2,
       "copied_tenders": 2,
       "detail_complete": 0,
-      "detail_failed": 2,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 2
     },
     {
       "organisation": "Department of Higher Education",
@@ -493,9 +493,9 @@
       "portal_tender_count": 44,
       "copied_tenders": 44,
       "detail_complete": 43,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Madhya Pradesh Power Generating Company Limited",
@@ -889,9 +889,9 @@
       "portal_tender_count": 1,
       "copied_tenders": 1,
       "detail_complete": 0,
-      "detail_failed": 1,
+      "detail_failed": 0,
       "detail_skipped": 0,
-      "detail_pending": 0
+      "detail_pending": 1
     },
     {
       "organisation": "Public Health Engineering- O/o Engineer In Chief",
