@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "github_run_id": "46079214037",
   "github_run_number": "256",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
@@ -8,11 +8,11 @@
   "current_portal_ids": 5006,
   "initial_incomplete": 21,
   "batch_targets": 21,
-  "batch_attempted": 17,
-  "batch_complete": 16,
+  "batch_attempted": 21,
+  "batch_complete": 20,
   "started_at": "2026-11-27T22:53:10.542194+00:00",
   "success": 5002,
-  "failed": 0,
+  "failed": 1,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -5017,15 +5017,22 @@
     "2026_WRD_549251_1",
     "2026_WRD_550544_1"
   ],
-  "failed_ids": [],
+  "failed_ids": [
+    "2026_PKVVC_548375_1"
+  ],
   "skipped_ids": [],
   "pending_ids": [
     "2026_CU_546825_1",
     "2026_CU_550168_1",
-    "2026_PKVVC_548375_1",
     "2026_PSNSU_550377_1"
   ],
-  "last_successful_tender_id": "2026_PWDRB_474498_5",
-  "errors": [],
-  "updated_at": "2026-11-27T22:55:07.198711+00:00"
+  "last_successful_tender_id": "2026_MKVVC_547160_1",
+  "errors": [
+    {
+      "Tender ID": "2026_PKVVC_548375_1",
+      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
+      "retry_pass": true
+    }
+  ],
+  "updated_at": "2026-11-27T22:55:45.833958+00:00"
 }
