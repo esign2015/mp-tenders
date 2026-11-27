@@ -1,101 +1,12 @@
 {
   "status": "completed",
-  "snapshot_at": "2026-11-27T20:53:45.565003+05:30",
+  "snapshot_at": "2026-11-27T23:28:21.475640+05:30",
   "previous_organisation_count": 91,
   "current_organisation_count": 91,
-  "previous_tender_count": 4984,
+  "previous_tender_count": 5006,
   "current_tender_count": 5006,
-  "organisations_with_changes": 7,
-  "organisations_with_new_tenders": 7,
-  "new_tender_count": 25,
-  "changes": [
-    {
-      "Organisation Name": "Directorate Urban Administration and Development",
-      "Previous Tender Count": 3149,
-      "Current Tender Count": 3154,
-      "Count Difference": 5,
-      "New Tender Count": 8,
-      "New Tender IDs": [
-        "2026_UAD_521562_3",
-        "2026_UAD_521563_3",
-        "2026_UAD_545734_1",
-        "2026_UAD_552022_1",
-        "2026_UAD_552446_1",
-        "2026_UAD_552540_1",
-        "2026_UAD_552590_1",
-        "2026_UAD_552594_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Power Generating Company Limited",
-      "Previous Tender Count": 251,
-      "Current Tender Count": 257,
-      "Count Difference": 6,
-      "New Tender Count": 6,
-      "New Tender IDs": [
-        "2026_MPPGC_540288_1",
-        "2026_MPPGC_543548_1",
-        "2026_MPPGC_544558_1",
-        "2026_MPPGC_546621_1",
-        "2026_MPPGC_547191_1",
-        "2026_MPPGC_552024_1"
-      ]
-    },
-    {
-      "Organisation Name": "Excise Department",
-      "Previous Tender Count": 29,
-      "Current Tender Count": 33,
-      "Count Difference": 4,
-      "New Tender Count": 4,
-      "New Tender IDs": [
-        "2026_EXCIS_552443_1",
-        "2026_EXCIS_552443_2",
-        "2026_EXCIS_552443_3",
-        "2026_EXCIS_552571_1"
-      ]
-    },
-    {
-      "Organisation Name": "Engineer-in-Chief - Water Resources Department",
-      "Previous Tender Count": 67,
-      "Current Tender Count": 69,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_WRD_528875_1",
-        "2026_WRD_545181_1"
-      ]
-    },
-    {
-      "Organisation Name": "Madhya Pradesh Paschim Kshetra Vidyut Vitran Company Ltd",
-      "Previous Tender Count": 60,
-      "Current Tender Count": 62,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_MPPKV_552569_1",
-        "2026_MPPKV_552599_1"
-      ]
-    },
-    {
-      "Organisation Name": "PWD-PIU",
-      "Previous Tender Count": 39,
-      "Current Tender Count": 41,
-      "Count Difference": 2,
-      "New Tender Count": 2,
-      "New Tender IDs": [
-        "2026_PWPIU_552460_1",
-        "2026_PWPIU_552576_1"
-      ]
-    },
-    {
-      "Organisation Name": "Rural Engineering Service",
-      "Previous Tender Count": 89,
-      "Current Tender Count": 90,
-      "Count Difference": 1,
-      "New Tender Count": 1,
-      "New Tender IDs": [
-        "2026_RES_548895_1"
-      ]
-    }
-  ]
+  "organisations_with_changes": 0,
+  "organisations_with_new_tenders": 0,
+  "new_tender_count": 0,
+  "changes": []
 }
