@@ -1,18 +1,18 @@
 {
-  "status": "completed",
-  "github_run_id": "46108553905",
-  "github_run_number": "257",
+  "status": "running",
+  "github_run_id": "46145039116",
+  "github_run_number": "293",
   "github_commit_sha": "2f30de8d1351648e400856df4875ed14b7a94291",
-  "batch_size": 0,
-  "total_csv_ids": 5006,
-  "current_portal_ids": 5006,
-  "initial_incomplete": 20,
-  "batch_targets": 20,
-  "batch_attempted": 20,
-  "batch_complete": 19,
-  "started_at": "2026-11-28T04:40:03.541510+00:00",
-  "success": 5002,
-  "failed": 1,
+  "batch_size": 500,
+  "total_csv_ids": 5025,
+  "current_portal_ids": 5025,
+  "initial_incomplete": 42,
+  "batch_targets": 42,
+  "batch_attempted": 23,
+  "batch_complete": 0,
+  "started_at": "2026-11-28T12:31:27.829370+00:00",
+  "success": 5021,
+  "failed": 0,
   "success_ids": [
     "2023_UAD_255288_17",
     "2023_UAD_272419_2",
@@ -224,6 +224,8 @@
     "2026_DGPCS_552218_1",
     "2026_DGPCS_552225_1",
     "2026_DGPCS_552230_1",
+    "2026_DGPCS_552656_1",
+    "2026_DGPCS_552657_1",
     "2026_DHS_530172_1",
     "2026_DHS_540123_1",
     "2026_DHS_543092_1",
@@ -291,6 +293,7 @@
     "2026_DME_548802_1",
     "2026_DME_548991_1",
     "2026_DME_550094_1",
+    "2026_DME_550318_1",
     "2026_DME_550494_1",
     "2026_DME_551510_1",
     "2026_DME_551692_1",
@@ -333,6 +336,7 @@
     "2026_DoF_551609_1",
     "2026_DoF_551610_1",
     "2026_DoF_551611_1",
+    "2026_DoF_552556_1",
     "2026_DoPR_545503_1",
     "2026_DoPR_545506_1",
     "2026_DoPR_545510_1",
@@ -392,6 +396,7 @@
     "2026_EXCIS_552570_6",
     "2026_EXCIS_552570_7",
     "2026_EXCIS_552571_1",
+    "2026_EXCIS_552623_1",
     "2026_GAACH_551372_1",
     "2026_GAACH_551384_1",
     "2026_GDACU_547241_1",
@@ -501,6 +506,7 @@
     "2026_MKVVC_552213_1",
     "2026_MKVVC_552362_1",
     "2026_MKVVC_552399_1",
+    "2026_MKVVC_552652_1",
     "2026_MLPDC_552057_1",
     "2026_MMPSU_547356_1",
     "2026_MMPSU_548099_1",
@@ -584,6 +590,8 @@
     "2026_MPFD_552546_1",
     "2026_MPFD_552560_1",
     "2026_MPFD_552565_1",
+    "2026_MPFD_552628_1",
+    "2026_MPFD_552631_1",
     "2026_MPHC_543823_1",
     "2026_MPHC_547922_1",
     "2026_MPHC_548833_1",
@@ -861,6 +869,7 @@
     "2026_MPPGC_551967_1",
     "2026_MPPGC_552015_1",
     "2026_MPPGC_552024_1",
+    "2026_MPPGC_552634_1",
     "2026_MPPHC_548118_1",
     "2026_MPPHC_549512_1",
     "2026_MPPHC_549513_1",
@@ -1021,6 +1030,7 @@
     "2026_MPP_551771_1",
     "2026_MPP_551844_1",
     "2026_MPP_552035_1",
+    "2026_MPP_552575_1",
     "2026_MPRDC_477836_1",
     "2026_MPRDC_527803_1",
     "2026_MPRDC_543381_1",
@@ -1496,6 +1506,7 @@
     "2026_PWDRB_549629_1",
     "2026_PWDRB_549631_1",
     "2026_PWDRB_549632_1",
+    "2026_PWDRB_549633_1",
     "2026_PWDRB_549638_1",
     "2026_PWDRB_549639_1",
     "2026_PWDRB_549640_1",
@@ -1706,6 +1717,7 @@
     "2026_PWPIU_552544_1",
     "2026_PWPIU_552553_1",
     "2026_PWPIU_552576_1",
+    "2026_PWPIU_552595_1",
     "2026_RCVP_544828_1",
     "2026_RES_518338_1",
     "2026_RES_545559_1",
@@ -4639,6 +4651,7 @@
     "2026_UAD_551651_1",
     "2026_UAD_551652_1",
     "2026_UAD_551653_1",
+    "2026_UAD_551653_2",
     "2026_UAD_551654_1",
     "2026_UAD_551655_1",
     "2026_UAD_551656_1",
@@ -4801,6 +4814,8 @@
     "2026_UAD_551999_1",
     "2026_UAD_552001_1",
     "2026_UAD_552002_1",
+    "2026_UAD_552011_1",
+    "2026_UAD_552012_1",
     "2026_UAD_552016_1",
     "2026_UAD_552021_1",
     "2026_UAD_552022_1",
@@ -4908,6 +4923,8 @@
     "2026_UAD_552276_1",
     "2026_UAD_552278_1",
     "2026_UAD_552291_1",
+    "2026_UAD_552301_1",
+    "2026_UAD_552302_1",
     "2026_UAD_552312_1",
     "2026_UAD_552315_1",
     "2026_UAD_552316_1",
@@ -4940,6 +4957,7 @@
     "2026_UAD_552402_1",
     "2026_UAD_552407_1",
     "2026_UAD_552424_1",
+    "2026_UAD_552427_1",
     "2026_UAD_552446_1",
     "2026_UAD_552540_1",
     "2026_UAD_552552_1",
@@ -4948,6 +4966,7 @@
     "2026_UAD_552589_1",
     "2026_UAD_552590_1",
     "2026_UAD_552594_1",
+    "2026_UAD_552662_1",
     "2026_WRD_511442_1",
     "2026_WRD_511718_1",
     "2026_WRD_519926_2",
@@ -5017,22 +5036,131 @@
     "2026_WRD_549251_1",
     "2026_WRD_550544_1"
   ],
-  "failed_ids": [
-    "2026_PKVVC_548375_1"
-  ],
+  "failed_ids": [],
   "skipped_ids": [],
   "pending_ids": [
     "2026_CU_546825_1",
     "2026_CU_550168_1",
+    "2026_PKVVC_548375_1",
     "2026_PSNSU_550377_1"
   ],
-  "last_successful_tender_id": "2026_MKVVC_547160_1",
+  "last_successful_tender_id": "",
   "errors": [
     {
-      "Tender ID": "2026_PKVVC_548375_1",
-      "error": "RuntimeError: Search returned no matching Tender row for 2026_PKVVC_548375_1",
-      "retry_pass": true
+      "Tender ID": "2026_PSNSU_550377_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_CU_546825_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_CU_550168_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_550905_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_550912_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_540768_3",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPPGC_552634_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MMPSU_548099_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_UAD_550916_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_1",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_11",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_10",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_12",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_15",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_14",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_17",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_18",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_16",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_20",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_2",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_19",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_21",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
+    },
+    {
+      "Tender ID": "2026_MPRRD_551853_23",
+      "error": "RuntimeError: Search Tender input not found",
+      "retry_pass": false
     }
   ],
-  "updated_at": "2026-11-28T04:42:06.999127+00:00"
+  "updated_at": "2026-11-28T12:33:26.361691+00:00"
 }
