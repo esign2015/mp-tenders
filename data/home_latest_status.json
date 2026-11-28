@@ -1,14 +1,14 @@
 {
   "status": "failed",
-  "started_at": "2026-11-28T10:16:10.613936+00:00",
+  "started_at": "2026-11-28T11:31:26.366242+00:00",
   "budget_seconds": 720,
   "success_ids": [],
   "unchanged_ids": [],
   "errors": [
     {
-      "error": "503 Server Error: Service Unavailable for url: https://mptenders.gov.in/nicgep/app"
+      "error": "Home table missing: activeTenders"
     }
   ],
   "pending": [],
-  "updated_at": "2026-11-28T10:16:17.346502+00:00"
+  "updated_at": "2026-11-28T11:31:34.511223+00:00"
 }
